@@ -1,0 +1,58 @@
+{
+	"pages": [
+		{
+			"path": "pages/index/index",
+			"style": {
+				"enablePullDownRefresh": true,
+				"app-plus": {
+					"scrollIndicator": "none",
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/index/pre",
+			"style": {
+				"navigationBarTitleText": "预览首页"
+			}
+		},
+		{
+			"path": "pages/common/webview",
+			"style": {
+				"navigationBarTitleText": "webview"
+			}
+		},
+		{
+			"path": "pages/page/page",
+			"style": {
+				"navigationBarTitleText": "自定义"
+			}
+		}
+    ],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": " ",
+		"navigationBarBackgroundColor": "#FFFFFF",
+		// #ifdef H5
+		"navigationStyle": "custom",
+		// #endif
+		"app-plus": {}
+	},
+	"tabBar": {
+		// #ifdef MP-WEIXIN
+		//"custom": true,
+		// #endif
+		"color": "#7A7E83",
+		"selectedColor": "#F43131",
+		"borderStyle": "black",
+		"backgroundColor": "#ffffff",
+		"list": [{
+				"pagePath": "pages/index/index",
+				"iconPath": "/static/tabbar/home.png",
+				"selectedIconPath": "/static/tabbar/homeCheck.png",
+				"text": "首页"
+			}
+		]
+	},
+	"usingComponents": {}
+}
