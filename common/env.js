@@ -20,7 +20,8 @@ const prodStatic = 'https://new401t.bafangka.com'
 export const staticUrl = isDev ?devStatic:prodStatic;
 
 export const apiKey = '458f_$#@$*!fdjisdJDFHUk4%%653154%^@#(FSD#$@0-T';
-
+console.log(process.env)
+export const testUrl = process.env.VUE_APP_FRONT_URL;
 
 export default {
     apiBaseUrl, apiKey

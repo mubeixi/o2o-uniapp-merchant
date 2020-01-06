@@ -153,9 +153,7 @@
             "postcss" : false
         },
         "usingComponents" : true,
-		"navigateToMiniProgramAppIdList": [
-		    "wxbdeb9e51dacbbafc"
-		],
+        "navigateToMiniProgramAppIdList" : [ "wxbdeb9e51dacbbafc" ],
         "permission" : {
             "scope.userLocation" : {
                 "desc" : "你的位置信息将用于为您就近匹配门店"
@@ -186,21 +184,21 @@
             "disableHostCheck" : true,
             "proxy" : {
                 "/api" : {
-                    "target" : "https://new401t.bafangka.com/api",//"http://www.gogo.com/api",
+                    "target" : "https://new401t.bafangka.com/api", //"http://www.gogo.com/api",
                     "changeOrigin" : true,
                     "secure" : false,
                     "pathRewrite" : {
                         "^/api" : ""
                     }
                 },
-				"/node" : {
-					"target" : "http://localhost:9100/",//"http://www.gogo.com/api",
-					"changeOrigin" : true,
-					"secure" : false,
-					"pathRewrite" : {
-						"^/node" : ""
-					}
-				}
+                "/node" : {
+                    "target" : "http://localhost:9100/", //"http://www.gogo.com/api",
+                    "changeOrigin" : true,
+                    "secure" : false,
+                    "pathRewrite" : {
+                        "^/node" : ""
+                    }
+                }
             }
         },
         "optimization" : {

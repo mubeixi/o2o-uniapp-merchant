@@ -66,6 +66,8 @@
 
 	import {ls} from "../../common/helper";
 
+	import {testUrl} from "../../common/env";
+
 	export default {
 		mixins:[pageMixin],
 		data() {
@@ -103,7 +105,7 @@
 
 		},
 		onShow(){
-
+			console.log(this.testUrl)
 			let that=this
 			//每次加载都清空全站配置
 			ls.remove('initData');
