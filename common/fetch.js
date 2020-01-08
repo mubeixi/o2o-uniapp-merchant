@@ -3,6 +3,43 @@ import fetch from './request';
 //获取全局配置
 export const getSystemConf = (data, options) => fetch('shopconfig', data, options)
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 export const login = (data, options) => {
     //获取推荐人id
     // let owner_id = ls.get("owner_id")
