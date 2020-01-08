@@ -192,7 +192,7 @@
 	.address-font{font-size: 13px;color: #333333;line-height: 20px;}
 	.coupon{width: 710rpx;padding: 10px 15px 10px 12px;background-color: #ffffff;border-radius: 5px;box-sizing: border-box;}
 	.couponDetail{height: 22px;}
-	.coupon-button{color: #FFFFFF;width: 60px;text-align: center;height: 22px;line-height: 22px;border-radius: 3px;background-color: #E41515}
+	.coupon-button{color: #FFFFFF;width: 60px;text-align: center;height: 22px;line-height: 22px;border-radius: 3px;background-color: $wzw-bg-primary}
 	.coupon-font{margin-right: 9px;color: #333333;height: 13px;line-height: 13px;}
 	.coupon-value{height: 13px;line-height: 13px;color: #E41515}
 	.group-buy{width: 710rpx;border-radius: 5px;box-sizing: border-box;padding-left: 14px;padding-right: 14px;background-color: #ffffff;}
@@ -218,9 +218,9 @@
 	.group-price{
 		height: 13px;
 	}
-	.price-q{color: #E41515;font-size: 16px;font-weight: bold;}
+	.price-q{color: $wzw-color-price-selling;font-size: 16px;font-weight: bold;}
 	.price-w{font-size: 14px;font-weight: 500;}
-	.price-e{text-decoration:line-through;color: #AEAEAE;font-size: 13px;margin-left: 10px;}
+	.price-e{text-decoration:line-through;color: $wzw-color-price-market;font-size: 13px;margin-left: 10px;}
 	.group-more{
 		margin-top: 7px;
 		width: 100%;
