@@ -9,10 +9,12 @@
 		<!--	轮播图下面全部 padding10px	-->
 		<div class="padding10-c">
 			<div class="padding15-r">
-				<div class="businessTitle">世家牛扒城</div>
+				<div class="businessTitle x-font-18">世家牛扒城</div>
 			</div>
-            <div class="rate">
-                <uni-rate value="4.5" max="5" active-color="#E41515" size='14'  margin="2"></uni-rate>
+            <div class="rate x-font-14 flex flex-vertical-center">
+                <uni-rate value="4.2" max="5" active-color="#E41515" size='14' disabled="false"  margin="2"></uni-rate>
+				<text class="rateValue">4.5评分</text>
+				<text class="rateValue">人均￥98</text>
             </div>
 		</div>
 
@@ -41,13 +43,16 @@
 	.businessTitle{
 		color: #333333;
 		font-weight: bold;
-		font-size: 18px;
 		height: 17px;
 		line-height: 17px;
 	}
     .rate{
         height: 14px;
         width: 100%;
+        color: #666666;
+    }
+    .rateValue{
+        height: 13px;
     }
 
 

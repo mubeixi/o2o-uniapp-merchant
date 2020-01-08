@@ -7,19 +7,9 @@
       class="uni-rate-icon"
       @click="_onClick(index)"
     >
-      <uni-icons
-        :size="size"
-        :color="color"
-        :type="isFill ? 'star-filled' : 'star'"
-      />
-      <view
-        :style="{ width: star.activeWitch }"
-        class="uni-rate-icon-on">
-        <uni-icons
-          :size="size"
-          :color="activeColor"
-          type="star-filled"/>
-      </view>
+      <text :style="{ color: 'red', 'font-size': size + 'px' }" v-if="star.activeWitch=='100%'" class="iconcc-star-half1 wzwicon" ></text>
+      <text :style="{ color: 'red', 'font-size': size + 'px' }" v-if="star.activeWitch=='50%'" class="iconcc-star-half-copy wzwicon"  ></text>
+      <text :style="{ color: '#999', 'font-size': size + 'px' }" v-else-if="star.activeWitch=='0'" class="wzwicon iconcc-star-half1-copy" ></text>
     </view>
   </view>
 </template>
@@ -91,7 +81,8 @@ export default {
           })
         } else if (ceilValue - 1 === i) {
           starList.push({
-            activeWitch: (value - floorValue) * 100 + '%'
+            // activeWitch: (value - floorValue) * 100 + '%'
+            activeWitch: '50%'
           })
         } else {
           starList.push({
