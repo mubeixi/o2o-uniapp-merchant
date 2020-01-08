@@ -28,6 +28,12 @@
 				"navigationBarTitleText": "自定义"
 			}
 		}
+        ,{
+            "path" : "pages/business/businessDetail",
+            "style": {
+            	"navigationBarTitleText": "商家详情"
+            }
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
