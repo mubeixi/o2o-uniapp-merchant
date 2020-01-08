@@ -26,7 +26,6 @@
 			</section>
 		</view>
 
-		<div :content="dfsaf|formatRichTextByUparse"></div>
 		<!-- <div style="height: 60px;"></div>
 		<div v-if="tabbar" class="tabbar">
 			<div class="item" @click="tabbarFn(0)">首页</div>
@@ -72,7 +71,7 @@
 		mixins:[pageMixin],
 		data() {
 			return {
-				dfsaf:'342342',
+
 				templateList:[],
 				templateData:[],
 				tagIndex:0,
