@@ -132,4 +132,8 @@ export default {
 		}
 	}
 }
+  .uni-rate-icon{
+    line-height: normal;
+    height: 100%;
+  }
 </style>
