@@ -33,6 +33,12 @@
             "style": {
             	"navigationBarTitleText": "商家详情"
             }
+		}
+		,{
+            "path" : "pages/detail/detail",
+            "style": {
+            	"navigationBarTitleText": "详情"
+            }
         }
     ],
 	"globalStyle": {
