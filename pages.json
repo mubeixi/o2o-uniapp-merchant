@@ -29,19 +29,6 @@
 			}
 		}
     ],
-	"subPackages": [{
-			"root": "pagesA",
-			"name": "onther",
-			"pages": [
-            ]
-			
-	}],
-	"preloadRule": {
-			"pages/index/index": {
-				"network": "all",
-				"packages": ["onther"]
-			}
-	},
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": " ",
