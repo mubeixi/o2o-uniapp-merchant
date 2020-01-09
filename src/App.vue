@@ -6,7 +6,9 @@
   </div>
 </template>
 <script lang="ts">
-import {getCommonConfig } from './common/fetch';
+import {
+    getCommonConfig
+} from './api/pub';
 import {
     Component,
     Vue

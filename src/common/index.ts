@@ -11,8 +11,7 @@ import './pluginRegister';
 //将特定的变量挂载到Vue原型链
 import './prototype';
 
-import interceptorsConfig from "./interceptors";
-Vue.http.interceptors.push(interceptorsConfig);
+
 
 //自定义的便捷操作
 import Fun from './fun'

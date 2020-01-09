@@ -5,27 +5,10 @@ import router from './router';
 import store from './store';
 import './registerServiceWorker';
 
-// import VueResource from 'vue-resource';
-// Vue.use(VueResource);
-// @ts-ignore
-Vue.http.options.emulateJSON = true;
-// @ts-ignore
-Vue.http.options.emulateHTTP = true;
-
-
 import './common'
 
+import './assets/js/icon'
 
-
-
-
-
-
-
-
-
-//symbol icon
-require('./assets/js/icon');
 
 //懒加载
 import VueLazyload from 'vue-lazyload'
@@ -38,7 +21,7 @@ Vue.use(VueLazyload, {
 Vue.config.productionTip = false;
 
 //各种方法?
-import {doLoginMixin} from "@/common/mixin";
+import {doLoginMixin} from "./common/mixin";
 new Vue({
   mixins: [doLoginMixin],
   router,

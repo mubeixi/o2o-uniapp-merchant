@@ -111,7 +111,7 @@ export const fetch = function (act: string, param: object = {}, options = {}, ur
 
   return new Promise(((resolve, reject) => {
 
-    request.post(url,data,options).then(res=>{
+    request[method](url,data,options).then(res=>{
       resolve(res)
       // if(res.data.errorCode === 0){
       //   resolve(res.data)

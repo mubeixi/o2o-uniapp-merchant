@@ -1,6 +1,5 @@
 import {fetch} from "../common/fetch";
 
-export const getCommonConfig = (data:object={},options:any=false)=> fetch('shopconfig', data, options)
 
 export const getFileList = (data:object={},options:any=false)=> fetch('getFolderDir', data, options)
 
