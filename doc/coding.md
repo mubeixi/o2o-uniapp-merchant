@@ -4,7 +4,7 @@
 2. 组件文件名始终是大驼峰，不管是单文件（及单个的vue文件的组件)还是利用render渲染的js组件
 3. 和父组件紧密耦合的子组件应该以父组件名作为前缀命名
 
-```javascript
+```text
 components/
 |- TodoList.vue
 |- TodoListItem.vue
