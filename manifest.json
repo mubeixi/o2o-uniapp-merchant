@@ -173,12 +173,12 @@
     "h5" : {
         "router" : {
             "mode" : "history",
-            "base" : "fre"
+            "base" : "member/fre"
         },
         "async" : {
             "timeout" : 10000 //避免容易出现网络不给力的情况，默认3秒
         },
-        "publicPath" : "/fre/",
+        "publicPath" : "/member/fre/",
         "devServer" : {
             "port" : 4100,
             "disableHostCheck" : true,
