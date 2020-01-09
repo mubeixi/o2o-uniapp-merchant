@@ -215,7 +215,16 @@
     import {Component, Vue} from 'vue-property-decorator';
     import {State} from 'vuex-class';
     import {mapActions, mapState} from 'vuex';
-    import {getSkinConfig, setSkinConfig,uploadImgByBase64,getDiySkinConfig,setDiySkinConfig} from '@/common/fetch';
+
+    import {
+        uploadImgByBase64
+    } from '../api/pub';
+    import {
+        getSkinConfig,
+        setSkinConfig,
+        getDiySkinConfig,
+        setDiySkinConfig
+    } from '../api/tmpl';
 
     import SpaceComponent from '@/components/diy/SpaceComponent';
     import HrComponent from '@/components/diy/HrComponent.vue';

@@ -3,7 +3,6 @@ import Router from 'vue-router';
 Vue.use(Router);
 
 import Page from '@/views/PageTmpl.vue';
-
 import Home from './views/Home';
 import Diy from './views/Diy';
 import Empty from './views/Empty';
@@ -40,8 +39,7 @@ import Contribute from '@/views/distributor/Contribute.vue';
 import ContributeDetail from '@/views/distributor/ContributeDetail.vue';
 
 
-const routerInstance = new Router({
-  routes: [
+export const route_list = [
     {
       path: '/',
       name: 'Home',
@@ -292,25 +290,27 @@ const routerInstance = new Router({
       path: '*',
       redirect:'/NotFound'
     }
+  ]
 
 
 
-    // {
-    //   path: '/about',
-    //   name: 'about',
-    //   // route level code-splitting
-    //   // this generates a separate chunk (about.[hash].js) for this route
-    //   // which is lazy-loaded when the route is visited.
-    //   component: () => import(/* webpackChunkName: "about" */ './views/About.vue'),
-    // },
-  ],
-});
-routerInstance.beforeEach((to, from, next) => {
-  const title = to.meta && to.meta.title;
-  if (title) {
-    document.title = title;
-  }
-  next();
-});
+
+
+const createRouter = () => new Router({
+  // mode: 'history', // require service support
+  // @ts-ignore
+  scrollBehavior: () => ({ y:0 }),
+  routes: route_list
+})
+
+const routerInstance = createRouter()
+
+// Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
+export function resetRouter() {
+  const newRouter = createRouter()
+  routerInstance.matcher = newRouter.matcher // reset router
+}
+
+
 
 export default routerInstance

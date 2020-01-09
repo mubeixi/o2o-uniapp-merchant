@@ -5,8 +5,8 @@ import router from './router';
 import store from './store';
 import './registerServiceWorker';
 
-import VueResource from 'vue-resource';
-Vue.use(VueResource);
+// import VueResource from 'vue-resource';
+// Vue.use(VueResource);
 // @ts-ignore
 Vue.http.options.emulateJSON = true;
 // @ts-ignore
