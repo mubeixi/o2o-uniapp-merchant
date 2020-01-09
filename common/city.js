@@ -1,8 +1,7 @@
 // import Area from './tool/area.js'
 import {area} from './area';
-
-
 const areaData = area[0];
+import {array_change} from "./helper";
 
 export class City {
 
