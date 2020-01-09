@@ -40,6 +40,12 @@
             	"navigationBarTitleText": "详情"
             }
         }
+		,{
+            "path" : "pages/PC-register/register",
+            "style": {
+            	"navigationBarTitleText": "注册"
+            }
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
