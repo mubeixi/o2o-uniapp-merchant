@@ -5,7 +5,7 @@
 3. 和父组件紧密耦合的子组件应该以父组件名作为前缀命名
 ```
 components/
-|- TodoList.vue
+|- TodoList.vue2
 |- TodoListItem.vue
 |- TodoListItemButton.vue
 ```
