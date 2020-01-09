@@ -25,16 +25,24 @@
             </div>
         </div>
         <div class="rightss">
-            <block v-if="!(recieve || isVirtual)">
-                <div class="dan bTitle" @click="addCart">
-                    {{first}}
+                <div class="buy-now">
+                    <div>
+                        <text class="price-q">¥</text><text class="price-w">550.00</text>
+                    </div>
+                    <div class="buy-button">
+                        立即购买
+                    </div>
                 </div>
-                <div class="tuan bTitle" @click="directBuy">
-                    {{second}}
-                </div>
-            </block>
-            <div class="all" @click="lingqu" :class="canSubmit?'':'disable'" v-else>{{isVirtual ? '立即购买' : '立即领取'}}
-            </div>
+<!--            <block v-if="!(recieve || isVirtual)">-->
+<!--                <div class="dan bTitle" @click="addCart">-->
+<!--                    {{first}}-->
+<!--                </div>-->
+<!--                <div class="tuan bTitle" @click="directBuy">-->
+<!--                    {{second}}-->
+<!--                </div>-->
+<!--            </block>-->
+<!--            <div class="all" @click="lingqu" :class="canSubmit?'':'disable'" v-else>{{isVirtual ? '立即购买' : '立即领取'}}-->
+<!--            </div>-->
         </div>
     </div>
 </template>
@@ -187,4 +195,16 @@
             }
         }
     }
+
+    .buy-now{
+        width: 100%;
+        height: 100%;
+        background-color: $wzw-bg-primary;
+        color: #ffffff;
+        text-align: center;
+        padding-top: 5px;
+    }
+    .price-q{font-size: 11px}
+    .price-w{font-size: 13px;margin-left: 4px}
+
 </style>

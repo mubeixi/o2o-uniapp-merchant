@@ -32,7 +32,7 @@
 			</div>
 			<div class="address-font">
 				河南省郑州市金水区文化路与任寨北街交叉口向西50米路北世家牛扒城
-				<image src="static/icon/rightIconSmall.png" class="rightIconSmall"></image>
+				<image src="/static/icon/rightIconSmall.png" class="rightIconSmall"></image>
 			</div>
 		</div>
 		<!--	领取优惠券	-->
@@ -149,7 +149,7 @@
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	.swiper{
 		width: 750rpx;
 		height: 400rpx;
@@ -188,7 +188,7 @@
 			.lines{width: 1px;height: 14px;background-color: #DADADA;margin-left: 12px;margin-right: 12px}
 		}
 	}
-	.rightIconSmall{width: 8px;height: 12px;margin-left: 10px}
+	.rightIconSmall{width: 8px;height: 12px;margin-left: 10px;vertical-align: middle;}
 	.address-font{font-size: 13px;color: #333333;line-height: 20px;}
 	.coupon{width: 710rpx;padding: 10px 15px 10px 12px;background-color: #ffffff;border-radius: 5px;box-sizing: border-box;}
 	.couponDetail{height: 22px;}
