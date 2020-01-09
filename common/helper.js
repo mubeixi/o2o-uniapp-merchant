@@ -662,3 +662,13 @@ export function check_money_in(money) {
         return true;
     }
 }
+
+export const array_change = function (arr) {
+    var array = [];
+    // console.log('utls')
+    // console.log(arr)
+    for (var i in arr) {
+        array.push({ 'id': i, 'name': arr[i] });
+    }
+    return array;
+}
