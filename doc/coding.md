@@ -1,15 +1,15 @@
 ### 编码规范
 ---
-1.组件名应该始终是多个单词的，根组件 App 以及 <transition>、<component> 之类的 Vue 内置组件除外。
-2.组件文件名始终是大驼峰，不管是单文件（及单个的vue文件的组件)还是利用render渲染的js组件
-3.和父组件紧密耦合的子组件应该以父组件名作为前缀命名
+1. 组件名应该始终是多个单词的，根组件 App 以及 <transition>、<component> 之类的 Vue 内置组件除外。
+2. 组件文件名始终是大驼峰，不管是单文件（及单个的vue文件的组件)还是利用render渲染的js组件
+3. 和父组件紧密耦合的子组件应该以父组件名作为前缀命名
 ```$javascript
 components/
 |- TodoList.vue
 |- TodoListItem.vue
 |- TodoListItemButton.vue
 ```
-4.组件/实例的选项应该有统一的顺序
+4. 组件/实例的选项应该有统一的顺序
 ```text
 1.副作用 (触发组件外的影响)
 el
@@ -54,15 +54,15 @@ methods
 template/render
 renderError
 ```
-5.总是用 key 配合 v-for。
-6.避免 v-if 和 v-for 用在一起
-7.为组件样式设置作用域 <style scope lang="xx"></style>
-8.组件中自定义私有属性使用 $_ 前缀
-9.dom中组件都使用kebab-case。
+5. 总是用 key 配合 v-for。
+6. 避免 v-if 和 v-for 用在一起
+7. 为组件样式设置作用域 <style scope lang="xx"></style>
+8. 组件中自定义私有属性使用 $_ 前缀
+9. dom中组件都使用kebab-case。
 ```javascript
 <my-component></my-component>
 ```
-10.组件名应该倾向于完整单词而不是缩写
+10. 组件名应该倾向于完整单词而不是缩写
 反例
 ```javascript
 components/
@@ -75,7 +75,7 @@ components/
 |- StudentDashboardSettings.vue
 |- UserProfileOptions.vue
 ```
-11.prop 的定义应该尽量详细，至少需要指定其类型。在声明 prop 的时候，其命名应该始终使用 camelCase，而在模板和 JSX 中应该始终使用 kebab-case。
+11. prop 的定义应该尽量详细，至少需要指定其类型。在声明 prop 的时候，其命名应该始终使用 camelCase，而在模板和 JSX 中应该始终使用 kebab-case。
 ```javascript
 props: {
   greetingText: String
@@ -84,7 +84,7 @@ props: {
 ```html
 <WelcomeMessage greeting-text="hi"/>
 ```
-12.多个特性的元素应该分多行撰写，每个特性一行。
+12. 多个特性的元素应该分多行撰写，每个特性一行。
 反例
 ```javascript
 <MyComponent foo="a" bar="b" baz="c"/>
@@ -97,7 +97,7 @@ props: {
   baz="c"
 />
 ```
-13.组件模板应该只包含简单的表达式，复杂的表达式则应该重构为计算属性或方法。
+13. 组件模板应该只包含简单的表达式，复杂的表达式则应该重构为计算属性或方法。
 ```html
 <div class="">
 {{
@@ -122,7 +122,7 @@ computed: {
   }
 }
 ```
-14.应该把复杂计算属性分割为尽可能多的更简单的属性。
+14. 应该把复杂计算属性分割为尽可能多的更简单的属性。
 反例
 ```javascript
 computed: {
@@ -149,7 +149,7 @@ computed: {
   }
 }
 ```
-15.元素特征的推荐顺序
+15. 元素特征的推荐顺序
 ```text
 定义 (提供组件的选项)
 is
@@ -178,7 +178,7 @@ v-on
 v-html
 v-text
 ```
-16.CSS书写顺序
+16. CSS书写顺序
 ```text
 1.位置属性(position, top, right, z-index, display, float等)
 2.大小(width, height, padding, margin)
