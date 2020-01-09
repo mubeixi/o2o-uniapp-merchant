@@ -3,7 +3,7 @@
 1. 组件名应该始终是多个单词的，根组件 App 以及 <transition>、<component> 之类的 Vue 内置组件除外。
 2. 组件文件名始终是大驼峰，不管是单文件（及单个的vue文件的组件)还是利用render渲染的js组件
 3. 和父组件紧密耦合的子组件应该以父组件名作为前缀命名
-```$javascript
+``` javascript
 components/
 |- TodoList.vue
 |- TodoListItem.vue
@@ -59,18 +59,18 @@ renderError
 7. 为组件样式设置作用域 <style scope lang="xx"></style>
 8. 组件中自定义私有属性使用 $_ 前缀
 9. dom中组件都使用kebab-case。
-```javascript
+``` javascript
 <my-component></my-component>
 ```
 10. 组件名应该倾向于完整单词而不是缩写
 反例
-```javascript
+``` javascript
 components/
 |- SdSettings.vue
 |- UProfOpts.vue
 ```
 好例子
-```javascript
+``` javascript
 components/
 |- StudentDashboardSettings.vue
 |- UserProfileOptions.vue
