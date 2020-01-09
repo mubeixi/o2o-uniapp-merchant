@@ -14,13 +14,13 @@
                     <div class="form-item">
                         <span class="label">验证码</span>
                         <input type="text" placeholder="请输入验证码" placeholder-style="color:#C0C4CC;">
-                        <button class="code">获取验证码</button>
+                        <button class="code cur-pointer">获取验证码</button>
                     </div>
                     <div class="form-item">
                         <span class="label">密码</span>
                         <input type="text" placeholder="请输入登录密码" placeholder-style="color:#C0C4CC;">
                     </div>
-                    <div class="submit marginT50">注册</div>
+                    <div class="submit marginT50 cur-pointer">注册</div>
                 </form>
             </div>
         </div>
@@ -75,6 +75,9 @@
 <style scoped lang="scss">
     .wrap {
         min-width: 1080px;
+    }
+    .cur-pointer {
+        cursor: pointer;
     }
     .top {
         position: relative;
