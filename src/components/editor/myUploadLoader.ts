@@ -1,8 +1,10 @@
 
-import {uploadImgByBase64} from "../../common/fetch";
+import {
+  uploadImgByBase64
+} from "../../api/pub";
 import {domain} from "../../common/utils";
 import {isDev} from "../../common/env";
-const initData = window.initData
+
 // 上传适配插件所有的操作都在这里面完成
 export class myUploadLoader {
   loader:any

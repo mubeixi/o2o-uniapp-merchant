@@ -14,6 +14,6 @@ import './prototype';
 
 
 //自定义的便捷操作
-import Fun from './fun'
+// import Fun from './fun'
 import Vue from "vue/types/vue";
-export const fun = Fun
+// export const fun = Fun

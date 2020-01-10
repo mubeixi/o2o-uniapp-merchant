@@ -6,6 +6,15 @@ import Cookies from "js-cookie";
 
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
+export const uploadService = axios.create({
+  headers:{'Content-Type':'multipart/form-data'},
+  onUploadProgress: p => { return 100 * ( p.loaded / p.total ) },
+  onDownloadProgress: p => { return 100 * ( p.loaded / p.total ) },
+  baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
+  // withCredentials: true, // send cookies when cross-domain requests
+  //transformRequest:[function(data){return qs.stringify(data)}],
+  timeout: 30000 // request timeout
+})
 
 
 // create an axios instance

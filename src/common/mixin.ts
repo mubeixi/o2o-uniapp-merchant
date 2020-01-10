@@ -1,9 +1,10 @@
 // import {login,getUsersInfo} from "@/common/fetch";
 import {login,getUsersInfo} from "../api/user";
-import {ls,ss} from '@/common/tool/ls';
+import {ss} from '@/common/tool/ls';
 import {GetQueryByString} from "@/common/utils";
 import Cookies from 'js-cookie';
 import {isDev} from "./env";
+import fun from "./fun";
 
 
 /**
@@ -11,11 +12,12 @@ import {isDev} from "./env";
  */
 export const doLoginMixin = {
 
-  created() {
+  async created() {
 
     if (isDev && !Cookies.get('access_token')) {
+      Cookies.set('Users_ID', 'wkbq6nc2kc')
 
-      login({Account: 'admin', Password: '123456'}).then((res:any) => {
+      await login({Account: 'admin', Password: '123456'}).then((res:any) => {
         // ls.set('Users_ID', res.data.Users_ID);
         // // ls.set('Users_Account', res.data.Users_Account)
         //
@@ -24,7 +26,6 @@ export const doLoginMixin = {
         //   ShopLogo: res.data.ShopLogo,
         //   description: res.data.description
         // })
-        Cookies.set('Users_ID', 'wkbq6nc2kc')
         Cookies.set('Stores_Bind_User_ID', '48')//为了区分其他的user_id，所以弄了这个代表店铺的user_id
         Cookies.set('Stores_ID', '10')
         Cookies.set('access_token', res.data.access_token)//手动写hack
@@ -34,10 +35,10 @@ export const doLoginMixin = {
     }
 
     if(!Cookies.get('Users_ID')){
-      this.$fun.error({msg:'需要登录'});
-      setTimeout(()=>{
-        location.href = '/member/login.php';
-      },1000)
+      fun.error({msg:'需要登录'})
+      // setTimeout(()=>{
+      //   location.href = '/member/login.php';
+      // },1000)
     }
 
   }

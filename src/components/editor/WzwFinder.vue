@@ -159,18 +159,18 @@
 </template>
 
 <script lang="ts">
-
+  import {Component, Vue, Prop} from 'vue-property-decorator';
   import {
       Action,
       State
   } from 'vuex-class'
 
+
+
   import {createDirectory,getFileList} from '../../api/pub'
-  import {fetch as fetchFn} from "../../common/fetch";
-  import {Component, Vue, Prop} from 'vue-property-decorator';
   import {domain} from '../../common/utils';
   import WzwFileButton from './WzwFileButton.vue';
-  import {fun} from '../../common';
+  import fun from "../../common/fun";
   import {isDev} from '../../common/env';
 
 
@@ -268,7 +268,7 @@
               deep: true,
               handler(val){
                   const upload_rule = val.upload_rule
-                  console.log(upload_rule)
+                  //console.log(upload_rule)
                   this.accept = upload_rule['image'].exts
                   this.maxSize = upload_rule['image'].size
                   this.seconds = upload_rule['media'].seconds

@@ -1,5 +1,5 @@
 import Vue from "vue";
-import {fun} from "./index";
+import fun from "./fun";
 import echarts from 'echarts'
 
 // const i18n = require('i18n');

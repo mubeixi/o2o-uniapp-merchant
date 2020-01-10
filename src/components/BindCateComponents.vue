@@ -67,7 +67,10 @@
 </template>
 
 <script>
-  import { getProductCategory } from '@/common/fetch';
+  import {
+    getProductCategory
+  } from '../api/product';
+
   import { deepCopy } from '@/common/utils';
   import { get_arr_column, objTranslate } from '../common/utils';
 

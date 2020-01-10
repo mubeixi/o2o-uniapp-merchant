@@ -26,13 +26,17 @@
         Action,
         State
     } from 'vuex-class'
-    // import {getAliyunOssSign,uploadImgByBase64,uploadFileFn} from '../../common/fetch';
-    import {getAliyunOssSign,uploadImgByBase64,uploadFileFn} from "../../api/pub";
-    import {objTranslate} from '../../common/utils';
+
+    import {
+      getAliyunOssSign
+    } from "../../api/pub";
+
     import _ from 'underscore'
     const defaultAllowFileType = [ 'jpeg', 'png', 'gif', 'bmp']
 
-    //const upFIleUrl = 'http://localhost:9100/upload-multi'
+    import {
+      uploadService
+    } from "../../common/request";
 
     function returnFileSize(number) {
         if(number < 1024) {
@@ -65,8 +69,8 @@
         return suffix;
     }
 
-    import {ls} from '../../common/tool/ls';
-    import {fun} from '../../common';
+
+    import fun from "../../common/fun";
     import {get_Users_ID,GET_ACCESS_TOKEN,createToken} from '../../common/fetch';
 
     const formatNumber = n => {
@@ -142,12 +146,17 @@
 
             xhr.onload = function () {
                 // 请求结束后,在此处写处理代码
-
                 resolve('');
 
             };
+            xhr.addEventListener('error', function(e){
+              reject(e)
+            });
             xhr.send(formdata);
 
+        }).catch((e)=>{
+          console.log(e)
+          fun.error({msg:'文件上传失败'+JSON.stringify(e)})
         })
 
 
@@ -188,31 +197,38 @@
             reader.addEventListener("load", ()=>{
 
                 //上传到服务器上
-                Vue.http.post('/api/little_program/shopconfig.php',formdata,{
-                    progress:function(event) {
+              uploadService.post('/api/little_program/shopconfig.php',formdata,{
 
-                        let percent = parseInt(event.loaded / event.total * 100)
-                        console.log(`upload task upload :${idx}==>${percent}`);
-                        if(percent<100){
-                            list[idx].percent = percent
-                            progress && progress()
-                        }else{
-                            list[idx].percent = percent
-                            // list.splice(idx,1);//去掉
-                            progress && progress()
-                        }
+                  onUploadProgress:function(event:object) {
 
+                    let percent = parseInt(event.loaded / event.total * 100)
+                    console.log(`upload task upload :${idx}==>${percent}`);
+                    if(percent<100){
+                        list[idx].percent = percent
+                        progress && progress()
+                    }else{
+                        list[idx].percent = percent
+                        // list.splice(idx,1);//去掉
+                        progress && progress()
                     }
-                }).then(res=>{
+                  }
 
-                    resolve(true)
+                }).then(ret=>{
+                  let res = ret.data
+
+                    if(res.errorCode!==0){
+                      reject(res.msg)
+                    }else{
+                      resolve(true)
+                    }
+
                 }).catch(e=>{})
 
 
-            },false)
+            })
             reader.readAsDataURL(file)
 
-        })
+        }).catch((msg)=>{fun.error({msg:'文件上传失败:'+msg})})
 
 
     }
@@ -367,8 +383,7 @@
                         progress:()=>{
                           this.progress(this.previews)
                         }
-                    }
-                    ))
+                    }))
 
                 }
 
@@ -386,6 +401,10 @@
                 this.previews = []
                 this.preview([])
                 this.success()
+            }).catch((msg)=>{
+              fun.error({msg:'上传失败：'+msg})
+
+              //console.log('上传失败',err)
             })
 
         }

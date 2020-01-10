@@ -86,7 +86,7 @@
   function noop() {
   }
 
-  import {fun} from '@/common';
+  import fun from "../../common/fun";
 
   @Component({
       computed: {

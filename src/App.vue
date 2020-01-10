@@ -33,7 +33,7 @@ export default class App extends Vue {
     created() {
         getCommonConfig().then(res=>{
             this.setInitData(res.data)
-        })
+        }).catch(()=>{})
     }
 }
 

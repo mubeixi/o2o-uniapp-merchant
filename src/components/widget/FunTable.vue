@@ -70,7 +70,9 @@
         mapState
     } from 'vuex';
     import FunSearch from './FunSearch'
-    import {commonReq} from '@/common/fetch';
+    import {
+      commonReq
+    } from "../../api/pub";
     import MyRender from './MyRender'
     import _ from 'underscore'
     const noop = ()=>{}

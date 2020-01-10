@@ -10,6 +10,7 @@ import Cookie from 'js-cookie';
 import './tool/base64'
 
 import request from './request'
+import {emptyObject} from "./utils";
 
 
 export const GET_ACCESS_TOKEN = ()=>Cookie.get('access_token');
@@ -90,7 +91,7 @@ export const fetch = function (act: string, param: object = {}, options = {}, ur
   }
 
   // @ts-ignore
-  if(!param.Users_ID){
+  if(!param.hasOwnProperty('Users_ID') || !param.Users_ID){
     // @ts-ignore
     param.Users_ID = get_Users_ID();
   }
@@ -105,9 +106,11 @@ export const fetch = function (act: string, param: object = {}, options = {}, ur
     param.store_id = get_Stores_ID();
   }
 
-  // 数据加密
-  let data = createToken(param);
+  const postData = emptyObject(param)
 
+  // 数据加密
+  let data = createToken(postData);
+  console.log(data)
   url = (process.env.NODE_ENV === 'production' ? baseApiUrl : '') + url;
 
   return new Promise(((resolve, reject) => {
