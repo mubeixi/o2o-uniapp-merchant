@@ -8,7 +8,8 @@ import Diy from './views/Diy';
 import Empty from './views/Empty';
 
 import NotFound from '@/views/NotFound.vue';
-
+import Login from '@/views/register/login.vue';
+import Register from '@/views/register/register.vue';
 
 export const route_list = [
     {
@@ -37,6 +38,22 @@ export const route_list = [
     {
       path: '*',
       redirect:'/NotFound'
+    },
+    {
+      path: '/login',
+      name: 'Login',
+      component: Login,
+      meta: {
+        title: '登录'
+      }
+    },
+    {
+      path: '/register',
+      name: 'Register',
+      component: Register,
+      meta: {
+        title: '注册'
+      }
     }
   ]
 
