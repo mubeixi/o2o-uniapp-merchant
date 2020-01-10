@@ -4,13 +4,20 @@ import store from '../store'
 import {isDev} from "./env";
 import Cookies from "js-cookie";
 
+// axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+
+
 
 // create an axios instance
 const service = axios.create({
+  headers:{'Content-Type':'application/x-www-form-urlencoded'},
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
   // withCredentials: true, // send cookies when cross-domain requests
+  //transformRequest:[function(data){return qs.stringify(data)}],
   timeout: 5000 // request timeout
 })
+// service.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+// {headers:{'Content-Type':'application/x-www-form-urlencoded'}}
 
 // request interceptor
 service.interceptors.request.use(
@@ -42,12 +49,12 @@ service.interceptors.response.use(
     }
 
     const res = response.data
-
+    console.log(res)
 
     // if the custom code is not 20000, it is judged as an error.
-    if (res.code !== 0) {
+    if (res.errorCode !== 0) {
 
-      if(res.code === 66001){
+      if(res.errorCode === 66001){
 
         if(!isDev){
           //清空cookies
@@ -70,7 +77,7 @@ service.interceptors.response.use(
       })
 
       // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
-      if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
+      if (res.errorCode === 50008 || res.errorCode === 50012 || res.errorCode === 50014) {
         // to re-login
         MessageBox.confirm('You have been logged out, you can cancel to stay on this page, or log in again', 'Confirm logout', {
           confirmButtonText: 'Re-Login',
@@ -82,10 +89,12 @@ service.interceptors.response.use(
           })
         })
       }
+      return Promise.reject(res.message || 'Error')
 
-      return Promise.reject(new Error(res.message || 'Error'))
     } else {
+
       return res
+
     }
   },
     error => {

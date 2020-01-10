@@ -70,7 +70,8 @@
     import {mapState} from 'vuex';
     import Goods from '@/assets/js/diy/goods';
     import {deepCopy, domain,mixinStyle} from '@/common/utils';
-    import {getProductList} from '@/common/fetch';
+    // import {getProductList} from '@/common/fetch';
+    import {getProductList} from "../../api/product";
 
     @Component({
         props: {

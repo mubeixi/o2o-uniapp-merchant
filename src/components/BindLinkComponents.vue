@@ -104,7 +104,19 @@
 </template>
 
 <script>
-  import { getProductCategory, getProductList,getDiyPageList,getSystemUrl,getDiyUrl,systemArticleUrl } from '@/common/fetch';
+
+  import {
+    getDiyPageList,
+    getSystemUrl,
+    getDiyUrl,
+    systemArticleUrl
+  } from '../api/tmpl';
+
+  import {
+    getProductList,
+    getProductCategory
+  } from '../api/product';
+
   import { deepCopy } from '@/common/utils';
   import {fun} from '../common';
 

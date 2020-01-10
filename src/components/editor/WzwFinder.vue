@@ -160,16 +160,18 @@
 
 <script lang="ts">
 
-    import {
-        Action,
-        State
-    } from 'vuex-class'
-    import {createDirectory, fetch as fetchFn, getFileList} from '../../common/fetch';
+  import {
+      Action,
+      State
+  } from 'vuex-class'
+
+  import {createDirectory,getFileList} from '../../api/pub'
+  import {fetch as fetchFn} from "../../common/fetch";
   import {Component, Vue, Prop} from 'vue-property-decorator';
   import {domain} from '../../common/utils';
   import WzwFileButton from './WzwFileButton.vue';
-    import {fun} from '../../common';
-    import {isDev} from '../../common/env';
+  import {fun} from '../../common';
+  import {isDev} from '../../common/env';
 
 
   @Component({

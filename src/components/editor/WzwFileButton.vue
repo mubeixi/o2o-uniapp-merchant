@@ -26,12 +26,13 @@
         Action,
         State
     } from 'vuex-class'
-    import {getAliyunOssSign,uploadImgByBase64,uploadFileFn} from '../../common/fetch';
+    // import {getAliyunOssSign,uploadImgByBase64,uploadFileFn} from '../../common/fetch';
+    import {getAliyunOssSign,uploadImgByBase64,uploadFileFn} from "../../api/pub";
     import {objTranslate} from '../../common/utils';
     import _ from 'underscore'
     const defaultAllowFileType = [ 'jpeg', 'png', 'gif', 'bmp']
 
-    const upFIleUrl = 'http://localhost:9100/upload-multi'
+    //const upFIleUrl = 'http://localhost:9100/upload-multi'
 
     function returnFileSize(number) {
         if(number < 1024) {

@@ -474,3 +474,7 @@ export const formatRichTextByKindEditor = (html)=>{
 
   return newContent
 }
+
+export function trim(str) {
+  return str ? str.replace(/^\s*|\s*$/g, '') : '';
+}
