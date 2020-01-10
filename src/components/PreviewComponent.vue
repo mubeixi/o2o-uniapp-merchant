@@ -244,7 +244,7 @@
     import CubeComponent from '@/components/diy/CubeComponent.vue';
     import TabComponent from '@/components/diy/TabComponent';
 
-    import {deepCopy, getStyle} from '@/common/utils';
+    import {deepCopy, getStyle,trim} from '@/common/utils';
     import Hr from '@/assets/js/diy/hr';
     import Text from '@/assets/js/diy/text';
     import Space from '@/assets/js/diy/space';
@@ -266,8 +266,7 @@
 
 
     import html2canvas from 'html2canvas';
-    import {Canvas2Image} from '@/assets/js/diy/tool/canvas2img';
-    import {trim} from 'vue-resource/src/util';
+    import {Canvas2Image} from '../assets/js/diy/tool/canvas2img';
 
 
     @Component({
@@ -438,7 +437,7 @@
                 await html2canvas(shareContent, opts).then(canvas => {
 
                     console.log(canvas)
-                    let context = canvas.getContext('2d')
+                    let context:object = canvas.getContext('2d')
                     // 【重要】关闭抗锯齿
                     context.mozImageSmoothingEnabled = false
                     context.webkitImageSmoothingEnabled = false
@@ -534,7 +533,7 @@
 
 
                 if(!this.system.title){
-                    this.$fun.warning("名称必填");
+                    this.$fun.warning({msg:"名称必填"});
                     return;
                 }
 
@@ -543,7 +542,7 @@
                 let mixinData = {plugin:this.templateData,system:this.system}
 
 
-                let postData = {
+                let postData:object = {
                     //this.templateData换掉最新的
                     Home_Json: JSON.stringify(mixinData)
                 }
@@ -693,7 +692,7 @@
             clickPlugin(idx) {
                 const sectionEl = document.querySelectorAll('.canvas > section')[idx];
                 if (!sectionEl) return;
-                sectionEl.click();
+
                 const templateName = sectionEl.getAttribute('data-tag');
 
                 const dragEl = sectionEl.getElementsByClassName(`${templateName}`)[0];

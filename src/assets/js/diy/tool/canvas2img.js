@@ -3,7 +3,7 @@
  * and save the image file
  */
 
-export const  Canvas2Image = function () {
+export const Canvas2Image = function () {
 
   // check if support sth.
   var $support = function () {

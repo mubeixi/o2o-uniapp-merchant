@@ -11,5 +11,16 @@ export const getSpikeProd = (data:object={},options:any=false) => fetch('get_spi
 
 export const getProductCategory = (data:object={},options:any=false) => fetch('pro_cate', data, options)
 
-
 export const getProductCountInfo  = (data:object={},options:any=false) => fetch('get_users_info', data, options);
+
+
+export const getProductDetail = (data:object={},options:any=false) => fetch('prod_detail', data, options)
+
+export const getProductList = (data:object={},options:any=false) => fetch('get_prod', data, options)
+
+
+
+
+
+
+

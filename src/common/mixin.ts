@@ -1,4 +1,5 @@
-import {login,getUsersInfo} from "@/common/fetch";
+// import {login,getUsersInfo} from "@/common/fetch";
+import {login,getUsersInfo} from "../api/user";
 import {ls,ss} from '@/common/tool/ls';
 import {GetQueryByString} from "@/common/utils";
 import Cookies from 'js-cookie';

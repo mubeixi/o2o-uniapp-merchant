@@ -3,6 +3,7 @@ import {baseApiUrl} from './env';
 import {hexMD5} from "@/common/tool/md5";
 import {Loading} from "element-ui";
 import {ls} from "@/common/tool/ls";
+import qs from 'qs'
 
 import Cookie from 'js-cookie';
 
@@ -111,7 +112,7 @@ export const fetch = function (act: string, param: object = {}, options = {}, ur
 
   return new Promise(((resolve, reject) => {
 
-    request[method](url,data,options).then(res=>{
+    request[method](url,qs.stringify(data),options).then(res=>{
       resolve(res)
       // if(res.data.errorCode === 0){
       //   resolve(res.data)
@@ -119,7 +120,7 @@ export const fetch = function (act: string, param: object = {}, options = {}, ur
       //   reject(new Error(res))
       // }
     },error=>{
-      reject(new Error(error))
+      reject(error)
     })
 
   }));
