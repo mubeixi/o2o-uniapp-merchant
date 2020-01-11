@@ -27,8 +27,22 @@
                     <div class="c-title">提交资质</div>
                     <div class="c-mid">提交企业资料和银行账户信息</div>
                 </div>
-                <div class="btn text-center">去提交</div>
+                <div class="btn text-center" @click="dialogFormVisible = true ">去提交</div>
             </div>
+            <el-dialog title="入驻类型" :visible.sync="dialogFormVisible">
+                <el-form :model="form">
+                    <el-form-item label="入驻类型" :label-width="formLabelWidth">
+                    <el-select v-model="form.type" placeholder="请选择类型">
+                        <el-option label="个人入驻" value="person"></el-option>
+                        <el-option label="商家入驻" value="company"></el-option>
+                    </el-select>
+                    </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="dialogFormVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="goApprove">确 定</el-button>
+                </div>
+            </el-dialog>
         </div>
         <div class="item flex flex-vertical-center">
             <div class="num text-center">4</div>
@@ -58,7 +72,23 @@
     import Vue from 'vue'
 
     export default Vue.extend({
-        
+        data(){
+            return {
+                dialogFormVisible: false,
+                form: {
+                    type: ''
+                }
+            }
+        },
+        methods: {
+            goApprove: function(){
+                if(this.form.type == 'person') {
+                    this.$router.push('PersonApprove')
+                }else if(this.form.type == 'company') {
+                    this.$router.push('CompanyApprove')
+                }
+            }
+        }
     })
 </script>
 
@@ -118,6 +148,7 @@
             border-radius:3px;
             font-size: 14px;
             background: @primary-color;
+            cursor: pointer;
             .see {
                 position: absolute;
                 bottom: -30px;
