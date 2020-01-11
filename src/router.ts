@@ -13,6 +13,7 @@ import Register from '@/views/register/Register.vue';
 import Setting from '@/views/register/Setting';
 import SettledAgreement from '@/views/register/SettledAgreement';
 import PersonApprove from '@/views/register/PersonApprove';
+import CompanyApprove from '@/views/register/CompanyApprove';
 
 export const route_list = [
     {
@@ -81,7 +82,16 @@ export const route_list = [
       meta: {
         title: '个人认证'
       }
+    },
+    {
+      path: '/CompanyApprove',
+      name: 'CompanyApprove',
+      component: CompanyApprove,
+      meta: {
+        title: '个人认证'
+      }
     }
+
   ]
 
 
