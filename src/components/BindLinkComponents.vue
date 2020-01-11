@@ -118,7 +118,7 @@
   } from '../api/product';
 
   import { deepCopy } from '@/common/utils';
-  import {fun} from '../common';
+  import fun from '../common/fun';
 
   function refreshCateData(arr) {
 

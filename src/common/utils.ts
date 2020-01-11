@@ -1,6 +1,6 @@
 // @ts-nocheck
 import Vue from 'vue';
-import {fun} from "./index";
+import fun from "./fun";
 import {staticUrl} from "./env";
 // const staticUrl = process.env.VUE_APP_STATIC_URL
 

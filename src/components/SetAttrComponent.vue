@@ -405,7 +405,7 @@
     import SelectGoodsComponent from '@/components/SelectGoodsComponent';
     import MagicCubeComponent from '@/components/diy/tool/MagicCubeComponent';
     import SelectSpikeListComponent from '@/components/SelectSpikeListComponent';
-    import {fun} from '@/common';
+    import fun from "../common/fun";
 
     import {
         Action,

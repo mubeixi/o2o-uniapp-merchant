@@ -61,6 +61,7 @@
   },
   "devDependencies": {
     "@types/js-cookie": "^2.2.4",
+    "@types/underscore": "^1.9.4",
     "@vue/cli-plugin-babel": "^3.11.0",
     "@vue/cli-plugin-eslint": "^3.11.0",
     "@vue/cli-plugin-pwa": "^3.11.0",

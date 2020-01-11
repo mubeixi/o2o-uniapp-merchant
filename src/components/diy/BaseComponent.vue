@@ -35,7 +35,10 @@
     import {mapState} from 'vuex';
     import Base from '@/assets/js/diy/base';
     import {deepCopy, domain} from '@/common/utils';
-    import {getProductCountInfo} from "../../common/fetch";
+
+    import {
+      getProductCountInfo
+    } from "../../api/product";
 
     @Component({
         props: {
