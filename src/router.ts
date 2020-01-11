@@ -8,8 +8,12 @@ import Diy from './views/Diy';
 import Empty from './views/Empty';
 
 import NotFound from '@/views/NotFound.vue';
-import Login from '@/views/register/login.vue';
-import Register from '@/views/register/register.vue';
+import Login from '@/views/register/Login.vue';
+import Register from '@/views/register/Register.vue';
+import Setting from '@/views/register/Setting';
+import SettledAgreement from '@/views/register/SettledAgreement';
+import PersonApprove from '@/views/register/PersonApprove';
+import CompanyApprove from '@/views/register/CompanyApprove';
 
 export const route_list = [
     {
@@ -54,7 +58,40 @@ export const route_list = [
       meta: {
         title: '注册'
       }
+    },
+    {
+      path: '/setting',
+      name: 'Setting',
+      component: Setting,
+      meta: {
+        title: '注册'
+      }
+    },
+    {
+      path: '/SettledAgreement',
+      name: 'SettledAgreement',
+      component: SettledAgreement,
+      meta: {
+        title: '签署协议'
+      }
+    },
+    {
+      path: '/PersonApprove',
+      name: 'PersonApprove',
+      component: PersonApprove,
+      meta: {
+        title: '个人认证'
+      }
+    },
+    {
+      path: '/CompanyApprove',
+      name: 'CompanyApprove',
+      component: CompanyApprove,
+      meta: {
+        title: '个人认证'
+      }
     }
+
   ]
 
 

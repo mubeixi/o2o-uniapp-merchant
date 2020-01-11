@@ -40,6 +40,7 @@ export default class App extends Vue {
 </script>
 <style lang="stylus">
   @import "assets/css/app.styl";
+  @import "assets/css/common.less";
 </style>
 <style lang="less">
 .el-carousel__container{
