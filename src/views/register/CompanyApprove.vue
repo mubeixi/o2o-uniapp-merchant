@@ -33,6 +33,7 @@
             </el-form-item> 
             <el-form-item label="主营商品：">
                 <el-input v-model="form.name"></el-input>
+                <span class="tips">多个主营商品以逗号间隔</span>
             </el-form-item>
             <el-form-item label="手机：">
                 <el-input v-model="form.name"></el-input>
@@ -54,15 +55,12 @@
             </el-form-item>
             <el-form-item label="企业资金：">
                 <el-input v-model="form.name"></el-input>
-                <span class="tips">须与身份证上保持一致</span>
             </el-form-item>
             <el-form-item label="营业执照注册号或统一社会信用代码：" class="code">
                 <el-input v-model="form.name"></el-input>
-                <span class="tips">须与身份证上保持一致</span>
             </el-form-item>
             <el-form-item label="法人：">
                 <el-input v-model="form.name"></el-input>
-                <span class="tips">须与身份证上保持一致</span>
             </el-form-item>
             <el-form-item label="身份证正面扫描件：">
                 <el-upload
