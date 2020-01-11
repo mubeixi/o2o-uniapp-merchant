@@ -14,6 +14,7 @@ import Setting from '@/views/register/Setting';
 import SettledAgreement from '@/views/register/SettledAgreement';
 import PersonApprove from '@/views/register/PersonApprove';
 import CompanyApprove from '@/views/register/CompanyApprove';
+import Pay from '@/views/register/Pay';
 
 export const route_list = [
     {
@@ -90,7 +91,15 @@ export const route_list = [
       meta: {
         title: '个人认证'
       }
-    }
+    },
+    {
+      path: '/Pay',
+      name: 'Pay',
+      component: Pay,
+      meta: {
+        title: '付款'
+      }
+    },
 
   ]
 
