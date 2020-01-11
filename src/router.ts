@@ -12,6 +12,7 @@ import Login from '@/views/register/Login.vue';
 import Register from '@/views/register/Register.vue';
 import Setting from '@/views/register/Setting';
 import SettledAgreement from '@/views/register/SettledAgreement';
+import PersonApprove from '@/views/register/PersonApprove';
 
 export const route_list = [
     {
@@ -71,6 +72,14 @@ export const route_list = [
       component: SettledAgreement,
       meta: {
         title: '签署协议'
+      }
+    },
+    {
+      path: '/PersonApprove',
+      name: 'PersonApprove',
+      component: PersonApprove,
+      meta: {
+        title: '个人认证'
       }
     }
   ]
