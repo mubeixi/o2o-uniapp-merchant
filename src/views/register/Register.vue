@@ -60,10 +60,15 @@
 </template>
 
 <script lang="ts">
-    import Vue from 'vue'
+    import {
+        Vue,
+        Component,
+        Watch,
+        Prop
+    } from 'vue-property-decorator';
 
-    export default class Login  extends Vue{
-        
+    export default class Register  extends Vue{
+
     }
 </script>
 

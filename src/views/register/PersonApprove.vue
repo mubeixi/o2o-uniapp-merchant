@@ -43,7 +43,7 @@
                     <el-input v-model="form.name" placeholder="请输入具体地址"></el-input>
                     <span class="tips specil">与营业执照上一致</span>
                 </el-row>
-            </el-form-item>  
+            </el-form-item>
             <div class="title box-sizing">资质信息</div>
             <el-form-item label="真实姓名：">
                 <el-input v-model="form.name"></el-input>
@@ -103,8 +103,12 @@
 </template>
 
 <script lang="ts">
-    import Vue from 'vue'
-
+    import {
+        Vue,
+        Component,
+        Watch,
+        Prop
+    } from 'vue-property-decorator';
     export default Vue.extend({
         data(){
             return {

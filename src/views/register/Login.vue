@@ -19,10 +19,15 @@
 
 
 <script lang="ts">
-    import Vue from 'vue'
+    import {
+        Vue,
+        Component,
+        Watch,
+        Prop
+    } from 'vue-property-decorator';
     import {doLoginMixin} from "../../common/mixin";
     export default class Login  extends Vue{
-        
+
     }
 </script>
 

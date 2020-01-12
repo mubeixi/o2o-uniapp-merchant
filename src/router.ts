@@ -7,9 +7,9 @@ import Home from './views/Home';
 import Diy from './views/Diy';
 import Empty from './views/Empty';
 
-import NotFound from '@/views/NotFound.vue';
-import Login from '@/views/register/Login.vue';
-import Register from '@/views/register/Register.vue';
+import NotFound from '@/views/NotFound';
+import Login from '@/views/register/Login';
+import Register from '@/views/register/Register';
 import Setting from '@/views/register/Setting';
 import SettledAgreement from '@/views/register/SettledAgreement';
 import PersonApprove from '@/views/register/PersonApprove';
