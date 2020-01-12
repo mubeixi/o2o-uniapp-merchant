@@ -69,7 +69,12 @@
 </template>
 
 <script lang="ts">
-    import Vue from 'vue'
+    import {
+        Vue,
+        Component,
+        Watch,
+        Prop
+    } from 'vue-property-decorator';
 
     export default Vue.extend({
         data(){

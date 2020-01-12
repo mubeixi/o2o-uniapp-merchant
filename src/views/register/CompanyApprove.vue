@@ -30,7 +30,7 @@
                     <el-input v-model="form.name" placeholder="请输入具体地址"></el-input>
                     <span class="tips specil">与营业执照上一致</span>
                 </el-row>
-            </el-form-item> 
+            </el-form-item>
             <el-form-item label="主营商品：">
                 <el-input v-model="form.name"></el-input>
                 <span class="tips">多个主营商品以逗号间隔</span>
@@ -41,7 +41,7 @@
             <el-form-item label="邮箱地址：">
                 <el-input v-model="form.name"></el-input>
             </el-form-item>
-             
+
             <div class="title box-sizing">资质信息</div>
             <el-form-item label="企业类型：">
                 <el-select v-model="form.region" placeholder="请选择">
@@ -134,7 +134,12 @@
 </template>
 
 <script lang="ts">
-    import Vue from 'vue'
+    import {
+        Vue,
+        Component,
+        Watch,
+        Prop
+    } from 'vue-property-decorator';
 
     export default Vue.extend({
         data(){
