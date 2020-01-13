@@ -23,7 +23,7 @@
                 </el-table-column>
             </el-table>
             <el-form-item label="选择年限：">
-                  <el-radio-group v-model="form.resource">
+                  <el-radio-group v-model="resource">
                     <el-radio label="1年"></el-radio>
                     <el-radio label="2年"></el-radio>
                     <el-radio label="3年"></el-radio>
@@ -66,20 +66,17 @@
         Watch,
         Prop
     } from 'vue-property-decorator';
-
-    export default Vue.extend({
-        data(){
-            return {
-                form: {},
-                tableData: [
-                    {
-                        cate: '女式羽绒服、潮鞋、美妆、箱包、连衣裙、针织衫、女式羽绒服、潮鞋、美妆、箱包、连衣裙、针织衫女式羽绒服、潮鞋、美妆、箱包、连衣裙、针织衫',
-                        money: '￥1000'
-                    }
-                ]
+    export default class Pay extends Vue{
+        form={}
+        resource=''
+        tableData=[
+            {
+                cate: '女式羽绒服、潮鞋、美妆、箱包、连衣裙、针织衫、女式羽绒服、潮鞋、美妆、箱包、连衣裙、针织衫女式羽绒服、潮鞋、美妆、箱包、连衣裙、针织衫',
+                money: '￥1000'
             }
-        }
-    })
+        ]
+
+    }
 </script>
 
 <style scoped lang="less">
