@@ -17,6 +17,7 @@ import CompanyApprove from '@/views/register/CompanyApprove';
 import Pay from '@/views/register/Pay';
 
 import SettlementInformation from '@/views/register/SettlementInformation';
+import AddIndustryCate from '@/views/register/AddIndustryCate';
 
 
 export const route_list = [
@@ -110,7 +111,15 @@ export const route_list = [
       meta: {
         title: '入驻资料设置'
       }
+    },
+  {
+    path: '/AddIndustryCate',
+    name: 'AddIndustryCate',
+    component: AddIndustryCate,
+    meta: {
+      title: '添加行业分类'
     }
+  }
 
   ]
 
