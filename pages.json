@@ -40,18 +40,6 @@
             	"navigationBarTitleText": "详情"
             }
         }
-		,{
-            "path" : "pages/PC-register/register",
-            "style": {
-            	"navigationBarTitleText": "注册"
-            }
-        }
-		,{
-            "path" : "pages/PC-register/login",
-            "style": {
-            	"navigationBarTitleText": "登录"
-            }
-        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

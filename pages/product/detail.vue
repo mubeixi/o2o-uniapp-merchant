@@ -41,7 +41,7 @@
                 <text>免预约</text>
             </div>
         </div>
-        <div class="padding10-c line"></div>
+        <div class="line"></div>
         <div class="bg-white padding15-10 flex flex-vertical-center flex-between">
             <div>
                 <image class="buddy-img" src="/static/canDel/hg.png"></image>
@@ -153,7 +153,7 @@
         text-align: center;
         background: #FFEAEA;
         color: $wzw-color-price-selling;
-        border-radius: 12px;
+        border-radius: 15px;
     }
     .xing {
         width: 12px;
@@ -170,6 +170,8 @@
     }
     .line {
         height: 1px;
+        width: 710rpx;
+        margin: 0 auto;
         background: #E8E8E8;
     }
     .buddy{
@@ -189,7 +191,8 @@
         overflow: hidden;
     }
     .buddy-img-margin{
-        margin-left: -2px;
+        // margin-left: -2px;
+        margin-right: -2px;
     }
     .business-info{
         width: 750rpx;
