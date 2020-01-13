@@ -19,7 +19,7 @@
             </div>
 		</div>
 		<!--	商家地址	-->
-		<div class="business-address x-mx-auto line20">
+		<div class="business-address x-mx-auto line10">
 			<div class="business-time flex flex-vertical-center flex-between ">
 				<div class="business-time-font">
 					营业中 10:00-24:00
@@ -36,7 +36,7 @@
 			</div>
 		</div>
 		<!--	领取优惠券	-->
-		<div class="coupon x-mx-auto line20">
+		<div class="coupon x-mx-auto line10">
 			<div class="flex-vertical-center flex flex-between couponDetail">
 				<div>
 					<text class="font13 coupon-font">优惠券</text>
@@ -48,7 +48,7 @@
 			</div>
 		</div>
 		<!--	团购	-->
-		<div class="x-mx-auto line20 group-buy">
+		<div class="x-mx-auto line10 group-buy">
 			<div class="group-title">团购</div>
 			<div class="group-list flex ">
 				<div class="group-left">
@@ -68,7 +68,7 @@
 			</div>
 		</div>
 		<!--	评价	-->
-		<div class="x-mx-auto line20 group-buy">
+		<div class="x-mx-auto line10 group-buy">
 			<div class="group-title">评价</div>
 			<div class="comment-list">
 				<div class="comment flex flex-vertical-center flex-between">
@@ -97,7 +97,7 @@
 		</div>
 
 		<!--	附近吃喝玩乐	-->
-		<div class="x-mx-auto line20 group-buy">
+		<div class="x-mx-auto line10 group-buy">
 			<div class="group-title">附近吃喝玩乐</div>
 			<div class="group-list flex ">
 				<div class="group-left">
