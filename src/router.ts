@@ -16,6 +16,9 @@ import PersonApprove from '@/views/register/PersonApprove';
 import CompanyApprove from '@/views/register/CompanyApprove';
 import Pay from '@/views/register/Pay';
 
+import SettlementInformation from '@/views/register/SettlementInformation';
+
+
 export const route_list = [
     {
       path: '/',
@@ -65,7 +68,7 @@ export const route_list = [
       name: 'Setting',
       component: Setting,
       meta: {
-        title: '注册'
+        title: '商家入驻'
       }
     },
     {
@@ -100,6 +103,14 @@ export const route_list = [
         title: '付款'
       }
     },
+    {
+      path: '/SettlementInformation',
+      name: 'SettlementInformation',
+      component: SettlementInformation,
+      meta: {
+        title: '入驻资料设置'
+      }
+    }
 
   ]
 
