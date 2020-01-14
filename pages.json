@@ -52,6 +52,12 @@
             	"navigationBarTitleText": "商家入驻"
             }
         }
+        ,{
+            "path" : "pages/business/businessList",
+            "style": {
+            	"navigationBarTitleText": "商家列表"
+            }
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
