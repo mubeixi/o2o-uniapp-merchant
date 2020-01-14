@@ -96,5 +96,7 @@
 			}
 		]
 	},
-	"usingComponents": {}
+	"usingComponents": {
+		"ly-tree-node": "/components/ly-tree/ly-tree-node"
+	}
 }

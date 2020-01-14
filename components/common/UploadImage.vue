@@ -1,9 +1,8 @@
 <template>
     <div class="plugin-wrap">
-        <div class="box">
+        <div class="box" :class="[previewSize]">
             <div @click="delImg(idx)" class="img-item item" v-for="(pre,idx) in previews" :style="{backgroundImage:'url('+pre+')'}"></div>
             <image @click="openUpload" v-if="previews.length<limit" src="/static/upload_icon.png" class="upload-icon item"></image>
-
         </div>
     </div>
 </template>
@@ -24,6 +23,10 @@
     export default {
     name:'UploadImage',
     props:{
+        previewSize:{
+          type:String,
+          default:'default' //'large是九宫格'
+        },
         limit:{
             type:Number,
             default:9
@@ -123,8 +126,8 @@
     //justify-content: center;
     .item{
         display: inline-block;
-        width: 200rpx;
-        height: 200rpx;
+        width: 140rpx;
+        height: 140rpx;
         margin-right: 10rpx;
         margin-bottom: 10rpx;
         &.img-item{
@@ -133,9 +136,21 @@
             background-color: #f8f8f8;
             background-position: center;
         }
-        &:nth-child(3n+3){
-            margin-right: 0;
+
+    }
+
+    &.large{
+        .item{
+            width: 200rpx;
+            height: 200rpx;
+            margin-right: 10rpx;
+            margin-bottom: 10rpx;
+
+            &:nth-child(3n+3){
+                margin-right: 0;
+            }
         }
+
     }
 
 }

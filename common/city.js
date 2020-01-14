@@ -13,7 +13,7 @@ export class City {
 
     static getCityList = (pIdx) => {
         let citys = []
-        console.log('0,' + pIdx)
+        //console.log('0,' + pIdx)
         let rt = areaData[('0,' + pIdx)]
         return array_change(rt)
 
@@ -22,7 +22,7 @@ export class City {
     static getAreaList = (pIdx, cIdx) => {
 
         let rt = areaData[`0,${pIdx},${cIdx}`]
-        console.log(rt)
+        //console.log(rt)
 
         return array_change(rt)
     }
