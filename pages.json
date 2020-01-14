@@ -63,6 +63,12 @@
 			"style": {
 				"navigationBarTitleText": "企业认证"
 			}
+		},
+		{
+			"path" : "pages/businessStation/settlementAgreement",
+			"style": {
+				"navigationBarTitleText": "签署入驻协议"
+			}
 		}
     ],
 	"globalStyle": {
