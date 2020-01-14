@@ -117,6 +117,7 @@
 	}
 </script>
 <style lang="scss">
+@import "./components/ly-tree/ly-tree.css";
 /* #ifndef APP-NVUE */
 @import "./static/css/common.scss";
 /* #endif */
@@ -125,6 +126,7 @@
 /* #ifndef APP-NVUE */
 @import "./static/css/icon.css";
 @import "./components/gaoyia-parse/parse.css";
+
 /* #endif */
 </style>
 

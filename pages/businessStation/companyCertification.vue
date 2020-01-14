@@ -8,7 +8,7 @@
                     <div class="form-title__text">基本信息</div>
                 </div>
                 <div class="form-cell">
-                    <div class="form-cell-item">
+                    <div class="form-cell-item" @click="openTradeSelect">
                         <div class="form-cell-item__label">商家行业</div>
                         <div class="form-cell-item__content">
                             <div class="__placeholder" v-if="!trade.label">请选择企业所在地</div>
@@ -216,6 +216,15 @@
         >
         </simple-address>
 
+        <select-trade
+            :show="showTrade"
+            :has="trade.list"
+            @close="handleTradeSelectClose"
+            @onConfirm="handleTradeSelect"
+        >
+
+        </select-trade>
+
 
     </div>
 
@@ -224,14 +233,20 @@
 <script>
     import {pageMixin} from "../../common/mixin";
     import simpleAddress from '../../components/simple-address/simple-address.nvue'
+    import SelectTrade from "./compoents/SelectTrade";
     import UploadImage from "../../components/common/UploadImage";
 
     export default {
         name: "companyCertification",
-        components:{simpleAddress,UploadImage},
+        components:{
+            simpleAddress,
+            UploadImage,
+            SelectTrade
+        },
         mixins:[pageMixin],
         data(){
             return {
+                showTrade:false,
                 trade:{
                   label:'',
                   list:[]
@@ -256,6 +271,15 @@
 
         },
         methods:{
+            openTradeSelect(){
+              this.showTrade = true
+            },
+            handleTradeSelectClose(){
+              this.showTrade = false
+            },
+            handleTradeSelect(e){
+              console.log(e)
+            },
             taxUploadSuccess(urls){
                 console.log(urls)
             },
@@ -327,7 +351,7 @@
                 color: $x-color-666;
             }
             &__content{
-                padding: 10px;
+                padding: 10px 0;
             }
 
         }
