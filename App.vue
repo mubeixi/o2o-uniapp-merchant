@@ -19,7 +19,7 @@
 
     export default {
 		globalData: {
-			videoInstance:[]
+			//videoInstance:[]
 		},
         //目前只有app和小程序用到了应用的全局onLaunch，h5环境下这里不执行的
 		onLaunch: function(option) {

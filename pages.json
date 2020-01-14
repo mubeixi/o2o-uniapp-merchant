@@ -51,7 +51,13 @@
             "style": {
             	"navigationBarTitleText": "商家入驻"
             }
-        }
+        },
+		{
+			"path" : "pages/businessStation/companyCertification",
+			"style": {
+				"navigationBarTitleText": "企业认证"
+			}
+		}
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

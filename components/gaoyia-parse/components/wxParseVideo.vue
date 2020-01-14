@@ -50,7 +50,7 @@ export default {
       let videoContext = uni.createVideoContext('myVideo1', _self)
 
       //添加到这里
-      getApp().globalData.videoInstance.push(videoContext)
+      //getApp().globalData.videoInstance.push(videoContext)
     })
 
 

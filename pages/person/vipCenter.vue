@@ -1,4 +1,4 @@
-<template>
+ <template>
 	<div>
 		<div class="vip-center-top">
 			<image src="/static/person/vipTopBg.png" class="imgFull"></image>
