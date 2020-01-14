@@ -271,8 +271,7 @@
 
 	.filter-center{
 		width: 750rpx;
-		padding-left:20px;
-		padding-right: 20px;
+		padding: 10px 20px;
 		box-sizing: border-box;
 		background-color: #ffffff;
 	}
