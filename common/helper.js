@@ -315,7 +315,7 @@ export const uploadImages = (formData, imgs) => {
 
     return new Promise((resolve, reject) => {
         Promise.all(taskList).then((urls) => {
-            console.log(urls)
+
             resolve(urls)
         }).catch((error) => {
             reject(false)

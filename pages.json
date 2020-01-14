@@ -57,7 +57,13 @@
             "style": {
             	"navigationBarTitleText": "商家列表"
             }
-        }
+        },
+		{
+			"path" : "pages/businessStation/companyCertification",
+			"style": {
+				"navigationBarTitleText": "企业认证"
+			}
+		}
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

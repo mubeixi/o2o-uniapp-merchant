@@ -65,7 +65,7 @@
                 let videoContext = uni.createVideoContext('myVideo1', _self)
                 _self.videoContext = videoContext
                 //添加到这里
-                getApp().globalData.videoInstance.push(videoContext)
+                //getApp().globalData.videoInstance.push(videoContext)
             })
 
 

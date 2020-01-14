@@ -19,7 +19,7 @@
 
     export default {
 		globalData: {
-			videoInstance:[]
+			//videoInstance:[]
 		},
         //目前只有app和小程序用到了应用的全局onLaunch，h5环境下这里不执行的
 		onLaunch: function(option) {
@@ -117,9 +117,9 @@
 	}
 </script>
 <style lang="scss">
-    /* #ifndef APP-NVUE */
-    @import "./static/css/common.scss";
-    /* #endif */
+/* #ifndef APP-NVUE */
+@import "./static/css/common.scss";
+/* #endif */
 </style>
 <style lang="less">
 /* #ifndef APP-NVUE */

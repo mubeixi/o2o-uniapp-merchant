@@ -18,7 +18,7 @@ $wzw-color-error: #dd524d;
 $wzw-text-color:#333;//基本色
 $wzw-text-color-inverse:#fff;//反色
 $wzw-text-color-grey:#999;//辅助灰色，如加载更多的提示信息
-$wzw-text-color-placeholder: #808080;
+$wzw-text-color-placeholder: #CAC8C8;
 $wzw-text-color-disable:#c0c0c0;
 
 /* 背景颜色 */
@@ -63,12 +63,26 @@ $wzw-spacing-col-lg: 24rpx;
 $wzw-opacity-disabled: 0.3; // 组件禁用态的透明度
 
 /* 文章场景相关 */
-$wzw-color-title: #2C405A; // 文章标题颜色
+$wzw-color-title: #333; // 文章标题颜色
 $wzw-font-size-title:40rpx;
 $wzw-color-subtitle: #555555; // 二级标题颜色
 $wzw-font-size-subtitle:36rpx;
 $wzw-color-paragraph: #3F536E; // 文章段落颜色
 $wzw-font-size-paragraph:30rpx;
+
+/* 表单相关 */
+$wzw-color-input:#555;
+$wzw-color-placeholder:#CAC8C8;
+
+
+$x-color-333:#333;
+$x-color-444:#444;
+$x-color-555:#555;
+$x-color-666:#666;
+$x-color-777:#777;
+$x-color-888:#888;
+$x-color-999:#999;
+
 
 /**
 网中网自定义样式

@@ -13,7 +13,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "ftp-deploy": "^2.3.6",
     "rrweb": "^0.7.27",
+    "shelljs": "^0.8.3",
     "underscore": "^1.9.1",
     "weixin-js-sdk": "^1.4.0-test"
   }
