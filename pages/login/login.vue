@@ -760,7 +760,6 @@
 </script>
 
 <style scoped lang="scss">
-	@import "../../static/css/scssConfig";
 
 	.joinForm{
 		background: white;

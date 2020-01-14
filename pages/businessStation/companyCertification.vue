@@ -11,7 +11,8 @@
                     <div class="form-cell-item">
                         <div class="form-cell-item__label">商家行业</div>
                         <div class="form-cell-item__content">
-                            <input placeholder-class="__placeholder" class="input" placeholder="请选择商家行业" />
+                            <div class="__placeholder" v-if="!trade.label">请选择企业所在地</div>
+                            <div v-if="trade.label">{{trade.label}}</div>
                         </div>
                         <div class="form-cell-item__right">
                             <span class="wzwicon iconright font16" style="color: #666"></span>
@@ -41,7 +42,8 @@
                     <div class="form-cell-item" @click="openAddressChoose">
                         <div class="form-cell-item__label">企业所在地</div>
                         <div class="form-cell-item__content">
-                           <div class="__placeholder">请选择企业所在地</div>
+                            <div class="__placeholder" v-if="!addressInfo.label">请选择企业所在地</div>
+                            <div v-if="addressInfo.label">{{addressInfo.label}}</div>
                         </div>
                         <div class="form-cell-item__right">
                             <span class="wzwicon iconright font16" style="color: #666"></span>
@@ -126,6 +128,16 @@
         mixins:[pageMixin],
         data(){
             return {
+                trade:{
+                  label:'',
+                  list:[]
+                },
+                addressInfo:{
+                    areaCode: "",
+                    cityCode: "",
+                    label: "",
+                    provinceCode: "",
+                },
                 showAddress:false,
                 cityPickerValueDefault: [0,0,0]
             }
@@ -144,7 +156,13 @@
                 this.showAddress = true
             },
             handleAddressConfirm(address){
-                console.log(address)
+
+                let {areaCode, cityCode, label, provinceCode} = address
+                Object.assign(this.addressInfo,address)
+                // this.addressInfo.areaCode = areaCode
+                // this.addressInfo.cityCode = cityCode
+                // this.addressInfo.label = label
+                // this.addressInfo.provinceCode = provinceCode
             },
             formSubmit(e){
                 console.log('form发生了submit事件，携带数据为：' + JSON.stringify(e.detail.value))
@@ -186,6 +204,8 @@
 
     &-cell{
         background: white;
+        border-radius: 4px;
+        overflow: hidden;
         &-item{
             display: flex;
             align-items: center;
@@ -193,6 +213,7 @@
             &__label{
                 width: 80px;
                 padding: 0 10px;
+                color: $x-color-666;
             }
             &__content{
                 flex: 1;

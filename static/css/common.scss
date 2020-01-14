@@ -1,5 +1,3 @@
-@import "./scssConfig.scss";
-
 
 .fl { float:left;
 }
@@ -53,6 +51,8 @@ $fontsize :(12,14,16,18,20,22,24,26,30,36,40,60);
 @each $num in $spaces {
     .x-font-#{$num} { font-size: $num}
 }
+
+
 
 
 

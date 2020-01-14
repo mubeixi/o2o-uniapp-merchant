@@ -117,9 +117,9 @@
 	}
 </script>
 <style lang="scss">
-    /* #ifndef APP-NVUE */
-    @import "./static/css/common.scss";
-    /* #endif */
+/* #ifndef APP-NVUE */
+@import "./static/css/common.scss";
+/* #endif */
 </style>
 <style lang="less">
 /* #ifndef APP-NVUE */
