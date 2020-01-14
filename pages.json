@@ -40,6 +40,18 @@
             	"navigationBarTitleText": "详情"
             }
         }
+        ,{
+            "path" : "pages/person/vipCenter",
+            "style": {
+            	"navigationBarTitleText": "会员中心"
+            }
+        }
+        ,{
+            "path" : "pages/businessStation/businessStation",
+            "style": {
+            	"navigationBarTitleText": "商家入驻"
+            }
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
