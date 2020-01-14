@@ -1,23 +1,18 @@
 <template>
     <div class="plugin-wrap">
         <div class="box">
-            <div class="img-item item" v-for="(pre,idx) in previews" :style="{backgroundImage:'url('+pre+')'}"></div>
-            <image @click="openUpload" src="/static/upload_icon.png" class="upload-icon item"></image>
-            <image @click="openUpload" src="/static/upload_icon.png" class="upload-icon item"></image>
-            <image @click="openUpload" src="/static/upload_icon.png" class="upload-icon item"></image>
-            <image @click="openUpload" src="/static/upload_icon.png" class="upload-icon item"></image>
-            <image @click="openUpload" src="/static/upload_icon.png" class="upload-icon item"></image>
-            <image @click="openUpload" src="/static/upload_icon.png" class="upload-icon item"></image>
-            <image @click="openUpload" src="/static/upload_icon.png" class="upload-icon item"></image>
-            <image @click="openUpload" src="/static/upload_icon.png" class="upload-icon item"></image>
-            <image @click="openUpload" src="/static/upload_icon.png" class="upload-icon item"></image>
-            <image @click="openUpload" src="/static/upload_icon.png" class="upload-icon item"></image>
+            <div @click="delImg(idx)" class="img-item item" v-for="(pre,idx) in previews" :style="{backgroundImage:'url('+pre+')'}"></div>
+            <image @click="openUpload" v-if="previews.length<limit" src="/static/upload_icon.png" class="upload-icon item"></image>
+
         </div>
     </div>
 </template>
 <script>
     import {uploadImages} from "../../common/helper";
-    import {error} from "../../common/init/fun";
+    import {
+        error,
+        confirm
+    } from "../../common/init/fun";
     import {
         get_User_ID,
         GET_ACCESS_TOKEN,
@@ -46,14 +41,26 @@
       }
     },
     methods:{
-
-        async chooseImg(){
-            uni.chooseImage({
-                count: this.limit-this.imgs.length,
-                success: function (res) {
-                    return res.tempFilePaths
-                }
+        delImg(idx){
+          confirm({title:'移除图片',content:'将删除该图片,是否确认?'}).then(res=>{
+              this.previews.splice(idx,1)
+              this.imgs.splice(idx,1)
+              this._$emit(this.imgs)
+          }).catch(()=>{})
+        },
+        chooseImg(){
+            return new Promise((resolve, reject) => {
+                uni.chooseImage({
+                    count: this.limit-this.imgs.length,
+                    success: function (res) {
+                        resolve(res.tempFilePaths)
+                    },
+                    fail:function(e){
+                        reject(false)
+                    }
+                })
             })
+
         },
         async openUpload(){
             if(this.limit<=this.imgs.length){
@@ -76,17 +83,32 @@
 
             let formData = createToken(param);
 
-            let tempFilePaths = await this.chooseImg()
+            this.chooseImg().then(tempFilePaths=>{
 
-            //批量上传
-            uploadImages(formData,tempFilePaths).then(urls=>{
-                this.imgs = this.imgs.concat(urls)
+                console.log(tempFilePaths)
+                this.previews = this.previews.concat(tempFilePaths)
+                uni.showLoading({
+                    title: '文件上传中',
+                    mask: true
+                })
+                //批量上传
+                uploadImages(formData,tempFilePaths).then(urls=>{
+
+                    this.imgs = this.imgs.concat(urls)
+                    this._$emit(this.imgs)
+                    setTimeout(()=>{
+                        uni.hideLoading()
+                    },500)
+
+                }).catch(e=>{
+                    error('选择图片失败')
+                })
+
             })
 
-            this.$emit('onUpSuccess',this.imgs)
         },
-        _$emit(emitName) {
-
+        _$emit(urls) {
+            this.$emit('onUpSuccess',urls)
         },
     }
 }
@@ -105,6 +127,12 @@
         height: 200rpx;
         margin-right: 10rpx;
         margin-bottom: 10rpx;
+        &.img-item{
+            background-repeat: no-repeat;
+            background-size: contain;
+            background-color: #f8f8f8;
+            background-position: center;
+        }
         &:nth-child(3n+3){
             margin-right: 0;
         }

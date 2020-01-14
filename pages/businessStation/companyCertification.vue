@@ -122,9 +122,80 @@
                         <div class="form-upload-item__label">法人身份证正面扫描件</div>
                         <div class="form-upload-item__content">
                             <upload-image
-                            :limit="2"
+                            :limit="1"
                             @onUpSuccess="idcardUploadSuccess"
                             ></upload-image>
+                        </div>
+                    </div>
+                    <div class="form-upload-item">
+                        <div class="form-upload-item__label">法人身份证反面扫描件</div>
+                        <div class="form-upload-item__content">
+                            <upload-image
+                                    :limit="1"
+                                    @onUpSuccess="idcardBackUploadSuccess"
+                            ></upload-image>
+                        </div>
+                    </div>
+                    <div class="form-upload-item">
+                        <div class="form-upload-item__label">营业执照影印件</div>
+                        <div class="form-upload-item__content">
+                            <upload-image
+                                    :limit="1"
+                                    @onUpSuccess="businessLicenseUploadSuccess"
+                            ></upload-image>
+                        </div>
+                    </div>
+                    <div class="form-upload-item">
+                        <div class="form-upload-item__label">税务登记证扫描件</div>
+                        <div class="form-upload-item__content">
+                            <upload-image
+                                    :limit="1"
+                                    @onUpSuccess="taxUploadSuccess"
+                            ></upload-image>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-panel">
+                <div class="form-title">
+                    <div class="form-title__place"></div>
+                    <div class="form-title__text">账户信息</div>
+                </div>
+                <div class="form-cell">
+                    <div class="form-cell-item">
+                        <div class="form-cell-item__label">提现方式</div>
+                        <div class="form-cell-item__content">
+                            <div class="__placeholder">请选择提现方式</div>
+<!--                            <div v-if="trade.label">{{trade.label}}</div>-->
+                        </div>
+                        <div class="form-cell-item__right">
+                            <span class="wzwicon iconright font16" style="color: #666"></span>
+                        </div>
+                    </div>
+                    <div class="form-cell-item">
+                        <div class="form-cell-item__label">开户城市</div>
+                        <div class="form-cell-item__content">
+                            <input placeholder-class="__placeholder" class="input" placeholder="请输入开户城市" />
+                        </div>
+                    </div>
+
+                    <div class="form-cell-item">
+                        <div class="form-cell-item__label">开户银行</div>
+                        <div class="form-cell-item__content">
+                            <input placeholder-class="__placeholder" class="input" placeholder="请输入开户银行" />
+                        </div>
+                    </div>
+                    <div class="form-cell-item">
+                        <div class="form-cell-item__label">开户姓名</div>
+                        <div class="form-cell-item__content">
+                            <input placeholder-class="__placeholder" class="input" placeholder="请输入开户姓名" />
+                        </div>
+                    </div>
+                    <div class="form-cell-item">
+                        <div class="form-cell-item__label">银行卡号</div>
+                        <div class="form-cell-item__content">
+                            <input placeholder-class="__placeholder" class="input" placeholder="请输入银行卡号" />
                         </div>
                     </div>
                 </div>
@@ -185,6 +256,15 @@
 
         },
         methods:{
+            taxUploadSuccess(urls){
+                console.log(urls)
+            },
+            businessLicenseUploadSuccess(urls){
+                console.log(urls)
+            },
+            idcardBackUploadSuccess(urls){
+                console.log(urls)
+            },
             idcardUploadSuccess(urls){
                 console.log(urls)
             },
@@ -244,7 +324,7 @@
             padding: 10px;
 
             &__label{
-
+                color: $x-color-666;
             }
             &__content{
                 padding: 10px;
