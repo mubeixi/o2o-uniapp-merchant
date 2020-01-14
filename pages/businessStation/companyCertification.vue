@@ -89,10 +89,42 @@
                 </div>
                 <div class="form-cell">
                     <div class="form-cell-item">
-                        <div class="form-cell-item__label"></div>
-                        <div class="form-cell-item__content"></div>
-                        <div class="form-cell-item__right">
-                            <span class="wzwicon iconright font16" style="color: #666"></span>
+                        <div class="form-cell-item__label">企业类型</div>
+                        <div class="form-cell-item__content">
+                            <input placeholder-class="__placeholder" class="input" placeholder="请选择企业类型" />
+                        </div>
+                    </div>
+                    <div class="form-cell-item">
+                        <div class="form-cell-item__label">企业住所</div>
+                        <div class="form-cell-item__content">
+                            <input placeholder-class="__placeholder" class="input" placeholder="请输入企业住所" />
+                        </div>
+                    </div>
+                    <div class="form-cell-item">
+                        <div class="form-cell-item__label">注册资金</div>
+                        <div class="form-cell-item__content">
+                            <input placeholder-class="__placeholder" class="input" placeholder="请输入注册资金" />
+                        </div>
+                    </div>
+                    <div class="form-cell-item">
+                        <div class="form-cell-item__label">营业执照注册号或统一社会信用代码</div>
+                        <div class="form-cell-item__content">
+                            <input placeholder-class="__placeholder" class="input" placeholder="请输入" />
+                        </div>
+                    </div>
+                    <div class="form-cell-item">
+                        <div class="form-cell-item__label">法人姓名</div>
+                        <div class="form-cell-item__content">
+                            <input placeholder-class="__placeholder" class="input" placeholder="请输入法人姓名" />
+                        </div>
+                    </div>
+                    <div class="form-upload-item">
+                        <div class="form-upload-item__label">法人身份证正面扫描件</div>
+                        <div class="form-upload-item__content">
+                            <upload-image
+                            :limit="2"
+                            @onUpSuccess="idcardUploadSuccess"
+                            ></upload-image>
                         </div>
                     </div>
                 </div>
@@ -121,10 +153,11 @@
 <script>
     import {pageMixin} from "../../common/mixin";
     import simpleAddress from '../../components/simple-address/simple-address.nvue'
+    import UploadImage from "../../components/common/UploadImage";
 
     export default {
         name: "companyCertification",
-        components:{simpleAddress},
+        components:{simpleAddress,UploadImage},
         mixins:[pageMixin],
         data(){
             return {
@@ -152,6 +185,9 @@
 
         },
         methods:{
+            idcardUploadSuccess(urls){
+                console.log(urls)
+            },
             openAddressChoose(){
                 this.showAddress = true
             },
@@ -201,19 +237,39 @@
             font-weight: bold;
         }
     }
+    &-upload{
 
+        &-item{
+            display: block;
+            padding: 10px;
+
+            &__label{
+
+            }
+            &__content{
+                padding: 10px;
+            }
+
+        }
+
+    }
     &-cell{
         background: white;
         border-radius: 4px;
         overflow: hidden;
+        font-size: 14px;
+
         &-item{
             display: flex;
             align-items: center;
             padding: 10px 0;
+
             &__label{
                 width: 80px;
                 padding: 0 10px;
                 color: $x-color-666;
+
+                line-height: 1.3;
             }
             &__content{
                 flex: 1;
@@ -222,6 +278,7 @@
                 display: flex;
                 align-items: center;
                 .input{
+                    font-size: 14px;
                     flex: 1;
                     color: $wzw-color-input;
                     &::placeholder{

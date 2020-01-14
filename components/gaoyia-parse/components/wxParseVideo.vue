@@ -13,7 +13,7 @@
 
 <!--	<view v-show="ifshow" @tap="ableClose" @touchmove.stop.prevent class="popup-layer"-->
 <!--	      ></view>-->
-<!--    <image v-show="showImg" @click="showDialog" style="width: 750rpx;height: 300rpx;" src="/static/img-lazy.png" />-->
+<!--    <image v-show="showImg" @click="showDialog" style="width: 750rpx;height: 300rpx;" src="/static/img_lazy.png" />-->
 <!--    <view  >
       <video x5-video-player-type="h5-page"  class="video-video" :src="node.attr.src"></video>
     </view> -->
