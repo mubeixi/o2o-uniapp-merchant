@@ -4,6 +4,7 @@
         <div class="wrap" :style="_location">
             <div class="text-center padding10-r">选择行业</div>
             <ly-tree
+                v-if="isReady"
                 :tree-data="treeData"
                 :props="propsConf"
                 :showCheckbox="true"
@@ -54,7 +55,9 @@
                 }]
             }]
         }];
-    import {checkIcon} from "./icon";
+    import {
+        bizIndustryList
+    } from "../../../api/merchant";
 
     export default {
         name: "SelectTrade",
@@ -75,7 +78,7 @@
         },
         data() {
             return {
-
+                isReady:false,
                 showTree:false,
                 timer: null,
                 iftoggle: false,
@@ -118,13 +121,24 @@
                 }
             }
         },
-        created(){
-            this.treeData = mockData
+        async created(){
+
+            bizIndustryList().then(res=>{
+              console.log(res)
+
+                this.treeData = mockData
+                this.isReady = true
+
+            })
+
         },
         onLoad(){
 
         },
         methods: {
+            loadNode(){
+
+            },
             noop(){
                 return ;
             },
