@@ -1,4 +1,7 @@
-import {get_user_info, getSystemConf} from "../../common/fetch";
+import {get_user_info} from "../../common/fetch";
+import {
+    getSystemConf
+} from "../../api/comm";
 
 const state = {
     initData:{},

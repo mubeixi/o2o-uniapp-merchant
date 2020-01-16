@@ -1,4 +1,7 @@
-import {getJsSign, getSystemConf, upUserLog} from "./fetch";
+import {getJsSign, upUserLog} from "./fetch";
+import {
+	getSystemConf
+} from "../api/comm";
 import {buildSharePath, emptyObject, GetQueryByString, isWeiXin, ls} from "./helper";
 import {domainFn} from "./filter";
 import {mapActions} from "vuex";
