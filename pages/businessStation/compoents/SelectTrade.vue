@@ -3,17 +3,20 @@
         <div class="mask" @click="close" :style="{opacity:maskOpacity}"></div>
         <div class="wrap" :style="_location">
             <div class="text-center padding10-r">选择行业</div>
-            <ly-tree
-                v-if="isReady"
-                :tree-data="treeData"
-                :props="propsConf"
-                :showCheckbox="true"
-                :checkOnlyLeaf="true"
-                node-key="label"
-                @node-expand="handleNodeExpand"
-                @node-click="handleNodeClick">
-            </ly-tree>
-            <div class="btn">提交</div>
+            <block v-if="isReady">
+                <ly-tree
+                        ref="tree"
+                        :tree-data="treeData"
+                        :showCheckbox="true"
+                        :checkOnlyLeaf="true"
+                        :props="propsConf"
+                        node-key="industry_name"
+                        @node-expand="handleNodeExpand"
+                        @node-click="handleNodeClick">
+                </ly-tree>
+            </block>
+
+            <div @click="subFn" class="btn">提交</div>
         </div>
     </div>
 </template>
@@ -58,6 +61,21 @@
     import {
         bizIndustryList
     } from "../../../api/merchant";
+    import {objTranslate} from "../../../common/helper";
+
+    function formateData(origin_data){
+        for(var item of origin_data){
+            item.label = item.industry_name
+            if(item.child){
+                item.children = objTranslate(item.child)
+                if(item.child && item.child.length>0){
+                    formateData(item.child)
+                }
+            }
+
+        }
+        return origin_data
+    }
 
     export default {
         name: "SelectTrade",
@@ -86,9 +104,9 @@
                 treeData: [],
                 maskOpacity:0,
                 propsConf:{
-                    icon:'iconname',
-                    children: 'children', // 指定子树为节点对象的某个属性值
-                    label: 'label', // 指定节点标签为节点对象的某个属性值
+                    //icon:'iconname',
+                    children: 'child', // 指定子树为节点对象的某个属性值
+                    label: 'industry_name', // 指定节点标签为节点对象的某个属性值
                     disabled: 'disabled' //	指定节点选择框是否禁用为节点对象的某个属性值
                 }
             }
@@ -124,9 +142,11 @@
         async created(){
 
             bizIndustryList().then(res=>{
-              console.log(res)
 
-                this.treeData = mockData
+                //let ret = res.data
+                //formateData(ret)
+
+                this.treeData = res.data;//mockData
                 this.isReady = true
 
             })
@@ -136,6 +156,11 @@
 
         },
         methods: {
+            subFn(){
+                let checkNodeList = this.$refs.tree.getCheckedNodes()
+                console.log(checkNodeList)
+                this.$emit('onConfirm',checkNodeList)
+            },
             loadNode(){
 
             },
@@ -176,7 +201,7 @@
             },
             // uni-app中emit触发的方法只能接受一个参数
             handleNodeClick(obj) {
-                console.log('handleNodeClick', JSON.stringify(obj));
+                console.log('handleNodeClick', obj);
             },
             handleNodeExpand(obj) {
                 console.log('handleNodeExpand', JSON.stringify(obj));

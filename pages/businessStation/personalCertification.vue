@@ -11,7 +11,7 @@
                     <div class="form-cell-item" @click="openTradeSelect">
                         <div class="form-cell-item__label">商家行业</div>
                         <div class="form-cell-item__content">
-                            <div class="__placeholder" v-if="!trade.label">请选择企业所在地</div>
+                            <div class="__placeholder" v-if="!trade.label">请选择所在行业</div>
                             <div v-if="trade.label">{{trade.label}}</div>
                         </div>
                         <div class="form-cell-item__right">
@@ -241,8 +241,17 @@
             handleTradeSelectClose(){
                 this.showTrade = false
             },
-            handleTradeSelect(e){
-                console.log(e)
+            handleTradeSelect(select_trade_list){
+                console.log(select_trade_list)
+                let trade_names = [],trade_ids = []
+                for(let trade of select_trade_list){
+                    trade_names.push(trade.industry_name)
+                    trade_ids.push(trade.id)
+                }
+                this.trade.label = trade_names.join(',')
+                this.trade.list = trade_ids
+                this.handleTradeSelectClose()
+
             },
             taxUploadSuccess(urls){
                 console.log(urls)

@@ -184,7 +184,7 @@
             "disableHostCheck" : true,
             "proxy" : {
                 "/api" : {
-                    "target" : "www.newo2osrc.com/api", //"http://www.gogo.com/api",
+                    "target" : "http://www.newo2osrc.com/api", //"http://www.gogo.com/api",
                     "changeOrigin" : true,
                     "secure" : false,
                     "pathRewrite" : {
