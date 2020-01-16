@@ -63,7 +63,27 @@
 			"style": {
 				"navigationBarTitleText": "企业认证"
 			}
+		},
+		{
+			"path" : "pages/businessStation/settlementAgreement",
+			"style": {
+				"navigationBarTitleText": "签署入驻协议"
+			}
+		},
+		{
+			"path" : "pages/businessStation/businessPay",
+			"style": {
+				"navigationBarTitleText": "付款"
+			}
+		},
+		{
+			"path" : "pages/businessStation/personalCertification",
+			"style": {
+				"navigationBarTitleText": "个人认证"
+			}
 		}
+
+
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
