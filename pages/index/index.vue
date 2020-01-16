@@ -57,7 +57,10 @@
 	import FlashComponent from "../../components/diy/FlashComponent";
 	import KillComponent from "../../components/diy/KillComponent";
 
-	import {getSkinConfig,getSystemConf} from "../../common/fetch";
+	import {getSkinConfig} from "../../common/fetch";
+	import {
+		getSystemConf
+	} from "../../api/comm";
 
 	import {pageMixin} from "../../common/mixin";
 	import {error,toast} from "../../common";

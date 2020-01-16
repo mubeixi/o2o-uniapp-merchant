@@ -6,6 +6,8 @@
             <ly-tree
                 :tree-data="treeData"
                 :props="propsConf"
+                :showCheckbox="true"
+                :checkOnlyLeaf="true"
                 node-key="label"
                 @node-expand="handleNodeExpand"
                 @node-click="handleNodeClick">

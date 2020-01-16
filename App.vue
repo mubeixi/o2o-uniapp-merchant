@@ -1,6 +1,8 @@
 <script>
     import {ls} from "./common/helper";
-    import {getSystemConf} from "./common/fetch";
+    import {
+        getSystemConf
+    } from "./api/comm";
 
     import {isDev} from "./common/env";
     // #ifdef APP-PLUS || MP-TOUTIAO
