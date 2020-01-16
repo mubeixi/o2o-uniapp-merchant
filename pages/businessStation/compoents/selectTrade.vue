@@ -16,7 +16,6 @@
 </template>
 <script>
     import LyTree from '../../../components/ly-tree/ly-tree.vue'
-
     const mockData = [
         {
             label: '一级 1',
@@ -53,6 +52,8 @@
                 }]
             }]
         }];
+    import {checkIcon} from "./icon";
+
     export default {
         name: "SelectTrade",
         components: {LyTree},
@@ -80,6 +81,7 @@
                 treeData: [],
                 maskOpacity:0,
                 propsConf:{
+                    icon:'iconname',
                     children: 'children', // 指定子树为节点对象的某个属性值
                     label: 'label', // 指定节点标签为节点对象的某个属性值
                     disabled: 'disabled' //	指定节点选择框是否禁用为节点对象的某个属性值
