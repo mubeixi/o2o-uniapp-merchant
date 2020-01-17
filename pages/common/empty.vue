@@ -1,13 +1,18 @@
 <template>
-	<view @click="commonClick" class="wrap">
-
+	<view  class="wrap">
+		<business-popularity></business-popularity>
 	</view>
 </template>
 
 <script>
+	 import {pageMixin} from "../../common/mixin";
+	 import BusinessPopularity from "../../components/BusinessPopularity";
 	export default {
 		name:'Empty',
-		components:{},
+		components:{
+			BusinessPopularity
+		},
+		mixins:[pageMixin],
 		data() {
 			return {
 
