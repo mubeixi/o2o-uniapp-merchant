@@ -49,20 +49,18 @@
 <script>
 
     export default {
-        components:{
+        props: {
+            list: {
+                type: Array,
+                default: []
+            }
         },
         data() {
             return {
 
             }
         },
-        computed:{
-
-        },
         methods:{
-
-        },
-        created(){
 
         }
 
