@@ -23,6 +23,12 @@
 			}
 		},
 		{
+			"path": "pages/common/empty",
+			"style": {
+				"navigationBarTitleText": "测试"
+			}
+		},
+		{
 			"path": "pages/page/page",
 			"style": {
 				"navigationBarTitleText": "自定义"
@@ -82,7 +88,6 @@
 				"navigationBarTitleText": "个人认证"
 			}
 		}
-
 
     ],
 	"globalStyle": {
