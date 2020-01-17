@@ -149,7 +149,7 @@
         }
     }
     /deep/ ::-webkit-scrollbar {
-        display: none;
+        display: none !important;
         width: 0 !important;
         height: 0 !important;
         -webkit-appearance: none;
