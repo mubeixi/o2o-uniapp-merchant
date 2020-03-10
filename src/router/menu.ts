@@ -20,13 +20,21 @@ export default [
   {
     path: '/',
     name: 'LayoutPage',
-    meta:{
+    meta: {
       title: '',
       auth: false,
     },
     component: PageTmpl,
-    children:[
-
+    children: [
+      {
+        path: '/diy',
+        name: 'LayoutPage',
+        component:Diy,
+        meta: {
+          title: '页面diy',
+          auth: false,
+        },
+      }
     ]
   },
   {
@@ -34,11 +42,11 @@ export default [
     name: 'Home',
     component: Home,
   },
-  {
-    path: '/diy',
-    name: 'DIY',
-    component: Diy,
-  },
+  // {
+  //   path: '/diy',
+  //   name: 'DIY',
+  //   component: Diy,
+  // },
   {
     path: '/empty',
     name: 'empty',
@@ -48,13 +56,13 @@ export default [
     path: '/NotFound',
     name: 'NotFound',
     component: NotFound,
-    meta:{
-      title:'NotFound'
+    meta: {
+      title: 'NotFound'
     }
   },
   {
     path: '*',
-    redirect:'/NotFound'
+    redirect: '/NotFound'
   },
   {
     path: '/login',
