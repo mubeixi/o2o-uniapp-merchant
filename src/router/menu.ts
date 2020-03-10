@@ -16,6 +16,8 @@ import AddIndustryCate from '../views/register/AddIndustryCate.vue'
 
 import PageTmpl from '../views/PageTmpl.vue'
 
+import UpdatePassword from '../views/info/UpdatePassword.vue'
+
 export default [
   {
     path: '/',
@@ -134,6 +136,14 @@ export default [
     component: AddIndustryCate,
     meta: {
       title: '添加行业分类'
+    }
+  },
+  {
+    path: '/UpdatePassword',
+    name: 'UpdatePassword',
+    component: UpdatePassword,
+    meta: {
+      title: '修改密码'
     }
   }
 
