@@ -22,12 +22,22 @@ export default [
   {
     path: '/',
     name: 'LayoutPage',
-    meta: {
-      title: '',
-      auth: false,
-    },
     component: PageTmpl,
     children: [
+      {
+        path:'info',
+        component:Empty,
+        children:[
+          {
+            path: 'UpdatePassword',
+            name: 'UpdatePassword',
+            component: UpdatePassword,
+            meta: {
+              title: '修改密码'
+            }
+          },
+        ]
+      },
       {
         path: '/diy',
         name: 'LayoutPage',
@@ -62,10 +72,10 @@ export default [
       title: 'NotFound'
     }
   },
-  {
-    path: '*',
-    redirect: '/NotFound'
-  },
+  // {
+  //   path: '*',
+  //   redirect: '/NotFound'
+  // },
   {
     path: '/login',
     name: 'Login',
@@ -136,14 +146,6 @@ export default [
     component: AddIndustryCate,
     meta: {
       title: '添加行业分类'
-    }
-  },
-  {
-    path: '/UpdatePassword',
-    name: 'UpdatePassword',
-    component: UpdatePassword,
-    meta: {
-      title: '修改密码'
     }
   }
 

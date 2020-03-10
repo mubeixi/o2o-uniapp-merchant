@@ -1,18 +1,20 @@
 <template>
-  <div>
-   <router-view></router-view>
-  </div>
+    <div>
+        <layout-menu-component></layout-menu-component>
+        <router-view></router-view>
+    </div>
 </template>
 <script lang="ts">
 import {
     Component,
     Vue
 } from 'vue-property-decorator';
+import LayoutMenuComponent from "../components/comm/LayoutMenuComponent.vue";
 
-    @Component({
-
-    })
-export default class Page extends Vue {
+@Component({
+    "components": {LayoutMenuComponent},
+})
+export default class LayoutPage extends Vue {
 
 }
 </script>

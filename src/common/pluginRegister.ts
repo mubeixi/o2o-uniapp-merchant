@@ -4,6 +4,10 @@ import FunTable from "@/components/widget/FunTable.vue";
 Vue.component('fun-table',FunTable);
 
 import {
+    Menu,
+    MenuItem,
+    MenuItemGroup,
+    Submenu,
   Alert,
   Breadcrumb,
   BreadcrumbItem,
@@ -51,6 +55,10 @@ import {
   Popover
 } from 'element-ui';
 
+Vue.use(Menu)
+Vue.use(Submenu)
+Vue.use(MenuItem)
+Vue.use(MenuItemGroup)
 Vue.use(Popover)
 Vue.use(Tag)
 Vue.use(Row)

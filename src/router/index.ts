@@ -3,7 +3,7 @@ import Router from 'vue-router';
 Vue.use(Router);
 
 
-import route_list from './menu'
+import route_list from './menuConf'
 
 const createRouter = () => new Router({
   routes: route_list
