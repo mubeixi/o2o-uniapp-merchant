@@ -26,9 +26,6 @@
         async created(){
 
 
-
-
-
         }
 
     }

@@ -1,6 +1,6 @@
 import {Notification} from "element-ui";
 
-export default {
+export const fun =  {
   success: ({msg = '操作成功', title = '成功'}) => Notification({
     title,
     message: msg,
