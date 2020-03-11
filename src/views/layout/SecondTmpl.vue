@@ -20,7 +20,8 @@ import LayoutTabComponent from "../../components/comm/LayoutTabComponent.vue";
 })
 export default class SecondTmpl extends Vue {
     get menuThirdList(){
-        return this.$store.getters['menu/menuThirdList']
+        let data = this.$store.getters['menu/menuThirdList']
+        return data?data:[]
     }
 
     created(){

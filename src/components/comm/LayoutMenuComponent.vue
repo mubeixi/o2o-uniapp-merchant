@@ -14,7 +14,7 @@
                 </template>
             </ul>
         </div>
-        <div class="menu-vertical-second" v-if="secondMenuData.length>0">
+        <div class="menu-vertical-second" v-if="secondMenuData && secondMenuData.length>0">
             <ul>
                 <template v-for="(second,idx) in secondMenuData">
                     <template v-if="!second.hide">
