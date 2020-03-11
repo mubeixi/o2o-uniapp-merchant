@@ -19,7 +19,7 @@
                 <template v-for="(second,idx) in secondMenuData">
                     <template v-if="!second.hide">
                         <li
-                            @click="changeMenu(idx)"
+                            @click="changeMenu(idx,second)"
                             :class="{active:secondIndex===idx}"
                         >{{second.meta.title}}</li>
                     </template>
@@ -79,7 +79,7 @@ export default class LayoutMenuComponent extends Vue {
 
     }
 
-    changeMenu(idx){
+    changeMenu(idx,item){
         //设置二级菜单的下标
         this.setMenuActiveIndex({name:'menuSecondIndex',idx})
         this.setMenuActiveIndex({name:'menuThirdIndex',idx:0})
@@ -90,6 +90,9 @@ export default class LayoutMenuComponent extends Vue {
         }else{
             this.setThirdMenuData([])
         }
+
+        //路由跳转
+        item.name && this.$router.push({name:item.name})
     }
 
 

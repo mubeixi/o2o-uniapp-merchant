@@ -6,7 +6,7 @@
                     <li
                         @mouseover="overNav(idx,item)"
                         @mouseout="outNav(idx,item)"
-                        @click="bindThirdEvent(idx)"
+                        @click="bindThirdEvent(idx,item)"
                         :class="{active:activeIndex===idx}"
                     >{{item.meta.title}}</li>
                 </template>
@@ -35,8 +35,11 @@ export default class LayoutTabComponent extends Vue {
         return this.$store.state.menu.menuThirdIndex
     }
 
-    bindThirdEvent(idx){
+    bindThirdEvent(idx,item){
         this.setMenuActiveIndex({name:'menuThirdIndex',idx})
+
+        //路由跳转
+        item.name && this.$router.push({name:item.name})
     }
 
 
