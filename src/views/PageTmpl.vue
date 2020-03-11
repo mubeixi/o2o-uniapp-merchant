@@ -14,7 +14,7 @@
         </div>
         <div class="layout-wrap">
             <layout-menu-component></layout-menu-component>
-            <div class="layout-container">
+            <div class="layout-container" :style="{marginTop:menuThirdList.length===0?'20px':'0px'}">
                 <layout-tab-component></layout-tab-component>
                 <router-view></router-view>
             </div>
@@ -33,7 +33,9 @@ import LayoutTabComponent from "../components/comm/LayoutTabComponent.vue";
   components: {LayoutTabComponent, LayoutMenuComponent },
 })
 export default class LayoutPage extends Vue {
-
+    get menuThirdList(){
+        return this.$store.state.menu.menuThirdList
+    }
 }
 </script>
 <style lang="less" scoped>

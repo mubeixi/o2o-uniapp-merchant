@@ -1,11 +1,12 @@
 <template>
-    <div class="tab-menu">
+    <div class="tab-menu" v-if="tabData.length>0">
         <ul>
             <template v-for="(item,idx) in tabData">
                 <template v-if="!item.hide">
                     <li
                         @mouseover="overNav(idx,item)"
                         @mouseout="outNav(idx,item)"
+                        @click="bindThirdEvent(idx)"
                         :class="{active:activeIndex===idx}"
                     >{{item.meta.title}}</li>
                 </template>
@@ -15,27 +16,37 @@
 </template>
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-
+import {
+    Action,
+    State,
+} from 'vuex-class';
 @Component
 export default class LayoutTabComponent extends Vue {
 
-        // computed
-        get tabData() {
-            return this.$store.state.menu.menuThirdList
-        }
-
-        get activeIndex() {
-            return this.$store.state.menu.menuThirdIndex
-        }
+    @Action('menu/setMenuActiveIndex') setMenuActiveIndex
 
 
-        overNav(idx) {
-          // this.menuIndex = idx;
-        }
+    // computed
+    get tabData() {
+        return this.$store.state.menu.menuThirdList
+    }
 
-        outNav() {
+    get activeIndex() {
+        return this.$store.state.menu.menuThirdIndex
+    }
 
-        }
+    bindThirdEvent(idx){
+        this.setMenuActiveIndex({name:'menuThirdIndex',idx})
+    }
+
+
+    overNav(idx) {
+      // this.menuIndex = idx;
+    }
+
+    outNav() {
+
+    }
 
 
 }

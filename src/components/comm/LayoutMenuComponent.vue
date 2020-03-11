@@ -1,23 +1,27 @@
 <template>
     <div class="left-menu">
         <div class="menu-vertical-first">
-
             <ul>
                 <template v-for="(first,idx) in firstMenuData">
                     <template v-if="!first.hide">
                         <li
+                            @click="bindFirstEvent(idx)"
                             @mouseover="overNav(idx,first)"
                             @mouseout="outNav(idx,first)"
+                            :class="{active:firstIndex===idx}"
                         >{{first.meta.title}}</li>
                     </template>
                 </template>
             </ul>
         </div>
-        <div class="menu-vertical-second">
+        <div class="menu-vertical-second" v-if="secondMenuData.length>0">
             <ul>
                 <template v-for="(second,idx) in secondMenuData">
                     <template v-if="!second.hide">
-                        <li @click="changeMenu(idx)">{{second.meta.title}}</li>
+                        <li
+                            @click="changeMenu(idx)"
+                            :class="{active:secondIndex===idx}"
+                        >{{second.meta.title}}</li>
                     </template>
                 </template>
             </ul>
@@ -36,28 +40,62 @@ import menuConf from '../../router/menuConf';
 export default class LayoutMenuComponent extends Vue {
     //isCollapse = false
 
-    menuIndex = 3
-
-    @Action('menu/setThirdMenuData') setThirdMenuData
-
-    changeMenu(idx){
-        //设置第三级菜单
-        if(Array.isArray(this.secondMenuData[idx].children)){
-            this.setThirdMenuData(this.secondMenuData[idx].children)
-        }
-    }
-
     // computed
     get firstMenuData() {
-      return menuConf[0].children;
+        return menuConf[0].children;
     }
 
     get secondMenuData() {
-      return menuConf[0].children[this.menuIndex].children;
+        if(this.firstMenuData[this.firstIndex].hasOwnProperty('children')){
+            return this.firstMenuData[this.firstIndex].children;
+        }
+        return []
     }
 
+    get firstIndex(){
+        return this.$store.state.menu.menuFirstIndex
+    }
+
+    get secondIndex(){
+        return this.$store.state.menu.menuSecondIndex
+    }
+
+    @Action('menu/setMenuActiveIndex') setMenuActiveIndex
+    @Action('menu/setThirdMenuData') setThirdMenuData
+
+    bindFirstEvent(idx){
+        this.setMenuActiveIndex({name:'menuFirstIndex',idx})
+
+        //设置二级菜单
+        this.setMenuActiveIndex({name:'menuSecondIndex',idx:0})
+        //设置第三级菜单
+        this.setMenuActiveIndex({name:'menuThirdIndex',idx:0})
+
+        if(this.secondMenuData && this.secondMenuData[0] && this.secondMenuData[0].hasOwnProperty('children') && Array.isArray(this.secondMenuData[0].children) && this.secondMenuData[0].children.length>0){
+            this.setThirdMenuData(this.secondMenuData[0].children)
+        }else{
+            this.setThirdMenuData([])
+        }
+
+    }
+
+    changeMenu(idx){
+        //设置二级菜单的下标
+        this.setMenuActiveIndex({name:'menuSecondIndex',idx})
+        this.setMenuActiveIndex({name:'menuThirdIndex',idx:0})
+
+        //设置第三级菜单
+        if(Array.isArray(this.secondMenuData[idx].children) && this.secondMenuData[idx].children.length>0){
+            this.setThirdMenuData(this.secondMenuData[idx].children)
+        }else{
+            this.setThirdMenuData([])
+        }
+    }
+
+
+
     overNav(idx) {
-      // this.menuIndex = idx;
+      // this.firstIndex = idx;
     }
 
     outNav() {
@@ -75,7 +113,7 @@ export default class LayoutMenuComponent extends Vue {
 </script>
 <style lang="less" scoped>
 .left-menu{
-    width: 280px;
+
     height: 100%;
     overflow: hidden;
     display: flex;
@@ -100,7 +138,7 @@ export default class LayoutMenuComponent extends Vue {
                 }
                 &.active{
                     background: #316CBC;
-                    border-radius: 50%;
+                    border-radius: 22px;
                 }
             }
         }
@@ -122,7 +160,8 @@ export default class LayoutMenuComponent extends Vue {
                         /*visibility: visible;*/
                     /*}*/
                 }
-                &:active{
+                &.active{
+                    color: #428CF7;
                     &:after{
                         visibility: visible;
                     }
