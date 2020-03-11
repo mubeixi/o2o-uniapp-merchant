@@ -27,6 +27,17 @@ export default [
       {
         path:'info',
         component:Empty,
+        meta: {
+          title: '商家认证'
+        },
+        children:[]
+      },
+      {
+        path:'info',
+        component:Empty,
+        meta: {
+          title: '商家资料'
+        },
         children:[
           {
             path: 'UpdatePassword',
@@ -39,9 +50,117 @@ export default [
         ]
       },
       {
+        path:'info',
+        component:Empty,
+        meta: {
+          title: '店铺管理'
+        },
+        children:[]
+      },
+      {
+        path:'info',
+        component:Empty,
+        meta: {
+          title: '产品管理'
+        },
+        children:[
+          {
+            path:'info',
+            component:Empty,
+            meta: {
+              title: '全部商品'
+            }
+          },
+          {
+            path:'info',
+            component:Empty,
+            meta: {
+              title: '商品分组'
+            }
+          },
+          {
+            path:'info',
+            component:Empty,
+            meta: {
+              title: '商品标签'
+            }
+          },
+          {
+            path:'info',
+            component:Empty,
+            meta: {
+              title: '商品模板'
+            }
+          },
+          {
+            path:'info',
+            component:Empty,
+            meta: {
+              title: '商品属性'
+            }
+          },
+          {
+            path:'info',
+            component:Empty,
+            meta: {
+              title: '商品评论'
+            }
+          }
+        ]
+      },
+      {
+        path:'info',
+        component:Empty,
+        meta: {
+          title: '优惠券管理'
+        },
+        children:[]
+      },
+      {
+        path:'info',
+        component:Empty,
+        meta: {
+          title: '第三方配送'
+        },
+        children:[]
+      },
+      {
+        path:'info',
+        component:Empty,
+        meta: {
+          title: '订单管理'
+        },
+        children:[]
+      },
+      {
+        path:'info',
+        component:Empty,
+        meta: {
+          title: '活动管理'
+        },
+        children:[]
+      },
+      {
+        path:'info',
+        component:Empty,
+        meta: {
+          title: '财务结算'
+        },
+        children:[]
+      },
+      {
+        path:'info',
+        component:Empty,
+        meta: {
+          title: '运费管理'
+        },
+        children:[]
+      },
+      {
         path: '/diy',
         name: 'LayoutPage',
         component:Diy,
+        hide:true,
         meta: {
           title: '页面diy',
           auth: false,

@@ -3,10 +3,25 @@
         <div class="menu-vertical-first">
             <img />
             <ul>
-
+                <template v-for="(first,idx) in firstMenuData">
+                    <template v-if="!first.hide">
+                        <li
+                            @mouseover="overNav(idx,first)"
+                            @mouseout="outNav(idx,first)"
+                        >{{first.meta.title}}</li>
+                    </template>
+                </template>
             </ul>
         </div>
-        <div class="menu-vertical-second"></div>
+        <div class="menu-vertical-second">
+            <ul>
+                <template v-for="(second,idx) in secondMenuData">
+                    <template v-if="!second.hide">
+                        <li >{{second.meta.title}}</li>
+                    </template>
+                </template>
+            </ul>
+        </div>
         <!--<el-menu-->
                 <!--:collapse="isCollapse"-->
                 <!--@close="handleClose"-->
@@ -62,7 +77,15 @@
         }
 
         get secondMenuData(){
-            return menuConf[0].children[this.menuIndex];
+            return menuConf[0].children[this.menuIndex].children;
+        }
+
+        overNav(idx){
+            this.menuIndex = idx;
+        }
+
+        outNav(){
+
         }
 
         handleOpen(key, keyPath) {
@@ -76,13 +99,39 @@
 </script>
 <style lang="less" scoped>
 .left-menu{
+    width: 280px;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
     .menu-vertical-first{
-        width: 280px;
+        flex:1;
+        width: 140px;
+        height: 100vh;
+        padding: 0 15px;
         background: #397FDC;
+        color: #fff;
+        font-size: 14px;
+        box-sizing: border-box;
+        text-align: center;
+        ul{
+            li{
+                width: 110px;
+                height: 44px;
+                line-height: 44px;
+                margin-bottom: 10px;
+                &.active{
+                    background: #316CBC;
+                    border-radius: 50%;
+                }
+            }
+        }
     }
     .menu-vertical-second{
-        width: 260px;
+        flex:1;
+        width: 140px;
+        height: 100vh;
         background: #fff;
+        color: #777;
     }
 
 }
