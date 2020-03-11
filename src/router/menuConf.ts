@@ -17,6 +17,7 @@ import AddIndustryCate from '../views/register/AddIndustryCate.vue';
 import PageTmpl from '../views/PageTmpl.vue';
 
 import UpdatePassword from '../views/info/UpdatePassword.vue';
+import ProductList from '../views/product/ProductList.vue';
 
 export default [
   {
@@ -65,8 +66,9 @@ export default [
         },
         children: [
           {
-            path: 'info',
-            component: Empty,
+            path: 'ProductList',
+            name:'ProductList',
+            component: ProductList,
             meta: {
               title: '全部商品',
             },
