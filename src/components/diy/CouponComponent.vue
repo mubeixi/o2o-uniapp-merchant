@@ -42,92 +42,90 @@
 </template>
 
 <script lang="ts">
-    import {Component, Vue} from 'vue-property-decorator';
-    import {mapState} from 'vuex';
-    import Coupon from '@/assets/js/diy/coupon';
-    import {deepCopy} from '@/common/utils';
+import { Component, Vue } from 'vue-property-decorator';
+import { mapState } from 'vuex';
+import Coupon from '@/assets/js/diy/coupon';
+import { deepCopy } from '@/common/utils';
 
     @Component({
-        props: {
-            index: {
-                required: true,
-            },
-            data: {
-                type: Object,
-                default: () => ({}),
-            },
+      props: {
+        index: {
+          required: true,
         },
-        data() {
-            return {
-                coupon: {},
-            };
+        data: {
+          type: Object,
+          default: () => ({}),
         },
-        computed: {
-            couponList(){
-                if(this.coupon.value.list.length<1){
-                    return []
-                }
-                return this.coupon.value.list
-            },
-            style() {
-                // return deepCopyStrict(this.coupon.styleDefault, this.coupon.style);
-            },
-            activeAttr: {
-                get() {
-                    return this.$store.state.activeAttr;
-                },
-                set(nval) {
+      },
+      data() {
+        return {
+          coupon: {},
+        };
+      },
+      computed: {
+        couponList() {
+          if (this.coupon.value.list.length < 1) {
+            return [];
+          }
+          return this.coupon.value.list;
+        },
+        style() {
+          // return deepCopyStrict(this.coupon.styleDefault, this.coupon.style);
+        },
+        activeAttr: {
+          get() {
+            return this.$store.state.activeAttr;
+          },
+          set(nval) {
 
-                },
-            },
-            ...mapState(['editStatus']),
+          },
         },
-        filters: {},
-        watch: {
-            // 属性变化
-            activeAttr: {
-                deep: true,
-                handler(val) {
+        ...mapState(['editStatus']),
+      },
+      filters: {},
+      watch: {
+        // 属性变化
+        activeAttr: {
+          deep: true,
+          handler(val) {
 
-                },
-            },
+          },
         },
-        components: {},
-        methods: {
-            setData(item, index) {
-                // console.log('hehe',this.search)
-                // @ts-ignore
-                this.$store.commit('activeAttr', this.coupon);// 这里点击之后，setAttr马上就有响应。
+      },
+      components: {},
+      methods: {
+        setData(item, index) {
+          // console.log('hehe',this.search)
+          // @ts-ignore
+          this.$store.commit('activeAttr', this.coupon);// 这里点击之后，setAttr马上就有响应。
 
-                // @ts-ignore
-                this.$store.commit('tabIndex', this.index);
+          // @ts-ignore
+          this.$store.commit('tabIndex', this.index);
 
-                // 用vuex就不要一层层传递了，头都晕了
-                // this.$emit('setData', this.img.attrData)
-            },
-            // ...mapActions(),
+          // 用vuex就不要一层层传递了，头都晕了
+          // this.$emit('setData', this.img.attrData)
         },
+        // ...mapActions(),
+      },
 
     })
-    export default class CouponComponent extends Vue {
-        created() {
+export default class CouponComponent extends Vue {
+  created() {
+    // 用这个来搞事啊
+    // funvm也是vue实例，而且不是根实例，是这个组件的实例，可以快捷的调用组件中的对象或者方法以及$ref
+    Coupon.prototype.funvm = this;
+    // Coupon.prototype.vm = this;
+    this.$store.commit('tabIndex', this.index);// 设置tabIndex，等于templData是二维数组，这个是二维数组的
+    this.coupon = deepCopy(new Coupon(), this.data);
 
-            //用这个来搞事啊
-            //funvm也是vue实例，而且不是根实例，是这个组件的实例，可以快捷的调用组件中的对象或者方法以及$ref
-            Coupon.prototype.funvm = this;
-            //Coupon.prototype.vm = this;
-            this.$store.commit('tabIndex', this.index);// 设置tabIndex，等于templData是二维数组，这个是二维数组的
-            this.coupon = deepCopy(new Coupon(), this.data);
+    // 重新绑定attrData.content，让修改可以同步到其他地方
+    this.coupon.setIndex(0, { value: false, config: false });
 
-            //重新绑定attrData.content，让修改可以同步到其他地方
-            this.coupon.setIndex(0,{value:false,config:false})
-
-            // if(this.data.value && this.data.value.list.length>0){
-            //     this.coupon.value.list = [...this.data.value.list];
-            // }
-
-        }
-    }
+    // if(this.data.value && this.data.value.list.length>0){
+    //     this.coupon.value.list = [...this.data.value.list];
+    // }
+  }
+}
 </script>
 
 <style scoped lang="less">
@@ -166,7 +164,6 @@
       height: 70px;
       position: relative;
       margin-right: 10px;
-
 
 
       &:before,&:after{
@@ -263,7 +260,6 @@
         height: 100%;
         background-size: 100% 100%;
       }
-
 
 
       .c {

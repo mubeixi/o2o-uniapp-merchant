@@ -69,32 +69,32 @@
 </template>
 
 <script lang="ts">
-    import {
-        Vue,
-        Component,
-        Watch,
-        Prop
-    } from 'vue-property-decorator';
+import {
+  Vue,
+  Component,
+  Watch,
+  Prop,
+} from 'vue-property-decorator';
 
-    export default Vue.extend({
-        data(){
-            return {
-                dialogFormVisible: false,
-                form: {
-                    type: ''
-                }
-            }
-        },
-        methods: {
-            goApprove: function(){
-                if(this.form.type == 'person') {
-                    this.$router.push('PersonApprove')
-                }else if(this.form.type == 'company') {
-                    this.$router.push('CompanyApprove')
-                }
-            }
-        }
-    })
+export default Vue.extend({
+  data() {
+    return {
+      dialogFormVisible: false,
+      form: {
+        type: '',
+      },
+    };
+  },
+  methods: {
+    goApprove() {
+      if (this.form.type == 'person') {
+        this.$router.push('PersonApprove');
+      } else if (this.form.type == 'company') {
+        this.$router.push('CompanyApprove');
+      }
+    },
+  },
+});
 </script>
 
 <style scoped lang="less">

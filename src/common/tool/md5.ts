@@ -1,9 +1,10 @@
-var rotateLeft = function (lValue, iShiftBits) {
+const rotateLeft = function (lValue, iShiftBits) {
   return (lValue << iShiftBits) | (lValue >>> (32 - iShiftBits));
-}
+};
 
-var addUnsigned = function (lX, lY) {
-  var lX4, lY4, lX8, lY8, lResult;
+const addUnsigned = function (lX, lY) {
+  let lX4; let lY4; let lX8; let lY8; let
+    lResult;
   lX8 = (lX & 0x80000000);
   lY8 = (lY & 0x80000000);
   lX4 = (lX & 0x40000000);
@@ -12,57 +13,56 @@ var addUnsigned = function (lX, lY) {
   if (lX4 & lY4) return (lResult ^ 0x80000000 ^ lX8 ^ lY8);
   if (lX4 | lY4) {
     if (lResult & 0x40000000) return (lResult ^ 0xC0000000 ^ lX8 ^ lY8);
-    else return (lResult ^ 0x40000000 ^ lX8 ^ lY8);
-  } else {
-    return (lResult ^ lX8 ^ lY8);
+    return (lResult ^ 0x40000000 ^ lX8 ^ lY8);
   }
-}
+  return (lResult ^ lX8 ^ lY8);
+};
 
-var F = function (x, y, z) {
+const F = function (x, y, z) {
   return (x & y) | ((~x) & z);
-}
+};
 
-var G = function (x, y, z) {
+const G = function (x, y, z) {
   return (x & z) | (y & (~z));
-}
+};
 
-var H = function (x, y, z) {
+const H = function (x, y, z) {
   return (x ^ y ^ z);
-}
+};
 
-var I = function (x, y, z) {
+const I = function (x, y, z) {
   return (y ^ (x | (~z)));
-}
+};
 
-var FF = function (a, b, c, d, x, s, ac) {
+const FF = function (a, b, c, d, x, s, ac) {
   a = addUnsigned(a, addUnsigned(addUnsigned(F(b, c, d), x), ac));
   return addUnsigned(rotateLeft(a, s), b);
 };
 
-var GG = function (a, b, c, d, x, s, ac) {
+const GG = function (a, b, c, d, x, s, ac) {
   a = addUnsigned(a, addUnsigned(addUnsigned(G(b, c, d), x), ac));
   return addUnsigned(rotateLeft(a, s), b);
 };
 
-var HH = function (a, b, c, d, x, s, ac) {
+const HH = function (a, b, c, d, x, s, ac) {
   a = addUnsigned(a, addUnsigned(addUnsigned(H(b, c, d), x), ac));
   return addUnsigned(rotateLeft(a, s), b);
 };
 
-var II = function (a, b, c, d, x, s, ac) {
+const II = function (a, b, c, d, x, s, ac) {
   a = addUnsigned(a, addUnsigned(addUnsigned(I(b, c, d), x), ac));
   return addUnsigned(rotateLeft(a, s), b);
 };
 
-var convertToWordArray = function (string) {
-  var lWordCount;
-  var lMessageLength = string.length;
-  var lNumberOfWordsTempOne = lMessageLength + 8;
-  var lNumberOfWordsTempTwo = (lNumberOfWordsTempOne - (lNumberOfWordsTempOne % 64)) / 64;
-  var lNumberOfWords = (lNumberOfWordsTempTwo + 1) * 16;
-  var lWordArray = Array(lNumberOfWords - 1);
-  var lBytePosition = 0;
-  var lByteCount = 0;
+const convertToWordArray = function (string) {
+  let lWordCount;
+  const lMessageLength = string.length;
+  const lNumberOfWordsTempOne = lMessageLength + 8;
+  const lNumberOfWordsTempTwo = (lNumberOfWordsTempOne - (lNumberOfWordsTempOne % 64)) / 64;
+  const lNumberOfWords = (lNumberOfWordsTempTwo + 1) * 16;
+  const lWordArray = Array(lNumberOfWords - 1);
+  let lBytePosition = 0;
+  let lByteCount = 0;
   while (lByteCount < lMessageLength) {
     lWordCount = (lByteCount - (lByteCount % 4)) / 4;
     lBytePosition = (lByteCount % 4) * 8;
@@ -77,23 +77,24 @@ var convertToWordArray = function (string) {
   return lWordArray;
 };
 
-var wordToHex = function (lValue) {
-  var WordToHexValue = "",
-    WordToHexValueTemp = "",
-    lByte, lCount;
+const wordToHex = function (lValue) {
+  let WordToHexValue = '';
+  let WordToHexValueTemp = '';
+  let lByte;
+  let lCount;
   for (lCount = 0; lCount <= 3; lCount++) {
     lByte = (lValue >>> (lCount * 8)) & 255;
-    WordToHexValueTemp = "0" + lByte.toString(16);
-    WordToHexValue = WordToHexValue + WordToHexValueTemp.substr(WordToHexValueTemp.length - 2, 2);
+    WordToHexValueTemp = `0${lByte.toString(16)}`;
+    WordToHexValue += WordToHexValueTemp.substr(WordToHexValueTemp.length - 2, 2);
   }
   return WordToHexValue;
 };
 
-var uTF8Encode = function (string) {
-  string = string.replace(/\x0d\x0a/g, "\x0a");
-  var output = "";
-  for (var n = 0; n < string.length; n++) {
-    var c = string.charCodeAt(n);
+const uTF8Encode = function (string) {
+  string = string.replace(/\x0d\x0a/g, '\x0a');
+  let output = '';
+  for (let n = 0; n < string.length; n++) {
+    const c = string.charCodeAt(n);
     if (c < 128) {
       output += String.fromCharCode(c);
     } else if ((c > 127) && (c < 2048)) {
@@ -109,24 +110,25 @@ var uTF8Encode = function (string) {
 };
 
 export const hexMD5 = function (string) {
-  var x = Array();
-  var k, AA, BB, CC, DD, a, b, c, d;
-  var S11 = 7,
-    S12 = 12,
-    S13 = 17,
-    S14 = 22;
-  var S21 = 5,
-    S22 = 9,
-    S23 = 14,
-    S24 = 20;
-  var S31 = 4,
-    S32 = 11,
-    S33 = 16,
-    S34 = 23;
-  var S41 = 6,
-    S42 = 10,
-    S43 = 15,
-    S44 = 21;
+  let x = Array();
+  let k; let AA; let BB; let CC; let DD; let a; let b; let c; let
+    d;
+  const S11 = 7;
+  const S12 = 12;
+  const S13 = 17;
+  const S14 = 22;
+  const S21 = 5;
+  const S22 = 9;
+  const S23 = 14;
+  const S24 = 20;
+  const S31 = 4;
+  const S32 = 11;
+  const S33 = 16;
+  const S34 = 23;
+  const S41 = 6;
+  const S42 = 10;
+  const S43 = 15;
+  const S44 = 21;
   string = uTF8Encode(string);
   x = convertToWordArray(string);
   a = 0x67452301;
@@ -207,8 +209,6 @@ export const hexMD5 = function (string) {
     c = addUnsigned(c, CC);
     d = addUnsigned(d, DD);
   }
-  var tempValue = wordToHex(a) + wordToHex(b) + wordToHex(c) + wordToHex(d);
+  const tempValue = wordToHex(a) + wordToHex(b) + wordToHex(c) + wordToHex(d);
   return tempValue.toLowerCase();
-}
-
-
+};

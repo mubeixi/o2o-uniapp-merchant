@@ -61,378 +61,373 @@
 </template>
 
 <script lang="ts">
-    import {
-        Component,
-        Vue,
-        Prop
-    } from 'vue-property-decorator';
-    import {
-        mapState
-    } from 'vuex';
-    import FunSearch from './FunSearch'
-    import {
-      commonReq
-    } from "../../api/pub";
-    import MyRender from './MyRender'
-    import _ from 'underscore'
-    const noop = ()=>{}
-    const extendFn = (obj)=>{
-        var o = {},attr = Array.prototype.slice.call(arguments).slice(1);
-        attr.forEach(function(val, index) {
-            if (val in obj) { o[val] = obj[val]; }
-        });
-        return o;
+import {
+  Component,
+  Vue,
+  Prop,
+} from 'vue-property-decorator';
+import {
+  mapState,
+} from 'vuex';
+import _ from 'underscore';
+import col from 'element-ui/packages/col/src/col';
+import FunSearch from './FunSearch';
+import {
+  commonReq,
+} from '../../api/pub';
+import MyRender from './MyRender';
+import { RenderContent } from '@/components/widget/RenderContent';
+import { objTranslate } from '../../common/utils';
+
+const noop = () => {};
+const extendFn = (obj) => {
+  const o = {}; const attr = Array.prototype.slice.call(arguments).slice(1);
+  attr.forEach((val, index) => {
+    if (val in obj) { o[val] = obj[val]; }
+  });
+  return o;
+};
+const valInArr = (val, arr) => {
+  let rt = false;
+  for (const i in arr) {
+    if (arr[i] == val) {
+      rt = true;
+      break;
     }
-    import {RenderContent} from '@/components/widget/RenderContent';
-    import col from "element-ui/packages/col/src/col";
-    import {objTranslate} from "../../common/utils";
-    const valInArr = (val,arr)=>{
-        let rt = false
-        for(var i in arr){
-            if(arr[i]==val){
-                rt = true;
-                break;
-            }
-        }
-        return rt;
-    }
+  }
+  return rt;
+};
 
     @Component({
-        components:{
-            FunSearch,MyRender,RenderContent
+      components: {
+        FunSearch, MyRender, RenderContent,
+      },
+      computed: {
+        computedColumns() {
+          return this.columns.filter(column => (column.showIf ? column.showIf(this.lists) : true));
         },
-        computed:{
-            computedColumns () {
-                return this.columns.filter(column =>
-                    column.showIf ? column.showIf(this.lists) : true
-                )
+      },
+      watch: {
+        dataList: {
+          immediate: true,
+          deep: true,
+          handler(val) {
+            if (_.isArray(val)) {
+              this.lists = [...val];
             }
+          },
         },
-        watch:{
-          dataList:{
-              immediate:true,
-              deep:true,
-              handler(val){
-
-                  if(_.isArray(val)){
-                      this.lists = [...val]
-                  }
-              }
+        lists: {
+          deep: true,
+          handler(val) {
+            // 有变动就需要渲染下
+            this.toggleSelection();
           },
-          lists:{
-              deep:true,
-              handler(val){
-                  //有变动就需要渲染下
-                  this.toggleSelection()
-              }
-          },
-          has:{
-              immediate:true,
-              deep:true,
-              handler(val){
-
-              }
-          },
-          _totalCount:{
-              handler(val){
-                  this.totalCount = val
-              }
-          },
-
-          _pageSize:{
-              handler(val){
-                  this.pageSize = val
-              }
-          },
-          _page:{
-              handler(val){
-                  this.currentPage = val
-              }
-          }
         },
-        filters:{
+        has: {
+          immediate: true,
+          deep: true,
+          handler(val) {
 
-        }
+          },
+        },
+        _totalCount: {
+          handler(val) {
+            this.totalCount = val;
+          },
+        },
+
+        _pageSize: {
+          handler(val) {
+            this.pageSize = val;
+          },
+        },
+        _page: {
+          handler(val) {
+            this.currentPage = val;
+          },
+        },
+      },
+      filters: {
+
+      },
     })
 
-    export default class FunTable extends Vue {
-        filterColVal(row,columName){
-            return row[columName]
-        }
-        @Prop({
-            type:String,
-        })
-        vkey //主键
+export default class FunTable extends Vue {
+  filterColVal(row, columName) {
+    return row[columName];
+  }
 
         @Prop({
-            type:Array,
-            default:()=>[]
+          type: String,
         })
-        has //是否有已经选中的选项
+        vkey // 主键
 
         @Prop({
-            type:Number
+          type: Array,
+          default: () => [],
+        })
+        has // 是否有已经选中的选项
+
+        @Prop({
+          type: Number,
         })
         height
 
         @Prop({
-            type:Boolean,
-            default:false
+          type: Boolean,
+          default: false,
         })
-        is_paginate //是否分页
+        is_paginate // 是否分页
+
         @Prop({
-            type:Number,
-            default:1
+          type: Number,
+          default: 1,
         })
-        _page //分页配置
+        _page // 分页配置
+
         @Prop({
-            type:Number,
-            default:10
+          type: Number,
+          default: 10,
         })
         _pageSize
+
         @Prop({
-            type:Number,
-            default:0
+          type: Number,
+          default: 0,
         })
         _totalCount
 
         @Prop({
-            type:String,
-            default:'small'
+          type: String,
+          default: 'small',
         })
         formSize
 
         @Prop({
-            type:Array,
-            required:true,
+          type: Array,
+          required: true,
         })
-        columns //表头和内容显示的配置
-        @Prop({
-            type:[Array,Boolean],
-            default:false
-        })
-        dataList //可能是已经有的数据，如果有该配置。那么就不需要加载数据了
-
-
+        columns // 表头和内容显示的配置
 
         @Prop({
-            type:Boolean,
-            default:false
+          type: [Array, Boolean],
+          default: false,
         })
-        isRow //是否点击某行某行选中
-
+        dataList // 可能是已经有的数据，如果有该配置。那么就不需要加载数据了
 
 
         @Prop({
-            type:[String,Boolean],
+          type: Boolean,
+          default: false,
         })
-        act //请求的数据的方法
-        @Prop({
-            type:[Function,Boolean],
-            default:false
-        })
-        __list_filter_func //拿到结果后数据过滤的
+        isRow // 是否点击某行某行选中
+
 
         @Prop({
-            type:Object,
-            default:()=>{}
+          type: [String, Boolean],
+        })
+        act // 请求的数据的方法
+
+        @Prop({
+          type: [Function, Boolean],
+          default: false,
+        })
+        __list_filter_func // 拿到结果后数据过滤的
+
+        @Prop({
+          type: Object,
+          default: () => {},
         })
         extParam
 
         @Prop({
-            type:[Function,Boolean],
-            default:(parama,extParam)=>{
-                let newOBJ ={}
-                Object.assign(newOBJ,parama,extParam)
-                return newOBJ
-            }
+          type: [Function, Boolean],
+          default: (parama, extParam) => {
+            const newOBJ = {};
+            Object.assign(newOBJ, parama, extParam);
+            return newOBJ;
+          },
         })
-        __params_filter_func //发起请求前参数混合的
+        __params_filter_func // 发起请求前参数混合的
 
 
         @Prop({
-            type:Boolean,
-            default:false
+          type: Boolean,
+          default: false,
         })
-        showSave //是否显示保存
-        @Prop({
-            type:Boolean,
-            default:true
-        })
-        isSelect //是否多选
+        showSave // 是否显示保存
 
-        //loading
+        @Prop({
+          type: Boolean,
+          default: true,
+        })
+        isSelect // 是否多选
+
+        // loading
         getDataLoding = false
 
         lists = []
 
-        currentPage = 1 //当前页
-        totalCount = 0 //分页数据
-        pageSize = 10 //页面数据
+        currentPage = 1 // 当前页
+
+        totalCount = 0 // 分页数据
+
+        pageSize = 10 // 页面数据
 
 
         toggleSelection() {
+          // this.$refs.funTable.clearSelection();
+          console.log('初始化选中的', objTranslate(this.has));
+          if (!this.vkey || !this.has || !_.isArray(this.has) || this.has.length < 1) {
+            console.log('清空数据');
+            this.$refs.funTable.clearSelection();
+            return;
+          }
 
-            //this.$refs.funTable.clearSelection();
-            console.log('初始化选中的',objTranslate(this.has))
-            if(!this.vkey || !this.has || !_.isArray(this.has) || this.has.length<1){
-                console.log('清空数据')
-                this.$refs.funTable.clearSelection();
-                return;
-            };
+          const rows = [];
 
-            let rows = []
-
-            console.log(objTranslate(this.lists))
-            for(var item of this.lists){
-                if(valInArr(item[this.vkey],this.has)){
-                    rows.push(item)
-                }
+          console.log(objTranslate(this.lists));
+          for (const item of this.lists) {
+            if (valInArr(item[this.vkey], this.has)) {
+              rows.push(item);
             }
-            console.log('设置为选中',rows)
+          }
+          console.log('设置为选中', rows);
 
-            let _self = this
-            if (rows) {
-                setTimeout(function () {
-                    rows.forEach(row => {
-                        _self.$refs.funTable.toggleRowSelection(row,true);
-                    });
-                },10)
-
-            }
+          const _self = this;
+          if (rows) {
+            setTimeout(() => {
+              rows.forEach((row) => {
+                _self.$refs.funTable.toggleRowSelection(row, true);
+              });
+            }, 10);
+          }
         }
 
-        getSlotNameFn (column) {
-            if (typeof column.render === 'string') {
-                return column.render
-            }
-           // console.log(`${column.prop}-column`)
-            return `${column.prop}-column`
+        getSlotNameFn(column) {
+          if (typeof column.render === 'string') {
+            return column.render;
+          }
+          // console.log(`${column.prop}-column`)
+          return `${column.prop}-column`;
         }
 
-        closeDialog(){
-            this.$emit('closeDialog')
+        closeDialog() {
+          this.$emit('closeDialog');
         }
 
         handleSizeChange(val) {
-            console.log(`每页 ${val} 条`);
-            this.pageSize = val
-            this.currentPage = 1
-            this.$emit('handleSizeChange', val); // 将当前对象传到父组件
-            if(this.act){
-                this.loadData()
-            }
+          console.log(`每页 ${val} 条`);
+          this.pageSize = val;
+          this.currentPage = 1;
+          this.$emit('handleSizeChange', val); // 将当前对象传到父组件
+          if (this.act) {
+            this.loadData();
+          }
         }
 
         handleCurrentChange(val) {
-            console.log(`当前页: ${val}`)
-            this.currentPage = val
-            this.$emit('currentChange', val); // 将当前对象传到父组件
-            if(this.act){
-                this.loadData()
-            }
+          console.log(`当前页: ${val}`);
+          this.currentPage = val;
+          this.$emit('currentChange', val); // 将当前对象传到父组件
+          if (this.act) {
+            this.loadData();
+          }
         }
 
-        filterFn(params){
-            /**
+        filterFn(params) {
+          /**
              * 需要完善
              */
-            this.$emit('submit',params);
+          this.$emit('submit', params);
         }
-        reset(){
-            this.$emit('reset');
+
+        reset() {
+          this.$emit('reset');
         }
-        //单击某一行
+
+        // 单击某一行
         handleRowChange(row, column, event) {
-            if(this.isRow) return
-            this.$refs.funTable.toggleRowSelection(row);
+          if (this.isRow) return;
+          this.$refs.funTable.toggleRowSelection(row);
         }
 
         /**
          * 选中的值
          */
-        handleSelectionChange(val){
-            let tempA = val.map(item=>JSON.stringify(item))
-            let tempB = this.lists.map(item=>JSON.stringify(item))
+        handleSelectionChange(val) {
+          const tempA = val.map(item => JSON.stringify(item));
+          const tempB = this.lists.map(item => JSON.stringify(item));
 
-            var sa = new Set(tempA);
-            var sb = new Set(tempB);
+          const sa = new Set(tempA);
+          const sb = new Set(tempB);
 
-            //补集
-            let complement  = [...tempA.filter(x => !sb.has(x)), ...tempB.filter(x => !sa.has(x))];
-            let other = complement.map(item=>JSON.parse(item))
-            this.$emit('selectVal', val,other); // 将当前对象传到父组件
+          // 补集
+          const complement = [...tempA.filter(x => !sb.has(x)), ...tempB.filter(x => !sa.has(x))];
+          const other = complement.map(item => JSON.parse(item));
+          this.$emit('selectVal', val, other); // 将当前对象传到父组件
         }
 
         /**
          * 拼接筛选条件
          */
-        buildFilterFormData(){
+        buildFilterFormData() {
 
         }
 
-        async loadData({paramObj={}}={}){
+        async loadData({ paramObj = {} } = {}) {
+          if (this.dataList) return;
+          let postData = {};
+          const filterData = this.buildFilterFormData();
 
-            if(this.dataList)return;
-            let postData = {},
-                filterData = this.buildFilterFormData()
+          // pageSize等配置
+          if (this.is_paginate) {
+            Object.assign(postData, { page: this.currentPage, pageSize: this.pageSize });
+          }
 
-            //pageSize等配置
-            if(this.is_paginate){
-                Object.assign(postData,{page:this.currentPage,pageSize:this.pageSize})
+
+          // 筛选条件
+          Object.assign(postData, filterData);
+          if (!this.act) {
+            throw new Error('act参数必传');
+            return;
+          }
+
+          this.getDataLoding = true;
+
+
+          Object.assign(postData, paramObj);
+
+          // 修改参数
+          if (this.__params_filter_func) {
+            postData = this.__params_filter_func(postData, this.extParam);
+          }
+          await commonReq(this.act, postData).then((res) => {
+            this.totalCount = res.totalCount;
+
+            // 看是否需要过滤
+            if (this.__list_filter_func) {
+              this.lists = this.__list_filter_func(res);
+            } else {
+              this.lists = res.data;
             }
 
+            // if(this.currentPage * this.pageSize<this.totalCount){
+            //     this.currentPage++
+            // }
+          }).catch((e) => {});
 
-            //筛选条件
-            Object.assign(postData,filterData)
-            if(!this.act){
-                throw new Error('act参数必传')
-                return
-            }
-
-            this.getDataLoding = true
-
-
-            Object.assign(postData,paramObj)
-
-            //修改参数
-            if(this.__params_filter_func){
-                postData = this.__params_filter_func(postData,this.extParam)
-            }
-            await commonReq(this.act,postData).then(res=>{
-                this.totalCount = res.totalCount
-
-                //看是否需要过滤
-                if(this.__list_filter_func){
-                    this.lists = this.__list_filter_func(res)
-                }else{
-                   this.lists = res.data
-                }
-
-                // if(this.currentPage * this.pageSize<this.totalCount){
-                //     this.currentPage++
-                // }
-
-            }).catch(e=>{})
-
-            this.getDataLoding = false
-
+          this.getDataLoding = false;
         }
 
 
-
-        created(){
-
-            if(this.act){
-                this.loadData()
-            }
-
+        created() {
+          if (this.act) {
+            this.loadData();
+          }
         }
-
-
-
-
-    }
+}
 </script>
 
 <style lang="less" scoped>

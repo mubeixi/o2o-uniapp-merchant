@@ -40,92 +40,91 @@
 </template>
 
 <script>
-  import { getOrderExpress,getShippingList } from '../../common/fetch';
-  import { fun } from '../../common';
+import { getOrderExpress, getShippingList } from '../../common/fetch';
+import { fun } from '../../common';
 
 
-  function noop() {}
+function noop() {}
 
-  export default {
-    name: 'LogisticsInfo',
-    props: {
-      //store_id_list,只包含id
-      order_no:{
-        type:String,
-        default:''
-      },
-      // show: {
-      //   type: Boolean,
-      //   default: false
-      // },
+export default {
+  name: 'LogisticsInfo',
+  props: {
+    // store_id_list,只包含id
+    order_no: {
+      type: String,
+      default: '',
     },
-    data() {
-      return {
-        loading: true,
-        finish:false,
-        innerVisible: false,
-        activities: [],
-        ajax:false,
-        out_order_no:'',
-        express:'',
-        express_list:['顺丰','申通','中通','韵达']
-      };
-    },
-    watch: {
-      // show: {
-      //   immediate: true,
-      //   handler(val) {
-      //     this.innerVisible = val;
-      //   }
-      // },
-    },
-    created() {
-      if(this.order_no){
-        this.out_order_no = this.order_no
-      }
-
-      // getShippingList().then(res=>{
-      //   this.express_list = res.data
-      // })
-
-      this.activities = []
-
-    },
-    methods: {
-      cancel() {
-
-      },
-      async search(){
-        if(!this.out_order_no){
-          fun.error({msg:'物流单号需要填写'})
-          return
-        }
-        if(!this.express){
-          fun.error({msg:'请选择物流公司'})
-          return
-        }
-
-        this.ajax = true;
-        this.activities = []
-        await getOrderExpress({shipping_id:this.out_order_no,express:this.express}).then(res=>{
-          this.activities = res.data.list
-        },err=>{
-          this.activities = []
-          fun.error({msg:'未查询到信息'})
-        })
-        this.ajax = false
-      },
-      setOutOrderNo(val){
-        this.out_order_no = val
-      },
-      setExpress(val){
-        this.express = val
-      },
-      show(){
-        this.innerVisible = true
-      }
+    // show: {
+    //   type: Boolean,
+    //   default: false
+    // },
+  },
+  data() {
+    return {
+      loading: true,
+      finish: false,
+      innerVisible: false,
+      activities: [],
+      ajax: false,
+      out_order_no: '',
+      express: '',
+      express_list: ['顺丰', '申通', '中通', '韵达'],
+    };
+  },
+  watch: {
+    // show: {
+    //   immediate: true,
+    //   handler(val) {
+    //     this.innerVisible = val;
+    //   }
+    // },
+  },
+  created() {
+    if (this.order_no) {
+      this.out_order_no = this.order_no;
     }
-  };
+
+    // getShippingList().then(res=>{
+    //   this.express_list = res.data
+    // })
+
+    this.activities = [];
+  },
+  methods: {
+    cancel() {
+
+    },
+    async search() {
+      if (!this.out_order_no) {
+        fun.error({ msg: '物流单号需要填写' });
+        return;
+      }
+      if (!this.express) {
+        fun.error({ msg: '请选择物流公司' });
+        return;
+      }
+
+      this.ajax = true;
+      this.activities = [];
+      await getOrderExpress({ shipping_id: this.out_order_no, express: this.express }).then((res) => {
+        this.activities = res.data.list;
+      }, (err) => {
+        this.activities = [];
+        fun.error({ msg: '未查询到信息' });
+      });
+      this.ajax = false;
+    },
+    setOutOrderNo(val) {
+      this.out_order_no = val;
+    },
+    setExpress(val) {
+      this.express = val;
+    },
+    show() {
+      this.innerVisible = true;
+    },
+  },
+};
 </script>
 <style lang="less" scoped>
 .filter{

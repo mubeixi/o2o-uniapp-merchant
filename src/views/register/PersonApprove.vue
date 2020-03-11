@@ -103,30 +103,31 @@
 </template>
 
 <script lang="ts">
-    import {
-        Vue,
-        Component,
-        Watch,
-        Prop
-    } from 'vue-property-decorator';
-    export default Vue.extend({
-        data(){
-            return {
-                form: {
-                    name: '',
-                    region: '',
-                    date1: '',
-                    date2: '',
-                    delivery: false,
-                    type: [],
-                    resource: '',
-                    desc: ''
-                },
-                imageUrl: '',
-                imageUrlBack: ''
-            }
-        }
-    })
+import {
+  Vue,
+  Component,
+  Watch,
+  Prop,
+} from 'vue-property-decorator';
+
+export default Vue.extend({
+  data() {
+    return {
+      form: {
+        name: '',
+        region: '',
+        date1: '',
+        date2: '',
+        delivery: false,
+        type: [],
+        resource: '',
+        desc: '',
+      },
+      imageUrl: '',
+      imageUrlBack: '',
+    };
+  },
+});
 </script>
 
 <style scoped lang="less">

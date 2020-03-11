@@ -55,16 +55,16 @@
 </template>
 
 <script lang="ts">
-    import {
-        Vue,
-        Component,
-        Watch,
-        Prop
-    } from 'vue-property-decorator';
-    export default class SettlementInformation extends Vue{
-        value=''
+import {
+  Vue,
+  Component,
+  Watch,
+  Prop,
+} from 'vue-property-decorator';
 
-    }
+export default class SettlementInformation extends Vue {
+        value=''
+}
 </script>
 
 <style scoped lang="less">

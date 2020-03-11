@@ -24,58 +24,55 @@
 </template>
 
 <script lang="ts">
-    import {Component, Vue} from 'vue-property-decorator';
-    import {mapState} from 'vuex';
-    import draggable from 'vuedraggable';
+import { Component, Vue } from 'vue-property-decorator';
+import { mapState } from 'vuex';
+import draggable from 'vuedraggable';
 
     @Component({
-        components:{
-            draggable
+      components: {
+        draggable,
+      },
+      methods: {
+        emitPreviewPlugin(idx) {
+          this.$parent.$refs.preview.clickPlugin(idx);
         },
-        methods: {
-            emitPreviewPlugin(idx) {
-                this.$parent.$refs.preview.clickPlugin(idx);
-            },
-            removePlugin(idx){
-                this.$parent.$refs.preview.removeTemplateByKeyCode(idx);
-            }
+        removePlugin(idx) {
+          this.$parent.$refs.preview.removeTemplateByKeyCode(idx);
         },
-        computed: {
-            pluginList:{
-                get() {
-                    return this.tmplData[this.templateEditIndex]
-                },
-                set(val) {
+      },
+      computed: {
+        pluginList: {
+          get() {
+            return this.tmplData[this.templateEditIndex];
+          },
+          set(val) {
+            // this.$store.commit('tabIndex',-1)
+            // this.$store.commit('activeAttr',{attrData: {}})
 
-                    // this.$store.commit('tabIndex',-1)
-                    // this.$store.commit('activeAttr',{attrData: {}})
+            // let pluginNameList = val.map(plugin=>{
+            //     return plugin.tag
+            // })
 
-                    // let pluginNameList = val.map(plugin=>{
-                    //     return plugin.tag
-                    // })
-
-                    // this.$set(this.$parent.$refs.preview.templateList,this.templateEditIndex,[])
-                    // this.$set(this.$parent.$refs.preview.templateData,this.templateEditIndex,[])
-
-
-
-                    // this.$set(this.$parent.$refs.preview.templateList,this.templateEditIndex,pluginNameList)
-                    // this.$set(this.$parent.$refs.preview.templateData,this.templateEditIndex,val)
-
-                    this.$parent.$refs.preview.restTmplFun(val);
+            // this.$set(this.$parent.$refs.preview.templateList,this.templateEditIndex,[])
+            // this.$set(this.$parent.$refs.preview.templateData,this.templateEditIndex,[])
 
 
-                    // console.log(val)
+            // this.$set(this.$parent.$refs.preview.templateList,this.templateEditIndex,pluginNameList)
+            // this.$set(this.$parent.$refs.preview.templateData,this.templateEditIndex,val)
 
-                }
-            },
-            ...mapState(['tmplData', 'templateEditIndex']),
+            this.$parent.$refs.preview.restTmplFun(val);
+
+
+            // console.log(val)
+          },
         },
+        ...mapState(['tmplData', 'templateEditIndex']),
+      },
     })
-    export default class RightComponent extends Vue {
+export default class RightComponent extends Vue {
 
 
-    }
+}
 </script>
 
 <style scoped lang="stylus">

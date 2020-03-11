@@ -15,16 +15,16 @@
 </template>
 
 <script lang="ts">
-    import {
-        Vue,
-        Component,
-        Watch,
-        Prop
-    } from 'vue-property-decorator';
+import {
+  Vue,
+  Component,
+  Watch,
+  Prop,
+} from 'vue-property-decorator';
 
-    export default class UpdatePassword extends Vue {
-        formq = "store"
-    }
+export default class UpdatePassword extends Vue {
+        formq = 'store'
+}
 </script>
 
 <style scoped lang="less">

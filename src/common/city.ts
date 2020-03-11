@@ -51,24 +51,24 @@
 // }
 
 
+// @ts-ignore
+import { area } from 'tool/areaData';
+import { array_change } from './utils';
 
-import {area} from './tool/areaData.js';
 const areaData = area[0];
-import {array_change} from "./utils";
 
 export class City {
-
-  //直接返回
-  static getProvinceList = ()=>{
-    let rt = areaData[`0`]
-    return array_change(rt)
+  // 直接返回
+  static getProvinceList = () => {
+    const rt = areaData['0'];
+    return array_change(rt);
   }
 
-  static getCityList = (pIdx)=>{
-    let citys = []
-    console.log('0,'+pIdx)
-    let rt = areaData[('0,'+pIdx)]
-    return array_change(rt)
+  static getCityList = (pIdx: any) => {
+    const citys = [];
+    console.log(`0,${pIdx}`);
+    const rt = areaData[(`0,${pIdx}`)];
+    return array_change(rt);
     // for(var province of Area){
     //     if(province.name === pName){
     //         citys = province.city
@@ -81,8 +81,7 @@ export class City {
     // return rt
   }
 
-  static getAreaList = (pIdx,cIdx)=>{
-
+  static getAreaList = (pIdx: any, cIdx: any) => {
     // let citys = []
     // for(var province of Area){
     //     if(province.name === pName){
@@ -98,10 +97,9 @@ export class City {
     // }
     // console.log(cityInfo)
 
-    let rt = areaData[`0,${pIdx},${cIdx}`]
-    console.log(rt)
+    const rt = areaData[`0,${pIdx},${cIdx}`];
+    console.log(rt);
 
-    return array_change(rt)
+    return array_change(rt);
   }
-
 }

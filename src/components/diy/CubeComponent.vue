@@ -18,214 +18,207 @@
 </template>
 
 <script lang="ts">
-    import {Component, Vue} from 'vue-property-decorator';
-    import {mapState} from 'vuex';
-    import Cube from '@/assets/js/diy/cube';
-    import {deepCopy, domain} from '@/common/utils';
-    import {getRowColSpan} from '@/assets/js/diy/tool/MagicCube';
-    import {objTranslate} from '@/common/utils';
+import { Component, Vue } from 'vue-property-decorator';
+import { mapState } from 'vuex';
+import Cube from '@/assets/js/diy/cube';
+import { deepCopy, domain, objTranslate } from '@/common/utils';
+import { getRowColSpan } from '@/assets/js/diy/tool/MagicCube';
+
 
     @Component({
-        props: {
-            index: {
-                required: true,
-            },
-            data: {
-                type: Object,
-                default: () => ({}),
-            },
+      props: {
+        index: {
+          required: true,
         },
-        data() {
-            return {
-                cube: {},
-                CTX: {},
-                // colH:0,
-                // colW:0
-
-            };
+        data: {
+          type: Object,
+          default: () => ({}),
         },
-        computed: {
-            fullW(){
-                let ele = document.getElementById('canvas');
-                if (ele) {
-                    return ele.offsetWidth;
-                } else {
-                    return 375;
-                }
-            },
-            // W() {
-            //     let ele = document.getElementById('canvas');
-            //     if (ele) {
-            //         return ele.offsetWidth-2*this.cube.style.wrapmargin;
-            //     } else {
-            //         return 375-2*this.cube.style.wrapmargin;
-            //     }
-            // },
-            // //这个方法需要调整下
-            // colWH() {
-            //
-            //     return this.W / this.cube.config.row
-            // },
-            // colW() {
-            //
-            //     //得到横纵的缝隙
-            //     let {rownum,colnum} = getRowColSpan(this.cube.value.list);
-            //
-            //     return (this.W) / colnum+1
-            // },
-            // colH() {
-            //     //得到横纵的缝隙
-            //     let {rownum,colnum} = getRowColSpan(this.cube.value.list);
-            //
-            //     return this.fullW*(1-this.cube.style.wrapmargin/this.fullW*2) / rownum+1
-            // },
-            W(){
+      },
+      data() {
+        return {
+          cube: {},
+          CTX: {},
+          // colH:0,
+          // colW:0
 
-
-                return this.fullW-2*this.cube.style.wrapmargin
-            },
-            H(){
-
-                return this.fullW*this.cube.config.row/this.cube.config.col;
-            },
-            // colWH(){
-            //
-            //   const res = uni.getSystemInfoSync();
-            //   return (res.screenWidth-2*this.cube.style.wrapmargin)/this.cube.config.row
-            // },
-            colH(){
-
-                let Height = this.fullW*this.cube.config.row/this.cube.config.col;
-                return Height/this.cube.config.row
-            },
-            rowW(){
-                return (this.fullW-2*this.cube.style.wrapmargin)/this.cube.config.col
-            },
-            className() {
-                return 'style1';//+this.nav.config.style
-            },
-            style() {
-                // return deepCopyStrict(this.coupon.styleDefault, this.coupon.style);
-            },
-            activeAttr: {
-                get() {
-                    return this.$store.state.activeAttr;
-                },
-                set(nval) {
-
-                },
-            },
-            ...mapState(['editStatus']),
+        };
+      },
+      computed: {
+        fullW() {
+          const ele = document.getElementById('canvas');
+          if (ele) {
+            return ele.offsetWidth;
+          }
+          return 375;
         },
-        filters: {
-            str2num(val) {
-                return parseInt(val)
-            }
+        // W() {
+        //     let ele = document.getElementById('canvas');
+        //     if (ele) {
+        //         return ele.offsetWidth-2*this.cube.style.wrapmargin;
+        //     } else {
+        //         return 375-2*this.cube.style.wrapmargin;
+        //     }
+        // },
+        // //这个方法需要调整下
+        // colWH() {
+        //
+        //     return this.W / this.cube.config.row
+        // },
+        // colW() {
+        //
+        //     //得到横纵的缝隙
+        //     let {rownum,colnum} = getRowColSpan(this.cube.value.list);
+        //
+        //     return (this.W) / colnum+1
+        // },
+        // colH() {
+        //     //得到横纵的缝隙
+        //     let {rownum,colnum} = getRowColSpan(this.cube.value.list);
+        //
+        //     return this.fullW*(1-this.cube.style.wrapmargin/this.fullW*2) / rownum+1
+        // },
+        W() {
+          return this.fullW - 2 * this.cube.style.wrapmargin;
         },
-        watch: {
-            'cube.value.list':{
-              deep:true,
-              immediate:true,
-              handler:function(val){
-                  // if(!val ||val.length<1)return;
-                  // let {rownum,colnum} = getRowColSpan(val);
-                  // this.colW = (this.W) / (colnum+1)
-                  // this.colH = this.fullW*(1-this.cube.style.wrapmargin/this.fullW*2) / (rownum+1)
-              }
-            },
-            'cube.config.row':{
-              handler(val){
-
-              }
-            },
-            data:{
-                deep: true,
-                handler(val) {
-                    //this.cube = deepCopy(new Cube(), val)
-                },
-            },
-            // 属性变化
-            activeAttr: {
-                deep: true,
-                handler(val) {
-
-                },
-            },
-
+        H() {
+          return this.fullW * this.cube.config.row / this.cube.config.col;
         },
-        components: {},
-        methods: {
-            getWrapStyle(){
-                let styleObj = {
-                    marginLeft:this.cube.style.wrapmargin+'px',
-                    marginRight:this.cube.style.wrapmargin+'px',
-                    width:this.fullW*(1-this.cube.style.wrapmargin/this.fullW*2)+'px',
-                    height:this.H+'px',//高度不变的
-                }
-
-                return styleObj;
-            },
-            getAreaStyle(area) {
-                let styleObj = {
-                    left: area.x * this.rowW+'px',
-                    top: area.y * this.colH  + 'px',
-                    width: (area.x1 - area.x) * this.rowW + 'px',
-                    height: (area.y1 - area.y) * this.colH + 'px',
-
-                    borderTopWidth: area.y==0?0:this.cube.style.margin/2+'px',
-                    borderLeftWidth: area.x==0?0:this.cube.style.margin/2+'px',
-                    borderRightWidth: area.x1==this.cube.config.row?0:this.cube.style.margin/2+'px',
-                    borderBottomWidth: area.y1==this.cube.config.row?0:this.cube.style.margin/2+'px',
-
-                };
-
-                return styleObj
-            },
-            domainFunc(url) {
-                return domain(url)
-            },
-            setData(item, index) {
-                // console.log('hehe',this.search)
-                // @ts-ignore
-
-                // console.log('1111111111activeAttr的值发生修改',objTranslate(this.cube))
-
-
-
-                //拖一下勾？？
-                //let Data = deepCopy(new Cube(), objTranslate(this.cube));
-                this.$store.commit('activeAttr', this.cube);// 这里点击之后，setAttr马上就有响应。
-                // @ts-ignore
-                this.$store.commit('tabIndex', this.index);
-
-
-                // 用vuex就不要一层层传递了，头都晕了
-                // this.$emit('setData', this.img.attrData)
-            },
-            // ...mapActions(),
+        // colWH(){
+        //
+        //   const res = uni.getSystemInfoSync();
+        //   return (res.screenWidth-2*this.cube.style.wrapmargin)/this.cube.config.row
+        // },
+        colH() {
+          const Height = this.fullW * this.cube.config.row / this.cube.config.col;
+          return Height / this.cube.config.row;
         },
+        rowW() {
+          return (this.fullW - 2 * this.cube.style.wrapmargin) / this.cube.config.col;
+        },
+        className() {
+          return 'style1';// +this.nav.config.style
+        },
+        style() {
+          // return deepCopyStrict(this.coupon.styleDefault, this.coupon.style);
+        },
+        activeAttr: {
+          get() {
+            return this.$store.state.activeAttr;
+          },
+          set(nval) {
+
+          },
+        },
+        ...mapState(['editStatus']),
+      },
+      filters: {
+        str2num(val) {
+          return parseInt(val);
+        },
+      },
+      watch: {
+        'cube.value.list': {
+          deep: true,
+          immediate: true,
+          handler(val) {
+            // if(!val ||val.length<1)return;
+            // let {rownum,colnum} = getRowColSpan(val);
+            // this.colW = (this.W) / (colnum+1)
+            // this.colH = this.fullW*(1-this.cube.style.wrapmargin/this.fullW*2) / (rownum+1)
+          },
+        },
+        'cube.config.row': {
+          handler(val) {
+
+          },
+        },
+        data: {
+          deep: true,
+          handler(val) {
+            // this.cube = deepCopy(new Cube(), val)
+          },
+        },
+        // 属性变化
+        activeAttr: {
+          deep: true,
+          handler(val) {
+
+          },
+        },
+
+      },
+      components: {},
+      methods: {
+        getWrapStyle() {
+          const styleObj = {
+            marginLeft: `${this.cube.style.wrapmargin}px`,
+            marginRight: `${this.cube.style.wrapmargin}px`,
+            width: `${this.fullW * (1 - this.cube.style.wrapmargin / this.fullW * 2)}px`,
+            height: `${this.H}px`, // 高度不变的
+          };
+
+          return styleObj;
+        },
+        getAreaStyle(area) {
+          const styleObj = {
+            left: `${area.x * this.rowW}px`,
+            top: `${area.y * this.colH}px`,
+            width: `${(area.x1 - area.x) * this.rowW}px`,
+            height: `${(area.y1 - area.y) * this.colH}px`,
+
+            borderTopWidth: area.y == 0 ? 0 : `${this.cube.style.margin / 2}px`,
+            borderLeftWidth: area.x == 0 ? 0 : `${this.cube.style.margin / 2}px`,
+            borderRightWidth: area.x1 == this.cube.config.row ? 0 : `${this.cube.style.margin / 2}px`,
+            borderBottomWidth: area.y1 == this.cube.config.row ? 0 : `${this.cube.style.margin / 2}px`,
+
+          };
+
+          return styleObj;
+        },
+        domainFunc(url) {
+          return domain(url);
+        },
+        setData(item, index) {
+          // console.log('hehe',this.search)
+          // @ts-ignore
+
+          // console.log('1111111111activeAttr的值发生修改',objTranslate(this.cube))
+
+
+          // 拖一下勾？？
+          // let Data = deepCopy(new Cube(), objTranslate(this.cube));
+          this.$store.commit('activeAttr', this.cube);// 这里点击之后，setAttr马上就有响应。
+          // @ts-ignore
+          this.$store.commit('tabIndex', this.index);
+
+
+          // 用vuex就不要一层层传递了，头都晕了
+          // this.$emit('setData', this.img.attrData)
+        },
+        // ...mapActions(),
+      },
 
     })
-    export default class CubeComponent extends Vue {
-        async created() {
-            //用这个来搞事啊
-            //funvm也是vue实例，而且不是根实例，是这个组件的实例，可以快捷的调用组件中的对象或者方法以及$ref
-            Cube.prototype.funvm = this;
-            //Cube.prototype.vm = this;
-            this.$store.commit('tabIndex', this.index);// 设置tabIndex，等于templData是二维数组，这个是二维数组的
-            this.cube = deepCopy(new Cube(), this.data);
-            // console.log('新建cube组件的值',objTranslate(this.cube))
+export default class CubeComponent extends Vue {
+  async created() {
+    // 用这个来搞事啊
+    // funvm也是vue实例，而且不是根实例，是这个组件的实例，可以快捷的调用组件中的对象或者方法以及$ref
+    Cube.prototype.funvm = this;
+    // Cube.prototype.vm = this;
+    this.$store.commit('tabIndex', this.index);// 设置tabIndex，等于templData是二维数组，这个是二维数组的
+    this.cube = deepCopy(new Cube(), this.data);
+    // console.log('新建cube组件的值',objTranslate(this.cube))
 
 
-            //利用数据生成一下attrData
+    // 利用数据生成一下attrData
 
-            //重新绑定attrData.content，让修改可以同步到其他地方
-            this.cube.setIndex(0,{value:false,config:false})
-            this.CTX = this.cube;
-            // console.log('新建cube组件的值2222222222222222222222',objTranslate(this.cube))
-
-        }
-    }
+    // 重新绑定attrData.content，让修改可以同步到其他地方
+    this.cube.setIndex(0, { value: false, config: false });
+    this.CTX = this.cube;
+    // console.log('新建cube组件的值2222222222222222222222',objTranslate(this.cube))
+  }
+}
 </script>
 
 <style scoped lang="less">

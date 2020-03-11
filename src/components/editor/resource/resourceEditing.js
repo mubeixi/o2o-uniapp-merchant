@@ -9,11 +9,11 @@
 
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 
-import resourceCommand from './resourceCommand';
-
-import {PLUGIN_NAME} from './resourceUi';
 import ImageUploadCommand from '@ckeditor/ckeditor5-image/src/imageupload/imageuploadcommand';
 import FileRepository from '@ckeditor/ckeditor5-upload/src/filerepository';
+import resourceCommand from './resourceCommand';
+
+import { PLUGIN_NAME } from './resourceUi';
 
 /**
  * The font size editing feature.
@@ -39,25 +39,25 @@ export default class ResourceEditing extends Plugin {
   /**
    * @inheritDoc
    */
-  constructor( editor ) {
-    super( editor );
+  constructor(editor) {
+    super(editor);
 
     // Add FontSize command.
-    //editor.commands.add( PLUGIN_NAME, new InsertImageCommand( editor ) );
+    // editor.commands.add( PLUGIN_NAME, new InsertImageCommand( editor ) );
   }
 
   /**
    * @inheritDoc
    */
   init() {
-    const editor = this.editor;
+    const { editor } = this;
     const doc = editor.model.document;
-    const schema = editor.model.schema;
-    const conversion = editor.conversion;
-    const fileRepository = editor.plugins.get( FileRepository );
+    const { schema } = editor.model;
+    const { conversion } = editor;
+    const fileRepository = editor.plugins.get(FileRepository);
 
     // Register imageUpload command.
-    editor.commands.add( PLUGIN_NAME, new resourceCommand( editor ) );
+    editor.commands.add(PLUGIN_NAME, new resourceCommand(editor));
 
     // Allow fontSize attribute on text nodes.
     // editor.model.schema.extend( '$text', { allowAttributes: FONT_SIZE } );
@@ -66,7 +66,7 @@ export default class ResourceEditing extends Plugin {
     //   copyOnEnter: true
     // } );
 
-    doc.on( 'change', () => {
+    doc.on('change', () => {
       const changes = doc.differ.getChanges({ includeChangesInGraveyard: true });
 
       for (const entry of changes) {
@@ -99,9 +99,7 @@ export default class ResourceEditing extends Plugin {
           }
         }
       }
-    })
-
-
+    });
   }
 
   /**
@@ -116,38 +114,38 @@ export default class ResourceEditing extends Plugin {
    * @param {module:engine/model/element~Element} imageElement
    * @returns {Promise}
    */
-  _readAndUpload( loader, imageElement ) {
-    const editor = this.editor;
-    const model = editor.model;
-    const t = editor.locale.t;
-    const fileRepository = editor.plugins.get( FileRepository );
-    const notification = editor.plugins.get( Notification );
+  _readAndUpload(loader, imageElement) {
+    const { editor } = this;
+    const { model } = editor;
+    const { t } = editor.locale;
+    const fileRepository = editor.plugins.get(FileRepository);
+    const notification = editor.plugins.get(Notification);
 
-    model.enqueueChange( 'transparent', writer => {
-      writer.setAttribute( 'uploadStatus', 'reading', imageElement );
-    } );
+    model.enqueueChange('transparent', (writer) => {
+      writer.setAttribute('uploadStatus', 'reading', imageElement);
+    });
 
     return loader.read()
-      .then( () => {
+      .then(() => {
         const promise = loader.upload();
 
         // Force re–paint in Safari. Without it, the image will display with a wrong size.
         // https://github.com/ckeditor/ckeditor5/issues/1975
         /* istanbul ignore next */
-        if ( env.isSafari ) {
-          const viewFigure = editor.editing.mapper.toViewElement( imageElement );
-          const viewImg = viewFigure.getChild( 0 );
+        if (env.isSafari) {
+          const viewFigure = editor.editing.mapper.toViewElement(imageElement);
+          const viewImg = viewFigure.getChild(0);
 
-          editor.editing.view.once( 'render', () => {
+          editor.editing.view.once('render', () => {
             // Early returns just to be safe. There might be some code ran
             // in between the outer scope and this callback.
-            if ( !viewImg.parent ) {
+            if (!viewImg.parent) {
               return;
             }
 
-            const domFigure = editor.editing.view.domConverter.mapViewToDom( viewImg.parent );
+            const domFigure = editor.editing.view.domConverter.mapViewToDom(viewImg.parent);
 
-            if ( !domFigure ) {
+            if (!domFigure) {
               return;
             }
 
@@ -159,53 +157,53 @@ export default class ResourceEditing extends Plugin {
             domFigure._ckHack = domFigure.offsetHeight;
 
             domFigure.style.display = originalDisplay;
-          } );
+          });
         }
 
-        model.enqueueChange( 'transparent', writer => {
-          writer.setAttribute( 'uploadStatus', 'uploading', imageElement );
-        } );
+        model.enqueueChange('transparent', (writer) => {
+          writer.setAttribute('uploadStatus', 'uploading', imageElement);
+        });
 
         return promise;
-      } )
-      .then( data => {
-        model.enqueueChange( 'transparent', writer => {
-          writer.setAttributes( { uploadStatus: 'complete', src: data.default }, imageElement );
-          this._parseAndSetSrcsetAttributeOnImage( data, imageElement, writer );
-        } );
+      })
+      .then((data) => {
+        model.enqueueChange('transparent', (writer) => {
+          writer.setAttributes({ uploadStatus: 'complete', src: data.default }, imageElement);
+          this._parseAndSetSrcsetAttributeOnImage(data, imageElement, writer);
+        });
 
         clean();
-      } )
-      .catch( error => {
+      })
+      .catch((error) => {
         // If status is not 'error' nor 'aborted' - throw error because it means that something else went wrong,
         // it might be generic error and it would be real pain to find what is going on.
-        if ( loader.status !== 'error' && loader.status !== 'aborted' ) {
+        if (loader.status !== 'error' && loader.status !== 'aborted') {
           throw error;
         }
 
         // Might be 'aborted'.
-        if ( loader.status == 'error' && error ) {
-          notification.showWarning( error, {
-            title: t( 'Upload failed' ),
-            namespace: 'upload'
-          } );
+        if (loader.status == 'error' && error) {
+          notification.showWarning(error, {
+            title: t('Upload failed'),
+            namespace: 'upload',
+          });
         }
 
         clean();
 
         // Permanently remove image from insertion batch.
-        model.enqueueChange( 'transparent', writer => {
-          writer.remove( imageElement );
-        } );
-      } );
+        model.enqueueChange('transparent', (writer) => {
+          writer.remove(imageElement);
+        });
+      });
 
     function clean() {
-      model.enqueueChange( 'transparent', writer => {
-        writer.removeAttribute( 'uploadId', imageElement );
-        writer.removeAttribute( 'uploadStatus', imageElement );
-      } );
+      model.enqueueChange('transparent', (writer) => {
+        writer.removeAttribute('uploadId', imageElement);
+        writer.removeAttribute('uploadStatus', imageElement);
+      });
 
-      fileRepository.destroyLoader( loader );
+      fileRepository.destroyLoader(loader);
     }
   }
 
@@ -217,38 +215,35 @@ export default class ResourceEditing extends Plugin {
    * @param {module:engine/model/element~Element} image The image element on which the `srcset` attribute will be set.
    * @param {module:engine/model/writer~Writer} writer
    */
-  _parseAndSetSrcsetAttributeOnImage( data, image, writer ) {
+  _parseAndSetSrcsetAttributeOnImage(data, image, writer) {
     // Srcset attribute for responsive images support.
     let maxWidth = 0;
 
-    const srcsetAttribute = Object.keys( data )
+    const srcsetAttribute = Object.keys(data)
     // Filter out keys that are not integers.
-      .filter( key => {
-        const width = parseInt( key, 10 );
+      .filter((key) => {
+        const width = parseInt(key, 10);
 
-        if ( !isNaN( width ) ) {
-          maxWidth = Math.max( maxWidth, width );
+        if (!isNaN(width)) {
+          maxWidth = Math.max(maxWidth, width);
 
           return true;
         }
-      } )
+      })
 
       // Convert each key to srcset entry.
-      .map( key => `${ data[ key ] } ${ key }w` )
+      .map(key => `${data[key]} ${key}w`)
 
       // Join all entries.
-      .join( ', ' );
+      .join(', ');
 
-    if ( srcsetAttribute != '' ) {
-      writer.setAttribute( 'srcset', {
+    if (srcsetAttribute != '') {
+      writer.setAttribute('srcset', {
         data: srcsetAttribute,
-        width: maxWidth
-      }, image );
+        width: maxWidth,
+      }, image);
     }
   }
-
-
-
 }
 
 
@@ -256,14 +251,12 @@ export default class ResourceEditing extends Plugin {
 //
 // @param {module:clipboard/datatransfer~DataTransfer} dataTransfer
 // @returns {Boolean}
-export function isHtmlIncluded( dataTransfer ) {
-  return Array.from( dataTransfer.types ).includes( 'text/html' ) && dataTransfer.getData( 'text/html' ) !== '';
+export function isHtmlIncluded(dataTransfer) {
+  return Array.from(dataTransfer.types).includes('text/html') && dataTransfer.getData('text/html') !== '';
 }
 
-function getImagesFromChangeItem( editor, item ) {
-  return Array.from( editor.model.createRangeOn( item ) )
-    .filter( value => value.item.is( 'image' ) )
-    .map( value => value.item );
+function getImagesFromChangeItem(editor, item) {
+  return Array.from(editor.model.createRangeOn(item))
+    .filter(value => value.item.is('image'))
+    .map(value => value.item);
 }
-
-

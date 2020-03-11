@@ -6,14 +6,26 @@
       </div>
       <div class="preview" >
         <div class="preview-page">
-          <div @click="setAct(0,'system','全局设置','针对页面的整体配置')" :class="{active:mode==='system'}" class="item preview-page-options"><i class="preview-page-options-icon"></i>全局设置</div>
-          <div @click="setAct(1,'plugin','组件管理','可以便捷拖动、删除组件')" :class="{active:mode==='plugin'}" class="item preview-page-coms"><i class="preview-page-coms-icon"></i>组件管理</div>
+          <div @click="setAct(0,'system','全局设置','针对页面的整体配置')"
+               :class="{active:mode==='system'}"
+               class="item preview-page-options">
+            <i class="preview-page-options-icon"></i>全局设置</div>
+          <div
+                  @click="setAct(1,'plugin','组件管理','可以便捷拖动、删除组件')"
+                  :class="{active:mode==='plugin'}" class="item preview-page-coms"
+          ><i class="preview-page-coms-icon"></i>组件管理</div>
         </div>
-        <preview-component @preFun="setPreEv" ref="preview" @setData="setDataEv"></preview-component>
+        <preview-component
+                @preFun="setPreEv"
+                ref="preview"
+                @setData="setDataEv"
+        ></preview-component>
       </div>
       <div class="setattr">
         <div class="deco-component-title">
-          <div class="deco-component-title__header"><span class="deco-component-title__name">{{componentTitle.title}}</span></div>
+          <div class="deco-component-title__header">
+            <span class="deco-component-title__name">{{componentTitle.title}}</span>
+          </div>
           <div class="deco-component-title__msg">{{componentTitle.desc}}</div>
         </div>
         <set-attr-component v-show="mode=='attr'" ref="setAttr"></set-attr-component>
@@ -39,107 +51,110 @@
 
 <script lang="ts">
 
-    import {
-        Component,
-        Vue
-    } from 'vue-property-decorator';
-    import {
-        Action,
-        State
-    } from 'vuex-class'
-    import SetAttrComponent from '@/components/SetAttrComponent.vue'; // @ is an alias to /src
-    import PreviewComponent from '@/components/PreviewComponent.vue';
-    import CommonAttrComponent from '@/components/CommonAttrComponent.vue';
-    import PluginsComponent from '@/components/PluginsComponent.vue';
-    import RightComponent from '@/components/RightComponent.vue';
+import {
+  Component,
+  Vue,
+} from 'vue-property-decorator';
+import {
+  Action,
+  State,
+} from 'vuex-class';
+import Cookies from 'js-cookie';
+import QrcodeVue from 'qrcode.vue';
+import SetAttrComponent from '@/components/SetAttrComponent.vue'; // @ is an alias to /src
+import PreviewComponent from '@/components/PreviewComponent.vue';
+import CommonAttrComponent from '@/components/CommonAttrComponent.vue';
+import PluginsComponent from '@/components/PluginsComponent.vue';
+import RightComponent from '@/components/RightComponent.vue';
 
-    import {front_url} from '../common/env';
-    // const front_url = process.env.VUE_APP_FRONT_URL
+import { front_url, isDev } from '../common/env';
+// const front_url = process.env.VUE_APP_FRONT_URL
 
-    import {ss} from '@/common/tool/ss';
-    import Cookies from 'js-cookie';
-    import QrcodeVue from 'qrcode.vue';
-    import {tmplDiyMixin} from '@/common/mixin';
-    import {serialize} from '@/common/utils';
-    import {isDev} from '../common/env';
+import { ss } from '@/common/tool/ss';
+import { tmplDiyMixin } from '@/common/mixin';
+import { serialize } from '@/common/utils';
+
 
     @Component({
-        mixins:[tmplDiyMixin],
-        components: {
-            PluginsComponent,
-            SetAttrComponent,
-            PreviewComponent,
-            RightComponent,
-            CommonAttrComponent,
-            QrcodeVue
-        }
+      mixins: [tmplDiyMixin],
+      components: {
+        PluginsComponent,
+        SetAttrComponent,
+        PreviewComponent,
+        RightComponent,
+        CommonAttrComponent,
+        QrcodeVue,
+      },
     })
 
 
-    export default class Home extends Vue {
-
+export default class Home extends Vue {
         is_dev = isDev
+
         preUrl = ''
+
         centerDialogVisible = false
+
         previewActiveIndex = null
 
         @Action('setMode') setMode
+
         @Action('setComponentTitle') setComponentTitle
 
         @State('activeAttr') activeAttr
+
         @State('mode') mode
+
         @State('componentTitle') componentTitle
 
 
-        clearPlugin(){
-            this.$refs.preview.clearPlugin()
+        clearPlugin() {
+          this.$refs.preview.clearPlugin();
         }
 
 
-        //vue的生命周期
-        created(){
-            this.setpreUrl();
+        // vue的生命周期
+        created() {
+          this.setpreUrl();
         }
 
-        setpreUrl(){
+        setpreUrl() {
+          const Skin_ID = ss.get('Skin_ID');
+          const Home_ID = ss.get('Home_ID');
+          const Users_ID = Cookies.get('Users_ID');
 
-            let Skin_ID =  ss.get('Skin_ID'),
-                Home_ID =  ss.get('Home_ID'),
-                Users_ID = Cookies.get('Users_ID');
+          const obj = { Skin_ID, Home_ID, users_id: Users_ID };
 
-            let obj = {Skin_ID,Home_ID,users_id:Users_ID};
+          let str = serialize(obj);
 
-            let str = serialize(obj);
+          if (str)str = `?${str}`;
 
-            if(str)str = '?'+str;
+          console.log('更新preurl', this.preUrl);
 
-            console.log('更新preurl',this.preUrl);
-
-            this.preUrl = front_url+'pages/index/pre'+str;
-
+          this.preUrl = `${front_url}pages/index/pre${str}`;
         }
-        setAct(idx,mode,title,desc){
-            this.previewActiveIndex=idx;
-            this.setMode(mode);
-            this.setComponentTitle({title,desc})
+
+        setAct(idx, mode, title, desc) {
+          this.previewActiveIndex = idx;
+          this.setMode(mode);
+          this.setComponentTitle({ title, desc });
         }
+
         // 这个数据一直往上传，这么辛苦
         setDataEv(data) {
 
         }
-        setPreEv(val){
-            this.setpreUrl();
-            this.centerDialogVisible = val
-        }
-        saveData(use,pre){
-            // @ts-ignore
-            this.$refs.preview.uploadConfig(use,pre);
 
+        setPreEv(val) {
+          this.setpreUrl();
+          this.centerDialogVisible = val;
         }
 
-
-
-    }
+        saveData(use, pre) {
+          // @ts-ignore
+          this.$refs.preview.uploadConfig(use, pre);
+        }
+}
 </script>
 <style lang="stylus" scoped>
   /*.mainHeader*/

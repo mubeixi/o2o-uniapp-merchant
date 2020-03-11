@@ -16,7 +16,8 @@ import ImageUploadEditing from '@ckeditor/ckeditor5-image/src/imageupload/imageu
 import ImageUploadProgress from '@ckeditor/ckeditor5-image/src/imageupload/imageuploadprogress';
 
 import resourceIcon from './resource.svg';
-export const PLUGIN_NAME = 'resource'
+
+export const PLUGIN_NAME = 'resource';
 /**
  * The code block UI plugin.
  *
@@ -25,117 +26,111 @@ export const PLUGIN_NAME = 'resource'
  * @extends module:core/plugin~Plugin
  */
 export default class ResourceUi extends Plugin {
-
   static get requires() {
-    return [ ImageUploadEditing,ImageUploadProgress ];
+    return [ImageUploadEditing, ImageUploadProgress];
   }
 
   /**
    * @inheritDoc
    */
   init() {
-
-    const editor = this.editor;
-    const t = editor.t;
-    const componentFactory = editor.ui.componentFactory;
-
-
-    componentFactory.add( PLUGIN_NAME, locale => {
-
-      const dropdownView = createDropdown( locale );
-      const imageTypes = editor.config.get( 'image.upload.types' );
-      const command = editor.commands.get( PLUGIN_NAME );
-      //,{model:'up',title:'直接上传'}
-      const  options = [{model:{type:'img',limit:9},title:'素材库选择',command:'openResource'}]
-      addListToDropdown( dropdownView, _prepareListOptions( options, command ) );
+    const { editor } = this;
+    const { t } = editor;
+    const { componentFactory } = editor.ui;
 
 
-      const imageTypesRegExp = createImageTypeRegExp( imageTypes );
-      const view = new FileDialogButtonView( locale );
-      view.set( {
-        acceptedType: imageTypes.map( type => `image/${ type }` ).join( ',' ),
-        allowMultipleFiles: true
-      } );
+    componentFactory.add(PLUGIN_NAME, (locale) => {
+      const dropdownView = createDropdown(locale);
+      const imageTypes = editor.config.get('image.upload.types');
+      const command = editor.commands.get(PLUGIN_NAME);
+      // ,{model:'up',title:'直接上传'}
+      const options = [{ model: { type: 'img', limit: 9 }, title: '素材库选择', command: 'openResource' }];
+      addListToDropdown(dropdownView, _prepareListOptions(options, command));
 
-      view.buttonView.set( {
-        label: t( '直接上传图片' ),
+
+      const imageTypesRegExp = createImageTypeRegExp(imageTypes);
+      const view = new FileDialogButtonView(locale);
+      view.set({
+        acceptedType: imageTypes.map(type => `image/${type}`).join(','),
+        allowMultipleFiles: true,
+      });
+
+      view.buttonView.set({
+        label: t('直接上传图片'),
         withText: true,
-        //icon: imageIcon,
-        tooltip: true
-      } );
+        // icon: imageIcon,
+        tooltip: true,
+      });
 
-      view.on( 'done', ( evt, files ) => {
-        const imagesToUpload = Array.from( files ).filter( file => imageTypesRegExp.test( file.type ) );
-        if ( imagesToUpload.length ) {
-          editor.execute( 'imageUpload', { file: imagesToUpload } );
+      view.on('done', (evt, files) => {
+        const imagesToUpload = Array.from(files).filter(file => imageTypesRegExp.test(file.type));
+        if (imagesToUpload.length) {
+          editor.execute('imageUpload', { file: imagesToUpload });
         }
-      } );
+      });
 
-      let buttons = []
-      buttons.push( view );
-      addToolbarToDropdown( dropdownView, buttons );
+      const buttons = [];
+      buttons.push(view);
+      addToolbarToDropdown(dropdownView, buttons);
 
       // Create dropdown model.
-      dropdownView.buttonView.set( {
+      dropdownView.buttonView.set({
         label: '插入素材',
         icon: resourceIcon,
-        tooltip: true
-      } );
+        tooltip: true,
+      });
       dropdownView.isToggleable = true;
 
 
-      dropdownView.extendTemplate( {
+      dropdownView.extendTemplate({
         attributes: {
           class: [
-            'ck-fun-finder-dropdown'
-          ]
-        }
-      } );
+            'ck-fun-finder-dropdown',
+          ],
+        },
+      });
 
       // dropdownView.bind( 'isEnabled' ).to( command );
 
       // Execute command when an item from the dropdown is selected.
-      this.listenTo( dropdownView, 'execute', evt => {
-        console.log(`触发 command ${evt.source.commandName}参数`,evt.source.commandParam)
-        editor.execute( evt.source.commandName, { value: evt.source.commandParam } );
+      this.listenTo(dropdownView, 'execute', (evt) => {
+        console.log(`触发 command ${evt.source.commandName}参数`, evt.source.commandParam);
+        editor.execute(evt.source.commandName, { value: evt.source.commandParam });
         editor.editing.view.focus();
-      } );
+      });
 
       return dropdownView;
-    } );
-
+    });
   }
-
-
 }
 
-function _prepareListOptions( options, command ) {
+function _prepareListOptions(options, command) {
   const itemDefinitions = new Collection();
 
-  for ( const option of options ) {
+  for (const option of options) {
     const def = {
       type: 'button',
-      model: new Model( {
+      model: new Model({
         commandName: option.command,
         commandParam: option.model,
         label: option.title,
         class: 'ck-fontsize-option',
-        withText: true
-      } )
+        withText: true,
+      }),
     };
 
-    if ( option.view && option.view.styles ) {
-      def.model.set( 'labelStyle', `font-size:${ option.view.styles[ 'font-size' ] }` );
+    if (option.view && option.view.styles) {
+      def.model.set('labelStyle', `font-size:${option.view.styles['font-size']}`);
     }
 
-    if ( option.view && option.view.classes ) {
-      def.model.set( 'class', `${ def.model.class } ${ option.view.classes }` );
+    if (option.view && option.view.classes) {
+      def.model.set('class', `${def.model.class} ${option.view.classes}`);
     }
 
-    def.model.bind( 'isOn' ).to( command, 'value', value => value === option.model );
+    def.model.bind('isOn').to(command, 'value', value => value === option.model);
 
     // Add the option to the collection.
-    itemDefinitions.add( def );
+    itemDefinitions.add(def);
   }
 
   return itemDefinitions;

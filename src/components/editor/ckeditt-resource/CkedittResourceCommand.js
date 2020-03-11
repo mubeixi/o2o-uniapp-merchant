@@ -11,7 +11,10 @@
 
 import Command from '@ckeditor/ckeditor5-core/src/command';
 import CKEditorError from '@ckeditor/ckeditor5-utils/src/ckeditorerror';
-import {FUNFinder} from './FUNFinder'
+import { findOptimalInsertionPosition } from '@ckeditor/ckeditor5-widget/src/utils';
+import { FUNFinder } from './FUNFinder';
+
+import { fun } from '../../../common';
 
 /**
  * The CKFinder command. It is used by the {@link module:ckfinder/ckfinderediting~CKFinderEditing CKFinder editing feature}
@@ -31,35 +34,33 @@ export default class CkedittResourceCommand extends Command {
   /**
    * @inheritDoc
    */
-  constructor( editor ) {
-
-    super( editor );
+  constructor(editor) {
+    super(editor);
 
     // Remove default document listener to lower its priority.
-    //this.stopListening( this.editor.model.document, 'change' );
+    // this.stopListening( this.editor.model.document, 'change' );
 
     // Lower this command listener priority to be sure that refresh() will be called after link & image refresh.
-    //this.listenTo( this.editor.model.document, 'change', () => this.refresh(), { priority: 'low' } );
+    // this.listenTo( this.editor.model.document, 'change', () => this.refresh(), { priority: 'low' } );
   }
 
   /**
    * @inheritDoc
    */
   refresh() {
-    const imageCommand = this.editor.commands.get( 'imageInsert' );
-    //const linkCommand = this.editor.commands.get( 'link' );
+    const imageCommand = this.editor.commands.get('imageInsert');
+    // const linkCommand = this.editor.commands.get( 'link' );
 
     // The CKFinder command is enabled when one of image or link command is enabled.
-    this.isEnabled = imageCommand.isEnabled ; //|| linkCommand.isEnabled;
+    this.isEnabled = imageCommand.isEnabled; // || linkCommand.isEnabled;
   }
 
   /**
    * @inheritDoc
    */
   execute(opt) {
-
-    console.log(opt)
-    const editor = this.editor;
+    console.log(opt);
+    const { editor } = this;
 
 
     // const model = editor.model;
@@ -71,100 +72,94 @@ export default class CkedittResourceCommand extends Command {
     //   }
     // } );
 
-    //const openerMethod = 'modal';
+    // const openerMethod = 'modal';
 
-    const options = Object.assign({limit:10,type:'img'},opt);
+    const options = Object.assign({ limit: 10, type: 'img' }, opt);
 
 
     const callFn = {
-      up:(url)=>{
-        insertImages( editor, [url] );
+      up: (url) => {
+        insertImages(editor, [url]);
         editor.editing.view.focus();
       },
-      choose:(urls)=>{
-        insertImages( editor, urls );
+      choose: (urls) => {
+        insertImages(editor, urls);
         editor.editing.view.focus();
       },
-      chooseMedia:(urls)=>{
-        insertMediaFunc(editor, urls)
+      chooseMedia: (urls) => {
+        insertMediaFunc(editor, urls);
         editor.editing.view.focus();
-      }
-    }
+      },
+    };
 
-    //console.log(window.CKFinder)
-    FUNFinder.open({editor,options,callFn});
+    // console.log(window.CKFinder)
+    FUNFinder.open({ editor, options, callFn });
   }
 }
 
-import { findOptimalInsertionPosition } from '@ckeditor/ckeditor5-widget/src/utils';
-import { fun } from '../../../common';
-
-const utilsInsertImageFunc = function( writer, model, attributes = {} ) {
-  const imageElement = writer.createElement( 'image', attributes );
-  const insertAtSelection = findOptimalInsertionPosition( model.document.selection, model );
-  model.insertContent( imageElement,insertAtSelection);
+const utilsInsertImageFunc = function (writer, model, attributes = {}) {
+  const imageElement = writer.createElement('image', attributes);
+  const insertAtSelection = findOptimalInsertionPosition(model.document.selection, model);
+  model.insertContent(imageElement, insertAtSelection);
   // Inserting an image might've failed due to schema regulations.
-  //就是这个，让无法再次插入了
-  if ( imageElement.parent ) {
-    console.log(attributes.src)
-    //writer.setSelection( imageElement, 'on' );
+  // 就是这个，让无法再次插入了
+  if (imageElement.parent) {
+    console.log(attributes.src);
+    // writer.setSelection( imageElement, 'on' );
   }
+};
 
-}
-
-function focusEditor(editor)
-{
+function focusEditor(editor) {
 
 
 }
 
-function insertImages( editor, urls ) {
-  console.log(urls)
-  const imageCommand = editor.commands.get( 'imageInsert' );
+function insertImages(editor, urls) {
+  console.log(urls);
+  const imageCommand = editor.commands.get('imageInsert');
 
   // Check if inserting an image is actually possible - it might be possible to only insert a link.
-  if ( !imageCommand.isEnabled ) {
-    const notification = editor.plugins.get( 'Notification' );
-    const t = editor.locale.t;
+  if (!imageCommand.isEnabled) {
+    const notification = editor.plugins.get('Notification');
+    const { t } = editor.locale;
 
-    notification.showWarning( t( 'Could not insert image at the current position.' ), {
-      title: t( 'Inserting image failed' ),
-      namespace: 'ckfinder'
-    } );
+    notification.showWarning(t('Could not insert image at the current position.'), {
+      title: t('Inserting image failed'),
+      namespace: 'ckfinder',
+    });
 
     return;
   }
 
 
-  //editor.execute( 'imageInsert', { source: urls } );
+  // editor.execute( 'imageInsert', { source: urls } );
 
-  const options = { source: urls }
-  //自己实现imageInsert的cocommand
-  const model = editor.model;
-  const changeRt = model.change( writer => {
-    const sources = Array.isArray( options.source ) ? options.source : [ options.source ];
+  const options = { source: urls };
+  // 自己实现imageInsert的cocommand
+  const { model } = editor;
+  const changeRt = model.change((writer) => {
+    const sources = Array.isArray(options.source) ? options.source : [options.source];
 
-    let endPostion = null
-    for ( let i in sources ) {
-      let src = sources[i]
-      console.log(src,i)
-      endPostion = utilsInsertImageFunc( writer, model, { src } );
+    let endPostion = null;
+    for (const i in sources) {
+      const src = sources[i];
+      console.log(src, i);
+      endPostion = utilsInsertImageFunc(writer, model, { src });
     }
 
-    //model.insertContent( imageElement,insertAtSelection);
+    // model.insertContent( imageElement,insertAtSelection);
 
-    console.log(333333333)
-    const textElement = writer.createElement( 'paragraph');
-    const insertAtSelection = findOptimalInsertionPosition( model.document.selection, model );
-    model.insertContent( textElement,insertAtSelection);
+    console.log(333333333);
+    const textElement = writer.createElement('paragraph');
+    const insertAtSelection = findOptimalInsertionPosition(model.document.selection, model);
+    model.insertContent(textElement, insertAtSelection);
 
 
+    // writer.insertText( 'foo', editor.model.document.selection.getLastPosition() );
 
-    //writer.insertText( 'foo', editor.model.document.selection.getLastPosition() );
+    // writer.insertElement( 'paragraph', { alignment: 'center' },editor.model.document.selection.getLastPosition() );
 
-    //writer.insertElement( 'paragraph', { alignment: 'center' },editor.model.document.selection.getLastPosition() );
-
-    //writer.setSelection( p1, 'end' );
+    // writer.setSelection( p1, 'end' );
     // const modelRoot = model.document.getRoot();
     // if ( modelRoot.childCount < 2 ) {
     //   let _bodyPlaceholder = writer.createElement( 'paragraph' );
@@ -185,46 +180,37 @@ function insertImages( editor, urls ) {
     // }
 
 
-
     // writer.setSelectionFocus(position)
 
 
     return 32322;
+  });
 
-  } );
+  console.log(changeRt);
 
-  console.log(changeRt)
-
-  focusEditor(editor)
-
-
-
-
+  focusEditor(editor);
 }
 
-function insertMediaFunc(editor, urls){
-
-
-  console.log(urls)
-  const mediaCommand = editor.commands.get( 'mediaEmbed' );
+function insertMediaFunc(editor, urls) {
+  console.log(urls);
+  const mediaCommand = editor.commands.get('mediaEmbed');
 
   // Check if inserting an image is actually possible - it might be possible to only insert a link.
-  if ( !mediaCommand.isEnabled ) {
-    const notification = editor.plugins.get( 'Notification' );
-    const t = editor.locale.t;
+  if (!mediaCommand.isEnabled) {
+    const notification = editor.plugins.get('Notification');
+    const { t } = editor.locale;
 
-    notification.showWarning( t( 'Could not insert media at the current position.' ), {
-      title: t( 'Inserting media failed' ),
-      namespace: 'ckfinder'
-    } );
+    notification.showWarning(t('Could not insert media at the current position.'), {
+      title: t('Inserting media failed'),
+      namespace: 'ckfinder',
+    });
 
     return;
   }
 
-  for ( const src of urls ) {
-    editor.execute( 'mediaEmbed', src );
+  for (const src of urls) {
+    editor.execute('mediaEmbed', src);
   }
 
-  focusEditor(editor)
-
+  focusEditor(editor);
 }

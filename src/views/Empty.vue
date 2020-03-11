@@ -5,11 +5,11 @@
 </template>
 <script lang="ts">
 import {
-    Component,
-    Vue
+  Component,
+  Vue,
 } from 'vue-property-decorator';
 @Component({
-    'components': {}
+  components: {},
 })
 export default class Empty extends Vue {
 

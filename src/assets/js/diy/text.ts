@@ -61,9 +61,7 @@ function setAttrData() {
         model: this.style.bgColor,
         editType: 'style',
         editKey: 'bgColor',
-        editCB: item => {
-          return item.model?item.model:'none'
-        },
+        editCB: item => (item.model ? item.model : 'none'),
       },
       {
         type: 'color',
@@ -101,8 +99,7 @@ function setAttrData() {
         editKey: 'link',
         model: this.value,
         bindLinkCB: (dataType, type, path, tooltip, dataItem, pageEl, idx2) => {
-
-          console.log(dataType, type, path, tooltip, dataItem, pageEl, idx2)
+          console.log(dataType, type, path, tooltip, dataItem, pageEl, idx2);
           pageEl.bindLinkDialogShow = false;
 
           Vue.set(this.value, 'link', path);
@@ -110,10 +107,9 @@ function setAttrData() {
           Vue.set(this.value, 'linkType', type);
           Vue.set(this.value, 'tooltip', tooltip);
 
-          //这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
-          this.setIndex(0, {value:false,config:false});
+          // 这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
+          this.setIndex(0, { value: false, config: false });
           this.vm.$store.commit('activeAttr', this);// 传出去
-
         },
       },
 
@@ -125,7 +121,7 @@ function setAttrData() {
 }
 
 function attrData(options = {}) {
-  const {value, config, attrData} = options;
+  const { value, config, attrData } = options;
   if (value !== false) setValue.call(this);
   if (config !== false) setConfig.call(this);
   if (attrData !== false) setAttrData.call(this);
@@ -163,7 +159,6 @@ class Hr extends Common {
 
   constructor() {
     super();
-
 
 
     // 统一这样来初始化

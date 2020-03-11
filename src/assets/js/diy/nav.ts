@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Common from './commonClass';
-import fun from "../../../common/fun";
+import fun from '../../../common/fun';
 
 function setValue() {
   // let value = {}
@@ -58,9 +58,7 @@ function setAttrData() {
         model: this.style.bgColor,
         editType: 'style',
         editKey: 'bgColor',
-        editCB: item => {
-          return item.model?item.model:'none'
-        },
+        editCB: item => (item.model ? item.model : 'none'),
       },
       {
         type: 'addbtn',
@@ -70,29 +68,28 @@ function setAttrData() {
         //   pageEl.bindLinkDialogShow = true
         // },
         dialogCB: (coupon_list) => {
-
           this.value.list = [...coupon_list];
 
-          //这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
-          this.setIndex(0, {value:false,config:false});
+          // 这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
+          this.setIndex(0, { value: false, config: false });
           this.vm.$store.commit('activeAttr', this);// 传出去
         },
-        //这个按钮的功能，主要是新增元素
+        // 这个按钮的功能，主要是新增元素
         editCB: (pageEl) => {
           if (this.value.list.length >= 10) {
-            fun.info({msg: '最多允许十个'});
+            fun.info({ msg: '最多允许十个' });
             return;
           }
-          this.value.list.push( {
+          this.value.list.push({
             title: '标题',
             img: '',
             link: '',
             linkType: '',
-            tooltip: ''
-          });//新增一个空元素
+            tooltip: '',
+          });// 新增一个空元素
 
-          //这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
-          this.setIndex(0, {value:false,config:false});
+          // 这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
+          this.setIndex(0, { value: false, config: false });
           this.vm.$store.commit('activeAttr', this);// 传出去
         },
       },
@@ -102,8 +99,7 @@ function setAttrData() {
         label: '',
         value: this.value.list,
         bindCB: (dataType, type, path, tooltip, dataItem, pageEl, idx2) => {
-
-          console.log(dataType, type, path, tooltip, dataItem, pageEl, idx2)
+          console.log(dataType, type, path, tooltip, dataItem, pageEl, idx2);
           pageEl.bindLinkDialogShow = false;
 
           Vue.set(this.value.list[idx2], 'link', path);
@@ -111,29 +107,27 @@ function setAttrData() {
           Vue.set(this.value.list[idx2], 'linkType', type);
           Vue.set(this.value.list[idx2], 'tooltip', tooltip);
 
-          //这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
-          this.setIndex(0, {value:false,config:false});
+          // 这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
+          this.setIndex(0, { value: false, config: false });
           this.vm.$store.commit('activeAttr', this);// 传出去
-
         },
         // 之类是输入的回调，可以根据需要决定写什么
         imgCB: (item, idx2) => {
-
           Vue.set(this.value.list[idx2], 'img', item.data.path);
 
 
-          //这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
-          this.setIndex(0, {value:false,config:false});
+          // 这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
+          this.setIndex(0, { value: false, config: false });
           this.vm.$store.commit('activeAttr', this);// 传出去
         },
         removeCB: (idx) => {
           this.value.list.splice(idx, 1);
 
 
-          //这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
-          this.setIndex(0, {value:false,config:false});
+          // 这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
+          this.setIndex(0, { value: false, config: false });
           this.vm.$store.commit('activeAttr', this);// 传出去
-        }
+        },
 
       },
 
@@ -145,7 +139,7 @@ function setAttrData() {
 }
 
 function attrData(options = {}) {
-  const {value, config, attrData} = options;
+  const { value, config, attrData } = options;
   // console.log(value, config, attrData);
   if (value !== false) setValue.call(this);
   if (config !== false) setConfig.call(this);
@@ -182,8 +176,9 @@ class Nav extends Common {
     // loop:false,//是否循环
     // interval:5000,//切换时间
     // autoplay:false,//自动播放
-    //type: 1, //两种风格
+    // type: 1, //两种风格
   }
+
   // img: "/uploadfiles/wkbq6nc2kc/image/SwiftFox_ZH-CN9413097062_1920x1080.jpg"
   // link: "/product/list?cate_id=194"
   // linkType: "cate"
@@ -196,31 +191,31 @@ class Nav extends Common {
         img: '',
         link: '',
         linkType: '',
-        tooltip: ''
+        tooltip: '',
       },
       {
         title: '标题',
         img: '',
         link: '',
         linkType: '',
-        tooltip: ''
+        tooltip: '',
       },
       {
         title: '标题',
         img: '',
         link: '',
         linkType: '',
-        tooltip: ''
+        tooltip: '',
       },
       {
         title: '标题',
         img: '',
         link: '',
         linkType: '',
-        tooltip: ''
+        tooltip: '',
       },
 
-    ],//存优惠券数组
+    ], // 存优惠券数组
   }
 
 

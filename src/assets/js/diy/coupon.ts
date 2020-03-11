@@ -30,9 +30,7 @@ function setAttrData() {
         model: this.style.bgColor,
         editType: 'style',
         editKey: 'bgColor',
-        editCB: item => {
-          return item.model?item.model:'none'
-        },
+        editCB: item => (item.model ? item.model : 'none'),
       },
       {
         type: 'radio',
@@ -64,24 +62,21 @@ function setAttrData() {
         text: '',
         label: '选择优惠券',
         dialogCB: (coupon_list) => {
-
           this.value.list = [...coupon_list];
 
-          //这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
-          this.setIndex(0, {value:false,config:false});
+          // 这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
+          this.setIndex(0, { value: false, config: false });
           this.vm.$store.commit('activeAttr', this);// 传出去
         },
-        //这个按钮的功能，主要是新增页面吧
+        // 这个按钮的功能，主要是新增页面吧
         editCB: (pageEl) => {
-
-          let tempArr = []
-          for (var i in this.value.list) {
-            tempArr.push(this.value.list[i].Coupon_ID)
+          const tempArr = [];
+          for (const i in this.value.list) {
+            tempArr.push(this.value.list[i].Coupon_ID);
           }
 
           pageEl.coupon_ids = tempArr.join(',');
           pageEl.couponDialogShow = true;
-
         },
       },
       {
@@ -96,13 +91,12 @@ function setAttrData() {
           // this.vm.$store.state.activeAttr.value.list = this.value.list;// 传出去
         },
         removeCB: (idx) => {
-
           this.value.list.splice(idx, 1);
 
-          //这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
-          this.setIndex(0, {value:false,config:false});
+          // 这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
+          this.setIndex(0, { value: false, config: false });
           this.vm.$store.commit('activeAttr', this);// 传出去
-        }
+        },
       },
 
     ],
@@ -114,7 +108,7 @@ function setAttrData() {
 
 function attrData(options = {}) {
   // @ts-ignore
-  const {value, config, attrData} = options;
+  const { value, config, attrData } = options;
   // console.log(value, config, attrData);
   if (value !== false) setValue.call(this);
   if (config !== false) setConfig.call(this);
@@ -151,7 +145,7 @@ class Coupon extends Common {
   }
 
   value = {
-    list: [],//存优惠券数组
+    list: [], // 存优惠券数组
   }
 
 

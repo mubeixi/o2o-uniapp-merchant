@@ -20,22 +20,22 @@
 </template>
 
 <script lang="ts">
-    import {Component, Prop, Vue} from 'vue-property-decorator';
-    import {PLUGINSLIST} from '@/common/data';
+import { Component, Prop, Vue } from 'vue-property-decorator';
+import { PLUGINSLIST } from '@/common/data';
 
     @Component
-    export default class PluginsComponent extends Vue {
+export default class PluginsComponent extends Vue {
         @Prop() private msg!: string;
 
         plugins = PLUGINSLIST
 
         sourceDrag(e: Object): Object {
-            // console.log(e.target);
-            const templateName = e.target.getAttribute('data-label');
-            // console.log(templateName);
-            e.dataTransfer.setData('text/plain', templateName);
+          // console.log(e.target);
+          const templateName = e.target.getAttribute('data-label');
+          // console.log(templateName);
+          e.dataTransfer.setData('text/plain', templateName);
         }
-    }
+}
 </script>
 
 <style scoped lang="less">
@@ -115,8 +115,6 @@
         }
 
 
-
-
         .center {
           position: absolute;
           left: 0;
@@ -135,7 +133,6 @@
 
           }
         }
-
 
 
         .icon {

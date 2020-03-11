@@ -14,9 +14,9 @@ function setConfig() {
     height: 30,
     color: '',
     inputBgColor: '',
-    position:'inherit',
-    x:0,
-    y:0
+    position: 'inherit',
+    x: 0,
+    y: 0,
   })) {
     Vue.set(this, 'style', JSON.parse(JSON.stringify(this.styleDefault)));
   }
@@ -24,10 +24,10 @@ function setConfig() {
 }
 
 function setAttrData() {
-  console.log(JSON.parse(JSON.stringify(this)))
+  console.log(JSON.parse(JSON.stringify(this)));
   const data = {
     title: '搜索设置',
-    labelSize:'L',
+    labelSize: 'L',
     content: [
       {
         type: 'addbtn',
@@ -37,16 +37,12 @@ function setAttrData() {
           const temp = [...this.value.hot];
 
           temp.push('热词');
-          //这个value也会作用在Preview中的SearchComponents组件
+          // 这个value也会作用在Preview中的SearchComponents组件
           Vue.set(this.value, 'hot', temp);
 
-          //这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
-          this.setIndex(0, {value:false,config:false});
+          // 这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
+          this.setIndex(0, { value: false, config: false });
           this.vm.$store.commit('activeAttr', this);// 传出去
-
-          return;
-
-
         },
       },
       {
@@ -57,18 +53,16 @@ function setAttrData() {
         // 之类是输入的回调，可以根据需要决定写什么
         inputCB: (item) => {
           this.value.hot = [...item.value];
-          //这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
+          // 这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
           this.vm.$store.commit('activeAttr', this);// 传出去
         },
         removeCB: (idx) => {
-
           this.value.hot.splice(idx, 1);
 
-          //这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
-          this.setIndex(0, {value:false,config:false});
+          // 这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
+          this.setIndex(0, { value: false, config: false });
           this.vm.$store.commit('activeAttr', this);// 传出去
-
-        }
+        },
         // 用函数来包容万象，返回数组
         // getFunc:()=>{
         //   let arr = this.config.hot,rt = [];
@@ -128,9 +122,7 @@ function setAttrData() {
         model: this.style.bgColor,
         editType: 'style',
         editKey: 'bgColor',
-        editCB: item => {
-          return item.model?item.model:'none'
-        },
+        editCB: item => (item.model ? item.model : 'none'),
       },
       {
         type: 'color',
@@ -156,7 +148,7 @@ function setAttrData() {
 
 function attrData(options = {}) {
   // @ts-ignore
-  const {value, config, attrData} = options;
+  const { value, config, attrData } = options;
   console.log(value, config, attrData, JSON.parse(JSON.stringify(this)));
   if (value !== false) setValue.call(this);
   if (config !== false) setConfig.call(this);
@@ -166,7 +158,6 @@ function attrData(options = {}) {
 
 
 class Search extends Common {
-
   tag = 'search';
   // activeIndex = 0;
 
@@ -175,9 +166,9 @@ class Search extends Common {
     height: 30,
     color: '',
     inputBgColor: '',
-    position:'inherit',
-    x:0,
-    y:0
+    position: 'inherit',
+    x: 0,
+    y: 0,
   }
 
   /**
@@ -191,9 +182,9 @@ class Search extends Common {
     height: 30,
     color: '#444',
     inputBgColor: '#f2f2f2',
-    position:'inherit',
-    x:0,
-    y:0
+    position: 'inherit',
+    x: 0,
+    y: 0,
   }
 
   config = {
@@ -203,7 +194,6 @@ class Search extends Common {
   value = {
     hot: ['女装'],
   }
-
 
 
   constructor() {

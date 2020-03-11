@@ -3,10 +3,11 @@
 </template>
 
 <script>
-  import avatar from './components/avatar';
-  export default {
-    name: 'StoreList'
-  };
+import avatar from './components/avatar';
+
+export default {
+  name: 'StoreList',
+};
 </script>
 
 <style scoped>

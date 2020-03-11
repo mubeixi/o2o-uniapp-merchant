@@ -159,400 +159,393 @@
 </template>
 
 <script lang="ts">
-  import {Component, Vue, Prop} from 'vue-property-decorator';
-  import {
-      Action,
-      State
-  } from 'vuex-class'
+import { Component, Vue, Prop } from 'vue-property-decorator';
+import {
+  Action,
+  State,
+} from 'vuex-class';
 
 
-
-  import {createDirectory,getFileList} from '../../api/pub'
-  import {domain} from '../../common/utils';
-  import WzwFileButton from './WzwFileButton.vue';
-  import fun from "../../common/fun";
-  import {isDev} from '../../common/env';
+import { createDirectory, getFileList } from '../../api/pub';
+import { domain } from '../../common/utils';
+import WzwFileButton from './WzwFileButton.vue';
+import fun from '../../common/fun';
+import { isDev } from '../../common/env';
 
 
   @Component({
-      props:{
-          limit:{
-              type: [String,Number],
-              default: 10
-          },
-          top:{
-              type:String,
-              default:'10vh'
-          },
-          label: {
-              type: String,
-              default: '选择素材'
-          },
-          maskClose:{
-              type:Boolean,
-              default:true
-          },
-          show: {
-              type: Boolean,
-              default: false
-          },
+    props: {
+      limit: {
+        type: [String, Number],
+        default: 10,
       },
-      computed:{
-          dir_list(){
-            let rt = []
-            for(var dir of this.dirs){
-                if(window.finderDialogInstance.allow.indexOf(dir.source_type)!==-1){
-                    rt.push(dir)
-                }
-            }
-            return rt
-          },
-          //上传按钮插件的配置
-          extParam(){
-              return {type:this.source_type}
-          },
-          storage_type(){
-            return this.initData.storage_type == 1 ?'aliyun':'local'
-          },
-          up_progress_list(){
-            return window.UP_PROGRESS_LIST
-          },
-          current_path_arr(){
-              let arr = this.current_path.split('/')
-              let rt = []
-              for(var item of arr){
-                  if(item)rt.push(item)
-              }
-              return rt
+      top: {
+        type: String,
+        default: '10vh',
+      },
+      label: {
+        type: String,
+        default: '选择素材',
+      },
+      maskClose: {
+        type: Boolean,
+        default: true,
+      },
+      show: {
+        type: Boolean,
+        default: false,
+      },
+    },
+    computed: {
+      dir_list() {
+        const rt = [];
+        for (const dir of this.dirs) {
+          if (window.finderDialogInstance.allow.indexOf(dir.source_type) !== -1) {
+            rt.push(dir);
           }
+        }
+        return rt;
       },
-      filters:{
-          // imgFilter(filename){
-          //     return domain(this.+filename)
-          // }
+      // 上传按钮插件的配置
+      extParam() {
+        return { type: this.source_type };
       },
-      watch:{
-          currentPage:{
-              immediate: true,
-              handler(){
-                  this.pageGo=this.currentPage
-                  this.current_file_list=this.lists.slice((this.currentPage-1)*this.pageSize,(this.currentPage-1)*this.pageSize+this.pageSize)
-              }
-          },
-          show: {
-              immediate: true,
-              handler(val) {
-                  this.innerVisible = val;
-                  if(val){
+      storage_type() {
+        return this.initData.storage_type == 1 ? 'aliyun' : 'local';
+      },
+      up_progress_list() {
+        return window.UP_PROGRESS_LIST;
+      },
+      current_path_arr() {
+        const arr = this.current_path.split('/');
+        const rt = [];
+        for (const item of arr) {
+          if (item)rt.push(item);
+        }
+        return rt;
+      },
+    },
+    filters: {
+      // imgFilter(filename){
+      //     return domain(this.+filename)
+      // }
+    },
+    watch: {
+      currentPage: {
+        immediate: true,
+        handler() {
+          this.pageGo = this.currentPage;
+          this.current_file_list = this.lists.slice((this.currentPage - 1) * this.pageSize, (this.currentPage - 1) * this.pageSize + this.pageSize);
+        },
+      },
+      show: {
+        immediate: true,
+        handler(val) {
+          this.innerVisible = val;
+          if (val) {
+            // init处理
+            // this.current_type_idx = 0
+            // this.current_path = this.dir_list[0].source_type+'/'
+            // // this.innerVisible = false
+            // this.source_type = this.dir_list[0].source_type
 
-                      //init处理
-                      // this.current_type_idx = 0
-                      // this.current_path = this.dir_list[0].source_type+'/'
-                      // // this.innerVisible = false
-                      // this.source_type = this.dir_list[0].source_type
+            // 点击第一个啊
 
-                      //点击第一个啊
-
-                      this.$nextTick().then(()=>{
-                          let firstEl = document.querySelector('.js-type-item')
-                          firstEl.click()
-                          this.select_file_list = []
-                          this.init_func()
-                      })
-
-                  }
-
-              }
-          },
-          initData:{
-              deep: true,
-              handler(val){
-                  const upload_rule = val.upload_rule
-                  //console.log(upload_rule)
-                  this.accept = upload_rule['image'].exts
-                  this.maxSize = upload_rule['image'].size
-                  this.seconds = upload_rule['media'].seconds
-
-              }
+            this.$nextTick().then(() => {
+              const firstEl = document.querySelector('.js-type-item');
+              firstEl.click();
+              this.select_file_list = [];
+              this.init_func();
+            });
           }
-
+        },
       },
-      components: {
-          WzwFileButton
-      }
+      initData: {
+        deep: true,
+        handler(val) {
+          const { upload_rule } = val;
+          // console.log(upload_rule)
+          this.accept = upload_rule.image.exts;
+          this.maxSize = upload_rule.image.size;
+          this.seconds = upload_rule.media.seconds;
+        },
+      },
+
+    },
+    components: {
+      WzwFileButton,
+    },
   })
 
-  export default class WzwFinder extends Vue{
-
-
+export default class WzwFinder extends Vue {
       @State finderDialogInstance
+
       @State up_progress_list
+
       @State initData
 
-      filterSourceType(source_type){
-          return this.finderDialogInstance.allow.indexOf(source_type)!==-1
+      filterSourceType(source_type) {
+        return this.finderDialogInstance.allow.indexOf(source_type) !== -1;
       }
-      reqLoading = false //loading
 
-      getFileUrl(url){
-          //oss才支持
-          //后端牛逼，服务器也支持了this.initData.storage_type &&
-          if(isDev){
-              url = domain(url);
-          }
+      reqLoading = false // loading
 
-          if(this.source_type=='media')return `${url}?x-oss-process=video/snapshot,t_1000,f_jpg,w_200`
-          if(this.source_type=='image')return `${url}-r200`
-          //if(isDev) return domain(url)
-          return url
+      getFileUrl(url) {
+        // oss才支持
+        // 后端牛逼，服务器也支持了this.initData.storage_type &&
+        if (isDev) {
+          url = domain(url);
+        }
+
+        if (this.source_type == 'media') return `${url}?x-oss-process=video/snapshot,t_1000,f_jpg,w_200`;
+        if (this.source_type == 'image') return `${url}-r200`;
+        // if(isDev) return domain(url)
+        return url;
       }
 
       folder_name = ''
-      async createDirFn(){
-          if(!this.folder_name){
-              fun.error({msg:'文件夹名称不能为空'})
-              return;
-          }
 
-          await createDirectory({folder_name:this.folder_name,root_path:this.current_path}).then(res=>{
+      async createDirFn() {
+        if (!this.folder_name) {
+          fun.error({ msg: '文件夹名称不能为空' });
+          return;
+        }
 
-          })
+        await createDirectory({ folder_name: this.folder_name, root_path: this.current_path }).then((res) => {
 
-          this.folder_name = ''
-          this.recallVisible = false
-          this.init_func()
+        });
+
+        this.folder_name = '';
+        this.recallVisible = false;
+        this.init_func();
       }
 
 
-      handleTabClick(tab, event){
-
-          this.init_func()
-          console.log(tab, event);
+      handleTabClick(tab, event) {
+        this.init_func();
+        console.log(tab, event);
       }
 
 
-      //点击面包屑菜单
-      bindCrumb(idx){
-          let current_path_arr = [...this.current_path_arr];
-          let tempArr = current_path_arr.splice(0,idx+1);
-          this.current_path = tempArr.join('/')+'/'
-          this.init_func()
+      // 点击面包屑菜单
+      bindCrumb(idx) {
+        const current_path_arr = [...this.current_path_arr];
+        const tempArr = current_path_arr.splice(0, idx + 1);
+        this.current_path = `${tempArr.join('/')}/`;
+        this.init_func();
       }
-
 
 
       current_file_list = []
+
       pageSize = 21
+
       currentPage = 1
+
       totalPage = 1
+
       current_type_idx = 0
+
       current_path = 'image/'
+
       innerVisible = false
+
       source_type = 'image'
 
 
-
       dirs = [
-          {label:'图片',source_type:'image',accept:'image/gif, image/jpeg,image/png,image/bmp'},
-          {label:'视频',source_type:'media',accept:'audio/mp4, video/mp4'},//,application/ogg, audio/ogg,.wmv
-          {label:'文件',source_type:'file',accept:'application/vnd.ms-powerpoint,application/vnd.ms-excel,application/msword,application/pdf'},
-          {label:'其他',source_type:'other',accept:'application/zip,application/x-zip,application/x-zip-compressed,application/x-rar-compressed'},
+        { label: '图片', source_type: 'image', accept: 'image/gif, image/jpeg,image/png,image/bmp' },
+        { label: '视频', source_type: 'media', accept: 'audio/mp4, video/mp4' }, // ,application/ogg, audio/ogg,.wmv
+        { label: '文件', source_type: 'file', accept: 'application/vnd.ms-powerpoint,application/vnd.ms-excel,application/msword,application/pdf' },
+        { label: '其他', source_type: 'other', accept: 'application/zip,application/x-zip,application/x-zip-compressed,application/x-rar-compressed' },
       ]
 
-      //目录list
-      lists = []//资源list,也可能是音频、视频、商品
+      // 目录list
+      lists = []// 资源list,也可能是音频、视频、商品
 
-      recallVisible = false //新建分组
+      recallVisible = false // 新建分组
 
       select_file_list = []
+
       pageGo=''
 
-      domainFn(url){
-          return domain(url,'?x-oss-process=image/resize,m_lfit,h_110,w_110')
+      domainFn(url) {
+        return domain(url, '?x-oss-process=image/resize,m_lfit,h_110,w_110');
       }
 
-      addFn(file){
-          console.log('点击图片')
-          let fullPath = domain(file.fileurl)
+      addFn(file) {
+        console.log('点击图片');
+        const fullPath = domain(file.fileurl);
 
-          if(!file.checked){
-              if(this.finderDialogInstance.limit<=this.select_file_list.length){
-                  this.$message('照片最多可选'+this.finderDialogInstance.limit+'张');
-                  return
-              }
-              this.$set(file,'checked',true)
-              this.select_file_list.push(fullPath)
-          }else{
-              this.$set(file,'checked',false)
-              let index = this.select_file_list.indexOf(fullPath);
-              if (index > -1) {
-                  this.select_file_list.splice(index, 1);
-              }
+        if (!file.checked) {
+          if (this.finderDialogInstance.limit <= this.select_file_list.length) {
+            this.$message(`照片最多可选${this.finderDialogInstance.limit}张`);
+            return;
           }
-
-
-
-      }
-
-      //分页
-      paginate =  {
-          page: 1,
-          total: 0,
-          pageSize: 999
-      }
-
-      changeCurrent(){
-          if(this.pageGo<this.totalPage){
-              this.currentPage=this.pageGo
-          }else{
-              this.pageGo=this.totalPage
-              this.currentPage=this.totalPage
+          this.$set(file, 'checked', true);
+          this.select_file_list.push(fullPath);
+        } else {
+          this.$set(file, 'checked', false);
+          const index = this.select_file_list.indexOf(fullPath);
+          if (index > -1) {
+            this.select_file_list.splice(index, 1);
           }
+        }
       }
 
-      plusPage(){
-          if(this.currentPage==this.totalPage)return;
-          this.currentPage++
-          //this.pageGo=this.currentPage
+      // 分页
+      paginate = {
+        page: 1,
+        total: 0,
+        pageSize: 999,
       }
 
-      minusPage(){
-          if(this.currentPage==1)return;
-          this.currentPage--
-          //this.pageGo=this.currentPage
+      changeCurrent() {
+        if (this.pageGo < this.totalPage) {
+          this.currentPage = this.pageGo;
+        } else {
+          this.pageGo = this.totalPage;
+          this.currentPage = this.totalPage;
+        }
       }
 
-      cancel(){
-          window.finderDialogInstance.visible = false
+      plusPage() {
+        if (this.currentPage == this.totalPage) return;
+        this.currentPage++;
+        // this.pageGo=this.currentPage
       }
 
-      subFn(){
-
-
-          this.cancel()
-          switch (this.source_type) {
-              case 'image':
-                  window.finderDialogInstance.callFn.choose && window.finderDialogInstance.callFn.choose(this.select_file_list)
-              break;
-              case 'media':
-                  window.finderDialogInstance.callFn.chooseMedia && window.finderDialogInstance.callFn.chooseMedia(this.select_file_list)
-                  break;
-          }
-
+      minusPage() {
+        if (this.currentPage == 1) return;
+        this.currentPage--;
+        // this.pageGo=this.currentPage
       }
 
-      loadDir(){
+      cancel() {
+        window.finderDialogInstance.visible = false;
+      }
+
+      subFn() {
+        this.cancel();
+        switch (this.source_type) {
+          case 'image':
+            window.finderDialogInstance.callFn.choose && window.finderDialogInstance.callFn.choose(this.select_file_list);
+            break;
+          case 'media':
+            window.finderDialogInstance.callFn.chooseMedia && window.finderDialogInstance.callFn.chooseMedia(this.select_file_list);
+            break;
+        }
+      }
+
+      loadDir() {
 
 
       }
 
       accept = 'image/gif, image/jpeg,image/png,image/bmp'
+
       maxSize = 0
+
       seconds = 15
 
-      selectSourceType(type,idx){
-          if(this.reqLoading)return //如果还在请求就不动
-          const upload_rule = this.initData.upload_rule
+      selectSourceType(type, idx) {
+        if (this.reqLoading) return; // 如果还在请求就不动
+        const { upload_rule } = this.initData;
 
-          // this.accept = upload_rule[type.source_type].exts
-          this.accept = type.accept //upload_rule[type.source_type].exts
-          this.maxSize = upload_rule[type.source_type].size
+        // this.accept = upload_rule[type.source_type].exts
+        this.accept = type.accept; // upload_rule[type.source_type].exts
+        this.maxSize = upload_rule[type.source_type].size;
 
-          this.current_type_idx = idx
-          this.source_type = type.source_type
-          this.current_path = `${type.source_type}/`
-          this.init_func()
-      }
-      selectDir(dir){
-          this.current_path = dir.filepath
-          this.init_func()
+        this.current_type_idx = idx;
+        this.source_type = type.source_type;
+        this.current_path = `${type.source_type}/`;
+        this.init_func();
       }
 
-      async init_func(){
-          //防止多次请求
-          if(this.reqLoading)return //如果还在请求就不动
+      selectDir(dir) {
+        this.current_path = dir.filepath;
+        this.init_func();
+      }
 
-          let dir=this.current_path,order='Name',path='',source_type=this.source_type//控制类型
-          console.log(`source_type is ${source_type}`)
+      async init_func() {
+        // 防止多次请求
+        if (this.reqLoading) return; // 如果还在请求就不动
 
-          this.reqLoading = true
+        const dir = this.current_path; const order = 'Name'; const path = ''; const { source_type } = this;// 控制类型
+        console.log(`source_type is ${source_type}`);
 
-          await getFileList({attach_path:dir,type:source_type}).then(res=>{
+        this.reqLoading = true;
 
-              let tempDirs = [],tempLists = [...res.data];
+        await getFileList({ attach_path: dir, type: source_type }).then((res) => {
+          const tempDirs = []; const tempLists = [...res.data];
 
-              this.lists  = tempLists;
+          this.lists = tempLists;
 
-              this.totalPage = Math.ceil(this.lists.length/this.pageSize)
+          this.totalPage = Math.ceil(this.lists.length / this.pageSize);
 
-              this.currentPage = 1
-              this.current_file_list=this.lists.slice((this.currentPage-1)*this.pageSize,(this.currentPage-1)*this.pageSize+this.pageSize)
+          this.currentPage = 1;
+          this.current_file_list = this.lists.slice((this.currentPage - 1) * this.pageSize, (this.currentPage - 1) * this.pageSize + this.pageSize);
+        });
 
-          })
-
-          this.reqLoading = false
-          console.log('点击目录略')
-
-
+        this.reqLoading = false;
+        console.log('点击目录略');
       }
 
 
       uplists = []
+
       previews = []
 
       preview_file_list = []
 
-      //不用一直改了
-      progressFn(arr){
-          for(var i=0;i<arr.length;i++){
-              if(this.preview_file_list[i]){
-                  this.preview_file_list[i].percent = arr[i].percent
-              }
-
+      // 不用一直改了
+      progressFn(arr) {
+        for (let i = 0; i < arr.length; i++) {
+          if (this.preview_file_list[i]) {
+            this.preview_file_list[i].percent = arr[i].percent;
           }
+        }
       }
 
-      previewFn(arr){
+      previewFn(arr) {
+        // filename:"3333"
+        // filepath:"image/3333/"
+        // fileurl:"http://wupengfei.oss-cn-beijing.aliyuncs.com/image/3333/"
+        // is_dir:1
 
-          // filename:"3333"
-          // filepath:"image/3333/"
-          // fileurl:"http://wupengfei.oss-cn-beijing.aliyuncs.com/image/3333/"
-          // is_dir:1
-
-          let preview_file_list = arr
-          console.log(preview_file_list)
-          this.preview_file_list = preview_file_list
-          // let previews = preview_file_list.map(file=>{
-          //     return {
-          //         fileurl:file.url,
-          //         filepath:'',
-          //         filename:file.name,
-          //         is_dir:0,
-          //         percent:file.percent,
-          //     }
-          // })
-          //this.current_file_list = previews.concat(this.current_file_list)
-
-      }
-      upSuccess(){
-          console.log('done')
-          this.init_func()
-          // let file_list = {...arguments}
-          // this.uplists = file_list
+        const preview_file_list = arr;
+        console.log(preview_file_list);
+        this.preview_file_list = preview_file_list;
+        // let previews = preview_file_list.map(file=>{
+        //     return {
+        //         fileurl:file.url,
+        //         filepath:'',
+        //         filename:file.name,
+        //         is_dir:0,
+        //         percent:file.percent,
+        //     }
+        // })
+        // this.current_file_list = previews.concat(this.current_file_list)
       }
 
-      created(){
-          //this.init_func()
-          // const upload_rule = this.initData.upload_rule
-          // if(upload_rule.hasOwnProperty('image')){
-          //     this.accept = upload_rule.image.exts
-          //     this.maxSize = upload_rule.image.size
-          // }
+      upSuccess() {
+        console.log('done');
+        this.init_func();
+        // let file_list = {...arguments}
+        // this.uplists = file_list
+      }
 
+      created() {
+        // this.init_func()
+        // const upload_rule = this.initData.upload_rule
+        // if(upload_rule.hasOwnProperty('image')){
+        //     this.accept = upload_rule.image.exts
+        //     this.maxSize = upload_rule.image.size
+        // }
 
 
       }
-  }
+}
 </script>
 
 <style scoped lang="less">
@@ -605,7 +598,6 @@
     position: absolute;
     bottom: 0px;
   }
-
 
 
 }

@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Common from './commonClass';
-import fun from "../../../common/fun";
+import fun from '../../../common/fun';
 
 
 function setValue() {
@@ -12,10 +12,10 @@ function setConfig() {
   if (JSON.stringify(this.style) === JSON.stringify({
     color: '',
     bgColor: '',
-    padding:'',
-    paddingc:'',
-    fontSize:'',
-    textAlign:''
+    padding: '',
+    paddingc: '',
+    fontSize: '',
+    textAlign: '',
   })) {
     Vue.set(this, 'style', JSON.parse(JSON.stringify(this.styleDefault)));
   }
@@ -51,9 +51,9 @@ function setAttrData() {
         text: '标签图片',
         tip: '建议上传宽度不超过4px的纯色图片',
         uploadType: 'avatar',
-        showDelIcon:true,
+        showDelIcon: true,
         model: this.config.icon,
-        mini:true,
+        mini: true,
         editType: 'config',
         editKey: 'icon',
         editCB: item => item.model,
@@ -88,9 +88,7 @@ function setAttrData() {
         model: this.style.bgColor,
         editType: 'style',
         editKey: 'bgColor',
-        editCB: item => {
-          return item.model?item.model:'none'
-        },
+        editCB: item => (item.model ? item.model : 'none'),
       },
       {
         type: 'radio',
@@ -157,20 +155,20 @@ function setAttrData() {
         //
         //   this.vm.$store.state.activeAttr.value.list = this.value.list;// 传出去
         // },
-        //这个按钮的功能，主要是新增元素
+        // 这个按钮的功能，主要是新增元素
         editCB: (pageEl) => {
-
           if (this.value.more.length >= 1) {
-            fun.info({msg: '最多允许添加一个'});
+            fun.info({ msg: '最多允许添加一个' });
             return;
           }
 
-          this.value.more.push({title: '查看更多>', link: '', linkType: null, tooltip: ''});//新增一个空元素
+          this.value.more.push({
+            title: '查看更多>', link: '', linkType: null, tooltip: '',
+          });// 新增一个空元素
 
-          //这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
-          this.setIndex(0, {value:false,config:false});
+          // 这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
+          this.setIndex(0, { value: false, config: false });
           this.vm.$store.commit('activeAttr', this);// 传出去
-
         },
       },
       {
@@ -179,8 +177,7 @@ function setAttrData() {
         label: '',
         value: this.value.more,
         bindCB: (dataType, type, path, tooltip, dataItem, pageEl, idx2) => {
-
-          console.log(dataType, type, path, tooltip, dataItem, pageEl, idx2)
+          console.log(dataType, type, path, tooltip, dataItem, pageEl, idx2);
           pageEl.bindLinkDialogShow = false;
 
           Vue.set(this.value.more[idx2], 'link', path);
@@ -188,29 +185,26 @@ function setAttrData() {
           Vue.set(this.value.more[idx2], 'linkType', type);
           Vue.set(this.value.more[idx2], 'tooltip', tooltip);
 
-          //这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
-          this.setIndex(0, {value:false,config:false});
+          // 这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
+          this.setIndex(0, { value: false, config: false });
           this.vm.$store.commit('activeAttr', this);// 传出去
-
         },
         // 之类是输入的回调，可以根据需要决定写什么
         imgCB: (item, idx2) => {
-          console.log(item.data.path, idx2)
+          console.log(item.data.path, idx2);
           Vue.set(this.value.list[idx2], 'img_src', item.data.path);
 
-          //这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
-          this.setIndex(0, {value:false,config:false});
+          // 这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
+          this.setIndex(0, { value: false, config: false });
           this.vm.$store.commit('activeAttr', this);// 传出去
-
         },
         removeCB: (idx) => {
           this.value.more.splice(idx, 1);
 
-          //这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
-          this.setIndex(0, {value:false,config:false});
+          // 这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
+          this.setIndex(0, { value: false, config: false });
           this.vm.$store.commit('activeAttr', this);// 传出去
-
-        }
+        },
         // 用函数来包容万象，返回数组
         // getFunc:()=>{
         //   let arr = this.config.hot,rt = [];
@@ -230,7 +224,7 @@ function setAttrData() {
 
 function attrData(options = {}) {
   // @ts-ignore
-  const {value, config, attrData} = options;
+  const { value, config, attrData } = options;
   if (value !== false) setValue.call(this);
   if (config !== false) setConfig.call(this);
   if (attrData !== false) setAttrData.call(this);
@@ -244,23 +238,23 @@ class Title extends Common {
   style = {
     color: '',
     bgColor: '#fff',
-    padding:'',
-    paddingc:'',
-    fontSize:'',
-    textAlign:''
+    padding: '',
+    paddingc: '',
+    fontSize: '',
+    textAlign: '',
   }
 
   styleDefault = {
     color: '#333',
     bgColor: '#fff',
-    paddingc:10,
-    padding:10,
-    fontSize:16,
-    textAlign:''
+    paddingc: 10,
+    padding: 10,
+    fontSize: 16,
+    textAlign: '',
   }
 
   config = {
-    icon:''
+    icon: '',
   }
 
 

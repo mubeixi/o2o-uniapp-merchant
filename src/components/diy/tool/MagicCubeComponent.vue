@@ -15,7 +15,6 @@
       </div>
 
 
-
       <!--所有热区用绝对定位实现-->
       <div class="active" :data-idx="area.IDX" @click.stop="activeArea(aidx,area)"   :class="areaActiveIndex===aidx?'act':''"
            :style="[getAreaStyle(area)]" v-for="(area,aidx) in CTX.selects">
@@ -54,40 +53,40 @@
 
 <script>
 
+import _ from 'underscore';
 import MagicCube from '../../../assets/js/diy/tool/MagicCube';
 
-import {domain} from '@/common/utils';
-import {objTranslate} from '../../../common/utils';
+import { domain, objTranslate } from '@/common/utils';
+
 import UploadImgComponents from '@/components/diy/tool/UploadImgComponents';
 
 import BindLinkComponents from '@/components/BindLinkComponents';
-import _ from 'underscore'
 
 export default {
-  name:'MagicCubeComponent',
-  props:{
-    selecteds:{
-      type:Array,
-      default:[],//function(){return []}
+  name: 'MagicCubeComponent',
+  props: {
+    selecteds: {
+      type: Array,
+      default: [], // function(){return []}
     },
-    row:{
-      type:Number,
-      default:5
+    row: {
+      type: Number,
+      default: 5,
     },
-    type:{
+    type: {
 
     },
-    col:{
-      type:Number,
-      default:5
+    col: {
+      type: Number,
+      default: 5,
     },
 
-    width:{
-      type:Number,
-      default:375
-    }
+    width: {
+      type: Number,
+      default: 375,
+    },
   },
-  data(){
+  data() {
     return {
       CTX: null,
       mouseInBox: false,
@@ -96,99 +95,95 @@ export default {
         x: null,
         y: null,
         x1: null,
-        y1: null
+        y1: null,
       },
       tempArea: {
-        row_idx: null,//行序列1
-        col_idx: null,//竖直序列1
-        row_idx1: null,//行序列2
-        col_idx1: null//竖直序列2
+        row_idx: null, // 行序列1
+        col_idx: null, // 竖直序列1
+        row_idx1: null, // 行序列2
+        col_idx1: null, // 竖直序列2
       },
       isTempDrag: false,
       areaActiveIndex: null,
-      isDrag: false,//标记是否点击了一次
-      row_idx: null,//行序列1
-      col_idx: null,//竖直序列1
-      row_idx1: null,//行序列2
-      col_idx1: null//竖直序列2
-    }
+      isDrag: false, // 标记是否点击了一次
+      row_idx: null, // 行序列1
+      col_idx: null, // 竖直序列1
+      row_idx1: null, // 行序列2
+      col_idx1: null, // 竖直序列2
+    };
   },
-  components:{
-    UploadImgComponents,BindLinkComponents
+  components: {
+    UploadImgComponents, BindLinkComponents,
   },
-  computed:{
-    W(){
-      return this.CTX.width
+  computed: {
+    W() {
+      return this.CTX.width;
     },
-    H(){
-      return this.CTX.height
+    H() {
+      return this.CTX.height;
     },
-    colWH(){
-      return this.CTX.width/this.CTX.row
+    colWH() {
+      return this.CTX.width / this.CTX.row;
     },
-    colH(){
-      return this.CTX.height/this.CTX.row
+    colH() {
+      return this.CTX.height / this.CTX.row;
     },
-    rowW(){
-      return this.CTX.width/this.CTX.col
-    }
+    rowW() {
+      return this.CTX.width / this.CTX.col;
+    },
   },
-  watch:{
-    row:{
-      immediate:true,
-      handler(val){
+  watch: {
+    row: {
+      immediate: true,
+      handler(val) {
+        this.rest();
+        this.INIT();
+      },
+    },
+    type: {
 
-        this.rest()
-        this.INIT()
-      }
+      handler(val) {
+        this.rest();
+        this.INIT();
+      },
     },
-    type:{
-
-      handler(val){
-        this.rest()
-        this.INIT()
-      }
+    col: {
+      immediate: true,
+      handler(val) {
+        this.rest();
+        this.INIT();
+      },
     },
-    col:{
-      immediate:true,
-      handler(val){
-        this.rest()
-        this.INIT()
-      }
-    },
-    selecteds:{
-      immediate:true,
-      deep:true,
-      handler(val){
+    selecteds: {
+      immediate: true,
+      deep: true,
+      handler(val) {
         // console.log('333333333333333selecteds发生修改',val);
-      }
+      },
     },
-    //传上去
-    'CTX.selects':{
-      deep:true,
-      handler(val){
-        this.$emit('selectChange',objTranslate(val))
-      }
-    }
+    // 传上去
+    'CTX.selects': {
+      deep: true,
+      handler(val) {
+        this.$emit('selectChange', objTranslate(val));
+      },
+    },
   },
-  methods:{
-    bindLink(){
+  methods: {
+    bindLink() {
       // console.log(this.areaActiveIndex);
-      this.$emit('openBindLink',this.areaActiveIndex)
+      this.$emit('openBindLink', this.areaActiveIndex);
     },
-    rest(){
-
-      this.CTX=null;
-      this.currentArea={};
-      this.areaActiveIndex=null;
-      this.showConfig=false;
-      this.isDrag=false;//标记是否点击了一次
-      this.row_idx=null;//行序列1
-      this.col_idx=null;//竖直序列1
-      this.row_idx1=null;//行序列2
-      this.col_idx1=null;//竖直序列2
-
-
+    rest() {
+      this.CTX = null;
+      this.currentArea = {};
+      this.areaActiveIndex = null;
+      this.showConfig = false;
+      this.isDrag = false;// 标记是否点击了一次
+      this.row_idx = null;// 行序列1
+      this.col_idx = null;// 竖直序列1
+      this.row_idx1 = null;// 行序列2
+      this.col_idx1 = null;// 竖直序列2
     },
     enterBox() {
       this.mouseInBox = true;
@@ -196,24 +191,23 @@ export default {
     leaveBox() {
       // this.clearTempArea()
       this.mouseInBox = false;
-
     },
     /**
      * 清理
      */
     clearTempArea() {
       this.tempArea = {
-        row_idx: null,//行序列1
-        col_idx: null,//竖直序列1
-        row_idx1: null,//行序列2
-        col_idx1: null//竖直序列2
+        row_idx: null, // 行序列1
+        col_idx: null, // 竖直序列1
+        row_idx1: null, // 行序列2
+        col_idx1: null, // 竖直序列2
       };
 
       this.tempAreaObj = {
         x: null,
         y: null,
         x1: null,
-        y1: null
+        y1: null,
       };
 
       this.isTempDrag = false;
@@ -227,44 +221,41 @@ export default {
      * @param idx2
      */
     enter(idx1, idx2) {
-
       // console.log(idx1, idx2);
 
-      //没有进入编辑模式则不算
+      // 没有进入编辑模式则不算
       if (!this.isTempDrag) return;
 
       this.tempArea.row_idx1 = idx1;
       this.tempArea.col_idx1 = idx2;
 
 
-      //分别获取最小的x和y的取值范围
-      let y = Math.min(this.tempArea.row_idx1, this.tempArea.row_idx);
-      let y1 = Math.max(this.tempArea.row_idx1, this.tempArea.row_idx);//需要多数一格
+      // 分别获取最小的x和y的取值范围
+      const y = Math.min(this.tempArea.row_idx1, this.tempArea.row_idx);
+      let y1 = Math.max(this.tempArea.row_idx1, this.tempArea.row_idx);// 需要多数一格
 
-      let x = Math.min(this.tempArea.col_idx1, this.tempArea.col_idx);
-      let x1 = Math.max(this.tempArea.col_idx1, this.tempArea.col_idx);//需要多数一格
+      const x = Math.min(this.tempArea.col_idx1, this.tempArea.col_idx);
+      let x1 = Math.max(this.tempArea.col_idx1, this.tempArea.col_idx);// 需要多数一格
 
-      //大的数值加1
+      // 大的数值加1
       y1++;
       x1++;
 
 
-      //碰撞检测来一下
+      // 碰撞检测来一下
       if (!this.CTX.is_conflict({
         x,
         y,
         x1,
-        y1
+        y1,
       })) {
         this.tempAreaObj = {
           x,
           y,
           x1,
-          y1
+          y1,
         };
       }
-
-
     },
     domainFunc(url) {
       // console.log(url);
@@ -275,12 +266,9 @@ export default {
       if (!res.data.path) return;
       if (_.isEmpty(this.currentArea)) return;
 
-      this.$set(this.currentArea, 'bgimg', domain(res.data.path));//不这样数据装死不动
-
-
+      this.$set(this.currentArea, 'bgimg', domain(res.data.path));// 不这样数据装死不动
     },
     activeArea(idx, area) {
-
       // console.log('4444444444444')
       this.areaActiveIndex = idx;
       this.currentArea = area;
@@ -294,22 +282,21 @@ export default {
       this.clearIdx();
     },
     getTip(area) {
-      let width = (area.x1 - area.x) * this.rowW*2;
-      let height = (area.y1 - area.y) * this.colH*2;
+      let width = (area.x1 - area.x) * this.rowW * 2;
+      let height = (area.y1 - area.y) * this.colH * 2;
 
-      width = parseInt(width)
-      height = parseInt(height)
+      width = parseInt(width);
+      height = parseInt(height);
 
       return `${width}x${height}像素或同等比例`;
-
     },
     getAreaStyle(area) {
       // console.log(area);
-      let styleObj = {
-        left: area.x * this.rowW + 'px',
-        top: area.y * this.colH + 'px',
-        width: (area.x1 - area.x) * this.rowW + 'px',
-        height: (area.y1 - area.y) * this.colH + 'px',
+      const styleObj = {
+        left: `${area.x * this.rowW}px`,
+        top: `${area.y * this.colH}px`,
+        width: `${(area.x1 - area.x) * this.rowW}px`,
+        height: `${(area.y1 - area.y) * this.colH}px`,
       };
       // console.log(styleObj);
       // if(area.bgimg){
@@ -325,7 +312,7 @@ export default {
         this.row_idx = idx1;
         this.col_idx = idx2;
 
-        //考虑下tempArea
+        // 考虑下tempArea
         this.tempArea.row_idx = idx1;
         this.tempArea.col_idx = idx2;
         this.isTempDrag = true;
@@ -336,11 +323,10 @@ export default {
 
 
       if (this.isDrag) {
-
         this.clearTempArea();
 
-        //同一个区块点两次，也取消掉
-        //老大牛逼，说一个点也可以创建 2019.9.30
+        // 同一个区块点两次，也取消掉
+        // 老大牛逼，说一个点也可以创建 2019.9.30
         // if (this.row_idx === idx1 && this.col_idx === idx2) {
         //   this.isDrag = false;
         //   return;
@@ -351,32 +337,28 @@ export default {
         this.col_idx1 = idx2;
         this.isDrag = false;
 
-        //分别获取最小的x和y的取值范围
-        let y = Math.min(this.row_idx1, this.row_idx);
-        let y1 = Math.max(this.row_idx1, this.row_idx);//需要多数一格
+        // 分别获取最小的x和y的取值范围
+        const y = Math.min(this.row_idx1, this.row_idx);
+        let y1 = Math.max(this.row_idx1, this.row_idx);// 需要多数一格
 
-        let x = Math.min(this.col_idx1, this.col_idx);
-        let x1 = Math.max(this.col_idx1, this.col_idx);//需要多数一格
+        const x = Math.min(this.col_idx1, this.col_idx);
+        let x1 = Math.max(this.col_idx1, this.col_idx);// 需要多数一格
 
-        //大的数值加1
+        // 大的数值加1
         y1++;
         x1++;
 
-        //创建矩形试试
-        //let tempArea = getAreaPoint(x,y,x1,y1,this.colWH);
+        // 创建矩形试试
+        // let tempArea = getAreaPoint(x,y,x1,y1,this.colWH);
 
-        //需要乘以单元格的长度，获得实际像素
-        let createRT = this.CTX.create_area(x, y, x1, y1);
+        // 需要乘以单元格的长度，获得实际像素
+        const createRT = this.CTX.create_area(x, y, x1, y1);
 
         createRT && this.dragSelect(x, y, x1, y1);
 
 
-        this.currentArea = this.CTX.selects[this.CTX.selects.length - 1];//新增的话，就把最新的给他
-
-
+        this.currentArea = this.CTX.selects[this.CTX.selects.length - 1];// 新增的话，就把最新的给他
       }
-
-
     },
     changeActive(idx1, idx2) {
 
@@ -406,18 +388,16 @@ export default {
 
       this.areaActiveIndex = -1;
     },
-    INIT(){
-      this.CTX = new MagicCube(this.row,this.col,this.width,this.width*this.row/this.col);//还有label。。真牛
-      this.CTX.selects = this.CTX.selects.concat(this.selecteds)
-      //window.CTX = this.CTX;
-    }
+    INIT() {
+      this.CTX = new MagicCube(this.row, this.col, this.width, this.width * this.row / this.col);// 还有label。。真牛
+      this.CTX.selects = this.CTX.selects.concat(this.selecteds);
+      // window.CTX = this.CTX;
+    },
   },
   created() {
-
-    this.INIT()
-
-  }
-}
+    this.INIT();
+  },
+};
 </script>
 
 <style lang="less" scoped>

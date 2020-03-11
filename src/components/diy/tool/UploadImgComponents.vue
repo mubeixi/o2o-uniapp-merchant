@@ -51,154 +51,153 @@
 </template>
 
 <script>
-  import { baseApiUrl } from '@/common/env';
-  import { createToken, get_Users_ID } from '@/common/fetch';
-  import { domain } from '@/common/utils';
+import { baseApiUrl } from '@/common/env';
+import { createToken, get_Users_ID } from '@/common/fetch';
+import { domain } from '@/common/utils';
 
-  function noop() {
-  }
+function noop() {
+}
 
-  export default {
-    props: {
-      mini: {
-        type: Boolean,
+export default {
+  props: {
+    mini: {
+      type: Boolean,
+    },
+    showDelIcon: {
+      type: Boolean,
+    },
+    small: {
+      type: Boolean,
+    },
+    idx2: {
+      default: -1,
+    },
+    data: {
+      type: Object,
+      default: () => ({}),
+    },
+    name: {
+      type: String,
+      default: 'image',
+    },
+    tip: {
+      type: String,
+      default: '',
+    },
+    imgUrl: {
+      type: String,
+      default: '',
+    },
+    type: {
+      type: String,
+      default: '',
+    },
+    multiple: {
+      type: Boolean,
+      default: false,
+    },
+    limit: {
+      type: Number,
+      default: 1,
+    },
+    onPreview: {
+      type: Function,
+      default: noop,
+    },
+    showFileList: {
+      type: Boolean,
+      default: true,
+    },
+    onSuccess: {
+      type: Function,
+      default: noop,
+    },
+    onRemove: {
+      type: Function,
+      default: noop,
+    },
+    cropperOption: {
+      type: Object,
+      default: () => ({ aspectRatio: 1 }),
+    },
+    cropper: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  data() {
+    return {
+      fileList: [],
+      baseURL: baseApiUrl,
+      // ajaxData: {
+      //   act:'upload_image',
+      //   ...this.data,
+      // },
+    };
+  },
+  computed: {
+    activeAttr: {
+      get() {
+        return this.$store.state.activeAttr;
       },
-      showDelIcon:{
-        type:Boolean
-      },
-      small: {
-        type: Boolean,
-      },
-      idx2: {
-        default: -1,
-      },
-      data: {
-        type: Object,
-        default: () => ({}),
-      },
-      name: {
-        type: String,
-        default: 'image',
-      },
-      tip: {
-        type: String,
-        default: '',
-      },
-      imgUrl: {
-        type: String,
-        default: '',
-      },
-      type: {
-        type: String,
-        default: '',
-      },
-      multiple: {
-        type: Boolean,
-        default: false,
-      },
-      limit: {
-        type: Number,
-        default: 1,
-      },
-      onPreview: {
-        type: Function,
-        default: noop,
-      },
-      showFileList: {
-        type: Boolean,
-        default: true,
-      },
-      onSuccess: {
-        type: Function,
-        default: noop,
-      },
-      onRemove: {
-        type: Function,
-        default: noop,
-      },
-      cropperOption: {
-        type: Object,
-        default: () => ({ aspectRatio: 1 })
-      },
-      cropper: {
-        type: Boolean,
-        default: false,
+      set: () => {
       },
     },
-    data() {
-      return {
-        fileList: [],
-        baseURL: baseApiUrl,
-        // ajaxData: {
-        //   act:'upload_image',
-        //   ...this.data,
-        // },
+    ajaxData() {
+      const param = {
+        Users_ID: get_Users_ID(),
+        act: 'upload_image',
+        env: 'wx_mp',
       };
+
+      const ajaxData = createToken(param);
+      // console.log(ajaxData);
+      return ajaxData;
     },
-    computed: {
-      activeAttr: {
-        get() {
-          return this.$store.state.activeAttr;
+
+  },
+  methods: {
+    remove() {
+      this.onSuccess.call(this, { data: { path: '' } }, this.idx2);
+    },
+    domainFunc(url) {
+      return domain(url);
+    },
+    exceedFunc() {
+      this.$fun.error({ msg: `最多上传${this.limit}个文件` });
+    },
+    error(err, file, fileList) {
+      this.$fun.error({
+        msg: JSON.stringify(err),
+        title: '上传失败',
+      });
+      // 写死试一下
+      const mock = {
+        data: {
+          path: 'https://knowledges.qd101.net/uploads/20190921/183707ef00bcaa47dc813d3dd50c0061.jpg',
         },
-        set: () => {
-        },
-      },
-      ajaxData() {
-        let param = {
-          Users_ID: get_Users_ID(),
-          act: 'upload_image',
-          env : 'wx_mp'
-        };
-
-        let ajaxData = createToken(param);
-        //console.log(ajaxData);
-        return ajaxData;
-      }
-
+      };
+      this.onSuccess.apply(this, mock);
     },
-    methods: {
-      remove(){
-        this.onSuccess.call(this,{data:{path:''}}, this.idx2);
-      },
-      domainFunc(url) {
-        return domain(url);
-      },
-      exceedFunc() {
-        this.$fun.error({ msg: '最多上传' + this.limit + '个文件' });
-      },
-      error(err, file, fileList) {
-        this.$fun.error({
-          msg: JSON.stringify(err),
-          title: '上传失败',
-        });
-        // 写死试一下
-        const mock = {
-          data: {
-            path: 'https://knowledges.qd101.net/uploads/20190921/183707ef00bcaa47dc813d3dd50c0061.jpg',
-          },
-        };
-        this.onSuccess.apply(this, mock);
-      },
-      change() {
-        console.log(22222222);
-        this.activeAttr.isSendAjax = false;
-      },
-      beforeUpload() {
-
-        console.log(33);
-
-        this.activeAttr.isSendAjax = true;
-      },
-      success(...params) {
-        console.log(params);
-        //这里其实等于，上传了很多图片。但是只是不显示而已，如果后续有必要可以考虑每次上传成功清空文件列表。
-        //this.$refs.upload.clearFiles()
-        this.onSuccess.call(this, params[0], this.idx2);
-      },
+    change() {
+      console.log(22222222);
+      this.activeAttr.isSendAjax = false;
     },
-    created() {
+    beforeUpload() {
+      console.log(33);
+
+      this.activeAttr.isSendAjax = true;
     },
-  };
+    success(...params) {
+      console.log(params);
+      // 这里其实等于，上传了很多图片。但是只是不显示而已，如果后续有必要可以考虑每次上传成功清空文件列表。
+      // this.$refs.upload.clearFiles()
+      this.onSuccess.call(this, params[0], this.idx2);
+    },
+  },
+  created() {
+  },
+};
 </script>
 
 <style lang="stylus" scoped>

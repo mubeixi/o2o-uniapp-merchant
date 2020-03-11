@@ -17,142 +17,140 @@
 </template>
 
 <script lang="ts">
-    import {Component, Vue} from 'vue-property-decorator';
-    import {mapState} from 'vuex';
-    import Notice from '@/assets/js/diy/notice';
-    import {deepCopy, mixinStyle} from '@/common/utils';
+import { Component, Vue } from 'vue-property-decorator';
+import { mapState } from 'vuex';
+import Notice from '@/assets/js/diy/notice';
+import { deepCopy, mixinStyle } from '@/common/utils';
 
     @Component({
-        props: {
-            index: {
-                required: true,
-            },
-            data: {
-                type: Object,
-                default: () => ({}),
-            },
+      props: {
+        index: {
+          required: true,
         },
-        data() {
-            return {
-                number: 0,
-                time:100,
-                marginLeft:0,
-                an:null,
-                notice: {},
-            };
+        data: {
+          type: Object,
+          default: () => ({}),
         },
-        computed: {
-            // style() {
-            //     return mixinStyle(this.notice.styleDefault, this.notice.style);
-            // },
-            activeAttr: {
-                get() {
-                    return this.$store.state.activeAttr;
-                },
-                set(nval) {
+      },
+      data() {
+        return {
+          number: 0,
+          time: 100,
+          marginLeft: 0,
+          an: null,
+          notice: {},
+        };
+      },
+      computed: {
+        // style() {
+        //     return mixinStyle(this.notice.styleDefault, this.notice.style);
+        // },
+        activeAttr: {
+          get() {
+            return this.$store.state.activeAttr;
+          },
+          set(nval) {
 
-                },
-            },
-            text() {
-                return {
-                    id: this.number,
-                    val: this.notice.value.list[this.number]
-                }
-            },
-            ...mapState(['editStatus']),
+          },
         },
-        watch: {
-            // 属性变化
-            activeAttr: {
-                deep: true,
-                handler(val) {
+        text() {
+          return {
+            id: this.number,
+            val: this.notice.value.list[this.number],
+          };
+        },
+        ...mapState(['editStatus']),
+      },
+      watch: {
+        // 属性变化
+        activeAttr: {
+          deep: true,
+          handler(val) {
 
-                },
-            },
-            notice:{
-                deep:true,
-                handler(val){
-                    console.log(342423)
-                }
+          },
+        },
+        notice: {
+          deep: true,
+          handler(val) {
+            console.log(342423);
+          },
+        },
+      },
+      components: {},
+      methods: {
+        startAn() { // 开始
+          const _self = this;
+          const width = document.getElementById('canvas').offsetWidth;
+          _self.an = setInterval(() => {
+            if (_self.marginLeft > width) {
+              _self.marginLeft = 0;
             }
+            _self.marginLeft += 2;
+          }, _self.time);
         },
-        components: {},
-        methods: {
-            startAn: function(){ // 开始
-                let _self = this;
-                let width = document.getElementById('canvas').offsetWidth;
-                _self.an = setInterval( function() {
-                    if (_self.marginLeft > width) {
-                        _self.marginLeft = 0;
-                    }
-                    _self.marginLeft += 2;
-                } , _self.time);
-            },
-            stopAn: function(){ // 停止
-                this.prevLeft = this.marginLeft;
-                this.marginLeft = 0;
-                clearInterval(this.an);
-                this.$emit('on-stop-An');
-            },
-            pauseAn: function(){ // 暂停动画
-                clearInterval(this.an);
-            },
-            itemClick: function( item, e ) {
-                this.$emit('on-item-click',item );
-            },
-
-            startMove() {
-                let _self = this;
-                setTimeout(function () {
-                    if (_self.number === _self.notice.value.list.length - 1) {
-                        _self.number = 0;
-                    } else {
-                        _self.number += 1;
-                    }
-                    _self.startMove();
-                }, 2000)
-            },
-            setData(item, index) {
-                // console.log('hehe',this.hr)
-                // @ts-ignore
-                this.$store.commit('activeAttr', this.notice);// 这里点击之后，setAttr马上就有响应。
-                // @ts-ignore
-                this.$store.commit('tabIndex', this.index);
-
-                // 用vuex就不要一层层传递了，头都晕了
-                // this.$emit('setData', this.img.attrData)
-            },
-            // ...mapActions(),
+        stopAn() { // 停止
+          this.prevLeft = this.marginLeft;
+          this.marginLeft = 0;
+          clearInterval(this.an);
+          this.$emit('on-stop-An');
         },
-        mounted() {
-            this.$nextTick().then(res => {
-                this.startMove()
-            })
-        }
+        pauseAn() { // 暂停动画
+          clearInterval(this.an);
+        },
+        itemClick(item, e) {
+          this.$emit('on-item-click', item);
+        },
+
+        startMove() {
+          const _self = this;
+          setTimeout(() => {
+            if (_self.number === _self.notice.value.list.length - 1) {
+              _self.number = 0;
+            } else {
+              _self.number += 1;
+            }
+            _self.startMove();
+          }, 2000);
+        },
+        setData(item, index) {
+          // console.log('hehe',this.hr)
+          // @ts-ignore
+          this.$store.commit('activeAttr', this.notice);// 这里点击之后，setAttr马上就有响应。
+          // @ts-ignore
+          this.$store.commit('tabIndex', this.index);
+
+          // 用vuex就不要一层层传递了，头都晕了
+          // this.$emit('setData', this.img.attrData)
+        },
+        // ...mapActions(),
+      },
+      mounted() {
+        this.$nextTick().then((res) => {
+          this.startMove();
+        });
+      },
 
     })
-    export default class NoticeComponent extends Vue {
-        created() {
-            //用这个来搞事啊
-            //funvm也是vue实例，而且不是根实例，是这个组件的实例，可以快捷的调用组件中的对象或者方法以及$ref
-            // @ts-ignore
-            Notice.prototype.funvm = this;
-            //Notice.prototype.vm = this;
-            // @ts-ignore
-            this.$store.commit('tabIndex', this.index);// 设置tabIndex，等于templData是二维数组，这个是二维数组的
-            // @ts-ignore
-            this.notice = deepCopy(new Notice(), this.data);
-            //重新绑定attrData.content，让修改可以同步到其他地方
-            this.notice.setIndex(0,{value:false,config:false})
+export default class NoticeComponent extends Vue {
+  created() {
+    // 用这个来搞事啊
+    // funvm也是vue实例，而且不是根实例，是这个组件的实例，可以快捷的调用组件中的对象或者方法以及$ref
+    // @ts-ignore
+    Notice.prototype.funvm = this;
+    // Notice.prototype.vm = this;
+    // @ts-ignore
+    this.$store.commit('tabIndex', this.index);// 设置tabIndex，等于templData是二维数组，这个是二维数组的
+    // @ts-ignore
+    this.notice = deepCopy(new Notice(), this.data);
+    // 重新绑定attrData.content，让修改可以同步到其他地方
+    this.notice.setIndex(0, { value: false, config: false });
 
 
-            this.$nextTick(function(){
-                this.startAn();
-            })
-
-        }
-
-    }
+    this.$nextTick(function () {
+      this.startAn();
+    });
+  }
+}
 </script>
 
 <style scoped lang="less">

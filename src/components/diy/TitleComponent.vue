@@ -15,87 +15,86 @@
 </template>
 
 <script lang="ts">
-    import {Component, Vue} from 'vue-property-decorator';
-    import {mapState} from 'vuex';
-    import Title from '@/assets/js/diy/title';
-    import {deepCopy,mixinStyle} from '@/common/utils';
-    import {domain} from '@/common/utils';
+import { Component, Vue } from 'vue-property-decorator';
+import { mapState } from 'vuex';
+import Title from '@/assets/js/diy/title';
+import { deepCopy, mixinStyle, domain } from '@/common/utils';
+
 
     @Component({
-        props: {
-            index: {
-                required: true,
-            },
-            data: {
-                type: Object,
-                default: () => ({}),
-            },
+      props: {
+        index: {
+          required: true,
         },
-        data() {
-            return {
-                title: {},
-            };
+        data: {
+          type: Object,
+          default: () => ({}),
         },
-        computed: {
-            moreData() {
+      },
+      data() {
+        return {
+          title: {},
+        };
+      },
+      computed: {
+        moreData() {
+          return this.title.value.more[0] || {};
+          // if(!this.title || !this.title.value || !this.title.value.more)return {};
+          // return this.title.value.more[0];//this.title.value?this.title.value.more[0]:{}
+        },
+        style() {
+          return mixinStyle(this.title.styleDefault, this.title.style);
+        },
+        activeAttr: {
+          get() {
+            return this.$store.state.activeAttr;
+          },
+          set(nval) {
 
-                return this.title.value.more[0] || {};
-                // if(!this.title || !this.title.value || !this.title.value.more)return {};
-                // return this.title.value.more[0];//this.title.value?this.title.value.more[0]:{}
-            },
-            style() {
-                return mixinStyle(this.title.styleDefault, this.title.style);
-            },
-            activeAttr: {
-                get() {
-                    return this.$store.state.activeAttr;
-                },
-                set(nval) {
-
-                },
-            },
-            ...mapState(['editStatus']),
+          },
         },
-        watch: {
-            // 属性变化
-            activeAttr: {
-                deep: true,
-                handler(val) {
+        ...mapState(['editStatus']),
+      },
+      watch: {
+        // 属性变化
+        activeAttr: {
+          deep: true,
+          handler(val) {
 
-                },
-            },
+          },
         },
-        components: {},
-        methods: {
-            domainFunc(url){
-                return domain(url)
-            },
-            setData(item, index) {
-                // console.log('hehe',this.hr)
-                // @ts-ignore
-                this.$store.commit('activeAttr', this.title);// 这里点击之后，setAttr马上就有响应。
-                // @ts-ignore
-                this.$store.commit('tabIndex', this.index);
+      },
+      components: {},
+      methods: {
+        domainFunc(url) {
+          return domain(url);
+        },
+        setData(item, index) {
+          // console.log('hehe',this.hr)
+          // @ts-ignore
+          this.$store.commit('activeAttr', this.title);// 这里点击之后，setAttr马上就有响应。
+          // @ts-ignore
+          this.$store.commit('tabIndex', this.index);
 
-                // 用vuex就不要一层层传递了，头都晕了
-                // this.$emit('setData', this.img.attrData)
-            },
-            // ...mapActions(),
+          // 用vuex就不要一层层传递了，头都晕了
+          // this.$emit('setData', this.img.attrData)
         },
+        // ...mapActions(),
+      },
 
     })
-    export default class TitleComponent extends Vue {
-        created() {
-            //用这个来搞事啊
-            //funvm也是vue实例，而且不是根实例，是这个组件的实例，可以快捷的调用组件中的对象或者方法以及$ref
-            Title.prototype.funvm = this;
-            //Title.prototype.vm = this;
-            this.$store.commit('tabIndex', this.index);// 设置tabIndex，等于templData是二维数组，这个是二维数组的
-            this.title = deepCopy(new Title(this), this.data);
-            //重新绑定attrData.content，让修改可以同步到其他地方
-            this.title.setIndex(0,{value:false,config:false})
-        }
-    }
+export default class TitleComponent extends Vue {
+  created() {
+    // 用这个来搞事啊
+    // funvm也是vue实例，而且不是根实例，是这个组件的实例，可以快捷的调用组件中的对象或者方法以及$ref
+    Title.prototype.funvm = this;
+    // Title.prototype.vm = this;
+    this.$store.commit('tabIndex', this.index);// 设置tabIndex，等于templData是二维数组，这个是二维数组的
+    this.title = deepCopy(new Title(this), this.data);
+    // 重新绑定attrData.content，让修改可以同步到其他地方
+    this.title.setIndex(0, { value: false, config: false });
+  }
+}
 </script>
 
 <style scoped lang="stylus">

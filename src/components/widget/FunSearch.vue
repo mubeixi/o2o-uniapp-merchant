@@ -58,114 +58,111 @@
 </template>
 
 <script lang="ts">
-    import {Component, Prop, Vue} from 'vue-property-decorator';
+import { Component, Prop, Vue } from 'vue-property-decorator';
 
 
     @Component({
-        filters:{
+      filters: {
 
-        }
+      },
     })
-    export default class FunSearch extends Vue {
-
+export default class FunSearch extends Vue {
         @Prop({
-            type: Array,
-            default: () => []
+          type: Array,
+          default: () => [],
         })
         columns
 
         @Prop({
-            type: String,
-            default: 'default'
+          type: String,
+          default: 'default',
         })
         size
 
         columnsData = []
+
         filter = {}
+
         op = {}
 
-        fontSizeFn(val){
-
-            if(val==='default') return '16px'
-            if(val==='small') return '14px'
-            if(val==='mini') return '12px'
+        fontSizeFn(val) {
+          if (val === 'default') return '16px';
+          if (val === 'small') return '14px';
+          if (val === 'mini') return '12px';
         }
 
-        //每次都回重新重置 重置选中的数据有问题
-        resets(){
-            this.$emit('reset');
+        // 每次都回重新重置 重置选中的数据有问题
+        resets() {
+          this.$emit('reset');
         }
+
         reset(is_init) {
-            //重置没反应
-            //this.$emit('reset');
-            this.columnsData = []
+          // 重置没反应
+          // this.$emit('reset');
+          this.columnsData = [];
 
-            this.columns.map(v => {
-                if (v.search !== false) {
-                    if (!v.search) {
-                        this.$set(v, 'search', {operate: '='})
-                    }
-                    // if (typeof v.search === 'string') {
-                    //     this.$set(v, 'search', {operate: v.search})
-                    // }
-                    // if (!v.search.operate) {
-                    //     this.$set(v.search, 'operate', '=')
-                    // }
-                    v.search.operate = v.search.operate.toUpperCase();
-                    if (!v.search.type) {
-                        this.$set(v.search, 'type', 'input')
-                    }
-                    let value = v.search.operate === 'BETWEEN' ? [] : '';
-                    this.$set(v, 'value', value);
-                    // if (v.search.type === 'date') {
-                    //     v.search.operate = 'RANGE';
-                    //     this.$set(v, 'opened', false);
-                    // }
+          this.columns.map((v) => {
+            if (v.search !== false) {
+              if (!v.search) {
+                this.$set(v, 'search', { operate: '=' });
+              }
+              // if (typeof v.search === 'string') {
+              //     this.$set(v, 'search', {operate: v.search})
+              // }
+              // if (!v.search.operate) {
+              //     this.$set(v.search, 'operate', '=')
+              // }
+              v.search.operate = v.search.operate.toUpperCase();
+              if (!v.search.type) {
+                this.$set(v.search, 'type', 'input');
+              }
+              const value = v.search.operate === 'BETWEEN' ? [] : '';
+              this.$set(v, 'value', value);
+              // if (v.search.type === 'date') {
+              //     v.search.operate = 'RANGE';
+              //     this.$set(v, 'opened', false);
+              // }
 
-                    this.columnsData.push(v)
-                }
-                //return v;
-            })
-
-
-            // if(!is_init){
-            //     this.$emit('reset');
-            // }
+              this.columnsData.push(v);
+            }
+            // return v;
+          });
 
 
+          // if(!is_init){
+          //     this.$emit('reset');
+          // }
         }
 
         submit() {
-            let filter = {};
-            let op = {};
-            for (let item of this.columnsData) {
-                let val = item.value;
-                if (typeof val === 'object') {
-                    let n = false;
-                    for (let inp of val) {
-                        if (inp) {
-                            n = true;
-                            break;
-                        }
-                    }
-                    val = n ? val.join(',') : '';
+          const filter = {};
+          const op = {};
+          for (const item of this.columnsData) {
+            let val = item.value;
+            if (typeof val === 'object') {
+              let n = false;
+              for (const inp of val) {
+                if (inp) {
+                  n = true;
+                  break;
                 }
-                if (!val) {
-                    continue;
-                }
-                filter[item.name] = val;
-                op[item.name] = item.search.operate;
+              }
+              val = n ? val.join(',') : '';
             }
-            this.$emit('submit', {filter: filter, op: op});
+            if (!val) {
+              continue;
+            }
+            filter[item.name] = val;
+            op[item.name] = item.search.operate;
+          }
+          this.$emit('submit', { filter, op });
         }
 
 
         mounted() {
-            this.reset(true);
+          this.reset(true);
         }
-
-
-    }
+}
 </script>
 
 <style lang="less" scoped>

@@ -77,16 +77,16 @@
 </template>
 
 <script lang="ts">
-    import {
-        Vue,
-        Component,
-        Watch,
-        Prop
-    } from 'vue-property-decorator';
-    export default class AddIndustryCate extends Vue{
-        value=''
+import {
+  Vue,
+  Component,
+  Watch,
+  Prop,
+} from 'vue-property-decorator';
 
-    }
+export default class AddIndustryCate extends Vue {
+        value=''
+}
 </script>
 
 <style scoped lang="less">

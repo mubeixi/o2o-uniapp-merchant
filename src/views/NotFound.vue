@@ -12,38 +12,33 @@
 
 <script lang="ts">
 
-    import {
-        Component,
-        Vue
-    } from 'vue-property-decorator';
-    import {
-        Action,
-        State
-    } from 'vuex-class'
+import {
+  Component,
+  Vue,
+} from 'vue-property-decorator';
+import {
+  Action,
+  State,
+} from 'vuex-class';
 
 
     @Component({
-        mixins:[],
-        components: {
+      mixins: [],
+      components: {
 
-        }
+      },
     })
 
 
-    export default class NotFound extends Vue {
+export default class NotFound extends Vue {
+  static backFn() {
+    window.history.back();
+  }
 
-
-        backFn(){
-            window.history.back()
-        }
-
-        goHome(){
-            window.location.href = location.origin
-        }
-
-
-
-    }
+  static goHome() {
+    window.location.href = window.location.origin;
+  }
+}
 </script>
 <style lang="stylus" scoped>
 .container
@@ -65,7 +60,6 @@
       margin-right 15px
 
 
-
 .wrap
   position absolute
   left 0
@@ -77,4 +71,3 @@
   background-size cover
   background-position center
 </style>
-

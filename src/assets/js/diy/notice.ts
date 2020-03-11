@@ -38,9 +38,7 @@ function setAttrData() {
         model: this.style.bgColor,
         editType: 'style',
         editKey: 'bgColor',
-        editCB: item => {
-          return item.model?item.model:'none'
-        },
+        editCB: item => (item.model ? item.model : 'none'),
       },
       {
         type: 'color',
@@ -103,7 +101,7 @@ function setAttrData() {
 
 function attrData(options = {}) {
   // @ts-ignore
-  const {value, config, attrData} = options;
+  const { value, config, attrData } = options;
   // console.log(value, config, attrData);
   if (value !== false) setValue.call(this);
   if (config !== false) setConfig.call(this);
@@ -144,8 +142,8 @@ class Notice extends Common {
   }
 
   value = {
-    content:'公告内容',
-    list: ['通知公告1', '通知公告2', '通知公告3', '通知公告4'],//存优惠券数组
+    content: '公告内容',
+    list: ['通知公告1', '通知公告2', '通知公告3', '通知公告4'], // 存优惠券数组
   }
 
 

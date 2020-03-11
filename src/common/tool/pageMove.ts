@@ -1,15 +1,14 @@
 // @ts-nocheck
 
-import { getStyle } from '../utils'
+import { getStyle } from '../utils';
 
-const $ = el=>document.querySelectorAll(el)
+const $ = el => document.querySelectorAll(el);
 
-let sortEl
-const pageMoveArr = {}
+let sortEl;
+const pageMoveArr = {};
 
 export class pageMove {
-
-  constructor(){
+  constructor() {
 
   }
 
@@ -123,7 +122,7 @@ export class pageMove {
       pageMoveArr.input.cb && pageMoveArr.input.cb(that.x, that.y);
     } catch (err) {
       if (globalVal.dragClassName) {
-        const {cb} = pageMoveArr[globalVal.dragClassName];
+        const { cb } = pageMoveArr[globalVal.dragClassName];
         cb && cb(that.x, that.y);
       }
     }
@@ -144,7 +143,7 @@ export class pageMove {
   static initSort() {
     const that = pageMove;
 
-    //这里只允许搜索框拖拽
+    // 这里只允许搜索框拖拽
     sortEl = document.querySelectorAll('.canvas > section.noborder');
     console.log(sortEl);// 所有的元素，批量添加拖动事件监听
     Array.from(sortEl).map((v) => {
@@ -164,7 +163,7 @@ export class pageMove {
     );
     pageMove.canvasScrollTop = pageMove.canvas.scrollTop;
 
-    console.log(e)
+    console.log(e);
 
     // const that = pageMove;
     //
@@ -180,27 +179,24 @@ export class pageMove {
     //   }
     //   return;
     // }
-
-
   }
 
   static sortDrag(e) {
-
     // console.log(e);
 
-    let TARGET = e.target;
+    const TARGET = e.target;
 
     const sectionEl = document.querySelectorAll('.canvas > section')[0];
 
-    let preBoundingClientRect = sectionEl.getBoundingClientRect()
+    const preBoundingClientRect = sectionEl.getBoundingClientRect();
 
-    //在这里插入一下拖动搜索框的逻辑
-    if(TARGET.className.indexOf('search')>-1 && TARGET.className.indexOf('absolute')>-1){
-      console.log(e.clientY,pageMove.canvasScrollTop)
-      //因为绝对定位只能参照上一层，特别麻烦。
-      let TOP = e.clientY-$('.main')[0].offsetTop+(0-preBoundingClientRect.top);
-      if(TOP >= 0){
-        TARGET.style.top = TOP+'px';
+    // 在这里插入一下拖动搜索框的逻辑
+    if (TARGET.className.indexOf('search') > -1 && TARGET.className.indexOf('absolute') > -1) {
+      console.log(e.clientY, pageMove.canvasScrollTop);
+      // 因为绝对定位只能参照上一层，特别麻烦。
+      const TOP = e.clientY - $('.main')[0].offsetTop + (0 - preBoundingClientRect.top);
+      if (TOP >= 0) {
+        TARGET.style.top = `${TOP}px`;
       }
       return;
     }
@@ -226,39 +222,33 @@ export class pageMove {
     }
 
 
-
     that.vm.$data.sort.sortIndex = index;
   }
 
   static sortDragend(e) {
-
     const that = pageMove;
     e.preventDefault();
     e.stopPropagation();
 
 
-
-    let downIndex=false;
+    let downIndex = false;
     downIndex = that.vm.$data.sort;// 原来在的位置
     let sortIndex = false;
     sortIndex = that.vm.$data.sort;// 需要被拖动到的位置
 
 
-    let TARGET = e.target;
+    const TARGET = e.target;
 
-    //在这里插入一下拖动搜索框的逻辑
-    if(TARGET.className.indexOf('search')>-1 && TARGET.className.indexOf('absolute')>-1){
-
-      //需要更新一下商品
-      if(TARGET.id.indexOf('searchWrap')!==-1){
-        if(downIndex!==false){
-          that.vm.clickPlugin(downIndex)
+    // 在这里插入一下拖动搜索框的逻辑
+    if (TARGET.className.indexOf('search') > -1 && TARGET.className.indexOf('absolute') > -1) {
+      // 需要更新一下商品
+      if (TARGET.id.indexOf('searchWrap') !== -1) {
+        if (downIndex !== false) {
+          that.vm.clickPlugin(downIndex);
         }
-
       }
       return;
     }
-
 
 
     if (downIndex == sortIndex) {
@@ -293,7 +283,6 @@ export class pageMove {
 
     that.vm.$data.sort.sortIndex = -1;
     that.vm.$data.editData.display = 'none';
-
   }
 
   /**
@@ -327,4 +316,3 @@ export class pageMove {
     // console.log('释放')
   }
 }
-

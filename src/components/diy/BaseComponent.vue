@@ -31,105 +31,101 @@
 </template>
 
 <script lang="ts">
-    import {Component, Vue} from 'vue-property-decorator';
-    import {mapState} from 'vuex';
-    import Base from '@/assets/js/diy/base';
-    import {deepCopy, domain} from '@/common/utils';
+import { Component, Vue } from 'vue-property-decorator';
+import { mapState } from 'vuex';
+import Base from '@/assets/js/diy/base';
+import { deepCopy, domain } from '@/common/utils';
 
-    import {
-      getProductCountInfo
-    } from "../../api/product";
+import {
+  getProductCountInfo,
+} from '../../api/product';
 
     @Component({
-        props: {
-            index: {
-                required: true,
-            },
-            data: {
-                type: Object,
-                default: () => ({}),
-            },
+      props: {
+        index: {
+          required: true,
         },
-        data() {
-            return {
-                base: {},
-                info:{}
-            };
+        data: {
+          type: Object,
+          default: () => ({}),
         },
-        computed: {
-            className() {
-                return 'style' + this.base.config.style
-            },
-            W() {
-                let ele = document.getElementById('canvas');
-                if (ele) {
-                    return ele.offsetWidth;
-                } else {
-                    return 375;
-                }
-            },
-            style() {
-                // return deepCopyStrict(this.coupon.styleDefault, this.coupon.style);
-            },
-            activeAttr: {
-                get() {
-                    return this.$store.state.activeAttr;
-                },
-                set(nval) {
+      },
+      data() {
+        return {
+          base: {},
+          info: {},
+        };
+      },
+      computed: {
+        className() {
+          return `style${this.base.config.style}`;
+        },
+        W() {
+          const ele = document.getElementById('canvas');
+          if (ele) {
+            return ele.offsetWidth;
+          }
+          return 375;
+        },
+        style() {
+          // return deepCopyStrict(this.coupon.styleDefault, this.coupon.style);
+        },
+        activeAttr: {
+          get() {
+            return this.$store.state.activeAttr;
+          },
+          set(nval) {
 
-                },
-            },
-            ...mapState(['editStatus']),
+          },
         },
-        filters: {
-            str2num(val) {
-                return parseInt(val)
-            }
+        ...mapState(['editStatus']),
+      },
+      filters: {
+        str2num(val) {
+          return parseInt(val);
         },
-        watch: {
-            // 属性变化
-            activeAttr: {
-                deep: true,
-                handler(val) {
+      },
+      watch: {
+        // 属性变化
+        activeAttr: {
+          deep: true,
+          handler(val) {
 
-                },
-            },
+          },
         },
-        components: {},
-        methods: {
-            domainFunc(url) {
-                return domain(url)
-            },
-            setData(item, index) {
-                // @ts-ignore
-                this.$store.commit('activeAttr', this.base);// 这里点击之后，setAttr马上就有响应。
-                // @ts-ignore
-                this.$store.commit('tabIndex', this.index);
-            },
-            // ...mapActions(),
+      },
+      components: {},
+      methods: {
+        domainFunc(url) {
+          return domain(url);
         },
+        setData(item, index) {
+          // @ts-ignore
+          this.$store.commit('activeAttr', this.base);// 这里点击之后，setAttr马上就有响应。
+          // @ts-ignore
+          this.$store.commit('tabIndex', this.index);
+        },
+        // ...mapActions(),
+      },
 
     })
-    export default class BaseComponent extends Vue {
-        created() {
-            //用这个来搞事啊
-            //funvm也是vue实例，而且不是根实例，是这个组件的实例，可以快捷的调用组件中的对象或者方法以及$ref
-            Base.prototype.funvm = this;
-            this.$store.commit('tabIndex', this.index);// 设置tabIndex，等于templData是二维数组，这个是二维数组的
-            this.base = deepCopy(new Base(), this.data);
-            //重新绑定attrData.content，让修改可以同步到其他地方
-            this.base.setIndex(0,{value:false,config:false})
+export default class BaseComponent extends Vue {
+  created() {
+    // 用这个来搞事啊
+    // funvm也是vue实例，而且不是根实例，是这个组件的实例，可以快捷的调用组件中的对象或者方法以及$ref
+    Base.prototype.funvm = this;
+    this.$store.commit('tabIndex', this.index);// 设置tabIndex，等于templData是二维数组，这个是二维数组的
+    this.base = deepCopy(new Base(), this.data);
+    // 重新绑定attrData.content，让修改可以同步到其他地方
+    this.base.setIndex(0, { value: false, config: false });
 
-            getProductCountInfo().then(res=>{
-              console.log(res)
+    getProductCountInfo().then((res) => {
+      console.log(res);
 
-              this.info = res.data
-
-            })
-
-
-        }
-    }
+      this.info = res.data;
+    });
+  }
+}
 </script>
 
 <style scoped lang="less">

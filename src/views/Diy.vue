@@ -38,102 +38,108 @@
 </template>
 
 <script lang="ts">
-    import {
-        Component,
-        Vue
-    } from 'vue-property-decorator';
-    import {
-        Action,
-        State
-    } from 'vuex-class'
+import {
+  Component,
+  Vue,
+} from 'vue-property-decorator';
+import {
+  Action,
+  State,
+} from 'vuex-class';
 
-    import SetAttrComponent from '@/components/SetAttrComponent.vue'; // @ is an alias to /src
-    import PreviewComponent from '@/components/PreviewComponent.vue';
-    import CommonAttrComponent from '@/components/CommonAttrComponent.vue';
-    import PluginsComponent from '@/components/PluginsComponent.vue';
-    import RightComponent from '@/components/RightComponent.vue';
+import Cookies from 'js-cookie';
+import QrcodeVue from 'qrcode.vue';
+import SetAttrComponent from '@/components/SetAttrComponent.vue'; // @ is an alias to /src
+import PreviewComponent from '@/components/PreviewComponent.vue';
+import CommonAttrComponent from '@/components/CommonAttrComponent.vue';
+import PluginsComponent from '@/components/PluginsComponent.vue';
+import RightComponent from '@/components/RightComponent.vue';
 
-    import {ss} from '@/common/tool/ss';
-    import {front_url} from '../common/env';
+import { ss } from '@/common/tool/ss';
+import { front_url, isDev } from '../common/env';
 
-    // const front_url = process.env.VUE_APP_FRONT_URL
+// const front_url = process.env.VUE_APP_FRONT_URL
 
-    import Cookies from 'js-cookie';
-    import QrcodeVue from 'qrcode.vue';
-    import {serialize} from '@/common/utils';
-    import {tmplDiyMixin} from '@/common/mixin';
-    import {isDev} from '../common/env';
+import { serialize } from '@/common/utils';
+import { tmplDiyMixin } from '@/common/mixin';
 
 
     @Component({
-        mixins:[tmplDiyMixin],
-        components: {
-            PluginsComponent,
-            SetAttrComponent,
-            PreviewComponent,
-            RightComponent,
-            CommonAttrComponent,
-            QrcodeVue
-        }
+      mixins: [tmplDiyMixin],
+      components: {
+        PluginsComponent,
+        SetAttrComponent,
+        PreviewComponent,
+        RightComponent,
+        CommonAttrComponent,
+        QrcodeVue,
+      },
     })
-    export default class Home extends Vue {
-
+export default class Home extends Vue {
         is_dev = isDev
+
         preUrl = ''
+
         centerDialogVisible = false
+
         previewActiveIndex = null
 
         @Action('setMode') setMode
+
         @Action('setComponentTitle') setComponentTitle
 
         @State('activeAttr') activeAttr
+
         @State('mode') mode
+
         @State('editStatus') editStatus
+
         @State('componentTitle') componentTitle
 
-        clearPlugin(){
-            this.$refs.preview.clearPlugin()
+        clearPlugin() {
+          this.$refs.preview.clearPlugin();
         }
 
         mounted() {
 
         }
+
         created() {
-            this.setpreUrl();
+          this.setpreUrl();
         }
 
-        setpreUrl(){
+        setpreUrl() {
+          const Home_ID = ss.get('Home_ID');
+          const Users_ID = Cookies.get('Users_ID');
 
-            let Home_ID =  ss.get('Home_ID'),
-                Users_ID = Cookies.get('Users_ID');
-
-            let obj = {Home_ID,users_id:Users_ID};
-            let str = serialize(obj);
-            if(str)str = '?'+str;
-            console.log('更新preurl',this.preUrl);
-            this.preUrl = front_url+'pages/page/page'+str;
-
+          const obj = { Home_ID, users_id: Users_ID };
+          let str = serialize(obj);
+          if (str)str = `?${str}`;
+          console.log('更新preurl', this.preUrl);
+          this.preUrl = `${front_url}pages/page/page${str}`;
         }
-        setAct(idx,mode,title,desc){
-            this.previewActiveIndex=idx;
-            this.setMode(mode);
-            this.setComponentTitle({title,desc})
+
+        setAct(idx, mode, title, desc) {
+          this.previewActiveIndex = idx;
+          this.setMode(mode);
+          this.setComponentTitle({ title, desc });
         }
+
         // 这个数据一直往上传，这么辛苦
         setDataEv(data) {
 
         }
-        setPreEv(val){
 
-            this.setpreUrl();
-            this.centerDialogVisible = val
-        }
-        saveData(use,pre){
-            //@ts-ignore
-            this.$refs.preview.uploadConfig(use,pre);
+        setPreEv(val) {
+          this.setpreUrl();
+          this.centerDialogVisible = val;
         }
 
-    }
+        saveData(use, pre) {
+          // @ts-ignore
+          this.$refs.preview.uploadConfig(use, pre);
+        }
+}
 </script>
 <style lang="stylus" scoped>
 

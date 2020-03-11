@@ -24,7 +24,7 @@ function setAttrData() {
       {
         type: 'input',
         text: '视频地址',
-        is_video:true,
+        is_video: true,
         inputType: 'text',
         patternFunc(val) {
           const reg = /(http|https):\/\/([\w.]+\/?)\S*/;
@@ -54,7 +54,7 @@ function setAttrData() {
 
 function attrData(options = {}) {
   // @ts-ignore
-  const {value, config, attrData} = options;
+  const { value, config, attrData } = options;
   // console.log(value, config, attrData);
   if (value !== false) setValue.call(this);
   if (config !== false) setConfig.call(this);
@@ -67,12 +67,12 @@ class Video extends Common {
   // activeIndex = 0;
 
   style = {
-    //bgColor: '',
+    // bgColor: '',
     height: '',
   }
 
   styleDefault = {
-    //bgColor: '#fff',
+    // bgColor: '#fff',
     height: '0',
   }
 

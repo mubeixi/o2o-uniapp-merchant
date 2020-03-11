@@ -52,7 +52,6 @@
             </el-form-item>
 
 
-
             <el-button type="primary" size="small" style="margin-left: 40px;">立即支付</el-button>
 
         </el-form>
@@ -60,23 +59,25 @@
 </template>
 
 <script lang="ts">
-    import {
-        Vue,
-        Component,
-        Watch,
-        Prop
-    } from 'vue-property-decorator';
-    export default class Pay extends Vue{
-        form={}
-        resource=''
-        tableData=[
-            {
-                cate: '女式羽绒服、潮鞋、美妆、箱包、连衣裙、针织衫、女式羽绒服、潮鞋、美妆、箱包、连衣裙、针织衫女式羽绒服、潮鞋、美妆、箱包、连衣裙、针织衫',
-                money: '￥1000'
-            }
-        ]
+import {
+  Vue,
+  Component,
+  Watch,
+  Prop,
+} from 'vue-property-decorator';
 
-    }
+export default class Pay extends Vue {
+        form={}
+
+        resource=''
+
+        tableData=[
+          {
+            cate: '女式羽绒服、潮鞋、美妆、箱包、连衣裙、针织衫、女式羽绒服、潮鞋、美妆、箱包、连衣裙、针织衫女式羽绒服、潮鞋、美妆、箱包、连衣裙、针织衫',
+            money: '￥1000',
+          },
+        ]
+}
 </script>
 
 <style scoped lang="less">

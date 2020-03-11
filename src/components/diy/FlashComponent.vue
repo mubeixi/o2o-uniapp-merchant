@@ -66,266 +66,265 @@
 </template>
 
 <script lang="ts">
-    import {Component, Vue} from 'vue-property-decorator';
-    import {mapState} from 'vuex';
-    import Flash from '@/assets/js/diy/flash';
-    import {deepCopy, domain} from '@/common/utils';
-    import {getSpikeProd} from '@/common/fetch';
+import { Component, Vue } from 'vue-property-decorator';
+import { mapState } from 'vuex';
+import Flash from '@/assets/js/diy/flash';
+import { deepCopy, domain } from '@/common/utils';
+import { getSpikeProd } from '@/common/fetch';
 
     @Component({
-        props: {
-            index: {
-                required: true,
-            },
-            data: {
-                type: Object,
-                default: () => ({}),
-            },
+      props: {
+        index: {
+          required: true,
         },
-        data() {
-            return {
-                goodsList: [],
-                infoTmpl:{
-                    Products_ID:33,
-                    Products_Name:'商品名称',
-                    Products_PriceX:99.99,
-                    Products_BriefDescription:'商品简介',
-                    ImgPath:''
-                },
-                goods: {},
-                fullWidth: 0
-            };
+        data: {
+          type: Object,
+          default: () => ({}),
         },
-        computed: {
-            limit(){
-              return this.goods.value.cate_id ? this.goods.value.limit :6
-            },
-            isEmpeyInfo() {
-                return !this.goods.config.attr.title.show && !this.goods.config.attr.desc.show && !this.goods.config.attr.price.show && !this.goods.config.attr.buybtn.show
-            },
-            w() {
-                return this.fullWidth;
-            },
-            itemw() {
-                let full = this.fullWidth;
-
-                if(this.goods.config.showmode == 'border-bgwhite'){
-                    full -= 4;//4个边框
-                }
-
-                if (this.goods.config.style === 2) {
-                    //内边不是乘以3 而是1
-                    return (full - this.goods.style.wrapmargin * 2 - this.goods.style.margin * 1) / 2 + 'px';
-                }
-
-                if (this.goods.config.style === 1) {
-                    //内边不是乘以3 而是1
-                    return (full - this.goods.style.wrapmargin * 2)+'px'
-                }
-
-                if (this.goods.config.style === 3) {
-                    //内边不是乘以3 而是1
-                    return 140+'px';
-                }
-
-                if (this.goods.config.style === 4) {
-                    return full / 3 + 'px';
-                }
-                return 'auto';
-
-            },
-            itemH(){
-                let full = this.fullWidth;
-                let ratio = this.goods.config.ratio?this.goods.config.ratio:1;
-                let num = 0;
-
-                if(this.goods.config.showmode == 'border-bgwhite'){
-                    full -= 4;//4个边框
-                }
-                if (this.goods.config.style === 2) {
-                    //内边不是乘以3 而是1
-                    num = (full - this.goods.style.wrapmargin * 2 - this.goods.style.margin * 1) / 2
-                }
-
-                if (this.goods.config.style === 3) {
-                    //内边不是乘以3 而是1
-                    num = 140
-                }
-
-                if (this.goods.config.style === 1) {
-                    //内边不是乘以3 而是1
-                    num = full - this.goods.style.wrapmargin * 2
-                }
-
-                if (this.goods.config.style === 4) {
-                    num = full / 3;
-                }
-                if(num>0){
-                    return num*ratio +'px';
-                }
-                return 'auto';
-            },
-            className() {
-                return 'style' + this.goods.config.style
-            },
-            style() {
-                // return deepCopyStrict(this.coupon.styleDefault, this.coupon.style);
-            },
-            activeAttr: {
-                get() {
-                    return this.$store.state.activeAttr;
-                },
-                set(nval) {
-
-                },
-            },
-            ...mapState(['editStatus']),
+      },
+      data() {
+        return {
+          goodsList: [],
+          infoTmpl: {
+            Products_ID: 33,
+            Products_Name: '商品名称',
+            Products_PriceX: 99.99,
+            Products_BriefDescription: '商品简介',
+            ImgPath: '',
+          },
+          goods: {},
+          fullWidth: 0,
+        };
+      },
+      computed: {
+        limit() {
+          return this.goods.value.cate_id ? this.goods.value.limit : 6;
         },
-        filters: {
-            str2num(val) {
-                return parseInt(val)
+        isEmpeyInfo() {
+          return !this.goods.config.attr.title.show && !this.goods.config.attr.desc.show && !this.goods.config.attr.price.show && !this.goods.config.attr.buybtn.show;
+        },
+        w() {
+          return this.fullWidth;
+        },
+        itemw() {
+          let full = this.fullWidth;
+
+          if (this.goods.config.showmode == 'border-bgwhite') {
+            full -= 4;// 4个边框
+          }
+
+          if (this.goods.config.style === 2) {
+            // 内边不是乘以3 而是1
+            return `${(full - this.goods.style.wrapmargin * 2 - this.goods.style.margin * 1) / 2}px`;
+          }
+
+          if (this.goods.config.style === 1) {
+            // 内边不是乘以3 而是1
+            return `${full - this.goods.style.wrapmargin * 2}px`;
+          }
+
+          if (this.goods.config.style === 3) {
+            // 内边不是乘以3 而是1
+            return `${140}px`;
+          }
+
+          if (this.goods.config.style === 4) {
+            return `${full / 3}px`;
+          }
+          return 'auto';
+        },
+        itemH() {
+          let full = this.fullWidth;
+          const ratio = this.goods.config.ratio ? this.goods.config.ratio : 1;
+          let num = 0;
+
+          if (this.goods.config.showmode == 'border-bgwhite') {
+            full -= 4;// 4个边框
+          }
+          if (this.goods.config.style === 2) {
+            // 内边不是乘以3 而是1
+            num = (full - this.goods.style.wrapmargin * 2 - this.goods.style.margin * 1) / 2;
+          }
+
+          if (this.goods.config.style === 3) {
+            // 内边不是乘以3 而是1
+            num = 140;
+          }
+
+          if (this.goods.config.style === 1) {
+            // 内边不是乘以3 而是1
+            num = full - this.goods.style.wrapmargin * 2;
+          }
+
+          if (this.goods.config.style === 4) {
+            num = full / 3;
+          }
+          if (num > 0) {
+            return `${num * ratio}px`;
+          }
+          return 'auto';
+        },
+        className() {
+          return `style${this.goods.config.style}`;
+        },
+        style() {
+          // return deepCopyStrict(this.coupon.styleDefault, this.coupon.style);
+        },
+        activeAttr: {
+          get() {
+            return this.$store.state.activeAttr;
+          },
+          set(nval) {
+
+          },
+        },
+        ...mapState(['editStatus']),
+      },
+      filters: {
+        str2num(val) {
+          return parseInt(val);
+        },
+      },
+      watch: {
+        'goods.value': {
+          immediate: true,
+          deep: true,
+          handler(val) {
+            console.log('spike_id is 2222222222');
+            if (!val) return;
+            const {
+              list = [], cate_id = [], limit, spike_id,
+            } = val;
+
+            console.log('spike_id is', spike_id);
+
+            // console.log(list,cate_id,limit)
+
+            // 如果值还没有设置的话
+            // 取消注释，拉取默认的商品。这样的话，方便有主题让人应用
+            // && cate_id.length===0
+            if (!spike_id) {
+              return;
             }
+
+            // pageSize: cate_id.length===0 && limit ? limit : 6
+            const param = {};
+            // if (cate_id.length>0) {
+            //     param.Cate_ID = cate_id.store(',')
+            // } else {
+            //
+            // }
+
+            // param.Products_ID = list.store(',');
+
+            getSpikeProd({ spike_id }).then((res) => {
+              this.goodsList = res.data;
+            });
+          },
         },
-        watch: {
-            'goods.value': {
-                immediate: true,
-                deep: true,
-                handler(val) {
+        // 属性变化
+        activeAttr: {
+          deep: true,
+          handler(val) {
 
-                    console.log('spike_id is 2222222222')
-                    if (!val) return;
-                    let {list = [], cate_id=[], limit,spike_id} = val;
-
-                    console.log('spike_id is',spike_id)
-
-                    //console.log(list,cate_id,limit)
-
-                    //如果值还没有设置的话
-                    //取消注释，拉取默认的商品。这样的话，方便有主题让人应用
-                // && cate_id.length===0
-                    if(!spike_id){
-                        return;
-                    }
-
-                    // pageSize: cate_id.length===0 && limit ? limit : 6
-                    let param = {}
-                    // if (cate_id.length>0) {
-                    //     param.Cate_ID = cate_id.store(',')
-                    // } else {
-                    //
-                    // }
-
-                    //param.Products_ID = list.store(',');
-
-                    getSpikeProd({spike_id}).then(res => {
-                        this.goodsList = res.data
-                    })
-
-                }
-            },
-            // 属性变化
-            activeAttr: {
-                deep: true,
-                handler(val) {
-
-                },
-            },
+          },
         },
-        components: {},
-        methods: {
-            itemMarginObj(idx) {
-
-                let conf = this.goods.style.margin;
-                let {left = conf, top = conf, bottom = 0, right = conf} = {}
-                // {marginBottom:tool.style.margin+'px',marginLeft:idx%2==0?tool.style.margin:tool.style.margin/2+'px',marginRight:idx%2==0?tool.style.margin/2:tool.style.margin+'px'}
-                switch (this.goods.config.style) {
-                    case 1:
-                        // top = 0;
-                        left = 0;
-                        right = 0;
-                        break;
-                    case 4:
-                        // top = 0;
-                        bottom = 0;
-                        left = 0;
-                        break;
-                    case 3:
-                        // top = 0;
-                        left = 0;
-                        right = 0;
-                        break;
-                    case 2:
-                        //console.log(idx)
-                        // top = 0;
-                        left = idx % 2 == 0 ? 0 : conf / 2;
-                        right = idx % 2 == 0 ? conf / 2 : 0;
-                        break;
-                }
-                // console.log({
-                //     marginTop: top + 'px',
-                //     marginBottom: bottom + 'px',
-                //     marginLeft: left + 'px',
-                //     marginRight: right + 'px'
-                // })
-                //6666
-                if(idx===0 )top = 0
-                //这个需要是2
-                if(idx===1 && this.goods.config.style==2 )top = 0
-                return {
-                    marginTop: top + 'px',
-                    marginBottom: bottom + 'px',
-                    marginLeft: left + 'px',
-                    marginRight: right + 'px'
-                }
-
-            },
-            getPic(jsonstr) {
-                if (!jsonstr) return '';
-                let obj = JSON.parse(jsonstr);
-                if (!obj || !obj.ImgPath || obj.ImgPath.length < 1) return '';
-
-                return domain(obj.ImgPath[0])
-            },
-            domainFunc(url) {
-                if(!url){
-                    return 'http://www.qiyeban.com/uploadfiles/wkbq6nc2kc/image/20190930095641111.png';//展位图替换掉吧。。
-                }
-
-                return domain(url)
-            },
-            setData(item, index) {
-                // console.log('hehe',this.search)
-                // @ts-ignore
-                this.$store.commit('activeAttr', this.goods);// 这里点击之后，setAttr马上就有响应。
-
-                // @ts-ignore
-                this.$store.commit('tabIndex', this.index);
-
-                // 用vuex就不要一层层传递了，头都晕了
-                // this.$emit('setData', this.img.attrData)
-            },
-            // ...mapActions(),
+      },
+      components: {},
+      methods: {
+        itemMarginObj(idx) {
+          const conf = this.goods.style.margin;
+          let {
+            left = conf, top = conf, bottom = 0, right = conf,
+          } = {};
+          // {marginBottom:tool.style.margin+'px',marginLeft:idx%2==0?tool.style.margin:tool.style.margin/2+'px',marginRight:idx%2==0?tool.style.margin/2:tool.style.margin+'px'}
+          switch (this.goods.config.style) {
+            case 1:
+              // top = 0;
+              left = 0;
+              right = 0;
+              break;
+            case 4:
+              // top = 0;
+              bottom = 0;
+              left = 0;
+              break;
+            case 3:
+              // top = 0;
+              left = 0;
+              right = 0;
+              break;
+            case 2:
+              // console.log(idx)
+              // top = 0;
+              left = idx % 2 == 0 ? 0 : conf / 2;
+              right = idx % 2 == 0 ? conf / 2 : 0;
+              break;
+          }
+          // console.log({
+          //     marginTop: top + 'px',
+          //     marginBottom: bottom + 'px',
+          //     marginLeft: left + 'px',
+          //     marginRight: right + 'px'
+          // })
+          // 6666
+          if (idx === 0)top = 0;
+          // 这个需要是2
+          if (idx === 1 && this.goods.config.style == 2)top = 0;
+          return {
+            marginTop: `${top}px`,
+            marginBottom: `${bottom}px`,
+            marginLeft: `${left}px`,
+            marginRight: `${right}px`,
+          };
         },
+        getPic(jsonstr) {
+          if (!jsonstr) return '';
+          const obj = JSON.parse(jsonstr);
+          if (!obj || !obj.ImgPath || obj.ImgPath.length < 1) return '';
+
+          return domain(obj.ImgPath[0]);
+        },
+        domainFunc(url) {
+          if (!url) {
+            return 'http://www.qiyeban.com/uploadfiles/wkbq6nc2kc/image/20190930095641111.png';// 展位图替换掉吧。。
+          }
+
+          return domain(url);
+        },
+        setData(item, index) {
+          // console.log('hehe',this.search)
+          // @ts-ignore
+          this.$store.commit('activeAttr', this.goods);// 这里点击之后，setAttr马上就有响应。
+
+          // @ts-ignore
+          this.$store.commit('tabIndex', this.index);
+
+          // 用vuex就不要一层层传递了，头都晕了
+          // this.$emit('setData', this.img.attrData)
+        },
+        // ...mapActions(),
+      },
 
     })
-    export default class FlashComponent extends Vue {
-        created() {
-            let _self = this;
-            this.$nextTick().then(res => {
-                _self.fullWidth = document.getElementById('canvas').offsetWidth;
-            })
+export default class FlashComponent extends Vue {
+  created() {
+    const _self = this;
+    this.$nextTick().then((res) => {
+      _self.fullWidth = document.getElementById('canvas').offsetWidth;
+    });
 
-            //用这个来搞事啊
-            //funvm也是vue实例，而且不是根实例，是这个组件的实例，可以快捷的调用组件中的对象或者方法以及$ref
-            Flash.prototype.funvm = this;
-            //Goods.prototype.vm = this;
-            this.$store.commit('tabIndex', this.index);// 设置tabIndex，等于templData是二维数组，这个是二维数组的
+    // 用这个来搞事啊
+    // funvm也是vue实例，而且不是根实例，是这个组件的实例，可以快捷的调用组件中的对象或者方法以及$ref
+    Flash.prototype.funvm = this;
+    // Goods.prototype.vm = this;
+    this.$store.commit('tabIndex', this.index);// 设置tabIndex，等于templData是二维数组，这个是二维数组的
 
-            this.goods = deepCopy(new Flash(), this.data);
-            //重新绑定attrData.content，让修改可以同步到其他地方
-            this.goods.setIndex(0,{value:false,config:false})
-        }
-    }
+    this.goods = deepCopy(new Flash(), this.data);
+    // 重新绑定attrData.content，让修改可以同步到其他地方
+    this.goods.setIndex(0, { value: false, config: false });
+  }
+}
 </script>
 
 <style scoped lang="less">
@@ -350,8 +349,6 @@
       background: none !important;
     }
   }
-
-
 
 
   *::-webkit-scrollbar {

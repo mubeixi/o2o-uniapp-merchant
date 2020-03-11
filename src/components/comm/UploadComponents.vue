@@ -76,82 +76,82 @@
 
 <script lang="ts">
 
-  import {Component, Vue, Prop} from 'vue-property-decorator';
-  import {mapActions, mapState} from 'vuex';
-  import { baseApiUrl } from '@/common/env';
-  import {createToken, GET_ACCESS_TOKEN, get_Users_ID} from '@/common/fetch';
-  import { domain,objTranslate} from '@/common/utils';
+import { Component, Vue, Prop } from 'vue-property-decorator';
+import { mapActions, mapState } from 'vuex';
+import { baseApiUrl } from '@/common/env';
+import { createToken, GET_ACCESS_TOKEN, get_Users_ID } from '@/common/fetch';
+import { domain, objTranslate } from '@/common/utils';
+
+import fun from '../../common/fun';
 
 
-  function noop() {
-  }
-
-  import fun from "../../common/fun";
+function noop() {
+}
 
   @Component({
-      computed: {
-          width(){
-              const conf = {mini:80,minimal:32,small:100}
-              return conf[this.size]?conf[this.size]:80
-          },
-          activeAttr: {
-              get() {
-                  return this.$store.state.activeAttr;
-              },
-              set: () => {
-              },
-          },
-          ajaxData() {
-              let act = this.type==='video'?'upload_video':'upload_image'
-              let param = {
-                  Users_ID: get_Users_ID(),
-                  act: act,
-                  env : 'wx_mp',
-                  access_token:GET_ACCESS_TOKEN()
-              };
-              let ajaxData = createToken(param);
-              return ajaxData;
-          }
-
+    computed: {
+      width() {
+        const conf = { mini: 80, minimal: 32, small: 100 };
+        return conf[this.size] ? conf[this.size] : 80;
       },
-      watch:{
-          // hasList:{
-          //     immediate:true,
-          //     deep:true,
-          //     handler(val){
-          //         this.fileList = val.map((img,idx)=>{
-          //             return {
-          //                 url:domain(img),
-          //                 name:(new Date()).getTime()+idx
-          //             }
-          //         })
-          //     }
-          // }
-      }
+      activeAttr: {
+        get() {
+          return this.$store.state.activeAttr;
+        },
+        set: () => {
+        },
+      },
+      ajaxData() {
+        const act = this.type === 'video' ? 'upload_video' : 'upload_image';
+        const param = {
+          Users_ID: get_Users_ID(),
+          act,
+          env: 'wx_mp',
+          access_token: GET_ACCESS_TOKEN(),
+        };
+        const ajaxData = createToken(param);
+        return ajaxData;
+      },
+
+    },
+    watch: {
+      // hasList:{
+      //     immediate:true,
+      //     deep:true,
+      //     handler(val){
+      //         this.fileList = val.map((img,idx)=>{
+      //             return {
+      //                 url:domain(img),
+      //                 name:(new Date()).getTime()+idx
+      //             }
+      //         })
+      //     }
+      // }
+    },
   })
 
-  export default class UploadComponents extends Vue{
-
+export default class UploadComponents extends Vue {
       @Prop({
-          type:String,
-          default:'image'
+        type: String,
+        default: 'image',
       })
       elName:string
+
       @Prop({
-          type:Boolean,
-          default:false
+        type: Boolean,
+        default: false,
       })
       disabled:boolean
 
       @Prop({
-          type:String,
-          default:'image'
+        type: String,
+        default: 'image',
       })
       type:string
 
       @Prop({
-          type:String,
-          default:''
+        type: String,
+        default: '',
       })
       tip:string
 
@@ -159,57 +159,57 @@
       imgUrl:string
 
       @Prop({
-          type:Boolean,
-          default:true
+        type: Boolean,
+        default: true,
       })
       showFileList:boolean
 
       @Prop({
-          type:Array,
-          default:()=>[]
+        type: Array,
+        default: () => [],
       })
       imgs:object
 
 
       @Prop({
-          type:Number,
-          default:1
+        type: Number,
+        default: 1,
       })
       limit:number
 
       @Prop({
-          type:Function,
-          default:noop
+        type: Function,
+        default: noop,
       })
       onSuccess:any
 
       @Prop({
-          type:Function,
-          default:noop
+        type: Function,
+        default: noop,
       })
       onRemove:any
 
       @Prop({
-          type:String,
-          default:'image/png, image/jpeg'
+        type: String,
+        default: 'image/png, image/jpeg',
       })
       accept:string
 
       @Prop({
-          type:Object,
-          default:()=>{aspectRatio:1}
+        type: Object,
+        default: () => { 1; },
       })
       cropperOption:object
 
       @Prop({
-          type:Number,
-          default:-1
+        type: Number,
+        default: -1,
       })
       idx2:number
 
       @Prop({
-          type:String,
-          default:'default'
+        type: String,
+        default: 'default',
       })
       size:string
 
@@ -220,166 +220,167 @@
       cropper:boolean
 
       @Prop({
-          type:Array,
-          default:()=>[]
+        type: Array,
+        default: () => [],
       })
       hasList:any
 
       fileList = []
 
-      //file_temp_list = []
+      // file_temp_list = []
       Len = 0
 
 
       baseURL = baseApiUrl
 
       preShow = false
+
       dialogImageUrl = ''
 
-      restFileList(files){
-          let rt = []
-          if(!files){
-              files = this.$refs.upload.uploadFiles;
-          }
+      restFileList(files) {
+        const rt = [];
+        if (!files) {
+          files = this.$refs.upload.uploadFiles;
+        }
 
-          console.log(files)
+        console.log(files);
 
-          let url,video_url,video_img;
-          for(var item of files ){
+        let url; let video_url; let video_img;
+        for (const item of files) {
+          // cover_url如果不是第一次上传是没有的
+          video_url = item.url;
 
-              //cover_url如果不是第一次上传是没有的
-              video_url = item.url
-
-              if(this.type==='video'){
-                  if(item.url.indexOf('blob')!=-1){
-                      if(item.status==='success' && item.response && item.response.data){
-                          video_url = item.response.data.video_url
-                          video_img = item.response.data.video_img
-                      }else{
-                          continue;
-                      }
-                  }
-                  rt.push({video_url:video_url,video_img:video_img})
-              }else if(this.type === 'image'){
-
-                  url = item.url
-                  if(item.url.indexOf('blob')!=-1){
-
-                      if(item.status==='success' && item.response && item.response.data){
-                          url = item.response.data.path
-                      }else{
-                          continue;
-                      }
-
-                  }
-                  rt.push({url:url})
-
+          if (this.type === 'video') {
+            if (item.url.indexOf('blob') != -1) {
+              if (item.status === 'success' && item.response && item.response.data) {
+                video_url = item.response.data.video_url;
+                video_img = item.response.data.video_img;
+              } else {
+                continue;
               }
-
+            }
+            rt.push({ video_url, video_img });
+          } else if (this.type === 'image') {
+            url = item.url;
+            if (item.url.indexOf('blob') != -1) {
+              if (item.status === 'success' && item.response && item.response.data) {
+                url = item.response.data.path;
+              } else {
+                continue;
+              }
+            }
+            rt.push({ url });
           }
-          this.Len = rt.length;
-          return rt;
+        }
+        this.Len = rt.length;
+        return rt;
       }
 
-      domainFn(url){
-          return domain(url)
+      domainFn(url) {
+        return domain(url);
       }
 
       /**
        *
        * @param list array
        */
-      handleInitHas(list){
-          console.log(list)
-          this.fileList = list.map((url,idx)=>{
-              return {
-                  url:url,
-                  name:Date.now()+idx
-              }
-          })
-          this.Len = this.fileList.length
+      handleInitHas(list) {
+        console.log(list);
+        this.fileList = list.map((url, idx) => ({
+          url,
+          name: Date.now() + idx,
+        }));
+        this.Len = this.fileList.length;
       }
-      progressFn(event, file, fileList){
-          console.log(event,file,fileList)
-      }
-      onPreview(file){
-          console.log(file)
-          this.dialogImageUrl = file.url;
-          this.preShow = true;
-      }
-      doRemove(file){
-          //直接调组件内部的方法
-          this.$refs.upload.handleRemove(file)
-      }
-      handleRemove(file, fileList){
-          console.log(file, fileList)
-          let call = this.onSuccess
-          // let idx = null;
-          // for(var i of fileList){
-          //     if(fileList[i].url == file.url){
-          //         idx =i ;
-          //         break;
-          //     }
-          // }
-          call && call(this.restFileList(fileList));
-      }
-      domainFunc(url) {
-          return domain(url);
-      }
-      exceedFunc() {
-          fun.error({ msg: '最多上传' + this.limit + '个文件' });
-      }
-      error(err, file, fileList) {
-          console.log('上传失败了')
-          fun.error({
-              msg: JSON.stringify(err),
-              title: '上传失败',
-          });
-          // // 写死试一下
-          // const mock = {
-          //     data: {
-          //         path: 'https://knowledges.qd101.net/uploads/20190921/183707ef00bcaa47dc813d3dd50c0061.jpg',
-          //     },
-          // };
-          // this.onSuccess.apply(this, mock);
-      }
-      change(file, fileList) {
 
-          this.Len = fileList.length
-          //this.file_temp_list = fileList
-          // let _self = this
-          // for(var fileItem of fileList){
-          //     if(fileItem.response && fileItem.response.data){
-          //         console.log(fileItem)
-          //         fileItem.type = _self.type
-          //         //this.file_temp_list.push(file.url)
-          //     }
-          // }
-          // console.log(fileList)
-          // this.file_temp_list = fileList.map(file=>{
-          //     return file.url
-          // })
+      progressFn(event, file, fileList) {
+        console.log(event, file, fileList);
       }
+
+      onPreview(file) {
+        console.log(file);
+        this.dialogImageUrl = file.url;
+        this.preShow = true;
+      }
+
+      doRemove(file) {
+        // 直接调组件内部的方法
+        this.$refs.upload.handleRemove(file);
+      }
+
+      handleRemove(file, fileList) {
+        console.log(file, fileList);
+        const call = this.onSuccess;
+        // let idx = null;
+        // for(var i of fileList){
+        //     if(fileList[i].url == file.url){
+        //         idx =i ;
+        //         break;
+        //     }
+        // }
+        call && call(this.restFileList(fileList));
+      }
+
+      domainFunc(url) {
+        return domain(url);
+      }
+
+      exceedFunc() {
+        fun.error({ msg: `最多上传${this.limit}个文件` });
+      }
+
+      error(err, file, fileList) {
+        console.log('上传失败了');
+        fun.error({
+          msg: JSON.stringify(err),
+          title: '上传失败',
+        });
+        // // 写死试一下
+        // const mock = {
+        //     data: {
+        //         path: 'https://knowledges.qd101.net/uploads/20190921/183707ef00bcaa47dc813d3dd50c0061.jpg',
+        //     },
+        // };
+        // this.onSuccess.apply(this, mock);
+      }
+
+      change(file, fileList) {
+        this.Len = fileList.length;
+        // this.file_temp_list = fileList
+        // let _self = this
+        // for(var fileItem of fileList){
+        //     if(fileItem.response && fileItem.response.data){
+        //         console.log(fileItem)
+        //         fileItem.type = _self.type
+        //         //this.file_temp_list.push(file.url)
+        //     }
+        // }
+        // console.log(fileList)
+        // this.file_temp_list = fileList.map(file=>{
+        //     return file.url
+        // })
+      }
+
       beforeUpload() {
 
       }
+
       success(response, file, fileList) {
-          if(response.errorCode!=0){
-              fun.error({msg:response.msg})
-              return;
-          }
-          console.log('response is ',response,fileList)
-          let call = this.onSuccess
-          if(response && response.data){
-              call && call(this.restFileList(fileList));
-          }
-
+        if (response.errorCode != 0) {
+          fun.error({ msg: response.msg });
+          return;
+        }
+        console.log('response is ', response, fileList);
+        const call = this.onSuccess;
+        if (response && response.data) {
+          call && call(this.restFileList(fileList));
+        }
       }
 
-      created(){
-          //this.fileList = this.hasList
+      created() {
+        // this.fileList = this.hasList
       }
-  }
+}
 
 
 </script>

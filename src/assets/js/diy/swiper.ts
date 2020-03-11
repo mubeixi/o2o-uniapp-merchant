@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Common from './commonClass';
-import fun from "../../../common/fun";
+import fun from '../../../common/fun';
 
 function setValue() {
   // let value = {}
@@ -23,7 +23,7 @@ function setConfig() {
 function setAttrData() {
   const data = {
     title: '图片Banner',
-    labelSize:'L',
+    labelSize: 'L',
     content: [
       // {
       //   type: 'color',
@@ -41,27 +41,23 @@ function setAttrData() {
         //   pageEl.bindLinkDialogShow = true
         // },
         dialogCB: (coupon_list) => {
-
-
-
           this.value.list = [...coupon_list];
 
-          //这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
-          this.setIndex(0, {value:false,config:false});
+          // 这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
+          this.setIndex(0, { value: false, config: false });
           this.vm.$store.commit('activeAttr', this);// 传出去
         },
-        //这个按钮的功能，主要是新增元素
+        // 这个按钮的功能，主要是新增元素
         editCB: (pageEl) => {
-
-          if(this.value.list.length > 9){
-            fun.info({msg:'最多只允许十张图片'})
+          if (this.value.list.length > 9) {
+            fun.info({ msg: '最多只允许十张图片' });
             return;
           }
 
-          this.value.list.push({img_src: '', link: '', linkType: null});//新增一个空元素
+          this.value.list.push({ img_src: '', link: '', linkType: null });// 新增一个空元素
 
-          //这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
-          this.setIndex(0, {value:false,config:false});
+          // 这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
+          this.setIndex(0, { value: false, config: false });
           this.vm.$store.commit('activeAttr', this);// 传出去
         },
       },
@@ -71,36 +67,34 @@ function setAttrData() {
         label: '',
         value: this.value.list,
         bindCB: (dataType, type, path, tooltip, dataItem, pageEl, idx2) => {
-
-          console.log(dataType, type, path, tooltip, dataItem, pageEl, idx2)
+          console.log(dataType, type, path, tooltip, dataItem, pageEl, idx2);
           pageEl.bindLinkDialogShow = false;
 
-          //console.log(dataType, type, path, tooltip, dataItem,pageEl,idx2)
+          // console.log(dataType, type, path, tooltip, dataItem,pageEl,idx2)
           Vue.set(this.value.list[idx2], 'link', path);
           Vue.set(this.value.list[idx2], 'ext', dataItem);
           Vue.set(this.value.list[idx2], 'linkType', type);
           Vue.set(this.value.list[idx2], 'tooltip', tooltip);
 
-          //这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
-          this.setIndex(0, {value:false,config:false});
+          // 这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
+          this.setIndex(0, { value: false, config: false });
           this.vm.$store.commit('activeAttr', this);// 传出去
-
         },
         // 之类是输入的回调，可以根据需要决定写什么
         imgCB: (item, idx2) => {
-          console.log(item.data.path, idx2)
+          console.log(item.data.path, idx2);
           Vue.set(this.value.list[idx2], 'img_src', item.data.path);
 
-          //这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
-          this.setIndex(0, {value:false,config:false});
+          // 这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
+          this.setIndex(0, { value: false, config: false });
           this.vm.$store.commit('activeAttr', this);// 传出去
         },
         removeCB: (idx) => {
           this.value.list.splice(idx, 1);
-          //这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
-          this.setIndex(0, {value:false,config:false});
+          // 这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
+          this.setIndex(0, { value: false, config: false });
           this.vm.$store.commit('activeAttr', this);// 传出去
-        }
+        },
 
       },
 
@@ -111,7 +105,7 @@ function setAttrData() {
         editType: 'config',
         editKey: 'interval',
         model: this.config.interval,
-        inputCB: (item) => item.model
+        inputCB: item => item.model,
       },
       // {
       //   type: 'switch',
@@ -156,7 +150,7 @@ function setAttrData() {
 
 function attrData(options = {}) {
   // @ts-ignore
-  const {value, config, attrData} = options;
+  const { value, config, attrData } = options;
   // console.log(value, config, attrData);
   if (value !== false) setValue.call(this);
   if (config !== false) setConfig.call(this);
@@ -189,14 +183,14 @@ class Swiper extends Common {
   }
 
   config = {
-    loop: false,//是否循环
-    interval: 5,//切换时间
-    autoplay: true,//自动播放
-    //type: 1, //两种风格
+    loop: false, // 是否循环
+    interval: 5, // 切换时间
+    autoplay: true, // 自动播放
+    // type: 1, //两种风格
   }
 
   value = {
-    list: [{img_src: '', link: '', linkType: null},{img_src: '', link: '', linkType: null},{img_src: '', link: '', linkType: null}],//存优惠券数组
+    list: [{ img_src: '', link: '', linkType: null }, { img_src: '', link: '', linkType: null }, { img_src: '', link: '', linkType: null }], // 存优惠券数组
   }
 
 

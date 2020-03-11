@@ -74,352 +74,338 @@
 </template>
 
 <script lang="ts">
-    import {Component, Vue} from 'vue-property-decorator';
-    import {mapState} from 'vuex';
-    import Tab from '@/assets/js/diy/tab';
-    import {deepCopy, domain} from '@/common/utils';
-    import {getProductList} from '@/common/fetch';
+import { Component, Vue } from 'vue-property-decorator';
+import { mapState } from 'vuex';
+import Tab from '@/assets/js/diy/tab';
+import { deepCopy, domain } from '@/common/utils';
+import { getProductList } from '@/common/fetch';
 
     @Component({
-        props: {
-            index: {
-                required: true,
-            },
-            data: {
-                type: Object,
-                default: () => ({}),
-            },
+      props: {
+        index: {
+          required: true,
         },
-        data() {
-            return {
-                infoTmpl:{
-                    Products_ID:33,
-                    Products_Name:'商品名称',
-                    Products_PriceX:99.99,
-                    Products_BriefDescription:'商品简介',
-                    ImgPath:''
-                },
-                fullHeight:0,
-                tabActive: null,
-                currentTab: null,
-                goodsList: [],
-                tab: {style: {}, value: {list: []}, config: {}},
-                fullWidth: 0
-            };
+        data: {
+          type: Object,
+          default: () => ({}),
         },
-        computed: {
-            limit(){
-                return this.tab.value.list[this.tabActive].cate_id ? this.tab.value.list[this.tabActive].limit :6
-            },
-            goods() {
-                return {}
-            },
-            isEmpeyInfo() {
-                return this.tab.config.attr.title.show && !this.tab.config.attr.desc.show && !this.tab.config.attr.price.show && !this.tab.config.attr.buybtn.show
-            },
-            w() {
-                return this.fullWidth;
-            },
-            h(){
-                return this.fullHeight;
-            },
-            // itemw() {
-            //     let full = this.fullWidth;
-            //
-            //     if(this.tab.config.showmode == 'border-bgwhite'){
-            //         full -= 4;//4个边框
-            //     }
-            //
-            //     if (this.tab.config.style === 2) {
-            //         //内边不是乘以3 而是1
-            //         return (full - this.tab.style.wrapmargin * 2 - this.tab.style.margin * 1) / 2 + 'px';
-            //     }
-            //
-            //     if (this.tab.config.style === 1) {
-            //         //内边不是乘以3 而是1
-            //         return (full - this.tab.style.wrapmargin * 2)+'px'
-            //     }
-            //
-            //     if (this.tab.config.style === 3) {
-            //         //内边不是乘以3 而是1
-            //         return 140+'px';
-            //     }
-            //
-            //     if (this.tab.config.style === 4) {
-            //         return full / 3 + 'px';
-            //     }
-            //     return 'auto';
-            //
-            // },
-            itemH(){
-                let full = this.fullWidth;
-                let ratio = this.tab.config.ratio?this.tab.config.ratio:1;
-                let num = 0;
-
-                if(this.tab.config.showmode == 'border-bgwhite'){
-                    full -= 4;//4个边框
-                }
-
-                //内边不是乘以3 而是1
-                //375-90-30-10 = 245px
-                if (this.tab.config.style === 2) {
-
-                    if(this.tab.config.position === 'left'){
-                        num = (full - 90 - this.tab.style.wrapmargin * 2 - this.tab.style.margin * 1)/2;
-                    }else{
-                        num = (full -  this.tab.style.wrapmargin * 2 - this.tab.style.margin * 1) / 2
-                    }
-
-                }
-
-
-                if (this.tab.config.style === 1) {
-                    //内边不是乘以3 而是1
-                    num = (full - 90 - this.tab.style.wrapmargin * 2)
-                }
-                //
-                if (this.tab.config.style === 3) {
-                    //内边不是乘以3 而是1
-                    num = 140;
-                }
-
-                if (this.tab.config.style === 4) {
-                    num = full / 3;
-                }
-
-                if(num>0){
-                    return num*ratio +'px';
-                }
-
-                return 'auto';
-            },
-
-            itemw() {
-                let full = this.fullWidth;
-
-
-
-                if(this.tab.config.showmode == 'border-bgwhite'){
-                    full -= 4;//4个边框
-                }
-
-                //内边不是乘以3 而是1
-                //375-90-30-10 = 245px
-                if (this.tab.config.style === 2) {
-
-                    if(this.tab.config.position === 'left'){
-                        return (full - 90 - this.tab.style.wrapmargin * 2 - this.tab.style.margin * 1) / 2 + 'px';
-                    }
-
-                    return (full -  this.tab.style.wrapmargin * 2 - this.tab.style.margin * 1) / 2 + 'px';
-
-                }
-
-
-                if (this.tab.config.style === 1) {
-                    //内边不是乘以3 而是1
-                    return (full - 90 - this.tab.style.wrapmargin * 2)+'px'
-                }
-                //
-                if (this.tab.config.style === 3) {
-                    //内边不是乘以3 而是1
-                    return 140+'px';
-                }
-
-                if (this.tab.config.style === 4) {
-                      return full / 3 + 'px';
-                }
-                return 'auto';
-
-            },
-            className() {
-                return 'style' + this.tab.config.style
-            },
-            style() {
-                // return deepCopyStrict(this.coupon.styleDefault, this.coupon.style);
-            },
-            activeAttr: {
-                get() {
-                    return this.$store.state.activeAttr;
-                },
-                set(nval) {
-
-                },
-            },
-            ...mapState(['editStatus']),
+      },
+      data() {
+        return {
+          infoTmpl: {
+            Products_ID: 33,
+            Products_Name: '商品名称',
+            Products_PriceX: 99.99,
+            Products_BriefDescription: '商品简介',
+            ImgPath: '',
+          },
+          fullHeight: 0,
+          tabActive: null,
+          currentTab: null,
+          goodsList: [],
+          tab: { style: {}, value: { list: [] }, config: {} },
+          fullWidth: 0,
+        };
+      },
+      computed: {
+        limit() {
+          return this.tab.value.list[this.tabActive].cate_id ? this.tab.value.list[this.tabActive].limit : 6;
         },
-        filters: {
-            str2num(val) {
-                return parseInt(val)
+        goods() {
+          return {};
+        },
+        isEmpeyInfo() {
+          return this.tab.config.attr.title.show && !this.tab.config.attr.desc.show && !this.tab.config.attr.price.show && !this.tab.config.attr.buybtn.show;
+        },
+        w() {
+          return this.fullWidth;
+        },
+        h() {
+          return this.fullHeight;
+        },
+        // itemw() {
+        //     let full = this.fullWidth;
+        //
+        //     if(this.tab.config.showmode == 'border-bgwhite'){
+        //         full -= 4;//4个边框
+        //     }
+        //
+        //     if (this.tab.config.style === 2) {
+        //         //内边不是乘以3 而是1
+        //         return (full - this.tab.style.wrapmargin * 2 - this.tab.style.margin * 1) / 2 + 'px';
+        //     }
+        //
+        //     if (this.tab.config.style === 1) {
+        //         //内边不是乘以3 而是1
+        //         return (full - this.tab.style.wrapmargin * 2)+'px'
+        //     }
+        //
+        //     if (this.tab.config.style === 3) {
+        //         //内边不是乘以3 而是1
+        //         return 140+'px';
+        //     }
+        //
+        //     if (this.tab.config.style === 4) {
+        //         return full / 3 + 'px';
+        //     }
+        //     return 'auto';
+        //
+        // },
+        itemH() {
+          let full = this.fullWidth;
+          const ratio = this.tab.config.ratio ? this.tab.config.ratio : 1;
+          let num = 0;
+
+          if (this.tab.config.showmode == 'border-bgwhite') {
+            full -= 4;// 4个边框
+          }
+
+          // 内边不是乘以3 而是1
+          // 375-90-30-10 = 245px
+          if (this.tab.config.style === 2) {
+            if (this.tab.config.position === 'left') {
+              num = (full - 90 - this.tab.style.wrapmargin * 2 - this.tab.style.margin * 1) / 2;
+            } else {
+              num = (full - this.tab.style.wrapmargin * 2 - this.tab.style.margin * 1) / 2;
             }
+          }
+
+
+          if (this.tab.config.style === 1) {
+            // 内边不是乘以3 而是1
+            num = (full - 90 - this.tab.style.wrapmargin * 2);
+          }
+          //
+          if (this.tab.config.style === 3) {
+            // 内边不是乘以3 而是1
+            num = 140;
+          }
+
+          if (this.tab.config.style === 4) {
+            num = full / 3;
+          }
+
+          if (num > 0) {
+            return `${num * ratio}px`;
+          }
+
+          return 'auto';
         },
-        watch: {
-            // 'tab.value.list':{
-            //   handler(val){
-            //       this.loadGoodsList()
-            //   }
-            // },
-            currentTab: {
-                deep: true,
-                immediate: true,
-                handler(val) {
 
-                    this.loadGoodsList()
+        itemw() {
+          let full = this.fullWidth;
 
-                }
-            },
-            tabActive: {
-                deep: true,
-                immediate: true,
-                handler(val) {
 
-                    this.currentTab = this.tab.value.list[this.tabActive];
+          if (this.tab.config.showmode == 'border-bgwhite') {
+            full -= 4;// 4个边框
+          }
 
-                }
-            },
-            // 属性变化
-            activeAttr: {
-                deep: true,
-                handler(val) {
+          // 内边不是乘以3 而是1
+          // 375-90-30-10 = 245px
+          if (this.tab.config.style === 2) {
+            if (this.tab.config.position === 'left') {
+              return `${(full - 90 - this.tab.style.wrapmargin * 2 - this.tab.style.margin * 1) / 2}px`;
+            }
 
-                },
-            },
+            return `${(full - this.tab.style.wrapmargin * 2 - this.tab.style.margin * 1) / 2}px`;
+          }
+
+
+          if (this.tab.config.style === 1) {
+            // 内边不是乘以3 而是1
+            return `${full - 90 - this.tab.style.wrapmargin * 2}px`;
+          }
+          //
+          if (this.tab.config.style === 3) {
+            // 内边不是乘以3 而是1
+            return `${140}px`;
+          }
+
+          if (this.tab.config.style === 4) {
+            return `${full / 3}px`;
+          }
+          return 'auto';
         },
-        components: {},
-        methods: {
-            clickTab(item, idx) {
-
-                // if (this.tabActive === idx) {
-                //     return;
-                // }
-                this.$set(this,'tabActive',idx)
-                this.$set(this,'currentTab',item)
-                // this.tabActive = idx
-                // this.currentTab = item;
-            },
-            loadGoodsList() {
-
-
-                let val = this.currentTab;
-                if (!val) return;
-                let {list = [], cate_id=[], limit} = val;
-
-                console.log(list,cate_id,limit)
-                //如果值还没有设置的话
-                if(cate_id.length===0){
-                    this.goodsList = []
-                    return;
-                }
-
-                let param = {pageSize: cate_id.length===0 && limit ? limit : 6}
-                if (cate_id.length>0) {
-                    param.Cate_ID = cate_id.join(',')
-                } else {
-                    //param.Products_ID = list.store(',')
-                }
-
-                getProductList(param).then(res => {
-                    this.goodsList = res.data
-
-                })
-            },
-            itemMarginObj(idx) {
-
-                let conf = this.tab.style.margin;
-                let {left = conf, top = conf, bottom = 0, right = conf} = {}
-                // {marginBottom:tool.style.margin+'px',marginLeft:idx%2==0?tool.style.margin:tool.style.margin/2+'px',marginRight:idx%2==0?tool.style.margin/2:tool.style.margin+'px'}
-                switch (this.tab.config.style) {
-                    case 1:
-                        // top = 0;
-                        left = 0;
-                        right = 0;
-                        break;
-                    case 4:
-                        // top = 0;
-                        bottom = 0;
-                        left = 0;
-                        break;
-                    case 3:
-                        // top = 0;
-                        left = 0;
-                        right = 0;
-                        break;
-                    case 2:
-                        console.log(idx)
-                        // top = 0;
-                        left = idx % 2 == 0 ? 0 : conf / 2;
-                        right = idx % 2 == 0 ? conf / 2 : 0;
-                        break;
-                }
-                console.log({
-                    marginTop: top + 'px',
-                    marginBottom: bottom + 'px',
-                    marginLeft: left + 'px',
-                    marginRight: right + 'px'
-                })
-
-                //6666
-                if(idx===0 )top = 0
-                //这个需要是2
-                if(idx===1 && this.tab.config.style==2 )top = 0
-                return {
-                    marginTop: top + 'px',
-                    marginBottom: bottom + 'px',
-                    marginLeft: left + 'px',
-                    marginRight: right + 'px'
-                }
-
-            },
-            getPic(jsonstr) {
-                if (!jsonstr) return '';
-                let obj = JSON.parse(jsonstr);
-                if (!obj || !obj.ImgPath || obj.ImgPath.length < 1) return '';
-
-                return domain(obj.ImgPath[0])
-            },
-            domainFunc(url) {
-                if(!url){
-                    return 'http://www.qiyeban.com/uploadfiles/wkbq6nc2kc/image/20190930095641111.png';//展位图替换掉吧。。
-                }
-                // http://iph.href.lu/375x375?text=nopic
-                // http://iph.href.lu/375x375?text=375x375
-
-                return domain(url)
-            },
-            setData(item, index) {
-                // console.log('hehe',this.search)
-                // @ts-ignore
-                this.$store.commit('activeAttr', this.tab);// 这里点击之后，setAttr马上就有响应。
-
-                // @ts-ignore
-                this.$store.commit('tabIndex', this.index);
-
-                // 用vuex就不要一层层传递了，头都晕了
-                // this.$emit('setData', this.img.attrData)
-            },
-            // ...mapActions(),
+        className() {
+          return `style${this.tab.config.style}`;
         },
+        style() {
+          // return deepCopyStrict(this.coupon.styleDefault, this.coupon.style);
+        },
+        activeAttr: {
+          get() {
+            return this.$store.state.activeAttr;
+          },
+          set(nval) {
+
+          },
+        },
+        ...mapState(['editStatus']),
+      },
+      filters: {
+        str2num(val) {
+          return parseInt(val);
+        },
+      },
+      watch: {
+        // 'tab.value.list':{
+        //   handler(val){
+        //       this.loadGoodsList()
+        //   }
+        // },
+        currentTab: {
+          deep: true,
+          immediate: true,
+          handler(val) {
+            this.loadGoodsList();
+          },
+        },
+        tabActive: {
+          deep: true,
+          immediate: true,
+          handler(val) {
+            this.currentTab = this.tab.value.list[this.tabActive];
+          },
+        },
+        // 属性变化
+        activeAttr: {
+          deep: true,
+          handler(val) {
+
+          },
+        },
+      },
+      components: {},
+      methods: {
+        clickTab(item, idx) {
+          // if (this.tabActive === idx) {
+          //     return;
+          // }
+          this.$set(this, 'tabActive', idx);
+          this.$set(this, 'currentTab', item);
+          // this.tabActive = idx
+          // this.currentTab = item;
+        },
+        loadGoodsList() {
+          const val = this.currentTab;
+          if (!val) return;
+          const { list = [], cate_id = [], limit } = val;
+
+          console.log(list, cate_id, limit);
+          // 如果值还没有设置的话
+          if (cate_id.length === 0) {
+            this.goodsList = [];
+            return;
+          }
+
+          const param = { pageSize: cate_id.length === 0 && limit ? limit : 6 };
+          if (cate_id.length > 0) {
+            param.Cate_ID = cate_id.join(',');
+          } else {
+            // param.Products_ID = list.store(',')
+          }
+
+          getProductList(param).then((res) => {
+            this.goodsList = res.data;
+          });
+        },
+        itemMarginObj(idx) {
+          const conf = this.tab.style.margin;
+          let {
+            left = conf, top = conf, bottom = 0, right = conf,
+          } = {};
+          // {marginBottom:tool.style.margin+'px',marginLeft:idx%2==0?tool.style.margin:tool.style.margin/2+'px',marginRight:idx%2==0?tool.style.margin/2:tool.style.margin+'px'}
+          switch (this.tab.config.style) {
+            case 1:
+              // top = 0;
+              left = 0;
+              right = 0;
+              break;
+            case 4:
+              // top = 0;
+              bottom = 0;
+              left = 0;
+              break;
+            case 3:
+              // top = 0;
+              left = 0;
+              right = 0;
+              break;
+            case 2:
+              console.log(idx);
+              // top = 0;
+              left = idx % 2 == 0 ? 0 : conf / 2;
+              right = idx % 2 == 0 ? conf / 2 : 0;
+              break;
+          }
+          console.log({
+            marginTop: `${top}px`,
+            marginBottom: `${bottom}px`,
+            marginLeft: `${left}px`,
+            marginRight: `${right}px`,
+          });
+
+          // 6666
+          if (idx === 0)top = 0;
+          // 这个需要是2
+          if (idx === 1 && this.tab.config.style == 2)top = 0;
+          return {
+            marginTop: `${top}px`,
+            marginBottom: `${bottom}px`,
+            marginLeft: `${left}px`,
+            marginRight: `${right}px`,
+          };
+        },
+        getPic(jsonstr) {
+          if (!jsonstr) return '';
+          const obj = JSON.parse(jsonstr);
+          if (!obj || !obj.ImgPath || obj.ImgPath.length < 1) return '';
+
+          return domain(obj.ImgPath[0]);
+        },
+        domainFunc(url) {
+          if (!url) {
+            return 'http://www.qiyeban.com/uploadfiles/wkbq6nc2kc/image/20190930095641111.png';// 展位图替换掉吧。。
+          }
+          // http://iph.href.lu/375x375?text=nopic
+          // http://iph.href.lu/375x375?text=375x375
+
+          return domain(url);
+        },
+        setData(item, index) {
+          // console.log('hehe',this.search)
+          // @ts-ignore
+          this.$store.commit('activeAttr', this.tab);// 这里点击之后，setAttr马上就有响应。
+
+          // @ts-ignore
+          this.$store.commit('tabIndex', this.index);
+
+          // 用vuex就不要一层层传递了，头都晕了
+          // this.$emit('setData', this.img.attrData)
+        },
+        // ...mapActions(),
+      },
 
     })
-    export default class TabComponent extends Vue {
-        created() {
-            let _self = this;
-            this.$nextTick().then(res => {
-                _self.fullWidth = document.getElementById('canvas').offsetWidth;
-                _self.fullHeight = document.getElementById('canvas').offsetHeight;
-            })
-            //用这个来搞事啊
-            //funvm也是vue实例，而且不是根实例，是这个组件的实例，可以快捷的调用组件中的对象或者方法以及$ref
-            Tab.prototype.funvm = this;
-            //Tab.prototype.vm = this;
-            this.$store.commit('tabIndex', this.index);// 设置tabIndex，等于templData是二维数组，这个是二维数组的
-            this.tab = deepCopy(new Tab(), this.data);
-            //重新绑定attrData.content，让修改可以同步到其他地方
-            this.tab.setIndex(0,{value:false,config:false})
+export default class TabComponent extends Vue {
+  created() {
+    const _self = this;
+    this.$nextTick().then((res) => {
+      _self.fullWidth = document.getElementById('canvas').offsetWidth;
+      _self.fullHeight = document.getElementById('canvas').offsetHeight;
+    });
+    // 用这个来搞事啊
+    // funvm也是vue实例，而且不是根实例，是这个组件的实例，可以快捷的调用组件中的对象或者方法以及$ref
+    Tab.prototype.funvm = this;
+    // Tab.prototype.vm = this;
+    this.$store.commit('tabIndex', this.index);// 设置tabIndex，等于templData是二维数组，这个是二维数组的
+    this.tab = deepCopy(new Tab(), this.data);
+    // 重新绑定attrData.content，让修改可以同步到其他地方
+    this.tab.setIndex(0, { value: false, config: false });
 
-            this.tabActive = 0
-        }
-    }
+    this.tabActive = 0;
+  }
+}
 </script>
 
 <style scoped lang="less">

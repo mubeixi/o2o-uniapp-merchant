@@ -87,7 +87,7 @@ function setAttrData() {
 
 function attrData(options = {}) {
   // @ts-ignore
-  const {value, config, attrData} = options;
+  const { value, config, attrData } = options;
   // console.log(value, config, attrData);
   if (value !== false) setValue.call(this);
   if (config !== false) setConfig.call(this);
@@ -101,7 +101,7 @@ class Hr extends Common {
 
   style = {
     color: '',
-    //bgColor: '',
+    // bgColor: '',
     margin: '',
     height: '',
   }

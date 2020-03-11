@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import Common from './commonClass';
-import {ss,ls} from "@/common/tool/ls";
+import { ss, ls } from '@/common/tool/ls';
 
-const shopInfo = ss.get('Shop_Info')
+const shopInfo = ss.get('Shop_Info');
 
 function setValue() {
   // let value = {}
@@ -61,7 +61,7 @@ function setAttrData() {
 
 function attrData(options = {}) {
   // @ts-ignore
-  const {value, config, attrData} = options;
+  const { value, config, attrData } = options;
   // console.log(value, config, attrData);
   if (value !== false) setValue.call(this);
   if (config !== false) setConfig.call(this);
@@ -70,7 +70,6 @@ function attrData(options = {}) {
 
 
 class Base extends Common {
-
   tag = 'base';
   // activeIndex = 0;
 
@@ -101,16 +100,16 @@ class Base extends Common {
     desc: shopInfo.description,
     total: shopInfo.prod_total,
     new: shopInfo.prod_isnew_total,
-    style: 1
+    style: 1,
 
     // loop:false,//是否循环
     // interval:5000,//切换时间
     // autoplay:false,//自动播放
-    //type: 1, //两种风格
+    // type: 1, //两种风格
   }
 
   value = {
-    list: [],//存优惠券数组
+    list: [], // 存优惠券数组
   }
 
 
@@ -126,7 +125,6 @@ class Base extends Common {
 
 
   setIndex(index: number, options: object) {
-
     this.activeIndex = index;
     attrData.call(this, options);
   }

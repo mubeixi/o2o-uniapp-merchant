@@ -7,33 +7,36 @@
 </template>
 <script lang="ts">
 import {
-    getCommonConfig
+  Component,
+  Vue,
+} from 'vue-property-decorator';
+import {
+  Action,
+  State,
+} from 'vuex-class';
+
+import {
+  getCommonConfig,
 } from './api/pub';
-import {
-    Component,
-    Vue
-} from 'vue-property-decorator'
-import {
-    Action,
-    State
-} from 'vuex-class'
-import WzwFinder from './components/editor/WzwFinder';
+import WzwFinder from './components/editor/WzwFinder.vue';
+
 
 @Component({
-    components:{
-        WzwFinder
-    }
+  components: {
+    WzwFinder,
+  },
 })
 export default class App extends Vue {
-
     @State('finderDialogInstance') finderDialogInstance
 
     @Action setInitData
+
     @State initData
+
     created() {
-        getCommonConfig().then(res=>{
-            this.setInitData(res.data)
-        }).catch(()=>{})
+      getCommonConfig().then((res) => {
+        this.setInitData(res.data);
+      }).catch(() => {});
     }
 }
 
@@ -164,8 +167,6 @@ input[type="number"]{
     overflow-x: hidden !important;
   }
 }
-
-
 
 
 .fly-pic{

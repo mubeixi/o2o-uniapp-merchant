@@ -1,9 +1,9 @@
 import Vue from 'vue';
 import Common from './commonClass';
-import {ls} from "@/common/tool/ls";
-import fun from "../../../common/fun";
+import { ls } from '@/common/tool/ls';
+import fun from '../../../common/fun';
 
-const shopInfo = ls.get('Shop_Info')
+const shopInfo = ls.get('Shop_Info');
 
 function setValue() {
   // let value = {}
@@ -55,20 +55,16 @@ function setAttrData() {
         //   pageEl.bindLinkDialogShow = true
         // },
         dialogCB: (list) => {
-
-
           this.value.list = [...list];
 
-          //这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
-          this.setIndex(0, {value:false,config:false});
+          // 这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
+          this.setIndex(0, { value: false, config: false });
           this.vm.$store.commit('activeAttr', this);// 传出去
-
         },
-        //这个按钮的功能，主要是新增元素
+        // 这个按钮的功能，主要是新增元素
         editCB: (pageEl) => {
-
           if (this.value.list.length >= 10) {
-            fun.info({msg: '最多允许十个'});
+            fun.info({ msg: '最多允许十个' });
             return;
           }
 
@@ -76,14 +72,13 @@ function setAttrData() {
             type: 'all',
             cate_id: [],
             title: '分类名称',
-            limit: 10,//显示的个数
-          });//新增一个空元素
+            limit: 10, // 显示的个数
+          });// 新增一个空元素
 
 
-          //这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
-          this.setIndex(0, {value:false,config:false});
+          // 这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
+          this.setIndex(0, { value: false, config: false });
           this.vm.$store.commit('activeAttr', this);// 传出去
-
         },
       },
       {
@@ -93,45 +88,43 @@ function setAttrData() {
         value: this.value.list,
         arr: this.value.list,
         radioCB: (item) => {
-        },//后面的radio回调
+        }, // 后面的radio回调
         bindCB: (dataType, type, path, tooltip, dataArr, pageEl, idx2) => {
-
-          console.log(dataType, type, path, tooltip, dataArr, pageEl, idx2)
+          console.log(dataType, type, path, tooltip, dataArr, pageEl, idx2);
           pageEl.bindCateDialogShow = false;
 
-          let tabItemEl = document.getElementById('tab-item' + idx2);
+          const tabItemEl = document.getElementById(`tab-item${idx2}`);
           if (tabItemEl) {
             tabItemEl.click();
           }
 
-          let ids = dataArr.map(item=>item.id)
+          const ids = dataArr.map(item => item.id);
 
           Vue.set(this.value.list[idx2], 'cate_id', ids);
-          //Vue.set(this.value.list[idx2], 'title', tooltip);
+          // Vue.set(this.value.list[idx2], 'title', tooltip);
           Vue.set(this.value.list[idx2], 'tooltip', tooltip);
 
 
-          //这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
-          this.setIndex(0, {value:false,config:false});
+          // 这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
+          this.setIndex(0, { value: false, config: false });
           this.vm.$store.commit('activeAttr', this);// 传出去
-
         },
         // 之类是输入的回调，可以根据需要决定写什么
         imgCB: (item, idx2) => {
-          console.log(item.data.path, idx2)
+          console.log(item.data.path, idx2);
           Vue.set(this.value.list[idx2], 'img_src', item.data.path);
 
-          //这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
-          this.setIndex(0, {value:false,config:false});
+          // 这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
+          this.setIndex(0, { value: false, config: false });
           this.vm.$store.commit('activeAttr', this);// 传出去
         },
         removeCB: (idx) => {
           this.value.list.splice(idx, 1);
 
-          //这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
-          this.setIndex(0, {value:false,config:false});
+          // 这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
+          this.setIndex(0, { value: false, config: false });
           this.vm.$store.commit('activeAttr', this);// 传出去
-        }
+        },
       },
       {
         type: 'radio',
@@ -208,7 +201,7 @@ function setAttrData() {
           {
             label: '无边框透明底',
             value: 'noborder-nobg',
-          }
+          },
         ],
       },
       {
@@ -237,20 +230,20 @@ function setAttrData() {
         value: [
           {
             label: '1/1',
-            value: 1/1,
+            value: 1 / 1,
           },
           {
             label: '1/2',
-            value: 1/2,
+            value: 1 / 2,
           },
           {
             label: '3/4',
-            value: 3/4,
+            value: 3 / 4,
           },
           {
             label: '9/16',
-            value: 9/16,
-          }
+            value: 9 / 16,
+          },
         ],
       },
       {
@@ -276,9 +269,7 @@ function setAttrData() {
         model: this.style.bgColor,
         editType: 'style',
         editKey: 'bgColor',
-        editCB: item => {
-          return item.model?item.model:'none'
-        },
+        editCB: item => (item.model ? item.model : 'none'),
       },
 
       {
@@ -286,19 +277,15 @@ function setAttrData() {
         text: '显示内容',
         label: '商品名称',
         editType: 'config',
-        disabled:this.config.attr.title.readOnly,
+        disabled: this.config.attr.title.readOnly,
         model: this.config.attr.title.show,
         editCB: (item) => {
+          Vue.set(this.config.attr.title, 'show', item.model);// 传递值
 
-
-          Vue.set(this.config.attr.title, 'show', item.model);//传递值
-
-          //这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
-          this.setIndex(0, {value:false,config:false});
+          // 这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
+          this.setIndex(0, { value: false, config: false });
           this.vm.$store.commit('activeAttr', this);// 传出去
-
-
-        }
+        },
       },
       {
         type: 'checkbox',
@@ -306,17 +293,14 @@ function setAttrData() {
         editType: 'config',
         model: this.config.attr.desc.show,
         editCB: (item) => {
+          console.log(item.model);
 
-          console.log(item.model)
+          Vue.set(this.config.attr.desc, 'show', item.model);// 传递值
 
-          Vue.set(this.config.attr.desc, 'show', item.model);//传递值
-
-          //这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
-          this.setIndex(0, {value:false,config:false});
+          // 这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
+          this.setIndex(0, { value: false, config: false });
           this.vm.$store.commit('activeAttr', this);// 传出去
-
-
-        }
+        },
       },
       {
         type: 'checkbox',
@@ -324,17 +308,14 @@ function setAttrData() {
         editType: 'config',
         model: this.config.attr.price.show,
         editCB: (item) => {
+          console.log(item.model);
 
-          console.log(item.model)
+          Vue.set(this.config.attr.price, 'show', item.model);// 传递值
 
-          Vue.set(this.config.attr.price, 'show', item.model);//传递值
-
-          //这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
-          this.setIndex(0, {value:false,config:false});
+          // 这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
+          this.setIndex(0, { value: false, config: false });
           this.vm.$store.commit('activeAttr', this);// 传出去
-
-
-        }
+        },
       },
       {
         type: 'diy',
@@ -344,31 +325,25 @@ function setAttrData() {
         model: this.config.attr.buybtn.show,
         data: this.config.attr.buybtn,
         checkboxCB: (val) => {
+          Vue.set(this.config.attr.buybtn, 'show', val);// 传递值
 
-          Vue.set(this.config.attr.buybtn, 'show', val);//传递值
-
-          //这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
-          this.setIndex(0, {value:false,config:false});
+          // 这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
+          this.setIndex(0, { value: false, config: false });
           this.vm.$store.commit('activeAttr', this);// 传出去
-
         },
         inputCB: (val) => {
+          Vue.set(this.config.attr.buybtn, 'text', val);// 传递值
 
-
-          Vue.set(this.config.attr.buybtn, 'text', val);//传递值
-
-          //这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
-          this.setIndex(0, {value:false,config:false});
+          // 这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
+          this.setIndex(0, { value: false, config: false });
           this.vm.$store.commit('activeAttr', this);// 传出去
-
         },
         radioCB: (val) => {
-          Vue.set(this.config.attr.buybtn, 'style', val);//传递值
+          Vue.set(this.config.attr.buybtn, 'style', val);// 传递值
 
-          //这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
-          this.setIndex(0, {value:false,config:false});
+          // 这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
+          this.setIndex(0, { value: false, config: false });
           this.vm.$store.commit('activeAttr', this);// 传出去
-
         },
       },
       {
@@ -380,28 +355,23 @@ function setAttrData() {
 
         data: this.config.attr.tag,
         checkboxCB: (val) => {
-
-          Vue.set(this.config.attr.tag, 'show', val);//传递值
+          Vue.set(this.config.attr.tag, 'show', val);// 传递值
           Vue.set(this.config.attr.tag, 'style', 'diy');
 
-          //这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
-          this.setIndex(0, {value:false,config:false});
+          // 这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
+          this.setIndex(0, { value: false, config: false });
           this.vm.$store.commit('activeAttr', this);// 传出去
-
-        },//勾选的回调
+        }, // 勾选的回调
         radioImgCB: (img, idx2) => {
-
-
           Vue.set(this.config.attr.tag, 'img', img.data.path);
           Vue.set(this.config.attr.tag, 'style', 'diy');
 
-          //这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
-          this.setIndex(0, {value:false,config:false});
+          // 这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
+          this.setIndex(0, { value: false, config: false });
           this.vm.$store.commit('activeAttr', this);// 传出去
-
         },
         radioCB: (item) => {
-        },//后面的radio回调
+        }, // 后面的radio回调
       },
     ],
   };
@@ -412,7 +382,7 @@ function setAttrData() {
 
 function attrData(options = {}) {
   // @ts-ignore
-  const {value, config, attrData} = options;
+  const { value, config, attrData } = options;
   // console.log(value, config, attrData);
   if (value !== false) setValue.call(this);
   if (config !== false) setConfig.call(this);
@@ -421,13 +391,13 @@ function attrData(options = {}) {
 
 
 class Tab extends Common {
-
   tag = 'tab';
+
   activeIndex = 0;
 
   style = {
-    wrapmargin: 15,//页面边距
-    margin: 10,//商品距离
+    wrapmargin: 15, // 页面边距
+    margin: 10, // 商品距离
     bgColor: '#fff',
     // height: 30,
     // color: '',
@@ -448,23 +418,23 @@ class Tab extends Common {
   }
 
   config = {
-    position: 'left',//位置 可选值为left和top
+    position: 'left', // 位置 可选值为left和top
     origin: 'filter',
-    origintooltip: '请绑定',//提示语
+    origintooltip: '请绑定', // 提示语
     style: 1,
-    showmode: 'noborder-bgwhite',//'border-bgwhite','noborder-nobg'  无边框白底 有边框白底 无边框透明底
-    radius: 'round',//圆角 none直角
+    showmode: 'noborder-bgwhite', // 'border-bgwhite','noborder-nobg'  无边框白底 有边框白底 无边框透明底
+    radius: 'round', // 圆角 none直角
     attr: {
-      title: {show: true,readOnly:true},
-      desc: {show: false},
-      price: {show: true},
-      buybtn: {show: true, text: '购买', style: '1'}, //样式1 样式2
-      tag: {show: false, style: '', img: ''} //hot new diy 第三个是图片。 都是放在商品左上角
-    }
+      title: { show: true, readOnly: true },
+      desc: { show: false },
+      price: { show: true },
+      buybtn: { show: true, text: '购买', style: '1' }, // 样式1 样式2
+      tag: { show: false, style: '', img: '' }, // hot new diy 第三个是图片。 都是放在商品左上角
+    },
     // loop:false,//是否循环
     // interval:5000,//切换时间
     // autoplay:false,//自动播放
-    //type: 1, //两种风格
+    // type: 1, //两种风格
   }
 
   value = {
@@ -475,14 +445,13 @@ class Tab extends Common {
         type: 'all',
         cate_id: [],
         title: '分类名称',
-        limit: 10,//显示的个数
-      }
-    ]
+        limit: 10, // 显示的个数
+      },
+    ],
   }
 
 
   constructor() {
-
     super();
 
     // 统一这样来初始化
