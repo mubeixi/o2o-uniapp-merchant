@@ -1,10 +1,16 @@
 import Home from '../views/Home.vue';
+import FirstTmpl from '../views/layout/FirstTmpl.vue';
+import SecondTmpl from '../views/layout/SecondTmpl.vue';
+import EmptyTmpl from '../views/layout/EmptyTmpl.vue';
+
 import Diy from '../views/Diy.vue';
+
 import Empty from '../views/Empty.vue';
 
 import NotFound from '../views/NotFound.vue';
 import Login from '../views/register/Login.vue';
 import Register from '../views/register/Register.vue';
+
 import Setting from '../views/register/Setting.vue';
 import SettledAgreement from '../views/register/SettledAgreement.vue';
 import PersonApprove from '../views/register/PersonApprove.vue';
@@ -14,31 +20,43 @@ import Pay from '../views/register/Pay.vue';
 import SettlementInformation from '../views/register/SettlementInformation.vue';
 import AddIndustryCate from '../views/register/AddIndustryCate.vue';
 
-import PageTmpl from '../views/PageTmpl.vue';
+
 
 import UpdatePassword from '../views/info/UpdatePassword.vue';
 import ProductList from '../views/product/ProductList.vue';
+import ProductTmplBase from '../views/product/ProductTmplBase.vue';
+import ProductTmplDiy from '../views/product/ProductTmplDiy.vue';
 
 export default [
   {
-    path: '/',
+    path: '/app',
     name: 'LayoutPage',
-    component: PageTmpl,
+    component: FirstTmpl,
+    redirect: {name: 'dashboard'},
     children: [
       {
-        path: 'info',
-        component: Empty,
+        path: 'dashboard',
+        name:'dashboard',
+        meta: {
+          title: '概览',
+        },
+      },
+
+      {
+        path: 'invalidate',
+        name:'invalidate',
         meta: {
           title: '商家认证',
-        },
-        children: [],
+        }
       },
       {
         path: 'info',
-        component: Empty,
+        name:'info',
         meta: {
           title: '商家资料',
         },
+        component: SecondTmpl,
+        redirect: {name: 'UpdatePassword'},
         children: [
           {
             path: 'UpdatePassword',
@@ -51,22 +69,23 @@ export default [
         ],
       },
       {
-        path: 'info',
-        component: Empty,
+        path: 'store',
+        name:'store',
         meta: {
           title: '店铺管理',
         },
-        children: [],
       },
       {
-        path: 'info',
-        component: Empty,
+        path: 'product',
+        name:'product',
         meta: {
           title: '产品管理',
         },
+        component: SecondTmpl,
+        redirect: {name: 'ProductList'},
         children: [
           {
-            path: 'ProductList',
+            path: 'list',
             name:'ProductList',
             component: ProductList,
             meta: {
@@ -74,36 +93,42 @@ export default [
             },
           },
           {
-            path: 'info',
+            path: 'group',
+            name: 'ProductGroup',
             component: Empty,
             meta: {
               title: '商品分组',
             },
           },
           {
-            path: 'info',
+            path: 'tag',
+            name:'ProductTag',
             component: Empty,
             meta: {
               title: '商品标签',
             },
           },
           {
-            path: 'info',
-            component: Empty,
+            path: 'tmpl',
+            name:'ProductTmpl',
             meta: {
               title: '商品模板',
             },
+            component: EmptyTmpl,
+            redirect: {name: 'ProductTmplBase'},
             children:[
               {
-                path: 'info',
-                component: Empty,
+                path: 'base',
+                name:'ProductTmplBase',
+                component: ProductTmplBase,
                 meta: {
                   title: '通用模板',
                 },
               },
               {
-                path: 'info',
-                component: Empty,
+                path: 'diy',
+                name:'ProductTmplDiy',
+                component: ProductTmplDiy,
                 meta: {
                   title: '自定义模板',
                 },
@@ -111,14 +136,14 @@ export default [
             ]
           },
           {
-            path: 'info',
+            path: 'specs',
             component: Empty,
             meta: {
               title: '商品属性',
             },
           },
           {
-            path: 'info',
+            path: 'comment',
             component: Empty,
             meta: {
               title: '商品评论',
@@ -127,7 +152,7 @@ export default [
         ],
       },
       {
-        path: 'info',
+        path: 'coupon',
         component: Empty,
         meta: {
           title: '优惠券管理',
@@ -135,7 +160,7 @@ export default [
         children: [],
       },
       {
-        path: 'info',
+        path: 'send',
         component: Empty,
         meta: {
           title: '第三方配送',
@@ -143,7 +168,7 @@ export default [
         children: [],
       },
       {
-        path: 'info',
+        path: 'order',
         component: Empty,
         meta: {
           title: '订单管理',
@@ -151,7 +176,7 @@ export default [
         children: [],
       },
       {
-        path: 'info',
+        path: 'activity',
         component: Empty,
         meta: {
           title: '活动管理',
@@ -159,7 +184,7 @@ export default [
         children: [],
       },
       {
-        path: 'info',
+        path: 'finance',
         component: Empty,
         meta: {
           title: '财务结算',
@@ -167,7 +192,7 @@ export default [
         children: [],
       },
       {
-        path: 'info',
+        path: 'postage',
         component: Empty,
         meta: {
           title: '运费管理',
@@ -184,13 +209,17 @@ export default [
           auth: false,
         },
       },
+      {
+        path: '/home',
+        name: 'Home',
+        meta: {
+          title: '模板装修',
+        },
+        component: Home,
+      },
     ],
   },
-  {
-    path: '/home',
-    name: 'Home',
-    component: Home,
-  },
+
   // {
   //   path: '/diy',
   //   name: 'DIY',

@@ -5,7 +5,7 @@
                 <template v-for="(first,idx) in firstMenuData">
                     <template v-if="!first.hide">
                         <li
-                            @click="bindFirstEvent(idx)"
+                            @click="bindFirstEvent(idx,first)"
                             @mouseover="overNav(idx,first)"
                             @mouseout="outNav(idx,first)"
                             :class="{active:firstIndex===idx}"
@@ -63,32 +63,65 @@ export default class LayoutMenuComponent extends Vue {
     @Action('menu/setMenuActiveIndex') setMenuActiveIndex
     @Action('menu/setThirdMenuData') setThirdMenuData
 
-    bindFirstEvent(idx){
+    /**
+     * 用子路由的模式，第一个路由设置为空，则会自动显示第一个
+     * @param idx
+     * @param item
+     */
+    bindFirstEvent(idx,item){
         this.setMenuActiveIndex({name:'menuFirstIndex',idx})
 
+        item.name && this.$router.push({name:item.name})
+        //只有一级菜单情况
+        // this.$router.push({path:item.path})
+        // this.$router.push({name:item.hasOwnProperty('name')?item.name:'NotFound'})
+
         //设置二级菜单
-        this.setMenuActiveIndex({name:'menuSecondIndex',idx:0})
+        //this.setMenuActiveIndex({name:'menuSecondIndex',idx:0})
 
-        //自动打开第一个
-        if(this.secondMenuData.length>0){
-
-            //如果二级菜单里面，还有三级菜单，就自动打开三级菜单第一个页面。没有的话就打开自己
-            if(this.secondMenuData[0] && this.secondMenuData[0].hasOwnProperty('children') && Array.isArray(this.secondMenuData[0].children) && this.secondMenuData[0].children.length>0){
-                this.secondMenuData[0].children[0].name && this.$router.push({name:this.secondMenuData[0].children[0].name})
-            }else{
-                this.secondMenuData[0].name && this.$router.push({name:this.secondMenuData[0].name})
-            }
-
-        }
 
         //设置第三级菜单
-        this.setMenuActiveIndex({name:'menuThirdIndex',idx:0})
+        //this.setMenuActiveIndex({name:'menuThirdIndex',idx:0})
 
-        if(this.secondMenuData && this.secondMenuData[0] && this.secondMenuData[0].hasOwnProperty('children') && Array.isArray(this.secondMenuData[0].children) && this.secondMenuData[0].children.length>0){
-            this.setThirdMenuData(this.secondMenuData[0].children)
-        }else{
-            this.setThirdMenuData([])
-        }
+        // if(this.secondMenuData && this.secondMenuData[0] && this.secondMenuData[0].hasOwnProperty('children') && Array.isArray(this.secondMenuData[0].children) && this.secondMenuData[0].children.length>0){
+        //     this.setThirdMenuData(this.secondMenuData[0].children)
+        // }else{
+        //     this.setThirdMenuData([])
+        // }
+
+
+
+
+        //如果存在二级，自动打开第一个
+        // if(this.secondMenuData.length>0){
+        //
+        //     this.secondMenuData[0].name && this.$router.push({
+        //         name:this.secondMenuData[0].name
+        //     })
+        //     //如果二级菜单里面，还有三级菜单，就自动打开三级菜单第一个页面
+        //     // if(
+        //     //     this.secondMenuData[0] && this.secondMenuData[0].hasOwnProperty('children') &&
+        //     //     Array.isArray(this.secondMenuData[0].children) &&
+        //     //     this.secondMenuData[0].children.length>0
+        //     // ){
+        //     //
+        //     //     // this.secondMenuData[0].children[0].name && this.$router.push({
+        //     //     //     name:this.secondMenuData[0].children[0].name
+        //     //     // })
+        //     //
+        //     // }else{
+        //     //     // 没有的话就打开自己
+        //     //     this.secondMenuData[0].name && this.$router.push({
+        //     //         name:this.secondMenuData[0].name
+        //     //     })
+        //     // }
+        //
+        // }else{
+        //     //只有一级菜单情况
+        //     (item.hasOwnProperty('name') && item.name) && this.$router.push({name:item.name})
+        //     //一级菜单未设置name
+        //     !item.name && this.$router.push({name:'NotFound'})
+        // }
 
     }
 
@@ -96,6 +129,7 @@ export default class LayoutMenuComponent extends Vue {
         //设置二级菜单的下标
         this.setMenuActiveIndex({name:'menuSecondIndex',idx})
         this.setMenuActiveIndex({name:'menuThirdIndex',idx:0})
+
 
         //设置第三级菜单
         if(Array.isArray(this.secondMenuData[idx].children) && this.secondMenuData[idx].children.length>0){
@@ -129,12 +163,12 @@ export default class LayoutMenuComponent extends Vue {
 </script>
 <style lang="less" scoped>
 .left-menu{
+    display: flex;
 
     height: 100%;
-    overflow: hidden;
-    display: flex;
     font-size: 14px;
     .menu-vertical-first{
+        display: inline-block;
         width: 140px;
         height: 100%;
         padding: 30px 15px 0;
@@ -160,6 +194,7 @@ export default class LayoutMenuComponent extends Vue {
         }
     }
     .menu-vertical-second{
+        display: inline-block;
         width: 140px;
         height: 100%;
         background: #fff;
@@ -169,6 +204,7 @@ export default class LayoutMenuComponent extends Vue {
         ul{
             li{
                 line-height: 54px;
+                width: 140px;
                 position: relative;
                 &:hover{
                     color: #428CF7;

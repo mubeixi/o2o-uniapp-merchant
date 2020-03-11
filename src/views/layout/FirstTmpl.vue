@@ -12,10 +12,10 @@
                 <div class="nickanme">时尚衣橱</div>
             </div>
         </div>
-        <div class="layout-wrap">
+        <div class="layout-first-wrap">
             <layout-menu-component></layout-menu-component>
-            <div class="layout-container" :style="{marginTop:menuThirdList.length===0?'20px':'0px'}">
-                <layout-tab-component></layout-tab-component>
+            <div class="layout-container" >
+                <!--第二层路由-->
                 <router-view></router-view>
             </div>
         </div>
@@ -26,24 +26,19 @@ import {
   Component,
   Vue,
 } from 'vue-property-decorator';
-import LayoutMenuComponent from '../components/comm/LayoutMenuComponent.vue';
-import LayoutTabComponent from "../components/comm/LayoutTabComponent.vue";
+import LayoutMenuComponent from '../../components/comm/LayoutMenuComponent.vue';
 
 @Component({
-  components: {LayoutTabComponent, LayoutMenuComponent },
+  components: { LayoutMenuComponent },
 })
-export default class LayoutPage extends Vue {
-    get menuThirdList(){
-        return this.$store.state.menu.menuThirdList
-    }
+export default class FirstTmpl extends Vue {
+
 }
 </script>
 <style lang="less" scoped>
 .layout-html{
     height: 100vh;
     overflow: hidden;
-    display: flex;
-    flex-flow: column;
 }
 .layout-head{
     height: 55px;
@@ -82,8 +77,9 @@ export default class LayoutPage extends Vue {
 
     }
 }
-.layout-wrap{
-    flex: 1;
+.layout-first-wrap{
+    width: 100%;
+    height: calc(100% - 55px);
     background: #f4f4f4;
     display: flex;
     .layout-container{

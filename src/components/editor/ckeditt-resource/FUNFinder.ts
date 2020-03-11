@@ -1,6 +1,5 @@
-import store from '../../../store';
 
-const { finderDialogInstance } = store.state;
+const finderDialogInstance = window.finderDialogInstance;
 const noop = () => {};
 export class FUNFinder {
   constructor(opt) {

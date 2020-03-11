@@ -1,5 +1,5 @@
 <template>
-    <div class="tab-menu" v-if="tabData.length>0">
+    <div class="tab-menu" v-if="tabData && tabData.length>0">
         <ul>
             <template v-for="(item,idx) in tabData">
                 <template v-if="!item.hide">
@@ -28,7 +28,7 @@ export default class LayoutTabComponent extends Vue {
 
     // computed
     get tabData() {
-        return this.$store.state.menu.menuThirdList
+        return this.$store.getters['menu/menuThirdList']
     }
 
     get activeIndex() {

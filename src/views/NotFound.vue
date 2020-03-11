@@ -22,21 +22,28 @@ import {
 } from 'vuex-class';
 
 
-    @Component({
-      mixins: [],
-      components: {
+@Component({
+  mixins: [],
+  components: {
 
-      },
-    })
+  },
+})
 
 
 export default class NotFound extends Vue {
-  static backFn() {
+
+  @Action('menu/setMenuActiveIndex') setMenuActiveIndex
+
+  backFn() {
     window.history.back();
   }
 
-  static goHome() {
-    window.location.href = window.location.origin;
+  goHome() {
+    // this.setMenuActiveIndex({name:'menuFirstIndex',idx:0})
+    // this.setMenuActiveIndex({name:'menuSecondIndex',idx:0})
+    // this.setMenuActiveIndex({name:'menuThirdIndex',idx:0})
+    //window.location.href = window.location.origin;
+    this.$router.push({path:'/dashboard'})
   }
 }
 </script>

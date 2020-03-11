@@ -1,6 +1,6 @@
 <template>
   <div class="empty-wrap">
-    <router-view/>
+    {{$route.path}}
   </div>
 </template>
 <script lang="ts">
