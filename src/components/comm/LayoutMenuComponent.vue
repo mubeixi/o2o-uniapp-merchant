@@ -68,6 +68,19 @@ export default class LayoutMenuComponent extends Vue {
 
         //设置二级菜单
         this.setMenuActiveIndex({name:'menuSecondIndex',idx:0})
+
+        //自动打开第一个
+        if(this.secondMenuData.length>0){
+
+            //如果二级菜单里面，还有三级菜单，就自动打开三级菜单第一个页面。没有的话就打开自己
+            if(this.secondMenuData[0] && this.secondMenuData[0].hasOwnProperty('children') && Array.isArray(this.secondMenuData[0].children) && this.secondMenuData[0].children.length>0){
+                this.secondMenuData[0].children[0].name && this.$router.push({name:this.secondMenuData[0].children[0].name})
+            }else{
+                this.secondMenuData[0].name && this.$router.push({name:this.secondMenuData[0].name})
+            }
+
+        }
+
         //设置第三级菜单
         this.setMenuActiveIndex({name:'menuThirdIndex',idx:0})
 
