@@ -18,6 +18,10 @@ import PageTmpl from '../views/PageTmpl.vue';
 
 import UpdatePassword from '../views/info/UpdatePassword.vue';
 import ProductList from '../views/product/ProductList.vue';
+import BindVip from '../views/info/BindVip.vue';
+import ShippingAddress from '../views/info/ShippingAddress.vue';
+import Settlement from '../views/info/Settlement.vue';
+
 
 export default [
   {
@@ -46,6 +50,30 @@ export default [
             component: UpdatePassword,
             meta: {
               title: '修改密码',
+            },
+          },
+          {
+            path: 'BindVip',
+            name: 'BindVip',
+            component: BindVip,
+            meta: {
+              title: '绑定会员',
+            },
+          },
+          {
+            path: 'ShippingAddress',
+            name: 'ShippingAddress',
+            component: ShippingAddress,
+            meta: {
+              title: '收货地址',
+            },
+          },
+          {
+            path: 'Settlement',
+            name: 'Settlement',
+            component: Settlement,
+            meta: {
+              title: '结算配置',
             },
           },
         ],
