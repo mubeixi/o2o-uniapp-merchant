@@ -137,7 +137,7 @@ export default class LayoutMenuComponent extends Vue {
     .menu-vertical-first{
         width: 140px;
         height: 100%;
-        padding: 0 15px;
+        padding: 30px 15px 0;
         background: #397FDC;
         color: #fff;
         box-sizing: border-box;
