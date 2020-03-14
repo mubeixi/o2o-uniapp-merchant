@@ -34,23 +34,28 @@
 </template>
 
 <script lang="ts">
-    import {
-        Vue,
-        Component,
-        Watch,
-        Prop,
-    } from 'vue-property-decorator';
+import {
+  Vue,
+  Component,
+  Watch,
+  Prop,
+} from 'vue-property-decorator';
 
     @Component
 
-    export default class ShippingAddress extends Vue {
+export default class ShippingAddress extends Vue {
         formq=''
+
         formw=''
+
         forme=''
+
         formr=''
+
         formt=''
+
         formy=''
-    }
+}
 </script>
 
 <style scoped lang="less">

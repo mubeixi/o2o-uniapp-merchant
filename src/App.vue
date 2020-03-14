@@ -5,7 +5,7 @@
     <router-view/>
   </div>
 </template>
-<script lang="ts">
+<script>
 import {
   Component,
   Vue,
@@ -18,7 +18,7 @@ import {
 import {
   getCommonConfig,
 } from './api/pub';
-import WzwFinder from './components/editor/WzwFinder.vue';
+import WzwFinder from './components/editor/WzwFinder';
 
 
 @Component({
@@ -34,12 +34,12 @@ export default class App extends Vue {
     @State initData
 
     created() {
-      setTimeout(() => {
-        this.$router.push({ name: 'ProductList' });
-      }, 3000);
-      // getCommonConfig().then((res) => {
-      //   this.setInitData(res.data);
-      // }).catch(() => {});
+      // setTimeout(() => {
+      //   this.$router.push({ name: 'ProductList' });
+      // }, 3000);
+      getCommonConfig().then((res) => {
+        this.setInitData(res.data);
+      }).catch(() => {});
     }
 }
 

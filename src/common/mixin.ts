@@ -4,7 +4,7 @@ import { login, getUsersInfo } from '../api/user';
 import { ss } from '@/common/tool/ls';
 import { GetQueryByString } from '@/common/utils';
 import { isDev } from './env';
-import {fun} from './func';
+import { fun } from './func';
 
 
 /**

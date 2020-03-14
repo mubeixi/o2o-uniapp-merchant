@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Common from './commonClass';
 import { ls } from '@/common/tool/ls';
-import {fun} from '../../../common/func';
+import { fun } from '../../../common/func';
 
 const shopInfo = ls.get('Shop_Info');
 

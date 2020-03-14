@@ -16,19 +16,20 @@
 </template>
 
 <script lang="ts">
-    import {
-        Vue,
-        Component,
-        Watch,
-        Prop,
-    } from 'vue-property-decorator';
+import {
+  Vue,
+  Component,
+  Watch,
+  Prop,
+} from 'vue-property-decorator';
 
     @Component
 
-    export default class ExpressTemplate extends Vue {
+export default class ExpressTemplate extends Vue {
         formr=''
+
         form=''
-    }
+}
 </script>
 
 <style scoped lang="less">

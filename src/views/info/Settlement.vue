@@ -38,9 +38,9 @@ import {
 
     @Component
 
-    export default class Settlement extends Vue {
+export default class Settlement extends Vue {
         mySelect = 222
-    }
+}
 </script>
 
 <style scoped lang="less">

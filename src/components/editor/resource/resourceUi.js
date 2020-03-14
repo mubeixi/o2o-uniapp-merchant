@@ -6,9 +6,13 @@
 /**
  * @module code-block/codeblockui
  */
+// eslint-disable-next-line
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
+// eslint-disable-next-line
 import Collection from '@ckeditor/ckeditor5-utils/src/collection';
+// eslint-disable-next-line
 import Model from '@ckeditor/ckeditor5-ui/src/model';
+// eslint-disable-next-line
 import { createDropdown, addListToDropdown, addToolbarToDropdown } from '@ckeditor/ckeditor5-ui/src/dropdown/utils';
 import FileDialogButtonView from '@ckeditor/ckeditor5-upload/src/ui/filedialogbuttonview';
 import { createImageTypeRegExp } from '@ckeditor/ckeditor5-image/src/imageupload/utils';
@@ -45,7 +49,7 @@ export default class ResourceUi extends Plugin {
       const command = editor.commands.get(PLUGIN_NAME);
       // ,{model:'up',title:'直接上传'}
       const options = [{ model: { type: 'img', limit: 9 }, title: '素材库选择', command: 'openResource' }];
-      addListToDropdown(dropdownView, _prepareListOptions(options, command));
+      addListToDropdown(dropdownView, prepareListOptions(options, command));
 
 
       const imageTypesRegExp = createImageTypeRegExp(imageTypes);
@@ -104,9 +108,9 @@ export default class ResourceUi extends Plugin {
   }
 }
 
-function _prepareListOptions(options, command) {
+function prepareListOptions(options, command) {
   const itemDefinitions = new Collection();
-
+  // eslint-disable-next-line
   for (const option of options) {
     const def = {
       type: 'button',

@@ -19,9 +19,9 @@ import {
 
     @Component
 
-    export default class BindVip extends Vue {
+export default class BindVip extends Vue {
         formq='sss'
-    }
+}
 </script>
 
 <style scoped lang="less">

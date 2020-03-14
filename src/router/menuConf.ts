@@ -45,9 +45,9 @@ import ShippingAddress from '../views/info/ShippingAddress';
 // @ts-ignore
 import Settlement from '../views/info/Settlement';
 // @ts-ignore
-import  CollectionCode from  '../views/info/CollectionCode';
+import CollectionCode from '../views/info/CollectionCode';
 // @ts-ignore
-import  ExpressTemplate from  '../views/info/ExpressTemplate';
+import ExpressTemplate from '../views/info/ExpressTemplate';
 
 export default [
   {
@@ -127,7 +127,7 @@ export default [
             meta: {
               title: '快递模板',
             },
-          }
+          },
 
         ],
       },

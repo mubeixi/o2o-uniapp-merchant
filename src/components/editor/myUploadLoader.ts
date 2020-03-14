@@ -7,11 +7,12 @@ import { isDev } from '../../common/env';
 
 // 上传适配插件所有的操作都在这里面完成
 export class myUploadLoader {
-  loader:any
-
   constructor(loader:any) {
     this.loader = loader;
   }
+  loader:any
+
+
 
   upload() {
     return this.loader.file.then((file:any) => new Promise((resolve, reject) => {
@@ -19,7 +20,7 @@ export class myUploadLoader {
       const reader = new FileReader();
       reader.addEventListener('load', () => {
         // 阿里云
-        uploadImgByBase64({ image: reader.result }).then((res) => {
+        uploadImgByBase64({ image: reader.result }).then((res:any) => {
           console.log(res.data.path);
           resolve({
             default: isDev ? domain(res.data.path) : res.data.path,

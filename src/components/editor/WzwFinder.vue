@@ -178,7 +178,7 @@ import {
 import { createDirectory, getFileList } from '../../api/pub';
 import { domain } from '../../common/utils';
 import WzwFileButton from './WzwFileButton';
-import {fun} from '../../common/func';
+import { fun } from '../../common/func';
 import { isDev } from '../../common/env';
 
 
