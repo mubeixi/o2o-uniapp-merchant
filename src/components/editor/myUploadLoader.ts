@@ -10,8 +10,8 @@ export class myUploadLoader {
   constructor(loader:any) {
     this.loader = loader;
   }
-  loader:any
 
+  loader:any
 
 
   upload() {

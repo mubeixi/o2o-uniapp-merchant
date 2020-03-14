@@ -6,7 +6,7 @@
 /**
  * @module font/fontsize/fontsizeediting
  */
-
+// eslint-disable-next-line
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 
 import ImageUploadCommand from '@ckeditor/ckeditor5-image/src/imageupload/imageuploadcommand';
@@ -39,6 +39,7 @@ export default class ResourceEditing extends Plugin {
   /**
    * @inheritDoc
    */
+  // eslint-disable-next-line
   constructor(editor) {
     super(editor);
 
@@ -57,6 +58,7 @@ export default class ResourceEditing extends Plugin {
     const fileRepository = editor.plugins.get(FileRepository);
 
     // Register imageUpload command.
+    // eslint-disable-next-line
     editor.commands.add(PLUGIN_NAME, new resourceCommand(editor));
 
     // Allow fontSize attribute on text nodes.
@@ -69,16 +71,19 @@ export default class ResourceEditing extends Plugin {
     doc.on('change', () => {
       const changes = doc.differ.getChanges({ includeChangesInGraveyard: true });
 
+      // eslint-disable-next-line
       for (const entry of changes) {
-        if (entry.type == 'insert' && entry.name != '$text') {
+        if (entry.type === 'insert' && entry.name !== '$text') {
           const item = entry.position.nodeAfter;
-          const isInGraveyard = entry.position.root.rootName == '$graveyard';
+          const isInGraveyard = entry.position.root.rootName === '$graveyard';
 
+          // eslint-disable-next-line
           for (const image of getImagesFromChangeItem(editor, item)) {
             // Check if the image element still has upload id.
             const uploadId = image.getAttribute('uploadId');
 
             if (!uploadId) {
+              // eslint-disable-next-line
               continue;
             }
 
@@ -86,15 +91,17 @@ export default class ResourceEditing extends Plugin {
             const loader = fileRepository.loaders.get(uploadId);
 
             if (!loader) {
+              // eslint-disable-next-line
               continue;
             }
 
             if (isInGraveyard) {
               // If the image was inserted to the graveyard - abort the loading process.
               loader.abort();
-            } else if (loader.status == 'idle') {
+            } else if (loader.status === 'idle') {
               // If the image was inserted into content and has not been loaded yet, start loading it.
-              this._readAndUpload(loader, image);
+              // eslint-disable-next-line
+              this.readAndUpload(loader, image);
             }
           }
         }
@@ -114,7 +121,7 @@ export default class ResourceEditing extends Plugin {
    * @param {module:engine/model/element~Element} imageElement
    * @returns {Promise}
    */
-  _readAndUpload(loader, imageElement) {
+  readAndUpload(loader, imageElement) {
     const { editor } = this;
     const { model } = editor;
     const { t } = editor.locale;
@@ -154,6 +161,7 @@ export default class ResourceEditing extends Plugin {
             domFigure.style.display = 'none';
 
             // Make sure this line will never be removed during minification for having "no effect".
+            // eslint-disable-next-line
             domFigure._ckHack = domFigure.offsetHeight;
 
             domFigure.style.display = originalDisplay;
@@ -169,9 +177,9 @@ export default class ResourceEditing extends Plugin {
       .then((data) => {
         model.enqueueChange('transparent', (writer) => {
           writer.setAttributes({ uploadStatus: 'complete', src: data.default }, imageElement);
-          this._parseAndSetSrcsetAttributeOnImage(data, imageElement, writer);
+          this.parseAndSetSrcsetAttributeOnImage(data, imageElement, writer);
         });
-
+        // eslint-disable-next-line
         clean();
       })
       .catch((error) => {
@@ -182,13 +190,13 @@ export default class ResourceEditing extends Plugin {
         }
 
         // Might be 'aborted'.
-        if (loader.status == 'error' && error) {
+        if (loader.status === 'error' && error) {
           notification.showWarning(error, {
             title: t('Upload failed'),
             namespace: 'upload',
           });
         }
-
+        // eslint-disable-next-line
         clean();
 
         // Permanently remove image from insertion batch.
@@ -215,15 +223,17 @@ export default class ResourceEditing extends Plugin {
    * @param {module:engine/model/element~Element} image The image element on which the `srcset` attribute will be set.
    * @param {module:engine/model/writer~Writer} writer
    */
-  _parseAndSetSrcsetAttributeOnImage(data, image, writer) {
+  // eslint-disable-next-line
+  parseAndSetSrcsetAttributeOnImage(data, image, writer) {
     // Srcset attribute for responsive images support.
     let maxWidth = 0;
 
     const srcsetAttribute = Object.keys(data)
     // Filter out keys that are not integers.
+    // eslint-disable-next-line
       .filter((key) => {
         const width = parseInt(key, 10);
-
+        // eslint-disable-next-line
         if (!isNaN(width)) {
           maxWidth = Math.max(maxWidth, width);
 
@@ -237,7 +247,7 @@ export default class ResourceEditing extends Plugin {
       // Join all entries.
       .join(', ');
 
-    if (srcsetAttribute != '') {
+    if (srcsetAttribute !== '') {
       writer.setAttribute('srcset', {
         data: srcsetAttribute,
         width: maxWidth,
