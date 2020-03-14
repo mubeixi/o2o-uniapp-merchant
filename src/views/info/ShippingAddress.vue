@@ -1,35 +1,35 @@
 <template>
   <div class="all-update">
-    <!--<el-form ref="form" label-width="140px" size="small">-->
-      <!--<el-form-item label="所在地：">-->
-        <!--<el-select v-model="forms" placeholder="请选择省" style="width: 155px;margin-right: 10px">-->
-          <!--<el-option label="区域一" value="shanghai"></el-option>-->
-          <!--<el-option label="区域二" value="beijing"></el-option>-->
-        <!--</el-select>-->
-        <!--<el-select v-model="forms" placeholder="请选择市" style="width: 155px;margin-right: 10px">-->
-          <!--<el-option label="区域一" value="shanghai"></el-option>-->
-          <!--<el-option label="区域二" value="beijing"></el-option>-->
-        <!--</el-select>-->
-        <!--<el-select v-model="forms" placeholder="请选择区" style="width: 155px;margin-right: 10px">-->
-          <!--<el-option label="区域一" value="shanghai"></el-option>-->
-          <!--<el-option label="区域二" value="beijing"></el-option>-->
-        <!--</el-select>-->
-      <!--</el-form-item>-->
+    <el-form ref="form" label-width="140px" size="small">
+      <el-form-item label="所在地：">
+        <el-select v-model="formq" placeholder="请选择省" style="width: 155px;margin-right: 10px">
+          <el-option label="区域一" value="shanghai"></el-option>
+          <el-option label="区域二" value="beijing"></el-option>
+        </el-select>
+        <el-select v-model="formw" placeholder="请选择市" style="width: 155px;margin-right: 10px">
+          <el-option label="区域一" value="shanghai"></el-option>
+          <el-option label="区域二" value="beijing"></el-option>
+        </el-select>
+        <el-select v-model="forme" placeholder="请选择区" style="width: 155px;margin-right: 10px">
+          <el-option label="区域一" value="shanghai"></el-option>
+          <el-option label="区域二" value="beijing"></el-option>
+        </el-select>
+      </el-form-item>
 
-      <!--<el-form-item label="详细地址：">-->
-        <!--<el-input v-model="forms" style="width: 485px"></el-input>-->
-      <!--</el-form-item>-->
+      <el-form-item label="详细地址：">
+        <el-input v-model="formr" style="width: 485px"></el-input>
+      </el-form-item>
 
-      <!--<el-form-item label="收货人：">-->
-        <!--<el-input v-model="forms" style="width: 204px"></el-input>-->
-      <!--</el-form-item>-->
+      <el-form-item label="收货人：">
+        <el-input v-model="formt" style="width: 204px"></el-input>
+      </el-form-item>
 
-      <!--<el-form-item label="收货人电话：">-->
-        <!--<el-input v-model="forms" style="width: 204px"></el-input>-->
-      <!--</el-form-item>-->
+      <el-form-item label="收货人电话：">
+        <el-input v-model="formy" style="width: 204px"></el-input>
+      </el-form-item>
 
 
-    <!--</el-form>-->
+    </el-form>
   </div>
 </template>
 
@@ -41,8 +41,15 @@
         Prop,
     } from 'vue-property-decorator';
 
+    @Component
+
     export default class ShippingAddress extends Vue {
-        //forms=''
+        formq=''
+        formw=''
+        forme=''
+        formr=''
+        formt=''
+        formy=''
     }
 </script>
 

@@ -22,6 +22,8 @@ import {
   Prop,
 } from 'vue-property-decorator';
 
+@Component
+
 export default class UpdatePassword extends Vue {
         formq = 'store'
 }
