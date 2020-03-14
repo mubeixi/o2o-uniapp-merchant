@@ -44,6 +44,10 @@ import BindVip from '../views/info/BindVip';
 import ShippingAddress from '../views/info/ShippingAddress';
 // @ts-ignore
 import Settlement from '../views/info/Settlement';
+// @ts-ignore
+import  CollectionCode from  '../views/info/CollectionCode';
+// @ts-ignore
+import  ExpressTemplate from  '../views/info/ExpressTemplate';
 
 export default [
   {
@@ -108,6 +112,23 @@ export default [
               title: '结算配置',
             },
           },
+          {
+            path: 'CollectionCode',
+            name: 'CollectionCode',
+            component: CollectionCode,
+            meta: {
+              title: '收款二维码',
+            },
+          },
+          {
+            path: 'ExpressTemplate',
+            name: 'ExpressTemplate',
+            component: ExpressTemplate,
+            meta: {
+              title: '快递模板',
+            },
+          }
+
         ],
       },
       {
