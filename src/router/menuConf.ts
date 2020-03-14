@@ -30,6 +30,9 @@ import BindVip from '../views/info/BindVip.vue';
 import ShippingAddress from '../views/info/ShippingAddress.vue';
 import Settlement from '../views/info/Settlement.vue';
 
+import  CollectionCode from  '../views/info/CollectionCode.vue';
+import  ExpressTemplate from  '../views/info/ExpressTemplate.vue';
+
 
 export default [
   {
@@ -94,6 +97,23 @@ export default [
               title: '结算配置',
             },
           },
+          {
+            path: 'CollectionCode',
+            name: 'CollectionCode',
+            component: CollectionCode,
+            meta: {
+              title: '收款二维码',
+            },
+          },
+          {
+            path: 'ExpressTemplate',
+            name: 'ExpressTemplate',
+            component: ExpressTemplate,
+            meta: {
+              title: '快递模板',
+            },
+          }
+
         ],
       },
       {
