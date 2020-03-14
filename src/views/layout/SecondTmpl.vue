@@ -13,20 +13,20 @@ import {
   Component,
   Vue,
 } from 'vue-property-decorator';
-import LayoutTabComponent from "../../components/comm/LayoutTabComponent.vue";
+import LayoutTabComponent from '../../components/comm/LayoutTabComponent';
 
 @Component({
-  components: {LayoutTabComponent },
+  components: { LayoutTabComponent },
 })
 export default class SecondTmpl extends Vue {
-    get menuThirdList(){
-        let data = this.$store.getters['menu/menuThirdList']
-        return data?data:[]
-    }
+  get menuThirdList() {
+    const data = this.$store.getters['menu/menuThirdList'];
+    return data || [];
+  }
 
-    created(){
-        console.log(this.$store)
-    }
+  created() {
+    console.log(this.$store);
+  }
 }
 </script>
 <style lang="less" scoped>

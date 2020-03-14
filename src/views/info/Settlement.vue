@@ -31,16 +31,16 @@
 </template>
 
 <script lang="ts">
-    import {
-        Vue,
-        Component,
-        Watch,
-        Prop,
-    } from 'vue-property-decorator';
+import {
+  Vue,
+  Component,
+  Watch,
+  Prop,
+} from 'vue-property-decorator';
 
-    export default class Settlement extends Vue {
-        // forms=''
-    }
+export default class Settlement extends Vue {
+  // forms=''
+}
 </script>
 
 <style scoped lang="less">

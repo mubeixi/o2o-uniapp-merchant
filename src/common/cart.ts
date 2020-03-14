@@ -1,4 +1,4 @@
-import fun from './fun';
+import {fun} from './func';
 import { findArrayIdx } from '@/common/utils';
 
 /**

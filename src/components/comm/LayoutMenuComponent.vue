@@ -5,6 +5,7 @@
                 <template v-for="(first,idx) in firstMenuData">
                     <template v-if="!first.hide">
                         <li
+                            :key="idx"
                             @click="bindFirstEvent(idx,first)"
                             @mouseover="overNav(idx,first)"
                             @mouseout="outNav(idx,first)"
@@ -19,6 +20,7 @@
                 <template v-for="(second,idx) in secondMenuData">
                     <template v-if="!second.hide">
                         <li
+                            :key="idx"
                             @click="changeMenu(idx,second)"
                             :class="{active:secondIndex===idx}"
                         >{{second.meta.title}}</li>
@@ -31,36 +33,39 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import {
-    Action,
-    State,
+  Action,
+  State,
 } from 'vuex-class';
 import menuConf from '../../router/menuConf';
 
 @Component
 export default class LayoutMenuComponent extends Vue {
-    //isCollapse = false
+  // isCollapse = false
 
-    // computed
-    get firstMenuData() {
-        return menuConf[0].children;
-    }
+  // computed
+  get firstMenuData() {
+    return menuConf[0].children;
+  }
 
-    get secondMenuData() {
-        if(this.firstMenuData[this.firstIndex].hasOwnProperty('children')){
-            return this.firstMenuData[this.firstIndex].children;
-        }
-        return []
+  get secondMenuData() {
+    // eslint-disable-next-line
+    if (this.firstMenuData[this.firstIndex].hasOwnProperty('children')) {
+      // eslint-disable-next-line
+      return this.firstMenuData[this.firstIndex].children;
     }
+    return [];
+  }
 
-    get firstIndex(){
-        return this.$store.state.menu.menuFirstIndex
-    }
+  get firstIndex() {
+    return this.$store.state.menu.menuFirstIndex;
+  }
 
-    get secondIndex(){
-        return this.$store.state.menu.menuSecondIndex
-    }
+  get secondIndex() {
+    return this.$store.state.menu.menuSecondIndex;
+  }
 
     @Action('menu/setMenuActiveIndex') setMenuActiveIndex
+
     @Action('menu/setThirdMenuData') setThirdMenuData
 
     /**
@@ -68,96 +73,89 @@ export default class LayoutMenuComponent extends Vue {
      * @param idx
      * @param item
      */
-    bindFirstEvent(idx,item){
-        this.setMenuActiveIndex({name:'menuFirstIndex',idx})
+    bindFirstEvent(idx, item) {
+      this.setMenuActiveIndex({ name: 'menuFirstIndex', idx });
 
-        item.name && this.$router.push({name:item.name})
-        //只有一级菜单情况
-        // this.$router.push({path:item.path})
-        // this.$router.push({name:item.hasOwnProperty('name')?item.name:'NotFound'})
+      if (item.name) {
+        this.$router.push({ name: item.name });
+      }
 
-        //设置二级菜单
-        //this.setMenuActiveIndex({name:'menuSecondIndex',idx:0})
+      // 只有一级菜单情况
+      // this.$router.push({path:item.path})
+      // this.$router.push({name:item.hasOwnProperty('name')?item.name:'NotFound'})
 
-
-        //设置第三级菜单
-        //this.setMenuActiveIndex({name:'menuThirdIndex',idx:0})
-
-        // if(this.secondMenuData && this.secondMenuData[0] && this.secondMenuData[0].hasOwnProperty('children') && Array.isArray(this.secondMenuData[0].children) && this.secondMenuData[0].children.length>0){
-        //     this.setThirdMenuData(this.secondMenuData[0].children)
-        // }else{
-        //     this.setThirdMenuData([])
-        // }
+      // 设置二级菜单
+      // this.setMenuActiveIndex({name:'menuSecondIndex',idx:0})
 
 
+      // 设置第三级菜单
+      // this.setMenuActiveIndex({name:'menuThirdIndex',idx:0})
+
+      // if(this.secondMenuData && this.secondMenuData[0] && this.secondMenuData[0].hasOwnProperty('children') && Array.isArray(this.secondMenuData[0].children) && this.secondMenuData[0].children.length>0){
+      //     this.setThirdMenuData(this.secondMenuData[0].children)
+      // }else{
+      //     this.setThirdMenuData([])
+      // }
 
 
-        //如果存在二级，自动打开第一个
-        // if(this.secondMenuData.length>0){
-        //
-        //     this.secondMenuData[0].name && this.$router.push({
-        //         name:this.secondMenuData[0].name
-        //     })
-        //     //如果二级菜单里面，还有三级菜单，就自动打开三级菜单第一个页面
-        //     // if(
-        //     //     this.secondMenuData[0] && this.secondMenuData[0].hasOwnProperty('children') &&
-        //     //     Array.isArray(this.secondMenuData[0].children) &&
-        //     //     this.secondMenuData[0].children.length>0
-        //     // ){
-        //     //
-        //     //     // this.secondMenuData[0].children[0].name && this.$router.push({
-        //     //     //     name:this.secondMenuData[0].children[0].name
-        //     //     // })
-        //     //
-        //     // }else{
-        //     //     // 没有的话就打开自己
-        //     //     this.secondMenuData[0].name && this.$router.push({
-        //     //         name:this.secondMenuData[0].name
-        //     //     })
-        //     // }
-        //
-        // }else{
-        //     //只有一级菜单情况
-        //     (item.hasOwnProperty('name') && item.name) && this.$router.push({name:item.name})
-        //     //一级菜单未设置name
-        //     !item.name && this.$router.push({name:'NotFound'})
-        // }
+      // 如果存在二级，自动打开第一个
+      // if(this.secondMenuData.length>0){
+      //
+      //     this.secondMenuData[0].name && this.$router.push({
+      //         name:this.secondMenuData[0].name
+      //     })
+      //     //如果二级菜单里面，还有三级菜单，就自动打开三级菜单第一个页面
+      //     // if(
+      //     //     this.secondMenuData[0] && this.secondMenuData[0].hasOwnProperty('children') &&
+      //     //     Array.isArray(this.secondMenuData[0].children) &&
+      //     //     this.secondMenuData[0].children.length>0
+      //     // ){
+      //     //
+      //     //     // this.secondMenuData[0].children[0].name && this.$router.push({
+      //     //     //     name:this.secondMenuData[0].children[0].name
+      //     //     // })
+      //     //
+      //     // }else{
+      //     //     // 没有的话就打开自己
+      //     //     this.secondMenuData[0].name && this.$router.push({
+      //     //         name:this.secondMenuData[0].name
+      //     //     })
+      //     // }
+      //
+      // }else{
+      //     //只有一级菜单情况
+      //     (item.hasOwnProperty('name') && item.name) && this.$router.push({name:item.name})
+      //     //一级菜单未设置name
+      //     !item.name && this.$router.push({name:'NotFound'})
+      // }
+    }
+
+    changeMenu(idx, item) {
+      // 设置二级菜单的下标
+      this.setMenuActiveIndex({ name: 'menuSecondIndex', idx });
+      this.setMenuActiveIndex({ name: 'menuThirdIndex', idx: 0 });
+
+
+      // 设置第三级菜单
+      if (Array.isArray(this.secondMenuData[idx].children) && this.secondMenuData[idx].children.length > 0) {
+        this.setThirdMenuData(this.secondMenuData[idx].children);
+      } else {
+        this.setThirdMenuData([]);
+      }
+
+      // 路由跳转
+      if (item.name) {
+        this.$router.push({ name: item.name });
+      }
+    }
+
+
+    static overNav() {
 
     }
 
-    changeMenu(idx,item){
-        //设置二级菜单的下标
-        this.setMenuActiveIndex({name:'menuSecondIndex',idx})
-        this.setMenuActiveIndex({name:'menuThirdIndex',idx:0})
+    static outNav() {
 
-
-        //设置第三级菜单
-        if(Array.isArray(this.secondMenuData[idx].children) && this.secondMenuData[idx].children.length>0){
-            this.setThirdMenuData(this.secondMenuData[idx].children)
-        }else{
-            this.setThirdMenuData([])
-        }
-
-        //路由跳转
-        item.name && this.$router.push({name:item.name})
-    }
-
-
-
-    overNav(idx) {
-      // this.firstIndex = idx;
-    }
-
-    outNav() {
-
-    }
-
-    handleOpen(key, keyPath) {
-      console.log(key, keyPath);
-    }
-
-    handleClose(key, keyPath) {
-      console.log(key, keyPath);
     }
 }
 </script>
@@ -227,7 +225,9 @@ export default class LayoutMenuComponent extends Vue {
                     height: 8px;
                     content: ' ';
                     visibility: hidden;
+                    /* eslint-disable */
                     background-image: url("~@/assets/img/nav_arrow_rihgt.png");
+                    /* eslint-disable */
                 }
             }
         }

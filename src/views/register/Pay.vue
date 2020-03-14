@@ -44,7 +44,10 @@
             </el-form-item>
 
             <el-form-item label="小计：" >
-                  <span class="span-left">保证金<span class="span-color span-margin">¥1000</span>、年费<span  class="span-color span-margin">¥1000</span></span>
+                  <span class="span-left">保证金
+                      <span class="span-color span-margin">¥1000</span>、年费
+                      <span  class="span-color span-margin">¥1000</span>
+                  </span>
             </el-form-item>
 
             <el-form-item label="总计：" >

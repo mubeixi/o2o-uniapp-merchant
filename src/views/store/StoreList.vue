@@ -1,12 +1,14 @@
 <template>
-
+    <avatar></avatar>
 </template>
 
 <script>
-import avatar from './components/avatar';
+
+import Avatar from '@/views/store/components/avatar';
 
 export default {
   name: 'StoreList',
+  components: { Avatar },
 };
 </script>
 

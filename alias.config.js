@@ -4,13 +4,15 @@
  * 进入 WebStorm preferences -> Language & Framework -> JavaScript -> Webpack，选择这个文件即可
  *
  * */
-const resolve = dir => require('path').join(__dirname, dir)
+const path = require('path');
+
+const resolve = dir => path.join(__dirname, dir);
 
 module.exports = {
   resolve: {
     alias: {
       '@': resolve('src'),
-      '@static': resolve('static')
-    }
-  }
-}
+      '@static': resolve('static'),
+    },
+  },
+};

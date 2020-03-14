@@ -60,18 +60,18 @@ import {
   State,
 } from 'vuex-class';
 import Cookies from 'js-cookie';
+// eslint-disable-next-line
 import QrcodeVue from 'qrcode.vue';
-import SetAttrComponent from '@/components/SetAttrComponent.vue'; // @ is an alias to /src
-import PreviewComponent from '@/components/PreviewComponent.vue';
-import CommonAttrComponent from '@/components/CommonAttrComponent.vue';
-import PluginsComponent from '@/components/PluginsComponent.vue';
-import RightComponent from '@/components/RightComponent.vue';
+import SetAttrComponent from '@/components/SetAttrComponent';
+import PreviewComponent from '@/components/PreviewComponent';
+import CommonAttrComponent from '@/components/CommonAttrComponent';
+import PluginsComponent from '@/components/PluginsComponent';
+import RightComponent from '@/components/RightComponent';
 
 import { front_url, isDev } from '../common/env';
-// const front_url = process.env.VUE_APP_FRONT_URL
 
 import { ss } from '@/common/tool/ss';
-import { tmplDiyMixin } from '@/common/mixin';
+import { tmplDiyMixin } from '../common/mixin';
 import { serialize } from '@/common/utils';
 
 
@@ -109,6 +109,7 @@ export default class Home extends Vue {
 
 
         clearPlugin() {
+          // eslint-disable-next-line
           this.$refs.preview.clearPlugin();
         }
 
@@ -141,7 +142,7 @@ export default class Home extends Vue {
         }
 
         // 这个数据一直往上传，这么辛苦
-        setDataEv(data) {
+        static setDataEv() {
 
         }
 
@@ -151,7 +152,7 @@ export default class Home extends Vue {
         }
 
         saveData(use, pre) {
-          // @ts-ignore
+          // eslint-disable-next-line
           this.$refs.preview.uploadConfig(use, pre);
         }
 }

@@ -10,9 +10,9 @@ export const attrData = function (state: any, value: any) {
   state.activeAttr.attrData = value;
 };
 
-export const SET_INIT_DATA = function (state: any, value: any) {
-  state.initData = value;
-};
+// export const SET_INIT_DATA = function (state: any, value: any) {
+//   state.initData = value;
+// };
 
 
 export const editStatus = function (state: { editStatus: any; }, value: any) {
@@ -38,7 +38,6 @@ export const mode = function (state:any, value:any) {
 export const system = function (state:any, value:any) {
   state.system = value;
 };
-
 
 
 // export const eTitle = function (state: any, value: any) {

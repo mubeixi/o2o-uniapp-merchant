@@ -1,9 +1,9 @@
 <template>
     <div class="tab-menu" v-if="tabData && tabData.length>0">
         <ul>
-            <template v-for="(item,idx) in tabData">
+            <template v-for="(item,idx) in tabData" >
                 <template v-if="!item.hide">
-                    <li
+                    <li :key="idx"
                         @mouseover="overNav(idx,item)"
                         @mouseout="outNav(idx,item)"
                         @click="bindThirdEvent(idx,item)"
@@ -17,41 +17,40 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import {
-    Action,
-    State,
+  Action,
+  State,
 } from 'vuex-class';
 @Component
 export default class LayoutTabComponent extends Vue {
-
     @Action('menu/setMenuActiveIndex') setMenuActiveIndex
 
 
     // computed
     get tabData() {
-        return this.$store.getters['menu/menuThirdList']
+      return this.$store.getters['menu/menuThirdList'];
     }
 
     get activeIndex() {
-        return this.$store.state.menu.menuThirdIndex
+      return this.$store.state.menu.menuThirdIndex;
     }
 
-    bindThirdEvent(idx,item){
-        this.setMenuActiveIndex({name:'menuThirdIndex',idx})
+    bindThirdEvent(idx, item) {
+      this.setMenuActiveIndex({ name: 'menuThirdIndex', idx });
 
-        //路由跳转
-        item.name && this.$router.push({name:item.name})
-    }
-
-
-    overNav(idx) {
-      // this.menuIndex = idx;
-    }
-
-    outNav() {
-
+      // 路由跳转
+      if (item.name) {
+        this.$router.push({ name: item.name });
+      }
     }
 
 
+    static overNav() {
+
+    }
+
+    static outNav() {
+
+    }
 }
 </script>
 <style lang="less" scoped>

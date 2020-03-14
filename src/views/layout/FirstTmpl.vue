@@ -26,7 +26,7 @@ import {
   Component,
   Vue,
 } from 'vue-property-decorator';
-import LayoutMenuComponent from '../../components/comm/LayoutMenuComponent.vue';
+import LayoutMenuComponent from '../../components/comm/LayoutMenuComponent';
 
 @Component({
   components: { LayoutMenuComponent },

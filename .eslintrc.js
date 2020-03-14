@@ -1,16 +1,30 @@
+const path = require('path')
+const root = __dirname;
+
 module.exports = {
   root: true,
   env: {
+    browser: true,
     node: true,
+    es6: true
   },
   extends: [
     'plugin:vue/essential',
     '@vue/airbnb',
     '@vue/typescript',
   ],
+  settings: {
+    "import/resolver": {
+      webpack: {
+        config: 'node_modules/@vue/cli-service/webpack.config.js',
+      },
+    }
+  },
   rules: {
-    // 'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-    // 'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    'import/extensions': ['error', 'always', { 'js': 'never',  'ts': 'never', 'vue': 'never' }],
+    "global-require":'off',
     // "no-alert": 0,//禁止使用alert confirm prompt
     // "no-array-constructor": 2,//禁止使用数组构造器
     // "no-bitwise": 0,//禁止使用按位运算符
@@ -74,7 +88,7 @@ module.exports = {
     // "no-octal-escape": 2,//禁止使用八进制转义序列
     // "no-param-reassign": 2,//禁止给参数重新赋值
     // "no-path-concat": 0,//node中不能使用__dirname或__filename做路径拼接
-    // "no-plusplus": 0,//禁止使用++，--
+    "no-plusplus": 'off',//0,//禁止使用++，--
     // "no-process-env": 0,//禁止使用process.env
     // "no-process-exit": 0,//禁止使用process.exit()
     // "no-proto": 2,//禁止使用__proto__属性
@@ -116,7 +130,7 @@ module.exports = {
     // "block-scoped-var": 0,//块语句中使用var
     // "brace-style": [1, "1tbs"],//大括号风格
     // "callback-return": 1,//避免多次调用回调什么的
-    "camelcase": ["error", {"allow": ["aa_bb"]}],//2,//强制驼峰法命名
+    "camelcase": ["off", {"allow": ["aa_bb"]}],//2,//强制驼峰法命名
     // "comma-dangle": [2, "never"],//对象字面量项尾不能有逗号
     // "comma-spacing": 0,//逗号前后的空格
     // "comma-style": [2, "last"],//逗号风格，换行时在行首还是行尾
@@ -142,7 +156,7 @@ module.exports = {
     // "key-spacing": [0, { "beforeColon": false, "afterColon": true }],//对象字面量中冒号的前后空格
     // "lines-around-comment": 0,//行前/行后备注
     // "max-depth": [0, 4],//嵌套块深度
-    // "max-len": [0, 80, 4],//字符串最大长度
+    "max-len": [0, 80, 4],//字符串最大长度
     // "max-nested-callbacks": [0, 2],//回调嵌套深度
     // "max-params": [0, 3],//函数最多只能有3个参数
     // "max-statements": [0, 10],//函数内最多有几个声明

@@ -4,7 +4,7 @@ import { login, getUsersInfo } from '../api/user';
 import { ss } from '@/common/tool/ls';
 import { GetQueryByString } from '@/common/utils';
 import { isDev } from './env';
-import fun from './fun';
+import {fun} from './func';
 
 
 /**
@@ -70,7 +70,7 @@ export const tmplDiyMixin = {
 
     // 走ss这样会每次重新打开页面，就会获取数据
     if (!ss.get('Shop_Info')) {
-      await getUsersInfo({}, {}).then((res:{data:any}) => {
+      await getUsersInfo({}, {}).then((res:any) => {
         ss.set('Shop_Info', {
           ShopName: res.data.ShopName,
           ShopLogo: res.data.ShopLogo,

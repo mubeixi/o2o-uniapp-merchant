@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import echarts from 'echarts';
-import fun from './fun';
+import {fun} from './func';
 
 // const i18n = require('i18n');
 

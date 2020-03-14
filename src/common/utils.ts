@@ -2,7 +2,7 @@
 
 import Vue from 'vue';
 import _ from 'underscore';
-import fun from './fun';
+import {fun} from './func';
 import { staticUrl } from './env';
 // const staticUrl = process.env.VUE_APP_STATIC_URL
 

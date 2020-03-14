@@ -15,8 +15,13 @@
       <div class="container">
           <div class="container-left">
               <div class="container-leftTop">
-                <template v-for="(dir,idx) in dirs" >
-                  <div class="item js-type-item" v-if="filterSourceType(dir.source_type)" :class="{active:idx==current_type_idx}"  @click="selectSourceType(dir,idx)">
+                <template v-for="(dir,idx) in dirs"  >
+                  <div
+                          :key="idx"
+                          class="item js-type-item"
+                          v-if="filterSourceType(dir.source_type)"
+                          :class="{active:idx==current_type_idx}"
+                          @click="selectSourceType(dir,idx)">
                     {{dir.label}}
                   </div>
                 </template>
@@ -42,11 +47,13 @@
               <div class="container-right-title">
                 <!--面包屑菜单-->
                 <div class="w300 crumb">
-                  <template v-for="(txt,idx) in current_path_arr">
-                    <span @click="bindCrumb(idx)" class="crumb-txt">{{txt}}</span>
-                    <template v-if="idx+1<current_path_arr.length">
-                      <span class="crumb-space">/</span>
-                    </template>
+                  <template v-for="(txt,idx) in current_path_arr" >
+                    <span :key="idx">
+                       <span @click="bindCrumb(idx)" class="crumb-txt">{{txt}}</span>
+                      <template v-if="idx+1<current_path_arr.length">
+                        <span class="crumb-space">/</span>
+                      </template>
+                    </span>
                   </template>
                 </div>
                 <!--文件上传-->
@@ -68,6 +75,7 @@
                     <template slot="btn">
                       <el-button >上传文件</el-button>
                     </template>
+                    <!--eslint-disable-next-line-->
                     <template slot="preview" slot-scope="props">
                       <div></div>
 <!--                      <div class="preview-list" v-show="props.previews.length>0">-->
@@ -83,7 +91,7 @@
               <div class="container-right-image" style="height:440px;overflow: hidden">
                 <!--:style="{marginRight:((idx2+1)%8==0?'0px':'')}"-->
 
-                <div  class="image"   v-for="(file,idx3) in preview_file_list" >
+                <div  class="image"   v-for="(file,idx3) in preview_file_list" :key="idx3" >
                   <img class="img" :src="file.url"  >
                   <div class="progress">
                     <el-progress :text-inside="true" :show-text="false" :percentage="file.percent"></el-progress>
@@ -93,7 +101,7 @@
                   <div  class="image" :class="{check:file.checked && select_file_list.length>0}" :key="idx2" v-for="(file,idx2) in current_file_list" >
                     <!--文件夹先显示-->
                     <template v-if="file.is_dir" >
-                      <div class="dir" @click.top="selectDir(file)" >
+                      <div class="dir" @click.stop="selectDir(file)" >
                         <div>
                           <i style="font-size: 36px;" class="el-icon-folder-opened"></i>
                         </div>
@@ -111,6 +119,7 @@
                           <img @click="addFn(file)" class="img-cover" :src="getFileUrl(file.fileurl)" />
                         </template>
                         <template v-else>
+                          <!--eslint-disable-next-line-->
                           <div @click="addFn(file)" class="img-cover" v-lazy:background-image="getFileUrl(file.fileurl)"></div>
                         </template>
                         <div class="file_name">
@@ -123,7 +132,7 @@
               </div>
               <div class="paginate-box" >
                 <div style="text-align: right;">
-                  <el-button @click="minusPage" size="mini"><</el-button><div style="display: inline-block" class="padding10-c">{{currentPage}}/{{totalPage}}</div><el-button size="mini" @click="plusPage">></el-button>
+                  <el-button @click="minusPage" size="mini"></el-button><div style="display: inline-block" class="padding10-c">{{currentPage}}/{{totalPage}}</div><el-button size="mini" @click="plusPage">></el-button>
                   <el-input size="mini" class="pageGo" v-model.number="pageGo" ></el-input>
                   <span class="spanCur" @click="changeCurrent">跳转</span>
                 </div>
@@ -168,8 +177,8 @@ import {
 
 import { createDirectory, getFileList } from '../../api/pub';
 import { domain } from '../../common/utils';
-import WzwFileButton from './WzwFileButton.vue';
-import fun from '../../common/fun';
+import WzwFileButton from './WzwFileButton';
+import {fun} from '../../common/func';
 import { isDev } from '../../common/env';
 
 
@@ -197,33 +206,7 @@ import { isDev } from '../../common/env';
       },
     },
     computed: {
-      dir_list() {
-        const rt = [];
-        for (const dir of this.dirs) {
-          if (window.finderDialogInstance.allow.indexOf(dir.source_type) !== -1) {
-            rt.push(dir);
-          }
-        }
-        return rt;
-      },
-      // 上传按钮插件的配置
-      extParam() {
-        return { type: this.source_type };
-      },
-      storage_type() {
-        return this.initData.storage_type == 1 ? 'aliyun' : 'local';
-      },
-      up_progress_list() {
-        return window.UP_PROGRESS_LIST;
-      },
-      current_path_arr() {
-        const arr = this.current_path.split('/');
-        const rt = [];
-        for (const item of arr) {
-          if (item)rt.push(item);
-        }
-        return rt;
-      },
+
     },
     filters: {
       // imgFilter(filename){
@@ -284,6 +267,42 @@ export default class WzwFinder extends Vue {
 
       @State initData
 
+      get dir_list() {
+        const rt = [];
+        // eslint-disable-next-line
+      for (const dir of this.dirs) {
+        // eslint-disable-next-line
+        if (window.finderDialogInstance.allow.indexOf(dir.source_type) !== -1) {
+            rt.push(dir);
+          }
+        }
+        return rt;
+      }
+
+      // 上传按钮插件的配置
+      get extParam() {
+        return { type: this.source_type };
+      }
+
+      get storage_type() {
+        return this.initData.storage_type === 1 ? 'aliyun' : 'local';
+      }
+
+      get up_progress_list() {
+      // eslint-disable-next-line
+      return window.UP_PROGRESS_LIST;
+      }
+
+      get current_path_arr() {
+        const arr = this.current_path.split('/');
+        const rt = [];
+        // eslint-disable-next-line
+      for (const item of arr) {
+          if (item)rt.push(item);
+        }
+        return rt;
+      }
+
       filterSourceType(source_type) {
         return this.finderDialogInstance.allow.indexOf(source_type) !== -1;
       }
@@ -291,16 +310,17 @@ export default class WzwFinder extends Vue {
       reqLoading = false // loading
 
       getFileUrl(url) {
+        let fileUrl = '';
         // oss才支持
         // 后端牛逼，服务器也支持了this.initData.storage_type &&
         if (isDev) {
-          url = domain(url);
+          fileUrl = domain(url);
         }
 
-        if (this.source_type == 'media') return `${url}?x-oss-process=video/snapshot,t_1000,f_jpg,w_200`;
-        if (this.source_type == 'image') return `${url}-r200`;
+        if (this.source_type === 'media') return `${fileUrl}?x-oss-process=video/snapshot,t_1000,f_jpg,w_200`;
+        if (this.source_type === 'image') return `${fileUrl}-r200`;
         // if(isDev) return domain(url)
-        return url;
+        return fileUrl;
       }
 
       folder_name = ''
@@ -367,7 +387,7 @@ export default class WzwFinder extends Vue {
 
       select_file_list = []
 
-      pageGo=''
+      pageGo:any =''
 
       domainFn(url) {
         return domain(url, '?x-oss-process=image/resize,m_lfit,h_110,w_110');
@@ -410,13 +430,13 @@ export default class WzwFinder extends Vue {
       }
 
       plusPage() {
-        if (this.currentPage == this.totalPage) return;
+        if (this.currentPage === this.totalPage) return;
         this.currentPage++;
         // this.pageGo=this.currentPage
       }
 
       minusPage() {
-        if (this.currentPage == 1) return;
+        if (this.currentPage === 1) return;
         this.currentPage--;
         // this.pageGo=this.currentPage
       }

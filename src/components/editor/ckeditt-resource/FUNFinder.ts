@@ -1,5 +1,5 @@
 
-const finderDialogInstance = window.finderDialogInstance;
+const { finderDialogInstance } = window;
 const noop = () => {};
 export class FUNFinder {
   constructor(opt) {

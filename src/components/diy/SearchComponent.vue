@@ -13,7 +13,6 @@ import { Component, Vue } from 'vue-property-decorator';
 import { mapState } from 'vuex';
 import Search from '@/assets/js/diy/search';
 import { deepCopy, deepCopyStrict, mixinStyle } from '@/common/utils';
-import fun from '../../common/fun';
 
 import { pageMove } from '@/common/tool/pageMove';
 

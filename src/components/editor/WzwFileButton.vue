@@ -38,7 +38,9 @@ import {
 } from '../../common/request';
 
 
-import fun from '../../common/fun';
+import {
+  fun
+} from '../../common/func';
 import { get_Users_ID, GET_ACCESS_TOKEN, createToken } from '../../common/fetch';
 
 const defaultAllowFileType = ['jpeg', 'png', 'gif', 'bmp'];

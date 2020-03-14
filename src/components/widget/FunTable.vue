@@ -66,17 +66,15 @@ import {
   Vue,
   Prop,
 } from 'vue-property-decorator';
-import {
-  mapState,
-} from 'vuex';
+
 import _ from 'underscore';
-import col from 'element-ui/packages/col/src/col';
+
 import FunSearch from './FunSearch';
 import {
   commonReq,
 } from '../../api/pub';
 import MyRender from './MyRender';
-import { RenderContent } from '@/components/widget/RenderContent';
+import { RenderContent } from './RenderContent';
 import { objTranslate } from '../../common/utils';
 
 const noop = () => {};
@@ -89,8 +87,9 @@ const extendFn = (obj) => {
 };
 const valInArr = (val, arr) => {
   let rt = false;
-  for (const i in arr) {
-    if (arr[i] == val) {
+  // eslint-disable-next-line
+  for (const i of arr) {
+    if (arr[i] === val) {
       rt = true;
       break;
     }
@@ -154,7 +153,7 @@ const valInArr = (val, arr) => {
     })
 
 export default class FunTable extends Vue {
-  filterColVal(row, columName) {
+  static filterColVal(row, columName) {
     return row[columName];
   }
 
@@ -233,7 +232,7 @@ export default class FunTable extends Vue {
           type: [Function, Boolean],
           default: false,
         })
-        __list_filter_func // 拿到结果后数据过滤的
+        list_filter_func // 拿到结果后数据过滤的
 
         @Prop({
           type: Object,
@@ -249,7 +248,7 @@ export default class FunTable extends Vue {
             return newOBJ;
           },
         })
-        __params_filter_func // 发起请求前参数混合的
+        params_filter_func // 发起请求前参数混合的
 
 
         @Prop({
@@ -281,6 +280,7 @@ export default class FunTable extends Vue {
           console.log('初始化选中的', objTranslate(this.has));
           if (!this.vkey || !this.has || !_.isArray(this.has) || this.has.length < 1) {
             console.log('清空数据');
+            // eslint-disable-next-line
             this.$refs.funTable.clearSelection();
             return;
           }
@@ -288,6 +288,7 @@ export default class FunTable extends Vue {
           const rows = [];
 
           console.log(objTranslate(this.lists));
+          // eslint-disable-next-line
           for (const item of this.lists) {
             if (valInArr(item[this.vkey], this.has)) {
               rows.push(item);
@@ -295,17 +296,18 @@ export default class FunTable extends Vue {
           }
           console.log('设置为选中', rows);
 
-          const _self = this;
+          const self = this;
           if (rows) {
             setTimeout(() => {
               rows.forEach((row) => {
-                _self.$refs.funTable.toggleRowSelection(row, true);
+                // eslint-disable-next-line
+                  self.$refs.funTable.toggleRowSelection(row, true);
               });
             }, 10);
           }
         }
 
-        getSlotNameFn(column) {
+        static getSlotNameFn(column) {
           if (typeof column.render === 'string') {
             return column.render;
           }
@@ -373,7 +375,7 @@ export default class FunTable extends Vue {
          * 拼接筛选条件
          */
         buildFilterFormData() {
-
+          // console.log(2)
         }
 
         async loadData({ paramObj = {} } = {}) {
@@ -391,7 +393,6 @@ export default class FunTable extends Vue {
           Object.assign(postData, filterData);
           if (!this.act) {
             throw new Error('act参数必传');
-            return;
           }
 
           this.getDataLoding = true;
@@ -400,15 +401,17 @@ export default class FunTable extends Vue {
           Object.assign(postData, paramObj);
 
           // 修改参数
-          if (this.__params_filter_func) {
-            postData = this.__params_filter_func(postData, this.extParam);
+
+          if (this.params_filter_func) {
+            postData = this.params_filter_func(postData, this.extParam);
           }
           await commonReq(this.act, postData).then((res) => {
+            // eslint-disable-next-line
             this.totalCount = res.totalCount;
 
             // 看是否需要过滤
-            if (this.__list_filter_func) {
-              this.lists = this.__list_filter_func(res);
+            if (this.list_filter_func) {
+              this.lists = this.list_filter_func(res);
             } else {
               this.lists = res.data;
             }

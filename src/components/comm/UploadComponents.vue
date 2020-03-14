@@ -82,7 +82,7 @@ import { baseApiUrl } from '@/common/env';
 import { createToken, GET_ACCESS_TOKEN, get_Users_ID } from '@/common/fetch';
 import { domain, objTranslate } from '@/common/utils';
 
-import fun from '../../common/fun';
+import {fun} from '../../common/func';
 
 
 function noop() {

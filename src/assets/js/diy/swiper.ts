@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Common from './commonClass';
-import fun from '../../../common/fun';
+import {fun} from '../../../common/func';
 
 function setValue() {
   // let value = {}

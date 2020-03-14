@@ -87,9 +87,9 @@ export default Vue.extend({
   },
   methods: {
     goApprove() {
-      if (this.form.type == 'person') {
+      if (this.form.type === 'person') {
         this.$router.push('PersonApprove');
-      } else if (this.form.type == 'company') {
+      } else if (this.form.type === 'company') {
         this.$router.push('CompanyApprove');
       }
     },

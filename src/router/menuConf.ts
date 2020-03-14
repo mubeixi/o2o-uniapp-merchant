@@ -1,46 +1,60 @@
-import Home from '../views/Home.vue';
-import FirstTmpl from '../views/layout/FirstTmpl.vue';
-import SecondTmpl from '../views/layout/SecondTmpl.vue';
-import EmptyTmpl from '../views/layout/EmptyTmpl.vue';
-
-import Diy from '../views/Diy.vue';
-
-import Empty from '../views/Empty.vue';
-
-import NotFound from '../views/NotFound.vue';
-import Login from '../views/register/Login.vue';
-import Register from '../views/register/Register.vue';
-
-import Setting from '../views/register/Setting.vue';
-import SettledAgreement from '../views/register/SettledAgreement.vue';
-import PersonApprove from '../views/register/PersonApprove.vue';
-import CompanyApprove from '../views/register/CompanyApprove.vue';
-import Pay from '../views/register/Pay.vue';
-
-import SettlementInformation from '../views/register/SettlementInformation.vue';
-import AddIndustryCate from '../views/register/AddIndustryCate.vue';
-
-
-
-import UpdatePassword from '../views/info/UpdatePassword.vue';
-import ProductList from '../views/product/ProductList.vue';
-import ProductTmplBase from '../views/product/ProductTmplBase.vue';
-import ProductTmplDiy from '../views/product/ProductTmplDiy.vue';
-import BindVip from '../views/info/BindVip.vue';
-import ShippingAddress from '../views/info/ShippingAddress.vue';
-import Settlement from '../views/info/Settlement.vue';
-
+// @ts-ignore
+import Home from '../views/Home';
+// @ts-ignore
+import FirstTmpl from '../views/layout/FirstTmpl';
+// @ts-ignore
+import SecondTmpl from '../views/layout/SecondTmpl';
+// @ts-ignore
+import EmptyTmpl from '../views/layout/EmptyTmpl';
+// @ts-ignore
+import Diy from '../views/Diy';
+// @ts-ignore
+import Empty from '../views/Empty';
+// @ts-ignore
+import NotFound from '../views/NotFound';
+// @ts-ignore
+import Login from '../views/register/Login';
+// @ts-ignore
+import Register from '../views/register/Register';
+// @ts-ignore
+import Setting from '../views/register/Setting';
+// @ts-ignore
+import SettledAgreement from '../views/register/SettledAgreement';
+// @ts-ignore
+import PersonApprove from '../views/register/PersonApprove';
+// @ts-ignore
+import CompanyApprove from '../views/register/CompanyApprove';
+// @ts-ignore
+import Pay from '../views/register/Pay';
+// @ts-ignore
+import SettlementInformation from '../views/register/SettlementInformation';
+// @ts-ignore
+import AddIndustryCate from '../views/register/AddIndustryCate';
+// @ts-ignore
+import UpdatePassword from '../views/info/UpdatePassword';
+// @ts-ignore
+import ProductList from '../views/product/ProductList';
+// @ts-ignore
+import ProductTmplBase from '../views/product/ProductTmplBase';
+// @ts-ignore
+import ProductTmplDiy from '../views/product/ProductTmplDiy';
+// @ts-ignore
+import BindVip from '../views/info/BindVip';
+// @ts-ignore
+import ShippingAddress from '../views/info/ShippingAddress';
+// @ts-ignore
+import Settlement from '../views/info/Settlement';
 
 export default [
   {
     path: '/app',
     name: 'LayoutPage',
     component: FirstTmpl,
-    redirect: {name: 'dashboard'},
+    redirect: { name: 'dashboard' },
     children: [
       {
         path: 'dashboard',
-        name:'dashboard',
+        name: 'dashboard',
         meta: {
           title: '概览',
         },
@@ -48,19 +62,19 @@ export default [
 
       {
         path: 'invalidate',
-        name:'invalidate',
+        name: 'invalidate',
         meta: {
           title: '商家认证',
-        }
+        },
       },
       {
         path: 'info',
-        name:'info',
+        name: 'info',
         meta: {
           title: '商家资料',
         },
         component: SecondTmpl,
-        redirect: {name: 'UpdatePassword'},
+        redirect: { name: 'UpdatePassword' },
         children: [
           {
             path: 'UpdatePassword',
@@ -98,23 +112,23 @@ export default [
       },
       {
         path: 'store',
-        name:'store',
+        name: 'store',
         meta: {
           title: '店铺管理',
         },
       },
       {
         path: 'product',
-        name:'product',
+        name: 'product',
         meta: {
           title: '产品管理',
         },
         component: SecondTmpl,
-        redirect: {name: 'ProductList'},
+        redirect: { name: 'ProductList' },
         children: [
           {
             path: 'list',
-            name:'ProductList',
+            name: 'ProductList',
             component: ProductList,
             meta: {
               title: '全部商品',
@@ -130,7 +144,7 @@ export default [
           },
           {
             path: 'tag',
-            name:'ProductTag',
+            name: 'ProductTag',
             component: Empty,
             meta: {
               title: '商品标签',
@@ -138,16 +152,16 @@ export default [
           },
           {
             path: 'tmpl',
-            name:'ProductTmpl',
+            name: 'ProductTmpl',
             meta: {
               title: '商品模板',
             },
             component: EmptyTmpl,
-            redirect: {name: 'ProductTmplBase'},
-            children:[
+            redirect: { name: 'ProductTmplBase' },
+            children: [
               {
                 path: 'base',
-                name:'ProductTmplBase',
+                name: 'ProductTmplBase',
                 component: ProductTmplBase,
                 meta: {
                   title: '通用模板',
@@ -155,13 +169,13 @@ export default [
               },
               {
                 path: 'diy',
-                name:'ProductTmplDiy',
+                name: 'ProductTmplDiy',
                 component: ProductTmplDiy,
                 meta: {
                   title: '自定义模板',
                 },
               },
-            ]
+            ],
           },
           {
             path: 'specs',

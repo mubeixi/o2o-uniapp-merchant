@@ -21,16 +21,16 @@ const options = {
   //   host: '',
   //   port: '',
   // }
-}
+};
 
 
-let FtpDeploy = require('ftp-deploy');
+const FtpDeploy = require('ftp-deploy');
 
-let ftpDeploy = new FtpDeploy();
+const ftpDeploy = new FtpDeploy();
 
-let config = {
+const config = {
   ...options,
-  localRoot: __dirname + '/dist',
+  localRoot: `${__dirname}/dist`,
   remoteRoot: '/member/shop/setting/diy/',
   include: ['*', '**/*'], // this would upload everything except dot files
   // include: ["*.php", "dist/*", ".*"],
@@ -65,17 +65,18 @@ ftpDeploy.deploy(config, (err, res) => {
   }
 });
 
-ftpDeploy.on('uploading', function(data) {
+ftpDeploy.on('uploading', (data) => {
   // console.log(data.totalFilesCount); // total file count being transferred
   // console.log(data.transferredFileCount); // number of files transferred
-  // console.log(`start up ${data.filename} ，fileSize ${data.totalFilesCount}`); // partial path with filename being uploaded
+  // console.log(`start up ${data.filename} ，fileSize ${data.totalFilesCount}`);
+  // partial path with filename being uploaded
 });
-ftpDeploy.on('uploaded', function(data) {
-  console.log('\033[33m '+data.filename+' upload done \033[39m'); // same data as uploading event
+ftpDeploy.on('uploaded', (data) => {
+  console.log(`[33m ${data.filename} upload done [39m`); // same data as uploading event
 });
-ftpDeploy.on('log', function(data) {
+ftpDeploy.on('log', (data) => {
   // console.log(data); // same data as uploading event
 });
-ftpDeploy.on('upload-error', function(data) {
+ftpDeploy.on('upload-error', (data) => {
   console.log(data.err); // data will also include filename, relativePath, and other goodies
 });

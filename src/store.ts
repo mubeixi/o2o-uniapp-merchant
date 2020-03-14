@@ -6,17 +6,18 @@ import * as mutations from './store/mutations';
 import * as getters from './store/getters';
 import system from './store/modules/system';
 import menu from './store/modules/menu';
+
 Vue.use(Vuex);
 
 export const storeInstance = new Vuex.Store({
   modules: {
     system,
-    menu
+    menu,
   },
   state,
   mutations,
   actions,
-  getters
+  getters,
 });
 
-export default storeInstance
+export default storeInstance;

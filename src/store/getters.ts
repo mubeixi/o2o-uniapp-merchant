@@ -1,1 +1,1 @@
-export const fun2 = ()=>3;
+export const fun2 = () => 3;

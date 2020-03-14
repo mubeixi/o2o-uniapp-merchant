@@ -34,10 +34,9 @@ export default class App extends Vue {
     @State initData
 
     created() {
-
-      setTimeout(()=>{
-        this.$router.push({name:'ProductList'})
-      },3000)
+      setTimeout(() => {
+        this.$router.push({ name: 'ProductList' });
+      }, 3000);
       // getCommonConfig().then((res) => {
       //   this.setInitData(res.data);
       // }).catch(() => {});

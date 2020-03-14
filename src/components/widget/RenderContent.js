@@ -24,3 +24,5 @@ export const RenderContent = {
     return <span>{value}</span>;
   },
 };
+
+export default RenderContent;
