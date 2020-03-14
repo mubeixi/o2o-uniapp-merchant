@@ -17,8 +17,10 @@
         Prop,
     } from 'vue-property-decorator';
 
-    export default class BindVip extends Vue {
+    @Component
 
+    export default class BindVip extends Vue {
+        formq='sss'
     }
 </script>
 
