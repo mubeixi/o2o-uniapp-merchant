@@ -6,7 +6,7 @@ function setValue() {
   // Vue.set(this, 'value', value)
 }
 
-function setConfig() {
+function setConfig(this: any) {
   // 如果新对象，那么可以考虑用默认值替换掉。
   if (JSON.stringify(this.style) === JSON.stringify({
     bgColor: '',
@@ -17,7 +17,7 @@ function setConfig() {
   // let config = {}
 }
 
-function setAttrData() {
+function setAttrData(this: any) {
   const data = {
     title: '视频设置',
     content: [
@@ -26,7 +26,7 @@ function setAttrData() {
         text: '视频地址',
         is_video: true,
         inputType: 'text',
-        patternFunc(val) {
+        patternFunc(val: string) {
           const reg = /(http|https):\/\/([\w.]+\/?)\S*/;
           return reg.test(val);
         },
@@ -43,7 +43,7 @@ function setAttrData() {
         model: this.config.cover,
         editType: 'config',
         editKey: 'cover',
-        editCB: item => item.model,
+        editCB: (item: { model: any; }) => item.model,
       },
     ],
   };
@@ -52,7 +52,7 @@ function setAttrData() {
   Vue.set(this, 'attrData', data);
 }
 
-function attrData(options = {}) {
+function attrData(this: any, options = {}) {
   // @ts-ignore
   const { value, config, attrData } = options;
   // console.log(value, config, attrData);

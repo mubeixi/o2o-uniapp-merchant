@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Common from './commonClass';
-import { ss, ls } from '@/common/tool/ls';
+import { ss, ls } from '@/common/tool/storage';
 
 const shopInfo = ss.get('Shop_Info');
 
@@ -9,7 +9,7 @@ function setValue() {
   // Vue.set(this, 'value', value)
 }
 
-function setConfig() {
+function setConfig(this: any) {
   // 如果新对象，那么可以考虑用默认值替换掉。
   if (JSON.stringify(this.style) === JSON.stringify({
     bgColor: '',
@@ -22,7 +22,7 @@ function setConfig() {
   // let config = {}
 }
 
-function setAttrData() {
+function setAttrData(this: any) {
   const data = {
     title: '店铺信息设置',
     content: [
@@ -59,7 +59,7 @@ function setAttrData() {
   Vue.set(this, 'attrData', data);
 }
 
-function attrData(options = {}) {
+function attrData(this: any, options = {}) {
   // @ts-ignore
   const { value, config, attrData } = options;
   // console.log(value, config, attrData);

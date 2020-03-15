@@ -7,7 +7,7 @@ function setValue() {
   // Vue.set(this, 'value', value)
 }
 
-function setConfig() {
+function setConfig(this: any) {
   // 如果新对象，那么可以考虑用默认值替换掉。
   if (JSON.stringify(this.style) === JSON.stringify({
     color: '',
@@ -20,7 +20,7 @@ function setConfig() {
   // let config = {}
 }
 
-function setAttrData() {
+function setAttrData(this: any) {
   const data = {
     title: '辅助线设置',
     content: [
@@ -85,7 +85,7 @@ function setAttrData() {
   Vue.set(this, 'attrData', data);
 }
 
-function attrData(options = {}) {
+function attrData(this: any, options = {}) {
   // @ts-ignore
   const { value, config, attrData } = options;
   // console.log(value, config, attrData);

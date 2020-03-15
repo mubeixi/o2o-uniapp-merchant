@@ -10,9 +10,7 @@ const plane_contact_plane = (check: { x: number; y: number, x1: number, y1: numb
   };
 
   // @ts-ignore
-  var {
-    x: left, y1: bottom, x1: right, y: top,
-  } = plane;
+  var {x: left, y1: bottom, x1: right, y: top} = plane;
   const domB = {
     left, bottom, right, top,
   };
@@ -28,7 +26,7 @@ const plane_contact_plane = (check: { x: number; y: number, x1: number, y1: numb
  * @param areaList 整个界面的数组
  * @param area 对应的矩形
  */
-export const getRowColSpan = (areaList:object, area:object) => {
+export const getRowColSpan = (areaList:any[], area:object) => {
   const y1arr = areaList.map(areaItem => areaItem.y1);
 
   // 得到所有不同y的值
@@ -63,9 +61,7 @@ const plane_in_plane = (check: { x: number; y: number, x1: number, y1: number },
   };
 
   // @ts-ignore
-  var {
-    x: left, y1: bottom, x1: right, y: top,
-  } = plane;
+  var {x: left, y1: bottom, x1: right, y: top} = plane;
   const domB = {
     left, bottom, right, top,
   };
@@ -91,7 +87,7 @@ const plane_in_plane = (check: { x: number; y: number, x1: number, y1: number },
  * 计算矩形面积
  * @param area
  */
-const countArea = (area:object) => {
+const countArea = (area: {x:number,y:number,x1:number,y1:number}) => {
   // @ts-ignore
   const {
     x, y, x1, y1,
@@ -113,7 +109,7 @@ class MagicCube {
     x: 0, y: 0, x2: 0, y2: 0,
   };// 模板，用四个角标来记录每个选中的区域
 
-  selects = [];
+  selects:any[] = [];
 
   base: Object;
 
@@ -145,6 +141,7 @@ class MagicCube {
   is_full() {
     // @ts-ignore
     let areaCount = 0;
+    // @ts-ignore
     const fullAreaCount = this.row * this.col;
 
     for (const area of this.selects) {
@@ -173,8 +170,8 @@ class MagicCube {
    * @param area
    */
   del_selects(area: object) {
-    let idx = null;
-    for (const i in this.selects) {
+    let idx:number = 0;
+    for (let i=0;i<this.selects.length;i++) {
       if (JSON.stringify(this.selects[i]) === JSON.stringify(area)) {
         idx = i;
         break;

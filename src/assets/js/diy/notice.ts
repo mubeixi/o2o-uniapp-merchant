@@ -19,7 +19,7 @@ function setConfig() {
   // let config = {}
 }
 
-function setAttrData() {
+function setAttrData(this: any) {
   const data = {
     title: '公告设置',
     content: [
@@ -46,7 +46,7 @@ function setAttrData() {
         model: this.style.iconColor,
         editType: 'style',
         editKey: 'iconColor',
-        editCB: item => item.model,
+        editCB: (item: { model: any; }) => item.model,
       },
       {
         type: 'color',
@@ -54,7 +54,7 @@ function setAttrData() {
         model: this.style.color,
         editType: 'style',
         editKey: 'color',
-        editCB: item => item.model,
+        editCB: (item: { model: any; }) => item.model,
       },
       // {
       //   type: 'addbtn',
@@ -99,7 +99,7 @@ function setAttrData() {
   Vue.set(this, 'attrData', data);
 }
 
-function attrData(options = {}) {
+function attrData(this: any, options = {}) {
   // @ts-ignore
   const { value, config, attrData } = options;
   // console.log(value, config, attrData);

@@ -7,7 +7,7 @@ function setValue() {
   // Vue.set(this, 'value', value)
 }
 
-function setConfig() {
+function setConfig(this: any) {
   if (JSON.stringify(this.style) === JSON.stringify({
     color: '',
     bgColor: '',
@@ -21,7 +21,7 @@ function setConfig() {
   // Vue.set(this, 'config', config)
 }
 
-function setAttrData() {
+function setAttrData(this: any) {
   const data = {
     title: '文字设置',
     content: [
@@ -32,7 +32,7 @@ function setAttrData() {
         editType: 'value',
         editKey: 'content',
         model: this.value.content,
-        editCB: item => item.model,
+        editCB: (item: { model: any; }) => item.model,
       },
       {
         type: 'radio',
@@ -61,7 +61,7 @@ function setAttrData() {
         model: this.style.bgColor,
         editType: 'style',
         editKey: 'bgColor',
-        editCB: item => (item.model ? item.model : 'none'),
+        editCB: (item: { model: any; }) => (item.model ? item.model : 'none'),
       },
       {
         type: 'color',
@@ -69,7 +69,7 @@ function setAttrData() {
         model: this.style.color,
         editType: 'style',
         editKey: 'color',
-        editCB: item => item.model,
+        editCB: (item: { model: any; }) => item.model,
       },
       {
         type: 'radio',
@@ -98,7 +98,7 @@ function setAttrData() {
         editType: 'value',
         editKey: 'link',
         model: this.value,
-        bindLinkCB: (dataType, type, path, tooltip, dataItem, pageEl, idx2) => {
+        bindLinkCB: (dataType: any, type: any, path: any, tooltip: any, dataItem: any, pageEl: { bindLinkDialogShow: boolean; }, idx2: any) => {
           console.log(dataType, type, path, tooltip, dataItem, pageEl, idx2);
           pageEl.bindLinkDialogShow = false;
 
@@ -120,7 +120,7 @@ function setAttrData() {
   Vue.set(this, 'attrData', data);
 }
 
-function attrData(options = {}) {
+function attrData(this: any, options:any = {}) {
   const { value, config, attrData } = options;
   if (value !== false) setValue.call(this);
   if (config !== false) setConfig.call(this);

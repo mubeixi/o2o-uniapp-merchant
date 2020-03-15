@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Common from './commonClass';
-import { ls } from '@/common/tool/ls';
+import { ls } from '@/common/tool/storage';
 
 const shopInfo = ls.get('Shop_Info');
 

@@ -1,18 +1,15 @@
-// @ts-nocheck
-
 import Vue from 'vue';
 import _ from 'underscore';
 import { fun } from './func';
 import { staticUrl } from './env';
-// const staticUrl = process.env.VUE_APP_STATIC_URL
-
 
 /**
  * 获取指定的样式值
  * @param el
  * @param name
  */
-export const getStyle = function (el, name) {
+export const getStyle = function (el:any, name:string) {
+  // @ts-ignore
   return window.getComputedStyle(el, null)[name];
 };
 
@@ -20,19 +17,19 @@ export const getStyle = function (el, name) {
  * 给相对路径的图片加上前缀
  * @param url
  */
-export const domain = (url, style = '') => {
+export const domain = (url:string, style = '') => {
   if (!url) return '';
   if (url.indexOf('http') == -1) return staticUrl + url;
   return url + style;
 };
 
-export const sortBy = props => function (a, b) {
-  return a[props] - b[props];
-};
-
-export const notSortBy = props => function (a, b) {
-  return b[props] - a[props];
-};
+// export const sortBy = props => function (a, b) {
+//   return a[props] - b[props];
+// };
+//
+// export const notSortBy = props => function (a, b) {
+//   return b[props] - a[props];
+// };
 
 /**
  *从指定字符串str中获取name=val的val值
@@ -40,7 +37,7 @@ export const notSortBy = props => function (a, b) {
  * @param {*} str
  * @param {*} name
  */
-export const GetQueryByString = (str, name) => {
+export const GetQueryByString = (str:string, name:string) => {
   // 获取？号出现几次
   const tempArr = str.split('?');
   // console.log(tempArr)
@@ -75,7 +72,7 @@ export const GetQueryByString = (str, name) => {
  * 同时可以用于简单粗暴的避免引用传递的对象copy，但是注意这种写法只保留值，会丢失方法
  * @param obj
  */
-export const objTranslate = obj => JSON.parse(JSON.stringify(obj));
+export const objTranslate = (obj:any) => JSON.parse(JSON.stringify(obj));
 
 
 /**
@@ -83,11 +80,12 @@ export const objTranslate = obj => JSON.parse(JSON.stringify(obj));
  * @param targetObj
  * @param tmplObj
  */
-export const mergeObject = function (targetObj, tmplObj) {
+export const mergeObject = function (targetObj:object, tmplObj:object) {
   for (const key in tmplObj) {
     if (!tmplObj.hasOwnProperty(key)) continue;
     // 只覆盖着和么多
     if (['value', 'style', 'config'].indexOf(key) != -1) {
+      // @ts-ignore
       Vue.set(targetObj, key, objTranslate(tmplObj[key]));
     }
   }
@@ -99,7 +97,7 @@ export const mergeObject = function (targetObj, tmplObj) {
  * @param newObject
  * 不过很奇怪之前的人为什么要复制两遍
  */
-export function deepCopy(currentObj, newObject) {
+export function deepCopy(currentObj:object, newObject:object) {
   mergeObject(currentObj, newObject);// 方法则是保留本地的新建实例  new Search()这样
   return currentObj;
 }
@@ -109,13 +107,14 @@ export function deepCopy(currentObj, newObject) {
  * @param defaultStyle
  * @param style
  */
-export function mixinStyle(defaultStyle, style) {
+export function mixinStyle(defaultStyle:object, style:object) {
   if (!defaultStyle)defaultStyle = {};
   if (!style)style = {};
 
   const rt = objTranslate(defaultStyle);
   for (const i in style) {
     if (!style.hasOwnProperty(i)) continue;
+    // @ts-ignore
     rt[i] = style[i];
   }
   return rt;
@@ -127,14 +126,14 @@ export function mixinStyle(defaultStyle, style) {
  * @param currentObj
  * @param newObject
  */
-export function deepCopyStrict(currentObj, newObject) {
+export function deepCopyStrict(currentObj:object, newObject:object) {
   addFun_base(currentObj, newObject);
   mergeDate_base(currentObj, newObject);
   return currentObj;
 }
 
 // 会修改原数据
-function addFun_base(object, newobj) {
+function addFun_base(object:any, newobj:any) {
   for (const key in object) {
     if (!object.hasOwnProperty(key)) continue;
 
@@ -151,7 +150,7 @@ function addFun_base(object, newobj) {
 }
 
 // 会修改原数据 浅拷贝对象。。
-function mergeDate_base(current, newObj) {
+function mergeDate_base(current:any, newObj:any) {
   for (const key in newObj) {
     if (!newObj.hasOwnProperty(key)) continue;
 
@@ -175,19 +174,12 @@ function mergeDate_base(current, newObj) {
   }
 }
 
-/**
- * 是否为Number类型
- * @param value
- */
-function isNum(value) {
-  return typeof value === 'number' && !isNaN(value);
-}
 
 /**
  * 去除数组中的相同元素
  * @param arr
  */
-export const arrayUnique = (arr) => {
+export const arrayUnique = (arr:any[]) => {
   const res = [];
   for (let i = 0, len = arr.length; i < len; i++) {
     const obj = arr[i];
@@ -204,7 +196,7 @@ export const arrayUnique = (arr) => {
  * 可以用在post请求转get,或者拼接url
  * @param obj
  */
-export const serialize = (obj) => {
+export const serialize = (obj:any) => {
   const ary = [];
   for (const p in obj) {
     if (obj.hasOwnProperty(p) && (obj[p] || obj[p] == 0 || obj[p] == '')) {
@@ -218,18 +210,21 @@ export const serialize = (obj) => {
  * 多维数组的笛卡尔乘积
  * @param array
  */
-export const calcDescartes = (array) => {
+export const calcDescartes = (array:any[]) => {
   // console.log(array)
   if (array.length < 1) return [];
   if (array.length < 2) {
     // if(array[0].length) return []
     return [array[0]];
   }
-  return [].reduce.call(array, (col, set) => {
-    const res = [];
-    col.forEach((c) => {
-      set.forEach((s) => {
-        const t = [].concat(Array.isArray(c) ? c : [c]);
+  // @ts-ignore
+  return [].reduce.call(array, (col:any[], set:any[], currentIndex) => {
+    const res:any[] = [];
+    col.forEach((c:any) => {
+      set.forEach((s:any) => {
+        const concatVal:any = Array.isArray(c) ? c : [c];
+        const t = [].concat(concatVal);
+        // @ts-ignore
         t.push(s);
         res.push(t);
       });
@@ -247,7 +242,7 @@ export const calcDescartes = (array) => {
  * @param arr
  * @param column
  */
-export const get_arr_column = (arr, column) => {
+export const get_arr_column = (arr:any[], column:string) => {
   if (!_.isArray(arr)) {
     throw new Error('数据必传');
   }
@@ -272,7 +267,7 @@ export const get_arr_column = (arr, column) => {
  * 使平铺城1维数组
  */
 
-export const plainArray = (arr, key, newArr) => {
+export const plainArray = (arr:any[], key:string, newArr:any[]) => {
   if (!arr || !key) return false;
 
   for (const item of arr) {
@@ -315,7 +310,7 @@ export const plainArray = (arr, key, newArr) => {
  * @param arr
  * @param startIdx
  */
-export const getArrayMulite = (arr, startIdx) => {
+export const getArrayMulite = (arr:any[], startIdx:number) => {
   let rt = 1;
 
   for (let i = startIdx + 1; i < arr.length; i++) {
@@ -329,7 +324,7 @@ export const getArrayMulite = (arr, startIdx) => {
 /**
  * 批量创建数组
  */
-export const createTmplArray = (item, len) => {
+export const createTmplArray = (item:any, len:number) => {
   const rt = [];
   for (let i = 0; i < len; i++) {
     rt.push(objTranslate(item));
@@ -345,7 +340,7 @@ export const createTmplArray = (item, len) => {
  * @param val
  * @param full 是否返回值和下标，默认只返回下标
  */
-export const findArrayIdx = (arr, key_val_arr, full:boolean = false) => {
+export const findArrayIdx = (arr:any[], key_val_arr:object, full:boolean = false) => {
   for (const i in arr) {
     if (typeof arr[i] !== 'object') continue;
 
@@ -365,7 +360,7 @@ export const findArrayIdx = (arr, key_val_arr, full:boolean = false) => {
  * order_by   desc: 降续排列  asc: 升续排列
  * 默认为asc
  */
-export const numberSort = function (arr, order_by) {
+export const numberSort = function (arr:any[], order_by:string) {
   if (typeof order_by !== 'undefined' && order_by == 'desc') { // desc
     return arr.sort((v1, v2) => v2 - v1);
   } // asc
@@ -378,9 +373,10 @@ export const numberSort = function (arr, order_by) {
  * @param obj1
  * @param obj2
  */
-export const compare_obj = (obj1, obj2) => {
+export const compare_obj = (obj1:object, obj2:object) => {
   for (const i in obj1) {
     if (!obj1.hasOwnProperty(i)) continue;
+    // @ts-ignore
     if (!obj2.hasOwnProperty(i) || obj1[i] != obj2[i]) {
       return false;
     }
@@ -391,7 +387,7 @@ export const compare_obj = (obj1, obj2) => {
 
 // ------------ 收货地址函数 -------------
 // 数组转化
-export const array_change = function (arr) {
+export const array_change = function (arr:any[]) {
   const array = [];
   // console.log('utls')
   // console.log(arr)
@@ -402,7 +398,7 @@ export const array_change = function (arr) {
 };
 
 // 获取数组下标  用于收货地址选择的显示
-export const get_arr_index = function (arr, id) {
+export const get_arr_index = function (arr:any[], id:number|string) {
   for (const i in arr) {
     if (arr[i].id == id) {
       return i;
@@ -410,14 +406,16 @@ export const get_arr_index = function (arr, id) {
   }
 };
 
-export const emptyObject = (obj, strice) => {
+export const emptyObject = (obj:object, strice:boolean) => {
   for (const prop in obj) {
+    // @ts-ignore
     if (obj[prop] === '' || obj[prop] === undefined || obj[prop] === null || obj[prop] === 'null' || obj[prop] === 'undefined') {
       if (strice) {
         fun.error({ msg: `参数${prop}不能为空` });
         console.log(`参数${prop}不能为空`);
         return false;
       }
+      // @ts-ignore
       delete obj[prop];
     }
   }
@@ -428,7 +426,7 @@ export const emptyObject = (obj, strice) => {
  * 判断某个值是否为非
  * @param val
  */
-export const emptyValue = (val) => {
+export const emptyValue = (val:any) => {
   if (val === '' || val === undefined || val === null || val === 'null' || val === 'undefined') {
     return true;
   }
@@ -439,7 +437,7 @@ export const emptyValue = (val) => {
 /**
  * 兼容原来的kindeditor文档
  */
-export const formatRichTextByKindEditor = (html) => {
+export const formatRichTextByKindEditor = (html:string) => {
   if (!html) return;
 
   const newContent = html.replace(/<embed[^>]*>/gi, (match, capture) => {
@@ -454,6 +452,6 @@ export const formatRichTextByKindEditor = (html) => {
   return newContent;
 };
 
-export function trim(str) {
+export function trim(str:string) {
   return str ? str.replace(/^\s*|\s*$/g, '') : '';
 }

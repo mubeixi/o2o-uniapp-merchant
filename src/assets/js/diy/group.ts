@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Common from './commonClass';
-import { ls } from '@/common/tool/ls';
+import { ls } from '@/common/tool/storage';
 
 const shopInfo = ls.get('Shop_Info');
 
@@ -24,7 +24,7 @@ function setConfig() {
 }
 
 
-function setAttrData() {
+function setAttrData(this: any) {
   const data = {
     title: '拼团',
     content: [
@@ -58,7 +58,7 @@ function setAttrData() {
           this.setIndex(0, { value: false, config: false });
           this.vm.$store.commit('activeAttr', this);// 传出去
         },
-        bindCateCB: (dataType, type, path, tooltip, dataArr, pageEl, idx2) => {
+        bindCateCB: (dataType: any, type: any, path: any, tooltip: any, dataArr: { map: (arg0: (item: any) => any) => void; }, pageEl: { bindCateDialogShow: boolean; }, idx2: any) => {
           console.log(dataArr);
           pageEl.bindCateDialogShow = false;
 
@@ -71,7 +71,7 @@ function setAttrData() {
           this.setIndex(0, { value: false, config: false });
           this.vm.$store.commit('activeAttr', this);// 传出去
         },
-        inputCB: (val) => {
+        inputCB: (val: string) => {
           Vue.set(this.value, 'limit', parseInt(val));
           Vue.set(this.config, 'origin', 'cate');
 
@@ -79,7 +79,7 @@ function setAttrData() {
           this.setIndex(0, { value: false, config: false });
           this.vm.$store.commit('activeAttr', this);// 传出去
         },
-        editCB: (item) => {
+        editCB: (item: { model: any; }) => {
           this.config.origin = item.model;// 手动赋值一下
 
           // 这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
@@ -222,7 +222,7 @@ function setAttrData() {
         model: this.style.bgColor,
         editType: 'style',
         editKey: 'bgColor',
-        editCB: item => (item.model ? item.model : 'none'),
+        editCB: (item: { model: any; }) => (item.model ? item.model : 'none'),
       },
       {
         type: 'checkbox',
@@ -231,7 +231,7 @@ function setAttrData() {
         editType: 'config',
         disabled: this.config.origin === 'filter' && this.config.attr.title.readOnly,
         model: this.config.attr.title.show,
-        editCB: (item) => {
+        editCB: (item: { model: any; }) => {
           Vue.set(this.config.attr.title, 'show', item.model);// 传递值
 
 
@@ -245,7 +245,7 @@ function setAttrData() {
         label: '商品描述',
         editType: 'config',
         model: this.config.attr.desc.show,
-        editCB: (item) => {
+        editCB: (item: { model: any; }) => {
           console.log(item.model);
 
           Vue.set(this.config.attr.desc, 'show', item.model);// 传递值
@@ -261,7 +261,7 @@ function setAttrData() {
         label: '商品价格',
         editType: 'config',
         model: this.config.attr.price.show,
-        editCB: (item) => {
+        editCB: (item: { model: any; }) => {
           console.log(item.model);
 
           Vue.set(this.config.attr.price, 'show', item.model);// 传递值
@@ -278,21 +278,21 @@ function setAttrData() {
         editType: 'config',
         model: this.config.attr.buybtn.show,
         data: this.config.attr.buybtn,
-        checkboxCB: (val) => {
+        checkboxCB: (val: any) => {
           Vue.set(this.config.attr.buybtn, 'show', val);// 传递值
 
           // 这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
           this.setIndex(0, { value: false, config: false });
           this.vm.$store.commit('activeAttr', this);// 传出去
         },
-        inputCB: (val) => {
+        inputCB: (val: any) => {
           Vue.set(this.config.attr.buybtn, 'text', val);// 传递值
 
           // 这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
           this.setIndex(0, { value: false, config: false });
           this.vm.$store.commit('activeAttr', this);// 传出去
         },
-        radioCB: (val) => {
+        radioCB: (val: any) => {
           Vue.set(this.config.attr.buybtn, 'style', val);// 传递值
 
           // 这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
@@ -308,7 +308,7 @@ function setAttrData() {
         model: this.config.attr.tag.show,
 
         data: this.config.attr.tag,
-        checkboxCB: (val) => {
+        checkboxCB: (val: any) => {
           Vue.set(this.config.attr.tag, 'show', val);// 传递值
           Vue.set(this.config.attr.tag, 'style', 'diy');
 
@@ -316,7 +316,7 @@ function setAttrData() {
           this.setIndex(0, { value: false, config: false });
           this.vm.$store.commit('activeAttr', this);// 传出去
         }, // 勾选的回调
-        radioImgCB: (img, idx2) => {
+        radioImgCB: (img: { data: { path: any; }; }, idx2: any) => {
           Vue.set(this.config.attr.tag, 'img', img.data.path);
           Vue.set(this.config.attr.tag, 'style', 'diy');
 
@@ -324,7 +324,7 @@ function setAttrData() {
           this.setIndex(0, { value: false, config: false });
           this.vm.$store.commit('activeAttr', this);// 传出去
         },
-        radioCB: (item) => {
+        radioCB: () => {
         }, // 后面的radio回调
       },
     ],
@@ -334,7 +334,7 @@ function setAttrData() {
   Vue.set(this, 'attrData', data);
 }
 
-function attrData(options = {}) {
+function attrData(this: any, options = {}) {
   // @ts-ignore
   const { value, config, attrData } = options;
   // console.log(value, config, attrData);

@@ -7,7 +7,7 @@ function setValue() {
   // Vue.set(this, 'value', value)
 }
 
-function setConfig() {
+function setConfig(this: any) {
   // 如果新对象，那么可以考虑用默认值替换掉。
   if (JSON.stringify(this.style) === JSON.stringify({
     bgColor: '',
@@ -20,7 +20,7 @@ function setConfig() {
   // let config = {}
 }
 
-function setAttrData() {
+function setAttrData(this: any) {
   const data = {
     title: '优惠券设置',
     content: [
@@ -30,7 +30,7 @@ function setAttrData() {
         model: this.style.bgColor,
         editType: 'style',
         editKey: 'bgColor',
-        editCB: item => (item.model ? item.model : 'none'),
+        editCB: (item: { model: any; }) => (item.model ? item.model : 'none'),
       },
       {
         type: 'radio',
@@ -61,7 +61,7 @@ function setAttrData() {
         type: 'addbtn',
         text: '',
         label: '选择优惠券',
-        dialogCB: (coupon_list) => {
+        dialogCB: (coupon_list: any) => {
           this.value.list = [...coupon_list];
 
           // 这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
@@ -69,7 +69,7 @@ function setAttrData() {
           this.vm.$store.commit('activeAttr', this);// 传出去
         },
         // 这个按钮的功能，主要是新增页面吧
-        editCB: (pageEl) => {
+        editCB: (pageEl: { coupon_ids: string; couponDialogShow: boolean; }) => {
           const tempArr = [];
           for (const i in this.value.list) {
             tempArr.push(this.value.list[i].Coupon_ID);
@@ -85,12 +85,12 @@ function setAttrData() {
         label: '优惠券',
         value: this.value.list,
         // 之类是输入的回调，可以根据需要决定写什么
-        inputCB: (item) => {
+        inputCB: () => {
           // this.value.list = [...item.value];
           //
           // this.vm.$store.state.activeAttr.value.list = this.value.list;// 传出去
         },
-        removeCB: (idx) => {
+        removeCB: (idx: any) => {
           this.value.list.splice(idx, 1);
 
           // 这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可

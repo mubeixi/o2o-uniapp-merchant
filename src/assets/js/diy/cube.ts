@@ -7,7 +7,7 @@ function setValue() {
   // Vue.set(this, 'value', value)
 }
 
-function setConfig() {
+function setConfig(this: any) {
   // 如果新对象，那么可以考虑用默认值替换掉。
   if (JSON.stringify(this.style) === JSON.stringify({
     bgColor: '',
@@ -266,7 +266,7 @@ const tmplArr = {
   cube_select_style1, cube_select_style2, cube_select_style3, cube_select_style4, cube_select_style5, cube_select_style6, cube_select_style7,
 };
 
-function setAttrData() {
+function setAttrData(this: any) {
   const data = {
     title: '图片混排',
     content: [
@@ -302,8 +302,9 @@ function setAttrData() {
         editType: 'config',
         editKey: 'type',
         model: this.config.type,
-        editCB: (item) => {
+        editCB: (item: { model: string; }) => {
           if (item.model != 'diy') {
+            // @ts-ignore
             const tmplData = tmplArr[`cube_select_style${item.model}`];
 
             // 设置行列
@@ -365,7 +366,7 @@ function setAttrData() {
         editType: 'config',
         editKey: 'row',
         model: this.config.row,
-        editCB: (item) => {
+        editCB: (item: { model: any; }) => {
           console.log(item);
 
           // 设置行列
@@ -411,7 +412,7 @@ function setAttrData() {
         style_type: this.config.type,
         value: this.value.list,
         // 数据变化放进来的
-        seclectChangeCB: (arr, pageEl) => {
+        seclectChangeCB: (arr: { [x: string]: any; length: number; }, pageEl: any) => {
           // console.log('55555555555555555cube选中列表有变动',this.tagName)
           // console.log(objTranslate(arr),objTranslate(this.value),objTranslate(this));
           // 如果是数组的长度变小了
@@ -465,7 +466,7 @@ function setAttrData() {
 
           // pageEl.currentData = {}
         },
-        bindCB: (dataType, type, path, tooltip, dataItem, pageEl, idx2) => {
+        bindCB: (dataType: any, type: any, path: any, tooltip: any, dataItem: any, pageEl: { bindLinkDialogShow: boolean; }, idx2: string | number) => {
           console.log(dataType, type, path, tooltip, dataItem, pageEl, idx2);
           pageEl.bindLinkDialogShow = false;
 
@@ -480,11 +481,11 @@ function setAttrData() {
           this.vm.$store.commit('activeAttr', this);// 传出去
         },
         // 之类是输入的回调，可以根据需要决定写什么
-        imgCB: (item, idx2) => {
+        imgCB: () => {
 
 
         },
-        removeCB: (idx) => {
+        removeCB: () => {
 
         },
 
@@ -498,7 +499,7 @@ function setAttrData() {
   Vue.set(this, 'attrData', data);
 }
 
-function attrData(options = {}) {
+function attrData(this: any, options = {}) {
   // console.log(this.config)
   // @ts-ignore
   const { value, config, attrData } = options;

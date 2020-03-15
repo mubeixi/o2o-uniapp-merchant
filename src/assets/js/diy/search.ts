@@ -7,7 +7,7 @@ function setValue() {
   // Vue.set(this, 'value', value)
 }
 
-function setConfig() {
+function setConfig(this: any) {
   // 如果新对象，那么可以考虑用默认值替换掉。
   if (JSON.stringify(this.style) === JSON.stringify({
     bgColor: '',
@@ -23,7 +23,7 @@ function setConfig() {
   // let config = {}
 }
 
-function setAttrData() {
+function setAttrData(this: any) {
   console.log(JSON.parse(JSON.stringify(this)));
   const data = {
     title: '搜索设置',
@@ -33,7 +33,7 @@ function setAttrData() {
         type: 'addbtn',
         text: '热词管理',
         label: '添加热词',
-        editCB: (item) => {
+        editCB: () => {
           const temp = [...this.value.hot];
 
           temp.push('热词');
@@ -51,12 +51,12 @@ function setAttrData() {
         label: '热词名称',
         value: this.value.hot,
         // 之类是输入的回调，可以根据需要决定写什么
-        inputCB: (item) => {
+        inputCB: (item: { value: any; }) => {
           this.value.hot = [...item.value];
           // 这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
           this.vm.$store.commit('activeAttr', this);// 传出去
         },
-        removeCB: (idx) => {
+        removeCB: (idx: any) => {
           this.value.hot.splice(idx, 1);
 
           // 这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
@@ -122,7 +122,7 @@ function setAttrData() {
         model: this.style.bgColor,
         editType: 'style',
         editKey: 'bgColor',
-        editCB: item => (item.model ? item.model : 'none'),
+        editCB: (item: { model: any; }) => (item.model ? item.model : 'none'),
       },
       {
         type: 'color',
@@ -130,7 +130,7 @@ function setAttrData() {
         model: this.style.inputBgColor,
         editType: 'style',
         editKey: 'inputBgColor',
-        editCB: item => item.model,
+        editCB: (item: { model: any; }) => item.model,
       },
       {
         type: 'color',
@@ -138,7 +138,7 @@ function setAttrData() {
         model: this.style.color,
         editType: 'style',
         editKey: 'color',
-        editCB: item => item.model,
+        editCB: (item: { model: any; }) => item.model,
       },
     ],
   };
@@ -146,8 +146,7 @@ function setAttrData() {
   Vue.set(this, 'attrData', data);
 }
 
-function attrData(options = {}) {
-  // @ts-ignore
+function attrData(this: any, options:any = {}) {
   const { value, config, attrData } = options;
   console.log(value, config, attrData, JSON.parse(JSON.stringify(this)));
   if (value !== false) setValue.call(this);

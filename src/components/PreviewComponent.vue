@@ -218,7 +218,7 @@ import { pageMove } from '@/common/tool/pageMove';
 import {
   deepCopy, GetQueryByString, getStyle, objTranslate, trim,
 } from '@/common/utils';
-import { ss } from '@/common/tool/ss';
+import { ss } from '../common/tool/storage';
 
 import { uploadImgByBase64 } from '../api/pub';
 import {

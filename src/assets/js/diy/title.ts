@@ -8,7 +8,7 @@ function setValue() {
   // Vue.set(this, 'value', value)
 }
 
-function setConfig() {
+function setConfig(this: any) {
   if (JSON.stringify(this.style) === JSON.stringify({
     color: '',
     bgColor: '',
@@ -24,7 +24,7 @@ function setConfig() {
   // Vue.set(this, 'config', config)
 }
 
-function setAttrData() {
+function setAttrData(this: any) {
   const data = {
     title: '标题设置',
     content: [
@@ -35,7 +35,7 @@ function setAttrData() {
         editType: 'value',
         editKey: 'title',
         model: this.value.title,
-        editCB: item => item.model,
+        editCB: (item: { model: any; }) => item.model,
       },
       {
         type: 'input',
@@ -44,7 +44,7 @@ function setAttrData() {
         editType: 'value',
         editKey: 'small',
         model: this.value.small,
-        editCB: item => item.model,
+        editCB: (item: { model: any; }) => item.model,
       },
       {
         type: 'uploadImg',
@@ -56,7 +56,7 @@ function setAttrData() {
         mini: true,
         editType: 'config',
         editKey: 'icon',
-        editCB: item => item.model,
+        editCB: (item: { model: any; }) => item.model,
       },
       {
         type: 'input',
@@ -88,7 +88,7 @@ function setAttrData() {
         model: this.style.bgColor,
         editType: 'style',
         editKey: 'bgColor',
-        editCB: item => (item.model ? item.model : 'none'),
+        editCB: (item: { model: any; }) => (item.model ? item.model : 'none'),
       },
       {
         type: 'radio',
@@ -114,7 +114,7 @@ function setAttrData() {
         model: this.style.color,
         editType: 'style',
         editKey: 'color',
-        editCB: item => item.model,
+        editCB: (item: { model: any; }) => item.model,
       },
       // {
       //   type: 'setlink',
@@ -176,7 +176,7 @@ function setAttrData() {
         row_type: 'title', // text/num这些代表简单的值，可以直接设置。
         label: '',
         value: this.value.more,
-        bindCB: (dataType, type, path, tooltip, dataItem, pageEl, idx2) => {
+        bindCB: (dataType: any, type: any, path: any, tooltip: any, dataItem: any, pageEl: { bindLinkDialogShow: boolean; }, idx2: string | number) => {
           console.log(dataType, type, path, tooltip, dataItem, pageEl, idx2);
           pageEl.bindLinkDialogShow = false;
 
@@ -190,7 +190,7 @@ function setAttrData() {
           this.vm.$store.commit('activeAttr', this);// 传出去
         },
         // 之类是输入的回调，可以根据需要决定写什么
-        imgCB: (item, idx2) => {
+        imgCB: (item: { data: { path: any; }; }, idx2: string | number) => {
           console.log(item.data.path, idx2);
           Vue.set(this.value.list[idx2], 'img_src', item.data.path);
 
@@ -198,7 +198,7 @@ function setAttrData() {
           this.setIndex(0, { value: false, config: false });
           this.vm.$store.commit('activeAttr', this);// 传出去
         },
-        removeCB: (idx) => {
+        removeCB: (idx: any) => {
           this.value.more.splice(idx, 1);
 
           // 这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
@@ -222,7 +222,7 @@ function setAttrData() {
   Vue.set(this, 'attrData', data);
 }
 
-function attrData(options = {}) {
+function attrData(this: any, options = {}) {
   // @ts-ignore
   const { value, config, attrData } = options;
   if (value !== false) setValue.call(this);

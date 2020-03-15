@@ -7,7 +7,7 @@ function setValue() {
   // Vue.set(this, 'value', value)
 }
 
-function setConfig() {
+function setConfig(this: any) {
   // 如果新对象，那么可以考虑用默认值替换掉。
   if (JSON.stringify(this.style) === JSON.stringify({
     bgColor: '',
@@ -21,7 +21,7 @@ function setConfig() {
   // let config = {}
 }
 
-function setAttrData() {
+function setAttrData(this: any) {
   const data = {
     title: '图文导航设置',
     content: [
@@ -49,7 +49,7 @@ function setAttrData() {
         model: this.style.color,
         editType: 'style',
         editKey: 'color',
-        editCB: item => item.model,
+        editCB: (item: { model: any; }) => item.model,
       },
       {
         type: 'color',
@@ -58,7 +58,7 @@ function setAttrData() {
         model: this.style.bgColor,
         editType: 'style',
         editKey: 'bgColor',
-        editCB: item => (item.model ? item.model : 'none'),
+        editCB: (item: { model: any; }) => (item.model ? item.model : 'none'),
       },
       {
         type: 'addbtn',
@@ -67,7 +67,7 @@ function setAttrData() {
         // openBindLink:(pageEl,item,idx)=>{
         //   pageEl.bindLinkDialogShow = true
         // },
-        dialogCB: (coupon_list) => {
+        dialogCB: (coupon_list: any[]) => {
           this.value.list = [...coupon_list];
 
           // 这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
@@ -75,7 +75,7 @@ function setAttrData() {
           this.vm.$store.commit('activeAttr', this);// 传出去
         },
         // 这个按钮的功能，主要是新增元素
-        editCB: (pageEl) => {
+        editCB: () => {
           if (this.value.list.length >= 10) {
             fun.info({ msg: '最多允许十个' });
             return;
@@ -98,7 +98,7 @@ function setAttrData() {
         row_type: 'nav', // text/num这些代表简单的值，可以直接设置。
         label: '',
         value: this.value.list,
-        bindCB: (dataType, type, path, tooltip, dataItem, pageEl, idx2) => {
+        bindCB: (dataType: any, type: any, path: any, tooltip: any, dataItem: any, pageEl: { bindLinkDialogShow: boolean; }, idx2: string | number) => {
           console.log(dataType, type, path, tooltip, dataItem, pageEl, idx2);
           pageEl.bindLinkDialogShow = false;
 
@@ -112,7 +112,7 @@ function setAttrData() {
           this.vm.$store.commit('activeAttr', this);// 传出去
         },
         // 之类是输入的回调，可以根据需要决定写什么
-        imgCB: (item, idx2) => {
+        imgCB: (item: { data: { path: any; }; }, idx2: string | number) => {
           Vue.set(this.value.list[idx2], 'img', item.data.path);
 
 
@@ -120,7 +120,7 @@ function setAttrData() {
           this.setIndex(0, { value: false, config: false });
           this.vm.$store.commit('activeAttr', this);// 传出去
         },
-        removeCB: (idx) => {
+        removeCB: (idx: any) => {
           this.value.list.splice(idx, 1);
 
 
@@ -138,7 +138,7 @@ function setAttrData() {
   Vue.set(this, 'attrData', data);
 }
 
-function attrData(options = {}) {
+function attrData(this: any, options:any= {}) {
   const { value, config, attrData } = options;
   // console.log(value, config, attrData);
   if (value !== false) setValue.call(this);

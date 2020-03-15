@@ -56,13 +56,13 @@ import CommonAttrComponent from '@/components/CommonAttrComponent';
 import PluginsComponent from '@/components/PluginsComponent';
 import RightComponent from '@/components/RightComponent';
 
-import { ss } from '@/common/tool/ss';
 import { front_url, isDev } from '../common/env';
 
 // const front_url = process.env.VUE_APP_FRONT_URL
 
 import { serialize } from '@/common/utils';
 import { tmplDiyMixin } from '@/common/mixin';
+import { ss } from '../common/tool/storage';
 
 
     @Component({

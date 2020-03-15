@@ -1,10 +1,9 @@
-import Vue from 'vue';
-import { Loading } from 'element-ui';
+
 import qs from 'qs';
 import Cookie from 'js-cookie';
 import { baseApiUrl } from './env';
 import { hexMD5 } from '@/common/tool/md5';
-import { ls } from '@/common/tool/ls';
+import { ls } from '@/common/tool/storage';
 
 
 import './tool/base64';

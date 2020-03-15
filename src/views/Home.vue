@@ -60,7 +60,6 @@ import {
   State,
 } from 'vuex-class';
 import Cookies from 'js-cookie';
-// eslint-disable-next-line
 import QrcodeVue from 'qrcode.vue';
 import SetAttrComponent from '@/components/SetAttrComponent';
 import PreviewComponent from '@/components/PreviewComponent';
@@ -70,22 +69,23 @@ import RightComponent from '@/components/RightComponent';
 
 import { front_url, isDev } from '../common/env';
 
-import { ss } from '@/common/tool/ss';
+
 import { tmplDiyMixin } from '../common/mixin';
 import { serialize } from '@/common/utils';
+import { ss } from '../common/tool/storage';
 
 
-    @Component({
-      mixins: [tmplDiyMixin],
-      components: {
-        PluginsComponent,
-        SetAttrComponent,
-        PreviewComponent,
-        RightComponent,
-        CommonAttrComponent,
-        QrcodeVue,
-      },
-    })
+@Component({
+  mixins: [tmplDiyMixin],
+  components: {
+    PluginsComponent,
+    SetAttrComponent,
+    PreviewComponent,
+    RightComponent,
+    CommonAttrComponent,
+    QrcodeVue,
+  },
+})
 
 
 export default class Home extends Vue {
@@ -109,8 +109,8 @@ export default class Home extends Vue {
 
 
         clearPlugin() {
-          // eslint-disable-next-line
-          this.$refs.preview.clearPlugin();
+          const previewRef: any = this.$refs.preview;
+          previewRef.clearPlugin();
         }
 
 
@@ -152,8 +152,8 @@ export default class Home extends Vue {
         }
 
         saveData(use, pre) {
-          // eslint-disable-next-line
-          this.$refs.preview.uploadConfig(use, pre);
+          const previewRef: any = this.$refs.preview;
+          previewRef.uploadConfig(use, pre);
         }
 }
 </script>

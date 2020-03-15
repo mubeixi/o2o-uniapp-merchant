@@ -1,7 +1,7 @@
 // import {login,getUsersInfo} from "@/common/fetch";
 import Cookies from 'js-cookie';
 import { login, getUsersInfo } from '../api/user';
-import { ss } from '@/common/tool/ls';
+import { ss } from '@/common/tool/storage';
 import { GetQueryByString } from '@/common/utils';
 import { isDev } from './env';
 import { fun } from './func';
@@ -17,10 +17,10 @@ export const doLoginMixin = {
       Cookies.set('Users_ID', 'wkbq6nc2kc');
 
       await login({ Account: 'admin', Password: '123456' }).then((res:any) => {
-        // ls.set('Users_ID', res.data.Users_ID);
-        // // ls.set('Users_Account', res.data.Users_Account)
+        // storage.set('Users_ID', res.data.Users_ID);
+        // // storage.set('Users_Account', res.data.Users_Account)
         //
-        // ls.set('Shop_Info', {
+        // storage.set('Shop_Info', {
         //   ShopName: res.data.ShopName,
         //   ShopLogo: res.data.ShopLogo,
         //   description: res.data.description
@@ -83,10 +83,10 @@ export const tmplDiyMixin = {
 
     // 先模拟登录一下
     // await login({Account: 'admin', Password: '123456'}).then(res => {
-    //   // ls.set('Users_ID', res.data.Users_ID);
-    //   // // ls.set('Users_Account', res.data.Users_Account)
+    //   // storage.set('Users_ID', res.data.Users_ID);
+    //   // // storage.set('Users_Account', res.data.Users_Account)
     //   //
-    //   // ls.set('Shop_Info', {
+    //   // storage.set('Shop_Info', {
     //   //   ShopName: res.data.ShopName,
     //   //   ShopLogo: res.data.ShopLogo,
     //   //   description: res.data.description
@@ -96,10 +96,10 @@ export const tmplDiyMixin = {
     // return;
 
 
-    // if (ls.get('Users_ID') && ls.get('Users_Account')) return;
+    // if (storage.get('Users_ID') && storage.get('Users_Account')) return;
 
-    // ls.set('Users_ID', Cookies.get('Users_ID'));
-    // ls.set('Users_Account', Cookies.get('Users_Account'));
+    // storage.set('Users_ID', Cookies.get('Users_ID'));
+    // storage.set('Users_Account', Cookies.get('Users_Account'));
   },
 
 };

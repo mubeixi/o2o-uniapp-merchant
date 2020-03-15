@@ -7,7 +7,7 @@ function setValue() {
   // Vue.set(this, 'value', value)
 }
 
-function setConfig() {
+function setConfig(this: any) {
   // 如果新对象，那么可以考虑用默认值替换掉。
   if (JSON.stringify(this.style) === JSON.stringify({
     bgColor: '',
@@ -20,7 +20,7 @@ function setConfig() {
   // let config = {}
 }
 
-function setAttrData() {
+function setAttrData(this: any) {
   const data = {
     title: '图片Banner',
     labelSize: 'L',
@@ -40,7 +40,7 @@ function setAttrData() {
         // openBindLink:(pageEl,item,idx)=>{
         //   pageEl.bindLinkDialogShow = true
         // },
-        dialogCB: (coupon_list) => {
+        dialogCB: (coupon_list:any[]) => {
           this.value.list = [...coupon_list];
 
           // 这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
@@ -48,7 +48,7 @@ function setAttrData() {
           this.vm.$store.commit('activeAttr', this);// 传出去
         },
         // 这个按钮的功能，主要是新增元素
-        editCB: (pageEl) => {
+        editCB: () => {
           if (this.value.list.length > 9) {
             fun.info({ msg: '最多只允许十张图片' });
             return;
@@ -66,7 +66,7 @@ function setAttrData() {
         row_type: 'swiper', // text/num这些代表简单的值，可以直接设置。
         label: '',
         value: this.value.list,
-        bindCB: (dataType, type, path, tooltip, dataItem, pageEl, idx2) => {
+        bindCB: (dataType: any, type: any, path: any, tooltip: any, dataItem: any, pageEl: { bindLinkDialogShow: boolean; }, idx2: string | number) => {
           console.log(dataType, type, path, tooltip, dataItem, pageEl, idx2);
           pageEl.bindLinkDialogShow = false;
 
@@ -81,7 +81,7 @@ function setAttrData() {
           this.vm.$store.commit('activeAttr', this);// 传出去
         },
         // 之类是输入的回调，可以根据需要决定写什么
-        imgCB: (item, idx2) => {
+        imgCB: (item: { data: { path: any; }; }, idx2: string | number) => {
           console.log(item.data.path, idx2);
           Vue.set(this.value.list[idx2], 'img_src', item.data.path);
 
@@ -89,7 +89,7 @@ function setAttrData() {
           this.setIndex(0, { value: false, config: false });
           this.vm.$store.commit('activeAttr', this);// 传出去
         },
-        removeCB: (idx) => {
+        removeCB: (idx: any) => {
           this.value.list.splice(idx, 1);
           // 这里重新生成的attrData应该会在组件中直接显示。 也就是说我只需要直接把this给activeAttr即可
           this.setIndex(0, { value: false, config: false });
@@ -105,7 +105,7 @@ function setAttrData() {
         editType: 'config',
         editKey: 'interval',
         model: this.config.interval,
-        inputCB: item => item.model,
+        inputCB: (item: { model: any; }) => item.model,
       },
       // {
       //   type: 'switch',
@@ -148,7 +148,7 @@ function setAttrData() {
   Vue.set(this, 'attrData', data);
 }
 
-function attrData(options = {}) {
+function attrData(this: any, options = {}) {
   // @ts-ignore
   const { value, config, attrData } = options;
   // console.log(value, config, attrData);
