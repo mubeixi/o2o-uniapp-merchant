@@ -362,7 +362,7 @@ function setAttrData(this: any) {
           this.setIndex(0, { value: false, config: false });
           this.vm.$store.commit('activeAttr', this);// 传出去
         }, // 勾选的回调
-        //, idx2: any
+        // , idx2: any
         radioImgCB: (img: { data: { path: any; }; }) => {
           Vue.set(this.config.attr.tag, 'img', img.data.path);
           Vue.set(this.config.attr.tag, 'style', 'diy');

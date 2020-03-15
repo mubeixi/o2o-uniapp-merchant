@@ -17,3 +17,6 @@ export const getProductCountInfo = (data:object = {}, options:any = false) => fe
 export const getProductDetail = (data:object = {}, options:any = false) => fetch('prod_detail', data, options);
 
 export const getProductList = (data:object = {}, options:any = false) => fetch('get_prod', data, options);
+
+// 获取门店商品列表
+export const getProducts = (data:object = {}, options:any = false) => fetch('get_products', data, options);

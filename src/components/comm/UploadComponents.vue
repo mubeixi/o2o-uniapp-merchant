@@ -4,7 +4,7 @@
     <el-upload
       ref="upload"
       class="upload"
-      :class="[imgUrl?'isHas':'',limit>1?'multiple':'',size,Len==limit?'is_full':'']"
+      :class="[imgUrl?'isHas':'',limit>1?'multiple':'',size,Len===limit?'is_full':'']"
       :multiple="limit>1"
       :accept="accept"
       :name="elName"
@@ -25,10 +25,10 @@
       :on-change='change'>
       <i class="el-icon-plus" v-if="Len<limit"></i>
         <div slot="file"  slot-scope="{file}">
-          <template v-if="file.status!='success'">
-            <el-progress :width="width-2" style="width: 100%" type="circle" :percentage="file.percentage|percent"></el-progress>
+          <template >
+            <el-progress v-if="file.status!=='success'" :width="width-2" style="width: 100%" type="circle" :percentage="file.percentage|percent"></el-progress>
           </template>
-         <template v-if="file.status=='success'">
+         <template v-if="file.status==='success'">
            <video
              v-if="type==='video'"
              class="el-upload-list__item-thumbnail"
@@ -37,9 +37,9 @@
            </video>
            <img v-if="type==='image'"
                 class="el-upload-list__item-thumbnail"
-                :src="domainFn(file.url)" />
+                :src="domainFn(file.url)"  alt="xx"/>
            <span class="el-upload-list__item-actions">
-            <span v-if="size!='minimal'"
+            <span v-if="size!=='minimal'"
               class="el-upload-list__item-preview"
               @click="onPreview(file)"
             >
@@ -58,13 +58,13 @@
 
         </div>
 
-<!--      <template v-if="type==='vidoe' &&file_temp_list.length>0">-->
-<!--        <div>{{file_temp_list[0]}}</div>-->
-<!--&lt;!&ndash;        <video :src="file_temp_list[0]|domain"></video>&ndash;&gt;-->
-<!--      </template>-->
       <div slot="tip" v-if="tip" class="el-upload__tip ">{{tip}} <i @click="remove" style="position: absolute;right: 0;top: 0;font-size: 22px;cursor: pointer;" v-if="showDelIcon && imgUrl" class="el-icon-circle-close del-icon"></i> </div>
     </el-upload>
 
+      <!--      <template v-if="type==='vidoe' &&file_temp_list.length>0">-->
+      <!--        <div>{{file_temp_list[0]}}</div>-->
+      <!--&lt;!&ndash;        <video :src="file_temp_list[0]|domain"></video>&ndash;&gt;-->
+      <!--      </template>-->
     <el-dialog  title="预览素材" :visible.sync="preShow">
       <video width="100%" controls
              autoplay :src="domainFn(dialogImageUrl)" v-if="type==='video'"></video>
@@ -77,31 +77,134 @@
 <script lang="ts">
 
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { mapActions, mapState } from 'vuex';
+
 import { baseApiUrl } from '@/common/env';
 import { createToken, GET_ACCESS_TOKEN, get_Users_ID } from '@/common/fetch';
 import { domain, objTranslate } from '@/common/utils';
-
 import { fun } from '../../common/func';
 
 
 function noop() {
 }
 
-  @Component({
-    computed: {
-      width() {
+@Component
+export default class UploadComponents extends Vue {
+      @Prop({
+        type: String,
+        default: 'image',
+      })
+      elName:string;
+
+      @Prop({
+        type: Boolean,
+        default: false,
+      })
+      disabled:boolean;
+
+      @Prop({
+        type: String,
+        default: 'image',
+      })
+      type:string;
+
+      @Prop({
+        type: String,
+        default: '',
+      })
+      tip:string;
+
+      @Prop(String)
+      imgUrl:string;
+
+      @Prop({
+        type: Boolean,
+        default: true,
+      })
+      showFileList:boolean;
+
+      @Prop({
+        type: Array,
+        default: () => [],
+      })
+      imgs:object;
+
+
+      @Prop({
+        type: Number,
+        default: 1,
+      })
+      limit:number;
+
+      @Prop({
+        type: Function,
+        default: noop,
+      })
+      onSuccess:any;
+
+      @Prop({
+        type: Function,
+        default: noop,
+      })
+      onRemove:any;
+
+      @Prop({
+        type: String,
+        default: 'image/png, image/jpeg',
+      })
+      accept:string;
+
+      @Prop({
+        type: Object,
+        default: () => 1,
+      })
+      cropperOption:object;
+
+      @Prop({
+        type: Number,
+        default: -1,
+      })
+      idx2:number;
+
+      @Prop({
+        type: String,
+        default: 'default',
+      })
+      size:string;
+
+      @Prop(Boolean)
+      showDelIcon:boolean;
+
+      @Prop(Boolean)
+      cropper:boolean;
+
+      @Prop({
+        type: Array,
+        default: () => [],
+      })
+      hasList:any;
+
+      fileList = [];
+
+      // file_temp_list = []
+      Len = 0;
+
+
+      baseURL = baseApiUrl;
+
+      preShow = false;
+
+      dialogImageUrl = '';
+
+      get width() {
         const conf = { mini: 80, minimal: 32, small: 100 };
         return conf[this.size] ? conf[this.size] : 80;
-      },
-      activeAttr: {
-        get() {
-          return this.$store.state.activeAttr;
-        },
-        set: () => {
-        },
-      },
-      ajaxData() {
+      }
+
+      get activeAttr() {
+        return this.$store.state.activeAttr;
+      }
+
+      get ajaxData() {
         const act = this.type === 'video' ? 'upload_video' : 'upload_image';
         const param = {
           Users_ID: get_Users_ID(),
@@ -111,136 +214,14 @@ function noop() {
         };
         const ajaxData = createToken(param);
         return ajaxData;
-      },
+      }
 
-    },
-    watch: {
-      // hasList:{
-      //     immediate:true,
-      //     deep:true,
-      //     handler(val){
-      //         this.fileList = val.map((img,idx)=>{
-      //             return {
-      //                 url:domain(img),
-      //                 name:(new Date()).getTime()+idx
-      //             }
-      //         })
-      //     }
-      // }
-    },
-  })
-
-export default class UploadComponents extends Vue {
-      @Prop({
-        type: String,
-        default: 'image',
-      })
-      elName:string
-
-      @Prop({
-        type: Boolean,
-        default: false,
-      })
-      disabled:boolean
-
-      @Prop({
-        type: String,
-        default: 'image',
-      })
-      type:string
-
-      @Prop({
-        type: String,
-        default: '',
-      })
-      tip:string
-
-      @Prop(String)
-      imgUrl:string
-
-      @Prop({
-        type: Boolean,
-        default: true,
-      })
-      showFileList:boolean
-
-      @Prop({
-        type: Array,
-        default: () => [],
-      })
-      imgs:object
-
-
-      @Prop({
-        type: Number,
-        default: 1,
-      })
-      limit:number
-
-      @Prop({
-        type: Function,
-        default: noop,
-      })
-      onSuccess:any
-
-      @Prop({
-        type: Function,
-        default: noop,
-      })
-      onRemove:any
-
-      @Prop({
-        type: String,
-        default: 'image/png, image/jpeg',
-      })
-      accept:string
-
-      @Prop({
-        type: Object,
-        default: () => { 1; },
-      })
-      cropperOption:object
-
-      @Prop({
-        type: Number,
-        default: -1,
-      })
-      idx2:number
-
-      @Prop({
-        type: String,
-        default: 'default',
-      })
-      size:string
-
-      @Prop(Boolean)
-      showDelIcon:boolean
-
-      @Prop(Boolean)
-      cropper:boolean
-
-      @Prop({
-        type: Array,
-        default: () => [],
-      })
-      hasList:any
-
-      fileList = []
-
-      // file_temp_list = []
-      Len = 0
-
-
-      baseURL = baseApiUrl
-
-      preShow = false
-
-      dialogImageUrl = ''
-
-      restFileList(files) {
+      restFileList(file_list) {
+        let files = file_list;
         const rt = [];
+        const uploadRef:any = this.$refs.upload;
         if (!files) {
-          files = this.$refs.upload.uploadFiles;
+          files = uploadRef.uploadFiles;
         }
 
         console.log(files);
@@ -251,7 +232,7 @@ export default class UploadComponents extends Vue {
           video_url = item.url;
 
           if (this.type === 'video') {
-            if (item.url.indexOf('blob') != -1) {
+            if (item.url.indexOf('blob') !== -1) {
               if (item.status === 'success' && item.response && item.response.data) {
                 video_url = item.response.data.video_url;
                 video_img = item.response.data.video_img;
@@ -262,7 +243,7 @@ export default class UploadComponents extends Vue {
             rt.push({ video_url, video_img });
           } else if (this.type === 'image') {
             url = item.url;
-            if (item.url.indexOf('blob') != -1) {
+            if (item.url.indexOf('blob') !== -1) {
               if (item.status === 'success' && item.response && item.response.data) {
                 url = item.response.data.path;
               } else {
@@ -305,7 +286,8 @@ export default class UploadComponents extends Vue {
 
       doRemove(file) {
         // 直接调组件内部的方法
-        this.$refs.upload.handleRemove(file);
+        const uploadRef:any = this.$refs.upload;
+        uploadRef.handleRemove(file);
       }
 
       handleRemove(file, fileList) {
@@ -318,7 +300,7 @@ export default class UploadComponents extends Vue {
         //         break;
         //     }
         // }
-        call && call(this.restFileList(fileList));
+        if (call)call(this.restFileList(fileList));
       }
 
       domainFunc(url) {
@@ -366,14 +348,14 @@ export default class UploadComponents extends Vue {
       }
 
       success(response, file, fileList) {
-        if (response.errorCode != 0) {
+        if (response.errorCode !== 0) {
           fun.error({ msg: response.msg });
           return;
         }
         console.log('response is ', response, fileList);
         const call = this.onSuccess;
         if (response && response.data) {
-          call && call(this.restFileList(fileList));
+          if (call)call(this.restFileList(fileList));
         }
       }
 

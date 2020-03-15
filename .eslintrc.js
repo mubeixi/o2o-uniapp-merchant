@@ -27,6 +27,12 @@ module.exports = {
     'global-require':'off',
     'no-bitwise':'off',//位运算
     'no-mixed-operators':'off',
+    'no-lonely-if':'off',
+    'class-methods-use-this':'off',
+    'o-restricted-syntax':'off',
+    'prefer-destructuring':'off',
+    'no-restricted-syntax':'off',
+    'no-continue':'off',
     // "no-alert": 0,//禁止使用alert confirm prompt
     // "no-array-constructor": 2,//禁止使用数组构造器
     // "no-bitwise": 0,//禁止使用按位运算符

@@ -103,3 +103,9 @@ export const tmplDiyMixin = {
   },
 
 };
+
+export default {
+  data(){
+    return {}
+  }
+}

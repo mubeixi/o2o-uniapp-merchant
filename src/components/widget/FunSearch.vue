@@ -2,7 +2,7 @@
   <div class="fun-search-plugin" v-if="columnsData.length>0">
       <div class="row">
         <template  v-for="(col,index) in columnsData">
-          <div class="col" v-if="col.search!==false">
+          <div class="col" :key="index" v-if="col.search!==false">
             <div class="label graytext" :style="{fontSize:fontSizeFn(size)}" >{{col.label}}</div>
               <template v-if="col.search.type === 'select'">
                 <el-select :size="size" v-model="col.value" :placeholder="col.search.placeholder||'请选择'">
@@ -86,9 +86,10 @@ export default class FunSearch extends Vue {
         op = {}
 
         fontSizeFn(val) {
-          if (val === 'default') return '16px';
+          // if (val === 'default') return '16px';
           if (val === 'small') return '14px';
           if (val === 'mini') return '12px';
+          return '16px';
         }
 
         // 每次都回重新重置 重置选中的数据有问题

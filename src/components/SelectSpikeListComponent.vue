@@ -69,15 +69,20 @@
 </template>
 
 <script>
-import { getSpikeList } from '../common/fetch';
+import {
+  Component,
+  Vue,
+} from 'vue-property-decorator';
+import {
+  getSpikeList,
+} from '@/api/product';
 import { domain } from '@/common/utils';
+
 
 function noop() {
 
 }
-
-export default {
-  name: 'SelectSpikeListComponent',
+@Component({
   props: {
     pageEl: {
       type: Object,
@@ -96,7 +101,7 @@ export default {
       default: noop,
     },
     spike_id: {
-      type: String | Number,
+      type: [String, Number],
     },
     show: {
       type: Boolean,
@@ -151,7 +156,7 @@ export default {
   },
   computed: {
     page_total() {
-      return parseInt(this.paginate.total / this.paginate.pageSize);
+      return parseInt(this.paginate.total / this.paginate.pageSize, 10);
     },
     // 已经选择的ids_arr不要重复选择了
     // ids_arr() {
@@ -171,19 +176,19 @@ export default {
       this.$refs.multipleTable.clearSelection();
 
       const rows = [];
-
+      // eslint-disable-next-line
       for (const item of this.list) {
-        if (item.id == this.spike_id) {
+        if (item.id === this.spike_id) {
           rows.push(item);
         }
       }
       console.log('设置为选中', rows);
 
-      const _self = this;
+      const self = this;
       if (rows) {
         setTimeout(() => {
           rows.forEach((row) => {
-            _self.$refs.multipleTable.setCurrentRow(row);
+            self.$refs.multipleTable.setCurrentRow(row);
           });
         }, 100);
       }
@@ -195,8 +200,8 @@ export default {
 
       return domain(obj.ImgPath[0]);
     },
-    // 单击某一行
-    handleRowChange(row, column, event) {
+    // 单击某一行 , column, event
+    handleRowChange(row) {
       this.$refs.multipleTable.toggleRowSelection(row);
     },
     filterTag(value, row) {
@@ -206,42 +211,44 @@ export default {
       // 停止
       if (this.paginate.total > 0 && this.page >= this.paginate.total) return;
       this.loading = true;
-      const _self = this;
+      const self = this;
       // 构造请求
       const postData = JSON.parse(JSON.stringify(this.paginate));
 
       getSpikeList(postData)
         .then((res) => {
           setTimeout(() => {
-            _self.loading = false;
+            self.loading = false;
           }, 600);
           this.paginate.total = res.totalCount;
           this.paginate.page++;
-          call && call(res.data);
+          if (call) {
+            call(res.data);
+          }
         });
     },
     next() {
-      if (this.paginate.page == this.paginate.total) return;
+      if (this.paginate.page === this.paginate.total) return;
       this.paginate.page++;
       this.loadCouponInfo((arr) => {
         this.list = arr;
       });
     },
     current(num) {
-      if (this.paginate.page == num) return;
+      if (this.paginate.page === num) return;
       this.paginate.page = num;
       this.loadCouponInfo((arr) => {
         this.list = arr;// this.list.concat(arr)
       });
     },
     prev() {
-      if (this.paginate.page == 1) return;
+      if (this.paginate.page === 1) return;
       this.paginate.page--;
       this.loadCouponInfo((arr) => {
         this.list = arr;
       });
     },
-    selectCoupon({}) {
+    selectCoupon() {
       this.onSuccess.call(this, this.currentRow, this.pageEl);
       // this.innerVisible = false;
     },
@@ -259,7 +266,10 @@ export default {
       // }
     },
   },
-};
+})
+export default class SelectSpikeListComponent extends Vue {
+
+}
 </script>
 <style lang="less" scoped>
 

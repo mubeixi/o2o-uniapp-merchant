@@ -24,8 +24,9 @@
           align="center"
           width="70">
         </el-table-column>
-        <template v-for="(column,idx1) in computedColumns">
+        <template v-for="(column) in computedColumns">
               <el-table-column
+
                 :type="column.type"
                 :key="column.prop + column.label"
                 :label="column.label"
@@ -280,8 +281,8 @@ export default class FunTable extends Vue {
           console.log('初始化选中的', objTranslate(this.has));
           if (!this.vkey || !this.has || !_.isArray(this.has) || this.has.length < 1) {
             console.log('清空数据');
-            // eslint-disable-next-line
-            this.$refs.funTable.clearSelection();
+            const funTableRef:any = this.$refs.funTable;
+            funTableRef.clearSelection();
             return;
           }
 
@@ -300,8 +301,8 @@ export default class FunTable extends Vue {
           if (rows) {
             setTimeout(() => {
               rows.forEach((row) => {
-                // eslint-disable-next-line
-                  self.$refs.funTable.toggleRowSelection(row, true);
+                const funTableRef:any = this.$refs.funTable;
+                funTableRef.toggleRowSelection(row, true);
               });
             }, 10);
           }
@@ -352,7 +353,8 @@ export default class FunTable extends Vue {
         // 单击某一行
         handleRowChange(row, column, event) {
           if (this.isRow) return;
-          this.$refs.funTable.toggleRowSelection(row);
+          const funTableRef:any = this.$refs.funTable;
+          funTableRef.toggleRowSelection(row);
         }
 
         /**
@@ -367,7 +369,7 @@ export default class FunTable extends Vue {
 
           // 补集
           const complement = [...tempA.filter(x => !sb.has(x)), ...tempB.filter(x => !sa.has(x))];
-          const other = complement.map(item => JSON.parse(item));
+          const other = complement.map((item:any) => JSON.parse(item));
           this.$emit('selectVal', val, other); // 将当前对象传到父组件
         }
 
@@ -375,7 +377,7 @@ export default class FunTable extends Vue {
          * 拼接筛选条件
          */
         buildFilterFormData() {
-          // console.log(2)
+          console.log(this.lists);
         }
 
         async loadData({ paramObj = {} } = {}) {
@@ -397,7 +399,6 @@ export default class FunTable extends Vue {
 
           this.getDataLoding = true;
 
-
           Object.assign(postData, paramObj);
 
           // 修改参数
@@ -405,7 +406,7 @@ export default class FunTable extends Vue {
           if (this.params_filter_func) {
             postData = this.params_filter_func(postData, this.extParam);
           }
-          await commonReq(this.act, postData).then((res) => {
+          await commonReq(this.act, postData).then((res:{totalCount:number, data:any}) => {
             // eslint-disable-next-line
             this.totalCount = res.totalCount;
 

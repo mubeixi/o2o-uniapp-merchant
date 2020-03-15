@@ -1,4 +1,4 @@
-
+// @ts-ignore
 import qs from 'qs';
 import Cookie from 'js-cookie';
 import { baseApiUrl } from './env';
@@ -18,13 +18,14 @@ export const get_Users_ID = () => Cookie.get('Users_ID');
 export const get_Stores_ID = () => Cookie.get('Stores_ID');
 
 // 对象转数组，并排序
-function ObjectToArr(object, addkey = '') {
+function ObjectToArr(object: { [x: string]: any; }, addkey = '') {
   const arrs = {};
   for (const i in object) {
     const newkey = addkey + (addkey === '' ? i : `[${i}]`);
     if (typeof object[i] !== 'object') {
       if (object[i] !== '') {
         if (i !== 'timestamp' && i !== 'sign' && i !== 'sortToken') {
+          // @ts-ignore
           arrs[newkey] = object[i];
         }
       }
@@ -37,13 +38,14 @@ function ObjectToArr(object, addkey = '') {
 
   // 此处不能使用for..in
   newkey_1.forEach((val) => {
+    // @ts-ignore
     newObj[val] = arrs[val];// 向新创建的对象中按照排好的顺序依次增加键值对
   });
   return newObj;
 }
 
 // 对象转字符串
-function ObjectToString(object, arrs = '') {
+function ObjectToString(object: { [x: string]: any; }, arrs = '') {
   for (const i in object) {
     if (typeof object[i] !== 'object') {
       if (object[i] !== '') {
@@ -58,14 +60,15 @@ function ObjectToString(object, arrs = '') {
   return arrs;
 }
 
-export const createToken = function (object) {
+export const createToken = function (object: any) {
   object = ObjectToArr(object);
   let signString = ObjectToString(object);
   signString = signString.slice(0, -1);
+  // @ts-ignore
   const timestamp = parseInt(new Date().getTime() / 1000).toString();
   const key = '458f_$#@$*!fdjisdJDFHUk4%%653154%^@#(FSD#$@0-T';
   const dataStr = signString + key + timestamp;
-  // console.log(dataStr)
+  // @ts-ignore
   const sign = hexMD5(window.Base64.toBase64(dataStr)).toUpperCase();
   object.timestamp = timestamp;
   object.sign = sign;
@@ -109,6 +112,7 @@ export const fetch = function (act: string, param: object = {}, options = {}, ur
   url = (process.env.NODE_ENV === 'production' ? baseApiUrl : '') + url;
 
   return new Promise(((resolve, reject) => {
+    // @ts-ignore
     request[method](url, qs.stringify(data), options).then((res) => {
       resolve(res);
       // if(res.data.errorCode === 0){
@@ -116,7 +120,7 @@ export const fetch = function (act: string, param: object = {}, options = {}, ur
       // }else{
       //   reject(new Error(res))
       // }
-    }, (error) => {
+    }, (error: any) => {
       reject(error);
     });
   }));

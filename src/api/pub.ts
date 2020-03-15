@@ -188,9 +188,6 @@ export const getDistributorContributeDetail = (data:object = {}, options:any = f
 export const sendDistributorContributeMoney = (data:object = {}, options:any = false) => fetch('sendContributeMoney', data, options);
 
 
-// 获取门店商品列表
-export const getProducts = (data:object = {}, options:any = false) => fetch('get_products', data, options);
-
 // 给商品type 1:批量下架 2：批量上架 3：批量生成二维码 4：批量设置佣金
 export const batchSetting = (data:object = {}, options:any = false) => fetch('batch_setting', data, options);
 

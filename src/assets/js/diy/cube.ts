@@ -417,7 +417,7 @@ function setAttrData(this: any) {
           // console.log(objTranslate(arr),objTranslate(this.value),objTranslate(this));
           // 如果是数组的长度变小了
           if (arr.length >= this.value.list.length) {
-            for (let i in arr) {
+            for (const i in arr) {
               if (this.value.list[i]) {
                 Vue.set(this.value.list, i, arr[i]);// 强制触发数据和视图绑定
               } else {
@@ -431,8 +431,8 @@ function setAttrData(this: any) {
             }
           } else {
             const ids = [];
-            const list:any[] = this.value.list;
-            for (let i in list) {
+            const { list } = this.value;
+            for (const i in list) {
               let j = 0;
               // @ts-ignore
               for (const area of arr) {

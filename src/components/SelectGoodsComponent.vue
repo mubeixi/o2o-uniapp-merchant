@@ -44,16 +44,18 @@
 </template>
 
 <script>
-import { getProductList, getFlashSaleList, getProducts } from '../common/fetch';
+import {
+  Component,
+  Vue,
+} from 'vue-property-decorator';
+import { getProductList, getFlashSaleList, getProducts } from '@/api/product';
 import { findArrayIdx, domain } from '../common/utils';
 
 
 function noop() {
 
 }
-
-export default {
-  name: 'SelectGoodsComponent',
+@Component({
   props: {
     pageEl: {
       type: Object,
@@ -157,19 +159,21 @@ export default {
         }
 
 
-        if (val && !this.finish) {
-          this.loadGoodsInfo((arr) => {
-            // this.finish = true;
-            arr.filter(column => column.Products_PriceX = parseFloat(column.Products_PriceX));
-            this.list = arr;
-          });
+        if (!(val && !this.finish)) {
+          return;
         }
+        this.loadGoodsInfo((arr) => {
+          // this.finish = true;
+          // eslint-disable-next-line
+          arr.filter(column => column.Products_PriceX = parseFloat(column.Products_PriceX));
+          this.list = arr;
+        });
       },
     },
   },
   computed: {
     page_total() {
-      return parseInt(this.paginate.total / this.paginate.pageSize);
+      return parseInt(this.paginate.total / this.paginate.pageSize, 10);
     },
     // 已经选择的ids_arr不要重复选择了
     ids_arr() {
@@ -188,14 +192,16 @@ export default {
       this.paginate.page = 1;
       this.loadGoodsInfo((arr) => {
         // this.finish = true;
+        // eslint-disable-next-line
         arr.filter(column => column.Products_PriceX = parseFloat(column.Products_PriceX));
         this.list = arr;
       });
     },
     reset() {
+      // eslint-disable-next-line
       for (const it in this.columns) {
         if (this.columns[it].search) {
-          if (this.columns[it].search.type == 'between') {
+          if (this.columns[it].search.type === 'between') {
             this.columns[it].search.value = [null, null];
             this.columns[it].value = [null, null];
           } else {
@@ -233,9 +239,9 @@ export default {
       // 停止
       if (this.paginate.total > 0 && this.page >= this.paginate.total) return;
       this.loading = true;
-      const _self = this;
+      const self = this;
       // 构造请求
-      const postData = JSON.parse(JSON.stringify(this.paginate));
+      const postData:any = JSON.parse(JSON.stringify(this.paginate));
       postData.status = 1;
       postData.store_id = '';
       // 搜索
@@ -245,10 +251,9 @@ export default {
           postData.pro_name = this.search.filter.name_area;
         }
         if (this.search.filter.price_area) {
-          const arr = this.search.filter.price_area.split(',');
-          console.log(arr, 'sss');
-          arr[0] ? postData.min_price = arr[0] : '';
-          arr[1] ? postData.max_price = arr[1] : '';
+          const arr:any[] = this.search.filter.price_area.split(',');
+          if (arr[0])postData.min_price = arr[0];
+          if (arr[1])postData.max_price = arr[1];
         }
         if (this.search.filter.attr_area) {
           postData.sel_oattr = this.search.filter.attr_area;
@@ -269,37 +274,37 @@ export default {
       getProductListFn(postData)
         .then((res) => {
           setTimeout(() => {
-            _self.loading = false;
+            self.loading = false;
           }, 600);
           this.paginate.total = res.totalCount;
           this.paginate.page++;
           const oattrIdx = findArrayIdx(this.columns, { prop: 'attr' });
           this.columns[oattrIdx].search.option = res.oattrs;
-          call && call(res.data);
+          if (call)call(res.data);
         });
     },
     next() {
-      if (this.paginate.page == this.paginate.total) return;
+      if (this.paginate.page === this.paginate.total) return;
       this.paginate.page++;
       this.loadCouponInfo((arr) => {
         this.list = arr;
       });
     },
     current(num) {
-      if (this.paginate.page == num) return;
+      if (this.paginate.page === num) return;
       this.paginate.page = num;
       this.loadCouponInfo((arr) => {
         this.list = arr;// this.list.concat(arr)
       });
     },
     prev() {
-      if (this.paginate.page == 1) return;
+      if (this.paginate.page === 1) return;
       this.paginate.page--;
       this.loadCouponInfo((arr) => {
         this.list = arr;
       });
     },
-    selectFn({}) {
+    selectFn() {
       this.onSuccess.call(this, this.multipleSelection, this.pageEl);
       // this.innerVisible = false;
     },
@@ -319,7 +324,11 @@ export default {
     //
     // }
   },
-};
+})
+
+export default class SelectGoodsComponent extends Vue {
+
+}
 </script>
 <style lang="less" scoped>
 

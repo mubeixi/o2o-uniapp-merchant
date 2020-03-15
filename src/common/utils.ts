@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import _ from 'underscore';
-import { fun } from './func';
-import { staticUrl } from './env';
+import {fun} from './func';
+import {staticUrl} from './env';
 
 /**
  * 获取指定的样式值
@@ -16,6 +16,7 @@ export const getStyle = function (el:any, name:string) {
 /**
  * 给相对路径的图片加上前缀
  * @param url
+ * @param style
  */
 export const domain = (url:string, style = '') => {
   if (!url) return '';
@@ -107,18 +108,18 @@ export function deepCopy(currentObj:object, newObject:object) {
  * @param defaultStyle
  * @param style
  */
-export function mixinStyle(defaultStyle:object, style:object) {
-  if (!defaultStyle)defaultStyle = {};
-  if (!style)style = {};
-
-  const rt = objTranslate(defaultStyle);
-  for (const i in style) {
-    if (!style.hasOwnProperty(i)) continue;
-    // @ts-ignore
-    rt[i] = style[i];
-  }
-  return rt;
-}
+// export function mixinStyle(defaultStyle:object, style:object) {
+//   if (!defaultStyle)defaultStyle = {};
+//   if (!style)style = {};
+//
+//   const rt = objTranslate(defaultStyle);
+//   for (const i in style) {
+//     if (!style.hasOwnProperty(i)) continue;
+//     // @ts-ignore
+//     rt[i] = style[i];
+//   }
+//   return rt;
+// }
 
 
 /**
@@ -141,6 +142,7 @@ function addFun_base(object:any, newobj:any) {
       if (!newobj) continue;
       addFun_base(object[key], newobj[key]);
     } else if (typeof object[key] === 'function') {
+      // eslint-disable-next-line
       continue;
     } else {
       if (!newobj || !newobj[key]) continue;
@@ -400,13 +402,13 @@ export const array_change = function (arr:any[]) {
 // 获取数组下标  用于收货地址选择的显示
 export const get_arr_index = function (arr:any[], id:number|string) {
   for (const i in arr) {
-    if (arr[i].id == id) {
+    if (arr[i].id === id) {
       return i;
     }
   }
 };
 
-export const emptyObject = (obj:object, strice:boolean) => {
+export const emptyObject = (obj:object, strice:boolean = false) => {
   for (const prop in obj) {
     // @ts-ignore
     if (obj[prop] === '' || obj[prop] === undefined || obj[prop] === null || obj[prop] === 'null' || obj[prop] === 'undefined') {
@@ -440,7 +442,7 @@ export const emptyValue = (val:any) => {
 export const formatRichTextByKindEditor = (html:string) => {
   if (!html) return;
 
-  const newContent = html.replace(/<embed[^>]*>/gi, (match, capture) => {
+  return html.replace(/<embed[^>]*>/gi, (match, capture) => {
     match = match.replace(/embed/gi, 'oembed');
     match = match.replace(/src/gi, 'url');
 
@@ -448,8 +450,6 @@ export const formatRichTextByKindEditor = (html:string) => {
     match = match.replace(/\/>/gi, '></oembed>');
     return match;
   });
-
-  return newContent;
 };
 
 export function trim(str:string) {

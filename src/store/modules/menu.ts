@@ -29,7 +29,8 @@ const actions = {
 };
 
 const getters = {
-  menuThirdList(state: any, getters: any, rootState: any) {
+  // eslint-disable-next-line
+  menuThirdList: function (state: any, getters: any, rootState: any) {
     try {
       // @ts-ignore
       return menuConf[0].children[state.menuFirstIndex].children[state.menuSecondIndex].children;

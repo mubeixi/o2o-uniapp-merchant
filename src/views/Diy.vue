@@ -48,9 +48,8 @@ import {
 } from 'vuex-class';
 
 import Cookies from 'js-cookie';
-// eslint-disable-next-line
 import QrcodeVue from 'qrcode.vue';
-import SetAttrComponent from '@/components/SetAttrComponent'; // @ is an alias to /src
+import SetAttrComponent from '@/components/SetAttrComponent';
 import PreviewComponent from '@/components/PreviewComponent';
 import CommonAttrComponent from '@/components/CommonAttrComponent';
 import PluginsComponent from '@/components/PluginsComponent';
@@ -65,17 +64,17 @@ import { tmplDiyMixin } from '@/common/mixin';
 import { ss } from '../common/tool/storage';
 
 
-    @Component({
-      mixins: [tmplDiyMixin],
-      components: {
-        PluginsComponent,
-        SetAttrComponent,
-        PreviewComponent,
-        RightComponent,
-        CommonAttrComponent,
-        QrcodeVue,
-      },
-    })
+@Component({
+  mixins: [tmplDiyMixin],
+  components: {
+    PluginsComponent,
+    SetAttrComponent,
+    PreviewComponent,
+    RightComponent,
+    CommonAttrComponent,
+    QrcodeVue,
+  },
+})
 export default class Home extends Vue {
         is_dev = isDev
 

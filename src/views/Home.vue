@@ -66,10 +66,7 @@ import PreviewComponent from '@/components/PreviewComponent';
 import CommonAttrComponent from '@/components/CommonAttrComponent';
 import PluginsComponent from '@/components/PluginsComponent';
 import RightComponent from '@/components/RightComponent';
-
 import { front_url, isDev } from '../common/env';
-
-
 import { tmplDiyMixin } from '../common/mixin';
 import { serialize } from '@/common/utils';
 import { ss } from '../common/tool/storage';
