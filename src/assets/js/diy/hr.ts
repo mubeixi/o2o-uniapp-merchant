@@ -30,7 +30,7 @@ function setAttrData(this: any) {
         model: this.style.color,
         editType: 'style',
         editKey: 'color',
-        editCB: item => item.model,
+        editCB: (item: { model: any; }) => item.model,
         // editCB2: (item) => {
         //   const val = item.model;
         //   if (!val || val.indexOf(',') == -1) return;
@@ -104,17 +104,17 @@ class Hr extends Common {
     // bgColor: '',
     margin: '',
     height: '',
-  }
+  };
 
   styleDefault = {
     color: '#e7e7e7',
     margin: '4',
     height: '1',
-  }
+  };
 
   config = {
     type: 'solid',
-  }
+  };
 
 
   constructor() {

@@ -3,7 +3,7 @@
  * and save the image file
  */
 
-export const Canvas2Image = (function () {
+const canvas2img = (function () {
   // check if support sth.
   const $support = (function () {
     const canvas = document.createElement('canvas');
@@ -22,24 +22,26 @@ export const Canvas2Image = (function () {
   function scaleCanvas(canvas, width, height) {
     const w = canvas.width;
     const h = canvas.height;
-    if (width == undefined) {
-      width = w;
+    let wval = width;
+    let hval = height;
+    if (width === undefined) {
+      wval = w;
     }
-    if (height == undefined) {
-      height = h;
+    if (height === undefined) {
+      hval = h;
     }
 
     const retCanvas = document.createElement('canvas');
     const retCtx = retCanvas.getContext('2d');
-    retCanvas.width = width;
-    retCanvas.height = height;
-    retCtx.drawImage(canvas, 0, 0, w, h, 0, 0, width, height);
+    retCanvas.width = wval;
+    retCanvas.height = hval;
+    retCtx.drawImage(canvas, 0, 0, w, h, 0, 0, wval, hval);
     return retCanvas;
   }
 
   function getDataURL(canvas, type, width, height) {
-    canvas = scaleCanvas(canvas, width, height);
-    return canvas.toDataURL(type);
+    const canvasInstance = scaleCanvas(canvas, width, height);
+    return canvasInstance.toDataURL(type);
   }
 
   function saveFile(strData) {
@@ -52,12 +54,12 @@ export const Canvas2Image = (function () {
     return img;
   }
   function fixType(type) {
-    type = type.toLowerCase().replace(/jpg/i, 'jpeg');
-    const r = type.match(/png|jpeg|bmp|gif/)[0];
+    const fileType = type.toLowerCase().replace(/jpg/i, 'jpeg');
+    const r = fileType.match(/png|jpeg|bmp|gif/)[0];
     return `image/${r}`;
   }
   function encodeData(data) {
-    if (!window.btoa) { throw 'btoa undefined'; }
+    if (!window.btoa) { throw new Error('btoa undefined'); }
     let str = '';
     if (typeof data === 'string') {
       str = data;
@@ -83,9 +85,9 @@ export const Canvas2Image = (function () {
    * create bitmap image
    * 按照规则生成图片响应头和响应体
    */
-  const genBitmapImage = function (oData) {
+  const genBitmapImage = (oData) => {
     const biWidth = oData.width;
-    const biHeight	= oData.height;
+    const biHeight = oData.height;
     const biSizeImage = biWidth * biHeight * 3;
     const bfSize = biSizeImage + 54; // total header size = 54 bytes
 
@@ -166,38 +168,40 @@ export const Canvas2Image = (function () {
    * @param {Number} [optional] png width
    * @param {Number} [optional] png height
    */
-  const saveAsImage = function (canvas, width, height, type) {
+  const saveAsImage = function (canvas, width, height, type = 'png') {
+    let canvasInstance;
+    canvasInstance = canvas;
     if ($support.canvas && $support.dataURL) {
-      if (typeof canvas === 'string') { canvas = document.getElementById(canvas); }
-      if (type == undefined) { type = 'png'; }
-      type = fixType(type);
+      if (typeof canvas === 'string') { canvasInstance = document.getElementById(canvas); }
+      const fileType = fixType(type);
       if (/bmp/.test(type)) {
-        const data = getImageData(scaleCanvas(canvas, width, height));
-        var strData = genBitmapImage(data);
+        const data = getImageData(scaleCanvas(canvasInstance, width, height));
+        const strData = genBitmapImage(data);
         saveFile(makeURI(strData, downloadMime));
       } else {
-        var strData = getDataURL(canvas, type, width, height);
-        saveFile(strData.replace(type, downloadMime));
+        const strData = getDataURL(canvasInstance, fileType, width, height);
+        saveFile(strData.replace(fileType, downloadMime));
       }
     }
+    return false;
   };
 
-  const convertToImage = function (canvas, width, height, type) {
+  const convertToImage = function (canvas, width, height, type = 'png') {
+    let canvasInstance;
+    canvasInstance = canvas;
     if ($support.canvas && $support.dataURL) {
-      if (typeof canvas === 'string') { canvas = document.getElementById(canvas); }
-      if (type == undefined) { type = 'png'; }
-      type = fixType(type);
-
-      console.log(type);
-
-      if (/bmp/.test(type)) {
-        const data = getImageData(scaleCanvas(canvas, width, height));
-        var strData = genBitmapImage(data);
+      if (typeof canvas === 'string') { canvasInstance = document.getElementById(canvas); }
+      const fileType = fixType(type);
+      console.log(fileType);
+      if (/bmp/.test(fileType)) {
+        const data = getImageData(scaleCanvas(canvasInstance, width, height));
+        const strData = genBitmapImage(data);
         return genImage(makeURI(strData, 'image/bmp'));
       }
-      var strData = getDataURL(canvas, type, width, height);
+      const strData = getDataURL(canvasInstance, fileType, width, height);
       return genImage(strData);
     }
+    return false;
   };
 
 
@@ -231,3 +235,5 @@ export const Canvas2Image = (function () {
     },
   };
 }());
+
+export default canvas2img;

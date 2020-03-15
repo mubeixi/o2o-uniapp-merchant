@@ -10,7 +10,7 @@ function setValue() {
 }
 
 
-function setConfig() {
+function setConfig(this: any) {
   // 如果新对象，那么可以考虑用默认值替换掉。
   if (JSON.stringify(this.style) === JSON.stringify({
     bgColor: '',
@@ -41,7 +41,7 @@ function setAttrData(this: any) {
         has: this.value.list.join(','),
         limit: this.value.limit,
         cate_id: this.value.cate_id,
-        bindListCB: (list, pageEl) => {
+        bindListCB: (list: { map: (arg0: (goods: any) => any) => void; }, pageEl: { bindListDialogShow: boolean; }) => {
           console.log(list);
 
           const tempArr = list.map(goods => goods.Products_ID);
@@ -58,7 +58,7 @@ function setAttrData(this: any) {
           this.setIndex(0, { value: false, config: false });
           this.vm.$store.commit('activeAttr', this);// 传出去
         },
-        bindCateCB: (dataType: any, type: any, path: any, tooltip: any, dataArr: { map: (arg0: (item: any) => any) => void; }, pageEl: { bindCateDialogShow: boolean; }, idx2: any) => {
+        bindCateCB: (dataType: any, type: any, path: any, tooltip: any, dataArr: { map: (arg0: (item: any) => any) => void; }, pageEl: { bindCateDialogShow: boolean; }) => {
           console.log(dataArr);
           pageEl.bindCateDialogShow = false;
 
@@ -183,7 +183,7 @@ function setAttrData(this: any) {
         value: [
           {
             label: '1/1',
-            value: 1 / 1,
+            value: 1,
           },
           {
             label: '1/2',
@@ -356,7 +356,7 @@ class Group extends Common {
     // height: 30,
     // color: '',
     // inputBgColor: '',
-  }
+  };
 
   /**
    * @bgColor 组件背景颜色
@@ -369,7 +369,7 @@ class Group extends Common {
     // height: 30,
     // color: '#444',
     // inputBgColor: '#f2f2f2',
-  }
+  };
 
   config = {
     origin: 'filter',
@@ -390,13 +390,13 @@ class Group extends Common {
     // interval:5000,//切换时间
     // autoplay:false,//自动播放
     // type: 1, //两种风格
-  }
+  };
 
   value = {
     cate_id: [],
     limit: 20,
     list: [],
-  }
+  };
 
 
   constructor() {

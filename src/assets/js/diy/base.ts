@@ -33,7 +33,7 @@ function setAttrData(this: any) {
         model: this.config.cover,
         editType: 'config',
         editKey: 'cover',
-        editCB: item => item.model,
+        editCB: (item: { model: any; }) => item.model,
       },
       {
         type: 'radio',
@@ -73,12 +73,12 @@ class Base extends Common {
   tag = 'base';
   // activeIndex = 0;
 
-  style = {
-    // bgColor: '',
-    // height: 30,
-    // color: '',
-    // inputBgColor: '',
-  }
+
+  // bgColor: '',
+  // height: 30,
+  // color: '',
+  // inputBgColor: '',
+  style = {};
 
   /**
    * @bgColor 组件背景颜色
@@ -86,12 +86,12 @@ class Base extends Common {
    * @color 文字颜色
    * @inputBgColor  输入框背景
    */
-  styleDefault = {
-    // bgColor: '#fff',
-    // height: 30,
-    // color: '#444',
-    // inputBgColor: '#f2f2f2',
-  }
+
+  // bgColor: '#fff',
+  // height: 30,
+  // color: '#444',
+  // inputBgColor: '#f2f2f2',
+  styleDefault = {};
 
   config = {
     cover: '',
@@ -106,11 +106,11 @@ class Base extends Common {
     // interval:5000,//切换时间
     // autoplay:false,//自动播放
     // type: 1, //两种风格
-  }
+  };
 
   value = {
     list: [], // 存优惠券数组
-  }
+  };
 
 
   constructor() {

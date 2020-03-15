@@ -71,8 +71,12 @@ function setAttrData(this: any) {
         // 这个按钮的功能，主要是新增页面吧
         editCB: (pageEl: { coupon_ids: string; couponDialogShow: boolean; }) => {
           const tempArr = [];
-          for (const i in this.value.list) {
-            tempArr.push(this.value.list[i].Coupon_ID);
+          const { list } = this.value;
+          for (let i:number = 0; i < list.length; i++) {
+            const coupon:object = list[i];
+            if (coupon.hasOwnProperty('Coupon_ID')) {
+              tempArr.push(this.value.list[i].Coupon_ID);
+            }
           }
 
           pageEl.coupon_ids = tempArr.join(',');
@@ -106,7 +110,7 @@ function setAttrData(this: any) {
   Vue.set(this, 'attrData', data);
 }
 
-function attrData(options = {}) {
+function attrData(this: any, options = {}) {
   // @ts-ignore
   const { value, config, attrData } = options;
   // console.log(value, config, attrData);
@@ -125,7 +129,7 @@ class Coupon extends Common {
     // height: 30,
     // color: '',
     // inputBgColor: '',
-  }
+  };
 
   /**
    * @bgColor 组件背景颜色
@@ -138,15 +142,15 @@ class Coupon extends Common {
     // height: 30,
     // color: '#444',
     // inputBgColor: '#f2f2f2',
-  }
+  };
 
   config = {
     type: 1, // quare
-  }
+  };
 
   value = {
     list: [], // 存优惠券数组
-  }
+  };
 
 
   constructor() {

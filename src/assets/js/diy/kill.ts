@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Common from './commonClass';
 import { ls } from '@/common/tool/storage';
 
-const shopInfo = ls.get('Shop_Info');
+// const shopInfo = ls.get('Shop_Info');
 
 function setValue() {
   // let value = {}
@@ -42,7 +42,7 @@ function setAttrData(this: any) {
         has: this.value.list.join(','),
         limit: this.value.limit,
         cate_id: this.value.cate_id,
-        bindListCB: (list, pageEl) => {
+        bindListCB: (list: { map: (arg0: (goods: any) => any) => void; }, pageEl: { bindListDialogShow: boolean; }) => {
           console.log(list);
 
           const tempArr = list.map(goods => goods.Products_ID);
@@ -59,11 +59,11 @@ function setAttrData(this: any) {
           this.setIndex(0, { value: false, config: false });
           this.vm.$store.commit('activeAttr', this);// 传出去
         },
-        bindCateCB: (dataType, type, path, tooltip, dataArr, pageEl, idx2) => {
+        bindCateCB: (dataType: any, type: any, path: any, tooltip: any, dataArr: { map: (arg0: (item: { id: any; }) => any) => void; }, pageEl: { bindCateDialogShow: boolean; }) => {
           console.log(dataArr);
           pageEl.bindCateDialogShow = false;
 
-          const ids = dataArr.map(item => item.id);
+          const ids = dataArr.map((item: { id: any; }) => item.id);
           Vue.set(this.config, 'origin', 'cate');
           Vue.set(this.value, 'cate_id', ids);
           Vue.set(this.config, 'origintooltip', tooltip);
@@ -184,7 +184,7 @@ function setAttrData(this: any) {
         value: [
           {
             label: '1/1',
-            value: 1 / 1,
+            value: 1,
           },
           {
             label: '1/2',
@@ -317,7 +317,7 @@ function setAttrData(this: any) {
           this.setIndex(0, { value: false, config: false });
           this.vm.$store.commit('activeAttr', this);// 传出去
         }, // 勾选的回调
-        radioImgCB: (img: { data: { path: any; }; }, idx2: any) => {
+        radioImgCB: (img: { data: { path: any; }; }) => {
           Vue.set(this.config.attr.tag, 'img', img.data.path);
           Vue.set(this.config.attr.tag, 'style', 'diy');
 
@@ -335,7 +335,7 @@ function setAttrData(this: any) {
   Vue.set(this, 'attrData', data);
 }
 
-function attrData(options = {}) {
+function attrData(this: any, options = {}) {
   // @ts-ignore
   const { value, config, attrData } = options;
   // console.log(value, config, attrData);
@@ -357,7 +357,7 @@ class Kill extends Common {
     // height: 30,
     // color: '',
     // inputBgColor: '',
-  }
+  };
 
   /**
    * @bgColor 组件背景颜色
@@ -370,7 +370,7 @@ class Kill extends Common {
     // height: 30,
     // color: '#444',
     // inputBgColor: '#f2f2f2',
-  }
+  };
 
   config = {
     origin: 'filter',
@@ -393,7 +393,7 @@ class Kill extends Common {
     // interval:5000,//切换时间
     // autoplay:false,//自动播放
     // type: 1, //两种风格
-  }
+  };
 
   value = {
     cate_id: [],

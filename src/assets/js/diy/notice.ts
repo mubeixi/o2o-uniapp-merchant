@@ -30,7 +30,7 @@ function setAttrData(this: any) {
         editType: 'value',
         editKey: 'content',
         model: this.value.content,
-        editCB: item => item.model,
+        editCB: (item: { model: any; }) => item.model,
       },
       {
         type: 'color',
@@ -38,7 +38,7 @@ function setAttrData(this: any) {
         model: this.style.bgColor,
         editType: 'style',
         editKey: 'bgColor',
-        editCB: item => (item.model ? item.model : 'none'),
+        editCB: (item: { model: any; }) => (item.model ? item.model : 'none'),
       },
       {
         type: 'color',
@@ -119,7 +119,7 @@ class Notice extends Common {
     color: '',
     iconColor: '',
     // inputBgColor: '',
-  }
+  };
 
   /**
    * @bgColor 组件背景颜色
@@ -132,19 +132,19 @@ class Notice extends Common {
     // height: 30,
     // color: '#444',
     // inputBgColor: '#f2f2f2',
-  }
+  };
 
   config = {
     // bgColor: '#fff',
     // height: 30,
     // color: '#444',
     // type: 1, // quare
-  }
+  };
 
   value = {
     content: '公告内容',
     list: ['通知公告1', '通知公告2', '通知公告3', '通知公告4'], // 存优惠券数组
-  }
+  };
 
 
   constructor() {

@@ -3,7 +3,7 @@ import Common from './commonClass';
 import { ls } from '@/common/tool/storage';
 import { fun } from '../../../common/func';
 
-const shopInfo = ls.get('Shop_Info');
+// const shopInfo = ls.get('Shop_Info');
 
 function setValue() {
   // let value = {}
@@ -87,7 +87,7 @@ function setAttrData(this: any) {
         label: '',
         value: this.value.list,
         arr: this.value.list,
-        radioCB: (item) => {
+        radioCB: () => {
         }, // 后面的radio回调
         bindCB: (dataType: any, type: any, path: any, tooltip: any, dataArr: { map: (arg0: (item: any) => any) => void; }, pageEl: { bindCateDialogShow: boolean; }, idx2: string | number) => {
           console.log(dataType, type, path, tooltip, dataArr, pageEl, idx2);
@@ -230,7 +230,7 @@ function setAttrData(this: any) {
         value: [
           {
             label: '1/1',
-            value: 1 / 1,
+            value: 1,
           },
           {
             label: '1/2',
@@ -269,7 +269,7 @@ function setAttrData(this: any) {
         model: this.style.bgColor,
         editType: 'style',
         editKey: 'bgColor',
-        editCB: item => (item.model ? item.model : 'none'),
+        editCB: (item: { model: any; }) => (item.model ? item.model : 'none'),
       },
 
       {
@@ -362,7 +362,8 @@ function setAttrData(this: any) {
           this.setIndex(0, { value: false, config: false });
           this.vm.$store.commit('activeAttr', this);// 传出去
         }, // 勾选的回调
-        radioImgCB: (img: { data: { path: any; }; }, idx2: any) => {
+        //, idx2: any
+        radioImgCB: (img: { data: { path: any; }; }) => {
           Vue.set(this.config.attr.tag, 'img', img.data.path);
           Vue.set(this.config.attr.tag, 'style', 'diy');
 
@@ -402,7 +403,7 @@ class Tab extends Common {
     // height: 30,
     // color: '',
     // inputBgColor: '',
-  }
+  };
 
   /**
    * @bgColor 组件背景颜色
@@ -415,7 +416,7 @@ class Tab extends Common {
     // height: 30,
     // color: '#444',
     // inputBgColor: '#f2f2f2',
-  }
+  };
 
   config = {
     position: 'left', // 位置 可选值为left和top
@@ -435,7 +436,7 @@ class Tab extends Common {
     // interval:5000,//切换时间
     // autoplay:false,//自动播放
     // type: 1, //两种风格
-  }
+  };
 
   value = {
     // cate_id:null,
@@ -448,7 +449,7 @@ class Tab extends Common {
         limit: 10, // 显示的个数
       },
     ],
-  }
+  };
 
 
   constructor() {

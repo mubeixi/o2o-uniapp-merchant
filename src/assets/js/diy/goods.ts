@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Common from './commonClass';
 import { ls } from '@/common/tool/storage';
 
-const shopInfo = ls.get('Shop_Info');
+// const shopInfo = ls.get('Shop_Info');
 
 function setValue() {
   // let value = {}
@@ -58,7 +58,7 @@ function setAttrData(this: any) {
           this.setIndex(0, { value: false, config: false });
           this.vm.$store.commit('activeAttr', this);// 传出去
         },
-        bindCateCB: (dataType: any, type: any, path: any, tooltip: any, dataArr: { map: (arg0: (item: any) => any) => void; }, pageEl: { bindCateDialogShow: boolean; }, idx2: any) => {
+        bindCateCB: (dataType: any, type: any, path: any, tooltip: any, dataArr: { map: (arg0: (item: any) => any) => void; }, pageEl: { bindCateDialogShow: boolean; }) => {
           console.log(dataArr);
           pageEl.bindCateDialogShow = false;
 
@@ -71,7 +71,7 @@ function setAttrData(this: any) {
           this.setIndex(0, { value: false, config: false });
           this.vm.$store.commit('activeAttr', this);// 传出去
         },
-        inputCB: (val) => {
+        inputCB: (val: string) => {
           Vue.set(this.value, 'limit', parseInt(val));
           Vue.set(this.config, 'origin', 'cate');
 
@@ -183,7 +183,7 @@ function setAttrData(this: any) {
         value: [
           {
             label: '1/1',
-            value: 1 / 1,
+            value: 1,
           },
           {
             label: '1/2',
@@ -306,7 +306,6 @@ function setAttrData(this: any) {
         label: '标签',
         editType: 'config',
         model: this.config.attr.tag.show,
-
         data: this.config.attr.tag,
         checkboxCB: (val: any) => {
           Vue.set(this.config.attr.tag, 'show', val);// 传递值
@@ -357,7 +356,7 @@ class Goods extends Common {
     // height: 30,
     // color: '',
     // inputBgColor: '',
-  }
+  };
 
   /**
    * @bgColor 组件背景颜色
@@ -370,7 +369,7 @@ class Goods extends Common {
     // height: 30,
     // color: '#444',
     // inputBgColor: '#f2f2f2',
-  }
+  };
 
   config = {
     origin: 'filter',
@@ -391,13 +390,13 @@ class Goods extends Common {
     // interval:5000,//切换时间
     // autoplay:false,//自动播放
     // type: 1, //两种风格
-  }
+  };
 
   value = {
     cate_id: [],
     limit: 20,
     list: [],
-  }
+  };
 
 
   constructor() {
@@ -410,18 +409,10 @@ class Goods extends Common {
 
   // value = []
 
-  getHasVal() {
-    // var ids_arr = []
-    //
-    // for(var item of this.value.list){
-    //   if(item && item.hasOwnProperty('Products_ID')){
-    //     ids_arr.push(item.Products_ID)
-    //   }
-    //
-    // }
-    // console.log('列表是',this.value.list,'ids',ids_arr)
-    return this.value.list.join(',');
-  }
+  // getHasVal() {
+  //   // console.log('列表是',this.value.list,'ids',ids_arr)
+  //   return this.value.list.join(',');
+  // }
 
 
   setIndex(index: number, options: object) {

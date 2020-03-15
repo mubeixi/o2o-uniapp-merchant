@@ -156,7 +156,7 @@ function setAttrData(this: any) {
         //   this.vm.$store.state.activeAttr.value.list = this.value.list;// 传出去
         // },
         // 这个按钮的功能，主要是新增元素
-        editCB: (pageEl) => {
+        editCB: () => {
           if (this.value.more.length >= 1) {
             fun.info({ msg: '最多允许添加一个' });
             return;
@@ -242,7 +242,7 @@ class Title extends Common {
     paddingc: '',
     fontSize: '',
     textAlign: '',
-  }
+  };
 
   styleDefault = {
     color: '#333',
@@ -251,11 +251,11 @@ class Title extends Common {
     padding: 10,
     fontSize: 16,
     textAlign: '',
-  }
+  };
 
   config = {
     icon: '',
-  }
+  };
 
 
   value = {
@@ -265,7 +265,7 @@ class Title extends Common {
     tooltip: '',
     title: '大标题',
     small: '小标题',
-  }
+  };
 
 
   constructor() {

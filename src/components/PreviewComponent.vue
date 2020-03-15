@@ -263,8 +263,8 @@ import Cube from '@/assets/js/diy/cube';
 import Tab from '../assets/js/diy/tab';
 import MagicCube from '@/assets/js/diy/tool/MagicCube';
 
+import Canvas2Image from '../assets/js/diy/tool/canvas2img';
 
-import { Canvas2Image } from '../assets/js/diy/tool/canvas2img';
 import { fun } from '../common/func';
 
 

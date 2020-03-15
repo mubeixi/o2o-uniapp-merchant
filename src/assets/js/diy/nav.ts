@@ -138,7 +138,7 @@ function setAttrData(this: any) {
   Vue.set(this, 'attrData', data);
 }
 
-function attrData(this: any, options:any= {}) {
+function attrData(this: any, options:any = {}) {
   const { value, config, attrData } = options;
   // console.log(value, config, attrData);
   if (value !== false) setValue.call(this);

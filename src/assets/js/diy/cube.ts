@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Common from './commonClass';
-import { deepCopy, objTranslate } from '../../../common/utils';
+// import { deepCopy, objTranslate } from '../../../common/utils';
 
 function setValue() {
   // let value = {}
@@ -276,7 +276,7 @@ function setAttrData(this: any) {
         model: this.style.bgColor,
         editType: 'style',
         editKey: 'bgColor',
-        editCB: item => (item.model ? item.model : 'none'),
+        editCB: (item: { model: any; }) => (item.model ? item.model : 'none'),
       },
       {
         type: 'slider',
@@ -412,18 +412,33 @@ function setAttrData(this: any) {
         style_type: this.config.type,
         value: this.value.list,
         // 数据变化放进来的
-        seclectChangeCB: (arr: { [x: string]: any; length: number; }, pageEl: any) => {
+        seclectChangeCB: (arr: { [x: string]: any; length: number; }) => {
           // console.log('55555555555555555cube选中列表有变动',this.tagName)
           // console.log(objTranslate(arr),objTranslate(this.value),objTranslate(this));
           // 如果是数组的长度变小了
-          if (arr.length < this.value.list.length) {
+          if (arr.length >= this.value.list.length) {
+            for (let i in arr) {
+              if (this.value.list[i]) {
+                Vue.set(this.value.list, i, arr[i]);// 强制触发数据和视图绑定
+              } else {
+                Vue.set(this.value.list, i, {
+                  link: '',
+                  linkType: '',
+                  tooltip: '',
+                  ...arr[i],
+                });// 强制触发数据和视图绑定
+              }
+            }
+          } else {
             const ids = [];
-            for (var i in this.value.list) {
+            const list:any[] = this.value.list;
+            for (let i in list) {
               let j = 0;
+              // @ts-ignore
               for (const area of arr) {
                 // 如果都存在，则没有什么
-                console.log(area.IDX, this.value.list[i].IDX);
-                if (area.IDX === this.value.list[i].IDX) {
+                console.log(area.IDX, list[i].IDX);
+                if (area.IDX === list[i].IDX) {
                   j++;
                 }
               }
@@ -438,19 +453,6 @@ function setAttrData(this: any) {
             ids.reverse();
             for (const idx of ids) {
               this.value.list.splice(idx, 1);
-            }
-          } else {
-            for (var i in arr) {
-              if (this.value.list[i]) {
-                Vue.set(this.value.list, i, arr[i]);// 强制触发数据和视图绑定
-              } else {
-                Vue.set(this.value.list, i, {
-                  link: '',
-                  linkType: '',
-                  tooltip: '',
-                  ...arr[i],
-                });// 强制触发数据和视图绑定
-              }
             }
           }
 
@@ -523,7 +525,7 @@ class Cube extends Common {
     // height: 30,
     // color: '',
     // inputBgColor: '',
-  }
+  };
 
   /**
    * @bgColor 组件背景颜色
@@ -536,7 +538,7 @@ class Cube extends Common {
     // height: 30,
     // color: '#444',
     // inputBgColor: '#f2f2f2',
-  }
+  };
 
   config = {
     type: 'diy', // 这里是有多种便捷的选择
@@ -546,7 +548,7 @@ class Cube extends Common {
     // interval:5000,//切换时间
     // autoplay:false,//自动播放
 
-  }
+  };
   // img: "/uploadfiles/wkbq6nc2kc/image/SwiftFox_ZH-CN9413097062_1920x1080.jpg"
   // link: "/product/list?cate_id=194"
   // linkType: "cate"
@@ -555,9 +557,9 @@ class Cube extends Common {
 
   value = {
     list: [], // 存优惠券数组
-  }
+  };
 
-  tagName = ''
+  tagName = '';
 
 
   constructor() {

@@ -24,7 +24,9 @@ module.exports = {
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'import/extensions': ['error', 'always', { 'js': 'never',  'ts': 'never', 'vue': 'never' }],
-    "global-require":'off',
+    'global-require':'off',
+    'no-bitwise':'off',//位运算
+    'no-mixed-operators':'off',
     // "no-alert": 0,//禁止使用alert confirm prompt
     // "no-array-constructor": 2,//禁止使用数组构造器
     // "no-bitwise": 0,//禁止使用按位运算符
