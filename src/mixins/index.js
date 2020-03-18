@@ -1,8 +1,6 @@
-
-
 export default {
   data: {
-    mixin: 'MixinText'
+    mixin: 'PageMin'
   },
   methods: {
     mixintap () {
