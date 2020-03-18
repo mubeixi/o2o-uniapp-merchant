@@ -1,0 +1,13 @@
+{
+  "description": "o2o project by WePY",
+  "setting": {
+    "urlCheck": true,
+    "es6": false,
+    "postcss": false,
+    "minified": false
+  },
+  "compileType": "miniprogram",
+  "appid": "wx99d9a6d6f73a9591",
+  "projectname": "o2o-client",
+  "miniprogramRoot": "./weapp"
+}
