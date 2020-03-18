@@ -1,3 +1,0 @@
-detail/home.png
-del.png 一个灰色一个红色
-icon_http_error.png不能放在线上
