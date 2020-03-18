@@ -1,3 +1,3 @@
-export default {
-  URL: 'http://www.foo.com'
-}
+export const apiBaseUrl = 'http://wze.com'
+
+

@@ -57,8 +57,7 @@ module.exports.getTime = getTime;
 </wxs>
 <template>
   <div class="container">
-    <button class="btn" type="primary" open-type="getUserInfo" bindgetuserinfo="handleViewTap" size="small">获取用户信息</button>
-    <div class="userinfo">
+    <div class="userinfo" @tap="handleViewTap">
       <image class="userinfo-avatar" src="{{ userInfo.avatarUrl }}" background-size="cover"/>
       <div class="userinfo-nickname">{{ userInfo.nickName }}</div>
     </div>
@@ -142,18 +141,10 @@ module.exports.getTime = getTime;
 
 <script>
   import wepy from '@wepy/core'
-  import eventHub from '../common/eventHub'
-  import { mapState } from '@wepy/x'
-  import store from '../store'
+  import eventHub from '../common/eventHub';
+  import { mapState } from '@wepy/x';
+  import store from '../store';
   import testMixin from '../mixins'
-
-  import wxPromisify from '../common/promisify'
-  import {
-    getSystemInfo
-  } from '../api/system'
-  import {
-    toast
-  } from '../common/fun';
 
   wepy.page({
     store,
@@ -165,14 +156,18 @@ module.exports.getTime = getTime;
       // Page 级别 hook, 只对当前 Page 的 setData 生效。
       'before-setData': function (dirty) {
         if (Math.random() < 0.2) {
-          console.log('setData canceled')
-          return false // Cancel setData
+          console.log('setData canceled');
+          return false; // Cancel setData
         }
-        dirty.time = +new Date()
-        return dirty
+        dirty.time = +new Date();
+        return dirty;
       }
     },
+
+
+
     mixins: [testMixin],
+
     data: {
       inputmodel: 'v-model',
       mynum: 20,
@@ -232,18 +227,13 @@ module.exports.getTime = getTime;
     computed: {
       ...mapState([ 'counter' ]),
       testcomputed () {
-        return 'computed - ' + this.mynum
+        return 'computed - ' + this.mynum;
       }
     },
 
     methods: {
-      handleViewTap (e) {
-        wxPromisify('getUserInfo').then(res => {
-          this.userInfo = res.userInfo
-        }).catch(() => {})
-      },
       tap () {
-        throw new Error('can not go here')
+        throw 'can not go here';
       },
       plus () {
         this.mynum++
@@ -256,19 +246,19 @@ module.exports.getTime = getTime;
 
         promise.then((d) => {
           console.log('toast done')
-        })
+        });
       },
       mixintap () {
-        console.log('do noting from ' + this.$is)
+        console.log('do noting from ' + this.$is);
       },
       communicate () {
-        let counters = this.$children.filter((com) => com.$is === 'components/counter')
+        let counters = this.$children.filter((com) => com.$is === 'components/counter');
 
         // Get children counter
-        counters[0].num++
-        counters[1].num--
+        counters[0].num++;
+        counters[1].num--;
 
-        eventHub.$emit('app-launch', {a: 1}, {b: 2})
+        eventHub.$emit('app-launch', {a: 1}, {b: 2});
       },
       request () {
         let self = this
@@ -279,44 +269,35 @@ module.exports.getTime = getTime;
             url: 'https://www.madcoder.cn/tests/sleep.php?time=1&t=css&c=' + map[i] + '&i=' + i,
             success: function (d) {
               if (d.statusCode !== 200) {
-                self.netrst += d.statusCode + '.'
+                self.netrst += d.statusCode + '.';
               } else {
-                self.netrst += d.data + '.'
+                self.netrst += d.data + '.';
               }
             }
           })
         }
       },
       counterEmit (num) {
-        console.log(`${this.$is} receive event, the number is: ${num}`)
+        console.log(`${this.$is} receive event, the number is: ${num}`);
       }
     },
 
     created () {
       let self = this
-      self.currentTime = +new Date()
+      self.currentTime = +new Date();
 
-      self.setTimeoutTitle = '标题三秒后会被修改'
+      self.setTimeoutTitle = '标题三秒后会被修改';
       setTimeout(() => {
-        self.setTimeoutTitle = '到三秒了'
-      }, 3000)
+        self.setTimeoutTitle = '到三秒了';
+      }, 3000);
 
-      getSystemInfo()
-        .then(res => {
-          console.log(res)
-          toast('请求成功')
-        })
-        .catch(err => {
-          wx.fun.error('请求失败')
-        })
-
-      // wx.getUserInfo({
-      //   success (res) {
-      //     self.userInfo = res.userInfo
-      //   }
-      // })
+      wx.getUserInfo({
+        success (res) {
+          self.userInfo = res.userInfo;
+        }
+      });
     }
-  })
+  });
 </script>
 <config>
 {
