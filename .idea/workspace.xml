@@ -2,26 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="afb0a10c-91e0-4a30-a601-e69582c66bd9" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/watcherTasks.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/assets/app.scss" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/assets/icon.scss" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/assets/mixins.scss" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/assets/variables.scss" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/CopyRight.wpy" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/ad.wpy" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/icon.wpy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.eslintignore" beforeDir="false" afterPath="$PROJECT_DIR$/.eslintignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app.wpy" beforeDir="false" afterPath="$PROJECT_DIR$/src/app.wpy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/common/env.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/common/env.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/common/request.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/common/request.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/mixins/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/mixins/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/index.wpy" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/index.wpy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/tmpl.wpy" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/tmpl.wpy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/store/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/wepy.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/wepy.config.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -85,7 +65,7 @@
       <workItem from="1584842724829" duration="991000" />
       <workItem from="1584847768496" duration="6945000" />
       <workItem from="1584855505039" duration="11235000" />
-      <workItem from="1584866950478" duration="3038000" />
+      <workItem from="1584866950478" duration="3113000" />
     </task>
     <servers />
   </component>
