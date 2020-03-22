@@ -1,0 +1,98 @@
+/* variables start */
+@import "./variables.scss";
+/* variables end */
+
+/* mixin start */
+@import "./mixins.scss";
+/* mixin end */
+
+/* rest style start */
+.rest{
+  padding: 0;
+  margin: 0;
+  border:0;
+  list-style: none;
+}
+
+/* rest style end */
+
+/* common style start */
+$color-list: 000,111,222,333,444,555,666,777,888,999;
+@each $color in $color-list{
+  .c#{$color}{
+    color: '##{$color}';
+  }
+}
+
+@for $i from 4 through 100 {
+  .m-#{$i} { margin: ($i)+px; }
+  .m-t-#{$i} { margin-top: ($i)+px; }
+  .m-b-#{$i} { margin-bottom: ($i)+px; }
+  .m-l-#{$i} { margin-left: ($i)+px; }
+  .m-r-#{$i} { margin-right: ($i)+px; }
+
+  .p-#{$i} { padding: ($i)+px; }
+  .p-t-#{$i} { padding-top: ($i)+px; }
+  .p-b-#{$i} { padding-bottom: ($i)+px; }
+  .p-l-#{$i} { padding-left: ($i)+px; }
+  .p-r-#{$i} { padding-right: ($i)+px; }
+
+  .fz-#{$i} { font-size: ($i)+px; }
+}
+
+.page-wrap{
+  min-height: 100vh;
+  background: #f8f8f8;
+}
+
+.color-gray{
+  color: $fun-gray-color;
+}
+.color-primary{
+  color: $fun-primary-color;
+}
+.block{
+  display: block;
+}
+
+.flex{
+  display: flex;
+  .flex1{
+    flex: 1;
+  }
+  &.-vertical-center{
+    align-items: center;
+  }
+  &.-justify-center{
+    justify-content: center;
+  }
+  &.-justify-between{
+    justify-content: space-between;
+  }
+}
+
+.noscrollbar{
+  &::-webkit-scrollbar{
+    display: none;
+  }
+}
+
+
+/* common style end */
+
+
+.block{
+  &-title{
+    &-text{
+
+    }
+    &-more{
+
+    }
+  }
+  &-nav{
+    &-item{
+
+    }
+  }
+}

@@ -37,46 +37,27 @@ export const ajax = (url, method, data, options) => {
       method,
       data,
       success: (ret) => {
-        if (ret.statusCode !== 200 || typeof ret.data !== 'object') {
+        const {statusCode, data} = ret
+        if (statusCode !== 200 || typeof data !== 'object') {
           error('服务器去旅行了')
+          reject(new Error('服务器去旅行了'))
         }
-        let res = ret.data
+        const {data: res} = ret
 
-        if (res.hasOwnProperty('errorCode') && hookErrorCode.indexOf(res.errorCode) != -1) {
-          // if (res.errorCode === 66001) {
-          //   error(res.msg)
-          //   //重置用户信息
-          //   let users_id = ls.get('users_id');
-          //   ls.clear();
-          //   ls.set('users_id', users_id);
-          //   // #ifdef H5
-          //   sessionStorage.removeItem('is_send_usrlog')
-          //   // #endif
-          //   store.commit('SET_USER_INFO', {})
-          //   store.commit('SET_STORES_ID', null)
-          //
-          //   setTimeout(() => {
-          //     uni.navigateTo({
-          //       url: '/pages/login/login'
-          //     })
-          //   }, 1000)
-          //   return;
-          // }
+        const {errorCode = 1, msg = '请求未成功'} = res
+
+        if (hookErrorCode.indexOf(errorCode) !== -1) {
           resolve(res)
         } else {
-          if (res.hasOwnProperty('errorCode') && res.msg) {
-            if (errtip) error(res.msg)
-          } else {
-            error('请求未成功')
-          }
+          if (errtip) error(msg)
           reject(res)
         }
       },
       fail: (e) => {
+        if (errtip) error(e.errMsg)
         reject(e)
       },
       complete: () => {
-        // console.log(res)
         if (tip) {
           setTimeout(function () {
             wx.hideLoading()
@@ -96,10 +77,16 @@ export const get = (url, data, options) => {
 }
 
 export const fetch = function ({act, param, options = false, url = '/api/little_program/shopconfig.php', method = 'post'}) {
-  const data = {...param}
-  return ajax(url, method, data, options)
+  try {
+    const data = {...param}
+    return ajax(url, method, data, options)
+  } catch (e) {
+    console.log('request error :' + JSON.stringify(e))
+  }
 }
 
-module.exports = {
-  post, get, ajax,fetch
+export default {
+  ajax,
+  post,
+  get
 }

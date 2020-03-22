@@ -3,6 +3,7 @@ var prod = process.env.NODE_ENV === 'production';
 
 // 使用 UglifyJS 对编译后的代码进行打混淆压缩。
 // const UglifyPlugin = require('@wepy/plugin-uglifyjs');
+const TypeScriptCompiler = require('@wepy/compiler-typescript');
 
 module.exports = {
   wpyExt: '.wpy',
@@ -23,17 +24,22 @@ module.exports = {
     less: {
       compress: prod
     },
+    sass: {
+      outputStyle: 'compressed'
+    },
     babel: {
       sourceMap: true,
       presets: [
         '@babel/preset-env'
       ],
       plugins: [
-        '@wepy/babel-plugin-import-regenerator'
+        '@wepy/babel-plugin-import-regenerator',
+        '@babel/plugin-proposal-class-properties'
       ]
     }
   },
   plugins: [
+    TypeScriptCompiler()
     // UglifyPlugin()
   ],
   appConfig: {

@@ -2,7 +2,7 @@ import Vuex from '@wepy/x';
 
 export default new Vuex.Store({
   state: {
-    counter: 0
+    counter: 220
   },
   mutations: {
     increment (state) {

@@ -1,332 +1,180 @@
-<style lang="less">
-  input {
-    border: 1rpx solid #ccc;
-    display: inline-block;
-    width: 200rpx;
-    border-radius: 5rpx;
-  }
-  .info {
-    padding-right: 10rpx;
-  }
-  .userinfo {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+<style lang="scss">
+@import "../assets/variables.scss";
+.nav{
+  background: white;
+  /*margin: 15px 0;*/
+  &-list{
 
-  .userinfo-avatar {
-    width: 80rpx;
-    height: 80rpx;
-    border-radius: 50%;
   }
-
-  .userinfo-nickname {
-    color: #aaa;
-  }
-  .slide {
-    width: 640rpx;
-    display: flex;
-    border: 1rpx solid #ccc;
-    font-size: 28rpx;
-    align-items: center;
-    box-sizing: border-box;
-    .left {
-      width: 750rpx;
-      padding: 20rpx;
+  &-item{
+    padding: 10px 0;
+    text-align: center;
+    .title{
+      margin-top: 10px;
+      font-size: 14px;
+      color: #444;
     }
-    .right {
-      display: flex;
-      .right-item {
-        padding: 20rpx 30rpx;
-        background-color: red;
-        color: #fff;
+  }
+}
+.head-box{
+  position: fixed;
+  top: 0;
+  width: 750rpx;
+  box-sizing: border-box;
+
+  z-index: 2;
+  background: $fun-green-color;
+}
+.head{
+  padding-left: 20rpx;
+  display: flex;
+  align-items: center;
+  color: white;
+  .tab-box{
+    flex: 1;
+    display: flex;
+    align-items: flex-end;
+    .tab-item{
+      margin-right: 40rpx;
+      padding-bottom: 4px;
+      position: relative;
+      &:last-child{
+        margin-right: 0;
+      }
+      .underline{
+        visibility: hidden;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        height: 1px;
+        width: 100%;
+        background: #fff;
+      }
+      &.active{
+        font-size: 40rpx;
+        .underline{
+          visibility: visible;
+        }
       }
     }
   }
-</style>
-<wxs module="m1" lang="babel">
-const getTime = (time) => {
-  let date = getDate(time);
-  let hour = date.getHours();
-  let mins = date.getMinutes();
-  let sec = date.getSeconds();
-  let milli = date.getMilliseconds();
-  return `${hour}:${mins}:${sec}.${milli}`;
+  .search-box{
+    position: relative;
+    margin-right: 20rpx;
+    width: 120rpx;
+    text-align: right;
+    background: rgba(255,255,255,.5);
+    .iconsearch{
+      color: white;
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
 }
-module.exports.getTime = getTime;
-</wxs>
+
+
+</style>
+
 <template>
-  <div class="container">
-    <button class="btn" type="primary" open-type="getUserInfo" bindgetuserinfo="handleViewTap" size="small">获取用户信息</button>
-    <div class="userinfo">
-      <image class="userinfo-avatar" src="{{ userInfo.avatarUrl }}" background-size="cover"/>
-      <div class="userinfo-nickname">{{ userInfo.nickName }}</div>
+  <div class="page-wrap">
+    <div class="head-box" :style="{height:diyHeadHeight+'px'}">
+      <div class="head" :style="{height:menuButtonInfo.height+'px',paddingRight:diyHeadRight+'px',marginTop:menuButtonInfo.top+'px'}">
+        <ul class="tab-box">
+          <li @click="headTabIndex=0" class="tab-item {{headTabIndex === 0?'active':''}}">特价<span v-if="headTabIndex === 0" class="underline"></span></li>
+          <li @click="headTabIndex=1" class="tab-item {{headTabIndex === 1?'active':''}}">同城闪送<span v-if="headTabIndex === 1" class="underline"></span></li>
+          <li @click="headTabIndex=2" class="tab-item {{headTabIndex === 2?'active':''}}">好店<span v-if="headTabIndex === 2" class="underline"></span></li>
+        </ul>
+        <div class="search-box" :style="{borderRadius: menuButtonInfo.height/2+'px',height:menuButtonInfo.height+'px',}">
+          <icon class="iconsearch" type="iconsearch" size="16" color="#fff"></icon>
+        </div>
+      </div>
+    </div>
+    <!--  占位-->
+    <div :style="{height:diyHeadHeight+'px'}"></div>
+
+    <div class="nav">
+      <ul class="nav-list" :style="{display:navs.length<6?'flex':'block'}">
+        <li @click="go(item)" v-for="(item,idx) in navs" :key="idx" class="nav-item" :style="{flex:navs.length<6?'1':''}">
+          <icon :type="item.name" :size="item.size" :color="item.color"></icon>
+          <h4 class="title">{{item.title}}</h4>
+        </li>
+      </ul>
     </div>
 
-    <panel>
-      <div class="title" slot="title">测试数据绑定</div>
+    <ad
+      style="background: white"
+      :imgs="slide.imgs"
+      indicatorDots="line"
+      dotsColor="#C5C5C5"
+      dotsActiveColor="#26C78D"
+      itemwidth="655rpx"
+      itemheight="144rpx"
+    ></ad>
 
-      <text class="info" @tap="currentTime = +new Date()">{{m1.getTime(currentTime)}}</text>
-      <text class="info">{{setTimeoutTitle}}</text>
-      <text class="info" @tap="mixintap">{{mixin}}</text>
-      <text class="info">{{testcomputed}}</text>
-      <text class="info">{{counter}}</text>
-    </panel>
 
-    <panel>
-      <div class="title" slot="title">其它测试</div>
-      <!--button @tap="toast" size="mini">第三方组件</button-->
-      <button @tap="communicate" size="mini">组件通信</button>
-      <button @tap="tap" size="mini">混合TAP事件</button>
-    </panel>
 
-    <panel>
-      <div class="title" slot="title">测试并发网络请求</div>
-      <div>返回结果: <text>{{netrst}}</text></div>
-      <button @tap="request" size="mini"> 点我发起10个请求 </button>
-    </panel>
 
-     <panel>
-       <div class="title" slot="title">测试 v-model</div>
-       <div style="display: flex; align-items: center;">
-         <input v-model="inputmodel" />
-         <text style="margin-left: 30rpx;">Value: {{inputmodel}}</text>
-       </div>
-     </panel>
-
-    <panel>
-      <div class="title" slot="title">测试组件</div>
-
-      <text class="testcounter">全局计数器：</text>
-      <div class="counterview">
-        <button @tap="mynum++" size="mini">全局计数器: {{mynum}}</button>
-      </div>
-
-      <text class="testcounter">计数组件1 - num: </text>
-      <div class="counterview">
-
-        <counter @index-emit.user="counterEmit" />
-      </div>
-
-      <text class="testcounter">计数组件2 - num.sync: </text>
-
-      <div class="counterview">
-        <counter :num.sync="mynum"></counter>
-      </div>
-    </panel>
-
-    <panel>
-      <div class="title" slot="title">测试组件Repeat</div>
-      <div v-for="(item, index) in groupList">
-        <group :grouplist="item" :index="index"></group>
-      </div>
-    </panel>
-
-    <panel>
-      <div class="title" slot="title">测试列表</div>
-      <list></list>
-    </panel>
-
-    <panel>
-      <div class="title" slot="title">测试引用第三方原生组件</div>
-      <slide-view class="slide" width="640" height="80" slideWidth="266">
-        <view class="left" slot="left">这是一个原生组件，右滑试试看。</view>
-        <view class="right" slot="right">
-          <view class="right-item">删除</view>
-        </view>
-      </slide-view>
-     </panel>
-    <!--toast /-->
+    <copyright></copyright>
   </div>
 </template>
 
 <script>
   import wepy from '@wepy/core'
-  import eventHub from '../common/eventHub'
-  import { mapState } from '@wepy/x'
   import store from '../store'
-  import testMixin from '../mixins'
+  import pageMixin from '../mixins'
 
-  import wxPromisify from '../common/promisify'
   import {
     getSystemInfo
   } from '../api/system'
   import {
     toast
-  } from '../common/fun';
+  } from '../common/fun'
 
   wepy.page({
     store,
-    config: {
-      navigationBarTitleText: 'test'
-    },
-
-    hooks: {
-      // Page 级别 hook, 只对当前 Page 的 setData 生效。
-      'before-setData': function (dirty) {
-        if (Math.random() < 0.2) {
-          console.log('setData canceled')
-          return false // Cancel setData
-        }
-        dirty.time = +new Date()
-        return dirty
-      }
-    },
-    mixins: [testMixin],
+    mixins: [pageMixin],
     data: {
-      inputmodel: 'v-model',
-      mynum: 20,
-      userInfo: {
-        nickName: '加载中...'
+      slide: {
+        imgs: [
+          'https://new401t.bafangka.com/uploadfiles/wkbq6nc2kc/image/202003221654033886.png',
+          'https://qingclouds-server.oss-cn-shanghai.aliyuncs.com/695d1d409a77d695/ffd56752966467a7.jpg',
+          'https://qingclouds-server.oss-cn-shanghai.aliyuncs.com/db51fa901ed2c3b9/5514f2e17bbaf475.jpg']
       },
-      currentTime: +new Date(),
-      setTimeoutTitle: '标题三秒后会被修改',
-      count: 0,
-      netrst: '',
-      groupList: [
-        {
-          id: 1,
-          name: '点击改变',
-          list: [
-            {
-              childid: '1.1',
-              childname: '子项，点我改变'
-            }, {
-              childid: '1.2',
-              childname: '子项，点我改变'
-            }, {
-              childid: '1.3',
-              childname: '子项，点我改变'
-            }
-          ]
-        },
-        {
-          id: 2,
-          name: '点击改变',
-          list: [
-            {
-              childid: '2.1',
-              childname: '子项，点我改变'
-            }, {
-              childid: '2.2',
-              childname: '子项，点我改变'
-            }, {
-              childid: '2.3',
-              childname: '子项，点我改变'
-            }
-          ]
-        },
-        {
-          id: 3,
-          name: '点击改变',
-          list: [
-            {
-              childid: '3.1',
-              childname: '子项，点我改变'
-            }
-          ]
-        }
+      headTabIndex: 0,
+      navs: [
+        {title: '限时抢', name: 'iconxianshi', size: 44, color: '#26C78D'},
+        {title: '1小时达', name: 'iconqiandao', size: 44, color: '#ae48c7'},
+        {title: '享免单', name: 'iconsong', size: 44, color: '#3345c7'},
+        {title: '分享赚', name: 'iconmiandan', size: 44, color: '#3bc734'},
+        {title: '签到', name: 'iconfenxiang1', size: 44, color: '#c7596c'}
       ]
     },
-
-    computed: {
-      ...mapState([ 'counter' ]),
-      testcomputed () {
-        return 'computed - ' + this.mynum
-      }
-    },
-
-    methods: {
-      handleViewTap (e) {
-        wxPromisify('getUserInfo').then(res => {
-          this.userInfo = res.userInfo
-        }).catch(() => {})
-      },
-      tap () {
-        throw new Error('can not go here')
-      },
-      plus () {
-        this.mynum++
-      },
-      toast () {
-        let promise = this.$invoke('toast', 'show', {
-          title: '自定义标题',
-          img: 'https://raw.githubusercontent.com/kiinlam/wetoast/master/images/star.png'
-        })
-
-        promise.then((d) => {
-          console.log('toast done')
-        })
-      },
-      mixintap () {
-        console.log('do noting from ' + this.$is)
-      },
-      communicate () {
-        let counters = this.$children.filter((com) => com.$is === 'components/counter')
-
-        // Get children counter
-        counters[0].num++
-        counters[1].num--
-
-        eventHub.$emit('app-launch', {a: 1}, {b: 2})
-      },
-      request () {
-        let self = this
-        let i = 10
-        let map = ['MA==', 'MQo=', 'Mg==', 'Mw==', 'NA==', 'NQ==', 'Ng==', 'Nw==', 'OA==', 'OQ==']
-        while (i--) {
-          wx.request({
-            url: 'https://www.madcoder.cn/tests/sleep.php?time=1&t=css&c=' + map[i] + '&i=' + i,
-            success: function (d) {
-              if (d.statusCode !== 200) {
-                self.netrst += d.statusCode + '.'
-              } else {
-                self.netrst += d.data + '.'
-              }
-            }
-          })
-        }
-      },
-      counterEmit (num) {
-        console.log(`${this.$is} receive event, the number is: ${num}`)
-      }
-    },
-
     created () {
-      let self = this
-      self.currentTime = +new Date()
-
-      self.setTimeoutTitle = '标题三秒后会被修改'
-      setTimeout(() => {
-        self.setTimeoutTitle = '到三秒了'
-      }, 3000)
-
-      getSystemInfo()
-        .then(res => {
-          console.log(res)
-          toast('请求成功')
-        })
-        .catch(err => {
-          wx.fun.error('请求失败')
-        })
-
-      // wx.getUserInfo({
-      //   success (res) {
-      //     self.userInfo = res.userInfo
-      //   }
+      // getSystemInfo({
+      //
+      // }).then(res => {
+      //   console.log(res)
+      //   toast('请求成功')
+      //   // eslint-disable-next-line handle-callback-err
+      // }).catch(err => {
+      //   wx.fun.error('请求失败')
       // })
     }
+
   })
+
 </script>
 <config>
 {
-    navigationBarTitleText: 'O2O',
-    usingComponents: {
-      panel: '~@/components/panel',
-      counter: '~counter',
-      list: '../components/list',
-      group: '../components/group',
-      "slide-view": "module:miniprogram-slide-view",
-    }
+  "navigationBarTitleText": "首页",
+  "navigationStyle": "custom",
+  "navigationBarTextStyle": "white",
+  "usingComponents": {
+    "copyright": "~@/components/copyright",
+    "icon": "~@/components/icon",
+    "ad": "~@/components/ad"
+  }
 }
 </config>
