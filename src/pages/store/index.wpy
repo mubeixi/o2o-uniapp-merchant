@@ -2,7 +2,7 @@
   <div class="page-wrap">
     <div class="store-info">
       <div class="base">
-        <div class="logo" :style="{backgroundImage:'url('+''+')'}"></div>
+        <div class="logo" :style="{backgroundImage:'url('+'https://new401t.bafangka.com/uploadfiles/wkbq6nc2kc/image/202003231610328297.jpg'+')'}"></div>
         <div class="title">海的故事咖啡屋（文化路店）</div>
       </div>
       <div class="actions">
@@ -31,16 +31,28 @@
       :current="headTabIndex"
       @change="indexChangeEvent"
       class="tab-container"
-      :style="{height:(3000+'px')}">
+      :style="{height:(systemInfo.windowHeight+'px')}">
       <swiper-item class="tab-page">
         <!-- @scroll="bindscrollFn1" scroll-y :style="{height:(systemInfo.windowHeight+'px')}"-->
-        <scroll-view class="tab-page-wrap">
-          <div class="coupon-list">
-            <div class="coupon-item"></div>
-          </div>
+        <scroll-view class="tab-page-wrap" scroll-y :style="{height:(systemInfo.windowHeight+'px')}">
+
+<!--          <scroll-view class="coupon-section" scroll-x>-->
+<!--            <div class="coupon-item" v-for="(coupon,idx) in couponList">-->
+<!--              <div class="containier">-->
+<!--                <div class="price">-->
+<!--                  <div class="sign">{{coupon.num?'￥':'折'}}</div>-->
+<!--                  <div class="num">{{coupon.num?coupon.num:coupon.discount}}</div>-->
+<!--                </div>-->
+<!--                <div class="info">-->
+<!--                  <span class="condition">满{{coupon.condition}}使用</span>-->
+<!--                  <span class="use-end-item">有效期至{{coupon.use_end_time}}</span>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </scroll-view>-->
 
           <div class="activity-list">
-            <div class="activity-item"></div>
+            <div class="activity-item" v-for="(item,idx) in activityList">{{item}}</div>
           </div>
 
           <div class="feature-list">
@@ -52,7 +64,6 @@
 
           <!--优惠券产品-->
           <div class="block coupon-goods-list">
-
             <div class="block-title">
               <div class="block-title-text">到店券</div>
               <div class="block-title-more flex flex-vertical-center c9 fz-12">
@@ -68,8 +79,6 @@
                   </div>
                   <div class="right">
                     <h5 class="title"><span>{{item.title}}</span></h5>
-
-
                     <div class="flex flex-justify-between flex-vertical-center">
                       <div class="flex1">
                         <div class="tags" v-if="item.tags">
@@ -143,7 +152,6 @@
             </div>
           </div>
 
-
           <!--评论列表-->
           <div class="block comment-box">
 
@@ -167,6 +175,12 @@
             </div>
           </div>
 
+          <!--发布评论-->
+          <view class="commtent-add section">
+            <textarea class="textarea" @blur="bindTextAreaBlur" auto-height placeholder="发表你的评论..." />
+          </view>
+
+          <copyright></copyright>
 
         </scroll-view>
       </swiper-item>
@@ -209,6 +223,15 @@
     store,
     mixins: [pageMixin],
     data: {
+      couponList: [
+        {id: 1, title: 'xx优惠券', num: 50, discount: 0, use_end_time: '2020.3.31', condition: '199'},
+        {id: 1, title: 'xx优惠券', num: 50, discount: 0, use_end_time: '2020.3.31', condition: '199'},
+        {id: 1, title: 'xx优惠券', num: 0, discount: 2.5, use_end_time: '2020.3.31', condition: '199'},
+        {id: 1, title: 'xx优惠券', num: 50, discount: 0, use_end_time: '2020.3.31', condition: '199'},
+        {id: 1, title: 'xx优惠券', num: 0, discount: 6, use_end_time: '2020.3.31', condition: '199'},
+        {id: 1, title: 'xx优惠券', num: 50, discount: 0, use_end_time: '2020.3.31', condition: '199'}
+      ],
+      activityList: ['首单减13', '满50减10', '满100减25'],
       comments: [
         {id: 11, content: '挺好的，我们很喜欢，甜点不腻好吃，鱼柳也好吃，牛排也很不错南瓜汤也很赞，饮品一般吧！满意，还会去', nickname: '芷云青霜', headimg: 'https://new401t.bafangka.com/uploadfiles/wkbq6nc2kc/image/202003231610328297.jpg', create_at: '2020-03-11', hits: 444},
         {id: 11, content: '挺好的，我们很喜欢，甜点不腻好吃，鱼柳也好吃，牛排也很不错南瓜汤也很赞，饮品一般吧！满意，还会去', nickname: '芷云青霜', headimg: 'https://new401t.bafangka.com/uploadfiles/wkbq6nc2kc/image/202003231610328297.jpg', create_at: '2020-03-11', hits: 444},
@@ -431,6 +454,10 @@
       ]
     },
     methods: {
+      bindTextAreaBlur(e) {
+        const { value } = e.$wx.detail
+        console.log(value)
+      },
       bindPageScroll(e) {
         const {scrollLeft, scrollTop, scrollHeight, scrollWidth, deltaX, deltaY} = e.$wx.detail
         console.log(scrollTop)
@@ -488,6 +515,79 @@
   @import "../../assets/variables.scss";
   @import "../../assets/mixins.scss";
 
+  .coupon-section{
+    width: 750rpx;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    white-space: nowrap;
+    height: 123rpx;
+    margin-bottom: 20rpx;
+    background: white;
+
+    .coupon-item{
+      display: inline-block;
+      vertical-align: top;
+      width: 363rpx;
+      height: 123rpx;
+      margin-left: 30rpx;
+      background: #fff;
+      color: #fff;
+      background-image: url("data:image/jpeg;base64,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");
+      @include cover-img();
+      .containier{
+        vertical-align: top;
+        width: 248rpx;
+        padding-left: 10rpx;
+        height: 123rpx;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        .price{
+          height: 46rpx;
+          display: flex;
+          align-items: flex-end;
+          .sign{
+            font-size: 24rpx;
+          }
+          .num{
+            font-size: 40rpx;
+          }
+        }
+
+        .info{
+          font-size: 10px;
+          .condition{
+            margin-bottom: 10rpx;
+            display: block;
+          }
+          .use-end-item{
+
+          }
+        }
+      }
+    }
+  }
+  .activity{
+    &-list{
+      padding: 0 0 10rpx 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    &-item{
+      margin-right: 6px;
+      padding: 4px;
+      border-radius: 4px;
+      font-size: 10px;
+      color: $fun-red-color;
+      border:1px solid #FF9090;
+      &:last-child{
+        margin-right: 0;
+      }
+    }
+  }
+
   .feature{
     &-list{
       display: flex;
@@ -503,6 +603,7 @@
       }
     }
   }
+
   .store-info{
     .actions{
       width: 750rpx;
@@ -552,7 +653,6 @@
     }
   }
 
-
   .coupon-goods-list {
     padding: 0 25rpx;
     background: white;
@@ -562,7 +662,6 @@
         font-weight: bold;
       }
     }
-
 
     .goods-list {
 
@@ -775,6 +874,20 @@
 
     .comment-list {
 
+    }
+  }
+
+  .commtent-add{
+    margin: 50rpx 25rpx;
+    background: #F7F7F7;
+    min-height: 150rpx;
+    padding: 20rpx;
+    .textarea{
+      font-size: 14px;
+      line-height: 1.4;
+      &::placeholder{
+        color: #999;
+      }
     }
   }
 

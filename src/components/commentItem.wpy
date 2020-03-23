@@ -1,9 +1,9 @@
 <style lang="scss">
 .commtent-item{
-
+  padding: 30rpx 0;
   border-bottom: 1px solid #eee;
   .info{
-    padding: 20rpx 0;
+    padding-bottom: 20rpx;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -28,7 +28,7 @@
     line-height: 1.6;
   }
   .actions{
-    padding: 20rpx 0;
+    padding-top: 20rpx;
     text-align: right;
     color: #999;
     font-size: 12px;
