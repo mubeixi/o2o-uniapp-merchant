@@ -1,5 +1,7 @@
 <style lang="scss">
 @import "/assets/app.scss";
+
+
 </style>
 
 <script>
@@ -55,7 +57,12 @@ wepy.app({
 {
     pages: [
       "pages/index",
+<<<<<<< HEAD
       "pages/store/index"
+=======
+      "pages/tmpl",
+      "pages/productDetail"
+>>>>>>> 97b723d2d8d81f26d55a5fa6b068343031e37d51
     ],
     window: {
         backgroundTextStyle: "light",
@@ -75,7 +82,7 @@ wepy.app({
                 "text": "发现"
             },
             {
-                "pagePath": "pages/index",
+                "pagePath": "pages/productDetail",
                 "iconPath": "/static/tabbar/live.png",
                 "selectedIconPath": "/static/tabbar/live.png",
                 "text": "直播"
