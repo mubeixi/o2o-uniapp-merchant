@@ -79,7 +79,7 @@ wepy.app({
                 "text": "发现"
             },
             {
-                "pagePath": "pages/productDetail",
+                "pagePath": "pages/index",
                 "iconPath": "/static/tabbar/live.png",
                 "selectedIconPath": "/static/tabbar/live.png",
                 "text": "直播"
