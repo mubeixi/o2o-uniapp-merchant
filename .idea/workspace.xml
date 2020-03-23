@@ -4,9 +4,7 @@
     <list default="true" id="afb0a10c-91e0-4a30-a601-e69582c66bd9" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/assets/app.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/app.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/assets/variables.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/variables.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/index.wpy" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/index.wpy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wepy.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/wepy.config.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,7 +68,7 @@
       <workItem from="1584847768496" duration="6945000" />
       <workItem from="1584855505039" duration="11235000" />
       <workItem from="1584866950478" duration="4057000" />
-      <workItem from="1584924757679" duration="6818000" />
+      <workItem from="1584924757679" duration="8235000" />
     </task>
     <servers />
   </component>

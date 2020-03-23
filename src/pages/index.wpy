@@ -20,102 +20,122 @@
     <!--  占位-->
     <div :style="{height:diyHeadHeight+'px'}"></div>
 
-    <div class="nav">
-      <ul class="nav-list" :style="{display:navs.length<6?'flex':'block'}">
-        <li @click="go(item)" v-for="(item,idx) in navs" :key="idx" class="nav-item"
-            :style="{flex:navs.length<6?'1':''}">
-          <icon :type="item.name" :size="item.size" :color="item.color"></icon>
-          <h4 class="title">{{item.title}}</h4>
-        </li>
-      </ul>
-    </div>
-
-    <ad
-      style="background: white"
-      :imgs="slide.imgs"
-      indicatorDots="line"
-      dotsColor="#C5C5C5"
-      dotsActiveColor="#26C78D"
-      itemwidth="655rpx"
-      itemheight="144rpx"
-    ></ad>
-
-    <div class="block kill">
-      <div class="block-title">
-        <div class="block-title-text">今日秒杀</div>
-        <div class="block-title-more flex flex-vertical-center c9 fz-12">
-          <span>查看全部</span>
-          <icon class="iconright" type="iconright" size="14" color="#999"></icon>
-        </div>
-      </div>
-      <div class="block-content">
-        <div class="goods-list">
-          <div class="goods-item" v-for="(item,idx) in goodsList" :key="idx">
-            <div class="cover" :style="{backgroundImage:'url('+item.thumb+')'}"></div>
-            <h5 class="title">{{item.title}}</h5>
-            <div class="price-box">
-              <div>
-                <span class="sign">￥</span><span class="num">{{item.selling_price}}</span>
-              </div>
-              <div class="tags">
-                <span class="tag" v-if="item.discount">{{item.discount}}折</span>
-              </div>
+    <swiper
+      :current="headTabIndex"
+      @change="indexChangeEvent"
+      class="tab-container"
+      :style="{top:diyHeadHeight+'px',height:(systemInfo.windowHeight-diyHeadHeight+'px')}">
+        <swiper-item class="tab-page">
+          <scroll-view class="tab-page-wrap" scroll-y :style="{height:(systemInfo.windowHeight-diyHeadHeight+'px')}">
+            <div class="nav">
+              <ul class="nav-list" :style="{display:navs.length<6?'flex':'block'}">
+                <li @click="go(item)" v-for="(item,idx) in navs" :key="idx" class="nav-item"
+                    :style="{flex:navs.length<6?'1':''}">
+                  <icon :type="item.name" :size="item.size" :color="item.color"></icon>
+                  <h4 class="title">{{item.title}}</h4>
+                </li>
+              </ul>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="block live">
-      <div class="block-title">
-        <div class="block-title-text">钜惠推荐</div>
-        <div class="block-title-more flex flex-vertical-center c9 fz-12">
-          <!--          <span>查看全部</span>-->
-          <!--          <icon class="iconright" type="iconright" size="14" color="#999"></icon>-->
-        </div>
-      </div>
-      <div class="nav-box">
-        <ul class="nav-list">
-          <li class="nav-item"
-              @click="changeLiveNav(idx)"
-              v-for="(nav,idx) in liveNav"
-              :key="idx"
-              :class="{active:liveNavIndex === idx}"
-          >{{nav.title}}</li>
-
-        </ul>
-      </div>
-      <div class="block-content">
-        <div class="live-list">
-          <div class="live-item" v-for="(item,idx) in liveList" :key="idx">
-            <div class="left">
-              <div class="cover" :style="{backgroundImage:'url('+item.thumb+')'}"></div>
-              <h5 class="title"><span class="live-status">直播中</span><span>{{item.title}}</span></h5>
-            </div>
-            <div class="right">
-              <div class="price-box">
-                <div class="selling-price">
-                  <span class="sign">￥</span><span class="num">{{item.selling_price}}</span>
-                </div>
-                <div class="market-price m-l-6">
-                  <span class="sign">￥</span><span class="num">{{item.market_price}}</span>
+            <ad
+              style="background: white"
+              :imgs="slide.imgs"
+              indicatorDots="line"
+              dotsColor="#C5C5C5"
+              dotsActiveColor="#26C78D"
+              itemwidth="655rpx"
+              itemheight="144rpx"
+            ></ad>
+            <div class="block kill">
+              <div class="block-title">
+                <div class="block-title-text">今日秒杀</div>
+                <div class="block-title-more flex flex-vertical-center c9 fz-12">
+                  <span>查看全部</span>
+                  <icon class="iconright" type="iconright" size="14" color="#999"></icon>
                 </div>
               </div>
-              <div class="sale-count">已抢{{item.sale_count}}份</div>
-              <div class="tags" v-if="item.tags">
-                <span class="tag" v-for="(tag,idx) in item.tags" :key="idx" >{{tag}}</span>
-              </div>
-              <div class="action">
-                <div class="btn">抢</div>
+              <div class="block-content">
+                <div class="goods-list">
+                  <div class="goods-item" v-for="(item,idx) in goodsList" :key="idx">
+                    <div class="cover" :style="{backgroundImage:'url('+item.thumb+')'}"></div>
+                    <h5 class="title">{{item.title}}</h5>
+                    <div class="price-box">
+                      <div>
+                        <span class="sign">￥</span><span class="num">{{item.selling_price}}</span>
+                      </div>
+                      <div class="tags">
+                        <span class="tag" v-if="item.discount">{{item.discount}}折</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
+            <div class="block live">
 
+              <div class="block-title">
+                <div class="block-title-text">钜惠推荐</div>
+                <div class="block-title-more flex flex-vertical-center c9 fz-12">
+                  <!--          <span>查看全部</span>-->
+                  <!--          <icon class="iconright" type="iconright" size="14" color="#999"></icon>-->
+                </div>
+              </div>
+              <div class="nav-box">
+                <ul class="nav-list">
+                  <li class="nav-item"
+                      @click="changeLiveNav(idx)"
+                      v-for="(nav,idx) in liveNav"
+                      :key="idx"
+                      :class="{active:liveNavIndex === idx}"
+                  >{{nav.title}}</li>
 
-    <copyright></copyright>
+                </ul>
+              </div>
+              <div class="block-content">
+                <div class="live-list">
+                  <div class="live-item" v-for="(item,idx) in liveList" :key="idx">
+                    <div class="left">
+                      <div class="cover" :style="{backgroundImage:'url('+item.thumb+')'}"></div>
+                      <h5 class="title"><span class="live-status">直播中</span><span>{{item.title}}</span></h5>
+                    </div>
+                    <div class="right">
+                      <div class="price-box">
+                        <div class="selling-price">
+                          <span class="sign">￥</span><span class="num">{{item.selling_price}}</span>
+                        </div>
+                        <div class="market-price m-l-6">
+                          <span class="sign">￥</span><span class="num">{{item.market_price}}</span>
+                        </div>
+                      </div>
+                      <div class="sale-count">已抢{{item.sale_count}}份</div>
+                      <div class="tags" v-if="item.tags">
+                        <span class="tag" v-for="(tag,idx) in item.tags" :key="idx" >{{tag}}</span>
+                      </div>
+                      <div class="action">
+                        <div class="btn">抢</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <copyright></copyright>
+          </scroll-view>
+        </swiper-item>
+
+      <swiper-item class="tab-page">
+        <scroll-view class="tab-page-wrap" scroll-y :style="{height:(systemInfo.windowHeight-diyHeadHeight+'px')}">
+          同城闪送
+          <copyright></copyright>
+        </scroll-view>
+      </swiper-item>
+      <swiper-item class="tab-page">
+        <scroll-view class="tab-page-wrap" scroll-y :style="{height:(systemInfo.windowHeight-diyHeadHeight+'px')}">
+          好店
+          <copyright></copyright>
+        </scroll-view>
+      </swiper-item>
+    </swiper>
+
   </div>
 </template>
 
@@ -145,7 +165,7 @@
           market_price: 666.00,
           sale_count: 4343,
           tags: ['营养', '卫生干净'],
-          thumb: 'https://new401t.bafangka.com/uploadfiles/wkbq6nc2kc/image/202003231009124795.png'
+          thumb: 'https://new401t.bafangka.com/uploadfiles/wkbq6nc2kc/image/202003231121596330.png'
         },
         {
           id: 1,
@@ -154,7 +174,7 @@
           market_price: 666.00,
           sale_count: 4343,
           tags: ['营养', '卫生干净'],
-          thumb: 'https://new401t.bafangka.com/uploadfiles/wkbq6nc2kc/image/202003231009124795.png'
+          thumb: 'https://new401t.bafangka.com/uploadfiles/wkbq6nc2kc/image/202003231121596330.png'
         },
         {
           id: 1,
@@ -163,7 +183,7 @@
           market_price: 666.00,
           sale_count: 4343,
           tags: ['营养', '卫生干净'],
-          thumb: 'https://new401t.bafangka.com/uploadfiles/wkbq6nc2kc/image/202003231009124795.png'
+          thumb: 'https://new401t.bafangka.com/uploadfiles/wkbq6nc2kc/image/202003231121596330.png'
         },
         {
           id: 1,
@@ -172,7 +192,7 @@
           market_price: 666.00,
           sale_count: 4343,
           tags: ['营养', '卫生干净'],
-          thumb: 'https://new401t.bafangka.com/uploadfiles/wkbq6nc2kc/image/202003231009124795.png'
+          thumb: 'https://new401t.bafangka.com/uploadfiles/wkbq6nc2kc/image/202003231121596330.png'
         },
         {
           id: 1,
@@ -181,7 +201,7 @@
           market_price: 666.00,
           sale_count: 4343,
           tags: ['营养', '卫生干净'],
-          thumb: 'https://new401t.bafangka.com/uploadfiles/wkbq6nc2kc/image/202003231009124795.png'
+          thumb: 'https://new401t.bafangka.com/uploadfiles/wkbq6nc2kc/image/202003231121596330.png'
         },
         {
           id: 1,
@@ -190,7 +210,7 @@
           market_price: 666.00,
           sale_count: 4343,
           tags: ['营养', '卫生干净'],
-          thumb: 'https://new401t.bafangka.com/uploadfiles/wkbq6nc2kc/image/202003231009124795.png'
+          thumb: 'https://new401t.bafangka.com/uploadfiles/wkbq6nc2kc/image/202003231121596330.png'
         }
       ],
       goodsList: [
@@ -253,6 +273,11 @@
       ]
     },
     methods:{
+      indexChangeEvent(event) {
+
+        const {current, source} = event.$wx.detail
+        this.headTabIndex = current
+      },
       changeLiveNav(idx){
         this.liveNavIndex = idx
       }
@@ -275,14 +300,25 @@
 <style lang="scss">
   @import "../assets/variables.scss";
   @import "../assets/mixins.scss";
+  .page-wrap{
+
+  }
+  .tab-container{
+
+    .tab-page{
+
+      .tab-page-wrap{
+
+      }
+    }
+  }
 
   .live {
     padding: 0 25rpx;
     background: white;
 
     .block-title {
-      padding: 10px 0;
-
+      padding: 20px 0 10px 0;
       .block-title-text {
         font-weight: bold;
       }
@@ -425,7 +461,7 @@
     background: white;
 
     .block-title {
-      padding: 10px 0;
+      padding: 20px 0 10px 0;
 
       .block-title-text {
         font-weight: bold;
