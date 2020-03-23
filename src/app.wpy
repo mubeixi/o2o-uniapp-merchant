@@ -57,7 +57,7 @@ wepy.app({
 {
     pages: [
       "pages/index",
-      "pages/store/index"
+      "pages/store/index",
       "pages/tmpl",
       "pages/productDetail"
     ],
