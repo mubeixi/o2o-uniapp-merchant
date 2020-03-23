@@ -1,0 +1,140 @@
+<style lang="scss">
+  @import "../assets/variables.scss";
+  .page-wrap{
+    background-color: #ffffff;
+  }
+  .end-time{
+    width: 750rpx;
+    height: 58rpx;
+    line-height: 58rpx;
+    padding-left: 22rpx;
+    box-sizing: border-box;
+    font-size: 22rpx;
+    background-color: #F2FFFA;
+  }
+
+  .end-time-block{
+    width:36rpx;
+    height:36rpx;
+    background:rgba(68,68,68,1);
+    border-radius:6rpx;
+    font-size: 24rpx;
+    text-align: center;
+    line-height: 36rpx;
+    display: inline-block;
+    color: #ffffff;
+    margin: 0px 4rpx;
+  }
+  .end-time-day{
+    margin: 0px 4rpx;
+  }
+  .product-price{
+    background-color: #ffffff;
+    display: flex;
+    height: 108rpx;
+    width: 750rpx;
+    box-sizing: border-box;
+    padding-left: 20rpx;
+    align-items: center;
+    justify-content: space-between;
+    color: #ABABAB;
+  }
+  .product-price-red{
+    font-size: 20px;
+    color: #F53636;
+  }
+  .product-price-right{
+    width: 168rpx;
+    height: 70rpx;
+  }
+  .product-title{
+    width: 698rpx;
+    line-height: 40rpx;
+    height: 80rpx;
+    padding: 0rpx 30rpx 0rpx 22rpx;
+    background-color: #ffffff;
+    color: #333333;
+    font-size: 14px;
+    font-weight:bold;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    display:-webkit-box;
+    -webkit-box-orient:vertical;
+    -webkit-line-clamp:2;
+  }
+  .line-f8{
+    width:750rpx;
+    height:20rpx;
+    background:rgba(248,248,248,1);
+  }
+
+</style>
+
+<template>
+  <div class="page-wrap">
+    <swiper style="height:750rpx;width: 750rpx;" indicator-dots=true  indicator-active-color="#26C78D" indicator-color="#ffffff" autoplay=true interval='3000' duration='500' circular=true >
+        <swiper-item>
+          <image src="https://new401t.bafangka.com/uploadfiles/wkbq6nc2kc/image/202003221654033886.png" class="full-img"/>
+        </swiper-item>
+    </swiper>
+    <div class="end-time">
+        距结束还有：<span class="end-time-day">1天</span><span class="end-time-block">01</span>：<span class="end-time-block">01</span>：<span class="end-time-block">01</span>
+    </div>
+    <div class="product-price font14">
+          <div class="product-price-left">
+            <span class="product-price-red">
+              <span class="font13">¥</span>189.00
+            </span>
+            <span style="text-decoration:line-through;">
+              ¥189.00
+            </span>
+          </div>
+          <div class="product-price-right">
+              <image src="/static/product_share.png" class="full-img"></image>
+          </div>
+    </div>
+    <div class="product-title">
+      北海道玫瑰味双层芝士礼盒送礼蛋糕乳酪半熟芝士糕点礼盒柔滑芝士慕斯蛋糕
+    </div>
+    <div class="line-f8" style="margin-top: 30rpx"></div>
+
+  </div>
+</template>
+
+<script>
+  import wepy from '@wepy/core'
+  import store from '../store'
+  import pageMixin from '../mixins'
+
+  import {
+    getSystemInfo
+  } from '../api/system'
+  import {
+    toast
+  } from '../common/fun'
+
+  wepy.page({
+    store,
+    mixins: [pageMixin],
+    data: {
+
+    },
+    created () {
+
+    }
+
+  })
+
+</script>
+<config>
+  {
+  "navigationBarTitleText": "首页",
+  "navigationStyle": "custom",
+  "navigationBarTextStyle": "white",
+  "usingComponents": {
+  "copyright": "~@/components/copyright",
+  "icon": "~@/components/icon",
+  "ad": "~@/components/ad"
+  }
+  }
+</config>
