@@ -1,5 +1,6 @@
 <style lang="scss">
   @import "../assets/variables.scss";
+  @import "../assets/mixins.scss";
   .page-wrap{
     background-color: #ffffff;
   }
@@ -163,7 +164,11 @@
   }
   .shouhou-img{width: 28rpx;height: 28rpx;margin-right: 10rpx}
   .store{
+    position: sticky;
+    z-index: 999;
+    top: 0;
     width: 750rpx;
+    background-color: #ffffff;
     height: 82rpx;
     box-sizing: border-box;
     padding: 26rpx 72rpx;
@@ -248,6 +253,31 @@
     font-size:14px;
     color:rgba(51,51,51,1);
     line-height:28px;
+    margin-bottom: 10rpx;
+  }
+  .isStickly{
+    border-bottom: 1px solid #eee;
+  }
+  .store-list-address{
+    width: 100%;
+    box-sizing: border-box;
+    padding-left: 2rpx;
+    height: 34rpx;
+    line-height: 34rpx;
+    align-items: center;
+  }
+  .store-list-font{
+    color: #999999;
+    font-size: 12px;
+    height: 12px;
+    line-height: 12px;
+  }
+  .store-su{
+    width: 1px;
+    height: 34rpx;
+    background-color: #EBEBEB;
+    margin: 0px 24rpx;
+    display: inline-block;
   }
 
 </style>
@@ -353,7 +383,7 @@
     </div>
     <div class="line-f8"></div>
   <!--  店铺信息  -->
-    <ul class="store flex flex-vertical-center">
+    <ul class="store flex flex-vertical-center"  id="tabs"  :class="{isStickly:headTabSticky}">
       <li class="li-item {{tabIndex==0?'color-store':''}}" @click="tabIndex=0">
         介绍
         <span class="active" v-if="tabIndex==0"></span>
@@ -372,21 +402,21 @@
       </li>
     </ul>
     <swiper
-      style="height: 1000px"
       :current="tabIndex"
+      :style="{height:(systemInfo.windowHeight+'px')}"
       @change="changeTabIndex"
       class="tab-containers"
       >
       <swiper-item class="tab-pages" >
           介绍
       </swiper-item>
-      <swiper-item class="tab-pages">
+      <swiper-item class="tab-pages" >
         评价
       </swiper-item>
-      <swiper-item class="tab-pages">
+      <swiper-item class="tab-pages" >
         须知
       </swiper-item>
-      <swiper-item class="tab-pages">
+      <swiper-item class="tab-pages" >
           <div class="store-info flex">
               <div style="width: 96rpx;height: 96rpx;margin-right: 28rpx">
                 <image src="https://new401t.bafangka.com/uploadfiles/wkbq6nc2kc/image/202003221654033886.png" class="full-img"></image>
@@ -423,6 +453,16 @@
                   <div class="store-list-title">
                     肖战甜品屋（东风路店）
                   </div>
+                  <div class="flex flex-justify-between store-list-address">
+                      <div class="store-list-font">
+                        郑州市金水区文化路东风路硅谷广场a座
+                      </div>
+                      <div class="flex flex-vertical-center">
+                        <icon  type="iconaddress" size="17" color="#26C78D"></icon>
+                        <span class="store-su"></span>
+                        <icon  type="iconcall" size="17" color="#26C78D"></icon>
+                      </div>
+                  </div>
               </div>
           </div>
 
@@ -430,7 +470,7 @@
       </swiper-item>
     </swiper>
 
-
+    <bottombuy></bottombuy>
   </div>
 </template>
 
@@ -450,7 +490,20 @@
     store,
     mixins: [pageMixin],
     data: {
-        tabIndex:3
+        tabIndex:3,
+      headTabSticky:false
+    },
+    onPageScroll(e) {
+      const { scrollTop } = e
+      this.headTabSticky = scrollTop > this.headTabTop
+    },
+    onReady() {
+      const query = wx.createSelectorQuery()
+      query.select('#tabs').boundingClientRect()
+      query.selectViewport().scrollOffset()
+      query.exec((res) => {
+        this.headTabTop = res[0].top
+      })
     },
     methods:{
       changeTabIndex(event){
@@ -467,13 +520,9 @@
 </script>
 <config>
   {
-  "navigationBarTitleText": "首页",
-  "navigationStyle": "custom",
-  "navigationBarTextStyle": "white",
+  "navigationBarTitleText": "商品详情",
   "usingComponents": {
-  "copyright": "~@/components/copyright",
-  "icon": "~@/components/icon",
-  "ad": "~@/components/ad"
+    "bottombuy": "~@/components/BottomBuy",
   }
   }
 </config>

@@ -1,0 +1,38 @@
+<style lang="scss">
+.bottom-last{
+  width: 750rpx;
+  height: 106rpx;
+  padding: 10rpx;
+  background-color: #ffffff;
+  box-sizing: border-box;
+}
+</style>
+<template>
+ <div>
+    <div class="bottom-last flex flex-justify-between">
+          <div>
+            
+          </div>
+          <div>
+
+          </div>
+    </div>
+ </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+  wepy.component({
+    props: {
+      imgs: {
+        type: Array,
+        default: []
+      }
+    },
+    data: {
+
+    },
+    methods: {
+
+    }
+  })
+</script>
