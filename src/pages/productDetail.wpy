@@ -522,6 +522,7 @@
   {
   "navigationBarTitleText": "商品详情",
   "usingComponents": {
+    "icon": "~@/components/icon",
     "bottombuy": "~@/components/BottomBuy",
   }
   }
