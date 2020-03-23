@@ -17,11 +17,36 @@
 /* rest style end */
 
 /* common style start */
-$color-list: 000,111,222,333,444,555,666,777,888,999;
-@each $color in $color-list{
-  .c#{$color}{
-    color: '##{$color}';
-  }
+//$color-list: 000,111,222,333,444,555,666,777,888,999;
+.c0{
+  color: #000;
+}
+.c1{
+  color: #111;
+}
+.c2{
+  color: #222;
+}
+.c3{
+  color: #333;
+}
+.c4{
+  color: #444;
+}
+.c5{
+  color: #555;
+}
+.c6{
+  color: #666;
+}
+.c7{
+  color: #777;
+}
+.c8{
+  color: #888;
+}
+.c9{
+  color: #999;
 }
 
 @for $i from 4 through 100 {
@@ -40,9 +65,14 @@ $color-list: 000,111,222,333,444,555,666,777,888,999;
   .fz-#{$i} { font-size: ($i)+px; }
 }
 
-.page-wrap{
-  min-height: 100vh;
+page{
   background: #f8f8f8;
+}
+
+
+.page-wrap{
+  //min-height: 100vh;
+
 }
 
 .color-gray{
@@ -51,22 +81,20 @@ $color-list: 000,111,222,333,444,555,666,777,888,999;
 .color-primary{
   color: $fun-primary-color;
 }
-.block{
-  display: block;
-}
+
 
 .flex{
   display: flex;
   .flex1{
     flex: 1;
   }
-  &.-vertical-center{
+  &-vertical-center{
     align-items: center;
   }
-  &.-justify-center{
+  &-justify-center{
     justify-content: center;
   }
-  &.-justify-between{
+  &-justify-between{
     justify-content: space-between;
   }
 }
@@ -83,8 +111,11 @@ $color-list: 000,111,222,333,444,555,666,777,888,999;
 
 .block{
   &-title{
+    display: flex;
     &-text{
-
+      flex: 1;
+      font-size: 18px;
+      color: #333;
     }
     &-more{
 

@@ -1,92 +1,18 @@
-<style lang="scss">
-@import "../assets/variables.scss";
-.nav{
-  background: white;
-  /*margin: 15px 0;*/
-  &-list{
-
-  }
-  &-item{
-    padding: 10px 0;
-    text-align: center;
-    .title{
-      margin-top: 10px;
-      font-size: 14px;
-      color: #444;
-    }
-  }
-}
-.head-box{
-  position: fixed;
-  top: 0;
-  width: 750rpx;
-  box-sizing: border-box;
-
-  z-index: 2;
-  background: $fun-green-color;
-}
-.head{
-  padding-left: 20rpx;
-  display: flex;
-  align-items: center;
-  color: white;
-  .tab-box{
-    flex: 1;
-    display: flex;
-    align-items: flex-end;
-    .tab-item{
-      margin-right: 40rpx;
-      padding-bottom: 4px;
-      position: relative;
-      &:last-child{
-        margin-right: 0;
-      }
-      .underline{
-        visibility: hidden;
-        position: absolute;
-        left: 0;
-        bottom: 0;
-        height: 1px;
-        width: 100%;
-        background: #fff;
-      }
-      &.active{
-        font-size: 40rpx;
-        .underline{
-          visibility: visible;
-        }
-      }
-    }
-  }
-  .search-box{
-    position: relative;
-    margin-right: 20rpx;
-    width: 120rpx;
-    text-align: right;
-    background: rgba(255,255,255,.5);
-    .iconsearch{
-      color: white;
-      position: absolute;
-      right: 10px;
-      top: 50%;
-      transform: translateY(-50%);
-    }
-  }
-}
-
-
-</style>
-
 <template>
   <div class="page-wrap">
     <div class="head-box" :style="{height:diyHeadHeight+'px'}">
-      <div class="head" :style="{height:menuButtonInfo.height+'px',paddingRight:diyHeadRight+'px',marginTop:menuButtonInfo.top+'px'}">
+      <div class="head"
+           :style="{height:menuButtonInfo.height+'px',paddingRight:diyHeadRight+'px',marginTop:menuButtonInfo.top+'px'}">
         <ul class="tab-box">
-          <li @click="headTabIndex=0" class="tab-item {{headTabIndex === 0?'active':''}}">特价<span v-if="headTabIndex === 0" class="underline"></span></li>
-          <li @click="headTabIndex=1" class="tab-item {{headTabIndex === 1?'active':''}}">同城闪送<span v-if="headTabIndex === 1" class="underline"></span></li>
-          <li @click="headTabIndex=2" class="tab-item {{headTabIndex === 2?'active':''}}">好店<span v-if="headTabIndex === 2" class="underline"></span></li>
+          <li @click="headTabIndex=0" class="tab-item {{headTabIndex === 0?'active':''}}">特价<span
+            v-if="headTabIndex === 0" class="underline"></span></li>
+          <li @click="headTabIndex=1" class="tab-item {{headTabIndex === 1?'active':''}}">同城闪送<span
+            v-if="headTabIndex === 1" class="underline"></span></li>
+          <li @click="headTabIndex=2" class="tab-item {{headTabIndex === 2?'active':''}}">好店<span
+            v-if="headTabIndex === 2" class="underline"></span></li>
         </ul>
-        <div class="search-box" :style="{borderRadius: menuButtonInfo.height/2+'px',height:menuButtonInfo.height+'px',}">
+        <div class="search-box"
+             :style="{borderRadius: menuButtonInfo.height/2+'px',height:menuButtonInfo.height+'px',}">
           <icon class="iconsearch" type="iconsearch" size="16" color="#fff"></icon>
         </div>
       </div>
@@ -94,29 +20,122 @@
     <!--  占位-->
     <div :style="{height:diyHeadHeight+'px'}"></div>
 
-    <div class="nav">
-      <ul class="nav-list" :style="{display:navs.length<6?'flex':'block'}">
-        <li @click="go(item)" v-for="(item,idx) in navs" :key="idx" class="nav-item" :style="{flex:navs.length<6?'1':''}">
-          <icon :type="item.name" :size="item.size" :color="item.color"></icon>
-          <h4 class="title">{{item.title}}</h4>
-        </li>
-      </ul>
-    </div>
+    <swiper
+      :current="headTabIndex"
+      @change="indexChangeEvent"
+      class="tab-container"
+      :style="{top:diyHeadHeight+'px',height:(systemInfo.windowHeight-diyHeadHeight+'px')}">
+        <swiper-item class="tab-page">
+          <scroll-view class="tab-page-wrap" scroll-y :style="{height:(systemInfo.windowHeight-diyHeadHeight+'px')}">
+            <div class="nav">
+              <ul class="nav-list" :style="{display:navs.length<6?'flex':'block'}">
+                <li @click="go(item)" v-for="(item,idx) in navs" :key="idx" class="nav-item"
+                    :style="{flex:navs.length<6?'1':''}">
+                  <icon :type="item.name" :size="item.size" :color="item.color"></icon>
+                  <h4 class="title">{{item.title}}</h4>
+                </li>
+              </ul>
+            </div>
+            <ad
+              style="background: white"
+              :imgs="slide.imgs"
+              indicatorDots="line"
+              dotsColor="#C5C5C5"
+              dotsActiveColor="#26C78D"
+              itemwidth="655rpx"
+              itemheight="144rpx"
+            ></ad>
+            <div class="block kill">
+              <div class="block-title">
+                <div class="block-title-text">今日秒杀</div>
+                <div class="block-title-more flex flex-vertical-center c9 fz-12">
+                  <span>查看全部</span>
+                  <icon class="iconright" type="iconright" size="14" color="#999"></icon>
+                </div>
+              </div>
+              <div class="block-content">
+                <div class="goods-list">
+                  <div class="goods-item" v-for="(item,idx) in goodsList" :key="idx">
+                    <div class="cover" :style="{backgroundImage:'url('+item.thumb+')'}"></div>
+                    <h5 class="title">{{item.title}}</h5>
+                    <div class="price-box">
+                      <div>
+                        <span class="sign">￥</span><span class="num">{{item.selling_price}}</span>
+                      </div>
+                      <div class="tags">
+                        <span class="tag" v-if="item.discount">{{item.discount}}折</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="block live">
 
-    <ad
-      style="background: white"
-      :imgs="slide.imgs"
-      indicatorDots="line"
-      dotsColor="#C5C5C5"
-      dotsActiveColor="#26C78D"
-      itemwidth="655rpx"
-      itemheight="144rpx"
-    ></ad>
+              <div class="block-title">
+                <div class="block-title-text">钜惠推荐</div>
+                <div class="block-title-more flex flex-vertical-center c9 fz-12">
+                  <!--          <span>查看全部</span>-->
+                  <!--          <icon class="iconright" type="iconright" size="14" color="#999"></icon>-->
+                </div>
+              </div>
+              <div class="nav-box">
+                <ul class="nav-list">
+                  <li class="nav-item"
+                      @click="changeLiveNav(idx)"
+                      v-for="(nav,idx) in liveNav"
+                      :key="idx"
+                      :class="{active:liveNavIndex === idx}"
+                  >{{nav.title}}</li>
 
+                </ul>
+              </div>
+              <div class="block-content">
+                <div class="live-list">
+                  <div class="live-item" v-for="(item,idx) in liveList" :key="idx">
+                    <div class="left">
+                      <div class="cover" :style="{backgroundImage:'url('+item.thumb+')'}"></div>
+                      <h5 class="title"><span class="live-status">直播中</span><span>{{item.title}}</span></h5>
+                    </div>
+                    <div class="right">
+                      <div class="price-box">
+                        <div class="selling-price">
+                          <span class="sign">￥</span><span class="num">{{item.selling_price}}</span>
+                        </div>
+                        <div class="market-price m-l-6">
+                          <span class="sign">￥</span><span class="num">{{item.market_price}}</span>
+                        </div>
+                      </div>
+                      <div class="sale-count">已抢{{item.sale_count}}份</div>
+                      <div class="tags" v-if="item.tags">
+                        <span class="tag" v-for="(tag,idx) in item.tags" :key="idx" >{{tag}}</span>
+                      </div>
+                      <div class="action">
+                        <div class="btn">抢</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <copyright></copyright>
+          </scroll-view>
+        </swiper-item>
 
+      <swiper-item class="tab-page">
+        <scroll-view class="tab-page-wrap" scroll-y :style="{height:(systemInfo.windowHeight-diyHeadHeight+'px')}">
+          同城闪送
+          <copyright></copyright>
+        </scroll-view>
+      </swiper-item>
+      <swiper-item class="tab-page">
+        <scroll-view class="tab-page-wrap" scroll-y :style="{height:(systemInfo.windowHeight-diyHeadHeight+'px')}">
+          好店
+          <copyright></copyright>
+        </scroll-view>
+      </swiper-item>
+    </swiper>
 
-
-    <copyright></copyright>
   </div>
 </template>
 
@@ -136,6 +155,108 @@
     store,
     mixins: [pageMixin],
     data: {
+      liveNav: [{title: '全部', cid: 0}, {title: '小吃', cid: 0}, {title: '美食', cid: 0}, {title: '住宿', cid: 0}, {title: '日常', cid: 0}, {title: '旅游', cid: 0}],
+      liveNavIndex: 0,
+      liveList: [
+        {
+          id: 1,
+          title: '王师傅单人份早餐美味营养回头客多单人份早餐美味营养...',
+          selling_price: 158.00,
+          market_price: 666.00,
+          sale_count: 4343,
+          tags: ['营养', '卫生干净'],
+          thumb: 'https://new401t.bafangka.com/uploadfiles/wkbq6nc2kc/image/202003231121596330.png'
+        },
+        {
+          id: 1,
+          title: '王师傅单人份早餐美味营养回头客多单人份早餐美味营养...',
+          selling_price: 158.00,
+          market_price: 666.00,
+          sale_count: 4343,
+          tags: ['营养', '卫生干净'],
+          thumb: 'https://new401t.bafangka.com/uploadfiles/wkbq6nc2kc/image/202003231121596330.png'
+        },
+        {
+          id: 1,
+          title: '王师傅单人份早餐美味营养回头客多单人份早餐美味营养...',
+          selling_price: 158.00,
+          market_price: 666.00,
+          sale_count: 4343,
+          tags: ['营养', '卫生干净'],
+          thumb: 'https://new401t.bafangka.com/uploadfiles/wkbq6nc2kc/image/202003231121596330.png'
+        },
+        {
+          id: 1,
+          title: '王师傅单人份早餐美味营养回头客多单人份早餐美味营养...',
+          selling_price: 158.00,
+          market_price: 666.00,
+          sale_count: 4343,
+          tags: ['营养', '卫生干净'],
+          thumb: 'https://new401t.bafangka.com/uploadfiles/wkbq6nc2kc/image/202003231121596330.png'
+        },
+        {
+          id: 1,
+          title: '王师傅单人份早餐美味营养回头客多单人份早餐美味营养...',
+          selling_price: 158.00,
+          market_price: 666.00,
+          sale_count: 4343,
+          tags: ['营养', '卫生干净'],
+          thumb: 'https://new401t.bafangka.com/uploadfiles/wkbq6nc2kc/image/202003231121596330.png'
+        },
+        {
+          id: 1,
+          title: '王师傅单人份早餐美味营养回头客多单人份早餐美味营养...',
+          selling_price: 158.00,
+          market_price: 666.00,
+          sale_count: 4343,
+          tags: ['营养', '卫生干净'],
+          thumb: 'https://new401t.bafangka.com/uploadfiles/wkbq6nc2kc/image/202003231121596330.png'
+        }
+      ],
+      goodsList: [
+        {
+          id: 1,
+          title: '北欧四件套全棉纯棉床上用品宿舍...',
+          selling_price: 158.00,
+          thumb: 'https://new401t.bafangka.com/uploadfiles/wkbq6nc2kc/image/202003231009124795.png',
+          discount: 2.5
+        },
+        {
+          id: 2,
+          title: '北欧四件套全棉纯棉床上用品宿舍...',
+          selling_price: 158.00,
+          thumb: 'https://new401t.bafangka.com/uploadfiles/wkbq6nc2kc/image/202003231009124795.png',
+          discount: 0
+        },
+        {
+          id: 3,
+          title: '北欧四件套全棉纯棉床上用品宿舍...',
+          selling_price: 158.00,
+          thumb: 'https://new401t.bafangka.com/uploadfiles/wkbq6nc2kc/image/202003231009124795.png',
+          discount: 0
+        },
+        {
+          id: 4,
+          title: '北欧四件套全棉纯棉床上用品宿舍...',
+          selling_price: 158.00,
+          thumb: 'https://new401t.bafangka.com/uploadfiles/wkbq6nc2kc/image/202003231009124795.png',
+          discount: 0
+        },
+        {
+          id: 5,
+          title: '北欧四件套全棉纯棉床上用品宿舍...',
+          selling_price: 158.00,
+          thumb: 'https://new401t.bafangka.com/uploadfiles/wkbq6nc2kc/image/202003231009124795.png',
+          discount: 5.6
+        },
+        {
+          id: 6,
+          title: '北欧四件套全棉纯棉床上用品宿舍...',
+          selling_price: 158.00,
+          thumb: 'https://new401t.bafangka.com/uploadfiles/wkbq6nc2kc/image/202003231009124795.png',
+          discount: 0
+        }
+      ],
       slide: {
         imgs: [
           'https://new401t.bafangka.com/uploadfiles/wkbq6nc2kc/image/202003221654033886.png',
@@ -144,14 +265,24 @@
       },
       headTabIndex: 0,
       navs: [
-        {title: '限时抢', name: 'iconxianshi', size: 44, color: '#26C78D'},
-        {title: '1小时达', name: 'iconqiandao', size: 44, color: '#ae48c7'},
-        {title: '享免单', name: 'iconsong', size: 44, color: '#3345c7'},
-        {title: '分享赚', name: 'iconmiandan', size: 44, color: '#3bc734'},
-        {title: '签到', name: 'iconfenxiang1', size: 44, color: '#c7596c'}
+        { title: '限时抢', name: 'iconxianshi', size: 44, color: '#26C78D' },
+        { title: '1小时达', name: 'iconqiandao', size: 44, color: '#ae48c7' },
+        { title: '享免单', name: 'iconsong', size: 44, color: '#3345c7' },
+        { title: '分享赚', name: 'iconmiandan', size: 44, color: '#3bc734' },
+        { title: '签到', name: 'iconfenxiang1', size: 44, color: '#c7596c' }
       ]
     },
-    created () {
+    methods:{
+      indexChangeEvent(event) {
+
+        const {current, source} = event.$wx.detail
+        this.headTabIndex = current
+      },
+      changeLiveNav(idx){
+        this.liveNavIndex = idx
+      }
+    },
+    created() {
       // getSystemInfo({
       //
       // }).then(res => {
@@ -166,15 +297,335 @@
   })
 
 </script>
-<config>
-{
-  "navigationBarTitleText": "首页",
-  "navigationStyle": "custom",
-  "navigationBarTextStyle": "white",
-  "usingComponents": {
-    "copyright": "~@/components/copyright",
-    "icon": "~@/components/icon",
-    "ad": "~@/components/ad"
+<style lang="scss">
+  @import "../assets/variables.scss";
+  @import "../assets/mixins.scss";
+  .page-wrap{
+
   }
-}
+  .tab-container{
+
+    .tab-page{
+
+      .tab-page-wrap{
+
+      }
+    }
+  }
+
+  .live {
+    padding: 0 25rpx;
+    background: white;
+
+    .block-title {
+      padding: 20px 0 10px 0;
+      .block-title-text {
+        font-weight: bold;
+      }
+    }
+    .nav-box{
+      color: #666666;
+      margin-bottom: 10px;
+      .nav-list{
+        overflow-y: hidden;
+        overflow-x: scroll;
+        &::-webkit-scrollbar{
+          display: none;
+        }
+        .nav-item{
+          padding: 0;
+          margin-right: 30rpx;
+          height: 30px;
+          line-height: 30px;
+          display: inline-block;
+          &.active{
+            color: $fun-green-color;
+            border-bottom: 2px solid $fun-green-color;
+          }
+        }
+      }
+    }
+
+    .live-list {
+      display: flex;
+      flex-wrap: wrap;
+
+      .live-item {
+        width: 700rpx;
+        padding: 0 0 10px 0;
+        margin-bottom: 20rpx;
+        font-size: 14px;
+        border-bottom: 1px dashed #eee;
+        display: flex;
+        &:last-child{
+          margin-bottom: 0;
+          border-bottom: none;
+        }
+
+        .left {
+          width: 460rpx;
+          .cover {
+            width: 460rpx;
+            height: 230rpx;
+            @include cover-img()
+          }
+
+          .title {
+            font-size: 14px;
+            margin-top:10px;
+            color: #333;
+            line-height: 16px;
+            height: 32px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            .live-status{
+              display: inline-block;
+              margin-right: 4px;
+              text-align: center;
+              background: $fun-red-color;
+              color: #fff;
+              font-size: 10px;
+              height: 16px;
+              line-height: 16px;
+              width: 34px;
+              border-top-right-radius: 8px;
+              border-bottom-right-radius: 8px;
+            }
+          }
+        }
+
+        .right {
+          margin-left: 34rpx;
+          font-size: 12px;
+          .price-box{
+            display: flex;
+            margin-bottom: 6px;
+            .selling-price{
+              color: $fun-red-color;
+              .num {
+                font-size: 14px;
+              }
+            }
+
+            .market-price{
+              display: flex;
+              align-items: flex-end;
+              text-decoration: line-through;
+              color: #999;
+
+            }
+          }
+
+          .sale-count{
+            margin-bottom: 6px;
+            color: #999;
+          }
+
+          .tags {
+            margin-bottom: 6px;
+            .tag {
+              display: inline-block;
+              margin-right: 4px;
+              text-align: center;
+              background: #FFEBEB;
+              color: $fun-red-color;
+              padding: 0 6px;
+              font-size: 10px;
+              height: 16px;
+              line-height: 16px;
+
+            }
+          }
+
+          .action{
+            display: flex;
+            justify-content: center;
+            .btn{
+              width: 78rpx;
+              height: 78rpx;
+              text-align: center;
+              line-height: 78rpx;
+              border-radius: 50%;
+              background: $fun-red-color;
+              color: white;
+              border:12rpx solid #FFE7E7;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .kill {
+    padding: 0 25rpx;
+    background: white;
+
+    .block-title {
+      padding: 20px 0 10px 0;
+
+      .block-title-text {
+        font-weight: bold;
+      }
+    }
+
+    .goods-list {
+      display: flex;
+      flex-wrap: wrap;
+
+      .goods-item {
+        width: 220rpx;
+        margin-right: 20rpx;
+        margin-bottom: 20rpx;
+        font-size: 12px;
+
+        &:nth-child(3n+0) {
+          margin-right: 0;
+        }
+
+        .cover {
+          width: 220rpx;
+          height: 220rpx;
+          @include cover-img()
+        }
+
+        .title {
+          margin: 4px 0;
+          color: #333;
+          line-height: 16px;
+          height: 32px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .price-box {
+          display: flex;
+
+          .sign {
+            color: $fun-red-color;
+          }
+
+          .num {
+            color: $fun-red-color;
+            font-size: 14px;
+          }
+        }
+
+        .tags {
+          .tag {
+            display: inline-block;
+            margin-left: 4px;
+            text-align: center;
+            background: $fun-red-color;
+            color: #fff;
+            font-size: 10px;
+            height: 14px;
+            line-height: 14px;
+            width: 34px;
+            border-top-right-radius: 7px;
+            border-bottom-right-radius: 7px;
+          }
+        }
+      }
+    }
+  }
+
+  .nav {
+    background: white;
+    /*margin: 15px 0;*/
+    &-list {
+
+    }
+
+    &-item {
+      padding: 10px 0;
+      text-align: center;
+
+      .title {
+        margin-top: 10px;
+        font-size: 14px;
+        color: #444;
+      }
+    }
+  }
+
+  .head-box {
+    position: fixed;
+    top: 0;
+    width: 750rpx;
+    box-sizing: border-box;
+
+    z-index: 2;
+    background: $fun-green-color;
+  }
+
+  .head {
+    padding-left: 20rpx;
+    display: flex;
+    align-items: center;
+    color: white;
+
+    .tab-box {
+      flex: 1;
+      display: flex;
+      align-items: flex-end;
+
+      .tab-item {
+        margin-right: 40rpx;
+        padding-bottom: 4px;
+        position: relative;
+
+        &:last-child {
+          margin-right: 0;
+        }
+
+        .underline {
+          visibility: hidden;
+          position: absolute;
+          left: 0;
+          bottom: 0;
+          height: 1px;
+          width: 100%;
+          background: #fff;
+        }
+
+        &.active {
+          font-size: 40rpx;
+
+          .underline {
+            visibility: visible;
+          }
+        }
+      }
+    }
+
+    .search-box {
+      position: relative;
+      margin-right: 20rpx;
+      width: 120rpx;
+      text-align: right;
+      background: rgba(255, 255, 255, .5);
+
+      .iconsearch {
+        color: white;
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+    }
+  }
+
+
+</style>
+<config>
+  {
+    "navigationBarTitleText": "首页",
+    "navigationStyle": "custom",
+    "navigationBarTextStyle": "white",
+    "usingComponents": {
+      "copyright": "~@/components/copyright",
+      "icon": "~@/components/icon",
+      "ad": "~@/components/ad"
+    }
+  }
 </config>
