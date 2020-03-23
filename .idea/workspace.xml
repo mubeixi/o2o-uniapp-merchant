@@ -2,6 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="afb0a10c-91e0-4a30-a601-e69582c66bd9" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/app.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/app.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/variables.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/variables.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/index.wpy" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/index.wpy" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/wepy.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/wepy.config.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -65,7 +69,8 @@
       <workItem from="1584842724829" duration="991000" />
       <workItem from="1584847768496" duration="6945000" />
       <workItem from="1584855505039" duration="11235000" />
-      <workItem from="1584866950478" duration="3113000" />
+      <workItem from="1584866950478" duration="4057000" />
+      <workItem from="1584924757679" duration="6818000" />
     </task>
     <servers />
   </component>
@@ -89,13 +94,13 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="461" y="151" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1584855858273" />
-    <state x="636" y="251" width="647" height="538" key="find.popup" timestamp="1584851470648">
+    <state x="636" y="251" width="647" height="538" key="find.popup" timestamp="1584933186884">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="636" y="251" width="647" height="538" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1584851470648" />
-    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1584859791815">
+    <state x="636" y="251" width="647" height="538" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1584933186884" />
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1584932982262">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1584859791815" />
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1584932982262" />
   </component>
 </project>
