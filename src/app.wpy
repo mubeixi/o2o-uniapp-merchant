@@ -55,7 +55,7 @@ wepy.app({
 {
     pages: [
       "pages/index",
-      "pages/tmpl"
+      "pages/store/index"
     ],
     window: {
         backgroundTextStyle: "light",
