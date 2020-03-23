@@ -254,7 +254,7 @@
 
 <template>
   <div class="page-wrap">
-    <swiper style="height:750rpx;width: 750rpx;" indicator-dots=true  indicator-active-color="#26C78D" indicator-color="#ffffff" autoplay=true interval='3000' duration='500' circular=true >
+    <swiper style="height:750rpx;width: 750rpx;" indicator-dots="true"  indicator-active-color="#26C78D" indicator-color="#ffffff" autoplay="true" interval="3000" duration="500" circular="true" >
         <swiper-item>
           <image src="https://new401t.bafangka.com/uploadfiles/wkbq6nc2kc/image/202003221654033886.png" class="full-img"/>
         </swiper-item>
