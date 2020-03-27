@@ -4,6 +4,7 @@
   @import "../assets/mixins.scss";
   .page-wrap{
     background-color: #ffffff;
+    padding-bottom: 106rpx;
   }
   .end-time{
     width: 750rpx;
@@ -280,6 +281,12 @@
     margin: 0px 24rpx;
     display: inline-block;
   }
+  .bottom-posi{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 999;
+  }
 
 </style>
 
@@ -471,7 +478,7 @@
       </swiper-item>
     </swiper>
 
-    <bottombuy></bottombuy>
+    <bottombuy class="bottom-posi"></bottombuy>
   </div>
 </template>
 
