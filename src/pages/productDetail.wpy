@@ -1,3 +1,4 @@
+<!--suppress ALL -->
 <style lang="scss">
   @import "../assets/variables.scss";
   @import "../assets/mixins.scss";
@@ -490,8 +491,8 @@
     store,
     mixins: [pageMixin],
     data: {
-        tabIndex:3,
-      headTabSticky:false
+      tabIndex: 3,
+      headTabSticky: false
     },
     onPageScroll(e) {
       const { scrollTop } = e
@@ -505,10 +506,10 @@
         this.headTabTop = res[0].top
       })
     },
-    methods:{
-      changeTabIndex(event){
+    methods: {
+      changeTabIndex(event) {
         const {current, source} = event.$wx.detail
-        this.tabIndex=current
+        this.tabIndex = current
       }
     },
     created () {

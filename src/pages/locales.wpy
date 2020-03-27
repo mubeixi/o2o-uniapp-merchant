@@ -1,0 +1,81 @@
+<template>
+  <div class="group-cell">
+    <div class="cell-item">
+      <div class="label">中国话</div>
+      <div class="content">{{TT.t_comm_Time}}</div>
+      <div class="right"></div>
+    </div>
+    <div class="cell-item">
+      <div class="label">繁体</div>
+      <div class="content">{{fan}}</div>
+      <div class="right"></div>
+    </div>
+    <div class="cell-item">
+      <div class="label">英文</div>
+      <div class="content">{{english}}</div>
+      <div class="right"></div>
+    </div>
+    <div class="cell-item">
+      <div class="label">俄罗斯</div>
+      <div class="content">{{russia}}</div>
+      <div class="right"></div>
+    </div>
+    <div class="cell-item">
+      <div class="label">日语</div>
+      <div class="content">{{japan}}</div>
+      <div class="right"></div>
+    </div>
+    <div class="cell-item">
+      <div class="label">韩语</div>
+      <div class="content">{{korea}}</div>
+      <div class="right"></div>
+    </div>
+  </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+  import store from '../store'
+  import pageMixin from '../mixins'
+
+  wepy.page({
+    store,
+    mixins: [pageMixin],
+    data: {
+      t_comm_Time: '',
+      langues: ['t_comm_Time'],
+      fan: '',
+      english: '',
+      russia: '',
+      japan: '',
+      korea: ''
+    },
+    methods: {
+
+    },
+    created() {
+      setTimeout(() => {
+        this.$setLocale('zh-hk')
+        this.fan = this.$t('t_comm_Time')
+
+        this.$setLocale('en')
+        this.english = this.$t('t_comm_Time')
+
+        this.$setLocale('ru_RU')
+        this.russia = this.$t('t_comm_Time')
+
+        this.$setLocale('ja_JP')
+        this.japan = this.$t('t_comm_Time')
+
+        this.$setLocale('ko_KR')
+        this.korea = this.$t('t_comm_Time')
+      },100)
+    }
+  })
+</script>
+<config>
+  {
+    navigationBarTitleText: '国际化',
+    usingComponents: {
+    }
+  }
+</config>

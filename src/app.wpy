@@ -12,9 +12,27 @@ wepy.use(vuex)
 
 require('./common/index')
 
+// 国际化
+import locales from './common/locales'
+import T from './common/i18n'
+
+// 数据注入
+T.registerLocale(locales)
+try {
+  // 获取系统设置的语言格式
+  var value = wx.getStorageSync('language')
+  if (value) {
+    T.setLocale(value)
+  } else {
+    T.setLocale('zh-cn')// 默认显示简体
+  }
+} catch (e) {
+  T.setLocale('zh-cn')// 默认显示简体
+}
+wx.T = T
+
 // import promisify.js  from '@wepy/use-promisify.js'
 // wepy.use(promisify.js)
-
 wepy.app({
   hooks: {
     // App 级别 hook，对整个 App 生效
@@ -59,7 +77,8 @@ wepy.app({
       "pages/index",
       "pages/store/index",
       "pages/tmpl",
-      "pages/productDetail"
+      "pages/productDetail",
+      "pages/locales"
     ],
     window: {
         backgroundTextStyle: "light",
