@@ -5,6 +5,10 @@
  * eg. 弹出确认是否删除订单  't_order_confirm_DeleteText 即可
  * eg. 公共的错误提示  't_comm_errMsgTip 即可
  */
+
+// 后续有其他语言的，也独立一个文件类配置
+import ZHCN from './locales.zh-cn'
+
 export default {
 
   // 英文
@@ -13,9 +17,7 @@ export default {
   },
 
   // 中文
-  'zh-cn': {
-    't_comm_Time': '时间'
-  },
+  'zh-cn': ZHCN,
 
   // 繁体
   'zh-hk': {
