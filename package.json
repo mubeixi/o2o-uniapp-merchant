@@ -4,6 +4,8 @@
   "description": "",
   "main": "main.js",
   "scripts": {
+    "clean": "rimraf unpackage",
+    "lint": "eslint --ext .js,.vue",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -14,6 +16,34 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@dcloudio/uni-ui": "^1.1.9"
+    "async-validator": "^3.2.4",
+    "lodash": "^4.17.15",
+    "moment": "^2.24.0"
+  },
+  "devDependencies": {
+    "@types/html5plus": "^1.0.0",
+    "@types/uni-app": "^1.4.2",
+    "babel-eslint": "^7.2.1",
+    "cz-conventional-changelog": "^3.1.0",
+    "eslint": "^6.8.0",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "eslint-plugin-vue": "^6.2.2",
+    "rimraf": "^3.0.2",
+    "shelljs": "^0.8.3"
+  },
+  "easycom": {
+    "autoscan": true,
+    "custom": {
+      "uni-(.*)": "@/components/uni-$1.vue"
+    }
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
