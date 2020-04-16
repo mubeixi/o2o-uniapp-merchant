@@ -21,6 +21,9 @@ $fun-black-color:#000000;
 $fun-red-color:#F53636;
 $fun-blue-color:#00A8FF;
 
+$fun-selling-color:#E41515;//商品现在价格
+$fun-market-color:#939393;//原价
+
 $fun-border-color:#e7e7e7;
 
 /* 行为相关颜色 */
@@ -84,14 +87,8 @@ $uni-font-size-subtitle:36rpx;
 $uni-color-paragraph: #3F536E; // 文章段落颜色
 $uni-font-size-paragraph:30rpx;
 
-// 定义函数 rpx
-@function rpx($value) {
-  @return $value * 1rpx;
-}
-
-
 /** mixins **/
-@mixin cover-img($paddingTop:0px,$bgsize:cover,$bgcolor:#f2f2f2,$repreat:no-repeat) {
+@mixin cover-img($bgsize:cover,$paddingTop:0px,$bgcolor:#f2f2f2,$repreat:no-repeat) {
   background: {
     color: $bgcolor;
     size: $bgsize;
@@ -108,12 +105,18 @@ page{
   background: #f8f8f8;
 }
 
-.img-cover{
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  background: #fff;
+// 安全区域
+.safearea-box{
+  height: constant(safe-area-inset-bottom);
+  height: env(safe-area-inset-bottom);
+  width: 100%;
+  &.fixed{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+  }
 }
+
 
 /* 颜色 */
 .c0{
@@ -161,12 +164,19 @@ page{
   .p-l-#{$i} { padding-left: ($i)+px; }
   .p-r-#{$i} { padding-right: ($i)+px; }
 
-
-  .w#{$i} { width: ($i)+px; }
-  .h#{$i} { height: ($i)+px; }
-
   .fz-#{$i} { font-size: ($i)+px; }
 }
+
+@for $i from 0 through 200 {
+  .w#{$i} { width: ($i)+px; }
+  .h#{$i} { height: ($i)+px; }
+}
+
+//圆角
+@for $i from 0 through 30 {
+  .b-radius-#{$i} { border-radius: ($i)+px; }
+}
+.b-radius-aircle{border-radius: 50%;overflow: hidden}
 
 /* flex布局 */
 .flex{
@@ -249,6 +259,48 @@ page{
   }
 }
 
+.scroll{
+  
+  &-box{
+    background: white;
+    overflow-y: hidden;
+    overflow-x: scroll;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+    
+  }
+  
+  &-item{
+    display: inline-block;
+    &.active {
+      color: $fun-green-color;
+      border-bottom: 2px solid $fun-green-color;
+    }
+  }
+  
+}
+
+.grid{
+  
+  &-box{
+    display: flex;
+    flex-wrap: wrap;
+  }
+  &-item{
+    text-align: center;
+    .icon-img{
+    
+    }
+    .icon{
+    
+    }
+    .title{
+    
+    }
+  }
+}
+
 /* 边框样式 */
 .bor{
   border: 1px solid $fun-border-color;
@@ -273,14 +325,39 @@ page{
 }
 
 
-/* 安全区域 */
-.safearea-box{
-  height: constant(safe-area-inset-bottom);
-  height: env(safe-area-inset-bottom);
-  width: 100%;
-  &.fixed{
-    position: fixed;
-    bottom: 0;
-    left: 0;
+
+
+.img-cover{
+  @include cover-img();
+}
+
+.img-con{
+  @include cover-img(contain);
+}
+
+
+.text{
+  &-underline{
+    text-decoration: underline;
   }
+  &-through{
+    text-decoration: line-through;
+  }
+  &-nowrap{
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+}
+
+//原价和现价
+.price-selling{
+  color: $fun-selling-color;
+}
+.price-market{
+  color: $fun-market-color;
+}
+
+.bg-white{
+  background: #fff;
 }

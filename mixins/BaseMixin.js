@@ -14,6 +14,7 @@ export default {
     }
   },
   methods: {
+    $noop: () => {},
     $toast: toast,
     $error: error,
     $modal: modal,
