@@ -350,6 +350,29 @@ page{
   }
 }
 
+
+.block{
+  &-title{
+    display: flex;
+    
+    &-text{
+      flex: 1;
+      font-size: 18px;
+      color: #333;
+    }
+    &-more{
+      display: flex;
+      
+    }
+  }
+  &-nav{
+    &-item{
+    
+    }
+  }
+}
+
+
 //原价和现价
 .price-selling{
   color: $fun-selling-color;

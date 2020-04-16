@@ -45,12 +45,13 @@
             itemwidth="655rpx"
             itemheight="144rpx"
           ></layout-ad>
+          
           <div class="block kill">
-            <div class="block-title">
+            <div class="block-title flex-ver-c">
               <div class="block-title-text">今日秒杀</div>
-              <div class="block-title-more flex flex-vertical-center c9 fz-12">
+              <div class="block-title-more flex flex-ver-c c9 fz-12">
                 <span>查看全部</span>
-                <icon class="iconright" type="iconright" size="14" color="#999"></icon>
+                <layout-icon type="iconicon-arrow-right" size="14" color="#999"></layout-icon>
               </div>
             </div>
             <div class="block-content">
