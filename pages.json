@@ -21,14 +21,14 @@
 		}
 	],
 	"globalStyle": {
-		"navigationBarTextStyle": "black",
+		"navigationBarTextStyle": "light",
 		"backgroundTextStyle": "light",
 		"navigationBarTitleText": "本地生活",
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8"
 	},
 	"tabBar": {
-		"borderStyle": "white",
+		"borderStyle": "black",
 		"color": "#999999",
 		"selectedColor": "#26C78D",
 		"list": [

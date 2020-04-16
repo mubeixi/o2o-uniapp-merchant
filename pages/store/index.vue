@@ -510,7 +510,6 @@
       class="tab-container"
       :style="{height:(systemInfo.windowHeight+'px')}">
       <swiper-item class="tab-page">
-        <!-- @scroll="bindscrollFn1" scroll-y :style="{height:(systemInfo.windowHeight+'px')}"-->
         <scroll-view class="tab-page-wrap" scroll-y :style="{height:(systemInfo.windowHeight+'px')}">
 
           <!--          <scroll-view class="coupon-section" scroll-x>-->

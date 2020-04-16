@@ -1,9 +1,13 @@
 <style lang="scss" scoped>
-
+@import "../../assets/icon.scss";
+.inline{
+  display: inline;
+}
 </style>
 
 <template>
-  <i class="iconfont {{type}}"
+  <i class="iconfont icon"
+     :class="[type,display]"
      :style="{ color: color, 'font-size': size + 'px' }"
      @click="_onClick"
   ></i>
@@ -17,6 +21,10 @@ export default {
       require: true,
       type: String,
       default: ''
+    },
+    display: {
+      type: String,
+      default: 'block'
     },
     color: {
       type: String,
