@@ -12,30 +12,6 @@ import Schema from 'async-validator'
 
 export const objTranslate = (obj) => JSON.parse(JSON.stringify(obj))
 
-export const ls = {
-  set (key, val, cover) {
-    if (!cover && !val && (val !== 0 || val !== false)) return false
-
-    return uni.setStorageSync(key, val)
-  },
-
-  get (key) {
-    try {
-      var val = uni.getStorageSync(key)
-      return val
-    } catch (e) {
-      // error
-      uni.showModal(`获取Storage失败，key：${key}`)
-    }
-  },
-  remove (key) {
-    return uni.removeStorageSync(key)
-  },
-  clear () {
-    return uni.clearStorageSync()
-  }
-}
-
 function checkValue (val, vals) {
   let _val = val
   if (Number.isNaN(val)) {
@@ -311,3 +287,29 @@ export function sleep (fn, par, time = 3000) {
     setTimeout(() => resolve(fn(par)), time)
   })
 }
+
+const Helper = {
+  Object: {
+    extend: (o, p) => {
+      for (const prop in p)o[prop] = p[prop]
+      return o
+    },
+    // 把p中属性都给o，不覆盖o自有属性
+    merge: (o, p) => {
+      for (const prop in p) {
+        // eslint-disable-next-line no-prototype-builtins
+        if (o.hasOwnProperty(prop)) continue
+        o[prop] = p[prop]
+      }
+      return o
+    },
+    restrict: (o, p) => {
+      for (const prop in o) {
+        if (!(o in p)) delete o[prop]
+      }
+      return o
+    }
+  }
+}
+
+export default Helper

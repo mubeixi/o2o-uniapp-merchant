@@ -4,19 +4,19 @@ import {
 	error, toast
 } from './fun'
 import {
-	emptyObject,
-	ls
+	emptyObject
 } from './helper'
+import storage from '@/common/storage'
 import {hexMD5} from './tool/md5'
 import Base64 from './tool/base64.js'
 
-export const getUsersID = () => ls.get('users_id') ? ls.get('users_id') : 'wkbq6nc2kc'
+export const getUsersID = () => storage.get('users_id') ? storage.get('users_id') : 'wkbq6nc2kc'
 
-export const getAccessToken = () => ls.get('access_token')
+export const getAccessToken = () => storage.get('access_token')
 
-export const getUserID = () => ls.get('user_id')
+export const getUserID = () => storage.get('user_id')
 
-export const getBizId = () => ls.get('biz_id')
+export const getBizId = () => storage.get('biz_id')
 
 export const getEnv = () => 'wx_lp'
 
@@ -82,7 +82,7 @@ class XHR {
 	static checkQuick = (act, options) => {
 		const d = new Date()
 		if (options.hasOwnProperty('is_tap') && options.is_tap) {
-			let tempActInfo = ls.get('temp_act_info')
+			let tempActInfo = storage.get('temp_act_info')
 			if (tempActInfo && tempActInfo.hasOwnProperty('act') && tempActInfo.hasOwnProperty('time') && tempActInfo.act && tempActInfo.time) {
 				// 同一个请求，不能在0.5s内连点两次
 				return act === tempActInfo.act && d.getTime() < (tempActInfo.time + 500)
