@@ -205,7 +205,7 @@
             </swiper>
 
           </div>
-          <copyright></copyright>
+          <layout-copyright></layout-copyright>
         </scroll-view>
       </swiper-item>
     </swiper>
@@ -221,9 +221,10 @@ import {
 import { Exception } from '@/common/Exception'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import Mock from '@/dev/Mock'
+import LayoutCopyright from '@/componets/layout-copyright/layout-copyright'
 export default {
   mixins: [BaseMixin],
-  components: { LayoutIcon },
+  components: { LayoutCopyright, LayoutIcon },
   computed: {
     // quickNavs () {
     //   try {
