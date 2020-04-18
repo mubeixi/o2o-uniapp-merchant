@@ -7,7 +7,7 @@ export default {
   data () {
     return {
       menuButtonInfo: {},
-      systemInfo: { statusBarHeight: 0 },
+      systemInfo: { statusBarHeight: 0 ,windowHeight:0},
       diyHeadHeight: 0,
       diyHeadRight: 0,
       TT: {}

@@ -1,8 +1,6 @@
 import Vue from 'vue'
-import {staticUrl} from './env'
-import {
-  getDomain
-} from './helper'
+import { staticUrl } from './env'
+import moment from 'moment'
 
 Vue.filter('domain', (url) => {
   if (!url) return ''
@@ -10,6 +8,9 @@ Vue.filter('domain', (url) => {
   return url
 })
 
+Vue.filter('couponTime', (str) => {
+  return moment(str).format('YYYY.m.d')
+})
 
 export const formatRichTextByUparseFn = (html)=>{
 

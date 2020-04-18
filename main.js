@@ -4,6 +4,8 @@ import App from './App'
 import T from './common/langue/i18n'
 import locales from './common/langue/locales'
 
+import './common'
+
 Vue.config.productionTip = false
 
 App.mpType = 'app'

@@ -88,11 +88,12 @@ $uni-color-paragraph: #3F536E; // 文章段落颜色
 $uni-font-size-paragraph:30rpx;
 
 /** mixins **/
-@mixin cover-img($bgsize:cover,$paddingTop:0px,$bgcolor:#f2f2f2,$repreat:no-repeat) {
+@mixin cover-img($bgsize:cover,$paddingTop:0px,$bgcolor:#f2f2f2,$repreat:no-repeat,$position:center) {
   background: {
     color: $bgcolor;
     size: $bgsize;
     repeat: $repreat;
+    position: $position;
   };
   padding: {
     top:$paddingTop;
@@ -176,7 +177,10 @@ page{
 @for $i from 0 through 30 {
   .b-radius-#{$i} { border-radius: ($i)+px; }
 }
-.b-radius-aircle{border-radius: 50%;overflow: hidden}
+.b-radius-aircle{
+  border-radius: 50%;
+  overflow: hidden
+}
 
 /* flex布局 */
 .flex{
@@ -331,7 +335,7 @@ page{
   @include cover-img();
 }
 
-.img-con{
+.img-contain{
   @include cover-img(contain);
 }
 
