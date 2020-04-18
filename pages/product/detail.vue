@@ -2,6 +2,9 @@
   .page-wrap{
     background-color: #ffffff;
   }
+  .flex-vertical-center{
+    align-items: center;
+  }
   .end-time{
     width: 750rpx;
     height: 58rpx;
@@ -71,6 +74,9 @@
     display:-webkit-box;
     -webkit-box-orient:vertical;
     -webkit-line-clamp:2;
+  }
+  .over{
+    overflow-x: hidden;overflow-y: scroll;
   }
   .line-f8{
     width:750rpx;
@@ -198,6 +204,8 @@
   }
   .store-info{
     width: 750rpx;
+    overflow-y: scroll;
+    overflow-x: hidden;
     box-sizing: border-box;
     padding: 52rpx 20rpx 20rpx 30rpx;
   }
@@ -277,25 +285,30 @@
     margin: 0px 24rpx;
     display: inline-block;
   }
+  ul li{
+    list-style: none;
+  }
+
+
 </style>
 
 <template>
   <div class="page-wrap">
     <swiper style="height:750rpx;width: 750rpx;" indicator-dots="true"  indicator-active-color="#26C78D" indicator-color="#ffffff" autoplay="true" interval="3000" duration="500" circular="true" >
-      <swiper-item>
-        <image src="https://new401t.bafangka.com/uploadfiles/wkbq6nc2kc/image/202003221654033886.png" class="full-img"/>
+      <swiper-item v-for="(item,index) of detailData.Products_JSON.ImgPath">
+        <image :src="item" class="full-img"/>
       </swiper-item>
     </swiper>
     <div class="end-time">
       距结束还有：<span class="end-time-day">1天</span><span class="end-time-block">01</span>：<span class="end-time-block">01</span>：<span class="end-time-block">01</span>
     </div>
-    <div class="product-price ft-14">
+    <div class="product-price fz-14">
       <div class="product-price-left">
             <span class="product-price-red">
-              <span class="fz-13">¥</span>189.00
+              <span class="fz-13">¥</span>{{detailData.Products_PriceX}}
             </span>
-        <span style="text-decoration:line-through;">
-              ¥189.00
+        <span style="text-decoration:line-through;" class="m-l-5">
+              ¥{{detailData.Products_PriceY}}
             </span>
       </div>
       <div class="product-price-right">
@@ -310,50 +323,37 @@
       </div>
     </div>
     <div class="product-title">
-      北海道玫瑰味双层芝士礼盒送礼蛋糕乳酪半熟芝士糕点礼盒柔滑芝士慕斯蛋糕
+      {{detailData.Products_Name}}
     </div>
     <div class="line-f8" style="margin-top: 30rpx"></div>
-    <div class="product-activity">
+    <div class="product-activity"  v-if="active">
       <div class="flex" style="padding-bottom: 30rpx">
         <div class="product-activity-title">
           优惠活动
         </div>
         <div class="flex1">
           <div class="flex">
-            <div class="activity-item">
+            <div class="activity-item"  v-for="(item,index) of active" :key="index">
               <image src="/static/product/activity.png" class="activity-img" ></image>
-              首单减13
-            </div>
-            <div class="activity-item">
-              <image src="/static/product/activity.png" class="activity-img" ></image>
-              首单减13
-            </div>
-            <div class="activity-item">
-              <image src="/static/product/activity.png" class="activity-img" ></image>
-              首单减13
-            </div>
-            <div class="activity-item">
-              <image src="/static/product/activity.png" class="activity-img" ></image>
-              首单减13
+              满{{item.reach}}减{{item.award}}
             </div>
           </div>
-
-          <div class="flex flex-vertical-center  activity-second">
-            <div class="color-first">
-              多买优惠
-            </div>
-            <div class="color-second">
-              满2件打8.8折
-            </div>
-          </div>
-          <div class="flex flex-vertical-center  activity-second">
-            <div class="color-first">
-              多买优惠
-            </div>
-            <div class="color-second">
-              满2件打8.8折
-            </div>
-          </div>
+<!--          <div class="flex flex-vertical-center  activity-second">-->
+<!--            <div class="color-first">-->
+<!--              多买优惠-->
+<!--            </div>-->
+<!--            <div class="color-second">-->
+<!--              满2件打8.8折-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div class="flex flex-vertical-center  activity-second">-->
+<!--            <div class="color-first">-->
+<!--              多买优惠-->
+<!--            </div>-->
+<!--            <div class="color-second">-->
+<!--              满2件打8.8折-->
+<!--            </div>-->
+<!--          </div>-->
         </div>
       </div>
 
@@ -364,19 +364,12 @@
     </div>
 
     <!-- 服务保障   -->
-    <div class="shouhou flex flex-vertical-center">
-      <div class="shouhou-item">
+    <div class="shouhou flex flex-vertical-center" v-if="detailData.Products_Promise.length>0">
+      <div class="shouhou-item"  v-for="(item,index) in detailData.Products_Promise" v-if="item.name" :key="index">
         <image src="/static/product/checked.png" class="shouhou-img"></image>
-        随时退款
+        {{item.name}}
       </div>
-      <div class="shouhou-item">
-        <image src="/static/product/checked.png" class="shouhou-img"></image>
-        节假日通用
-      </div>
-      <div class="shouhou-item">
-        <image src="/static/product/checked.png" class="shouhou-img"></image>
-        免预约
-      </div>
+
     </div>
     <div class="line-f8"></div>
     <!--  店铺信息  -->
@@ -405,7 +398,9 @@
       class="tab-containers"
     >
       <swiper-item class="tab-pages" >
-        介绍
+        <div :style="{height:(systemInfo.windowHeight+'px')}" class="over">
+          <u-parse :content="detailData.Products_Description"></u-parse>
+        </div>
       </swiper-item>
       <swiper-item class="tab-pages" >
         评价
@@ -414,55 +409,56 @@
         须知
       </swiper-item>
       <swiper-item class="tab-pages" >
-        <div class="store-info flex">
-          <div style="width: 96rpx;height: 96rpx;margin-right: 28rpx">
-            <image src="https://new401t.bafangka.com/uploadfiles/wkbq6nc2kc/image/202003221654033886.png" class="full-img"></image>
-          </div>
-          <div>
-            <div class="store-info-title">
-              肖战甜品屋（文化路店）
+        <div :style="{height:(systemInfo.windowHeight+'px')}" class="over">
+          <div class="store-info flex" >
+            <div style="width: 96rpx;height: 96rpx;margin-right: 28rpx">
+              <image :src="store[0].biz_logo" class="full-img"></image>
             </div>
-            <div class="store-info-call m-b-10">
-              <icon type="icontime" size="14" color="#999" ></icon>
-              <span style="margin: 0rpx 26rpx 0rpx 16rpx">0371-8888888</span>
-              <icon type="iconcall" size="14" color="#26C78D"></icon>
-            </div>
-            <div class="store-info-call">
-              <icon type="iconaddress" size="14" color="#999" ></icon>
-              <span style="margin: 0rpx 20rpx 0rpx 16rpx">郑州市金水区文化路东风路硅谷广场a座</span>
-              <icon type="iconaddress" size="14" color="#26C78D"></icon>
-            </div>
-          </div>
-        </div>
-        <div class="line-f8" style="height: 10rpx !important;"></div>
-        <div class="store-list">
-          <div class="flex flex-justify-between">
-            <div class="store-list-top fz-15" style="color: #333333;font-weight: bold">
-              <span class="block-div"></span>
-              其他门店
-            </div>
-            <div class="store-list-top">
-              12家
-              <icon  type="iconright" size="15" color="#999"></icon>
-            </div>
-          </div>
-          <div class="store-list-item">
-            <div class="store-list-title">
-              肖战甜品屋（东风路店）
-            </div>
-            <div class="flex flex-justify-between store-list-address">
-              <div class="store-list-font">
-                郑州市金水区文化路东风路硅谷广场a座
+            <div>
+              <div class="store-info-title">
+                {{store[0].biz_shop_name}}
               </div>
-              <div class="flex flex-vertical-center">
-                <icon  type="iconaddress" size="17" color="#26C78D"></icon>
-                <span class="store-su"></span>
-                <icon  type="iconcall" size="17" color="#26C78D"></icon>
+              <div class="store-info-call m-b-10">
+                <icon type="icontime" size="14" color="#999" ></icon>
+                <span style="margin: 0rpx 26rpx 0rpx 16rpx"> {{store[0].biz_account}}</span>
+                <icon type="iconcall" size="14" color="#26C78D"></icon>
+              </div>
+              <div class="store-info-call">
+                <icon type="iconaddress" size="14" color="#999" ></icon>
+                <span style="margin: 0rpx 20rpx 0rpx 16rpx">{{store[0].area_address}}</span>
+                <icon type="iconaddress" size="14" color="#26C78D"></icon>
               </div>
             </div>
           </div>
+          <div class="line-f8" style="height: 10rpx !important;"></div>
+          <div class="store-list">
+            <div class="flex flex-justify-between">
+              <div class="store-list-top fz-15" style="color: #333333;font-weight: bold">
+                <span class="block-div"></span>
+                其他门店
+              </div>
+              <div class="store-list-top">
+                {{storeList.length}}家
+                <icon  type="iconright" size="15" color="#999"></icon>
+              </div>
+            </div>
+            <div class="store-list-item" v-for="(st,ind) of storeList" :key="ind">
+              <div class="store-list-title">
+                {{st.biz_shop_name}}
+              </div>
+              <div class="flex flex-justify-between store-list-address">
+                <div class="store-list-font">
+                  {{st.area_address}}
+                </div>
+                <div class="flex flex-vertical-center">
+                  <icon  type="iconaddress" size="17" color="#26C78D"></icon>
+                  <span class="store-su"></span>
+                  <icon  type="iconcall" size="17" color="#26C78D"></icon>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-
       </swiper-item>
     </swiper>
 
@@ -472,6 +468,9 @@
 
 <script>
 import BaseMixin from '@/mixins/BaseMixin'
+import  {getProductDetail,getActiveInfo,getBizInfo,getStoreList} from '../../api/product'
+import {formatRichTextByUparseFn} from  '../../common/filter'
+
 
 export default {
   name: 'ProductDetail',
@@ -479,29 +478,57 @@ export default {
   data () {
     return {
       tabIndex: 3,
-      headTabSticky: false
+      headTabSticky: false,
+      prod_id:'1613',//商品id
+      detailData:{},//商品数据
+      active:[],//满减活动列表
+      store:[],//门店
+      storeList:[],
     }
   },
   onPageScroll (e) {
     const { scrollTop } = e
     this.headTabSticky = scrollTop > this.headTabTop
   },
-  onReady () {
-    const query = wx.createSelectorQuery()
-    query.select('#tabs').boundingClientRect()
-    query.selectViewport().scrollOffset()
-    query.exec((res) => {
-      this.headTabTop = res[0].top
-    })
-  },
   methods: {
+    async getProductDetail(){
+      let data={
+        prod_id:this.prod_id
+      }
+     this.detailData=await getProductDetail(data,{onlyData: true}).catch(e=>{})
+      this.detailData.Products_Description=formatRichTextByUparseFn(this.detailData.Products_Description)
+
+      this.store=await getBizInfo({biz_id:this.detailData.biz_id},{onlyData:true}).catch(e=>{})
+      this.storeList=await getStoreList({biz_id:this.detailData.biz_id},{onlyData:true}).catch(e=>{})
+
+     let res=await  getActiveInfo({biz_id:this.detailData.biz_id,type:'manjian'},{onlyData:true}).catch(e=>{})
+      if(res.active_info){
+        this.active=res.active_info
+      }
+
+
+
+
+
+    },
     changeTabIndex (event) {
-      const { current, source } = event.$wx.detail
+      const { current, source } = event.detail
       this.tabIndex = current
     }
   },
-  created () {
+  onShow() {
+    this.getProductDetail()
+  },
+  onLoad(options){
+    //this.prod_id=options.prod_id
+  },
+  onReady () {
+    const query = uni.createSelectorQuery().in(this)
 
+    query.select('#tabs').boundingClientRect(data => {
+      console.log(data,"sss")
+      this.headTabTop = data.top
+    }).exec();
   }
 }
 </script>
