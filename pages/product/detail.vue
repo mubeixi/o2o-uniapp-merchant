@@ -1,6 +1,9 @@
 <style lang="scss" scoped>
   .page-wrap{
     background-color: #ffffff;
+    width: 750rpx;
+    overflow-x: hidden;
+    overflow-y: hidden;
   }
   .end-time{
     width: 750rpx;
@@ -492,32 +495,37 @@ export default {
   },
   methods: {
     async getProductDetail () {
-      let data = {
-        prod_id: this.prod_id,
-      }
-      this.detailData = await getProductDetail(data, { onlyData: true }).catch(e => {})
-      this.detailData.Products_Description = formatRichTextByUparseFn(this.detailData.Products_Description)
+      try {
+        let data = {
+          prod_id: this.prod_id,
+        }
+        this.detailData = await getProductDetail(data, { onlyData: true }).catch(e => {throw Error(e.msg||'获取商品详情失败')})
+        this.detailData.Products_Description = formatRichTextByUparseFn(this.detailData.Products_Description)
 
-      this.store = await getBizInfo({ biz_id: this.detailData.biz_id }, { onlyData: true }).catch(e => {})
-      this.storeList = await getStoreList({ biz_id: this.detailData.biz_id }, { onlyData: true }).catch(e => {})
+        this.store = await getBizInfo({ biz_id: this.detailData.biz_id }, { onlyData: true }).catch(e => {throw Error(e.msg||'获取店铺信息失败')})
+        this.storeList = await getStoreList({ biz_id: this.detailData.biz_id }, { onlyData: true }).catch(e => {throw Error(e.msg||'获取店铺列表失败')})
 
-      let res = await getActiveInfo({
-        biz_id: this.detailData.biz_id,
-        type: 'manjian',
-      }, { onlyData: true }).catch(e => {})
-      if (res!=null&&res.active_info) {
-        this.active = res.active_info
-      }
+        let res = await getActiveInfo({
+          biz_id: this.detailData.biz_id,
+          type: 'manjian',
+        }, { onlyData: true }).catch(e => {})
+        if (res!=null&&res.active_info) {
+          this.active = res.active_info
+        }
 
-      this.$nextTick().then(() => {
-        const query = uni.createSelectorQuery()
-        query.select('#tabs').boundingClientRect()
-        query.selectViewport().scrollOffset()
-        query.exec((res) => {
-          console.log(res,"ss")
-          this.headTabTop = res[0].top
+        this.$nextTick().then(() => {
+          const query = uni.createSelectorQuery()
+          query.select('#tabs').boundingClientRect()
+          query.selectViewport().scrollOffset()
+          query.exec((res) => {
+            console.log(res,"ss")
+            this.headTabTop = res[0].top
+          })
         })
-      })
+      }catch (e) {
+        console.log()
+        this.$modal(e.message)
+      }
 
     },
     changeTabIndex (event) {
