@@ -37,7 +37,7 @@
       </ul>
     </div>
     <!--  占位-->
-    <div class="h50 bg-white" v-if="headTabSticky"></div>
+<!--    <div class="h50 bg-white" v-if="headTabSticky"></div>-->
 
     <swiper
       :current="headTabIndex"
@@ -57,7 +57,7 @@
                 </div>
                 <div class="info">
                   <span class="condition">满{{coupon.Coupon_Condition}}元可使用</span>
-                  <span class="use-end-item">有效期至{{coupon.Coupon_EndTime|couponTime}}</span>
+                  <span class="use-end-item">有效期至{{coupon.Coupon_EndTime|formatTime('YYYY.mm.dd')}}</span>
                 </div>
               </div>
             </div>
@@ -143,7 +143,7 @@
               <li class="nav-item" @click="goodsNavIndex=2" :class="{active:goodsNavIndex === 2}">全部产品</li>
             </ul>
             <swiper
-              style="min-height:1600rpx;"
+              :style="{height:systemInfo.windowHeight+'px'}"
               @change="prodIndexChangeEvent"
               :current="goodsNavIndex">
               <swiper-item style="overflow-y: scroll">
@@ -198,14 +198,18 @@
 <!--            <textarea class="textarea" @blur="bindTextAreaBlur" auto-height placeholder="发表你的评论..." />-->
 <!--          </view>-->
 
-          <copyright></copyright>
+        <layout-copyright></layout-copyright>
 
         </div>
       </swiper-item>
 
       <swiper-item class="tab-page">
-        <div id="scrollView2" class="tab-page-wrap">
-          介绍
+        <div id="scrollView2" class="tab-page-wrap p-t-15">
+          <div class="p-10">地址:<span class="p-l-10">{{storeInfo.biz_address}}</span></div>
+          <div class="hr h15"></div>
+          <div class="p-10">电话:<span class="p-l-10">{{storeInfo.biz_mobile}}</span></div>
+          <div class="hr h15"></div>
+          <div class="p-10">简介:<span class="p-l-10 fz-14 c6">{{storeInfo.intro}}</span></div>
         </div>
       </swiper-item>
       <swiper-item class="tab-page">
@@ -230,16 +234,17 @@
 
 <script>
 import BaseMixin from '@/mixins/BaseMixin'
-import { getBizInfo, getBizSpikeList } from '@/api/store'
-import { modal } from '@/common/fun'
+import { getBizInfo, getBizSpikeList,getStoreList } from '@/api/store'
+import { hideLoading, modal, showLoading } from '@/common/fun'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import { getProductList, getBizProdCateList } from '@/api/product'
 import { getCouponList, getCommitList } from '@/api/common'
 import LayoutComment from '@/componets/layout-comment/layout-comment'
+import LayoutCopyright from '@/componets/layout-copyright/layout-copyright'
 
 export default {
   name: 'StoreIndex',
-  components: { LayoutComment, LayoutIcon },
+  components: { LayoutCopyright, LayoutComment, LayoutIcon },
   mixins: [BaseMixin],
   computed: {
 
@@ -249,6 +254,7 @@ export default {
       childSwiperHeight: 'auto',
       bid: null,
       scrollHeightS: [0, 0, 0, 0],
+      storeList:[],
       storeInfo: {},
       couponList: [],
       activityList: [],
@@ -348,13 +354,15 @@ export default {
     },
     async _init_func () {
       try {
+        
+        showLoading('加载中')
         const storeInfoData = await getBizInfo({ biz_id: this.bid }, { onlyData: true }).catch((e) => { throw Error(e.msg || '商品信息失败') })
         this.storeInfo = storeInfoData[0]
 
         const base = { biz_ids: this.bid }
         this.recommends = await getProductList({ pageSize: 5, Is_Recommend: 1, ...base }, { onlyData: true }).catch(e => { throw Error(e.msg || '获取商品列表错误') })
 
-        this.goodsList = await getProductList({ pageSize: 6, ...base }, { onlyData: true }).catch(e => { throw Error(e.msg || '获取商品列表错误') })
+        this.goodsList = await getProductList({ pageSize: 4, ...base }, { onlyData: true }).catch(e => { throw Error(e.msg || '获取商品列表错误') })
 
         this.virtuaGoodsLsit = await getProductList({ pageSize: 3, prod_order_type: 1, ...base }, { onlyData: true }).catch(e => { throw Error(e.msg || '获取虚拟商品列表错误') })
 
@@ -366,6 +374,8 @@ export default {
 
         this.comments = await getCommitList({ biz_id: this.bid, pageSize: 3 }, { onlyData: true }).catch((e) => { throw Error('获取评论数据失败') })
 
+        this.storeList = await getStoreList({ biz_id: this.bid, pageSize: 999 }, { onlyData: true }).catch((e) => { throw Error('获取门店列表数据失败') })
+        
         this.$nextTick().then(() => {
           const query = uni.createSelectorQuery()
           query.select('#scrollView1').boundingClientRect(data => {
@@ -390,7 +400,9 @@ export default {
           })
           query.exec()
         })
+        hideLoading()
       } catch (e) {
+        hideLoading()
         modal(e.message)
       }
     },
