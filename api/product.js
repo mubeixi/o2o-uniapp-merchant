@@ -7,3 +7,12 @@ export const getProductList = (param, options) => fetch({ act: 'get_prod', param
 
 // 获取产品分类
 export const getProductCategory = (param, options) => fetch({ act: 'pro_cate', param, options })
+
+
+// 获取产品详情
+export const getProductDetail = (param, options) => fetch({ act: 'prod_detail', param, options })
+
+
+//获取活动详情
+// 获取产品详情
+export const getActiveInfo = (param, options) => fetch({ act: 'getActiveInfo', param, options })
