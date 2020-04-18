@@ -412,20 +412,20 @@
         <div :style="{height:(systemInfo.windowHeight+'px')}" class="over">
           <div class="store-info flex" >
             <div style="width: 96rpx;height: 96rpx;margin-right: 28rpx">
-              <image src="https://new401t.bafangka.com/uploadfiles/wkbq6nc2kc/image/202003221654033886.png" class="full-img"></image>
+              <image :src="store[0].biz_logo" class="full-img"></image>
             </div>
             <div>
               <div class="store-info-title">
-                肖战甜品屋（文化路店）
+                {{store[0].biz_shop_name}}
               </div>
               <div class="store-info-call m-b-10">
                 <icon type="icontime" size="14" color="#999" ></icon>
-                <span style="margin: 0rpx 26rpx 0rpx 16rpx">0371-8888888</span>
+                <span style="margin: 0rpx 26rpx 0rpx 16rpx"> {{store[0].biz_account}}</span>
                 <icon type="iconcall" size="14" color="#26C78D"></icon>
               </div>
               <div class="store-info-call">
                 <icon type="iconaddress" size="14" color="#999" ></icon>
-                <span style="margin: 0rpx 20rpx 0rpx 16rpx">郑州市金水区文化路东风路硅谷广场a座</span>
+                <span style="margin: 0rpx 20rpx 0rpx 16rpx">{{store[0].area_address}}</span>
                 <icon type="iconaddress" size="14" color="#26C78D"></icon>
               </div>
             </div>
@@ -438,17 +438,17 @@
                 其他门店
               </div>
               <div class="store-list-top">
-                12家
+                {{storeList.length}}家
                 <icon  type="iconright" size="15" color="#999"></icon>
               </div>
             </div>
-            <div class="store-list-item">
+            <div class="store-list-item" v-for="(st,ind) of storeList" :key="ind">
               <div class="store-list-title">
-                肖战甜品屋（东风路店）
+                {{st.biz_shop_name}}
               </div>
               <div class="flex flex-justify-between store-list-address">
                 <div class="store-list-font">
-                  郑州市金水区文化路东风路硅谷广场a座
+                  {{st.area_address}}
                 </div>
                 <div class="flex flex-vertical-center">
                   <icon  type="iconaddress" size="17" color="#26C78D"></icon>
@@ -468,8 +468,9 @@
 
 <script>
 import BaseMixin from '@/mixins/BaseMixin'
-import  {getProductDetail,getActiveInfo} from '../../api/product'
+import  {getProductDetail,getActiveInfo,getBizInfo,getStoreList} from '../../api/product'
 import {formatRichTextByUparseFn} from  '../../common/filter'
+
 
 export default {
   name: 'ProductDetail',
@@ -481,6 +482,8 @@ export default {
       prod_id:'1613',//商品id
       detailData:{},//商品数据
       active:[],//满减活动列表
+      store:[],//门店
+      storeList:[],
     }
   },
   onPageScroll (e) {
@@ -495,11 +498,21 @@ export default {
      this.detailData=await getProductDetail(data,{onlyData: true}).catch(e=>{})
       this.detailData.Products_Description=formatRichTextByUparseFn(this.detailData.Products_Description)
 
+      this.store=await getBizInfo({biz_id:this.detailData.biz_id},{onlyData:true}).catch(e=>{})
+      this.storeList=await getStoreList({biz_id:this.detailData.biz_id},{onlyData:true}).catch(e=>{})
+
      let res=await  getActiveInfo({biz_id:this.detailData.biz_id,type:'manjian'},{onlyData:true}).catch(e=>{})
-      this.active=res.active_info
+      if(res.active_info){
+        this.active=res.active_info
+      }
+
+
+
+
+
     },
     changeTabIndex (event) {
-      const { current, source } = event.$wx.detail
+      const { current, source } = event.detail
       this.tabIndex = current
     }
   },
