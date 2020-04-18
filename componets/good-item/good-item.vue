@@ -3,11 +3,11 @@
 </style>
 <template>
   <div class="panel">
-    <slot name="title">
-      Title
-    </slot>
-    <slot>
-    </slot>
+    <slot name="cover"></slot>
+    <slot name="title"></slot>
+    <slot name="sellingPrice"></slot>
+    <slot name="marketPrice"></slot>
+    <slot name="actions"></slot>
   </div>
 </template>
 <script>
@@ -25,16 +25,11 @@ export default {
   },
   data () {
     return {
-      current: 0
+    
     }
   },
   methods: {
-    indexChangeEvent (event) {
-      console.log(event)
-      const { current, source } = event.$wx.detail
-      console.log(current, source)
-      this.current = current
-    }
+  
   }
 }
 </script>

@@ -3,6 +3,8 @@
 		{
 			"path": "pages/index",
 			"style": {
+				"navigationBarTextStyle": "light",
+				"backgroundTextStyle": "light",
 				"navigationBarTitleText": "首页",
 				"navigationStyle": "custom"
 			}
@@ -21,10 +23,9 @@
 		}
 	],
 	"globalStyle": {
-		"navigationBarTextStyle": "light",
-		"backgroundTextStyle": "light",
+		"navigationBarTextStyle": "black",
+		"navigationBarBackgroundColor": "#FFF",
 		"navigationBarTitleText": "本地生活",
-		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8"
 	},
 	"tabBar": {
