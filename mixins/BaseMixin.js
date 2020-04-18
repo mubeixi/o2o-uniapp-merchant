@@ -42,13 +42,15 @@ export default {
     }
   },
   onLoad () {
-    this.menuButtonInfo = uni.getMenuButtonBoundingClientRect()
+	  // #ifdef MP-WEIXIN
+	   this.menuButtonInfo = uni.getMenuButtonBoundingClientRect()
+	  // #endif
     this.systemInfo = uni.getSystemInfoSync()
-    const { height, top, left } = this.menuButtonInfo
+    //const { height, top, left } = this.menuButtonInfo
     // this.diyHeadHeight = top + height
 
-    this.diyHeadHeight = top + height + (top - this.systemInfo.statusBarHeight) + 10
-    this.diyHeadRight = this.systemInfo.windowWidth - left
+    //this.diyHeadHeight = top + height + (top - this.systemInfo.statusBarHeight) + 10
+    //this.diyHeadRight = this.systemInfo.windowWidth - left
 
     // 可以自己根据配置，来注册语言包
     if (this.langues && Array.isArray(this.langues) && this.langues.length > 0) {
