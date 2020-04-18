@@ -23,6 +23,6 @@
 </template>
 <script>
 export default {
-  name: 'LauoutCopyright'
+  name: 'LayoutCopyright'
 }
 </script>

@@ -5,7 +5,7 @@
         <image class="headimg" :src="comment.User_HeadImg"></image>
         <div class="nickname">{{comment.User_NickName}}</div>
       </div>
-      <span class="create_at">{{comment.CreateTime}}</span>
+      <span class="create_at">{{comment.CreateTime|formatTime('YYYY-MM-DD')}}</span>
     </div>
     <div class="content">{{comment.Note}}</div>
     <div class="actions">
