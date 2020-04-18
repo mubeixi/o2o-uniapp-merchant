@@ -76,5 +76,44 @@
     },
     "mp-toutiao" : {
         "usingComponents" : true
-    }
+    },
+	"h5" : {
+	    "router" : {
+	        "mode" : "history",
+	        "base" : "fre"
+	    },
+	    "async" : {
+	        "timeout" : 20000 //避免容易出现网络不给力的情况，默认3秒
+	    },
+	    "publicPath" : "/fre/",
+	    "devServer" : {
+	        "port" : 4100,
+	        "disableHostCheck" : true,
+	        "proxy" : {
+	            "/api" : {
+	                "target" : "http://www.newo2osrc.com", //"http://www.gogo.com/api",
+	                "changeOrigin" : true,
+	                "secure" : false,
+	                "pathRewrite" : {
+	                    "^/api" : ""
+	                }
+	            },
+	            "/node" : {
+	                "target" : "http://localhost:9100/", //"http://www.gogo.com/api",
+	                "changeOrigin" : true,
+	                "secure" : false,
+	                "pathRewrite" : {
+	                    "^/node" : ""
+	                }
+	            }
+	        }
+	    },
+	    "optimization" : {
+	        "treeShaking" : {
+	            "enable" : true
+	        }
+	    },
+	    "title" : " ",
+	    "domain" : ""
+	}
 }
