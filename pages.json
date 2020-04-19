@@ -54,7 +54,14 @@
 				"navigationBarTitleText": "付款成功",
 				"navigationStyle": "custom"
 			}
-		}
+		},
+        {
+          "path": "pages/person/VipList",
+          "style": {
+            "navigationBarTitleText": "会员等级",
+            "navigationStyle": "custom"
+          }
+        }
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
