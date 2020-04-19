@@ -57,7 +57,9 @@
     <div class="dot-list" v-if="indicatorDots==='line'">
         <span
           v-for="(img,idx) in imgList"
-          class="dot-item {{current===idx?'active':''}}"
+          :key="idx"
+          class="dot-item"
+          :class="{active:current===idx}"
           :style="{backgroundColor:current===idx?dotsActiveColor:dotsColor}"></span>
     </div>
   </div>
