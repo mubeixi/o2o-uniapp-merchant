@@ -28,6 +28,13 @@
 			}
 		},
 		{
+			"path": "pages/favorite/index",
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTitleText": "收藏"
+			}
+		},
+		{
 			"path": "pages/product/detail",
 			"style": {
 				"navigationBarTitleText": "商品详情",
