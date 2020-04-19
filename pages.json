@@ -22,6 +22,12 @@
 			}
 		},
 		{
+			"path": "pages/share/go",
+			"style": {
+				"navigationBarTitleText": "去分享"
+			}
+		},
+		{
 			"path": "pages/product/detail",
 			"style": {
 				"navigationBarTitleText": "商品详情",

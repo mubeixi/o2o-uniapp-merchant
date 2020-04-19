@@ -28,7 +28,7 @@
     <!--code="indexTop" :imgs="adData"-->
     <layout-ad code="indexTop"></layout-ad>
     <div class="goods-list">
-      <div class="goods-item" v-for="(item,idx) in goodsList" :key="idx">
+      <div class="goods-item" v-for="(item,idx) in goodsList" :key="idx" @click="$linkTo('/pages/share/go?prod_id='+item.Products_ID)">
         <div class="goods-item-cover" :style="{backgroundImage:'url('+item.ImgPath+')'}"></div>
         <div class="goods-item-info">
           <div class="title">{{item.Products_Name}}</div>
@@ -59,9 +59,10 @@ import LayoutAd from '@/componets/layout-ad/layout-ad'
 import { getProductList } from '@/api/product'
 import { hideLoading, modal, showLoading } from '@/common/fun'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
-
+import BaseMixin from '@/mixins/BaseMixin'
 export default {
   name: 'ShareIndex',
+  mixins:[BaseMixin],
   components: { LayoutIcon, LayoutAd },
   data () {
     return {
