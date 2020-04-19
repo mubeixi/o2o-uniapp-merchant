@@ -45,7 +45,7 @@
             itemwidth="655rpx"
             itemheight="144rpx"
           ></layout-ad>
-          
+
           <div class="block kill">
             <div class="block-title flex-ver-c">
               <div class="block-title-text">今日秒杀</div>
@@ -377,7 +377,7 @@ export default {
             line-height: 18px;
             margin-top: 10px;
             color: #333;
-            
+
             .text{
               white-space: normal;
               overflow: hidden;
