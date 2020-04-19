@@ -330,7 +330,7 @@
       {{detailData.Products_Name}}
     </div>
     <div class="line-f8" style="margin-top: 30rpx"></div>
-    <div class="product-activity" v-if="active">
+    <div class="product-activity" v-if="active.length>0">
       <div class="flex" style="padding-bottom: 30rpx">
         <div class="product-activity-title">
           优惠活动
@@ -418,19 +418,19 @@
             <div style="width: 96rpx;height: 96rpx;margin-right: 28rpx">
               <image :src="store[0].biz_logo" class="full-img"></image>
             </div>
-            <div>
+            <div v-if="store[0].biz_shop_name">
               <div class="store-info-title">
                 {{store[0].biz_shop_name}}
               </div>
               <div class="store-info-call m-b-10">
-                <icon type="icontime" size="14" color="#999"></icon>
+                <layout-icon type="icontime" size="14" color="#999"></layout-icon>
                 <span style="margin: 0rpx 26rpx 0rpx 16rpx"> {{store[0].biz_account}}</span>
-                <icon type="iconcall" size="14" color="#26C78D"></icon>
+                <layout-icon type="iconicon-phone" size="14" color="#26C78D"></layout-icon>
               </div>
               <div class="store-info-call">
-                <icon type="iconaddress" size="14" color="#999"></icon>
+                <layout-icon type="iconicon-address" size="14" color="#999"></layout-icon>
                 <span style="margin: 0rpx 20rpx 0rpx 16rpx">{{store[0].area_address}}</span>
-                <icon type="iconaddress" size="14" color="#26C78D"></icon>
+                <layout-icon type="iconicon-address" size="14" color="#26C78D"></layout-icon>
               </div>
             </div>
           </div>
@@ -443,7 +443,7 @@
               </div>
               <div class="store-list-top">
                 {{storeList.length}}家
-                <icon type="iconright" size="15" color="#999"></icon>
+                <layout-icon type="iconicon-arrow-right" size="15" color="#999"></layout-icon>
               </div>
             </div>
             <div class="store-list-item" v-for="(st,ind) of storeList" :key="ind">
@@ -455,9 +455,9 @@
                   {{st.area_address}}
                 </div>
                 <div class="flex flex-vertical-center">
-                  <icon type="iconaddress" size="17" color="#26C78D"></icon>
+                  <layout-icon type="iconicon-address" size="17" color="#26C78D"></layout-icon>
                   <span class="store-su"></span>
-                  <icon type="iconcall" size="17" color="#26C78D"></icon>
+                  <layout-icon type="iconicon-phone" size="17" color="#26C78D"></layout-icon>
                 </div>
               </div>
             </div>
@@ -472,12 +472,14 @@
 
 <script>
 import BaseMixin from '@/mixins/BaseMixin'
-import { getProductDetail, getActiveInfo, getBizInfo, getStoreList } from '../../api/product'
-import { formatRichTextByUparseFn } from '../../common/filter'
+import { getProductDetail, getActiveInfo, getBizInfo, getStoreList } from '@/api/product'
+import { formatRichTextByUparseFn } from '@/common/filter'
+import LayoutIcon from '@/componets/layout-icon/layout-icon'
 
 export default {
   name: 'ProductDetail',
   mixins: [BaseMixin],
+  components:{LayoutIcon},
   data () {
     return {
       tabIndex: 3,
