@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "clean": "rimraf unpackage",
-    "lint": "eslint --ext .js,.vue",
+    "lint": "eslint --fix --ext .js --ext .vue",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
