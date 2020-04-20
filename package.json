@@ -1,12 +1,13 @@
 {
   "name": "o2o-client",
-  "version": "1.0.0",
+  "version": "0.0.2",
   "description": "",
   "main": "main.js",
   "scripts": {
     "clean": "rimraf unpackage",
     "lint": "eslint --fix --ext .js --ext .vue",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "version": "conventional-changelog -p angular -i CHANGELOG.md -s && git add CHANGELOG.md"
   },
   "repository": {
     "type": "git",
@@ -16,9 +17,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "async-validator": "^3.2.4",
     "lodash": "^4.17.15",
-    "moment": "^2.24.0"
+    "moment": "^2.24.0",
+    "validate": "^5.1.0"
   },
   "devDependencies": {
     "@types/html5plus": "^1.0.0",
