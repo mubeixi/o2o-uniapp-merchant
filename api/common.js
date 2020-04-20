@@ -16,8 +16,16 @@ export const getActiveInfo = (param, options) => fetch({ act: 'getActiveInfo', p
 // 获取商品列表
 export const getProd = (param, options) => fetch({ act: 'get_prod', param, options })
 
+
+// 获取赠品列表
+export const getShopGiftList = (param, options) => fetch({ act: 'getShopGiftList', param, options })
+
 // 获取广告
 export const getAdvertList = (param, options) => fetch({ act: 'getAdvertList', param, options })
 
 // 获取分享海报
 export const getBizShare = (param, options) => fetch({ act: 'getBizShare', param, options })
+
+
+// 会员等级列表或详情
+export const getUserLevel = (param, options) => fetch({ act: 'getUserLevel', param, options })

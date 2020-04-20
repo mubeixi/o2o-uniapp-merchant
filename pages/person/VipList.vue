@@ -3,10 +3,10 @@
       <div class="top">
         <image src="/static/vip/vip-bg.png" class="img-full"></image>
         <swiper class="center" :indicator-dots="false" :autoplay="false"  :duration="1000" :current="inds" @change="change">
-          <swiper-item class="vipFir"  :style="vipData.length==1?'margin-left:42rpx;':''">
+          <swiper-item class="vipFir"  :style="vipData.length==1?'margin-left:42rpx;':''"    v-for="(item,index) of vipData" :key="index">
             <image src="/static/vip/vip.png" class="img-full"></image>
             <div class="vip-title">
-              豪华金卡会员
+              {{item.level_name}}
             </div>
           </swiper-item>
         </swiper>
@@ -16,53 +16,50 @@
           <div class="vip-has-title fz-17 c3">
             会员享特权
           </div>
-          <div class="vip-has-content flex ">
-              <div class="vip-has-item">
-                <image src="/static/vip/bao.png" class="vip-has-content-img"></image>
+          <scroll-view class="vip-has-content flex " scroll-x="true">
+            <block v-for="(item,index) in vipData[inds].basic_rights" :key="index">
+              <div class="vip-has-item" >
+                <image :src="item.img_url" class="vip-has-content-img"></image>
                 <div class="fz-12 c3 m-t-5">
-                  包邮
+                  {{item.name}}
                 </div>
               </div>
-              <div class="vip-has-item">
-                <image src="/static/vip/xiao.png" class="vip-has-content-img"></image>
-                <div class="fz-12 c3 m-t-5">
-                  消费折扣
-                </div>
-              </div>
-              <div class="vip-has-item">
-                <image src="/static/vip/fan.png" class="vip-has-content-img"></image>
-                <div class="fz-12 c3 m-t-5">
-                  返现
-                </div>
-              </div>
-              <div class="vip-has-item">
-                <image src="/static/vip/zhuan.png" class="vip-has-content-img"></image>
-                <div class="fz-12 c3 m-t-5">
-                  专享价
-                </div>
-              </div>
+            </block>
+          </scroll-view>
+      </div>
+
+      <div class="vip-has" style="height: auto;" v-if="coupon.length>0">
+        <div class="vip-has-title fz-17 c3">
+          赠送优惠卷
+        </div>
+        <div class="p-l-20 p-r-20 p-b-20">
+          <div class="vip-coupon" v-for="(item,index) of coupon" :key="index">
+            <image src="/static/vip/coupon.png" class="img-full"></image>
+            <div class="vip-coupon-title">满{{item.Coupon_Condition}}可用</div>
+            <div class="vip-coupon-price">{{item.Coupon_Cash}}</div>
           </div>
+        </div>
       </div>
 
 
-      <div class="vip-pro">
+      <div class="vip-pro" v-if="pro.length>0">
           <div class="vip-pro-title fz-17 c3">
             赠送商品
           </div>
           <div class="vip-pro-list">
-              <div class="vip-pro-item">
+              <div class="vip-pro-item"  v-for="(pr,ind) of pro" :key="ind">
                 <div class="vip-pro-item-img">
-                  <image src="/static/vip/vip.png" class="img-full"></image>
+                  <image :src="pr.img_url" class="img-full"></image>
                 </div>
                 <div class="vip-pro-item-title fz-13 c3 m-t-11 m-b-10">
-                  北海道玫瑰味双层芝士礼盒送礼蛋糕乳酪慕斯北海道玫瑰味双层芝士礼盒送礼蛋糕乳酪慕斯
+                  {{pr.Products_Name}}
                 </div>
                 <div class=" flex flex-vertical-c">
                   <div class="fz-12 cr">
-                    ¥ <span class="fz-17 m-l-5">100</span>
+                    ¥ <span class="fz-17 m-l-5">{{pr.Products_PriceX}}</span>
                   </div>
                   <div class="fz-12 priceY  m-l-10">
-                    ¥200
+                    ¥{{pr.Products_PriceY}}
                   </div>
                 </div>
               </div>
@@ -71,7 +68,7 @@
 
       <div style="width: 750rpx;height: 100rpx"></div>
       <div class="fz-12 submit">
-        ¥<span class="fz-16">299.00直接购买</span>
+        ¥<span class="fz-16">{{vipData[inds].price}}直接购买</span>
       </div>
 
     </div>
@@ -79,14 +76,60 @@
 
 <script>
 import BaseMixin from '@/mixins/BaseMixin'
+import {getUserLevel,getShopGiftList,getCouponList} from '@/api/common'
+
 export default {
   name: 'VipList',
   mixins:[BaseMixin],
   data() {
     return {
-        vipData:[{1:1}],
+        vipData:[{basic_rights:''}],
+        inds:0,
+        coupon:[],
+        pro:[]
     };
   },
+  methods:{
+    async change(e){
+      this.inds=e.mp.detail.current
+
+      if(this.vipData[this.inds].upgrade_rights&&this.vipData[this.inds].upgrade_rights.coupon){
+        let id=this.vipData[this.inds].upgrade_rights.coupon.value
+        this.coupon=await getCouponList({coupon_id:id},{onlyData:true,tip:'加载中'}).catch(e=>{throw  Error(e.msg||'获取优惠券信息失败')})
+      }else{
+        this.coupon=[]
+      }
+      if(this.vipData[this.inds].upgrade_rights&&this.vipData[this.inds].upgrade_rights.product){
+        let id=this.vipData[this.inds].upgrade_rights.product.value
+        this.pro=await getShopGiftList({ids:id},{onlyData:true,tip:'加载中'}).catch(e=>{throw  Error(e.msg||'获取赠送商品信息失败')})
+      }else{
+        this.pro=[]
+      }
+
+    },
+    async init(){
+      try {
+        let arr=await getUserLevel({biz_id:3},{onlyData:true,tip:'加载中'}).catch(e=>{throw  Error(e.msg||'获取会员信息失败')})
+        this.vipData=arr
+        if(this.vipData[this.inds].upgrade_rights&&this.vipData[this.inds].upgrade_rights.coupon){
+          let id=this.vipData[this.inds].upgrade_rights.coupon.value
+          this.coupon=await getCouponList({coupon_id:id},{onlyData:true,tip:'加载中'}).catch(e=>{throw  Error(e.msg||'获取优惠券信息失败')})
+        }
+        if(this.vipData[this.inds].upgrade_rights&&this.vipData[this.inds].upgrade_rights.product){
+          let id=this.vipData[this.inds].upgrade_rights.product.value
+          this.pro=await getShopGiftList({ids:id},{onlyData:true,tip:'加载中'}).catch(e=>{throw  Error(e.msg||'获取赠送商品信息失败')})
+        }
+
+      }catch (e) {
+        this.$modal(e.message)
+      }
+
+
+    }
+  },
+  onShow(){
+    this.init()
+  }
 }
 </script>
 
@@ -144,6 +187,7 @@ export default {
     border-right: 10rpx;
     margin: 50rpx auto 0;
     background-color: #FFFFFF;
+    white-space: nowrap;
     &-title{
       width: 100%;
       height: 114rpx;
@@ -165,6 +209,7 @@ export default {
   .vip-has-item{
     text-align: center;
     margin-right: 86rpx;
+    display: inline-block;
     &:last-child{
       margin-right: 0rpx;
     }
@@ -225,6 +270,30 @@ export default {
     bottom: 0;
     background-color: #26C78D;
     color: #FFFFFF;
+  }
+  .vip-coupon{
+    width: 168rpx;
+    height: 184rpx;
+    position: relative;
+    &-title{
+      position: absolute;
+      left: 0rpx;
+      top: 18rpx;
+      width: 168rpx;
+      text-align: center;
+      font-size: 10px;
+      color: #FD3E16;
+    }
+    &-price{
+      font-size: 72rpx;
+      color: #FD3E16;
+      position: absolute;
+      left: 0rpx;
+      top: 54rpx;
+      width: 168rpx;
+      line-height: 60rpx;
+      text-align: center;
+    }
   }
 
 </style>
