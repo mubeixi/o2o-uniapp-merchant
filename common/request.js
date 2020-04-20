@@ -4,19 +4,19 @@ import {
 	error, toast
 } from './fun'
 import {
-	emptyObject,
-	ls
+	emptyObject
 } from './helper'
+import Storage from '@/common/Storage'
 import {hexMD5} from './tool/md5'
 import Base64 from './tool/base64.js'
 
-export const getUsersID = () => ls.get('users_id') ? ls.get('users_id') : 'wkbq6nc2kc'
+export const getUsersID = () => Storage.get('users_id') ? Storage.get('users_id') : 'wkbq6nc2kc'
 
-export const getAccessToken = () => ls.get('access_token')
+export const getAccessToken = () => Storage.get('access_token')
 
-export const getUserID = () => ls.get('user_id')
+export const getUserID = () => Storage.get('user_id')
 
-export const getBizId = () => ls.get('biz_id')
+export const getBizId = () => Storage.get('biz_id')
 
 export const getEnv = () => 'wx_lp'
 
@@ -82,7 +82,7 @@ class XHR {
 	static checkQuick = (act, options) => {
 		const d = new Date()
 		if (options.hasOwnProperty('is_tap') && options.is_tap) {
-			let tempActInfo = ls.get('temp_act_info')
+			let tempActInfo = Storage.get('temp_act_info')
 			if (tempActInfo && tempActInfo.hasOwnProperty('act') && tempActInfo.hasOwnProperty('time') && tempActInfo.act && tempActInfo.time) {
 				// 同一个请求，不能在0.5s内连点两次
 				return act === tempActInfo.act && d.getTime() < (tempActInfo.time + 500)
@@ -108,7 +108,7 @@ export const ajax = ({url, method = 'post', data = {}, options = {}}) => {
 		mask = false,
 		// timelen = 2000,
 		timeout = 100, // 如果tip参数生效，请求结束后会延迟取消loading,有的请求太快了一闪而过
-		errtip = true, // 是否提示错误
+		errtip = false, // 是否提示错误,尽量让接口自己决定如何展示
 		// reqHeader = false, // 是否需要把响应头返回放在resolve里面，一般是有时候登录的时候需要从请求头里拿到token的
 		onlyData = false// 是否直接返回data，方便结构赋值
 	} = options
@@ -138,7 +138,7 @@ export const ajax = ({url, method = 'post', data = {}, options = {}}) => {
 				const {data: res} = ret
 				const {errorCode = 1, msg = '请求未成功'} = res
 
-				if (hookErrorCode.indexOf(errorCode) !== -1) {
+				if (hookErrorCode.includes(errorCode)) {
 					if (errorCode === 66001) {
 						error(res.msg)
 

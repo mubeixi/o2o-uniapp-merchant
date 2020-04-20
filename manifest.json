@@ -1,5 +1,5 @@
 {
-    "name" : "ff",
+    "name" : "本地生活",
     "appid" : "__UNI__A07EDA1",
     "description" : "",
     "versionName" : "1.0.0",
@@ -57,11 +57,16 @@
     "quickapp" : {},
     /* 小程序特有相关 */
     "mp-weixin" : {
-        "appid" : "",
+        "appid" : "wx3d24c565489e305b",
         "setting" : {
             "urlCheck" : false
         },
-        "usingComponents" : true
+        "usingComponents" : true,
+        "permission" : {
+            "scope.userLocation" : {
+                "desc" : "为了更好的为您推荐精准服务信息，需要获取您当前所在的位置。"
+            }
+        }
     },
     "mp-alipay" : {
         "usingComponents" : true
@@ -71,5 +76,44 @@
     },
     "mp-toutiao" : {
         "usingComponents" : true
+    },
+    "h5" : {
+        "router" : {
+            "mode" : "history",
+            "base" : "fre"
+        },
+        "async" : {
+            "timeout" : 20000 //避免容易出现网络不给力的情况，默认3秒
+        },
+        "publicPath" : "/fre/",
+        "devServer" : {
+            "port" : 4100,
+            "disableHostCheck" : true,
+            "proxy" : {
+                "/api" : {
+                    "target" : "http://www.newo2osrc.com", //"http://www.gogo.com/api",
+                    "changeOrigin" : true,
+                    "secure" : false,
+                    "pathRewrite" : {
+                        "^/api" : ""
+                    }
+                },
+                "/node" : {
+                    "target" : "http://localhost:9100/", //"http://www.gogo.com/api",
+                    "changeOrigin" : true,
+                    "secure" : false,
+                    "pathRewrite" : {
+                        "^/node" : ""
+                    }
+                }
+            }
+        },
+        "optimization" : {
+            "treeShaking" : {
+                "enable" : true
+            }
+        },
+        "title" : " ",
+        "domain" : ""
     }
 }

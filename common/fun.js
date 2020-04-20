@@ -24,11 +24,17 @@ export const error = (title, icon, duration) => {
   }
 }
 
-export const modal = (content = '', title = '提示') => {
-  uni.showModal({
-    title: title,
-    content: content
-  })
+export const modal = function () {
+  const opt = {
+    title: '提示',
+    content: ''
+  }
+  if (typeof arguments[0] === 'string') {
+    opt.content = arguments[0]
+  } else if (typeof arguments[0] === 'object') {
+    Object.assign(opt, arguments[0])
+  }
+  uni.showModal(opt)
 }
 
 export const back = () => uni.navigateBack()
@@ -48,7 +54,7 @@ export const linkTo = (url, type = 'default') => {
   }
 }
 
-export const showLoading = (title, mask = true) => {
+export const showLoading = (title = 'loading', mask = true) => {
   uni.showLoading({
     title,
     mask
