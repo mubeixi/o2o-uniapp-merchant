@@ -54,6 +54,13 @@
 				"navigationBarTitleText": "付款成功",
 				"navigationStyle": "custom"
 			}
+		},
+		{
+			"path": "pages/user/login",
+			"style": {
+				"navigationBarTitleText": "用户登录",
+				"navigationStyle": "custom"
+			}
 		}
 	],
 	"globalStyle": {

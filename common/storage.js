@@ -1,4 +1,4 @@
-const storage = {
+const Storage = {
   set (key, val, cover) {
     try {
       if (!cover && !val && (val !== 0 || val !== false)) return false
@@ -25,4 +25,4 @@ const storage = {
   }
 }
 
-export default storage
+export default Storage
