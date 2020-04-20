@@ -16,9 +16,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "async-validator": "^3.2.4",
     "lodash": "^4.17.15",
-    "moment": "^2.24.0"
+    "moment": "^2.24.0",
+    "validate": "^5.1.0"
   },
   "devDependencies": {
     "@types/html5plus": "^1.0.0",

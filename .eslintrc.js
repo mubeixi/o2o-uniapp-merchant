@@ -20,5 +20,7 @@ module.exports = {
   ],
   rules: {
     'camelcase': 0,
+    'no-prototype-builtins':0,
+    'no-throw-literal':0
   }
 }

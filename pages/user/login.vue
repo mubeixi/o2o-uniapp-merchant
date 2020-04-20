@@ -1,0 +1,624 @@
+<template>
+  <div class="wrap">
+    <layout-page-title :letfFn="true" @clickLeft="bindBackFn" :title="pageTitle"></layout-page-title>
+    <fun-err-msg :topStr="menuButtonInfo.height+menuButtonInfo.top+10+'px'" :errs="formCheckResult"></fun-err-msg>
+    <image class="img m-t-25" mode="widthFix" src="/static/copyright.png"></image>
+
+    <div class="form">
+      <form style="display: block" @submit="formSubmit" @reset="formReset">
+        <div class="form-item uni-column">
+          <input @input="inputPhone" class="fun-input" name="input" placeholder="请输入手机号码" />
+        </div>
+        <div class="form-item uni-column" v-if="mode==='code'">
+          <input @input="inputCaptcha" class="fun-input" name="captcha" placeholder="请输入短信验证码" />
+          <div class="sendCaptcha">
+            <span class="text" @click="sendCaptcha" v-if="!captchaSend">获取验证码</span><span class="text active" v-else>{{s}}s</span>
+          </div>
+        </div>
+        <div class="form-item uni-column" v-if="mode==='password'">
+          <input @input="inputPassword" type="password" class="fun-input" name="password" placeholder="请输入密码" />
+        </div>
+        <div class="action">
+          <div>
+            <button form-type="submit" class="sub-btn m-b-15" type="primary">立即登录</button>
+          </div>
+          <!--<div><button @click="cancel" class="sub-btn m-b-20" >暂不登录</button></div>-->
+
+          <div class="flex flex-vertical-center flex-justify-between p-t-10">
+            <div class="fz-12 text-right">登录及表示您已阅读并接受<span class="color-primary">《用户服务协议》</span></div>
+            <!--            <span class="c6 fz-12" style="text-decoration: underline" @click="cancel">暂不登录</span>-->
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="channel-list">
+      <div class="channel-item">
+        <button class="btn" open-type="getUserInfo" @getuserinfo="weixinlogin">
+          <layout-icon size="24" class="icon" color="#09bb07" type="iconlogo-wechat"></layout-icon>
+          <span class="text fz-14">微信登录</span></button>
+      </div>
+      <div class="channel-item" open-type="getUserInfo" @click="mode='code'" v-if="mode==='password'">
+        <layout-icon size="24" class="icon" color="#09bb07" type="iconphone"></layout-icon>
+        <span class="text fz-14">验证码登录</span>
+      </div>
+      <div class="channel-item" open-type="getUserInfo" @click="mode='password'" v-if="mode==='code'">
+        <layout-icon size="24" class="icon" color="#09bb07" type="iconmimadenglu"></layout-icon>
+        <span class="text fz-14">密码登录</span>
+      </div>
+    </div>
+
+    <layout-popup ref="phone" :autoClose="false" :topStr="menuButtonInfo.height+menuButtonInfo.top+10+'px'"
+                 :showMask="false">
+      <div class="form pwd-wrap" :style="{top:menuButtonInfo.height+menuButtonInfo.top+10+'px'}">
+        <div class="form-item uni-column">
+          <input @input="inputPhone" class="fun-input" name="input" placeholder="请输入手机号码" />
+        </div>
+        <div class="form-item uni-column">
+          <input @input="inputCaptcha" class="fun-input" name="captcha" placeholder="请输入短信验证码" />
+          <div class="sendCaptcha">
+            <span class="text" @click="sendCaptcha" v-if="!captchaSend">获取验证码</span><span class="text active" v-else>{{s}}s</span>
+          </div>
+        </div>
+        <div class="action">
+          <div>
+            <button @click="bingPhoneFn" class="sub-btn m-b-15" type="primary">立即绑定</button>
+          </div>
+        </div>
+      </div>
+    </layout-popup>
+
+    <layout-popup ref="pwd" :autoClose="false" :topStr="menuButtonInfo.height+menuButtonInfo.top+10+'px'"
+                 :showMask="false">
+      <div class="form pwd-wrap" :style="{top:menuButtonInfo.height+menuButtonInfo.top+10+'px'}">
+        <view class="form-item uni-column">
+          <input v-model="pwd" class="fun-input" placeholder="请输入不少于6位的密码" />
+        </view>
+        <view class="form-item uni-column">
+          <input v-model="pwdConfirm" class="fun-input" placeholder="请确认密码" />
+        </view>
+        <view class="action">
+          <button @click="setPwd" class="sub-btn m-b-15" type="primary">设置密码</button>
+          <button @click="cancelPwd" class="sub-btn m-b-15">暂不设置</button>
+        </view>
+      </div>
+    </layout-popup>
+
+  </div>
+</template>
+
+<script>
+import BaseMixin from '@/mixins/BaseMixin'
+import LayoutPageTitle from '@/componets/layout-page-title/layout-page-title'
+import FunErrMsg from '@/componets/fun-err-msg/fun-err-msg'
+import LayoutPopup from '@/componets/layout-popup/layout-popup'
+import LayoutIcon from '@/componets/layout-icon/layout-icon'
+
+import {
+  error
+} from '@/common/fun'
+import {
+  getSmsCode, userLogin
+} from '@/api/Customer'
+import { regPhone } from '@/common/Regs'
+import { validateFun } from '@/common/helper'
+import Promisify from '@/common/Promisify'
+import Storage from '@/common/Storage'
+
+export default {
+  name: 'UserLogin',
+  mixins: [BaseMixin],
+  components: {
+    LayoutIcon,
+    LayoutPopup,
+    FunErrMsg,
+    LayoutPageTitle
+  },
+  data () {
+    return {
+      mode: 'password',
+      binbPhoneShow: false,
+      bindPwdShow: false,
+      pageTitle: '登录',
+      setintervalInstance: null,
+      phone: '',
+      captcha: '',
+      password: '',
+      s: 120,
+      formCheckResult: false,
+      smsid: null,
+      pwd: '',
+      pwdConfirm: '',
+      captchaSend: false,
+      bindPhoneTempData: null// 如果需要绑定手机，需要临时储存服务端给的信息
+    }
+  },
+  methods: {
+    // 拦截
+    bindBackFn () {
+      console.log('拦截返回成功了')
+      if (this.binbPhoneShow) {
+        // toast('请绑定手机号', 'none')
+        this.$refs.phone.close()
+        return
+      }
+      if (this.bindPwdShow) {
+        uni.showModal({
+          title: '操作提示',
+          content: '是否跳过设置密码？',
+          success: (res) => {
+            if (res.confirm) uni.navigateBack()
+          }
+        })
+        return
+      }
+      uni.navigateBack()
+    },
+    cancel () {
+      uni.navigateBack()
+    },
+    formReset () {
+
+    },
+    minusFn () {
+      console.log(this)
+      if (this.s > 1) {
+        this.s--
+        return
+      }
+      clearInterval(this.setintervalInstance)
+      this.captchaSend = false
+    },
+    sendCaptcha () {
+      if (!this.phone) {
+        error('发送验证码失败')
+        return
+      }
+
+      getSmsCode({ mobile: this.phone }, { tip: '发送验证码' }).then(res => {
+        this.captchaSend = true
+        this.s = 120
+        this.setintervalInstance = setInterval(this.minusFn.bind(this), 1000)
+      }).catch(() => {
+      })
+    },
+    inputPassword (e) {
+      this.password = e.detail.value
+    },
+    inputCaptcha (e) {
+      this.captcha = e.detail.value
+    },
+    inputPhone (e) {
+      this.phone = e.detail.value
+    },
+    /**
+     * 绑定手机
+     * @returns {Promise<void>}
+     */
+    async bingPhoneFn () {
+      try {
+        // 获取暂存的userInfO和code
+        const lp_raw_data = JSON.stringify(this.bindPhoneTempData)
+        const wxLoginRt = await Promisify('login').catch(() => {
+          throw Error('微信login错误')
+        })
+        const { code: lp_code } = wxLoginRt
+
+        const postData = {
+          login_method: 'wx_lp',
+          lp_code,
+          lp_raw_data,
+          account: this.phone,
+          code: this.captcha
+        }
+        const rule = {
+          login_method: {
+            required: true,
+            type: String,
+            message: {
+              required: '登录方式必填'
+            }
+          },
+          account: {
+            type: String,
+            match: regPhone,
+            required: true,
+            length: 11,
+            message: {
+              length: '手机号码必须为11位',
+              required: '登录方式必填',
+              match: '手机号格式不符'
+            }
+          },
+          code: {
+            type: String,
+            required: true,
+            length: 4,
+            message: {
+              length: '验证码为4位数字',
+              required: '数字必填'
+            }
+          }
+        }
+        const checkRt = validateFun(postData, rule)
+        if (checkRt !== true) {
+          this.formCheckResult = checkRt
+          return
+        }
+
+        const { errorCode, data } = await userLogin(postData).catch(() => {
+          throw Error('第三方登录请求错误')
+        })
+        if (errorCode !== 0) throw Error('绑定手机号失败')
+        this.loginCall(data)
+      } catch (e) {
+        error(e.message)
+      }
+    },
+    async formSubmit () {
+      const mode = this.mode
+      const postData = { mobile: this.phone }
+      if (mode === 'password') {
+        postData.passwd = this.password
+        postData.login_method = 'mobile_login'
+      }
+      if (mode === 'code') {
+        postData.captcha = this.captcha
+        postData.login_method = 'sms_login'
+      }
+
+      const rule = {
+        login_method: {
+          required: true,
+          type: String,
+          enum: ['mobile_login', 'sms_login', 'wx_lp'],
+          message: {
+            required: '登录方式必选',
+            enum: '登录方式仅允许是mobile_login、sms_login、wx_lp中的一个'
+          }
+        },
+        mobile: {
+          type: String,
+          match: regPhone,
+          required: true,
+          length: 11,
+          message: {
+            required: '手机号必填',
+            length: '手机号为长11位的字符',
+            match: '手机号格式不符'
+          }
+        },
+        captcha: mode === 'password' ? { required: false } : {
+          type: String,
+          required: true,
+          length: 4,
+          message: {
+            required: '验证码必填',
+            length: '验证码长度为4'
+          }
+        },
+        passwd: mode === 'code' ? { required: false } : {
+          type: String,
+          required: true,
+          message: {
+            required: '密码必填'
+          }
+        }
+      }
+
+      console.log(postData, rule)
+
+      // {mobile:this.mobile, captcha:this.verificationCode,login_method:'sms_login'}
+      // {mobile:this.mobile,passwd:this.phone.password,login_method:'mobile_login'}
+
+      try {
+        const checkRt = validateFun(postData, rule)
+        if (checkRt !== true) {
+          this.formCheckResult = checkRt
+          throw Error('请正确填写资料')
+        }
+
+        const userData = await userLogin(postData, { reqHeader: true, onlyData: true }).catch((e) => { throw Error(e.msg || '登录失败') })
+        this.loginCall(userData)
+      } catch (e) {
+        this.$modal(e.message)
+      }
+    },
+    cancelPwd () {
+      uni.showModal({
+        title: '操作提示',
+        content: '是否跳过设置密码？',
+        success: (res) => {
+          if (res.confirm) {
+            this.$refs.pwd.close()
+            uni.navigateBack()
+          }
+        }
+      })
+    },
+    async setPwd () {
+      // const postData = { biz_passwd: this.pwd }
+      //
+      // const rule = {
+      //   biz_passwd: {
+      //     type: String,
+      //     required: true,
+      //     length: { min: 6 },
+      //     use: {
+      //       confimPwd: pwd => this.pwdConfirm === pwd // 校验重复密码
+      //     },
+      //     message: {
+      //       type: '密码必须是字符串',
+      //       required: '密码必填',
+      //       length: '密码不得少于六位数',
+      //       confimPwd: pwd => '两次密码不一致.'
+      //     }
+      //   }
+      // }
+      // const checkRt = validateFun(postData, rule)
+      // if (checkRt !== true) {
+      //   this.formCheckResult = checkRt
+      //   return
+      // }
+      // await opBizInfo(postData, { tip: 'loading' }).catch(() => {})
+      // this.$refs.pwd.close()
+      // uni.navigateBack()
+    },
+    loginCall (userData) {
+      const { access_token, User_ID: user_id } = userData
+      Storage.set('access_token', access_token)
+      Storage.set('user_id', user_id)
+
+      // this.$store.dispatch('setUserInfo', userData)
+
+      // 需要设置密码
+      // if (userData.hasOwnProperty('biz_passwd')) {
+      //   this.pageTitle = '设置密码'
+      //   this.bindPwdShow = true
+      //   this.$refs.pwd.show()
+      //   return
+      // }
+
+      setTimeout(function () {
+        uni.navigateBack()
+      }, 200)
+    },
+    async weixinlogin (e) {
+      try {
+        const checkSeting = await Promisify('getSetting').catch(() => {
+          throw Error('获取配置失败')
+        })
+        // 未获得用户信息权限,需要让用户授权
+        if (!checkSeting.authSetting['scope.userInfo']) {
+          await Promisify('authorize', { scope: 'scope.userInfo' }).catch(() => {
+            throw Error('请授权登录')
+          })
+        }
+        const wxUserInfo = await Promisify('getUserInfo', { lang: 'zh_CN' }).catch(() => {
+          throw Error('获取用户信息失败')
+        })
+        console.log(wxUserInfo)
+        const { encryptedData, rawData, signature, userInfo, iv } = wxUserInfo
+        if (!rawData) throw Error('请允许授权')
+        const lp_raw_data = JSON.stringify({
+          encryptedData,
+          rawData: JSON.parse(rawData),
+          signature,
+          userInfo,
+          iv
+        })
+
+        // 获取code
+        const wxLoginRt = await Promisify('login').catch(() => {
+          throw Error('微信login错误')
+        })
+        const { code: lp_code } = wxLoginRt
+
+        // 请求接口
+        console.log('snslogin data is', {
+          login_method: 'wx_lp',
+          lp_code,
+          lp_raw_data
+        })
+        const { errorCode, data } = await userLogin({
+          login_method: 'wx_lp',
+          lp_code,
+          lp_raw_data
+        }, { tip: '登录中' }).catch((err) => {
+          throw Error(err.msg || '第三方登录请求错误')
+        })
+
+        if (errorCode === 0) {
+          this.loginCall(data)
+        }
+
+        // 需要绑定手机号
+        if (errorCode === 88001) {
+          this.bindPhoneTempData = data
+          this.pageTitle = '绑定手机'
+          this.binbPhoneShow = true // 设置这个之后，无法后退
+          this.$refs.phone.show()
+        }
+      } catch (e) {
+        console.log(e)
+        error(e.message)
+      }
+    }
+  }
+}
+</script>
+<style lang="scss" scoped>
+  button {
+    line-height: 2.3;
+  }
+
+  .form {
+    .form-item {
+      margin: 0 50rpx 30rpx;
+      border-bottom: 1px solid #e7e7e7;
+      height: 80rpx;
+      display: flex;
+      align-items: center;
+
+      .sendCaptcha {
+
+        .text {
+          color: #999;
+          opacity: 1;
+
+          &.active {
+            color: $fun-primary-color;
+          }
+        }
+      }
+
+      .fun-input {
+        flex: 1;
+        height: 80rpx;
+        line-height: 80rpx;
+        font-size: 14px;
+        color: #444;
+        text-align: left;
+
+      }
+
+    }
+
+    .action {
+      margin: 50rpx 50rpx 30rpx;
+      display: block;
+    }
+
+  }
+
+  .placeholder {
+    color: #fff;
+  }
+
+  .joinForm {
+    width: 500rpx;
+    text-align: center;
+
+    .input {
+      border: 1px solid #e7e7e7;
+      line-height: 36px;
+      height: 36px;
+      font-size: 14px;
+      text-align: left;
+      padding: 0 10px;
+    }
+
+    .numbox {
+      display: flex;
+      justify-content: center; //x轴排列
+    }
+  }
+
+  .pwd-wrap {
+    width: 750rpx;
+    bottom: 0;
+    padding-top: 25px;
+    box-sizing: border-box;
+    position: fixed;
+    background: white;
+    z-index: 10;
+  }
+
+  .wrap {
+    text-align: center;
+    height: 100vh;
+    color: #333;
+    box-sizing: border-box;
+    background: #fff;
+  }
+
+  .img {
+
+    width: 70px;
+    margin: 50rpx 0 100rpx;
+
+  }
+
+  .snslogin {
+    position: absolute;
+    bottom: 60rpx;
+    width: 750rpx;
+
+    .tip {
+      position: relative;
+      margin: 0 auto;
+      width: 60px;
+      text-align: center;
+
+      .after, .before {
+        position: absolute;
+        height: 1px;
+        background: #ccc;
+        width: 40px;
+        top: 50%;
+      }
+
+      .after {
+        left: 0;
+        transform: translateX(-100%);
+      }
+
+      .before {
+        right: 0;
+        transform: translateX(100%);
+      }
+
+    }
+
+    .list {
+      margin: 15px auto;
+      width: 300px;
+      text-align: center;
+    }
+  }
+
+  .channel {
+    &-list {
+      position: absolute;
+      bottom: 60px;
+      width: 750rpx;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+    }
+
+    &-item {
+      background: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 6px;
+
+      .btn {
+        width: 100%;
+        height: 100%;
+        background: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .btn::after {
+        width: 0px !important;
+        height: 0px !important;
+        display: none;
+        content: ''
+      }
+
+      .icon {
+
+      }
+
+      .text {
+        padding-left: 6px;
+      }
+    }
+
+  }
+</style>

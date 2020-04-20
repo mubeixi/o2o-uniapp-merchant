@@ -1,4 +1,4 @@
-import storage from '@/common/storage'
+import Storage from '@/common/Storage'
 
 const T = {}
 T.locale = null
@@ -9,9 +9,9 @@ T.registerLocale = function (locales) {
 }
 // 设置语言
 T.setLocale = function (code) {
-  const _code = code || storage.get('language') || 'zh-cn'
+  const _code = code || Storage.get('language') || 'zh-cn'
   T.locale = _code
-  storage.set('language', _code)
+  Storage.set('language', _code)
 }
 
 T._ = function (line, data) {

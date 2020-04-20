@@ -8,7 +8,7 @@ import {
   upload, getAccessToken
 } from './request'
 
-import Schema from 'async-validator'
+import Schema from 'validate'
 
 export const objTranslate = (obj) => JSON.parse(JSON.stringify(obj))
 
@@ -311,5 +311,6 @@ const Helper = {
     }
   }
 }
+
 
 export default Helper
