@@ -20,6 +20,7 @@ $fun-green-color:#26C78D;
 $fun-black-color:#000000;
 $fun-red-color:#F53636;
 $fun-blue-color:#00A8FF;
+$fun-yellow-color:#FFE300;
 
 $fun-selling-color:#E41515;//商品现在价格
 $fun-market-color:#939393;//原价
@@ -153,6 +154,9 @@ page{
 }
 .c9{
   color: #999;
+}
+.color-white{
+  color: #fff;
 }
 
 // 太多了占空间，常见尺寸就这么多
@@ -404,3 +408,28 @@ page{
 
 .img-full{width: 100%;height: 100%}
 .fz-b{font-weight: bold}
+
+
+.page-section-title{
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .before,.after{
+    width: 23px;
+    height: 2px;
+    background: $fun-yellow-color;
+  }
+  .before{
+  
+  }
+  .after{
+  
+  }
+  .text{
+    color: #333;
+    font-weight: bold;
+    font-size: 16px;
+    padding: 0 8px;
+  }
+}

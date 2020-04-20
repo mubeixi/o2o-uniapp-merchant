@@ -4,7 +4,7 @@
     <div class="status-bar" :style="{height:menuButtonInfo.top+'px',backgroundColor:statusBgColor}"></div>
     <!--导航栏-->
     <div class="navigation-bar" :style="{height:menuButtonInfo.height+'px',backgroundColor:menuButtonBgColor}">
-      <layout-icon @click="bindBack" class="left-icon" size="22" type="iconright"></layout-icon>
+      <layout-icon @click="bindBack" class="left-icon" size="22" type="iconicon-arrow-left"></layout-icon>
       <div class="title" :style="{lineHeight:menuButtonInfo.height+'px'}">{{title}}</div>
     </div>
   </div>

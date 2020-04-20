@@ -20,6 +20,12 @@ export default {
     $error: error,
     $modal: modal,
     $linkTo: linkTo,
+    $openPop(name) {
+      this.$refs[name].show()
+    },
+    $closePop(name) {
+      this.$refs[name].close()
+    },
     // 批量注册变量名称
     $restLangueAssign (arr) {
       for (var name of arr) {
