@@ -25,6 +25,7 @@
       @change="indexChangeEvent"
       class="tab-container"
       :style="{top:diyHeadHeight+'px',height:(systemInfo.windowHeight-diyHeadHeight+'px')}">
+      <!--特价-->
       <swiper-item class="tab-page">
         <scroll-view class="tab-page-wrap" scroll-y :style="{height:(systemInfo.windowHeight-diyHeadHeight+'px')}">
           <div class="nav">
@@ -57,13 +58,13 @@
             <div class="block-content">
               <div class="goods-list">
                 <div class="goods-item" v-for="(item,idx) in goodsList" :key="idx">
-                  <div class="cover" :style="{backgroundImage:'url('+item.thumb+')'}">
+                  <div class="cover" :style="{backgroundImage:'url('+item.ImgPath+')'}">
                     <div class="tip" style="background: #185e44;">同城配送</div>
                   </div>
-                  <h5 class="title">{{item.title}}</h5>
+                  <h5 class="title">{{item.Products_Name}}</h5>
                   <div class="price-box">
                     <div>
-                      <span class="sign">￥</span><span class="num">{{item.selling_price}}</span>
+                      <span class="sign">￥</span><span class="num">{{item.Products_PriceX}}</span>
                     </div>
                     <div class="tags">
                       <span class="tag" v-if="item.discount">{{item.discount}}折</span>
@@ -97,7 +98,7 @@
               <div class="live-list">
                 <div class="live-item" v-for="(item,idx) in liveList" :key="idx">
                   <div class="left">
-                    <div class="cover" :style="{backgroundImage:'url('+item.thumb+')'}"></div>
+                    <div class="cover" :style="{backgroundImage:'url('+item.ImgPath+')'}"></div>
                     <!---->
                     <div class="title">
                       <span class="live-status"><layout-icon display="inline" type="iconicon-count" color="#fff" size="14"></layout-icon>直播中</span>
@@ -128,7 +129,7 @@
           <copyright></copyright>
         </scroll-view>
       </swiper-item>
-
+      <!--同城闪送-->
       <swiper-item class="tab-page">
         <scroll-view class="tab-page-wrap" scroll-y :style="{height:(systemInfo.windowHeight-diyHeadHeight+'px')}">
 
@@ -166,9 +167,52 @@
 
           </div>
 
-          <copyright></copyright>
+          <div class="hr h10"></div>
+
+          <div class="p-t-20 p-b-20 bg-white">
+            <layout-ad code="indexTop"></layout-ad>
+          </div>
+
+          <div class="page-section-title">
+            <span class="before"></span>
+            <span class="text">人气商家</span>
+            <span class="after"></span>
+          </div>
+
+          <div class="store-top-item" v-for="(num,idx) in [1,2,3]">
+            <div class="store-info flex flex-vertical-c flex-justify-between">
+              <div class="p-l-10 p-r-10 flex flex-vertical-c">
+                <image class="logo" src="https://newo2o.bafangka.com/static/member/images/login/loginWeixin.png"></image>
+                <div class="p-l-10 c3">
+                  <div class="name fz-15 m-b-5"> 海的故事咖啡店</div>
+                  <div class="activity">全场满300包邮，1300封顶</div>
+                </div>
+              </div>
+              <div class="flex flex-vertical-c">
+                <span class="p-r-8 fz-14 c6">进入商家</span>
+                <layout-icon color="#999" type="iconicon-arrow-right"></layout-icon>
+              </div>
+            </div>
+            <div class="store-goods-list">
+              <block  v-for="(goods,idx) in goodsList" >
+              <div class="store-goods-item"  v-if="idx<3" :key="idx">
+                
+                  <image :style="{backgroundImage:'url('+goods.ImgPath+')'}" class="cover"/>
+                  <div class="title fz-12 c3 p-t-7 p-b-7">{{goods.Products_Name}}</div>
+                  <div class="fz-10 c9 flex flex-vertical-b">
+                    <span class="price-selling">￥</span><span class="fz-12 price-selling">{{goods.Products_PriceX}}</span>
+                    <span class="text-through m-l-2">￥</span><span class="text-through">{{goods.Products_PriceY}}</span>
+                  </div>
+                
+              </div>
+              </block>
+            </div>
+          </div>
+
+          <layout-copyright></layout-copyright>
         </scroll-view>
       </swiper-item>
+      <!--好店-->
       <swiper-item class="tab-page">
         <scroll-view class="tab-page-wrap" scroll-y :style="{height:(systemInfo.windowHeight-diyHeadHeight+'px')}">
 
@@ -216,15 +260,16 @@
 <script>
 import BaseMixin from '@/mixins/BaseMixin'
 import {
-  getProductCategory
+  getProductCategory, getProductList
 } from '@/api/product'
 import { Exception } from '@/common/Exception'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import Mock from '@/dev/Mock'
 import LayoutCopyright from '@/componets/layout-copyright/layout-copyright'
+import LayoutAd from '@/componets/layout-ad/layout-ad'
 export default {
   mixins: [BaseMixin],
-  components: { LayoutCopyright, LayoutIcon },
+  components: { LayoutAd, LayoutCopyright, LayoutIcon },
   computed: {
     // quickNavs () {
     //   try {
@@ -254,15 +299,15 @@ export default {
   },
   async created () {
     try {
-      this.liveNav = await Mock.getDataByRequest('liveNav',100)
+      this.liveNav = await Mock.getDataByRequest('liveNav', 100)
 
-      this.liveList = await Mock.getDataByRequest('liveList',100)
+      this.liveList = await Mock.getDataByRequest('liveList', 100)
 
-      this.goodsList = await Mock.getDataByRequest('goodsList',100)
+      this.goodsList = await getProductList({}, { onlyData: true }).catch(err => { throw Error(err.msg || '初始化商品失败') })
 
-      this.slide = await Mock.getDataByRequest('slide',100)
+      this.slide = await Mock.getDataByRequest('slide', 100)
 
-      this.navs = await Mock.getDataByRequest('navs',100)
+      this.navs = await Mock.getDataByRequest('navs', 100)
 
       this.firstCateList = await getProductCategory({}, { onlyData: true }).catch(() => { throw Error('获取商品分类失败') })
       // this.$toast('加载成功','none')
@@ -639,6 +684,55 @@ export default {
         transform: translateY(-50%);
       }
     }
+  }
+
+  .store-top-item{
+    width: 710rpx;
+    overflow: hidden;
+    margin: 0 20rpx 30rpx;
+    background: white;
+    border-radius: 20rpx;
+    padding: 20rpx 0;
+    .store-info{
+      .logo{
+        width: 86rpx;
+        height: 86rpx;
+        border-radius: 50%;
+      }
+      .name{
+
+      }
+      .activity{
+        padding: 2px 6px;
+        font-size: 10px;
+        color: #F1A43A;
+        border:1px solid #F1A43A;
+        border-radius:5rpx;
+      }
+    }
+    .store-goods-list{
+      display: flex;
+      padding: 30rpx 10rpx;
+    }
+    .store-goods-item{
+      width: 215rpx;
+      overflow: hidden;
+      margin-right: 14rpx;
+      &:last-child{
+        margin-right: 0;
+      }
+      .title{
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .cover{
+        width: 215rpx;
+        height: 215rpx;
+        @include cover-img();
+      }
+    }
+
   }
 
 </style>
