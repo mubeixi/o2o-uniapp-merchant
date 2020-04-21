@@ -178,36 +178,38 @@
             </div>
             <div class="block-content">
               <div class="live-list">
-                <div class="live-item" v-for="(item,idx) in goodsList" :key="idx">
-                  <div class="left">
-                    <div class="cover" :style="{backgroundImage:'url('+item.ImgPath+')'}"></div>
-                    <!---->
-
-                  </div>
-                  <div class="right">
-                    <div class="title">
-                      <span class="live-status"><layout-icon display="inline" type="iconicon-count" color="#fff" size="14"></layout-icon>直播中</span>
-                      <span class="text">{{item.title}}</span>
+                <block v-for="(item,idx) in goodsList" :key="idx">
+                <div class="live-item" v-if="idx<3">
+                  
+                    <div class="left">
+                      <div class="cover" :style="{backgroundImage:'url('+item.ImgPath+')'}"></div>
                     </div>
-<!--                    <div class="sale-count">已抢{{item.sale_count}}份</div>-->
-                    <div class="tags" v-if="item.tags">
-                      <span class="tag" v-for="(tag,idx) in item.tags" :key="idx">{{tag}}</span>
-                    </div>
-                    <div class="action">
-                      <image class="bgimg" src="/static/home/capsule.png"></image>
-                      <div class="fz-12 color-white price-box">
-                        <span style="color: #754827;">爆抢{{item.Products_Sales}}件</span>
-                        <div class="flex fz-10 flex-vertical-b">
-                          <span>￥</span><span class="fz-12">{{item.Products_PriceX}}</span>
-                          <span class="text-through p-l-4">￥{{item.Products_PriceY}}</span>
+                    <div class="right">
+                      <div class="title">
+                        <span class="live-status"><layout-icon display="inline" type="iconicon-count" color="#fff" size="14"></layout-icon>直播中</span>
+                        <span class="text">{{item.Products_Name}}</span>
+                      </div>
+                      <!--                    <div class="sale-count">已抢{{item.sale_count}}份</div>-->
+                      <div class="tags" v-if="item.tags">
+                        <span class="tag" v-for="(tag,idx) in item.tags" :key="idx">{{tag}}</span>
+                      </div>
+                      <div class="action">
+                        <image class="bgimg" src="/static/home/capsule.png"></image>
+                        <div class="fz-12 color-white price-box">
+                          <span style="color: #754827;">爆抢{{item.Products_Sales}}件</span>
+                          <div class="flex fz-10 flex-vertical-b">
+                            <span>￥</span><span class="fz-12">{{item.Products_PriceX}}</span>
+                            <span class="text-through p-l-4">￥{{item.Products_PriceY}}</span>
+                          </div>
                         </div>
                       </div>
+                      <!--                    <div class="action">-->
+                      <!--                      <div class="btn">抢</div>-->
+                      <!--                    </div>-->
                     </div>
-<!--                    <div class="action">-->
-<!--                      <div class="btn">抢</div>-->
-<!--                    </div>-->
-                  </div>
+                  
                 </div>
+                </block>
               </div>
             </div>
           </div>
@@ -634,7 +636,7 @@ export default {
           .cover {
             width: 300rpx;
             height: 300rpx;
-            @include cover-img();
+            @include cover-img(contain);
             border-top-left-radius: 10rpx;
             border-bottom-left-radius: 10rpx;
             overflow: hidden;

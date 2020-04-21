@@ -1,28 +1,28 @@
 {
-  "name": "本地生活",
-  "appid": "__UNI__A07EDA1",
-  "description": "",
-  "versionName": "1.0.0",
-  "versionCode": "100",
-  "transformPx": false,
+  "name" : "本地生活",
+  "appid" : "__UNI__A07EDA1",
+  "description" : "",
+  "versionName" : "1.0.0",
+  "versionCode" : "100",
+  "transformPx" : false,
   /* 5+App特有相关 */
-  "app-plus": {
-    "usingComponents": true,
-    "nvueCompiler": "uni-app",
-    "compilerVersion": 3,
-    "splashscreen": {
-      "alwaysShowBeforeRender": true,
-      "waiting": true,
-      "autoclose": true,
-      "delay": 0
+  "app-plus" : {
+    "usingComponents" : true,
+    "nvueCompiler" : "uni-app",
+    "compilerVersion" : 3,
+    "splashscreen" : {
+      "alwaysShowBeforeRender" : true,
+      "waiting" : true,
+      "autoclose" : true,
+      "delay" : 0
     },
     /* 模块配置 */
-    "modules": {},
+    "modules" : {},
     /* 应用发布信息 */
-    "distribute": {
+    "distribute" : {
       /* android打包配置 */
-      "android": {
-        "permissions": [
+      "android" : {
+        "permissions" : [
           "<uses-permission android:name=\"android.permission.CHANGE_NETWORK_STATE\"/>",
           "<uses-permission android:name=\"android.permission.MOUNT_UNMOUNT_FILESYSTEMS\"/>",
           "<uses-permission android:name=\"android.permission.READ_CONTACTS\"/>",
@@ -48,75 +48,72 @@
         ]
       },
       /* ios打包配置 */
-      "ios": {},
+      "ios" : {},
       /* SDK配置 */
-      "sdkConfigs": {}
+      "sdkConfigs" : {}
     }
   },
   /* 快应用特有相关 */
-  "quickapp": {},
+  "quickapp" : {},
   /* 小程序特有相关 */
-  "mp-weixin": {
-    "appid": "wx3d24c565489e305b",
-    "setting": {
-      "urlCheck": false
+  "mp-weixin" : {
+    "appid" : "wx3d24c565489e305b",
+    "setting" : {
+      "urlCheck" : false
     },
-    "usingComponents": true,
-    "permission": {
-      "scope.userLocation": {
-        "desc": "为了更好的为您推荐精准服务信息，需要获取您当前所在的位置。"
+    "usingComponents" : true,
+    "permission" : {
+      "scope.userLocation" : {
+        "desc" : "为了更好的为您推荐精准服务信息，需要获取您当前所在的位置。"
       }
     }
   },
-  "mp-alipay": {
-    "usingComponents": true
+  "mp-alipay" : {
+    "usingComponents" : true
   },
-  "mp-baidu": {
-    "usingComponents": true
+  "mp-baidu" : {
+    "usingComponents" : true
   },
-  "mp-toutiao": {
-    "usingComponents": true
+  "mp-toutiao" : {
+    "usingComponents" : true
   },
-  "h5": {
-    "router": {
-      "mode": "history",
-      "base": "fre"
+  "h5" : {
+    "router" : {
+      "mode" : "history",
+      "base" : "fre"
     },
-    "async": {
-      "timeout": 20000
-      //避免容易出现网络不给力的情况，默认3秒
+    "async" : {
+      "timeout" : 20000 //避免容易出现网络不给力的情况，默认3秒
     },
-    "publicPath": "/fre/",
-    "devServer": {
-      "port": 4100,
-      "disableHostCheck": true,
-      "proxy": {
-        "/api": {
-          "target": "http://www.newo2osrc.com",
-          //"http://www.gogo.com/api",
-          "changeOrigin": true,
-          "secure": false,
-          "pathRewrite": {
-            "^/api": ""
+    "publicPath" : "/fre/",
+    "devServer" : {
+      "port" : 4100,
+      "disableHostCheck" : true,
+      "proxy" : {
+        "/api" : {
+          "target" : "http://www.newo2osrc.com", //"http://www.gogo.com/api",
+          "changeOrigin" : true,
+          "secure" : false,
+          "pathRewrite" : {
+            "^/api" : ""
           }
         },
-        "/node": {
-          "target": "http://localhost:9100/",
-          //"http://www.gogo.com/api",
-          "changeOrigin": true,
-          "secure": false,
-          "pathRewrite": {
-            "^/node": ""
+        "/node" : {
+          "target" : "http://localhost:9100/", //"http://www.gogo.com/api",
+          "changeOrigin" : true,
+          "secure" : false,
+          "pathRewrite" : {
+            "^/node" : ""
           }
         }
       }
     },
-    "optimization": {
-      "treeShaking": {
-        "enable": true
+    "optimization" : {
+      "treeShaking" : {
+        "enable" : true
       }
     },
-    "title": " ",
-    "domain": ""
+    "title" : " ",
+    "domain" : ""
   }
 }
