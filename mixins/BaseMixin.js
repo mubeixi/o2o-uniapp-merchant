@@ -7,7 +7,10 @@ export default {
   data () {
     return {
       menuButtonInfo: {},
-      systemInfo: { statusBarHeight: 0, windowHeight: 0 },
+      systemInfo: {
+        statusBarHeight: 0,
+        windowHeight: 0
+      },
       diyHeadHeight: 0,
       diyHeadRight: 0,
       TT: {}
@@ -15,11 +18,18 @@ export default {
   },
   methods: {
     $back: back,
-    $noop: () => {},
+    $noop: () => {
+    },
     $toast: toast,
     $error: error,
     $modal: modal,
     $linkTo: linkTo,
+    $openPop (name) {
+      this.$refs[name].show()
+    },
+    $closePop (name) {
+      this.$refs[name].close()
+    },
     // 批量注册变量名称
     $restLangueAssign (arr) {
       for (var name of arr) {
@@ -61,5 +71,14 @@ export default {
     const locale = T.locale
     const locales = T.locales
     this.TT = locales[locale]
+  }
+}
+
+export const ColorMixin = {
+  methods: {
+    getPrimaryColor () {
+    },
+    setPrimaryColor () {
+    }
   }
 }

@@ -1,11 +1,12 @@
 <style lang="scss" scoped>
-  .page-wrap{
+  .page-wrap {
     background-color: #ffffff;
     width: 750rpx;
     overflow-x: hidden;
     overflow-y: hidden;
   }
-  .end-time{
+
+  .end-time {
     width: 750rpx;
     height: 58rpx;
     line-height: 58rpx;
@@ -15,11 +16,11 @@
     background-color: #F2FFFA;
   }
 
-  .end-time-block{
-    width:36rpx;
-    height:36rpx;
-    background:rgba(68,68,68,1);
-    border-radius:6rpx;
+  .end-time-block {
+    width: 36rpx;
+    height: 36rpx;
+    background: rgba(68, 68, 68, 1);
+    border-radius: 6rpx;
     font-size: 24rpx;
     text-align: center;
     line-height: 36rpx;
@@ -27,10 +28,12 @@
     color: #ffffff;
     margin: 0px 4rpx;
   }
-  .end-time-day{
+
+  .end-time-day {
     margin: 0px 4rpx;
   }
-  .product-price{
+
+  .product-price {
     background-color: #ffffff;
     display: flex;
     height: 108rpx;
@@ -41,26 +44,30 @@
     justify-content: space-between;
     color: #ABABAB;
   }
-  .product-price-red{
+
+  .product-price-red {
     font-size: 20px;
     color: #F53636;
   }
-  .product-price-right{
+
+  .product-price-right {
     width: 168rpx;
     height: 70rpx;
     position: relative;
   }
-  .product-share{
-    height:20rpx;
-    font-size:11px;
-    font-weight:500;
-    color:rgba(255,255,255,1);
-    line-height:20rpx;
+
+  .product-share {
+    height: 20rpx;
+    font-size: 11px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 1);
+    line-height: 20rpx;
     position: absolute;
     top: 12rpx;
     left: 84rpx;
   }
-  .product-title{
+
+  .product-title {
     width: 698rpx;
     line-height: 40rpx;
     height: 80rpx;
@@ -68,49 +75,56 @@
     background-color: #ffffff;
     color: #333333;
     font-size: 14px;
-    font-weight:bold;
-    overflow:hidden;
-    text-overflow:ellipsis;
-    display:-webkit-box;
-    -webkit-box-orient:vertical;
-    -webkit-line-clamp:2;
+    font-weight: bold;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
   }
-  .line-f8{
-    width:750rpx;
-    height:20rpx;
-    background:rgba(248,248,248,1);
+
+  .line-f8 {
+    width: 750rpx;
+    height: 20rpx;
+    background: rgba(248, 248, 248, 1);
   }
-  .full-img{
+
+  .full-img {
     width: 100% !important;
     height: 100% !important;
   }
-  .product-price-share{
+
+  .product-price-share {
     font-size: 13px;
     height: 20rpx;
     line-height: 20rpx;
-    font-weight:500;
-    color:rgba(255,255,255,1);
+    font-weight: 500;
+    color: rgba(255, 255, 255, 1);
     position: absolute;
     bottom: 12rpx;
     left: 74rpx;
-    .price-q{
+
+    .price-q {
       font-size: 10px;
     }
   }
-  .product-activity{
+
+  .product-activity {
     width: 750rpx;
     padding: 30rpx 20rpx 0rpx 20rpx;
     box-sizing: border-box;
   }
-  .product-activity-title{
+
+  .product-activity-title {
     width: 134rpx;
     height: 34rpx;
-    font-size:14px;
-    font-weight:500;
-    color:rgba(51,51,51,1);
-    line-height:30rpx;
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(51, 51, 51, 1);
+    line-height: 30rpx;
   }
-  .activity-item{
+
+  .activity-item {
     width: 104rpx;
     height: 34rpx;
     line-height: 34rpx;
@@ -120,41 +134,54 @@
     margin-right: 20rpx;
     position: relative;
   }
-  .activity-img{position: absolute;top: 0;left: 0;width: 104rpx;height: 34rpx}
-  .activity-second{
+
+  .activity-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 104rpx;
+    height: 34rpx
+  }
+
+  .activity-second {
     margin-top: 20rpx;
-    .color-first{
+
+    .color-first {
       color: #1CA272;
-      height:32rpx;
+      height: 32rpx;
       line-height: 32rpx;
       text-align: center;
       padding: 8rpx;
-      background:rgba(235,255,248,1);
-      border-radius:3px;
+      background: rgba(235, 255, 248, 1);
+      border-radius: 3px;
       margin-right: 16rpx;
       font-size: 10px;
     }
-    .color-second{
+
+    .color-second {
       color: #333333;
-      height:22rpx;
-      font-size:22rpx;
-      font-weight:500;
-      color:rgba(51,51,51,1);
-      line-height:22rpx;
+      height: 22rpx;
+      font-size: 22rpx;
+      font-weight: 500;
+      color: rgba(51, 51, 51, 1);
+      line-height: 22rpx;
     }
   }
-  .vip-img{
+
+  .vip-img {
     width: 710rpx;
     margin: 0 auto;
     height: 96rpx;
   }
-  .shouhou{
+
+  .shouhou {
     width: 750rpx;
     box-sizing: border-box;
     height: 86rpx;
     padding: 30rpx 20rpx;
   }
-  .shouhou-item{
+
+  .shouhou-item {
     display: flex;
     height: 28rpx;
     align-items: center;
@@ -163,8 +190,14 @@
     line-height: 28rpx;
     margin-right: 36rpx;
   }
-  .shouhou-img{width: 28rpx;height: 28rpx;margin-right: 10rpx}
-  .store{
+
+  .shouhou-img {
+    width: 28rpx;
+    height: 28rpx;
+    margin-right: 10rpx
+  }
+
+  .store {
     position: sticky;
     z-index: 999;
     top: 0;
@@ -174,92 +207,106 @@
     box-sizing: border-box;
     padding: 26rpx 72rpx;
     justify-content: space-between;
-    .li-item{
+
+    .li-item {
       width: 60rpx;
       height: 32rpx;
       line-height: 32rpx;
       font-size: 16px;
       color: #333333;
-      font-weight:bold;
+      font-weight: bold;
       position: relative;
     }
-    .color-store{
+
+    .color-store {
       color: #26C78D;
     }
-    .active{
-      width:36rpx;
-      height:6rpx;
-      background:#26C78D;
-      border-radius:3px;
+
+    .active {
+      width: 36rpx;
+      height: 6rpx;
+      background: #26C78D;
+      border-radius: 3px;
       position: absolute;
       left: 12rpx;
       bottom: -24rpx;
     }
   }
-  .tab-containers{
+
+  .tab-containers {
     border-top: 1px solid #f1f1f1;
   }
-  .store-info{
+
+  .store-info {
     width: 750rpx;
     box-sizing: border-box;
     padding: 52rpx 20rpx 20rpx 30rpx;
   }
-  .store-info-title{
-    width:540rpx;
-    height:30rpx;
+
+  .store-info-title {
+    width: 540rpx;
+    height: 30rpx;
     overflow: hidden;
     line-height: 30rpx;
-    font-size:30rpx;
-    font-weight:bold;
-    color:rgba(51,51,51,1);
-    line-height:30rpx;
+    font-size: 30rpx;
+    font-weight: bold;
+    color: rgba(51, 51, 51, 1);
+    line-height: 30rpx;
     margin-bottom: 24rpx;
   }
-  .store-info-call{
+
+  .store-info-call {
     height: 28rpx;
     line-height: 28rpx;
     display: flex;
     font-size: 13px;
     color: #999999;
   }
-  .store-list{
+
+  .store-list {
     width: 710rpx;
     margin: 0 auto;
     padding-top: 30rpx;
     padding-bottom: 10rpx;
   }
-  .store-list-top{
+
+  .store-list-top {
     height: 32rpx;
     display: flex;
     align-items: center;
     font-size: 13px;
     color: #999999;
   }
-  .block-div{
+
+  .block-div {
     background-color: #26C78D;
     width: 8rpx;
     height: 32rpx;
     margin-right: 16rpx;
     display: inline-block;
   }
-  .store-list-item{
+
+  .store-list-item {
     width: 710rpx;
     padding: 30rpx 24rpx;
     box-sizing: border-box;
     border-bottom: 1px solid #EBEBEB;
   }
-  .store-list-title{
-    width:600rpx;
-    height:28px;
-    font-size:14px;
-    color:rgba(51,51,51,1);
-    line-height:28px;
+
+  .store-list-title {
+    width: 600rpx;
+    height: 28px;
+    font-size: 14px;
+    color: rgba(51, 51, 51, 1);
+    line-height: 28px;
     margin-bottom: 10rpx;
   }
-  .isStickly{
+
+  .isStickly {
     border-bottom: 1px solid #eee;
   }
-  .store-list-address{
+
+  .store-list-address {
     width: 100%;
     box-sizing: border-box;
     padding-left: 2rpx;
@@ -267,13 +314,15 @@
     line-height: 34rpx;
     align-items: center;
   }
-  .store-list-font{
+
+  .store-list-font {
     color: #999999;
     font-size: 12px;
     height: 12px;
     line-height: 12px;
   }
-  .store-su{
+
+  .store-su {
     width: 1px;
     height: 34rpx;
     background-color: #EBEBEB;
@@ -286,11 +335,44 @@
     overflow-y: scroll;
   }
 
-
   ul li {
     list-style: none;
   }
 
+  .comment-box {
+    border-top: 1px solid #f2f2f2;
+    border-bottom: 1px solid #f2f2f2;
+    padding: 30rpx 25rpx;
+    background: white;
+
+    .block-title {
+      padding: 20px 0;
+
+      .block-title-text {
+        font-weight: bold;
+      }
+    }
+
+    .comment-list {
+
+    }
+  }
+
+  .commtent-add {
+    margin: 50rpx 25rpx;
+    background: #F7F7F7;
+    min-height: 150rpx;
+    padding: 20rpx;
+
+    .textarea {
+      font-size: 14px;
+      line-height: 1.4;
+
+      &::placeholder {
+        color: #999;
+      }
+    }
+  }
 
 </style>
 
@@ -298,8 +380,8 @@
   <div class="page-wrap">
     <swiper style="height:750rpx;width: 750rpx;" indicator-dots="true" indicator-active-color="#26C78D"
             indicator-color="#ffffff" autoplay="true" interval="3000" duration="500" circular="true">
-      <swiper-item v-for="(item,index) of detailData.Products_JSON.ImgPath">
-        <image :src="item" class="full-img"/>
+      <swiper-item v-for="(item,index) of detailData.Products_JSON.ImgPath" :key="index">
+        <image :src="item" class="full-img" />
       </swiper-item>
     </swiper>
     <div class="end-time">
@@ -329,9 +411,9 @@
     <div class="product-title">
       {{detailData.Products_Name}}
     </div>
-    <div class="line-f8" style="margin-top: 30rpx"></div>
-    <div class="product-activity" v-if="active.length>0">
-      <div class="flex" style="padding-bottom: 30rpx">
+    <div class="line-f8" style="margin-top: 30rpx" v-if="active.length>0"></div>
+    <div class="product-activity">
+      <div class="flex" style="padding-bottom: 30rpx" v-if="active.length>0">
         <div class="product-activity-title">
           优惠活动
         </div>
@@ -403,11 +485,30 @@
     >
       <swiper-item class="tab-pages">
         <div :style="{height:(systemInfo.windowHeight+'px')}" class="over">
-<!--          <u-parse :content="detailData.Products_Description"></u-parse>-->
+          <!--          <u-parse :content="detailData.Products_Description"></u-parse>-->
         </div>
       </swiper-item>
       <swiper-item class="tab-pages">
-        评价
+
+        <!--评论列表-->
+        <div class="block comment-box over" v-if="comments.length>0" :style="{height:(systemInfo.windowHeight+'px')}">
+
+          <div class="block-title">
+            <div class="block-title-text">留言评论</div>
+            <div class="block-title-more flex flex-vertical-center c9 fz-12">
+              <span>查看全部</span>
+              <icon class="iconright" type="iconright" size="14" color="#999"></icon>
+            </div>
+          </div>
+          <div class="block-content">
+            <div class="comment-list">
+              <div v-for="(item,idx) in comments" :key="idx">
+                <layout-comment :isLast="comments.length-1===idx" :comment="item"></layout-comment>
+              </div>
+
+            </div>
+          </div>
+        </div>
       </swiper-item>
       <swiper-item class="tab-pages">
         须知
@@ -466,52 +567,92 @@
       </swiper-item>
     </swiper>
 
-<!--    <bottombuy></bottombuy>-->
+    <!--    <bottombuy></bottombuy>-->
   </div>
 </template>
 
 <script>
 import BaseMixin from '@/mixins/BaseMixin'
 import { getProductDetail, getActiveInfo, getBizInfo, getStoreList } from '@/api/product'
+import { getCommitList } from '@/api/common'
 import { formatRichTextByUparseFn } from '@/common/filter'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
+import LayoutComment from '@/componets/layout-comment/layout-comment'
 
 export default {
   name: 'ProductDetail',
   mixins: [BaseMixin],
-  components:{LayoutIcon},
+  components: {
+    LayoutIcon,
+    LayoutComment
+  },
   data () {
     return {
       tabIndex: 3,
       headTabSticky: false,
-      prod_id: '1613',//商品id
-      detailData: {Products_JSON:{},Products_Promise:[]},//商品数据
-      active: [],//满减活动列表
-      store: [{biz_go:''}],//门店
+      prod_id: '1613', // 商品id
+      detailData: {
+        Products_JSON: {},
+        Products_Promise: []
+      }, // 商品数据
+      active: [], // 满减活动列表
+      store: [{ biz_go: '' }], // 门店
       storeList: [],
+      comments: []
     }
   },
   onPageScroll (e) {
     const { scrollTop } = e
+    console.log(scrollTop, this.headTabTop, 'ss')
     this.headTabSticky = scrollTop > this.headTabTop
   },
   methods: {
     async getProductDetail () {
       try {
-        let data = {
-          prod_id: this.prod_id,
+        const data = {
+          prod_id: this.prod_id
         }
-        this.detailData = await getProductDetail(data, { onlyData: true }).catch(e => {throw Error(e.msg||'获取商品详情失败')})
+        this.detailData = await getProductDetail(data, {
+          onlyData: true,
+          tip: '加载中',
+          mask: true
+        }).catch(e => {
+          throw Error(e.msg || '获取商品详情失败')
+        })
         this.detailData.Products_Description = formatRichTextByUparseFn(this.detailData.Products_Description)
 
-        this.store = await getBizInfo({ biz_id: this.detailData.biz_id }, { onlyData: true }).catch(e => {throw Error(e.msg||'获取店铺信息失败')})
-        this.storeList = await getStoreList({ biz_id: this.detailData.biz_id }, { onlyData: true }).catch(e => {throw Error(e.msg||'获取店铺列表失败')})
-
-        let res = await getActiveInfo({
+        this.store = await getBizInfo({ biz_id: this.detailData.biz_id }, {
+          onlyData: true,
+          tip: '加载中',
+          mask: true
+        }).catch(e => {
+          throw Error(e.msg || '获取店铺信息失败')
+        })
+        this.comments = await getCommitList({
           biz_id: this.detailData.biz_id,
-          type: 'manjian',
-        }, { onlyData: true }).catch(e => {})
-        if (res!=null&&res.active_info) {
+          pageSize: 3
+        }, {
+          onlyData: true,
+          tip: '加载中',
+          mask: true
+        }).catch((e) => {
+          throw Error('获取评论数据失败')
+        })
+
+        this.storeList = await getStoreList({ biz_id: this.detailData.biz_id }, {
+          onlyData: true,
+          tip: '加载中',
+          mask: true
+        }).catch(e => {
+          throw Error(e.msg || '获取店铺列表失败')
+        })
+
+        const res = await getActiveInfo({
+          biz_id: this.detailData.biz_id,
+          type: 'manjian'
+        }, { onlyData: true }).catch(e => {
+        })
+        if (res != null && res.active_info) {
           this.active = res.active_info
         }
 
@@ -520,26 +661,24 @@ export default {
           query.select('#tabs').boundingClientRect()
           query.selectViewport().scrollOffset()
           query.exec((res) => {
-            console.log(res,"ss")
+            console.log(res, 'ss')
             this.headTabTop = res[0].top
           })
         })
-      }catch (e) {
-        console.log()
+      } catch (e) {
         this.$modal(e.message)
       }
-
     },
     changeTabIndex (event) {
       const { current, source } = event.detail
       this.tabIndex = current
-    },
+    }
   },
   onShow () {
     this.getProductDetail()
   },
   onLoad (options) {
-    //this.prod_id=options.prod_id
+    // this.prod_id=options.prod_id
   },
   onReady () {
     // const query = uni.createSelectorQuery().in(this)
@@ -548,6 +687,6 @@ export default {
     //   this.headTabTop = data.top
     // }).exec();
 
-  },
+  }
 }
 </script>

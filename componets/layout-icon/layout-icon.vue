@@ -1,15 +1,17 @@
 <style lang="scss" scoped>
-@import "../../assets/icon.scss";
-.inline{
-  display: inline;
-}
-.icon{
+  @import "../../assets/icon.scss";
 
-}
+  .inline {
+    display: inline;
+  }
+
+  .icon {
+
+  }
 </style>
 
 <template>
-<!--  ,height:size + 'px',lineHeight:size+'px'-->
+  <!--  ,height:size + 'px',lineHeight:size+'px'-->
   <i class="iconfont icon"
      :class="[type,display]"
      :style="{ color: color, 'font-size': size + 'px',fontWeight:weight}"

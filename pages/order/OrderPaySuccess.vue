@@ -1,5 +1,5 @@
 <template>
-  <view  class="myall">
+  <view class="myall">
     <view class="img-div">
       <image src="/static/free/paySuccess.png" style="width: 100%;height: 100%;"></image>
     </view>
@@ -11,17 +11,17 @@
       <view class="button-all button-next">查看订单</view>
     </view>
     <block>
-      <block >
-        <view  class="pay-succ-last">
+      <block>
+        <view class="pay-succ-last">
           本次购物可享权益
         </view>
-        <view class="youhuijuan" >
+        <view class="youhuijuan">
           <image class="allImg" src="/static/free/mbxcoupon.png"></image>
           <view class="infoImg">
             <image class="image" src="/static/free/mbxcoupon.png"></image>
           </view>
           <view class="storeTitle">
-           11
+            11
           </view>
           <view class="times">
             有效期：3213
@@ -29,26 +29,26 @@
           <view class="limit">
             232
           </view>
-<!--          <view class="prices" v-if="item.Coupon_Discount<=0">-->
-<!--            ¥<text>3213</text>-->
-<!--          </view>-->
-<!--          <view class="prices" v-else>-->
-<!--            {{item.Coupon_Discount*10}}折优惠-->
-<!--          </view>-->
-<!--          <view class="man" v-if="item.Coupon_Subject">-->
-<!--            满{{item.Coupon_Condition}}可用-->
-<!--          </view>-->
+          <!--          <view class="prices" v-if="item.Coupon_Discount<=0">-->
+          <!--            ¥<text>3213</text>-->
+          <!--          </view>-->
+          <!--          <view class="prices" v-else>-->
+          <!--            {{item.Coupon_Discount*10}}折优惠-->
+          <!--          </view>-->
+          <!--          <view class="man" v-if="item.Coupon_Subject">-->
+          <!--            满{{item.Coupon_Condition}}可用-->
+          <!--          </view>-->
           <view class="button">
             去使用
           </view>
         </view>
       </block>
-      <block >
+      <block>
         <!-- 猜你喜欢 -->
         <div class=" container">
           <div class="fenge"><span class="red"></span><span class="caini">猜你喜欢</span><span class="red"></span></div>
           <div class="prolist">
-            <div class="pro-item" >
+            <div class="pro-item">
               <img src="/static/active/bg.png" alt="">
               <div class="item-name">32131</div>
               <div class="price">
@@ -61,29 +61,27 @@
       </block>
     </block>
 
-
-
-      <div>
-        <div class="popup-layer">
+    <div>
+      <div class="popup-layer">
+      </div>
+      <div class="popup-content">
+        <image src="/static/free/free.png" class="img-full"></image>
+        <div class="popup-title">
+          恭喜您！
         </div>
-        <div  class="popup-content">
-            <image src="/static/free/free.png" class="img-full"></image>
-            <div class="popup-title">
-              恭喜您！
-            </div>
-            <div class="popup-co fz-10 c3">
-              获得<span class="fz-13" style="color: #FE3841;">免单特权!</span>该订单将为您免除XXX元，免除的金额将直接存入您的会员余额，请注意查收。
-            </div>
-            <div class="popup-btn">
-              立即查看
-            </div>
-          <div class="flex flex-justify-c flex-vertical-c popup-del">
-            <layout-icon type="icondel" size="20" color="#c4bfbf"></layout-icon>
-          </div>
-
+        <div class="popup-co fz-10 c3">
+          获得<span class="fz-13" style="color: #FE3841;">免单特权!</span>该订单将为您免除XXX元，免除的金额将直接存入您的会员余额，请注意查收。
+        </div>
+        <div class="popup-btn">
+          立即查看
+        </div>
+        <div class="flex flex-justify-c flex-vertical-c popup-del">
+          <layout-icon type="icondel" size="20" color="#c4bfbf"></layout-icon>
         </div>
 
       </div>
+
+    </div>
 
   </view>
 </template>
@@ -93,40 +91,35 @@ import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import BaseMixin from '@/mixins/BaseMixin'
 
 export default {
-  mixins:[BaseMixin],
-  components:{LayoutIcon},
-  data() {
-    return {
-
-    };
+  mixins: [BaseMixin],
+  components: { LayoutIcon },
+  data () {
+    return {}
   },
-  onLoad(option) {
+  onLoad (option) {
 
   },
-  onShow() {
-
-
+  onShow () {
 
   },
   // 上拉触底
-  onReachBottom() {
+  onReachBottom () {
 
   },
-  methods:{
-
-  }
+  methods: {}
 }
 </script>
 
 <style lang="scss" scoped>
-  .popup-content{
-        position: fixed;
-        z-index: 100;
-        top: 260rpx;
-        left: 40rpx;
-        width: 710rpx;
-        height: 600rpx;
-    .popup-title{
+  .popup-content {
+    position: fixed;
+    z-index: 100;
+    top: 260rpx;
+    left: 40rpx;
+    width: 710rpx;
+    height: 600rpx;
+
+    .popup-title {
       font-size: 72rpx;
       color: #FE3841;
       line-height: 80rpx;
@@ -134,33 +127,37 @@ export default {
       top: 54rpx;
       left: 196rpx;
     }
-    .popup-co{
+
+    .popup-co {
       width: 298rpx;
       position: absolute;
       top: 146rpx;
       left: 180rpx;
     }
-    .popup-btn{
-      width:280rpx;
-      height:74rpx;
+
+    .popup-btn {
+      width: 280rpx;
+      height: 74rpx;
       text-align: center;
       line-height: 74rpx;
-      background:linear-gradient(0deg,rgba(255,203,109,1),rgba(249,216,158,1));
-      box-shadow:0px 4rpx 14rpx 1px rgba(222,36,36,0.24);
-      border-radius:38rpx;
+      background: linear-gradient(0deg, rgba(255, 203, 109, 1), rgba(249, 216, 158, 1));
+      box-shadow: 0px 4rpx 14rpx 1px rgba(222, 36, 36, 0.24);
+      border-radius: 38rpx;
       font-size: 19px;
       color: #FE3841;
       position: absolute;
       top: 356rpx;
       left: 180rpx;
     }
-    .popup-del{
+
+    .popup-del {
       width: 690rpx;
       position: absolute;
       top: 508rpx;
       left: 0rpx;
     }
   }
+
   .popup-layer {
     position: fixed;
     z-index: 99;
@@ -171,32 +168,36 @@ export default {
     left: 0px;
     overflow: hidden;
   }
-  .img-div{
+
+  .img-div {
     width: 132px;
     height: 132px;
     margin: 0 auto;
     margin-bottom: 12px;
     box-sizing: border-box;
   }
-  .pay-succ{
-    height:36rpx;
-    font-size:18px;
-    color:rgba(51,51,51,1);
-    line-height:36rpx;
+
+  .pay-succ {
+    height: 36rpx;
+    font-size: 18px;
+    color: rgba(51, 51, 51, 1);
+    line-height: 36rpx;
     width: 100%;
     text-align: center;
     margin-bottom: 18px;
   }
-  .pay-succ-last{
-    height:26rpx;
-    font-size:13px;
-    color:#999999;
-    line-height:26rpx;
+
+  .pay-succ-last {
+    height: 26rpx;
+    font-size: 13px;
+    color: #999999;
+    line-height: 26rpx;
     width: 100%;
     text-align: center;
     margin-bottom: 18px;
   }
-  .pay-button{
+
+  .pay-button {
     display: flex;
     height: 35px;
     width: 100%;
@@ -205,36 +206,42 @@ export default {
     box-sizing: border-box;
     margin-bottom: 18px;
   }
-  .button-all{
-    width:290rpx;
-    height:35px;
+
+  .button-all {
+    width: 290rpx;
+    height: 35px;
     font-size: 15px;
     text-align: center;
     line-height: 35px;
     border-radius: 35px;
   }
-  .button-goon{
-    background:linear-gradient(90deg,rgba(255,150,87,1),rgba(253,84,90,1));
+
+  .button-goon {
+    background: linear-gradient(90deg, rgba(255, 150, 87, 1), rgba(253, 84, 90, 1));
     color: #FFFFFF;
     margin-right: 40rpx;
   }
-  .button-next{
-    border:1px solid rgba(245,54,54,1);
+
+  .button-next {
+    border: 1px solid rgba(245, 54, 54, 1);
     color: #F53636;
   }
-  .myall{
+
+  .myall {
     background-color: #FFFFFF !important;
     min-height: 100vh;
     padding-top: 18px;
   }
-  .titless{
+
+  .titless {
     position: fixed;
     top: 0rpx;
     left: 0rpx;
     width: 100%;
     z-index: 999;
   }
-  .nav{
+
+  .nav {
     z-index: 999;
     position: fixed;
     top: 86rpx;
@@ -247,15 +254,18 @@ export default {
     align-items: center;
     font-size: 30rpx;
     color: #333333;
-    .views{
+
+    .views {
       width: 236rpx;
       height: 72rpx;
       line-height: 72rpx;
       text-align: center;
       position: relative;
-      &.checked{
+
+      &.checked {
         color: #F43131;
-        &:after{
+
+        &:after {
           content: '';
           display: flex;
           width: 135rpx;
@@ -268,17 +278,20 @@ export default {
       }
     }
   }
-  .youhuijuan{
+
+  .youhuijuan {
     width: 709rpx;
     height: 206rpx;
     margin-left: 20rpx;
     margin-bottom: 30rpx;
     position: relative;
-    .allImg{
+
+    .allImg {
       width: 100%;
       height: 100%;
     }
-    .infoImg{
+
+    .infoImg {
       width: 89rpx;
       height: 89rpx;
       border-radius: 50%;
@@ -286,12 +299,14 @@ export default {
       top: 56rpx;
       left: 44rpx;
       overflow: hidden;
-      .image{
+
+      .image {
         width: 100%;
         height: 100%;
       }
     }
-    .storeTitle{
+
+    .storeTitle {
       font-size: 28rpx;
       color: #333333;
       line-height: 28rpx;
@@ -299,13 +314,15 @@ export default {
       top: 62rpx;
       left: 150rpx;
     }
-    .times{
+
+    .times {
       font-size: 20rpx;
       color: #666666;
       position: absolute;
       top: 105rpx;
       left: 148rpx;
     }
+
     .limit {
       font-size: 16rpx;
       color: #FF565F;
@@ -313,14 +330,16 @@ export default {
       left: 148rpx;
       top: 140rpx;
     }
-    .all-coupon{
+
+    .all-coupon {
       font-size: 10px;
       color: #FF565F;
       position: absolute;
       top: 140rpx;
       left: 148rpx;
     }
-    .prices{
+
+    .prices {
       width: 110rpx;
       height: 40rpx;
       line-height: 40rpx;
@@ -331,12 +350,14 @@ export default {
       position: absolute;
       top: 41rpx;
       left: 534rpx;
-      text{
+
+      text {
         margin-left: 11rpx;
         font-size: 52rpx;
       }
     }
-    .man{
+
+    .man {
       height: 19rpx;
       font-size: 20rpx;
       color: #666666;
@@ -344,20 +365,22 @@ export default {
       top: 95rpx;
       left: 534rpx;
     }
-    .button{
-      width:125rpx;
-      height:44rpx;
+
+    .button {
+      width: 125rpx;
+      height: 44rpx;
       line-height: 44rpx;
-      background:rgba(255,255,255,1);
-      border-radius:44rpx;
+      background: rgba(255, 255, 255, 1);
+      border-radius: 44rpx;
       font-size: 22rpx;
       color: #F43131;
       text-align: center;
       position: absolute;
-      top:133rpx ;
+      top: 133rpx;
       left: 527rpx;
     }
-    .yishiyong{
+
+    .yishiyong {
       position: absolute;
       width: 106rpx;
       height: 106rpx;
@@ -366,33 +389,37 @@ export default {
     }
   }
 
-  .lasts{
+  .lasts {
     font-size: 14px;
     padding-top: 30rpx;
     width: 100%;
     text-align: center;
     display: flex;
     justify-content: center;
-    .lefts{
+
+    .lefts {
       color: #666666;
     }
-    .rights{
+
+    .rights {
       margin-left: 10rpx;
       color: #F43131;
     }
   }
 
-  .defaults{
+  .defaults {
     margin: 0 auto;
     width: 640rpx;
     height: 480rpx;
     padding-top: 100rpx;
   }
+
   /* 猜你喜欢 */
-  .container{
+  .container {
     margin-top: 30rpx;
     padding: 0 20rpx;
   }
+
   .fenge {
     text-align: center;
     padding: 30rpx 0;
@@ -400,25 +427,30 @@ export default {
     justify-content: center;
     align-items: center;
   }
-  .caini{
+
+  .caini {
     font-size: 30rpx;
     margin-left: 13rpx;
     margin-right: 13rpx;
   }
+
   .prolist {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
   }
+
   .pro-item {
     width: 48%;
     margin-bottom: 15px;
     background: #fff;
   }
+
   .pro-item img {
     width: 345rpx;
     height: 345rpx;
   }
+
   .item-name {
     font-size: 24rpx;
     padding: 0 10rpx;
@@ -429,23 +461,28 @@ export default {
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
   }
+
   .red {
     background-color: #F43131;
     display: inline-block;
     height: 3rpx;
     width: 44rpx;
   }
+
   .price {
     margin-top: 20rpx;
     padding: 0 10rpx 20rpx;
   }
+
   .n_price {
     color: #ff0000;
     font-size: 34rpx;
-    span{
+
+    span {
       font-size: 24rpx;
     }
   }
+
   .o_price {
     margin-left: 15rpx;
     color: #afafaf;

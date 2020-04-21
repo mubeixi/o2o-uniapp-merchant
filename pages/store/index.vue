@@ -8,16 +8,26 @@
         <div class="title">{{storeInfo.biz_shop_name}}</div>
       </div>
       <div class="actions">
-        <div class="action-item"><layout-icon size="26" type="iconicon-address" color="#26C78D"></layout-icon></div>
-        <div class="action-item"><layout-icon size="26" type="iconicon-phone" color="#26C78D"></layout-icon></div>
-        <div class="action-item"><layout-icon size="26" type="iconicon-favorite" color="#26C78D"></layout-icon></div>
-        <div class="action-item"><layout-icon size="26" type="iconicon-timeline" color="#26C78D"></layout-icon></div>
-        <div class="action-item"><layout-icon size="26" type="iconicon-share" color="#26C78D"></layout-icon></div>
-<!--        <image mode="widthFix" class="action-item" src="/static/store/address.png"></image>-->
-<!--        <image mode="widthFix" class="action-item" src="/static/store/phone.png"></image>-->
-<!--        <image mode="widthFix" class="action-item" src="/static/store/favorite.png"></image>-->
-<!--        <image mode="widthFix" class="action-item" src="/static/store/timeline.png"></image>-->
-<!--        <image mode="widthFix" class="action-item" src="/static/store/share.png"></image>-->
+        <div class="action-item">
+          <layout-icon size="26" type="iconicon-address" color="#26C78D"></layout-icon>
+        </div>
+        <div class="action-item">
+          <layout-icon size="26" type="iconicon-phone" color="#26C78D"></layout-icon>
+        </div>
+        <div class="action-item">
+          <layout-icon size="26" type="iconicon-favorite" color="#26C78D"></layout-icon>
+        </div>
+        <div class="action-item">
+          <layout-icon size="26" type="iconicon-timeline" color="#26C78D"></layout-icon>
+        </div>
+        <div class="action-item">
+          <layout-icon size="26" type="iconicon-share" color="#26C78D"></layout-icon>
+        </div>
+        <!--        <image mode="widthFix" class="action-item" src="/static/store/address.png"></image>-->
+        <!--        <image mode="widthFix" class="action-item" src="/static/store/phone.png"></image>-->
+        <!--        <image mode="widthFix" class="action-item" src="/static/store/favorite.png"></image>-->
+        <!--        <image mode="widthFix" class="action-item" src="/static/store/timeline.png"></image>-->
+        <!--        <image mode="widthFix" class="action-item" src="/static/store/share.png"></image>-->
       </div>
     </div>
     <!--占位-->
@@ -37,7 +47,7 @@
       </ul>
     </div>
     <!--  占位-->
-<!--    <div class="h50 bg-white" v-if="headTabSticky"></div>-->
+    <!--    <div class="h50 bg-white" v-if="headTabSticky"></div>-->
 
     <swiper
       :current="headTabIndex"
@@ -45,7 +55,7 @@
       class="tab-container"
       :style="{height:childSwiperHeight}">
       <swiper-item class="tab-page">
-        <div id="scrollView1" class="tab-page-wrap" >
+        <div id="scrollView1" class="tab-page-wrap">
 
           <!--优惠券-->
           <scroll-view class="coupon-section" scroll-x>
@@ -85,9 +95,10 @@
                 <icon class="iconright" type="iconright" size="14" color="#999"></icon>
               </div>
             </div>
-            <div class="block-content" >
+            <div class="block-content">
               <div class="goods-list">
-                <div class="goods-item" v-for="(item,idx) in virtuaGoodsLsit" :key="idx" @click="$linkTo('/pages/product/detail?prod_id='+item.Products_ID)">
+                <div class="goods-item" v-for="(item,idx) in virtuaGoodsLsit" :key="idx"
+                     @click="$linkTo('/pages/product/detail?prod_id='+item.Products_ID)">
                   <div class="left">
                     <div class="cover" :style="{backgroundImage:'url('+item.ImgPath+')'}"></div>
                   </div>
@@ -127,7 +138,7 @@
             </div>
             <div class="block-content">
               <div class="comment-list">
-                <div v-for="(item,idx) in comments" :key="idx" >
+                <div v-for="(item,idx) in comments" :key="idx">
                   <layout-comment :isLast="comments.length-1===idx" :comment="item"></layout-comment>
                 </div>
 
@@ -148,11 +159,14 @@
               :current="goodsNavIndex">
               <swiper-item style="overflow-y: scroll">
                 <div class="goods-list">
-                  <div class="goods-item" @click="$linkTo('/pages/product/detail?prod_id='+item.Products_ID)" style="height: 220rpx;margin-bottom: 18rpx;" v-for="(item,idx) in recommends" :key="idx">
-                    <image class="goods-item-cover" :style="{backgroundImage:'url('+item.ImgPath+')'}" ></image>
+                  <div class="goods-item" @click="$linkTo('/pages/product/detail?prod_id='+item.Products_ID)"
+                       style="height: 220rpx;margin-bottom: 18rpx;" v-for="(item,idx) in recommends" :key="idx">
+                    <image class="goods-item-cover" :style="{backgroundImage:'url('+item.ImgPath+')'}"></image>
                     <div class="goods-item-right">
                       <div class="title">{{item.Products_Name}}</div>
-                      <div class="c8" style="line-height: 16px;max-height: 32px;overflow: hidden;">{{item.Products_BriefDescription}}</div>
+                      <div class="c8" style="line-height: 16px;max-height: 32px;overflow: hidden;">
+                        {{item.Products_BriefDescription}}
+                      </div>
                       <div class="flex flex-justify-between flex-vertical-c m-t-10">
                         <div class="selling-price">
                           <span class="sign">￥</span><span class="num">{{item.Products_PriceX}}</span>
@@ -164,11 +178,13 @@
                 </div>
               </swiper-item>
               <swiper-item class="tab-page" style="overflow-y: scroll">
-                <div style="width: 700rpx;background: #F7F7F7;box-sizing: border-box;" class="p-t-20 p-l-15 p-b-20 p-r-15">
-                  <block v-for="(row,idx1) in bizCateList">
-                    <div class="row p-b-15" v-if="row.child"  :key="idx1">
+                <div style="width: 700rpx;background: #F7F7F7;box-sizing: border-box;"
+                     class="p-t-20 p-l-15 p-b-20 p-r-15">
+                  <block v-for="(row,idx1) in bizCateList" :key="idx1">
+                    <div class="row p-b-15" v-if="row.child" >
                       <div class="fz-14 c3 ">{{row.cate_name}}</div>
-                      <span class="column fz-12 c6 p-9 m-r-10 m-t-10" style="background: #FFFFFF;display: inline-block;" v-for="(column,idx2) in row.child" :key="idx2">{{column.cate_name}}</span>
+                      <span class="column fz-12 c6 p-9 m-r-10 m-t-10" style="background: #FFFFFF;display: inline-block;"
+                            v-for="(column,idx2) in row.child" :key="idx2">{{column.cate_name}}</span>
                     </div>
                   </block>
                 </div>
@@ -180,11 +196,14 @@
                     @click="$linkTo('/pages/product/detail?prod_id='+item.Products_ID)"
                     v-for="(item,idx) in goodsList" :style="{marginRight:idx%2===0?'20rpx':'0rpx'}"
                     :key="idx">
-                    <div class="img-cover" style="width: 345rpx;height: 345rpx" :style="{backgroundImage:'url('+item.ImgPath+')'}"></div>
+                    <div class="img-cover" style="width: 345rpx;height: 345rpx"
+                         :style="{backgroundImage:'url('+item.ImgPath+')'}"></div>
                     <div class="c3 fz-13" style="line-height: 36rpx;height: 72rpx;">{{item.Products_Name}}</div>
                     <div class="flex flex-vertical-c" style="height: 32rpx;">
-                      <div class="price-selling"><span class="fz-10">￥</span><span class="fz-12">{{item.Products_PriceX}}</span></div>
-                      <div class="p-l-10 text-through price-market"><span class="fz-10">￥</span><span class="fz-12">{{item.Products_PriceY}}</span></div>
+                      <div class="price-selling"><span class="fz-10">￥</span><span class="fz-12">{{item.Products_PriceX}}</span>
+                      </div>
+                      <div class="p-l-10 text-through price-market"><span class="fz-10">￥</span><span class="fz-12">{{item.Products_PriceY}}</span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -194,11 +213,11 @@
           </div>
 
           <!--发布评论-->
-<!--          <view class="commtent-add section">-->
-<!--            <textarea class="textarea" @blur="bindTextAreaBlur" auto-height placeholder="发表你的评论..." />-->
-<!--          </view>-->
+          <!--          <view class="commtent-add section">-->
+          <!--            <textarea class="textarea" @blur="bindTextAreaBlur" auto-height placeholder="发表你的评论..." />-->
+          <!--          </view>-->
 
-        <layout-copyright></layout-copyright>
+          <layout-copyright></layout-copyright>
 
         </div>
       </swiper-item>
@@ -234,7 +253,7 @@
 
 <script>
 import BaseMixin from '@/mixins/BaseMixin'
-import { getBizInfo, getBizSpikeList,getStoreList } from '@/api/store'
+import { getBizInfo, getBizSpikeList, getStoreList } from '@/api/store'
 import { hideLoading, modal, showLoading } from '@/common/fun'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import { getProductList, getBizProdCateList } from '@/api/product'
@@ -244,17 +263,19 @@ import LayoutCopyright from '@/componets/layout-copyright/layout-copyright'
 
 export default {
   name: 'StoreIndex',
-  components: { LayoutCopyright, LayoutComment, LayoutIcon },
-  mixins: [BaseMixin],
-  computed: {
-
+  components: {
+    LayoutCopyright,
+    LayoutComment,
+    LayoutIcon
   },
+  mixins: [BaseMixin],
+  computed: {},
   data () {
     return {
       childSwiperHeight: 'auto',
       bid: null,
       scrollHeightS: [0, 0, 0, 0],
-      storeList:[],
+      storeList: [],
       storeInfo: {},
       couponList: [],
       activityList: [],
@@ -354,28 +375,59 @@ export default {
     },
     async _init_func () {
       try {
-        
         showLoading('加载中')
-        const storeInfoData = await getBizInfo({ biz_id: this.bid }, { onlyData: true }).catch((e) => { throw Error(e.msg || '商品信息失败') })
+        const storeInfoData = await getBizInfo({ biz_id: this.bid }, { onlyData: true }).catch((e) => {
+          throw Error(e.msg || '商品信息失败')
+        })
         this.storeInfo = storeInfoData[0]
 
         const base = { biz_ids: this.bid }
-        this.recommends = await getProductList({ pageSize: 5, Is_Recommend: 1, ...base }, { onlyData: true }).catch(e => { throw Error(e.msg || '获取商品列表错误') })
+        this.recommends = await getProductList({
+          pageSize: 5,
+          Is_Recommend: 1,
+          ...base
+        }, { onlyData: true }).catch(e => {
+          throw Error(e.msg || '获取商品列表错误')
+        })
 
-        this.goodsList = await getProductList({ pageSize: 4, ...base }, { onlyData: true }).catch(e => { throw Error(e.msg || '获取商品列表错误') })
+        this.goodsList = await getProductList({ pageSize: 4, ...base }, { onlyData: true }).catch(e => {
+          throw Error(e.msg || '获取商品列表错误')
+        })
 
-        this.virtuaGoodsLsit = await getProductList({ pageSize: 3, prod_order_type: 1, ...base }, { onlyData: true }).catch(e => { throw Error(e.msg || '获取虚拟商品列表错误') })
+        this.virtuaGoodsLsit = await getProductList({
+          pageSize: 3,
+          prod_order_type: 1,
+          ...base
+        }, { onlyData: true }).catch(e => {
+          throw Error(e.msg || '获取虚拟商品列表错误')
+        })
 
-        this.bizCateList = await getBizProdCateList({ biz_id: this.bid }, { onlyData: true }).catch((e) => { throw Error('获取商家自定义分类失败') })
+        this.bizCateList = await getBizProdCateList({ biz_id: this.bid }, { onlyData: true }).catch((e) => {
+          throw Error('获取商家自定义分类失败')
+        })
 
-        this.couponList = await getCouponList({ biz_id: this.bid }, { onlyData: true }).catch((e) => { throw Error('获取优惠券失败') })
+        this.couponList = await getCouponList({ biz_id: this.bid }, { onlyData: true }).catch((e) => {
+          throw Error('获取优惠券失败')
+        })
 
-        this.activityList = await getBizSpikeList({ biz_id: this.bid }, { onlyData: true }).catch((e) => { throw Error('获取限时抢购数据失败') })
+        this.activityList = await getBizSpikeList({ biz_id: this.bid }, { onlyData: true }).catch((e) => {
+          throw Error('获取限时抢购数据失败')
+        })
 
-        this.comments = await getCommitList({ biz_id: this.bid, pageSize: 3 }, { onlyData: true }).catch((e) => { throw Error('获取评论数据失败') })
+        this.comments = await getCommitList({
+          biz_id: this.bid,
+          pageSize: 3
+        }, { onlyData: true }).catch((e) => {
+          throw Error('获取评论数据失败')
+        })
 
-        this.storeList = await getStoreList({ biz_id: this.bid, pageSize: 999 }, { onlyData: true }).catch((e) => { throw Error('获取门店列表数据失败') })
-        
+        this.storeList = await getStoreList({
+          biz_id: this.bid,
+          pageSize: 999
+        }, { onlyData: true }).catch((e) => {
+          throw Error('获取门店列表数据失败')
+        })
+
         this.$nextTick().then(() => {
           const query = uni.createSelectorQuery()
           query.select('#scrollView1').boundingClientRect(data => {
@@ -497,6 +549,7 @@ export default {
         .info {
           font-size: 10px;
           padding-left: 4px;
+
           .condition {
             margin-bottom: 10rpx;
             display: block;
@@ -581,6 +634,7 @@ export default {
         /*border-radius: 50%;*/
         /*overflow: hidden;*/
       }
+
       .title {
         color: #333;
         font-size: 18px;
@@ -592,14 +646,18 @@ export default {
 
   .tab-container {
     background: #fff;
+
     .tab-page {
       overflow-x: hidden;
-      &.scroll{
+
+      &.scroll {
         overflow-y: scroll
       }
-      &.noscroll{
+
+      &.noscroll {
         overflow-y: hidden;
       }
+
       .tab-page-wrap {
       }
     }
@@ -608,8 +666,10 @@ export default {
   .coupon-goods-list {
     padding: 0 25rpx;
     background: white;
+
     .block-title {
       padding: 20px 0;
+
       .block-title-text {
         font-weight: bold;
       }
@@ -623,10 +683,12 @@ export default {
         font-size: 14px;
         /*border-bottom: 1px dashed #eee;*/
         display: flex;
+
         &:last-child {
           margin-bottom: 0;
           border-bottom: none;
         }
+
         .left {
           .cover {
             width: 160rpx;
@@ -639,6 +701,7 @@ export default {
         .right {
           margin-left: 25rpx;
           font-size: 12px;
+
           .title {
             font-size: 14px;
             margin-bottom: 10px;
@@ -653,8 +716,10 @@ export default {
           .price-box {
             display: flex;
             margin-bottom: 6px;
+
             .selling-price {
               color: $fun-red-color;
+
               .num {
                 font-size: 14px;
               }
@@ -675,6 +740,7 @@ export default {
 
           .tags {
             margin-bottom: 6px;
+
             .tag {
               display: inline-block;
               margin-right: 4px;
@@ -689,9 +755,11 @@ export default {
               border: 1px solid #FF9090;
             }
           }
+
           .action {
             display: flex;
             justify-content: center;
+
             .img {
               width: 57rpx;
               height: 57rpx;
@@ -713,6 +781,7 @@ export default {
       display: flex;
       justify-content: center;
       align-items: center;
+
       .nav-item {
         font-weight: bold;
         padding: 0;
@@ -721,6 +790,7 @@ export default {
         line-height: 32px;
         display: inline-block;
         color: #333;
+
         &.active {
           color: $fun-green-color;
           border-bottom: 2px solid $fun-green-color;
@@ -730,6 +800,7 @@ export default {
 
     .block-title {
       padding: 25px 0;
+
       .block-title-text {
         font-weight: bold;
       }
@@ -743,6 +814,7 @@ export default {
         &:last-child {
           margin-bottom: 0;
         }
+
         .goods-item-cover {
           width: 220rpx;
           height: 220rpx;
@@ -756,6 +828,7 @@ export default {
           box-sizing: border-box;
           overflow: hidden;
           font-size: 12px;
+
           .title {
             font-size: 14px;
             margin-bottom: 6px;
@@ -776,6 +849,7 @@ export default {
 
           .selling-price {
             color: $fun-red-color;
+
             .num {
               font-size: 14px;
             }
@@ -860,6 +934,7 @@ export default {
     padding: 10px 50rpx;
     align-items: center;
     color: #333;
+
     &.isStickly {
       border-bottom: 1px solid #eee;
     }

@@ -1,3 +1,3 @@
 export default {
-  't_comm_Time': '时间'
+  t_comm_Time: '时间'
 }
