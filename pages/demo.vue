@@ -6,34 +6,44 @@
 
 <template>
   <div class="tag">
-	  <product-sku  ref="mySku" :proList="list" ></product-sku>
-	  <div @click="open">
-		  我的规格
-	  </div>
-	 <!-- <address @up="updateAddress" ref="address"><span @click="open">选择地址</span></address> -->
+<!--    <product-sku ref="mySku" :proList="list"></product-sku>-->
+<!--    <div @click="open">-->
+<!--      我的规格-->
+<!--    </div>-->
+    <user-addrss @up="updateAddress" ref="address"><span @click="$openPop('address')">选择地址</span></user-addrss>
+
   </div>
 </template>
 
 <script>
-import address from '@/componets/layout-address/layout-address.vue'
+import BaseMixin from '@/mixins/BaseMixin'
 import productSku from '@/componets/product-sku/product-sku.vue'
 import { getProdDetail } from '@/api/common.js'
+import UserAddrss from '@/componets/layout-address/layout-address'
+
 export default {
   name: 'Demo',
-  components: { productSku },
+  mixins: [BaseMixin],
+  components: {
+    UserAddrss,
+    productSku
+  },
   data () {
-	  return {
+    return {
       list: {}
     }
   },
   methods: {
-	  open () {
+    updateAddress (d) {
+      console.log(d)
+    },
+    open () {
       console.log(this)
-		  this.$refs.mySku.show()
-	  }
+      this.$refs.mySku.show()
+    }
   },
   onShow () {
-  	getProdDetail({ prod_id: 1613 }).then(res => {
+    getProdDetail({ prod_id: 1613 }).then(res => {
       const product = res.data
       this.product = res.data
       if (res.data.skujosn) {
