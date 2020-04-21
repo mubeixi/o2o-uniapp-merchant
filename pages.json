@@ -68,7 +68,21 @@
             "navigationBarTitleText": "会员等级",
             "navigationStyle": "custom"
           }
-        }
+        },
+		{
+			"path": "pages/order/OrderList",
+			"style": {
+				"navigationBarTitleText": "订单列表",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/order/OrderDetail",
+			"style": {
+				"navigationBarTitleText": "订单详情",
+				"navigationStyle": "custom"
+			}
+		}
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
