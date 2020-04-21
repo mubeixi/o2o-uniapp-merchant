@@ -7,7 +7,7 @@ const getThemeData = () => {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       resolve('yellow')
-    }, 4000)
+    }, 1000)
   })
 }
 
@@ -36,7 +36,9 @@ const actions = {
   async refreshTheme ({ commit, state }, opts) {
     try {
       showLoading('加载主题')
-      const themeName = await getThemeData().catch(({ msg = '' }) => { throw Error(msg || '加载主题失败') })
+      const themeName = await getThemeData().catch(({ msg = '' }) => {
+        throw Error(msg || '加载主题失败')
+      })
       commit('setTheme', { themeName })
     } catch (e) {
       modal(e.message)

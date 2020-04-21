@@ -40,7 +40,10 @@ export default {
   data () {
     return {
       menuButtonInfo: {},
-      systemInfo: { statusBarHeight: 0, windowHeight: 0 }
+      systemInfo: {
+        statusBarHeight: 0,
+        windowHeight: 0
+      }
     }
   },
   methods: {

@@ -3,33 +3,65 @@ import {
 } from '@/common/request'
 
 // 优惠券列表
-export const getCouponList = (param, options) => fetch({ act: 'getCouponList', param, options })
+export const getCouponList = (param, options) => fetch({
+  act: 'getCouponList',
+  param,
+  options
+})
 
 // 获取评论
-export const getCommitList = (param, options) => fetch({ act: 'get_commit', param, options })
-
+export const getCommitList = (param, options) => fetch({
+  act: 'get_commit',
+  param,
+  options
+})
 
 // 获取活动详情
-export const getActiveInfo = (param, options) => fetch({ act: 'getActiveInfo', param, options })
-
+export const getActiveInfo = (param, options) => fetch({
+  act: 'getActiveInfo',
+  param,
+  options
+})
 
 // 获取商品列表
-export const getProd = (param, options) => fetch({ act: 'get_prod', param, options })
-
+export const getProd = (param, options) => fetch({
+  act: 'get_prod',
+  param,
+  options
+})
 
 // 获取赠品列表
-export const getShopGiftList = (param, options) => fetch({ act: 'getShopGiftList', param, options })
+export const getShopGiftList = (param, options) => fetch({
+  act: 'getShopGiftList',
+  param,
+  options
+})
 
 // 获取广告
-export const getAdvertList = (param, options) => fetch({ act: 'getAdvertList', param, options })
+export const getAdvertList = (param, options) => fetch({
+  act: 'getAdvertList',
+  param,
+  options
+})
 
 // 获取分享海报
-export const getBizShare = (param, options) => fetch({ act: 'getBizShare', param, options })
-
+export const getBizShare = (param, options) => fetch({
+  act: 'getBizShare',
+  param,
+  options
+})
 
 // 会员等级列表或详情
-export const getUserLevel = (param, options) => fetch({ act: 'getUserLevel', param, options })
+export const getUserLevel = (param, options) => fetch({
+  act: 'getUserLevel',
+  param,
+  options
+})
 
+export const getProductCountInfo = (param, options) => fetch({ act: 'get_users_info', param, options })
+
+// 获取商城的配置
+export const getSkinConfig = (param, options) => fetch({ act: 'get_shophome', param, options })
 
 //获取地址
 export const getAreaByPid = (param, options) => fetch({ act: 'getAreaByPid', param, options })

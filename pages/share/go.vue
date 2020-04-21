@@ -54,7 +54,9 @@ export default {
       try {
         const str = `${this.detailData.Products_Name},已售${this.detailData.Products_Sales},拼购价只要${this.detailData.Products_PriceX},原价${this.detailData.Products_PriceY}`
         console.log(str)
-        await Promisify('setClipboardData', { data: str }).catch(e => { throw Error(e.errMsg) })
+        await Promisify('setClipboardData', { data: str }).catch(e => {
+          throw Error(e.errMsg)
+        })
       } catch (e) {
         modal(e.message)
       }
@@ -65,8 +67,16 @@ export default {
         const data = {
           prod_id: this.prod_id
         }
-        this.detailData = await getProductDetail(data, { onlyData: true }).catch(e => { throw Error(e.msg || '获取商品信息失败') })
-        this.shareInfo = await getBizShare({ ...data, biz_id: 3, qrcode_type: getEnv() }, { onlyData: true }).catch(e => { throw Error(e.msg || '获取商品信息失败') })
+        this.detailData = await getProductDetail(data, { onlyData: true }).catch(e => {
+          throw Error(e.msg || '获取商品信息失败')
+        })
+        this.shareInfo = await getBizShare({
+          ...data,
+          biz_id: 3,
+          qrcode_type: getEnv()
+        }, { onlyData: true }).catch(e => {
+          throw Error(e.msg || '获取商品信息失败')
+        })
         hideLoading()
       } catch (e) {
         modal(e.message)
@@ -110,8 +120,8 @@ export default {
       line-height: 62rpx;
       border-radius: 4rpx;
     }
-    
-    .container{
+
+    .container {
       margin-top: 15px;
       background: #F4F4F4;
     }
@@ -120,6 +130,7 @@ export default {
   .bottom {
     color: #fff;
     margin: 55rpx 25rpx;
+
     .bottom-share-btn {
       border-radius: 4rpx;
       width: 186rpx;

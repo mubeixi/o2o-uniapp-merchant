@@ -51,7 +51,7 @@
 	                ><LayoutIcon type="iconradio-check" color="#F53636" class="m-r-5" v-if="selectIdxList[3] === index"></LayoutIcon>{{item.area_name}}</div>
 	              </swiper-item>
 	            </swiper>
-	
+
 	          </div>
 	        </div>
 	      </div>
@@ -61,13 +61,13 @@
 </template>
 
 <script>
-	
-	import { findArrayIdx, getArrColumn } from '@/common/helper.js'
-	import LayoutIcon from '@/componets/layout-icon/layout-icon'
-	import {getAreaByPid} from '@/api/common.js'
-	
-	export default {
-		 components:{LayoutIcon},
+
+import { findArrayIdx, getArrColumn } from '@/common/helper.js'
+import LayoutIcon from '@/componets/layout-icon/layout-icon'
+import { getAreaByPid } from '@/api/common.js'
+
+export default {
+		 components: { LayoutIcon },
 		 props: {
 		      // 可配置的 三级还是四级联动
 		      visiable: {
@@ -93,7 +93,7 @@
 		      }
 		    },
 		    computed: {
-		      provinceStr() {
+		      provinceStr () {
 		        try {
 		          const idx = this.selectIdxList[0]
 		          return this.provinceList[idx].area_name
@@ -101,7 +101,7 @@
 		          return ''
 		        }
 		      },
-		      cityStr() {
+		      cityStr () {
 		        try {
 		          const idx = this.selectIdxList[1]
 		          return this.cityList[idx].area_name
@@ -109,7 +109,7 @@
 		          return ''
 		        }
 		      },
-		      areaStr() {
+		      areaStr () {
 		        try {
 		          const idx = this.selectIdxList[2]
 		          return this.areaList[idx].area_name
@@ -117,7 +117,7 @@
 		          return ''
 		        }
 		      },
-		      townStr() {
+		      townStr () {
 		        try {
 		          const idx = this.selectIdxList[3]
 		          return this.townList[idx].area_name
@@ -126,7 +126,7 @@
 		        }
 		      }
 		    },
-		    data(){
+		    data () {
 		     return {
 				 active: false,
 				 selectIdxList: [-1, -1, -1, -1], // 初始化标记为-1,意味着所有的都没有选中
@@ -136,39 +136,39 @@
 				 areaList: [],
 				 townList: [],
 				 tempObj: {}
-			 };
+			 }
 		    },
 		    watch: {
 		      provinceStr: {
-		        handler(newVal, oldVal) {
+		        handler (newVal, oldVal) {
 		          console.log(`provinceStr is ${newVal}`)
 		          this.changeProvince()
 		        }
 		      },
 		      cityStr: {
-		        handler(newVal, oldVal) {
+		        handler (newVal, oldVal) {
 		          console.log(`cityStr is ${newVal}`)
 		          this.changeCity()
 		        }
 		      },
 		      areaStr: {
-		        handler(newVal, oldVal) {
+		        handler (newVal, oldVal) {
 		          console.log(`areaStr is ${newVal}`)
 		          this.changeArea()
 		        }
 		      },
 		      townStr: {
-		        handler(newVal, oldVal) {
+		        handler (newVal, oldVal) {
 		          console.log(`townStr is ${newVal}`)
 		        }
 		      }
 		    },
-		    ready() {
+		    ready () {
 		      console.log(this.lazyLoad)
 		      if (!this.lazyLoad) this._init_func()
 		    },
 		    methods: {
-		      subFn() {
+		      subFn () {
 		        this.active = false
 		        let rt = {}
 		        if (this.visiable) {
@@ -186,43 +186,43 @@
 		            id: getArrColumn(selectAreaList, 'area_id')
 		          }
 		        }
-		
+
 		        this.$emit('up', rt)
 		      },
-		      bindClickText(idx) {
+		      bindClickText (idx) {
 		        // console.log(idx)
 		        // this.$set(this.selectIdxList, idx, -1)
 		        this.currentSwiperIndex = idx
 		        // console.log(this.selectIdxList)
 		      },
-		      async changeProvince() {
+		      async changeProvince () {
 		        this.selectIdxList[1] = -1
-		
+
 		        const findProvinceIdx = this.selectIdxList[0]
 		        if (findProvinceIdx > -1) {
 		          const province = this.provinceList[findProvinceIdx]
-		          this.cityList = await this.getAreaList({pid: province.area_id}).catch(() => { throw Error('初始化市级地址失败') })
+		          this.cityList = await this.getAreaList({ pid: province.area_id }).catch(() => { throw Error('初始化市级地址失败') })
 		          this.currentSwiperIndex = 1 // 设置市
 		          console.log(this.currentSwiperIndex)
 		        }
 		      },
-		      async changeCity() {
+		      async changeCity () {
 		        this.selectIdxList[2] = -1
-		
+
 		        const findCityIdx = this.selectIdxList[1]
 		        if (findCityIdx > -1) {
 		          const city = this.cityList[findCityIdx]
-		          this.areaList = await this.getAreaList({pid: city.area_id}).catch(() => { throw Error('初始化区县地址失败') })
+		          this.areaList = await this.getAreaList({ pid: city.area_id }).catch(() => { throw Error('初始化区县地址失败') })
 		          this.currentSwiperIndex = 2 // 设置区县
 		        }
 		      },
-		      async changeArea() {
+		      async changeArea () {
 		        this.selectIdxList[3] = -1
-		
+
 		        const findAreaIdx = this.selectIdxList[2]
 		        if (findAreaIdx > -1) {
 		          const area = this.areaList[findAreaIdx]
-		          this.townList = await this.getAreaList({pid: area.area_id}).catch(() => { throw Error('初始化乡镇地址失败') })
+		          this.townList = await this.getAreaList({ pid: area.area_id }).catch(() => { throw Error('初始化乡镇地址失败') })
 		          if (this.visiable) {
 		            this.currentSwiperIndex = 3 // 设置区县
 		          }
@@ -233,12 +233,12 @@
 		       * @returns {Promise<unknown>}
 		       * @private
 		       */
-		      getAreaList({pid}) {
+		      getAreaList ({ pid }) {
 		        return new Promise((resolve, reject) => {
 		          if (this.tempObj.hasOwnProperty(pid)) {
 		            resolve(this.tempObj[pid])
 		          } else {
-		            getAreaByPid({pid}).then(res => {
+		            getAreaByPid({ pid }).then(res => {
 		              // 存起来用
 		              this.$set(this.tempObj, pid, res.data)
 		              console.log(this.tempObj)
@@ -249,21 +249,21 @@
 		          }
 		        })
 		      },
-		      async _init_func() {
+		      async _init_func () {
 		        try {
 		      // 找到省
-		          this.provinceList = await this.getAreaList({pid: 0}).catch(() => { throw Error('初始化省级地址失败') })
-		          const findProvinceIdx = findArrayIdx(this.provinceList, {area_id: this.province})
+		          this.provinceList = await this.getAreaList({ pid: 0 }).catch(() => { throw Error('初始化省级地址失败') })
+		          const findProvinceIdx = findArrayIdx(this.provinceList, { area_id: this.province })
 		          let province = {}
 		          if (findProvinceIdx !== false) {
 		            this.selectIdxList[0] = parseInt(findProvinceIdx)
 		            province = this.provinceList[findProvinceIdx]
 		          }
 		          this.selectFn(0, this.selectIdxList[0])
-		
+
 		          // 初始化市
-		          this.cityList = await this.getAreaList({pid: province.area_id}).catch(() => { throw Error('初始化市级地址失败') })
-		          const findCityIdx = findArrayIdx(this.cityList, {area_id: this.city})
+		          this.cityList = await this.getAreaList({ pid: province.area_id }).catch(() => { throw Error('初始化市级地址失败') })
+		          const findCityIdx = findArrayIdx(this.cityList, { area_id: this.city })
 		          if (findCityIdx === false) {
 		            this.areaList = []
 		            this.townList = []
@@ -273,10 +273,10 @@
 		          this.selectIdxList[1] = parseInt(findCityIdx)
 		          const city = this.cityList[findCityIdx]
 		          this.selectFn(1, this.selectIdxList[1])
-		
+
 		          // 初始化区县
-		          this.areaList = await this.getAreaList({pid: city.area_id}).catch(() => { throw Error('初始化区县地址失败') })
-		          const findAreaIdx = findArrayIdx(this.areaList, {area_id: this.area})
+		          this.areaList = await this.getAreaList({ pid: city.area_id }).catch(() => { throw Error('初始化区县地址失败') })
+		          const findAreaIdx = findArrayIdx(this.areaList, { area_id: this.area })
 		          if (findAreaIdx === false) {
 		            this.townList = []
 		            this.selectIdxList[2] = -1
@@ -288,8 +288,8 @@
 		          this.selectFn(2, this.selectIdxList[2])
 		          if (this.visiable) {
 		            // 初始化乡镇
-		            this.townList = await this.getAreaList({pid: area.area_id}).catch(() => { throw Error('初始化乡镇地址失败') })
-		            const findTownIdx = findArrayIdx(this.townList, {area_id: this.town})
+		            this.townList = await this.getAreaList({ pid: area.area_id }).catch(() => { throw Error('初始化乡镇地址失败') })
+		            const findTownIdx = findArrayIdx(this.townList, { area_id: this.town })
 		            if (findTownIdx === false) {
 		              this.selectIdxList[3] = -1
 		              this.currentSwiperIndex = 3 // 第三屏
@@ -302,27 +302,27 @@
 		          error(e.message)
 		        }
 		      },
-		      noop() {
-		
+		      noop () {
+
 		      },
-		      show() {
+		      show () {
 		        this.active = true
 		      },
-		      close() {
+		      close () {
 		        this.active = false
 		      },
-		      selectFn(col, idx, item) {
+		      selectFn (col, idx, item) {
 		        // console.log(col, idx, item)
 		        this.$set(this.selectIdxList, col, idx)
 		        // console.log(this.selectIdxList, this.provinceStr)
 		      },
 		      // 地址
-		      async getAreaByPid(pid, arr) {
+		      async getAreaByPid (pid, arr) {
 		        const requestRt = await getAreaByPid(pid).catch(() => { throw Error('初始化地址失败') })
 		        arr = requestRt.data
 		      }
 		    }
-	}
+}
 </script>
 
 <style lang="scss" scoped>
@@ -400,7 +400,6 @@
 
   }
   .swiper{
-
 
     &-box{
       position: absolute;

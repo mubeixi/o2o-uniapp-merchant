@@ -49,7 +49,7 @@
     </div>
 
     <layout-popup ref="phone" :autoClose="false" :topStr="menuButtonInfo.height+menuButtonInfo.top+10+'px'"
-                 :showMask="false">
+                  :showMask="false">
       <div class="form pwd-wrap" :style="{top:menuButtonInfo.height+menuButtonInfo.top+10+'px'}">
         <div class="form-item uni-column">
           <input @input="inputPhone" class="fun-input" name="input" placeholder="请输入手机号码" />
@@ -69,7 +69,7 @@
     </layout-popup>
 
     <layout-popup ref="pwd" :autoClose="false" :topStr="menuButtonInfo.height+menuButtonInfo.top+10+'px'"
-                 :showMask="false">
+                  :showMask="false">
       <div class="form pwd-wrap" :style="{top:menuButtonInfo.height+menuButtonInfo.top+10+'px'}">
         <view class="form-item uni-column">
           <input v-model="pwd" class="fun-input" placeholder="请输入不少于6位的密码" />
@@ -99,7 +99,7 @@ import {
 } from '@/common/fun'
 import {
   getSmsCode, userLogin
-} from '@/api/Customer'
+} from '@/api/customer'
 import { regPhone } from '@/common/Regs'
 import { validateFun } from '@/common/helper'
 import Promisify from '@/common/Promisify'
@@ -318,7 +318,12 @@ export default {
           throw Error('请正确填写资料')
         }
 
-        const userData = await userLogin(postData, { reqHeader: true, onlyData: true }).catch((e) => { throw Error(e.msg || '登录失败') })
+        const userData = await userLogin(postData, {
+          reqHeader: true,
+          onlyData: true
+        }).catch((e) => {
+          throw Error(e.msg || '登录失败')
+        })
         this.loginCall(userData)
       } catch (e) {
         this.$modal(e.message)

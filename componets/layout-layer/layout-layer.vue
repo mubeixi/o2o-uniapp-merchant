@@ -1,7 +1,9 @@
 <template>
   <div v-if="ifshow">
-    <div  @tap="ableClose" @touchmove.stop.prevent class="popup-layer" :style="{backgroundColor:bgColor}"></div>
-    <div @touchmove.stop.prevent :class="[positions]" :style="{backgroundColor:mainBgColor,borderRadius:radius?radius:''}" ref="popRef" class="popup-content" @tap.stop="stopEvent">
+    <div @tap="ableClose" @touchmove.stop.prevent class="popup-layer" :style="{backgroundColor:bgColor}"></div>
+    <div @touchmove.stop.prevent :class="[positions]"
+         :style="{backgroundColor:mainBgColor,borderRadius:radius?radius:''}" ref="popRef" class="popup-content"
+         @tap.stop="stopEvent">
       <slot></slot>
     </div>
   </div>
@@ -69,7 +71,8 @@ export default {
         this.close()
       }
     },
-    stopEvent (event) {},
+    stopEvent (event) {
+    }
   }
 }
 </script>
@@ -90,23 +93,26 @@ export default {
     z-index: 100;
     overflow: hidden;
   }
+
   .center {
     top: 50%;
-    left:50%;
+    left: 50%;
     transform: translate(-50%, -50%);
   }
+
   .top-center {
     top: 20%;
-    left:50%;
+    left: 50%;
     transform: translate(-50%);
   }
 
   .top {
     top: 10%;
-    left:50%;
+    left: 50%;
     transform: translate(-50%);
   }
-  .bottom{
+
+  .bottom {
     bottom: 0;
   }
 </style>

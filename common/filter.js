@@ -12,9 +12,12 @@ Vue.filter('formatTime', (str, fromatStr = 'YYYY.MM.DD') => {
   return moment(str).format(fromatStr)
 })
 
-
 Vue.filter('formatTimeFromNow', (str) => {
   return moment(str).startOf('day').fromNow()
+})
+
+Vue.filter('zero', (val) => {
+  return val || 0
 })
 
 export const formatRichTextByUparseFn = (html) => {

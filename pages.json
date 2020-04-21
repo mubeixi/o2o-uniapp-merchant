@@ -1,6 +1,5 @@
 {
-	"pages": [
-		{
+	"pages": [{
 			"path": "pages/index",
 			"style": {
 				"navigationBarTextStyle": "light",
@@ -87,21 +86,20 @@
 				"navigationStyle": "custom"
 			}
 		},
-        {
-          "path": "pages/person/VipList",
-          "style": {
-            "navigationBarTitleText": "会员等级",
-            "navigationStyle": "custom"
-          }
-        }
-        ,{
-            "path" : "pages/person/Coupon",
-            "style": {
-              "navigationBarTitleText": "优惠券",
-              "navigationStyle": "custom"
-            }
-        }
-    ],
+		{
+			"path": "pages/person/VipList",
+			"style": {
+				"navigationBarTitleText": "会员等级",
+				"navigationStyle": "custom"
+			}
+		}, {
+			"path": "pages/person/Coupon",
+			"style": {
+				"navigationBarTitleText": "优惠券",
+				"navigationStyle": "custom"
+			}
+		}
+	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarBackgroundColor": "#FFF",
@@ -112,8 +110,7 @@
 		"borderStyle": "black",
 		"color": "#999999",
 		"selectedColor": "#26C78D",
-		"list": [
-			{
+		"list": [{
 				"pagePath": "pages/index",
 				"iconPath": "/static/tabbar/find.png",
 				"selectedIconPath": "/static/tabbar/find.png",

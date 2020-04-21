@@ -1,7 +1,8 @@
 <template>
   <div v-if="isShow">
-    <div @tap="ableClose" @touchmove.stop.prevent id="mask" class="popup-layer" v-if="showMask"  ></div>
-    <div :animation="animationData" id="wrap" class="popup-wrap"   @tap.stop="noop" :style="{height:full?'100%':'auto','top':topStr?topStr:'auto',backgroundColor:mainBgColor}" >
+    <div @tap="ableClose" @touchmove.stop.prevent id="mask" class="popup-layer" v-if="showMask"></div>
+    <div :animation="animationData" id="wrap" class="popup-wrap" @tap.stop="noop"
+         :style="{height:full?'100%':'auto','top':topStr?topStr:'auto',backgroundColor:mainBgColor}">
       <div @touchmove.stop.prevent v-if="title" class="pupup-title">{{title}}</div>
       <slot></slot>
       <div @touchmove.stop.prevent class="safearea-box2"></div>
@@ -57,7 +58,10 @@ export default {
       domInfo: {},
       animationData: {},
       menuButtonInfo: {},
-      systemInfo: { statusBarHeight: 0, windowHeight: 0 }
+      systemInfo: {
+        statusBarHeight: 0,
+        windowHeight: 0
+      }
     }
   },
   mounted () {
@@ -74,7 +78,8 @@ export default {
     // #endif
   },
   methods: {
-    noop () {},
+    noop () {
+    },
     show: function () {
       this.isShow = true
     },
@@ -95,31 +100,33 @@ export default {
   .popup-layer {
     position: fixed;
     z-index: 99;
-    background: rgba(0, 0, 0,.6);
+    background: rgba(0, 0, 0, .6);
     width: 100%;
-    height:100%;
+    height: 100%;
     left: 0px;
-    top:0;
+    top: 0;
     //transform: translateY(100%);
   }
 
   .popup-wrap {
     position: fixed;
     left: 0;
-    bottom:0;
+    bottom: 0;
     width: 100%;
     //transform:translateY(100%);
     z-index: 100;
     background: #FFFFFF;
     overflow: hidden;
-    .pupup-title{
+
+    .pupup-title {
       padding: 30rpx 0 60rpx;
       font-size: 16px;
       text-align: center;
       color: #333;
     }
   }
-  .safearea-box2{
+
+  .safearea-box2 {
     height: constant(safe-area-inset-bottom);
     height: env(safe-area-inset-bottom);
     width: 100%;

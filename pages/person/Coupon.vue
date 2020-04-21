@@ -46,75 +46,73 @@
 </template>
 
 <script>
-	import BaseMixin from '@/mixins/BaseMixin'
-	import {getCouponList} from '@/api/common'
-	export default {
-		mixins:[BaseMixin],
-		data() {
-			return {
-				checked:0,//选中
-				page:1,
-				pageSize:6,
-				pro:[],
-				totalCount:0
-			};
-		},
-		onShow() {
-			this.pro=[];
-			this.page=1;
-			this.getUserReceivedCoupon();
-		},
-		onReachBottom() {
-			if(this.totalCount>this.pro.length){
-				this.page++;
-				this.getUserReceivedCoupon();
-			}
-		},
-		onPullDownRefresh() {
-			this.page=1;
-			this.pro=[];
-		},
-		methods:{
-			goExpired(){
-				uni.navigateTo({
-					url:"/pagesA/person/expiredCoupon"
-				})
-			},
-			//获取用户已领取可使用的优惠券
-			getUserReceivedCoupon(){
-				let data={
-					page:this.page,
-					pageSize:this.pageSize,
-					User_ID:49,
-					status:1
-				}
-				getCouponList(data).then(res=>{
-					this.totalCount=res.totalCount;
-					for(let item of res.data){
-						this.pro.push(item);
-					}
+import BaseMixin from '@/mixins/BaseMixin'
+import { getCouponList } from '@/api/common'
+export default {
+  mixins: [BaseMixin],
+  data () {
+    return {
+      checked: 0, // 选中
+      page: 1,
+      pageSize: 6,
+      pro: [],
+      totalCount: 0
+    }
+  },
+  onShow () {
+    this.pro = []
+    this.page = 1
+    this.getUserReceivedCoupon()
+  },
+  onReachBottom () {
+    if (this.totalCount > this.pro.length) {
+      this.page++
+      this.getUserReceivedCoupon()
+    }
+  },
+  onPullDownRefresh () {
+    this.page = 1
+    this.pro = []
+  },
+  methods: {
+    goExpired () {
+      uni.navigateTo({
+        url: '/pagesA/person/expiredCoupon'
+      })
+    },
+    // 获取用户已领取可使用的优惠券
+    getUserReceivedCoupon () {
+      const data = {
+        page: this.page,
+        pageSize: this.pageSize,
+        User_ID: 49,
+        status: 1
+      }
+      getCouponList(data).then(res => {
+        this.totalCount = res.totalCount
+        for (const item of res.data) {
+          this.pro.push(item)
+        }
+      }).catch(e => {
+      })
+    },
+    goIndex (i) {
+      if (i == '0') {
+        uni.switchTab({
+          url: '/pages/index/index'
+        })
+      } else {
+        uni.redirectTo({
+					    url: '/pages/classify/result?pid=' + i
+        })
+      }
+    }
+    // 	change(item){
+    // 		this.checked=item;
 
-				}).catch(e=>{
-				})
-
-			},
-			goIndex(i){
-				if(i=='0'){
-					uni.switchTab({
-						url:'/pages/index/index'
-					})
-				}else{
-					uni.redirectTo({
-					    url: '/pages/classify/result?pid='+i
-					});
-				}
-			}
-		// 	change(item){
-		// 		this.checked=item;
-
-		// 	}
-		}
-	}
+    // 	}
+  }
+}
 </script>
 
 <style lang="scss" scoped>

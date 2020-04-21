@@ -57,39 +57,39 @@
 </template>
 
 <script>
-	
-	import layoutPopup from '@/componets/layout-popup/layout-popup.vue'
-	export default {
-		components:{layoutPopup},
-		props:{
-			proList:{
-				type:Object,
-				default:{}
-			}
-		},
-		watch:{
-			proList: {
-			  handler(newVal, oldVal) {
-				  console.log(newVal,"ss")
-			   this.list=newVal
+
+import layoutPopup from '@/componets/layout-popup/layout-popup.vue'
+export default {
+  components: { layoutPopup },
+  props: {
+    proList: {
+      type: Object,
+      default: {}
+    }
+  },
+  watch: {
+    proList: {
+			  handler (newVal, oldVal) {
+				  console.log(newVal, 'ss')
+			   this.list = newVal
 			  }
-			},
-		},
-		data() {
-			return {
-				isShow:false,
-				list:{},
-			};
-		},
-		methods:{
-			show(){
-				this.isShow=true
-			},
-			close(){
-				this.isShow=false
-			}
-		}
-	}
+    }
+  },
+  data () {
+    return {
+      isShow: false,
+      list: {}
+    }
+  },
+  methods: {
+    show () {
+      this.isShow = true
+    },
+    close () {
+      this.isShow = false
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>

@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import store from '@/store'
+
 require('./Promisify')
 require('./filter')
 
@@ -7,3 +8,5 @@ require('./filter')
 Vue.prototype.getPimaryColor = () => {
   return store.getters['theme/pimaryColor']
 }
+
+export const lazyImgUrl = 'https://new401.bafangka.com/uploadfiles/wkbq6nc2kc/image/20191112154310111.jpg'

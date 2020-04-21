@@ -1,7 +1,7 @@
 <style lang="scss" scoped>
-.tag{
+  .tag {
 
-}
+  }
 </style>
 
 <template>
@@ -15,47 +15,43 @@
 </template>
 
 <script>
-import address from "@/componets/layout-address/layout-address.vue"
-import productSku from "@/componets/product-sku/product-sku.vue"
-import {getProdDetail} from '@/api/common.js'
+import address from '@/componets/layout-address/layout-address.vue'
+import productSku from '@/componets/product-sku/product-sku.vue'
+import { getProdDetail } from '@/api/common.js'
 export default {
   name: 'Demo',
   components: { productSku },
   data () {
 	  return {
-		list:{}
+      list: {}
     }
   },
-  methods:{
-	  open(){
-		console.log(this)
+  methods: {
+	  open () {
+      console.log(this)
 		  this.$refs.mySku.show()
 	  }
   },
-  onShow() {
-  	getProdDetail({prod_id:1613}).then(res=>{
-		let product = res.data
-		this.product = res.data;
-		if(res.data.skujosn) {
-			let skujosn = res.data.skujosn;
-			let skujosn_new = [];
-			for (let i in res.data.skujosn) {
-				skujosn_new.push({
-					sku: i,
-					val: skujosn[i]
-				});
-			}
-		
-			this.product.skujosn_new = skujosn_new;
-			this.product.skuvaljosn = res.data.skuvaljosn;
-		
-		}
-		
-		this.list=product
-	})
+  onShow () {
+  	getProdDetail({ prod_id: 1613 }).then(res => {
+      const product = res.data
+      this.product = res.data
+      if (res.data.skujosn) {
+        const skujosn = res.data.skujosn
+        const skujosn_new = []
+        for (const i in res.data.skujosn) {
+          skujosn_new.push({
+            sku: i,
+            val: skujosn[i]
+          })
+        }
+
+        this.product.skujosn_new = skujosn_new
+        this.product.skuvaljosn = res.data.skuvaljosn
+      }
+
+      this.list = product
+    })
   }
 }
 </script>
-
-
-

@@ -1,33 +1,37 @@
 <template>
   <div class="wrap">
     <view class="search-wrap" @click="goSearch">
-      <icon type="search" size="34rpx" class="search_icon"/>
-      <input type="text" class="search-input" name="search" placeholder="请输入商品关键词" placeholder-style="font-size:26rpx;color:#ADADAD;">
+      <icon type="search" size="34rpx" class="search_icon" />
+      <input type="text" class="search-input" name="search" placeholder="请输入商品关键词"
+             placeholder-style="font-size:26rpx;color:#ADADAD;">
     </view>
     <view class="page-body" :style="'height:'+height+'px'">
-      <scroll-view class="nav-left" scroll-y :style="'height:'+height+'px'" :scroll-top="scrollLeftTop" scroll-with-animation >
-        <view class="nav-left-item" @click="categoryClickMain(index)" :key="index" :class="index==categoryActive?'active':''"
+      <scroll-view class="nav-left" scroll-y :style="'height:'+height+'px'" :scroll-top="scrollLeftTop"
+                   scroll-with-animation>
+        <view class="nav-left-item" @click="categoryClickMain(index)" :key="index"
+              :class="index==categoryActive?'active':''"
               v-for="(item,index) in classifyData">
           <view class="leftBac" style="position: absolute;"></view>
           {{item.Category_Name}}
         </view>
       </scroll-view>
-      <scroll-view v-if="is_has_child" class="nav-right" scroll-y  :style="'height:'+height+'px'" scroll-with-animation >
-        <view  v-for="(first,index) in classifyData" :key="index" class="box" >
+      <scroll-view v-if="is_has_child" class="nav-right" scroll-y :style="'height:'+height+'px'" scroll-with-animation>
+        <view v-for="(first,index) in classifyData" :key="index" class="box">
           <block v-if="categoryActive == index">
-            <block v-for="(second,j) in first.child" :key="j" >
+            <block v-for="(second,j) in first.child" :key="j">
 
               <!--<block v-if="is_has_child(classifyData)">-->
               <block v-if="j==0">
                 <view v-if="first.Category_Img" class="imgTop">
-                  <img  class="imgs" :src="first.Category_Img">
+                  <img class="imgs" :src="first.Category_Img">
                 </view>
               </block>
               <view class="titles">
                 <view class="titleSum">{{second.Category_Name}}</view>
                 <!-- 	<view class="gengduo">查看更多></view> -->
               </view>
-              <view :id="i==0?'first':''" class="nav-right-item" v-for="(item,i) in second.child" :key="i" @click="cart(item)">
+              <view :id="i==0?'first':''" class="nav-right-item" v-for="(item,i) in second.child" :key="i"
+                    @click="cart(item)">
                 <image :src="item.Category_Img" />
                 <view class="nav-right-txt">{{item.Category_Name}}</view>
               </view>
@@ -61,16 +65,18 @@
 
         </view>
       </scroll-view>
-      <scroll-view v-if="!is_has_child" class="nav-right" scroll-y :scroll-top="scrollTop" @scroll="scroll" :style="'height:'+height+'px'" scroll-with-animation >
-        <view v-for="(foods,index) in classifyData" :key="index" class="box" >
+      <scroll-view v-if="!is_has_child" class="nav-right" scroll-y :scroll-top="scrollTop" @scroll="scroll"
+                   :style="'height:'+height+'px'" scroll-with-animation>
+        <view v-for="(foods,index) in classifyData" :key="index" class="box">
           <view class="titles">
             <view class="titleSum">{{classifyData[index].Category_Name}}</view>
             <!-- 	<view class="gengduo">查看更多></view> -->
           </view>
           <view v-if="foods.Category_Img" class="imgTop">
-            <img  class="imgs" :src="foods.Category_Img">
+            <img class="imgs" :src="foods.Category_Img">
           </view>
-          <view :id="i==0?'first':''" class="nav-right-item" v-for="(item,i) in foods.child" :key="i" @click="cart(item)">
+          <view :id="i==0?'first':''" class="nav-right-item" v-for="(item,i) in foods.child" :key="i"
+                @click="cart(item)">
             <image :src="item.Category_Img" />
             <view class="nav-right-txt">{{item.Category_Name}}</view>
           </view>
@@ -139,7 +145,8 @@ export default {
         this.$nextTick(() => {
           this.getHeightList()
         })
-      }).catch(e => {})
+      }).catch(e => {
+      })
     },
     getHeightList () {
       const _this = this

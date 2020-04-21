@@ -14,7 +14,7 @@ export default new Vuex.Store({
     system,
     theme
   },
-  state,
+  state
   // mutations,
   // actions,
   // getters

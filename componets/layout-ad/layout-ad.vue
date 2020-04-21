@@ -1,12 +1,15 @@
 <style scoped lang="scss">
   .wrap {
     position: relative;
+
     .swiper {
       &-item {
         position: relative;
+
         &-img {
           width: 100%;
         }
+
         &-cover {
           position: absolute;
           left: 50%;
@@ -24,13 +27,16 @@
       bottom: 10px;
       left: 50%;
       transform: translateX(-50%);
+
       .dot-item {
         width: 30rpx;
         height: 4rpx;
         margin-right: 6rpx;
+
         &:last-child {
           margin-right: 0;
         }
+
         &.active {
           //background: $fun-primary-color;
         }
@@ -49,10 +55,10 @@
       :circular="circular"
       :interval="interval"
       :duration="duration">
-        <swiper-item class="swiper-item" v-for="(img,idx) in imgList" :key="idx" @click="bindClick(idx)">
-          <image @load="handleImgLoad" :id="'img'+idx" mode="widthFix" class="swiper-item-img" :src="img"></image>
-<!--          <div class="swiper-item-cover" :style="{width:itemwidth,height:itemheight,backgroundImage:'url('+img+')'}"></div>-->
-        </swiper-item>
+      <swiper-item class="swiper-item" v-for="(img,idx) in imgList" :key="idx" @click="bindClick(idx)">
+        <image @load="handleImgLoad" :id="'img'+idx" mode="widthFix" class="swiper-item-img" :src="img"></image>
+        <!--          <div class="swiper-item-cover" :style="{width:itemwidth,height:itemheight,backgroundImage:'url('+img+')'}"></div>-->
+      </swiper-item>
     </swiper>
     <div class="dot-list" v-if="indicatorDots==='line'">
         <span
@@ -149,11 +155,12 @@ export default {
   },
   async created () {
     if (this.code) {
-      const imgs = await getAdvertList({ ad_code: this.code }, { onlyData: true }).catch(err => { throw Error(err.msg || '初始化广告组件失败') })
+      const imgs = await getAdvertList({ ad_code: this.code }, { onlyData: true }).catch(err => {
+        throw Error(err.msg || '初始化广告组件失败')
+      })
       const tempimgs = getArrColumn(imgs, 'image')
       this.imgList = tempimgs.map(imgsrc => getDomain(imgsrc))
       this.urls = getArrColumn(imgs, 'link')
-      console.log(this.imgList, this.urls)
     } else {
       this.imgList = this.imgs
     }
@@ -163,7 +170,7 @@ export default {
       if (!this.code) return
       if (this.urls[idx]) {
         const { link } = this.urls[idx]
-        if (link)linkTo(link)
+        if (link) linkTo(link)
       }
     },
     handleImgLoad (e) {
