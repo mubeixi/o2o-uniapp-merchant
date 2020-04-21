@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import address from '@/componets/layout-address/layout-address.vue'
+import address from '@/componets/form-address/form-address'
 import productSku from '@/componets/product-sku/product-sku.vue'
 import { getProdDetail } from '@/api/common.js'
 export default {
