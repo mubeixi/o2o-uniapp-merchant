@@ -20,10 +20,10 @@ export default {
     $error: error,
     $modal: modal,
     $linkTo: linkTo,
-    $openPop(name) {
+    $openPop (name) {
       this.$refs[name].show()
     },
-    $closePop(name) {
+    $closePop (name) {
       this.$refs[name].close()
     },
     // 批量注册变量名称
@@ -67,5 +67,12 @@ export default {
     const locale = T.locale
     const locales = T.locales
     this.TT = locales[locale]
+  }
+}
+
+export const ColorMixin = {
+  methods: {
+    getPrimaryColor () {},
+    setPrimaryColor () {}
   }
 }
