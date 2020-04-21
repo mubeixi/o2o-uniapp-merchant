@@ -32,11 +32,11 @@ function handle (e) {
   return ({
     message,
     type,
-    icon,
+    icon
   })
 }
 
 Exception.prototype = {
-  constructor: Exception,
+  constructor: Exception
 }
 Exception.handle = handle

@@ -28,7 +28,8 @@
     <!--code="indexTop" :imgs="adData"-->
     <layout-ad code="indexTop"></layout-ad>
     <div class="goods-list">
-      <div class="goods-item" v-for="(item,idx) in goodsList" :key="idx" @click="$linkTo('/pages/share/go?prod_id='+item.Products_ID)">
+      <div class="goods-item" v-for="(item,idx) in goodsList" :key="idx"
+           @click="$linkTo('/pages/share/go?prod_id='+item.Products_ID)">
         <div class="goods-item-cover" :style="{backgroundImage:'url('+item.ImgPath+')'}"></div>
         <div class="goods-item-info">
           <div class="title">{{item.Products_Name}}</div>
@@ -40,7 +41,8 @@
             <span style="color: #ccc;font-style: italic" class="text-underline p-l-15">￥{{item.Products_PriceY}}</span>
           </div>
           <div class="actions">
-            <div class="share flex flex-vertical-c" style="color: white;background-image: url('/static/share/share_action_btn.png')">
+            <div class="share flex flex-vertical-c"
+                 style="color: white;background-image: url('/static/share/share_action_btn.png')">
               <layout-icon color="#fff" type="iconicon-share"></layout-icon>
               <div class="flex1 p-l-6">
                 <div class="fz-12">分享赚</div>
@@ -60,10 +62,14 @@ import { getProductList } from '@/api/product'
 import { hideLoading, modal, showLoading } from '@/common/fun'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import BaseMixin from '@/mixins/BaseMixin'
+
 export default {
   name: 'ShareIndex',
-  mixins:[BaseMixin],
-  components: { LayoutIcon, LayoutAd },
+  mixins: [BaseMixin],
+  components: {
+    LayoutIcon,
+    LayoutAd
+  },
   data () {
     return {
       goodsList: [],
@@ -74,7 +80,9 @@ export default {
     async _init_func () {
       try {
         showLoading()
-        this.goodsList = await getProductList({ pageSize: 999 }, { onlyData: true }).catch(e => { throw Error(e.msg || '获取商品列表错误') })
+        this.goodsList = await getProductList({ pageSize: 999 }, { onlyData: true }).catch(e => {
+          throw Error(e.msg || '获取商品列表错误')
+        })
         hideLoading()
       } catch (e) {
         modal(e.message)
@@ -167,10 +175,12 @@ export default {
 
   .goods-list {
     padding: 25rpx;
+
     .goods-item {
       display: flex;
       margin-bottom: 30rpx;
       align-items: center;
+
       .goods-item-cover {
         width: 300rpx;
         height: 300rpx;
@@ -182,6 +192,7 @@ export default {
         height: 300rpx;
         padding-left: 20rpx;
         position: relative;
+
         .title {
           line-height: 20px;
           font-size: 14px;

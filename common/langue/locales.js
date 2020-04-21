@@ -12,8 +12,8 @@ import ZHCN from './locales.zh-cn'
 export default {
 
   // 英文
-  'en': {
-    't_comm_Time': 'time'
+  en: {
+    t_comm_Time: 'time'
   },
 
   // 中文
@@ -21,21 +21,21 @@ export default {
 
   // 繁体
   'zh-hk': {
-    't_comm_Time': '時間'
+    t_comm_Time: '時間'
   },
 
   // 俄罗斯
-  'ru_RU': {
-    't_comm_Time': '  '
+  ru_RU: {
+    t_comm_Time: '  '
   },
 
   // 韩国
-  'ko_KR': {
-    't_comm_Time': '철학'
+  ko_KR: {
+    t_comm_Time: '철학'
   },
 
   // 日本
-  'ja_JP': {
-    't_comm_Time': '時間'
+  ja_JP: {
+    t_comm_Time: '時間'
   }
 }

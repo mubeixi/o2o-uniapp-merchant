@@ -7,7 +7,10 @@ export default {
   data () {
     return {
       menuButtonInfo: {},
-      systemInfo: { statusBarHeight: 0, windowHeight: 0 },
+      systemInfo: {
+        statusBarHeight: 0,
+        windowHeight: 0
+      },
       diyHeadHeight: 0,
       diyHeadRight: 0,
       TT: {}
@@ -15,7 +18,8 @@ export default {
   },
   methods: {
     $back: back,
-    $noop: () => {},
+    $noop: () => {
+    },
     $toast: toast,
     $error: error,
     $modal: modal,
@@ -72,7 +76,9 @@ export default {
 
 export const ColorMixin = {
   methods: {
-    getPrimaryColor () {},
-    setPrimaryColor () {}
+    getPrimaryColor () {
+    },
+    setPrimaryColor () {
+    }
   }
 }

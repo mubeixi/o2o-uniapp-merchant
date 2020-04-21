@@ -1,87 +1,87 @@
 var pullDown = {
-    threshold: 95,
-    maxHeight: 200,
-    callRefresh: 'onrefresh',
-    callPullingDown: 'onpullingdown',
-    refreshSelector: '.uni-refresh'
-};
-
-function ready(newValue, oldValue, ownerInstance, instance) {
-    var state = instance.getState()
-    state.canPullDown = newValue;
-    // console.log(newValue);
+  threshold: 95,
+  maxHeight: 200,
+  callRefresh: 'onrefresh',
+  callPullingDown: 'onpullingdown',
+  refreshSelector: '.uni-refresh'
 }
 
-function touchStart(e, instance) {
-    var state = instance.getState();
-    state.refreshInstance = instance.selectComponent(pullDown.refreshSelector);
-    state.canPullDown = (state.refreshInstance != null && state.refreshInstance != undefined);
-    if (!state.canPullDown) {
-        return
-    }
-
-    // console.log("touchStart");
-
-    state.height = 0;
-    state.touchStartY = e.touches[0].pageY || e.changedTouches[0].pageY;
-    state.refreshInstance.setStyle({
-        'height': 0
-    });
-    state.refreshInstance.callMethod("onchange", true);
+function ready (newValue, oldValue, ownerInstance, instance) {
+  var state = instance.getState()
+  state.canPullDown = newValue
+  // console.log(newValue);
 }
 
-function touchMove(e, ownerInstance) {
-    var instance = e.instance;
-    var state = instance.getState();
-    if (!state.canPullDown) {
-        return
-    }
+function touchStart (e, instance) {
+  var state = instance.getState()
+  state.refreshInstance = instance.selectComponent(pullDown.refreshSelector)
+  state.canPullDown = (state.refreshInstance != null && state.refreshInstance != undefined)
+  if (!state.canPullDown) {
+    return
+  }
 
-    var oldHeight = state.height;
-    var endY = e.touches[0].pageY || e.changedTouches[0].pageY;
-    var height = endY - state.touchStartY;
-    if (height > pullDown.maxHeight) {
-        return;
-    }
+  // console.log("touchStart");
 
-    var refreshInstance = state.refreshInstance;
-    refreshInstance.setStyle({
-        'height': height + 'px'
-    });
-
-    height = height < pullDown.maxHeight ? height : pullDown.maxHeight;
-    state.height = height;
-    refreshInstance.callMethod(pullDown.callPullingDown, {
-        height: height
-    });
+  state.height = 0
+  state.touchStartY = e.touches[0].pageY || e.changedTouches[0].pageY
+  state.refreshInstance.setStyle({
+    height: 0
+  })
+  state.refreshInstance.callMethod('onchange', true)
 }
 
-function touchEnd(e, ownerInstance) {
-    var state = e.instance.getState();
-    if (!state.canPullDown) {
-        return
-    }
+function touchMove (e, ownerInstance) {
+  var instance = e.instance
+  var state = instance.getState()
+  if (!state.canPullDown) {
+    return
+  }
 
-    state.refreshInstance.callMethod("onchange", false);
+  var oldHeight = state.height
+  var endY = e.touches[0].pageY || e.changedTouches[0].pageY
+  var height = endY - state.touchStartY
+  if (height > pullDown.maxHeight) {
+    return
+  }
 
-    var refreshInstance = state.refreshInstance;
-    if (state.height > pullDown.threshold) {
-        refreshInstance.callMethod(pullDown.callRefresh);
-        return;
-    }
+  var refreshInstance = state.refreshInstance
+  refreshInstance.setStyle({
+    height: height + 'px'
+  })
 
-    refreshInstance.setStyle({
-        'height': 0
-    });
+  height = height < pullDown.maxHeight ? height : pullDown.maxHeight
+  state.height = height
+  refreshInstance.callMethod(pullDown.callPullingDown, {
+    height: height
+  })
 }
 
-function propObserver(newValue, oldValue, instance) {
-    pullDown = newValue;
+function touchEnd (e, ownerInstance) {
+  var state = e.instance.getState()
+  if (!state.canPullDown) {
+    return
+  }
+
+  state.refreshInstance.callMethod('onchange', false)
+
+  var refreshInstance = state.refreshInstance
+  if (state.height > pullDown.threshold) {
+    refreshInstance.callMethod(pullDown.callRefresh)
+    return
+  }
+
+  refreshInstance.setStyle({
+    height: 0
+  })
+}
+
+function propObserver (newValue, oldValue, instance) {
+  pullDown = newValue
 }
 
 module.exports = {
-    touchmove: touchMove,
-    touchstart: touchStart,
-    touchend: touchEnd,
-    propObserver: propObserver
+  touchmove: touchMove,
+  touchstart: touchStart,
+  touchend: touchEnd,
+  propObserver: propObserver
 }

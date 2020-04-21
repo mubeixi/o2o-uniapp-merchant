@@ -1,7 +1,7 @@
 <style lang="scss" scoped>
-.tag{
+  .tag {
 
-}
+  }
 </style>
 
 <template>
@@ -11,27 +11,26 @@
 
 <script>
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
+
 export default {
   name: 'Demo',
   components: { LayoutIcon },
   props: {
-	  text: {
-	    required: true,
+    text: {
+      required: true,
       type: String
     },
-    fontSize:12,
-    plain:{
-	    default:false,
-      type:Boolean
+    fontSize: 12,
+    plain: {
+      default: false,
+      type: Boolean
     },
-    mode:{
-	    default:'cube'//round
+    mode: {
+      default: 'cube'// round
     }
   },
   data () {
-	  return {
-
-    }
+    return {}
   }
 }
 </script>

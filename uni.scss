@@ -15,17 +15,17 @@
 
 /* 颜色变量 */
 $fun-gray-color: #BEBEBE;
-$fun-primary-color:#26C78D;
-$fun-green-color:#26C78D;
-$fun-black-color:#000000;
-$fun-red-color:#F53636;
-$fun-blue-color:#00A8FF;
-$fun-yellow-color:#FFE300;
+$fun-primary-color: #26C78D;
+$fun-green-color: #26C78D;
+$fun-black-color: #000000;
+$fun-red-color: #F53636;
+$fun-blue-color: #00A8FF;
+$fun-yellow-color: #FFE300;
 
-$fun-selling-color:#E41515;//商品现在价格
-$fun-market-color:#939393;//原价
+$fun-selling-color: #E41515; //商品现在价格
+$fun-market-color: #939393; //原价
 
-$fun-border-color:#e7e7e7;
+$fun-border-color: #e7e7e7;
 
 /* 行为相关颜色 */
 $uni-color-primary: #007aff;
@@ -34,32 +34,32 @@ $uni-color-warning: #f0ad4e;
 $uni-color-error: #dd524d;
 
 /* 文字基本颜色 */
-$uni-text-color:#333;//基本色
-$uni-text-color-inverse:#fff;//反色
-$uni-text-color-grey:#999;//辅助灰色，如加载更多的提示信息
+$uni-text-color: #333; //基本色
+$uni-text-color-inverse: #fff; //反色
+$uni-text-color-grey: #999; //辅助灰色，如加载更多的提示信息
 $uni-text-color-placeholder: #808080;
-$uni-text-color-disable:#c0c0c0;
+$uni-text-color-disable: #c0c0c0;
 
 /* 背景颜色 */
-$uni-bg-color:#ffffff;
-$uni-bg-color-grey:#f8f8f8;
-$uni-bg-color-hover:#f1f1f1;//点击状态颜色
-$uni-bg-color-mask:rgba(0, 0, 0, 0.4);//遮罩颜色
+$uni-bg-color: #ffffff;
+$uni-bg-color-grey: #f8f8f8;
+$uni-bg-color-hover: #f1f1f1; //点击状态颜色
+$uni-bg-color-mask: rgba(0, 0, 0, 0.4); //遮罩颜色
 
 /* 边框颜色 */
-$uni-border-color:#c8c7cc;
+$uni-border-color: #c8c7cc;
 
 /* 尺寸变量 */
 
 /* 文字尺寸 */
-$uni-font-size-sm:24rpx;
-$uni-font-size-base:28rpx;
-$uni-font-size-lg:32rpx;
+$uni-font-size-sm: 24rpx;
+$uni-font-size-base: 28rpx;
+$uni-font-size-lg: 32rpx;
 
 /* 图片尺寸 */
-$uni-img-size-sm:40rpx;
-$uni-img-size-base:52rpx;
-$uni-img-size-lg:80rpx;
+$uni-img-size-sm: 40rpx;
+$uni-img-size-base: 52rpx;
+$uni-img-size-lg: 80rpx;
 
 /* Border Radius */
 $uni-border-radius-sm: 4rpx;
@@ -82,11 +82,11 @@ $uni-opacity-disabled: 0.3; // 组件禁用态的透明度
 
 /* 文章场景相关 */
 $uni-color-title: #2C405A; // 文章标题颜色
-$uni-font-size-title:40rpx;
+$uni-font-size-title: 40rpx;
 $uni-color-subtitle: #555555; // 二级标题颜色
-$uni-font-size-subtitle:36rpx;
+$uni-font-size-subtitle: 36rpx;
 $uni-color-paragraph: #3F536E; // 文章段落颜色
-$uni-font-size-paragraph:30rpx;
+$uni-font-size-paragraph: 30rpx;
 
 /** mixins **/
 @mixin cover-img($bgsize:cover,$paddingTop:0px,$bgcolor:#f2f2f2,$repreat:no-repeat,$position:center) {
@@ -97,239 +97,315 @@ $uni-font-size-paragraph:30rpx;
     position: $position;
   };
   padding: {
-    top:$paddingTop;
+    top: $paddingTop;
   };
+}
+
+@mixin rest{
+  padding: 0;
+  margin: 0;
+  border: 0;
 }
 
 /* 公共的样式 */
 
-page{
+page {
   background: #f8f8f8;
 }
 
 // 安全区域
-.safearea-box{
+.safearea-box {
   height: constant(safe-area-inset-bottom);
   height: env(safe-area-inset-bottom);
   width: 100%;
-  &.fixed{
+  
+  &.fixed {
     position: fixed;
     bottom: 0;
     left: 0;
   }
 }
 
-.hr{
+.hr {
   background: #f2f2f2;
 }
 
 
+
+
 /* 颜色 */
-.c0{
+.c0 {
   color: #000;
 }
-.c1{
+
+.c1 {
   color: #111;
 }
-.c2{
+
+.c2 {
   color: #222;
 }
-.c3{
+
+.c3 {
   color: #333;
 }
-.c4{
+
+.c4 {
   color: #444;
 }
-.c5{
+
+.c5 {
   color: #555;
 }
-.c6{
+
+.c6 {
   color: #666;
 }
-.c7{
+
+.c7 {
   color: #777;
 }
-.c8{
+
+.c8 {
   color: #888;
 }
-.c9{
+
+.c9 {
   color: #999;
 }
-.color-white{
+
+.color-white {
   color: #fff;
 }
 
 // 太多了占空间，常见尺寸就这么多
 @for $i from 4 through 30 {
-  .m-#{$i} { margin: ($i)+px; }
-  .m-t-#{$i} { margin-top: ($i)+px; }
-  .m-b-#{$i} { margin-bottom: ($i)+px; }
-  .m-l-#{$i} { margin-left: ($i)+px; }
-  .m-r-#{$i} { margin-right: ($i)+px; }
-
-  .p-#{$i} { padding: ($i)+px; }
-  .p-t-#{$i} { padding-top: ($i)+px; }
-  .p-b-#{$i} { padding-bottom: ($i)+px; }
-  .p-l-#{$i} { padding-left: ($i)+px; }
-  .p-r-#{$i} { padding-right: ($i)+px; }
-
-  .fz-#{$i} { font-size: ($i)+px; }
+  .m-#{$i} {
+    margin: ($i)+px;
+  }
+  .m-t-#{$i} {
+    margin-top: ($i)+px;
+  }
+  .m-b-#{$i} {
+    margin-bottom: ($i)+px;
+  }
+  .m-l-#{$i} {
+    margin-left: ($i)+px;
+  }
+  .m-r-#{$i} {
+    margin-right: ($i)+px;
+  }
+  
+  .p-#{$i} {
+    padding: ($i)+px;
+  }
+  .p-t-#{$i} {
+    padding-top: ($i)+px;
+  }
+  .p-b-#{$i} {
+    padding-bottom: ($i)+px;
+  }
+  .p-l-#{$i} {
+    padding-left: ($i)+px;
+  }
+  .p-r-#{$i} {
+    padding-right: ($i)+px;
+  }
+  
+  .fz-#{$i} {
+    font-size: ($i)+px;
+  }
 }
 
 @for $i from 0 through 200 {
-  .w#{$i} { width: ($i)+px; }
-  .h#{$i} { height: ($i)+px; }
+  .w#{$i} {
+    width: ($i)+px;
+  }
+  .h#{$i} {
+    height: ($i)+px;
+  }
 }
 
 //圆角
 @for $i from 0 through 30 {
-  .b-radius-#{$i} { border-radius: ($i)+px; }
+  .b-radius-#{$i} {
+    border-radius: ($i)+px;
+  }
 }
-.b-radius-aircle{
+
+.b-radius-aircle {
   border-radius: 50%;
   overflow: hidden
 }
 
 /* flex布局 */
-.flex{
+.flex {
   display: flex;
-  .flex1{
+  
+  .flex1 {
     flex: 1;
   }
-  &-row{
+  
+  &-row {
     flex-direction: row;
   }
-  &-column{
+  
+  &-column {
     flex-direction: column;
   }
+  
   //水平
-  &-vertical-c{
+  &-vertical-c {
     align-items: center;
   }
-  &-vertical-b{
+  
+  &-vertical-b {
     align-items: flex-end;
   }
-  &-vertical-t{
+  
+  &-vertical-t {
     align-items: flex-end;
   }
+  
   //内容分布
-  &-justify-c{
+  &-justify-c {
     justify-content: center;
   }
-  &-justify-l{
+  
+  &-justify-l {
     justify-content: flex-start;
   }
-  &-justify-r{
+  
+  &-justify-r {
     justify-content: flex-end;
   }
-  &-justify-between{
+  
+  &-justify-between {
     justify-content: space-between;
   }
 }
 
 /* cell，一般用于表单 */
-.group-cell{
-  padding-left:20rpx;
+.group-cell {
+  padding-left: 20rpx;
   box-sizing: border-box;
   margin-bottom: 30rpx;
-  &:last-child{
+  
+  &:last-child {
     margin-bottom: 0;
   }
-  .cell-item{
+  
+  .cell-item {
     display: flex;
     align-items: center;
     border-bottom: 1px solid #eee;
     padding: 20rpx 0;
-    &:last-child{
+    
+    &:last-child {
       border-bottom: none;
     }
-    .label{
-
+    
+    .label {
+      
       color: #999;
     }
-    .content{
+    
+    .content {
       flex: 1;
       text-align: right;
       color: #444;
     }
-    .right{
+    
+    .right {
       margin: 0 10px;
     }
   }
 }
 
-.form{
-  .group-cell{
-    .cell-item{
-      .label{
-        &:not(:empty){
+.form {
+  .group-cell {
+    .cell-item {
+      .label {
+        &:not(:empty) {
           width: 180rpx;
         }
+        
         color: #333;
       }
     }
   }
 }
 
-.scroll{
-
-  &-box{
+.scroll {
+  
+  &-box {
     background: white;
     overflow-y: hidden;
     overflow-x: scroll;
+    
     &::-webkit-scrollbar {
       display: none;
     }
-
+    
   }
-
-  &-item{
+  
+  &-item {
     display: inline-block;
+    
     &.active {
       color: $fun-green-color;
       border-bottom: 2px solid $fun-green-color;
     }
   }
-
+  
 }
 
-.grid{
-
-  &-box{
+.grid {
+  
+  &-box {
     display: flex;
     flex-wrap: wrap;
   }
-  &-item{
+  
+  &-item {
     text-align: center;
-    .icon-img{
-
+    
+    .icon-img {
+    
     }
-    .icon{
-
+    
+    .icon {
+    
     }
-    .title{
-
+    
+    .title {
+    
     }
   }
 }
 
 /* 边框样式 */
-.bor{
+.bor {
   border: 1px solid $fun-border-color;
 }
-.bor-b{
+
+.bor-b {
   border-bottom: 1px solid $fun-border-color;
 }
-.bor-r{
+
+.bor-r {
   border-right: 1px solid $fun-border-color;
 }
-.bor-l{
+
+.bor-l {
   border-left: 1px solid $fun-border-color;
 }
-.bor-t{
+
+.bor-t {
   border-top: 1px solid $fun-border-color;
 }
-.nobor{
+
+.nobor {
   border-bottom: none;
   border-left: none;
   border-right: none;
@@ -337,96 +413,112 @@ page{
 }
 
 
-
-
-.img-cover{
+.img-cover {
   @include cover-img();
 }
 
-.img-contain{
+.img-contain {
   @include cover-img(contain);
 }
 
 
-.text{
-  &-underline{
+.text {
+  &-underline {
     text-decoration: underline;
   }
-  &-through{
+  
+  &-through {
     text-decoration: line-through;
   }
-  &-nowrap{
+  
+  &-nowrap {
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
   }
-  &-center{
+  
+  &-center {
     text-align: center;
   }
-  &-left{
+  
+  &-left {
     text-align: left;
   }
-  &-right{
+  
+  &-right {
     text-align: right;
   }
 }
 
 
-.block{
-  &-title{
+.block {
+  &-title {
     display: flex;
-
-    &-text{
+    
+    &-text {
       flex: 1;
       font-size: 18px;
       color: #333;
     }
-    &-more{
+    
+    &-more {
       display: flex;
-
+      
     }
   }
-  &-nav{
-    &-item{
-
+  
+  &-nav {
+    &-item {
+    
     }
   }
 }
 
 
 //原价和现价
-.price-selling{
+.price-selling {
   color: $fun-selling-color;
 }
-.price-market{
+
+.price-market {
   color: $fun-market-color;
 }
 
-.bg-white{
+.bg-white {
   background: #fff;
 }
 
-.img-full{width: 100%;height: 100%}
-.fz-b{font-weight: bold}
+.img-full {
+  width: 100%;
+  height: 100%
+}
+
+.fz-b {
+  font-weight: bold
+}
 
 
-.page-section-title{
+.page-section-title {
   padding: 15px;
   display: flex;
   align-items: center;
   justify-content: center;
-  .before,.after{
+  
+  .before, .after {
     width: 23px;
     height: 2px;
     background: $fun-yellow-color;
   }
-  .before{
+  
+  .before {
   
   }
-  .after{
+  
+  .after {
   
   }
-  .text{
+  
+  .text {
     color: #333;
     font-weight: bold;
     font-size: 16px;
