@@ -290,6 +290,41 @@
   ul li {
     list-style: none;
   }
+  .comment-box {
+    border-top: 1px solid #f2f2f2;
+    border-bottom: 1px solid #f2f2f2;
+    padding: 30rpx 25rpx;
+    background: white;
+
+    .block-title {
+      padding: 20px 0;
+
+      .block-title-text {
+        font-weight: bold;
+      }
+    }
+
+    .comment-list {
+
+    }
+  }
+
+  .commtent-add {
+    margin: 50rpx 25rpx;
+    background: #F7F7F7;
+    min-height: 150rpx;
+    padding: 20rpx;
+
+    .textarea {
+      font-size: 14px;
+      line-height: 1.4;
+
+      &::placeholder {
+        color: #999;
+      }
+    }
+  }
+
 
 
 </style>
@@ -329,9 +364,9 @@
     <div class="product-title">
       {{detailData.Products_Name}}
     </div>
-    <div class="line-f8" style="margin-top: 30rpx"></div>
-    <div class="product-activity" v-if="active.length>0">
-      <div class="flex" style="padding-bottom: 30rpx">
+    <div class="line-f8" style="margin-top: 30rpx" v-if="active.length>0"></div>
+    <div class="product-activity" >
+      <div class="flex" style="padding-bottom: 30rpx" v-if="active.length>0">
         <div class="product-activity-title">
           优惠活动
         </div>
@@ -407,7 +442,26 @@
         </div>
       </swiper-item>
       <swiper-item class="tab-pages">
-        评价
+
+        <!--评论列表-->
+        <div class="block comment-box over" v-if="comments.length>0" :style="{height:(systemInfo.windowHeight+'px')}" >
+
+          <div class="block-title">
+            <div class="block-title-text">留言评论</div>
+            <div class="block-title-more flex flex-vertical-center c9 fz-12">
+              <span>查看全部</span>
+              <icon class="iconright" type="iconright" size="14" color="#999"></icon>
+            </div>
+          </div>
+          <div class="block-content">
+            <div class="comment-list">
+              <div v-for="(item,idx) in comments" :key="idx" >
+                <layout-comment :isLast="comments.length-1===idx" :comment="item"></layout-comment>
+              </div>
+
+            </div>
+          </div>
+        </div>
       </swiper-item>
       <swiper-item class="tab-pages">
         须知
@@ -473,13 +527,15 @@
 <script>
 import BaseMixin from '@/mixins/BaseMixin'
 import { getProductDetail, getActiveInfo, getBizInfo, getStoreList } from '@/api/product'
+import {  getCommitList } from '@/api/common'
 import { formatRichTextByUparseFn } from '@/common/filter'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
+import LayoutComment from '@/componets/layout-comment/layout-comment'
 
 export default {
   name: 'ProductDetail',
   mixins: [BaseMixin],
-  components:{LayoutIcon},
+  components:{LayoutIcon,LayoutComment},
   data () {
     return {
       tabIndex: 3,
@@ -489,10 +545,12 @@ export default {
       active: [],//满减活动列表
       store: [{biz_go:''}],//门店
       storeList: [],
+      comments:[],
     }
   },
   onPageScroll (e) {
     const { scrollTop } = e
+    console.log(scrollTop,this.headTabTop,"ss")
     this.headTabSticky = scrollTop > this.headTabTop
   },
   methods: {
@@ -501,11 +559,15 @@ export default {
         let data = {
           prod_id: this.prod_id,
         }
-        this.detailData = await getProductDetail(data, { onlyData: true }).catch(e => {throw Error(e.msg||'获取商品详情失败')})
+        this.detailData = await getProductDetail(data, { onlyData: true,tip:'加载中',mask: true }).catch(e => {throw Error(e.msg||'获取商品详情失败')})
         this.detailData.Products_Description = formatRichTextByUparseFn(this.detailData.Products_Description)
 
-        this.store = await getBizInfo({ biz_id: this.detailData.biz_id }, { onlyData: true }).catch(e => {throw Error(e.msg||'获取店铺信息失败')})
-        this.storeList = await getStoreList({ biz_id: this.detailData.biz_id }, { onlyData: true }).catch(e => {throw Error(e.msg||'获取店铺列表失败')})
+        this.store = await getBizInfo({ biz_id: this.detailData.biz_id }, { onlyData: true,tip:'加载中',mask: true }).catch(e => {throw Error(e.msg||'获取店铺信息失败')})
+        this.comments = await getCommitList({ biz_id: this.detailData.biz_id, pageSize: 3 }, { onlyData: true,tip:'加载中',mask: true }).catch((e) => { throw Error('获取评论数据失败') })
+
+        this.storeList = await getStoreList({ biz_id: this.detailData.biz_id }, { onlyData: true,tip:'加载中',mask: true }).catch(e => {throw Error(e.msg||'获取店铺列表失败')})
+
+
 
         let res = await getActiveInfo({
           biz_id: this.detailData.biz_id,
@@ -525,7 +587,6 @@ export default {
           })
         })
       }catch (e) {
-        console.log()
         this.$modal(e.message)
       }
 
