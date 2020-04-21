@@ -29,3 +29,9 @@ export const getBizShare = (param, options) => fetch({ act: 'getBizShare', param
 
 // 会员等级列表或详情
 export const getUserLevel = (param, options) => fetch({ act: 'getUserLevel', param, options })
+
+
+//获取地址
+export const getAreaByPid = (param, options) => fetch({ act: 'getAreaByPid', param, options })
+
+export const getProdDetail = (param, options) => fetch({ act: 'prod_detail', param, options })

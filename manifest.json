@@ -91,7 +91,7 @@
             "disableHostCheck" : true,
             "proxy" : {
                 "/api" : {
-                    "target" : "http://www.newo2osrc.com", //"http://www.gogo.com/api",
+                    "target" : "https://newo2o.bafangka.com", //"https://newo2o.bafangka.com http://www.newo2osrc.com",
                     "changeOrigin" : true,
                     "secure" : false,
                     "pathRewrite" : {

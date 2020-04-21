@@ -10,6 +10,9 @@
 			}
 		},
 		{
+			"path": "pages/demo"
+		},
+		{
 			"path": "pages/store/index",
 			"style": {
 				"navigationBarTitleText": "店铺首页"
@@ -91,7 +94,14 @@
             "navigationStyle": "custom"
           }
         }
-	],
+        ,{
+            "path" : "pages/person/Coupon",
+            "style": {
+              "navigationBarTitleText": "优惠券",
+              "navigationStyle": "custom"
+            }
+        }
+    ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarBackgroundColor": "#FFF",
