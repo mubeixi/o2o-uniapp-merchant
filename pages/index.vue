@@ -1,6 +1,6 @@
 <template>
   <div class="page-wrap">
-    <div class="head-box" :style="{height:diyHeadHeight+'px'}">
+    <div class="head-box" :style="{height:diyHeadHeight+'px',backgroundColor:topBgColor}">
       <div class="head"
            :style="{height:menuButtonInfo.height+'px',paddingRight:diyHeadRight+'px',marginTop:menuButtonInfo.top+'px'}">
         <ul class="tab-box">
@@ -196,14 +196,14 @@
             <div class="store-goods-list">
               <block  v-for="(goods,idx) in goodsList" >
               <div class="store-goods-item"  v-if="idx<3" :key="idx">
-                
+
                   <image :style="{backgroundImage:'url('+goods.ImgPath+')'}" class="cover"/>
                   <div class="title fz-12 c3 p-t-7 p-b-7">{{goods.Products_Name}}</div>
                   <div class="fz-10 c9 flex flex-vertical-b">
                     <span class="price-selling">￥</span><span class="fz-12 price-selling">{{goods.Products_PriceX}}</span>
                     <span class="text-through m-l-2">￥</span><span class="text-through">{{goods.Products_PriceY}}</span>
                   </div>
-                
+
               </div>
               </block>
             </div>
@@ -267,10 +267,17 @@ import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import Mock from '@/dev/Mock'
 import LayoutCopyright from '@/componets/layout-copyright/layout-copyright'
 import LayoutAd from '@/componets/layout-ad/layout-ad'
+import {
+  mapGetters
+} from 'vuex'
+
 export default {
   mixins: [BaseMixin],
   components: { LayoutAd, LayoutCopyright, LayoutIcon },
   computed: {
+    ...mapGetters({
+      topBgColor: 'theme/pimaryColor'
+    })
     // quickNavs () {
     //   try {
     //     return this.firstCateList[this.quickFirstCateIdx].child
@@ -295,7 +302,7 @@ export default {
     }
   },
   onLoad () {
-
+    console.log(this.$store.getters['theme/pimaryColor'])
   },
   async created () {
     try {
@@ -623,9 +630,8 @@ export default {
     top: 0;
     width: 750rpx;
     box-sizing: border-box;
-
     z-index: 2;
-    background: $fun-green-color;
+    //background: $fun-green-color;
   }
 
   .head {

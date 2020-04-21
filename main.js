@@ -5,6 +5,7 @@ import T from './common/langue/i18n'
 import locales from './common/langue/locales'
 
 import './common'
+import store from '@/store'
 
 Vue.config.productionTip = false
 
@@ -15,6 +16,7 @@ T.registerLocale(locales)
 T.setLocale()
 
 const app = new Vue({
-  ...App
+  ...App,
+  store
 })
 app.$mount()
