@@ -6,12 +6,12 @@
   }
 
   .icon {
-
+  
   }
 </style>
 
 <template>
-  <!--  ,height:size + 'px',lineHeight:size+'px'-->
+  <!--  ,height:size + 'px',lineHeight:size+'px' ,transform:'rotate('+rotate+')'-->
   <i class="iconfont icon"
      :class="[type,display]"
      :style="{ color: color, 'font-size': size + 'px',fontWeight:weight}"
@@ -23,6 +23,10 @@
 export default {
   name: 'layoutIcon',
   props: {
+    rotate: {
+      type: String,
+      default: '0deg'
+    },
     type: {
       require: true,
       type: String,
