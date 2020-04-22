@@ -199,7 +199,7 @@
 
   .store {
     position: sticky;
-    z-index: 999;
+    z-index: 8;
     top: 0;
     width: 750rpx;
     background-color: #ffffff;
@@ -372,6 +372,11 @@
         color: #999;
       }
     }
+  }
+  .wzw-goods-action{
+  	position: fixed;
+  	left: 0px;
+  	bottom: 0px;
   }
 
 </style>
@@ -566,8 +571,13 @@
         </div>
       </swiper-item>
     </swiper>
-
-    <!--    <bottombuy></bottombuy>-->
+    <product-sku ref="mySku" @sureSku="save" :hasCart="hasCart" @updaCart="updaCart" @buyNow="buyNow" :proList="detailData"></product-sku>
+   <wzw-goods-action class="wzw-goods-action" @myPay="myPay" @allPay="allPay">
+   	   <span slot="leftText">单买¥</span>
+   	   <span slot="leftPrice">100.00</span>
+   	   <span slot="rightText">拼团购¥</span>
+   	   <span slot="rightPrice">100.00</span>
+   </wzw-goods-action>
   </div>
 </template>
 
@@ -575,19 +585,24 @@
 import BaseMixin from '@/mixins/BaseMixin'
 import { getProductDetail, getActiveInfo, getBizInfo, getStoreList } from '@/api/product'
 import { getCommitList } from '@/api/common'
+import ProductSku from '@/componets/product-sku/product-sku.vue'
+import {updateCart} from '@/api/order'
 import { formatRichTextByUparseFn } from '@/common/filter'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import LayoutComment from '@/componets/layout-comment/layout-comment'
-
+import WzwGoodsAction from '@/componets/wzw-goods-action/wzw-goods-action.vue'
 export default {
   name: 'ProductDetail',
   mixins: [BaseMixin],
   components: {
     LayoutIcon,
-    LayoutComment
+    LayoutComment,
+    ProductSku,
+	WzwGoodsAction
   },
   data () {
     return {
+	  hasCart:false,//是否有购物车
       tabIndex: 3,
       headTabSticky: false,
       prod_id: '1613', // 商品id
@@ -607,6 +622,29 @@ export default {
     this.headTabSticky = scrollTop > this.headTabTop
   },
   methods: {
+	  myPay(){
+		  this.hasCart=true
+		   this.$refs.mySku.show()
+	  },
+	  allPay(){
+		   this.hasCart=false
+		   this.$refs.mySku.show()
+	  },
+    async updaCart(sku){
+      //加入购物车
+      let data={
+        User_ID:'48',
+        cart_key:'CartList',
+        prod_id:this.detailData.Products_ID,
+        qty:sku.qty,
+        attr_id:sku.id
+      }
+      let arr=await updateCart(data).catch(e=>{throw  Error(e.msg||'加入购物车失败')})
+
+    },
+    buyNow(sku){
+      //立即购买
+    },
     async getProductDetail () {
       try {
         const data = {

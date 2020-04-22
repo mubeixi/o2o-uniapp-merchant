@@ -47,7 +47,7 @@
 				</div>
 			</div>
 
-			<div v-if="haveCart"  class="skuBtn">
+			<div v-if="hasCart"  class="skuBtn">
 				<div class="sku-btn cart"  @click="updaCart">
 					加入购物车
 				</div>
@@ -68,7 +68,7 @@ import layoutPopup from '@/componets/layout-popup/layout-popup.vue'
 export default {
   components: { layoutPopup },
   props: {
-  	haveCart:{
+  	hasCart:{
   		type:Boolean,
 			default:false
 		},
