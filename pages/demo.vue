@@ -10,23 +10,23 @@
 <!--    <div @click="open">-->
 <!--      我的规格-->
 <!--    </div>-->
-    <user-addrss @up="updateAddress" ref="address"><span @click="$openPop('address')">选择地址</span></user-addrss>
+<!--    <user-addrss @up="updateAddress" ref="address"><span @click="$openPop('address')">选择地址</span></user-addrss>-->
 
   </div>
 </template>
 
 <script>
-import address from '@/componets/form-address/form-address'
-import productSku from '@/componets/product-sku/product-sku.vue'
+// import address from '@/componets/form-address/form-address'
+// import productSku from '@/componets/product-sku/product-sku.vue'
 import { getProdDetail } from '@/api/common.js'
-import UserAddrss from '@/componets/layout-address/layout-address'
-
+// import UserAddrss from '@/componets/layout-address/layout-address'
+import BaseMixin from '@/mixins/BaseMixin'
 export default {
   name: 'Demo',
   mixins: [BaseMixin],
   components: {
-    UserAddrss,
-    productSku
+    // UserAddrss,
+    // productSku
   },
   data () {
     return {

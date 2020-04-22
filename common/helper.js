@@ -305,8 +305,8 @@ export function sleep (fn, par, time = 3000) {
 export const goProductDetail = (id, is_group) => {
   if (!id) return
 
-  // let path = '/pages/detail/detail';
-  const path = is_group ? '/pages/detail/groupDetail' : '/pages/detail/detail'// 根据不同路径跳转
+  // let path = '/pages/product/detail';
+  const path = is_group ? '/pages/detail/groupDetail' : '/pages/product/detail'// 根据不同路径跳转
   uni.navigateTo({
     url: path + '?Products_ID=' + id
   })

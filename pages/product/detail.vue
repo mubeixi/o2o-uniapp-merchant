@@ -397,7 +397,7 @@
               ¥{{detailData.Products_PriceY}}
             </span>
       </div>
-      <div class="product-price-right">
+      <div class="product-price-right" @click="toBooking">
         <image src="/static/product/product_share.png" class="full-img" style="width: 130% !important;"></image>
         <div class="product-share">
           分享赚
@@ -578,6 +578,8 @@ import { getCommitList } from '@/api/common'
 import { formatRichTextByUparseFn } from '@/common/filter'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import LayoutComment from '@/componets/layout-comment/layout-comment'
+import { updateCart } from '@/api/order'
+import { hideLoading, showLoading } from '@/common/fun'
 
 export default {
   name: 'ProductDetail',
@@ -607,6 +609,26 @@ export default {
     this.headTabSticky = scrollTop > this.headTabTop
   },
   methods: {
+    async toBooking () {
+      try {
+        showLoading()
+        // HUAWEI Mate 30 Pro
+        const postData = {
+          prod_id: 877, // 产品ID  在 onLoad中赋值
+          attr_id: 999, // 选择属性id
+          count: 555, // 选择属性的库存
+          qty: 1, // 购买数量
+          cart_key: 'DirectBuy', // 购物车类型   CartList（加入购物车）、DirectBuy（立即购买）、PTCartList（不能加入购物车）
+          productDetail_price: 11790
+        }
+        await updateCart(postData).catch(e => { throw Error(e.msg || '下单失败') })
+        this.$linkTo('/pages/order/OrderBooking?cart_key=DirectBuy')
+      } catch (e) {
+        this.$modal(e.message)
+      } finally {
+        hideLoading()
+      }
+    },
     async getProductDetail () {
       try {
         const data = {
@@ -678,7 +700,7 @@ export default {
     this.getProductDetail()
   },
   onLoad (options) {
-    // this.prod_id=options.prod_id
+    this.prod_id=options.prod_id
   },
   onReady () {
     // const query = uni.createSelectorQuery().in(this)

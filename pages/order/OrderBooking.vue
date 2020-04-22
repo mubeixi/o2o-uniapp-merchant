@@ -1,282 +1,266 @@
 <template>
-  <view v-if="loading" :class="selectStore?'over':''">
+  <div :class="selectStore?'over':''" class="page-wrap">
 
-    <div class="top" v-if="orderInfo.all_has_stores==1&&orderInfo.is_virtual == 0">
-      <div class="tabs">
-        <div class="tabs-item" :class="{active:tabIdx==0}" @click="changgeTabIdx(0)">快递发货</div>
-        <div class="tabs-item" :class="{active:tabIdx==1}" @click="changgeTabIdx(1)">到店自提</div>
+    <block v-if="orderInfo.is_virtual===0">
+      <div @click="goAddressList" class="address bg-white">
+        <image :src="'/static/client/location.png'|domain" alt="" class="loc_icon"></image>
+        <div class="add_msg" v-if="addressinfo.Address_Name">
+          <div class="name">收货人：{{addressinfo.Address_Name}} <span>{{addressinfo.Address_Mobile | formatphone}}</span>
+          </div>
+          <div class="location">
+            收货地址：{{addressinfo.Address_Province_name}}{{addressinfo.Address_City_name}}{{addressinfo.Address_Area_name}}{{addressinfo.Address_Town_name}}{{addressinfo.Address_Detailed}}
+          </div>
+        </div>
+        <div class="add_msg" v-else>
+          <div>暂无收货地址，去添加</div>
+        </div>
+        <image :src="'/static/client/right.png'|domain" alt="" class="right"></image>
+      </div>
+
+      <div class="remind-wrap" v-if="!addressinfo.Address_Name">
+        <div class="remind-add">
+          <div class="text-align-center mb20">新建收货地址</div>
+          <div class="remind_desc">
+            您还没有收货地址，请先添加一个新的收货地址
+          </div>
+          <div class="remind_btns text-align-center">
+            <div @click="$back" class="text-align-center fl1">返回</div>
+            <div @click="goEditAdd" class="text-align-center fl1 confirm">
+              新建
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </block>
+    <div class="container" v-if="orderInfo.is_virtual === 1">
+      <div class="other">
+        <div class="bd">
+          <div class="o_title  words">
+            <span>购买人姓名</span>
+            <input class="inputs" placeholder="请填写姓名" type="text" v-model="user_name">
+          </div>
+        </div>
+      </div>
+      <div class="other">
+        <div class="bd">
+          <div class="o_title  words">
+            <span>购买人手机号</span>
+            <input class="inputs" placeholder="请填写手机号码" type="text" v-model="user_mobile">
+          </div>
+        </div>
       </div>
     </div>
-    <block v-if="orderInfo.is_virtual == 0 && tabIdx==0 ">
-      <view class="address bgwhite" @click="goAddressList">
-        <image class="loc_icon" :src="'/static/client/location.png'|domain" alt=""></image>
-        <view class="add_msg" v-if="addressinfo.Address_Name">
-          <view class="name">收货人：{{addressinfo.Address_Name}} <span>{{addressinfo.Address_Mobile | formatphone}}</span>
-          </view>
-          <view class="location">
-            收货地址：{{addressinfo.Address_Province_name}}{{addressinfo.Address_City_name}}{{addressinfo.Address_Area_name}}{{addressinfo.Address_Town_name}}{{addressinfo.Address_Detailed}}
-          </view>
-        </view>
-        <view class="add_msg" v-else>
-          <view>暂无收货地址，去添加</view>
-        </view>
-        <image class="right" :src="'/static/client/right.png'|domain" alt=""></image>
-      </view>
-    </block>
 
-    <div class="container bgwhite">
-      <view class="biz_msg">
-        <div style="display: flex;align-items: center;">
-          <image :src="orderInfo.ShopLogo|domain" class="biz_logo" alt="" />
-          <span class="biz_name">{{orderInfo.ShopName}}</span>
-        </div>
-        <div v-if="tabIdx==0 && orderInfo.shipping_has_stores == 1" @click="multipleSelectStore"
-             class="graytext2 font14 disMbx">
-          {{orderInfo.Stores_Name?orderInfo.Stores_Name+' 修改门店':'选择门店'}}
-          <div class="zhouri">
-            <image style="width: 100%;height: 100%;" :src="'/static/client/right.png'|domain" alt=""></image>
+    <div class="container" v-if="orderInfo.CartList">
+
+      <div :key="storeIdx" class="store-item bg-white" v-for="(bizData,storeIdx) in orderInfo.CartList">
+        <div class="biz-info bor-b">
+          <div style="display: flex;align-items: center;">
+            <image :src="('https://newo2o.bafangka.com/static/member/images/login/loginWeixin.png'||orderInfo.biz_list[storeIdx].biz_logo)|domain"
+                   alt="" class="biz_logo" />
+            <span class="biz_name">{{orderInfo.biz_list[storeIdx].biz_name}}</span>
           </div>
         </div>
-        <div v-if="tabIdx==1" @click="multipleSelectStore" class="graytext2 font14">批量选择门店</div>
-      </view>
-      <view class="order_msg">
-        <block v-for="(pro,pro_id) in orderInfo.CartList" :key="pro_id">
-          <div v-for="(attr,attr_id) in pro" :key="attr_id">
-            <view class="pro">
-              <img class="pro-img" :src="attr.ImgPath" alt="">
-              <view class="pro-msg">
-                <view class="pro-name">{{attr.ProductsName}}</view>
-                <view class="attr" v-if="attr.Productsattrstrval"><span>{{attr.Productsattrstrval}}</span></view>
-                <view class="pro-price"><span>￥</span>{{attr.ProductsPriceX}} <span class="amount">x<span class="num">{{attr.Qty}}</span></span>
-                </view>
-              </view>
-            </view>
-            <div v-if="tabIdx==1" class="store-box" @click="openStores(pro_id,attr_id,attr.store)">
-              <div class="store-name">{{attr.store.Stores_Name||'选择门店'}}</div>
-              <div class="funicon icon-fanhui icon"></div>
+        <div class="biz-goods-list">
+          <block :key="pro_id" v-for="(pro,pro_id) in bizData">
+            <div :key="attr_id" v-for="(attr,attr_id) in pro">
+              <div class="pro">
+                <img :src="attr.ImgPath" alt="" class="pro-img">
+                <div class="pro-msg">
+                  <div class="pro-name">{{attr.ProductsName}}</div>
+                  <div class="attr" v-if="attr.Productsattrstrval"><span>{{attr.Productsattrstrval}}</span></div>
+                  <div class="pro-price"><span>￥</span>{{attr.ProductsPriceX}} <span class="amount">x<span class="num">{{attr.Qty}}</span></span>
+                  </div>
+                </div>
+              </div>
+              <div @click="openStores(pro_id,attr_id,attr.store)" class="store-box" v-if="tabIdx===1">
+                <div class="store-name">{{attr.store.Stores_Name||'选择门店'}}</div>
+                <div class="funicon icon-fanhui icon"></div>
+              </div>
+              <div class="goods-hr"></div>
             </div>
-            <div class="goods-hr"></div>
-          </div>
-
-        </block>
-      </view>
-      <block v-if="tabIdx==0">
-        <view class="other" v-if="orderInfo.is_virtual == 0">
-          <view class="bd">
-            <view class="o_title" @click="changeShip">
+          </block>
+        </div>
+        <div class="other">
+          <div class="bd"  v-if="orderInfo.is_virtual === 0">
+            <div @click="changeShip" class="o_title">
               <span>运费选择</span>
               <span style="text-align:right; color: #888;">
                 <span>{{shipping_name?(shipping_name + ' ' + (orderInfo.Order_Shipping.Price > 0 ? orderInfo.Order_Shipping.Price : '免运费')):'请选择物流'}}</span>
-                <image class="right" :src="'/static/client/right.png'|domain" alt=""></image>
+                <image :src="'/static/client/right.png'|domain" alt="" class="right"></image>
               </span>
-            </view>
-          </view>
-        </view>
-      </block>
-      <block v-if="tabIdx==1||orderInfo.is_virtual == 1">
-        <view class="other">
-          <view class="bd">
-            <view class="o_title  words">
-              <span>购买人姓名</span>
-              <input class="inputs" type="text" v-model="user_name" placeholder="请填写姓名">
-            </view>
-          </view>
-        </view>
-        <view class="other">
-          <view class="bd">
-            <view class="o_title  words">
-              <span>购买人手机号</span>
-              <input class="inputs" type="text" v-model="user_mobile" placeholder="请填写手机号码">
-            </view>
-          </view>
-        </view>
-      </block>
+            </div>
+          </div>
 
-      <view class="other" v-if="couponlist.length > 0">
-        <view class="bd">
-          <view class="o_title" @click="changeCoupon">
-            <span>优惠券选择</span>
-            <span style="text-align: right; color: #888;display: flex;align-items: center;">
+          <div class="bd" v-if="couponlist.length > 0">
+            <div @click="changeCoupon" class="o_title">
+              <span>优惠券选择</span>
+              <span style="text-align: right; color: #888;display: flex;align-items: center;">
               <span>{{couponlist.length>0?(coupon_desc?coupon_desc:'您有优惠券使用'): '暂无可用优惠券'}}</span>
-              <image :src="'/static/client/right.png'|domain" class="right" alt=""></image>
+              <image :src="'/static/client/right.png'|domain" alt="" class="right"></image>
             </span>
-          </view>
-        </view>
-      </view>
-      <view class="other" v-if="orderInfo.max_diyong_intergral > 0">
-        <view class="bd">
-          <view class="o_title">
-            <span>是否参与积分抵扣</span>
-            <switch :checked="intergralChecked" color="#04B600" @change="intergralSwitchChange" />
-          </view>
-          <view class="o_de" v-if="intergralChecked">您当前共有
-            <text>{{userInfo.User_Integral}}</text>
-            积分，每
-            <text>{{orderInfo.Integral_Buy}}</text>
-            积分可以抵扣
-            <text>1</text>
-            元，本次可使用
-            <text>{{orderInfo.max_diyong_intergral}}</text>
-            积分,总共可抵
-            <text>{{orderInfo.max_Integral_Money}}</text>
-            元
-          </view>
-        </view>
-      </view>
-      <view class="other" v-if="orderInfo.is_use_money == 1">
-        <view class="bd">
-          <view class="o_title">
-            <span>是否使用余额</span>
-            <switch :checked="userMoneyChecked" color="#04B600" @change="userMoneyChange" />
-          </view>
-          <view class="o_de">您当前最多使用余额:
-            <text>{{userInfo.User_Money < orderInfo.Order_TotalPrice ? userInfo.User_Money :
-              orderInfo.Order_TotalPrice}}
-            </text>
-          </view>
-          <input v-if="userMoneyChecked" @focus="postData.use_money = 0" v-model.number="postData.use_money"
-                 class="o_desc" placeholder="请输入金额" type="number" @blur="confirm_user_money">
-        </view>
-      </view>
-      <view class="other" v-if="initData.invoice_switch == 1">
-        <view class="bd">
-          <view class="o_title">
-            <span>是否开具发票</span>
-            <switch :checked="faPiaoChecked" color="#04B600" @change="faPiaoChange" />
-          </view>
-          <input v-if="faPiaoChecked" @blur="faPiaoConfirm" type="text" class="o_desc" placeholder="请输入发票抬头和纳税人识别号" />
-        </view>
-      </view>
-      <view class="other">
-        <view class="bd">
-          <view class="o_title  words">
-            <span>买家留言</span>
-            <input class="inputs" type="text" @blur="remarkConfirm" placeholder="请填写留言内容">
-          </view>
-        </view>
-      </view>
-      <!-- <view class="total">
-                <span style="margin-right:20rpx;">共<span>{{orderInfo.total_count}}</span>件商品</span>
-                <span>小计：<span>￥</span><span class="money">{{orderInfo.Order_TotalPrice}}</span></span>
-            </view> -->
+            </div>
+          </div>
 
-      <view class="remind-wrap" v-if="remindAddress">
-        <view class="remind-add">
-          <view class="text-align-center mb20">新建收货地址</view>
-          <view class="remind_desc">
-            您还没有收货地址，请先添加一个新的收货地址
-          </view>
-          <view class="remind_btns text-align-center">
-            <view class="text-align-center fl1" @click="$back">返回</view>
-            <view class="text-align-center fl1 confirm" @click="goEditAdd">
-              新建
-            </view>
-          </view>
-        </view>
-      </view>
+          <div class="bd" v-if="initData.invoice_switch === 1">
+            <div class="o_title">
+              <span>是否开具发票</span>
+              <switch :checked="faPiaoChecked" @change="faPiaoChange" color="#04B600" />
+            </div>
+            <input @blur="faPiaoConfirm" class="o_desc" placeholder="请输入发票抬头和纳税人识别号" type="text" v-if="faPiaoChecked" />
+          </div>
+
+          <div class="bd">
+            <div class="o_title  words">
+              <span>买家留言</span>
+              <input @blur="remarkConfirm" class="inputs" placeholder="请填写留言内容" type="text">
+            </div>
+          </div>
+
+          <div class="bd" v-if="orderInfo.max_diyong_intergral > 0">
+            <div class="o_title">
+              <span>是否参与积分抵扣</span>
+              <switch :checked="intergralChecked" @change="intergralSwitchChange" color="#04B600" />
+            </div>
+            <div class="o_de" v-if="intergralChecked">您当前共有
+              <text>{{userInfo.User_Integral}}</text>
+              积分，每
+              <text>{{orderInfo.Integral_Buy}}</text>
+              积分可以抵扣
+              <text>1</text>
+              元，本次可使用
+              <text>{{orderInfo.max_diyong_intergral}}</text>
+              积分,总共可抵
+              <text>{{orderInfo.max_Integral_Money}}</text>
+              元
+            </div>
+          </div>
+
+          <div class="bd" v-if="orderInfo.is_use_money === 1">
+            <div class="o_title">
+              <span>是否使用余额</span>
+              <switch :checked="userMoneyChecked" @change="userMoneyChange" color="#04B600" />
+            </div>
+            <div class="o_de">您当前最多使用余额:
+              <text>{{userInfo.User_Money < orderInfo.Order_TotalPrice ? userInfo.User_Money :
+                orderInfo.Order_TotalPrice}}
+              </text>
+            </div>
+            <input @blur="confirm_user_money" @focus="postData.use_money = 0" class="o_desc"
+                   placeholder="请输入金额" type="number" v-if="userMoneyChecked" v-model.number="postData.use_money">
+          </div>
+
+        </div>
+      </div>
+
     </div>
-    <view style="height: 50px;">
-      <view class="order_total" :style="{'z-index':zIndex}">
-        <view class="totalinfo">
-          <view class="info">共{{orderInfo.prod_count}}件商品 总计：
-            <text class="money">
-              <text class="m_icon">￥</text>
-              {{orderInfo.Order_Fyepay}}
-            </text>
-          </view>
-          <view class="tips" v-if="orderInfo.obtain_desc">{{orderInfo.obtain_desc}}</view>
-        </view>
-        <view class="mx" @click="seeDetail">明细
-          <image class="image" :class="isSlide?'slidedown': ''" src="/static/top.png"></image>
-        </view>
-        <form report-submit @submit="form_submit">
-          <button formType="submit" class="submit">提交订单</button>
-        </form>
-      </view>
-    </view>
+
+    <div :style="{'z-index':zIndex}" class="order_total">
+      <div class="totalinfo">
+        <div class="info">共{{orderInfo.prod_count||0}}件商品 总计：
+          <text class="money">
+            <text class="m_icon">￥</text>
+            {{orderInfo.Order_Fyepay||0}}
+          </text>
+        </div>
+        <div class="tips" v-if="orderInfo.obtain_desc">{{orderInfo.obtain_desc}}</div>
+      </div>
+      <div @click="seeDetail" class="mx">明细
+        <image :class="isSlide?'slidedown': ''" class="image" src="/static/top.png"></image>
+      </div>
+
+      <button class="submit" @click="form_submit">提交订单</button>
+
+    </div>
+
     <div class="safearea-box"></div>
-    <popup-layer ref="popupMX" :direction="'top'" @maskClicked="handClicked" :bottomHeight="bottomHeight">
-      <view class="mxdetail">
-        <view class="mxtitle">明细</view>
-        <view class="mxitem">产品原价
+
+    <layout-layer :bottomHeight="bottomHeight" title="运费选择"  @maskClicked="handClicked" ref="popupMX">
+      <div class="mxdetail">
+        <div class="mxtitle">明细</div>
+        <div class="mxitem">产品原价
           <text class="num">{{orderInfo.Order_TotalAmount-orderInfo.Order_Shipping.Price}}</text>
-        </view>
-        <view class="mxitem" v-if="checkfrom">{{active_name}}
+        </div>
+        <div class="mxitem" v-if="checkfrom">{{active_name}}
           <text class="num">{{orderInfo.Order_Fyepay}}</text>
-        </view>
-        <view class="mxitem" v-if="orderInfo.user_curagio_money > 0">会员折扣
+        </div>
+        <div class="mxitem" v-if="orderInfo.user_curagio_money > 0">会员折扣
           <text class="num">-{{orderInfo.user_curagio_money}}</text>
-        </view>
-        <view class="mxitem" v-if="orderInfo.Manjian_Cash > 0">满减
+        </div>
+        <div class="mxitem" v-if="orderInfo.Manjian_Cash > 0">满减
           <text class="num">-{{orderInfo.Manjian_Cash}}</text>
-        </view>
-        <view class="mxitem" v-if="orderInfo.Coupon_Money > 0">优惠券
+        </div>
+        <div class="mxitem" v-if="orderInfo.Coupon_Money > 0">优惠券
           <text class="num">-{{orderInfo.Coupon_Money}}</text>
-        </view>
-        <view class="mxitem" v-if="orderInfo.Integral_Money > 0">积分抵用
+        </div>
+        <div class="mxitem" v-if="orderInfo.Integral_Money > 0">积分抵用
           <text class="num">-{{orderInfo.Integral_Money}}</text>
-        </view>
-        <view class="mxitem" v-if="orderInfo.Order_Yebc > 0">余额
+        </div>
+        <div class="mxitem" v-if="orderInfo.Order_Yebc > 0">余额
           <text class="num">-{{orderInfo.Order_Yebc}}</text>
-        </view>
-        <view class="mxitem" v-if="orderInfo.Order_Shipping.Price > 0">运费
+        </div>
+        <div class="mxitem" v-if="orderInfo.Order_Shipping.Price > 0">运费
           <text class="num">+{{orderInfo.Order_Shipping.Price}}</text>
-        </view>
-      </view>
-    </popup-layer>
-    <popup-layer ref="popupRef" :direction="'top'">
-      <view class="bMbx" v-if="type=='shipping'">
-        <view class="fMbx">运费选择</view>
-        <view class="iMbx" v-for="(ship,shipid) in orderInfo.shipping_company" :key="shipid">
-          <view>
-            {{ship}}
-          </view>
-          <radio-group @change="ShipRadioChange" class="mbx-mbx">
-            <radio :value="shipid" :checked="shipid==ship_current" class="mbxs" style="float:right;" color="#F43131" />
-          </radio-group>
-        </view>
-      </view>
-      <scroll-view style="height:430rpx;width:95%;" scroll-y="true" class="bMbx" v-if="type=='coupon'">
-        <view class="fMbx scroll-view-item">优惠券选择</view>
-        <radio-group @change="radioChange">
-          <label class="iMbx scroll-view-item" v-for="(coupon,i) in orderInfo.coupon_list" :key="i">
-            <block v-if="coupon.Coupon_ID">
-              满{{coupon.Coupon_Condition}} - {{coupon.Coupon_Cash > 0 ? coupon.Coupon_Cash : coupon.Coupon_Discount}}
-            </block>
-            <block v-else>
-              不使用优惠
-            </block>
-
-            <radio :value="''+coupon.Coupon_ID" :checked="i===current" style="float:right;" color="#F43131" />
-
-          </label>
+        </div>
+      </div>
+    </layout-layer>
+    <layout-layer ref="freight">
+      <div class="freight-popup-wrap" v-if="type==='shipping'">
+        <radio-group @change="ShipRadioChange" class="row">
+        <div :key="shipid" class="label flex flex-justify-between" v-for="(ship,shipid) in orderInfo.shipping_company">
+          <div class="flex1">{{ship}}</div>
+          <radio :checked="shipid===ship_current" :value="shipid" class="radio" color="#F43131"/>
+        </div>
         </radio-group>
-      </scroll-view>
-      <view class="sure" @click="closeMethod">
-        确定
-      </view>
-    </popup-layer>
-    <store-list-components style="z-index: 10000;" :pageEl="selfObj" direction="top" ref="stroeComp"
-                           @callFn="bindStores" @change="selectStore=false" catchtouchmove />
-  </view>
+        <div @click="closeMethod" class="submit-btn">
+          确定
+        </div>
+      </div>
+
+    </layout-layer>
+
+    <layout-layer ref="freight">
+      <div class="bMbx freight-wrap" v-if="type==='shipping'">
+        <div class="fMbx">运费选择</div>
+        <scroll-div class="bMbx" scroll-y="true" style="height:430rpx;width:95%;" v-if="type==='coupon'">
+          <div class="fMbx scroll-div-item">优惠券选择</div>
+          <radio-group @change="radioChange">
+            <label :key="i" class="iMbx scroll-div-item" v-for="(coupon,i) in orderInfo.coupon_list">
+              <block v-if="coupon.Coupon_ID">
+                满{{coupon.Coupon_Condition}} - {{coupon.Coupon_Cash > 0 ? coupon.Coupon_Cash : coupon.Coupon_Discount}}
+              </block>
+              <block v-else>
+                不使用优惠
+              </block>
+
+              <radio :checked="i===current" :value="''+coupon.Coupon_ID" color="#F43131" style="float:right;" />
+
+            </label>
+          </radio-group>
+        </scroll-div>
+        <div @click="closeMethod" class="sure">
+          确定
+        </div>
+      </div>
+    </layout-layer>
+    <!--    <store-list-components style="z-index: 10000;" :pageEl="selfObj" direction="top" ref="stroeComp" @callFn="bindStores" @change="selectStore=false" catchtouchmove />-->
+  </div>
 </template>
 
 <script>
-// import popupLayer from '../../components/popup-layer/popup-layer.vue';
+
 // import StoreListComponents from "../../components/StoreListComponents";
 
 import BaseMixin from '@/mixins/BaseMixin'
-import { mapGetters, mapActions } from 'vuex'
-import {
-  getCart, createOrderCheck, createOrder
-} from '@/api/order'
-import {
-  getUserInfo, getAddressList
-} from '@/api/customer'
+import { createOrder, createOrderCheck } from '@/api/order'
+import { getAddressList } from '@/api/customer'
+import LayoutLayer from '@/componets/layout-layer/layout-layer'
+import { modal } from '@/common/fun'
 
 export default {
   mixins: [BaseMixin],
-  components: {},
+  components: { LayoutLayer },
   data () {
     return {
       selfObj: null,
@@ -306,7 +290,11 @@ export default {
         }
       ],
       addressinfo: {}, // 收货地址信息
-      orderInfo: {},
+      orderInfo: {
+        is_use_money: 0,
+        prod_count: 0,
+        Order_Fyepay: 0
+      },
       type: 'shipping',
       cart_buy: '',
       current: '',
@@ -323,19 +311,19 @@ export default {
       postData: {
         cart_key: '',
         cart_buy: '',
-        shipping_id: 0,
         address_id: '',
-        coupon_id: '',
-        use_integral: 0, // 用于抵扣的积分数
-        use_money: 0, // 余额支付金额
-        invoice_info: '', // 发票抬头
-        order_remark: '' // 买家留言
+        shipping_id: {},
+        coupon_id: {},
+        use_integral: {}, // 用于抵扣的积分数
+        use_money: {}, // 余额支付金额
+        need_invoice: {},
+        invoice_info: {}, // 发票抬头
+        order_remark: {} // 买家留言
       },
       Order_ID: 0,
       addressLoading: false, // 收货地址信息是否加载完
       orderLoading: false, // 订单信息是否加载完
       userLoading: false, // 个人信息是否加载完
-      // remindAddress: false, // 提醒添加收货地址
       submited: false, // 是否已经提交过，防止重复提交
       back_address_id: 0,
       user_name: '',
@@ -351,14 +339,7 @@ export default {
   },
   filters: {},
   onShow () {
-    if (JSON.stringify(this.userInfo) != '{}') {
-      getUserInfo().then(res => {
-        this.setUserInfo(res.data)
-      }).catch(e => {
-      })
-    }
-    this.getAddress()
-    this.createOrderCheck(2)
+    this._init_func()
   },
   async created () {
     // #ifdef H5
@@ -373,34 +354,58 @@ export default {
     if (options.checkfrom) {
       this.checkfrom = options.checkfrom
     }
+
+    // 页面直接传值很方便，为什么这么难受
+    uni.$on('bind_select_address', (data) => {
+      this.back_address_id = data.Address_ID
+      this.addressinfo = data
+
+      this.createOrderCheck()
+    })
   },
   computed: {
     loading: function () {
       return this.addressLoading && this.orderLoading
     },
-    remindAddress: function () {
-      return this.orderInfo.is_virtual == 0 && !this.addressinfo.Address_Name
-    },
-    active_name: function () {
+    active_name () {
+      let rt = ''
       switch (this.checkfrom) {
         case 'spike' :
-          return '秒杀价'
+          rt = '秒杀价'
           break
         case 'limit' :
-          return '限时抢购价'
+          rt = '限时抢购价'
           break
         case 'group' :
-          return '拼团价'
+          rt = '拼团价'
       }
+      return rt
     }
     // ...mapGetters(['userInfo','initData'])
   },
   methods: {
+    async _init_func () {
+      if (!this.$checkIsLogin(1, 1)) return
+      // if (JSON.stringify(this.userInfo) !== '{}') {
+      //   getUserInfo().then(res => {
+      //     this.setUserInfo(res.data)
+      //   }).catch(e => {
+      //   })
+      // }
+      const addressList = await getAddressList({}, { onlyData: true }).catch(() => {})
+      if (Array.isArray(addressList) && addressList.length > 0) {
+        this.addressinfo = addressList[0]
+      }
+      this.postData.address_id = this.addressinfo.Address_ID
+
+      // 获取用户收货地址，获取订单信息，后台判断运费信息
+      this.createOrderCheck({ isInit: true })
+    },
     changgeTabIdx (index) {
       this.tabIdx = index
-      if (index == 0) {
+      if (index === 0) {
         this.postData.shipping_id = this.idD
-      } else if (index == 1) {
+      } else if (index === 1) {
         this.idD = this.postData.shipping_id
         this.postData.shipping_id = 'is_store'
       }
@@ -409,7 +414,7 @@ export default {
       if (this.tabIdx === 1) {
         this.selectStore = false
         this.postData.shipping_id = 'is_store'
-      } else if (this.orderInfo.is_virtual == 1) {
+      } else if (this.orderInfo.is_virtual === 1) {
         this.postData.shipping_id = ''
       } else {
         // 为了选择门店的时候的用户体验
@@ -428,13 +433,15 @@ export default {
 
         this.orderInfo.Stores_Name = storeInfo.Stores_Name
       } else {
-        const tempArr = this.setStoreMode.split('::'); const prod_id = tempArr[0]; const attr_id = tempArr[1]
+        const tempArr = this.setStoreMode.split('::')
+        const prod_id = tempArr[0]
+        const attr_id = tempArr[1]
         this.orderInfo.CartList[prod_id][attr_id].store = storeInfo
         this.orderInfo.Stores_Name = storeInfo.Stores_Name
       }
       this.$refs.stroeComp.close()
 
-      if (this.postData.shipping_id == 'is_store') {
+      if (this.postData.shipping_id === 'is_store') {
         const obj = {}
         for (const it in this.orderInfo.CartList) {
           for (const iq in this.orderInfo.CartList[it]) {
@@ -447,7 +454,7 @@ export default {
       }
 
       // 新增
-      // if(this.tabIdx==0){
+      // if(this.tabIdx===0){
       this.createOrderCheck()
       // }
 
@@ -484,12 +491,12 @@ export default {
     seeDetail () {
       if (!this.isSlide) {
         this.bottomHeight = 50
-        this.zIndex = 9999999
+        this.zIndex = 9
         this.$refs.popupMX.show()
       } else {
         this.$refs.popupMX.close()
         setTimeout(() => {
-          this.zIndex = 99999
+          this.zIndex = 9
           this.bottomHeight = 0
         }, 500)
       }
@@ -518,9 +525,9 @@ export default {
     form_submit (e) {
       if (!this.submited) {
         this.submited = true
-        if (this.postData.need_invoice == 1 && this.postData.invoice_info == '' && this.initData.invoice_switch == 1) {
+        if (this.postData.need_invoice === 1 && this.postData.invoice_info === '' && this.initData.invoice_switch === 1) {
           this.submited = false
-          if (this.postData.invoice_info == '') {
+          if (this.postData.invoice_info === '') {
             uni.showToast({
               title: '发票信息不能为空',
               icon: 'none'
@@ -529,7 +536,7 @@ export default {
           }
         }
 
-        if (this.tabIdx == 1 && this.postData.shipping_id != 'is_store') {
+        if (this.tabIdx === 1 && this.postData.shipping_id !== 'is_store') {
           this.submited = false
           uni.showToast({
             title: '请选择门店',
@@ -537,7 +544,7 @@ export default {
           })
           return
         }
-        if (this.orderInfo.is_virtual == 0) {
+        if (this.orderInfo.is_virtual === 0) {
           if (!this.postData.shipping_id) {
             uni.showToast({
               title: '请选择物流',
@@ -548,28 +555,30 @@ export default {
           }
         }
 
-        if (this.orderInfo.is_virtual == 1 || this.postData.shipping_id == 'is_store') {
-          // if(!this.user_name) {
-          // 	uni.showToast({
-          // 		title: '请填写购买人姓名',
-          // 		icon: 'none'
-          // 	});
-          // 	this.submited = false;
-          // 	return;
-          // };
-          // if(!this.user_mobile) {
-          // 	uni.showToast({
-          // 		title: '请填写购买人手机号',
-          // 		icon: 'none'
-          // 	});
-          // 	this.submited = false;
-          // 	return;
-          // };
+        if (this.orderInfo.is_virtual === 1 || this.postData.shipping_id === 'is_store') {
+          // if (!this.user_name) {
+          //   uni.showToast({
+          //     title: '请填写购买人姓名',
+          //     icon: 'none'
+          //   })
+          //   this.submited = false
+          //   return
+          // }
+          //
+          // if (!this.user_mobile) {
+          //   uni.showToast({
+          //     title: '请填写购买人手机号',
+          //     icon: 'none'
+          //   })
+          //   this.submited = false
+          //   return
+          // }
+
           this.postData.user_name = this.user_name
           this.postData.user_mobile = this.user_mobile
         }
 
-        if (this.postData.shipping_id == 'is_store') {
+        if (this.postData.shipping_id === 'is_store') {
           const obj = {}
           for (const it in this.orderInfo.CartList) {
             for (const iq in this.orderInfo.CartList[it]) {
@@ -580,16 +589,13 @@ export default {
           }
           this.postData.self_pick_store_id = JSON.stringify(obj)
         }
-        // add_template_code({
-        // 	code: e.detail.formId,
-        // 	times: 1
-        // })
+
         if (this.shipping_store_id) {
           this.postData.shipping_store_id = this.shipping_store_id
         }
         createOrder(this.postData).then(res => {
           // 如果order_totalPrice <= 0  直接跳转 订单列表页
-          if (res.data.Order_Status != 1) {
+          if (res.data.Order_Status !== 1) {
             // 直接跳转订单列表页
             uni.redirectTo({
               url: '/pages/order/order'
@@ -638,24 +644,11 @@ export default {
     },
     // 发票抬头输入完成
     faPiaoConfirm (e) {
-      // #ifdef H5
-      // uni.pageScrollTo({
-      // 	scrollTop: 0,
-      // 	duration: 200
-      // });
-      // #endif
       const invoice_info = e.detail.value
-
       this.postData.invoice_info = invoice_info
     },
     // 余额支付输入完成
     confirm_user_money (e) {
-      // #ifdef H5
-      // uni.pageScrollTo({
-      // 	scrollTop: 0,
-      // 	duration: 200
-      // });
-      // #endif
       const input_money = e.detail.value
       // let user_money = this.userInfo.User_Money;
       // 用户的金额和订单金额比较，取较小的那个与用户输入金额比较
@@ -684,24 +677,13 @@ export default {
     },
     // 留言
     remarkConfirm (e) {
-      // #ifdef H5
-      // uni.pageScrollTo({
-      // 	scrollTop: 0,
-      // 	duration: 200
-      // });
-      // #endif
       this.postData.order_remark = e.detail.value
     },
-    //
-    //  	notUseCoupon(){
-    // 	this.postData.coupon_id = ''
-    // 	this.current = ''
-    // },
     // 优惠券改变
     radioChange (e) {
       var couponlist = this.orderInfo.coupon_list
       for (var i = 0; i < couponlist.length; i++) {
-        if (couponlist[i].Coupon_ID == e.target.value) {
+        if (couponlist[i].Coupon_ID === e.target.value) {
           this.current = i
           break
         }
@@ -712,7 +694,7 @@ export default {
     // 物流改变
     ShipRadioChange (e) {
       for (var i in this.orderInfo.shipping_company) {
-        if (i == e.target.value) {
+        if (i === e.target.value) {
           this.ship_current = i
           break
         }
@@ -722,104 +704,78 @@ export default {
     },
     changeCoupon () {
       this.type = 'coupon'
-      if (this.couponlist.length == 0) {
+      if (this.couponlist.length === 0) {
         return
       }
-      this.$refs.popupRef.show()
+      this.$refs.freight.show()
     },
     // 选择运费
     changeShip () {
       this.type = 'shipping'
       this.ship_current = this.postData.shipping_id
-      this.$refs.popupRef.show()
+      this.$refs.freight.show()
     },
     closeMethod () {
-      if (this.type == 'coupon') {
+      if (this.type === 'coupon') {
         // 不使用优惠
         if (!this.postData.coupon_id) {
           this.coupon_desc = '暂不使用优惠'
           this.createOrderCheck()
-          this.$refs.popupRef.close()
+          this.$refs.freight.close()
           return
         }
         for (var i in this.couponlist) {
-          if (this.couponlist[i].Coupon_ID == this.postData.coupon_id) {
+          if (this.couponlist[i].Coupon_ID === this.postData.coupon_id) {
             this.coupon_desc = `满${this.couponlist[i].Coupon_Condition} - ${this.couponlist[i].Coupon_Cash > 0 ? this.couponlist[i].Coupon_Cash : this.couponlist[i].Coupon_Discount}`
           }
         }
       } else {
         for (var i in this.orderInfo.shipping_company) {
-          if (i == this.postData.shipping_id) {
+          if (i === this.postData.shipping_id) {
             this.shipping_name = `${this.orderInfo.shipping_company[i]}`
           }
         }
       }
 
       this.createOrderCheck()
-      this.$refs.popupRef.close()
+      this.$refs.freight.close()
     },
-    async getAddress () {
-      uni.$on('fire', (data) => {
-        this.back_address_id = data
-      })
-      var Address_ID
-      if (this.back_address_id) { // 添加、选择收获地址返回
-        Address_ID = this.back_address_id
-      } else if (this.addressinfo.Address_ID) { // 有收获地址，则更新（防止收获地址编辑后返回）
-        Address_ID = this.addressinfo.Address_ID
-      }
-      await getAddressList({ Address_ID: Address_ID || 0 }).then(res => {
-        // if (this.back_address_id) {  //添加、选择收获地址返回
-        // 	uni.showModal({
-        // 	  title: '错误',
-        // 	  content: '收货地址获取失败',
-        // 	  showCancel: false
-        // 	});
-        // 	return false;
-        // }
-        if (this.back_address_id && res.errorCode != 0) { // 添加、选择收获地址返回
-          uni.showModal({
-            title: '错误',
-            content: '收货地址获取失败',
-            showCancel: false
-          })
-          return false
-        }
-        if (!res.data[0]) return
-        if (res.data.length > 0) {
-          this.addressinfo = res.data[0]
-        }
+    getAddress () {
 
-        this.postData.address_id = this.addressinfo.Address_ID
-        this.back_address_id = 0
+      // // 添加、选择收获地址返回
+      // // 有收获地址，则更新（防止收获地址编辑后返回）
+      // const Address_ID = this.back_address_id || this.addressinfo.Address_ID
+      //
+      // return new Promise((resolve, reject) => {
+      //
+      //
+      // })
 
-        // 获取用户收货地址，获取订单信息，后台判断运费信息
-        this.createOrderCheck()
-      }).catch(() => {
-      })
-
-      this.addressLoading = true
     },
-    createOrderCheck (num) {
+    /**
+     * 更新下单信息
+     * @param isInit 初次请求需要标记为true,因为有些操作只有第一次的时候才做
+     */
+    createOrderCheck ({ isInit = false }) {
       const oldOrderInfo = { ...this.orderInfo }
       createOrderCheck(this.postData).then(res => {
-        for (var i in res.data.CartList) {
-          for (var j in res.data.CartList[i]) {
-            res.data.CartList[i][j].store = {}
-            console.log(res.data.CartList[i][j], 'sss')
-            if (res.data.CartList[i][j].choose_store_info) {
-              res.data.CartList[i][j].store.Stores_Name = res.data.CartList[i][j].choose_store_info.Stores_Name
-              res.data.CartList[i][j].store.Stores_ID = res.data.CartList[i][j].choose_store_info.Stores_ID
-            }
-          }
-        }
+        // for (var i in res.data.CartList) {
+        //   for (var j in res.data.CartList[i]) {
+        //     res.data.CartList[i][j].store = {}
+        //     console.log(res.data.CartList[i][j], 'sss')
+        //     if (res.data.CartList[i][j].choose_store_info) {
+        //       res.data.CartList[i][j].store.Stores_Name = res.data.CartList[i][j].choose_store_info.Stores_Name
+        //       res.data.CartList[i][j].store.Stores_ID = res.data.CartList[i][j].choose_store_info.Stores_ID
+        //     }
+        //   }
+        // }
         this.orderInfo = Object.assign(oldOrderInfo, res.data)
         if (this.orderInfo.coupon_list.length > 0) {
           this.orderInfo.coupon_list.push({ Coupon_ID: '' })
         }
 
         // 如果该规格有门店 就优先后台设置的
-        if (this.orderInfo.all_has_stores == 1 && num == 2 && this.orderInfo.is_virtual != 1) {
+        if (this.orderInfo.all_has_stores === 1 && isInit === true && this.orderInfo.is_virtual !== 1) {
           this.tabIdx = this.initData.order_submit_first
         }
 
@@ -828,9 +784,9 @@ export default {
         this.orderLoading = true
         this.postData.shipping_id = res.data.Order_Shipping.shipping_id
         this.idD = this.postData.shipping_id
-        for (var i in this.orderInfo.shipping_company) {
-          if (i == this.postData.shipping_id) {
-            this.shipping_name = `${this.orderInfo.shipping_company[i]}`
+        for (var k in this.orderInfo.shipping_company) {
+          if (k === this.postData.shipping_id) {
+            this.shipping_name = `${this.orderInfo.shipping_company[k]}`
           }
         }
       }).catch(e => {
@@ -845,7 +801,16 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
+  .page-wrap {
+    background: #f8f8f8;
+    min-height: 100vh;
+    /* #ifdef MP */
+    padding-bottom: constant(safe-area-inset-bottom);
+    padding-bottom: env(safe-area-inset-bottom);
+    /* #endif */
+  }
+
   .top {
     padding: 10px 0;
 
@@ -862,8 +827,8 @@ export default {
         text-align: center;
 
         &.active {
-          color: $wzw-primary-color;
-          border-bottom: 2px solid $wzw-primary-color;
+          color: $fun-primary-color;
+          border-bottom: 2px solid $fun-primary-color;
         }
 
         &:last-child {
@@ -871,14 +836,6 @@ export default {
         }
       }
     }
-  }
-
-  .wrap {
-    background: #fff;
-    /* #ifdef MP */
-    padding-bottom: constant(safe-area-inset-bottom);
-    padding-bottom: env(safe-area-inset-bottom);
-    /* #endif */
   }
 
   .mxdetail {
@@ -924,6 +881,10 @@ export default {
 
   .container {
     padding-bottom: 60px;
+
+    .store-item {
+      margin-bottom: 15px;
+    }
   }
 
   .loc_icon {
@@ -951,16 +912,13 @@ export default {
 
   /* 收货地址 end */
   /* 订单信息 start */
-  .order_msg {
-    padding: 0 40rpx 0 30rpx;
-  }
 
-  .biz_msg {
+  .biz-info {
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 30rpx;
-    padding: 20rpx 30rpx 0rpx;
+    padding: 20rpx 30rpx;
   }
 
   .biz_logo {
@@ -981,11 +939,12 @@ export default {
 
   }
 
-  .order_msg .pro:last-child {
-    margin-bottom: 17rpx
-  }
+  .biz-goods-list {
 
-  .order_msg {
+    padding: 0 40rpx 0 30rpx;
+    .pro:last-child {
+      margin-bottom: 17rpx
+    }
     .store-box {
       padding: 15px 0 0;
       display: flex;
@@ -1075,7 +1034,7 @@ export default {
   /* 订单信息 end */
   /* 订单其他信息 start */
   .other {
-    padding: 30rpx 40rpx 0 30rpx;
+    padding: 0 40rpx 0 30rpx;
     font-size: 22rpx;
 
     .right {
@@ -1086,8 +1045,12 @@ export default {
   }
 
   .other .bd {
+    margin-top: 30rpx;
     padding-bottom: 30rpx;
     border-bottom: 2rpx solid #efefef;
+    &:last-child{
+      border-bottom: none;
+    }
   }
 
   .o_title {
@@ -1148,6 +1111,7 @@ export default {
   .order_total {
     position: fixed;
     bottom: 0;
+    height: 50px;
     /* #ifdef MP */
     bottom: constant(safe-area-inset-bottom);
     bottom: env(safe-area-inset-bottom);
@@ -1208,9 +1172,38 @@ export default {
     color: #979797;
   }
 
+  .freight-popup-wrap{
+    width: 750rpx;
+    .row{
+
+      display: flex;
+      flex: 1;
+      height: 100%;
+      align-items: center;
+      justify-content: flex-end;
+      .label{
+        padding: 0rpx 20rpx;
+        height: 104rpx;
+        border-bottom: 1px solid rgba(230, 230, 230, 1);
+        align-items: center;
+        font-size: 28rpx;
+      }
+    }
+    .submit-btn {
+      height: 90rpx;
+      width: 100%;
+      background-color: #F43131;
+      color: #fff;
+      font-size: 32rpx;
+      margin-top: 96rpx;
+      line-height: 90rpx;
+      text-align: center;
+    }
+  }
+
   .bMbx {
     padding: 0rpx 20rpx;
-
+    width: 710rpx;
     .fMbx {
       font-size: 32rpx;
       height: 30rpx;

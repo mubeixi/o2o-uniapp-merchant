@@ -94,6 +94,7 @@ class XHR {
     let _param = {
       access_token: getAccessToken(),
       biz_id: getBizId(),
+      User_ID:getUserID(),
       env: getEnv(), ...param,
     }
     

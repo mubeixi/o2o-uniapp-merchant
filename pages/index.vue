@@ -137,7 +137,7 @@
             </div>
             <div class="block-content">
               <div class="goods-list">
-                <div class="goods-item" v-for="(item,idx) in goodsList" :key="idx">
+                <div class="goods-item" v-for="(item,idx) in goodsList" :key="idx" @click="$toGoodsDetail(item.Products_ID)">
                   <block v-if="idx<6">
                     <div class="cover" :style="{backgroundImage:'url('+item.ImgPath+')'}">
                       <div class="tip" style="background: #185e44;">同城配送</div>
@@ -179,7 +179,7 @@
             <div class="block-content">
               <div class="live-list">
                 <block v-for="(item,idx) in goodsList" :key="idx">
-                <div class="live-item" v-if="idx<3">
+                <div class="live-item" v-if="idx<3"  @click="$toGoodsDetail(item.Products_ID)">
                   
                     <div class="left">
                       <div class="cover" :style="{backgroundImage:'url('+item.ImgPath+')'}"></div>
@@ -285,7 +285,7 @@
             </div>
             <div class="store-goods-list">
               <block v-for="(goods,idx) in goodsList" :key="idx">
-                <div class="store-goods-item" v-if="idx<3" >
+                <div class="store-goods-item" v-if="idx<3"  @click="$toGoodsDetail(item.Products_ID)">
 
                   <image :style="{backgroundImage:'url('+goods.ImgPath+')'}" class="cover" />
                   <div class="title fz-12 c3 p-t-7 p-b-7">{{goods.Products_Name}}</div>

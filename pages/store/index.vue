@@ -193,7 +193,7 @@
                 <div class="flex" style="flex-wrap: wrap;width: 710rpx;">
                   <div
                     style="width: 345rpx;border-radius: 8rpx;overflow: hidden;height: 450rpx;margin-bottom: 20rpx;"
-                    @click="$linkTo('/pages/product/detail?prod_id='+item.Products_ID)"
+                    @click="$toGoodsDetail(item.Products_ID)"
                     v-for="(item,idx) in goodsList" :style="{marginRight:idx%2===0?'20rpx':'0rpx'}"
                     :key="idx">
                     <div class="img-cover" style="width: 345rpx;height: 345rpx"
