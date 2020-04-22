@@ -18,9 +18,9 @@
 export default {
   name: 'LayoutComment',
   props: {
-    isLast:{
-      type:Boolean,
-      default:false
+    isLast: {
+      type: Boolean,
+      default: false
     },
     comment: {}
   },
@@ -33,18 +33,21 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-  .commtent-item{
+  .commtent-item {
     padding: 30rpx 0;
     border-bottom: 1px solid #eee;
-    .info{
+
+    .info {
       padding-bottom: 20rpx;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      .userInfo{
+
+      .userInfo {
         display: flex;
         align-items: center;
-        .headimg{
+
+        .headimg {
           width: 70rpx;
           height: 70rpx;
           border-radius: 50%;
@@ -52,21 +55,25 @@ export default {
           margin-right: 20rpx;
         }
       }
-      .create_at{
+
+      .create_at {
         color: #777;
       }
     }
-    .content{
+
+    .content {
       font-size: 14px;
       color: #333;
       line-height: 1.6;
     }
-    .actions{
+
+    .actions {
       padding-top: 20rpx;
       text-align: right;
       color: #999;
       font-size: 12px;
-      .icon{
+
+      .icon {
         width: 30rpx;
         height: 26rpx;
         margin-right: 4px;

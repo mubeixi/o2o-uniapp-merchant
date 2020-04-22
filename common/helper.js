@@ -77,7 +77,10 @@ export const findArrayIdx = (arr, keyValArr, full = false) => {
     // 用来比较对象
     if (compareObj(keyValArr, arr[i])) {
       if (!full) return i
-      return { val: arr[i], idx: i }
+      return {
+        val: arr[i],
+        idx: i
+      }
     }
   }
   return false
@@ -260,11 +263,17 @@ export const checkIsLogin = (redirect = 1, tip = 0) => {
         return
       }
 
-      confirm({ title: '提示', content: '该操作需要登录,请问是否登录?', confirmText: '去登录', cancelText: '暂不登录' }).then(() => {
+      confirm({
+        title: '提示',
+        content: '该操作需要登录,请问是否登录?',
+        confirmText: '去登录',
+        cancelText: '暂不登录'
+      }).then(() => {
         uni.navigateTo({
           url: '/pages/user/login'
         })
-      }).catch(() => {})
+      }).catch(() => {
+      })
     }
     return false
   }
@@ -288,10 +297,110 @@ export function sleep (fn, par, time = 3000) {
   })
 }
 
+/**
+ * 根据拼团跳转不同的页面
+ * @param id
+ * @param is_group
+ */
+export const goProductDetail = (id, is_group) => {
+  if (!id) return
+
+  // let path = '/pages/product/detail';
+  const path = is_group ? '/pages/detail/groupDetail' : '/pages/product/detail'// 根据不同路径跳转
+  uni.navigateTo({
+    url: path + '?Products_ID=' + id
+  })
+}
+
+// 会修改模板对象，将他没有的属性加上
+function addFun (object, newobj) {
+  for (const key in object) {
+    if (!object.hasOwnProperty(key)) continue
+
+    if (typeof object[key] === 'object') {
+      if (!newobj) continue
+      addFun(object[key], newobj[key])
+    } else if (typeof object[key] === 'function') {
+      continue
+    } else {
+      if (!newobj || !newobj[key]) continue
+      object[key] = newobj[key]
+    }
+  }
+}
+
+export function deepCopyStrict (currentObj, newObject) {
+  addFun(currentObj, newObject)
+  // mergeData(currentObj, newObject, 1);
+  return currentObj
+}
+
+/**
+ * 快速创建空数组
+ * @param len
+ * @param item
+ * @return {[]}
+ */
+export const createEmptyArray = (len, item) => {
+  if (item === undefined) {
+    item = ''
+  }
+
+  const tempArr = []
+
+  for (var i = 0; i < len; i++) {
+    tempArr[i] = item
+  }
+
+  return tempArr
+}
+
+export const getCountdownFunc = ({ start_timeStamp, end_timeStamp, current = (new Date()).getTime() } = {}) => {
+  let { d = 0, h = 0, m = 0, s = 0 } = {}
+
+  // 时间戳格式转换
+  current = parseInt(current / 1000)
+
+  let countTime = 0; let is_start = false; let is_end = false
+
+  // 还没开始
+  if (start_timeStamp > current && end_timeStamp > current) {
+    countTime = start_timeStamp - current
+  } else if (end_timeStamp > current && start_timeStamp < current) {
+    // 还在进行中
+
+    is_start = true
+    countTime = end_timeStamp - current
+  } else {
+    is_end = true
+
+    // throw "活动信息无效";
+  }
+
+  d = parseInt(countTime / (60 * 60 * 24))
+  h = parseInt((countTime - d * 60 * 60 * 24) / (60 * 60))
+  m = parseInt((countTime - d * 60 * 60 * 24 - h * 60 * 60) / 60)
+  s = countTime - d * 60 * 60 * 24 - h * 60 * 60 - m * 60
+
+  return { d, h, m, s, is_start, is_end }
+}
+
+// 输入金额时时验证
+export function check_money_in (money) {
+  if (!(/(^[1-9]([0-9]+)?(\.[0-9]{0,2})?$)|(^(0){1}$)|(^[0-9]\.([0-9]){0,2}?$)/.test(money))) {
+    return false
+  } else {
+    return true
+  }
+}
+
 const Helper = {
   Object: {
+    mapList: (list, fn) => {
+      list = list.map(fn)
+    },
     extend: (o, p) => {
-      for (const prop in p)o[prop] = p[prop]
+      for (const prop in p) o[prop] = p[prop]
       return o
     },
     // 把p中属性都给o，不覆盖o自有属性
@@ -311,6 +420,5 @@ const Helper = {
     }
   }
 }
-
 
 export default Helper

@@ -1,6 +1,5 @@
 {
-	"pages": [
-		{
+	"pages": [{
 			"path": "pages/index",
 			"style": {
 				"navigationBarTextStyle": "light",
@@ -8,6 +7,9 @@
 				"navigationBarTitleText": "首页",
 				"navigationStyle": "custom"
 			}
+		},
+		{
+			"path": "pages/demo"
 		},
 		{
 			"path": "pages/store/index",
@@ -62,13 +64,46 @@
 				"navigationStyle": "custom"
 			}
 		},
-        {
-          "path": "pages/person/VipList",
-          "style": {
-            "navigationBarTitleText": "会员等级",
-            "navigationStyle": "custom"
-          }
-        },
+		{
+			"path": "pages/delivery/desktop",
+			"style": {
+				"navigationBarTextStyle": "light",
+				"navigationBarTitleText": "外卖",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/delivery/detail",
+			"style": {
+				"navigationBarTitleText": "外卖详情",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/product/classify",
+			"style": {
+				"navigationBarTitleText": "商品分类",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/user/VipList",
+			"style": {
+				"navigationBarTitleText": "会员等级",
+				"navigationStyle": "custom"
+			}
+		}, {
+			"path": "pages/user/Coupon",
+			"style": {
+				"navigationBarTitleText": "优惠券",
+				"navigationStyle": "custom"
+			}
+		},{
+			"path": "pages/order/OrderBooking",
+			"style": {
+				"navigationBarTitleText": "订单确认"
+			}
+		},
 		{
 			"path": "pages/order/OrderList",
 			"style": {
@@ -94,8 +129,7 @@
 		"borderStyle": "black",
 		"color": "#999999",
 		"selectedColor": "#26C78D",
-		"list": [
-			{
+		"list": [{
 				"pagePath": "pages/index",
 				"iconPath": "/static/tabbar/find.png",
 				"selectedIconPath": "/static/tabbar/find.png",

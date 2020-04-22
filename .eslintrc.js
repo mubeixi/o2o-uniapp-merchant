@@ -1,26 +1,26 @@
 module.exports = {
   env: {
     browser: true,
-    es6: true
+    es6: true,
   },
   extends: [
     'plugin:vue/essential',
-    'standard'
+    'standard',
   ],
   globals: {
-    uni:'readonly',
+    uni: 'readonly',
     Atomics: 'readonly',
-    SharedArrayBuffer: 'readonly'
+    SharedArrayBuffer: 'readonly',
   },
   parserOptions: {
-    ecmaVersion: 2018
+    ecmaVersion: 2018,
   },
   plugins: [
-    'vue'
+    'vue',
   ],
   rules: {
     'camelcase': 0,
-    'no-prototype-builtins':0,
-    'no-throw-literal':0
-  }
+    'no-prototype-builtins': 0,
+    'no-throw-literal': 0,
+  },
 }

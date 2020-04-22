@@ -1,4 +1,3 @@
-
 export const toast = (title, icon, image, duration) => {
   uni.showToast({
     title,
@@ -47,7 +46,9 @@ export const linkTo = (url, type = 'default') => {
         console.log(err)
         uni.switchTab({
           url,
-          fail (e) { modal(e.errMsg) }
+          fail (e) {
+            modal(e.errMsg)
+          }
         })
       }
     })
@@ -63,3 +64,4 @@ export const showLoading = (title = 'loading', mask = true) => {
 export const hideLoading = () => {
   uni.hideLoading()
 }
+
