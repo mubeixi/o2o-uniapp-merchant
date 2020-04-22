@@ -98,13 +98,15 @@
 				"navigationBarTitleText": "优惠券",
 				"navigationStyle": "custom"
 			}
-		},{
-			"path": "pages/order/OrderBooking",
-			"style": {
-				"navigationBarTitleText": "订单确认"
-			}
 		}
-	],
+	    ,{
+            "path" : "pages/order/ShoppingCart",
+            "style": {
+            	"navigationBarTitleText": "购物车",
+            	"navigationStyle": "custom"
+            }
+        }
+    ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarBackgroundColor": "#FFF",
@@ -134,10 +136,10 @@
 				"text": "好评"
 			},
 			{
-				"pagePath": "pages/index",
+				"pagePath": "pages/order/ShoppingCart",
 				"iconPath": "/static/tabbar/notify.png",
 				"selectedIconPath": "/static/tabbar/notify.png",
-				"text": "消息"
+				"text": "购物车"
 			},
 			{
 				"pagePath": "pages/index",
