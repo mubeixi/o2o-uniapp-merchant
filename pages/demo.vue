@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import BaseMixin from '@/mixins/BaseMixin'
+import address from '@/componets/form-address/form-address'
 import productSku from '@/componets/product-sku/product-sku.vue'
 import { getProdDetail } from '@/api/common.js'
 import UserAddrss from '@/componets/layout-address/layout-address'
