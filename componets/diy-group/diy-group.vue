@@ -270,7 +270,7 @@ export default {
     goDetail (goods) {
       // Products_ID=243
       const linkObj = {
-        link: '/pages/detail/detail?Products_ID=' + goods.Products_ID,
+        link: '/pages/product/detail?Products_ID=' + goods.Products_ID,
         linkType: 'default'
       }
 

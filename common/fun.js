@@ -64,3 +64,4 @@ export const showLoading = (title = 'loading', mask = true) => {
 export const hideLoading = () => {
   uni.hideLoading()
 }
+

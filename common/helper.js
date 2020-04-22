@@ -305,8 +305,8 @@ export function sleep (fn, par, time = 3000) {
 export const goProductDetail = (id, is_group) => {
   if (!id) return
 
-  // let path = '/pages/detail/detail';
-  const path = is_group ? '/pages/detail/groupDetail' : '/pages/detail/detail'// 根据不同路径跳转
+  // let path = '/pages/product/detail';
+  const path = is_group ? '/pages/detail/groupDetail' : '/pages/product/detail'// 根据不同路径跳转
   uni.navigateTo({
     url: path + '?Products_ID=' + id
   })
@@ -385,17 +385,20 @@ export const getCountdownFunc = ({ start_timeStamp, end_timeStamp, current = (ne
   return { d, h, m, s, is_start, is_end }
 }
 
-//输入金额时时验证
-export function check_money_in(money) {
+// 输入金额时时验证
+export function check_money_in (money) {
   if (!(/(^[1-9]([0-9]+)?(\.[0-9]{0,2})?$)|(^(0){1}$)|(^[0-9]\.([0-9]){0,2}?$)/.test(money))) {
-    return false;
+    return false
   } else {
-    return true;
+    return true
   }
 }
 
 const Helper = {
   Object: {
+    mapList: (list, fn) => {
+      list = list.map(fn)
+    },
     extend: (o, p) => {
       for (const prop in p) o[prop] = p[prop]
       return o
