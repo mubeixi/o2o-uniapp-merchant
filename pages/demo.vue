@@ -6,12 +6,12 @@
 
 <template>
   <div class="tag">
-<!--    <product-sku ref="mySku" :proList="list"></product-sku>-->
-<!--    <div @click="open">-->
-<!--      我的规格-->
-<!--    </div>-->
-<!--    <user-addrss @up="updateAddress" ref="address"><span @click="$openPop('address')">选择地址</span></user-addrss>-->
-
+   <product-sku ref="mySku" @sureSku="save" :proList="list"></product-sku>
+   <div @click="open">
+     我的规格
+   </div>
+  <!--  <user-addrss @up="updateAddress" ref="address"><span @click="$openPop('address')">选择地址</span></user-addrss>
+ -->
   </div>
 </template>
 
@@ -19,7 +19,7 @@
 // import address from '@/componets/form-address/form-address'
 // import productSku from '@/componets/product-sku/product-sku.vue'
 import { getProdDetail } from '@/api/common.js'
-// import UserAddrss from '@/componets/layout-address/layout-address'
+import UserAddrss from '@/componets/form-address/form-address.vue'
 import BaseMixin from '@/mixins/BaseMixin'
 export default {
   name: 'Demo',
@@ -34,6 +34,9 @@ export default {
     }
   },
   methods: {
+    save(data){
+      console.log(data,"ss")
+    },
     updateAddress (d) {
       console.log(d)
     },
@@ -45,21 +48,6 @@ export default {
   onShow () {
     getProdDetail({ prod_id: 1613 }).then(res => {
       const product = res.data
-      this.product = res.data
-      if (res.data.skujosn) {
-        const skujosn = res.data.skujosn
-        const skujosn_new = []
-        for (const i in res.data.skujosn) {
-          skujosn_new.push({
-            sku: i,
-            val: skujosn[i]
-          })
-        }
-
-        this.product.skujosn_new = skujosn_new
-        this.product.skuvaljosn = res.data.skuvaljosn
-      }
-
       this.list = product
     })
   }

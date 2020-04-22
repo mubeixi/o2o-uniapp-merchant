@@ -52,14 +52,14 @@
       </div>
     </div>
 
-    <div class="container" v-if="orderInfo.CartList">
+    <div class="container" v-if="CartList">
 
-      <div :key="storeIdx" class="store-item bg-white" v-for="(bizData,storeIdx) in orderInfo.CartList">
+      <!--这行代码特别关键 bind click="activeBizId=biz_id"-->
+      <div :key="biz_id" class="store-item bg-white" v-for="(bizData,biz_id) in CartList" @click="activeBizId=biz_id">
         <div class="biz-info bor-b">
           <div style="display: flex;align-items: center;">
-            <image :src="('https://newo2o.bafangka.com/static/member/images/login/loginWeixin.png'||orderInfo.biz_list[storeIdx].biz_logo)|domain"
-                   alt="" class="biz_logo" />
-            <span class="biz_name">{{orderInfo.biz_list[storeIdx].biz_name}}</span>
+            <image :src="('https://newo2o.bafangka.com/static/member/images/login/loginWeixin.png'||biz_list[biz_id].biz_logo)|domain" class="biz_logo" />
+            <span class="biz_name">{{biz_list[biz_id].biz_name}}</span>
           </div>
         </div>
         <div class="biz-goods-list">
@@ -74,21 +74,26 @@
                   </div>
                 </div>
               </div>
-              <div @click="openStores(pro_id,attr_id,attr.store)" class="store-box" v-if="tabIdx===1">
-                <div class="store-name">{{attr.store.Stores_Name||'选择门店'}}</div>
-                <div class="funicon icon-fanhui icon"></div>
-              </div>
+<!--              <div @click="openStores(pro_id,attr_id,attr.store)" class="store-box" v-if="tabIdx===1">-->
+<!--                <div class="store-name">{{attr.store.Stores_Name||'选择门店'}}</div>-->
+<!--                <div class="funicon icon-fanhui icon"></div>-->
+<!--              </div>-->
               <div class="goods-hr"></div>
             </div>
           </block>
         </div>
         <div class="other">
-          <div class="bd"  v-if="orderInfo.is_virtual === 0">
-            <div @click="changeShip" class="o_title">
+          <div class="bd"  v-if="biz_list[biz_id].is_virtual === 0">
+            <div @click="changeShip(biz_id)" class="o_title">
               <span>运费选择</span>
-              <span style="text-align:right; color: #888;">
-                <span>{{shipping_name?(shipping_name + ' ' + (orderInfo.Order_Shipping.Price > 0 ? orderInfo.Order_Shipping.Price : '免运费')):'请选择物流'}}</span>
-                <image :src="'/static/client/right.png'|domain" alt="" class="right"></image>
+              <span style="text-align:right; color: #888;" class="flex flex-vertical-c">
+                <span>
+                  <block v-if="postData.shipping_name[biz_id]">
+                    {{postData.shipping_name[biz_id]}} {{(' ' + (orderInfo.Order_Shipping.Price > 0 ? '￥'+orderInfo.Order_Shipping.Price : '免运费'))}}
+                  </block>
+                  <block v-else>请选择物流</block>
+                </span>
+                <layout-icon type="iconicon-arrow-right" class="right" color="#999"></layout-icon>
               </span>
             </div>
           </div>
@@ -114,7 +119,7 @@
           <div class="bd">
             <div class="o_title  words">
               <span>买家留言</span>
-              <input @blur="remarkConfirm" class="inputs" placeholder="请填写留言内容" type="text">
+              <input @input="remarkConfirm" class="inputs" placeholder="请填写留言内容" type="text">
             </div>
           </div>
 
@@ -205,22 +210,20 @@
         </div>
       </div>
     </layout-layer>
-    <layout-layer ref="freight">
+    <layout-layer ref="freightPop" title="选择快递">
       <div class="freight-popup-wrap" v-if="type==='shipping'">
-        <radio-group @change="ShipRadioChange" class="row">
-        <div :key="shipid" class="label flex flex-justify-between" v-for="(ship,shipid) in orderInfo.shipping_company">
-          <div class="flex1">{{ship}}</div>
-          <radio :checked="shipid===ship_current" :value="shipid" class="radio" color="#F43131"/>
-        </div>
+        <radio-group @change="ShipRadioChange">
+          <label class="row flex flex-justify-between flex-vertical-b p-10" :key="shipid"  v-for="(ship,shipid) in popupExpressCompanys">
+            <span class="flex1">{{ship}}</span>
+            <radio :checked="shipid===ship_current" :value="shipid" class="radio" color="#F43131"/>
+          </label>
         </radio-group>
-        <div @click="closeMethod" class="submit-btn">
-          确定
-        </div>
+        <div @click="$closePop('freightPop')" class="submit-btn">确定</div>
       </div>
 
     </layout-layer>
 
-    <layout-layer ref="freight">
+    <layout-layer ref="couponPop">
       <div class="bMbx freight-wrap" v-if="type==='shipping'">
         <div class="fMbx">运费选择</div>
         <scroll-div class="bMbx" scroll-y="true" style="height:430rpx;width:95%;" v-if="type==='coupon'">
@@ -258,9 +261,14 @@ import { getAddressList } from '@/api/customer'
 import LayoutLayer from '@/componets/layout-layer/layout-layer'
 import { modal } from '@/common/fun'
 
+import Helper from '@/common/helper'
+import LayoutIcon from '@/componets/layout-icon/layout-icon'
+
+const ObjectMap = Helper.Object.mapList
+
 export default {
   mixins: [BaseMixin],
-  components: { LayoutLayer },
+  components: { LayoutIcon, LayoutLayer },
   data () {
     return {
       selfObj: null,
@@ -272,24 +280,12 @@ export default {
       checked1: true,
       checked2: true,
       checked3: true,
-      wl_list: [
-        {
-          name: '顺丰',
-          price: '免邮',
-          index: 0
-        },
-        {
-          name: '中通',
-          price: '免邮',
-          index: 1
-        },
-        {
-          name: '圆通',
-          price: '￥20',
-          index: 2
-        }
-      ],
       addressinfo: {}, // 收货地址信息
+
+      activeBizId: null, // 活跃的商户id,很多操作之前都需要先改变这个
+      CartList: false,
+      biz_list: false,
+
       orderInfo: {
         is_use_money: 0,
         prod_count: 0,
@@ -307,11 +303,12 @@ export default {
       userMoneyChecked: false,
       faPiaoChecked: false,
       ship_current: 0,
-      shipping_name: '', // 物流信息描述
+
       postData: {
         cart_key: '',
         cart_buy: '',
         address_id: '',
+        shipping_name: {}, // 对应名称,不过不需要提交到后台
         shipping_id: {},
         coupon_id: {},
         use_integral: {}, // 用于抵扣的积分数
@@ -337,33 +334,23 @@ export default {
       shipping_store_id: '' // 选择的门店id
     }
   },
-  filters: {},
-  onShow () {
-    this._init_func()
-  },
-  async created () {
-    // #ifdef H5
-    this.selfObj = this
-    // #endif
-  },
-  onLoad (options) {
-    this.postData.cart_key = options.cart_key
-    if (options.cart_buy) {
-      this.postData.cart_buy = options.cart_buy
-    }
-    if (options.checkfrom) {
-      this.checkfrom = options.checkfrom
-    }
-
-    // 页面直接传值很方便，为什么这么难受
-    uni.$on('bind_select_address', (data) => {
-      this.back_address_id = data.Address_ID
-      this.addressinfo = data
-
-      this.createOrderCheck()
-    })
-  },
   computed: {
+    // 根据当前活跃商家id，展示对应的优惠券
+    popupCoupons () {
+      try {
+        return this.biz_list[this.activeBizId].coupon_list
+      } catch (e) {
+        return {}
+      }
+    },
+    // 根据当前活跃商家id，展示对应的物流方式
+    popupExpressCompanys () {
+      try {
+        return this.biz_list[this.activeBizId].shipping_company
+      } catch (e) {
+        return {}
+      }
+    },
     loading: function () {
       return this.addressLoading && this.orderLoading
     },
@@ -399,7 +386,7 @@ export default {
       this.postData.address_id = this.addressinfo.Address_ID
 
       // 获取用户收货地址，获取订单信息，后台判断运费信息
-      this.createOrderCheck({ isInit: true })
+      this.checkOrderParam({ isInit: true })
     },
     changgeTabIdx (index) {
       this.tabIdx = index
@@ -455,7 +442,7 @@ export default {
 
       // 新增
       // if(this.tabIdx===0){
-      this.createOrderCheck()
+      this.checkOrderParam()
       // }
 
       this.zIndex = 999999
@@ -623,7 +610,7 @@ export default {
         this.postData.use_integral = 0
       }
 
-      this.createOrderCheck()
+      this.checkOrderParam()
     },
     // 余额支付开关
     userMoneyChange (e) {
@@ -631,7 +618,7 @@ export default {
       if (!this.userMoneyChecked) {
         this.postData.use_money = 0
       }
-      this.createOrderCheck()
+      this.checkOrderParam()
     },
     // 发票开关
     faPiaoChange (e) {
@@ -669,15 +656,15 @@ export default {
           showCancel: false
         })
         this.postData.use_money = user_money
-        this.createOrderCheck()
+        this.checkOrderParam()
         return
       }
       this.postData.use_money = Number(input_money).toFixed(2)
-      this.createOrderCheck()
+      this.checkOrderParam()
     },
     // 留言
     remarkConfirm (e) {
-      this.postData.order_remark = e.detail.value
+      this.postData.order_remark[this.activeBizId] = e.detail.value
     },
     // 优惠券改变
     radioChange (e) {
@@ -693,34 +680,29 @@ export default {
     },
     // 物流改变
     ShipRadioChange (e) {
-      for (var i in this.orderInfo.shipping_company) {
-        if (i === e.target.value) {
-          this.ship_current = i
-          break
-        }
-      }
-
-      this.postData.shipping_id = e.target.value
+      const val = e.detail.value
+      this.ship_current = val
+      this.postData.shipping_id[this.activeBizId] = val
     },
     changeCoupon () {
       this.type = 'coupon'
       if (this.couponlist.length === 0) {
-        return
+
       }
-      this.$refs.freight.show()
+      // this.$openPop('freightPop')
     },
     // 选择运费
-    changeShip () {
-      this.type = 'shipping'
-      this.ship_current = this.postData.shipping_id
-      this.$refs.freight.show()
+    changeShip (biz_id) {
+      this.activeBizId = biz_id
+      this.ship_current = this.postData.shipping_id[biz_id]
+      this.$openPop('freightPop')
     },
     closeMethod () {
       if (this.type === 'coupon') {
         // 不使用优惠
         if (!this.postData.coupon_id) {
           this.coupon_desc = '暂不使用优惠'
-          this.createOrderCheck()
+          this.checkOrderParam()
           this.$refs.freight.close()
           return
         }
@@ -737,7 +719,7 @@ export default {
         }
       }
 
-      this.createOrderCheck()
+      this.checkOrderParam()
       this.$refs.freight.close()
     },
     getAddress () {
@@ -756,20 +738,44 @@ export default {
      * 更新下单信息
      * @param isInit 初次请求需要标记为true,因为有些操作只有第一次的时候才做
      */
-    createOrderCheck ({ isInit = false }) {
+    checkOrderParam ({ isInit = false }) {
       const oldOrderInfo = { ...this.orderInfo }
-      createOrderCheck(this.postData).then(res => {
-        // for (var i in res.data.CartList) {
-        //   for (var j in res.data.CartList[i]) {
-        //     res.data.CartList[i][j].store = {}
-        //     console.log(res.data.CartList[i][j], 'sss')
-        //     if (res.data.CartList[i][j].choose_store_info) {
-        //       res.data.CartList[i][j].store.Stores_Name = res.data.CartList[i][j].choose_store_info.Stores_Name
-        //       res.data.CartList[i][j].store.Stores_ID = res.data.CartList[i][j].choose_store_info.Stores_ID
+
+      // 初始化的时候只有这个必传（也就是说默认的时候不算运费，毕竟运费可以通过选择运费后实时计算)
+      const params = isInit ? { cart_key: this.postData.cart_key } : this.postData
+      createOrderCheck(params).then(res => {
+        const { CartList, biz_list, ...orderInfo } = res.data
+
+        console.log(orderInfo)
+
+        // 第一层是商户
+        // for (var biz_id in CartList) {
+        //   // 第二个是产品
+        //   for (var prod_id in CartList[biz_id]) {
+        //     // 同一个产品可能同时多个规格
+        //     for (var attr in CartList[biz_id][prod_id]) {
+        //
+        //
         //     }
         //   }
         // }
-        this.orderInfo = Object.assign(oldOrderInfo, res.data)
+
+        for (var biz_id in CartList) {
+          this.$set(this.postData.shipping_id, biz_id, 0)// 初始化对应数量的物流方式，默认全是0.如果是实物订单，则在提交的时候校验就好了
+          this.$set(this.postData.shipping_name, biz_id, '')// 初始化对应数量的物流方式，默认全是0.如果是实物订单，则在提交的时候校验就好了
+
+          this.$set(this.postData.coupon_id, biz_id, '')// 优惠券
+          this.$set(this.postData.use_integral, biz_id, 0)// 积分抵扣
+          this.$set(this.postData.need_invoice, biz_id, 0)// 是否需要发票
+          this.$set(this.postData.invoice_info, biz_id, '')// 发票信息
+          this.$set(this.postData.use_money, biz_id, '')// 使用余额
+          this.$set(this.postData.order_remark, biz_id, '')// 订单备注
+        }
+
+        this.$set(this, 'biz_list', biz_list)
+        this.$set(this, 'CartList', CartList)
+
+        this.orderInfo = Object.assign(oldOrderInfo, orderInfo)
         if (this.orderInfo.coupon_list.length > 0) {
           this.orderInfo.coupon_list.push({ Coupon_ID: '' })
         }
@@ -779,10 +785,10 @@ export default {
           this.tabIdx = this.initData.order_submit_first
         }
 
-        this.couponlist = res.data.coupon_list
+        this.couponlist = orderInfo.coupon_list
 
         this.orderLoading = true
-        this.postData.shipping_id = res.data.Order_Shipping.shipping_id
+        this.postData.shipping_id = orderInfo.Order_Shipping.shipping_id
         this.idD = this.postData.shipping_id
         for (var k in this.orderInfo.shipping_company) {
           if (k === this.postData.shipping_id) {
@@ -797,6 +803,31 @@ export default {
       })
     }
     // ...mapActions(['getUserInfo','setUserInfo']),
+  },
+  onShow () {
+    this._init_func()
+  },
+  async created () {
+    // #ifdef H5
+    this.selfObj = this
+    // #endif
+  },
+  onLoad (options) {
+    this.postData.cart_key = options.cart_key
+    if (options.cart_buy) {
+      this.postData.cart_buy = options.cart_buy
+    }
+    if (options.checkfrom) {
+      this.checkfrom = options.checkfrom
+    }
+
+    // 页面直接传值很方便，为什么这么难受
+    uni.$on('bind_select_address', (data) => {
+      this.back_address_id = data.Address_ID
+      this.addressinfo = data
+
+      this.checkOrderParam()
+    })
   }
 }
 </script>
@@ -1175,18 +1206,9 @@ export default {
   .freight-popup-wrap{
     width: 750rpx;
     .row{
-
-      display: flex;
-      flex: 1;
-      height: 100%;
-      align-items: center;
-      justify-content: flex-end;
-      .label{
-        padding: 0rpx 20rpx;
-        height: 104rpx;
-        border-bottom: 1px solid rgba(230, 230, 230, 1);
-        align-items: center;
-        font-size: 28rpx;
+      border-bottom: 1px solid $fun-border-color;
+      &:last-child{
+        border-bottom: none;
       }
     }
     .submit-btn {
@@ -1195,7 +1217,7 @@ export default {
       background-color: #F43131;
       color: #fff;
       font-size: 32rpx;
-      margin-top: 96rpx;
+      margin-top: 40rpx;
       line-height: 90rpx;
       text-align: center;
     }

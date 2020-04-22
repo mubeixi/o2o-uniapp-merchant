@@ -700,7 +700,7 @@ export default {
     this.getProductDetail()
   },
   onLoad (options) {
-    this.prod_id=options.prod_id
+    this.prod_id = options.prod_id
   },
   onReady () {
     // const query = uni.createSelectorQuery().in(this)

@@ -4,6 +4,7 @@
     <div @touchmove.stop.prevent :class="[positions]"
          :style="{backgroundColor:mainBgColor,borderRadius:radius?radius:''}" ref="popRef" class="popup-content"
          @tap.stop="stopEvent">
+      <slot name="title"><div v-if="title" class="p-10 text-center c4">{{title}}</div></slot>
       <slot></slot>
     </div>
   </div>
@@ -13,6 +14,9 @@
 export default {
   name: 'LayoutLayer',
   props: {
+    title:{
+      type:String
+    },
     bgColor: {
       type: String,
       default: 'rgba(0,0,0,.5)'

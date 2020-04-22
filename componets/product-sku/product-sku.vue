@@ -1,24 +1,24 @@
 <template>
 	<view v-if="isShow">
 		<layout-popup  ref="productSku"  :showPop="true"  @maskClicked="close">
-		<!-- 	<div class="cartSku">
+			<div class="cartSku"  @touchmove.prevent.stop="noop">
 				<div class="cartTop">
-					<image  class="image" @click="yulanDetail" :src="skuImg?skuImg+'-r200':(product.Products_JSON.ImgPath[0]?product.Products_JSON.ImgPath[0]+'-r200':'')" ></image>
+					<image  class="image" @click="showImgDetal" :src="imgShow?imgShow+'-r200':(list.Products_JSON.ImgPath[0]?list.Products_JSON.ImgPath[0]+'-r200':'')" ></image>
 					<div class="cartTitle">
-						<div class="cartTitles">{{product.Products_Name}}</div>
+						<div class="cartTitles">{{list.Products_Name}}</div>
 						<div class="addInfo">
-							<div class="addPrice">{{postData.productDetail_price}}元</div>
+							<div class="addPrice">{{postData.price}}元</div>
 							<div class="proSale">库存{{postData.count}}</div>
 						</div>
 					</div>
 				</div>
 				<div class="cartCenter">
-					<div class="cartAttr" v-for="(item,i) of product.skujosn_new" :key="i">
+					<div class="cartAttr" v-for="(item,i) of list.skujosn_new" :key="i">
 						<div class="sku">
 							{{item.sku}}
 						</div>
 						<div class="skuValue" v-if="gift == 0">
-							<div class="skuview" :class="check_attr[item.sku]==index?'skuCheck':''" @click="selectAttr(index,item.sku)"  v-for="(mbx,index) of item.val" :key="index">{{mbx}}</div>
+							<div class="skuview" :class="ind==index?'skuCheck':''" @click="selectAttr(index)"  v-for="(mbx,index) of item.val" :key="index">{{mbx}}</div>
 						</div>
 						<div class="skuValue" v-else>
 							<div class="skuview" :class="skuval[i]==index?'skuCheck':'unablechoose'"  v-for="(mbx,index) of item.val" :key="index">{{mbx}}</div>
@@ -46,12 +46,18 @@
 					</div>
 				</div>
 			</div>
-			<form report-submit @submit="skuSub">
-			<button formType="submit" class="cartSub"  :class="submit_flag?'':'disabled'">
+
+			<div v-if="haveCart"  class="skuBtn">
+				<div class="sku-btn cart"  @click="updaCart">
+					加入购物车
+				</div>
+				<div class="sku-btn buyNow" @click="buyNow">
+					直接购买
+				</div>
+			</div>
+			<button v-else @click="submit" class="cartSub"  :class="submitFlag?'':'disabled'">
 				确定
 			</button>
-			</form> -->
-			55
 		</layout-popup>
 	</view>
 </template>
@@ -62,32 +68,158 @@ import layoutPopup from '@/componets/layout-popup/layout-popup.vue'
 export default {
   components: { layoutPopup },
   props: {
+  	haveCart:{
+  		type:Boolean,
+			default:false
+		},
     proList: {
       type: Object,
       default: {}
-    }
+    },
+		gift: {
+			type: Number,
+			default: 0
+		}
   },
   watch: {
     proList: {
 			  handler (newVal, oldVal) {
-				  console.log(newVal, 'ss')
-			   this.list = newVal
+				   this.list = newVal
+				   this.init()
 			  }
     }
   },
   data () {
     return {
       isShow: false,
-      list: {}
+      list: {},//商品数据
+			imgShow:'',
+			ind:'',
+			submitFlag:false,//是否可以提交
+			postData:{
+      	qty:1,
+				id:'',//规格id
+				price:'',//价格
+				count:0,//库存
+			}
     }
   },
   methods: {
-    show () {
-      this.isShow = true
-    },
-    close () {
-      this.isShow = false
-    }
+		noop(){
+
+		},
+		showImgDetal(){
+				let arr=[]
+				let str
+				if(this.imgShow){
+					str=this.imgShow+'-r420'
+				}else{
+					str=this.list.Products_JSON.ImgPath[0]+'-r420'
+				}
+				arr.push(str)
+				uni.previewImage({
+					urls: arr,
+					indicator:'default',
+					current:0
+				});
+
+			},
+			updaCart(){
+				if(!this.submitFlag){
+					uni.showToast({
+						title: '请选择正确的规格和数量',
+						icon: 'none',
+					});
+					return
+				}
+				this.close()
+				this.$emit('updaCart',this.postData)
+			},
+			buyNow(){
+				if(!this.submitFlag){
+					uni.showToast({
+						title: '请选择正确的规格和数量',
+						icon: 'none',
+					});
+					return
+				}
+				this.close()
+				this.$emit('buyNow',this.postData)
+			},
+			skuSub(){
+				if(!this.submitFlag)return
+				this.close()
+				this.$emit('sureSku',this.postData)
+			},
+			selectAttr(index){
+				this.ind=index
+				this.imgShow=this.list.skuvaljosn[index].Attr_Image
+				this.postData.id=this.list.skuvaljosn[index].Product_Attr_ID
+				this.postData.price=this.list.skuvaljosn[index].Attr_Price
+				this.postData.count=this.list.skuvaljosn[index].Property_count
+				if(this.postData.qty>this.postData.count){
+					this.submitFlag=false
+				}else{
+					this.submitFlag=true
+				}
+			},
+			addNum(){
+				if (this.postData.qty < this.postData.count) {
+					this.postData.qty = Number(this.postData.qty) + 1;
+				}else {
+					uni.showToast({
+						title: '购买数量不能大于库存量',
+						icon: 'none',
+					});
+					this.postData.qty = this.postData.count;
+				}
+			},
+			delNum(){
+				if (this.postData.qty > 1) {
+					this.postData.qty -= 1;
+				} else {
+					uni.showToast({
+						title: '购买数量不能小于1',
+						icon: 'none',
+					});
+					this.postData.qty = 1;
+				}
+			},
+			// 用户手动输入数量
+			setCount(e){
+				let amount = e.detail.value;
+				if(amount <= 0) {
+					this.postData.qty = 1;
+					error('至少购买一件')
+					return;
+				}
+				if(amount > this.postData.count) {
+					this.postData.qty = this.postData.count;
+					error('购买数量不能超过库存量')
+					return;
+				}
+			},
+		  init(){
+				if(this.list.skujosn) {
+					let skujosn_new = [];
+					for (let i in this.list.skujosn) {
+						skujosn_new.push({
+							sku: i,
+							val: this.list.skujosn[i]
+						});
+					}
+					this.list.skujosn_new = skujosn_new;
+					this.list.skuvaljosn = this.list.skuvaljosn;
+					this.postData.price=this.list.Products_PriceX
+					this.postData.count=this.list.Products_Count
+				}
+		  },
+			show () {
+				this.isShow = true
+			},
+			close () {
+				this.isShow = false
+			}
   }
 }
 </script>
@@ -95,6 +227,7 @@ export default {
 <style lang="scss" scoped>
 .cartSku{
 		padding: 0rpx 20rpx;
+		z-index: 100;
 		.cartTop{
 			position: relative;
 			display: flex;
@@ -218,6 +351,34 @@ export default {
 		border: none;
 		&.disabled {
 			background: #999;
+		}
+	}
+	.skuBtn{
+		margin-top: 30rpx;
+		width: 100%;
+		display: flex;
+		align-items: center;
+		height: 90rpx;
+		.sku-btn{
+			flex: 1;
+			height: 90rpx;
+			line-height: 90rpx;
+			text-align: center;
+			font-size:20px;
+			color: #FFFFFF;
+		}
+		.disabled {
+			background: #999 !important;
+		}
+		.cart{
+			background: linear-gradient(to right, #f6ca44 , #f19b38);
+			/*border-bottom-left-radius: 375rpx;*/
+			/*border-top-left-radius: 375rpx;*/
+		}
+		.buyNow{
+			background: linear-gradient(to right, #ee7e30 , #eb5928);
+			/*border-bottom-right-radius: 375rpx;*/
+			/*border-top-right-radius: 375rpx;*/
 		}
 	}
 	.skuCheck{

@@ -199,7 +199,7 @@
 
   .store {
     position: sticky;
-    z-index: 999;
+    z-index: 8;
     top: 0;
     width: 750rpx;
     background-color: #ffffff;
@@ -362,7 +362,7 @@
               ¥{{detailData.Products_PriceY}}
             </span>
       </div>
-      <div class="product-price-right">
+      <div class="product-price-right" @click="open">
         <image src="/static/product/product_share.png" class="full-img" style="width: 130% !important;"></image>
         <div class="product-share">
           分享赚
@@ -408,7 +408,7 @@
         </div>
       </div>
 
-      <div class="vip-img">
+      <div class="vip-img" >
         <image src="/static/product/vip.png" class="full-img"></image>
       </div>
 
@@ -513,20 +513,23 @@
       </swiper-item>
     </swiper>
 
+    <product-sku ref="mySku" @sureSku="save" :haveCart="true" @updaCart="updaCart" @buyNow="buyNow" :proList="detailData"></product-sku>
     <!--    <bottombuy></bottombuy>-->
   </div>
 </template>
 
 <script>
 import BaseMixin from '@/mixins/BaseMixin'
+import productSku from '@/componets/product-sku/product-sku.vue'
 import { getProductDetail, getActiveInfo, getBizInfo, getStoreList } from '@/api/product'
+import {updateCart} from '@/api/order'
 import { formatRichTextByUparseFn } from '@/common/filter'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 
 export default {
   name: 'DeliveryDetail',
   mixins: [BaseMixin],
-  components: { LayoutIcon },
+  components: { LayoutIcon,productSku },
   data () {
     return {
       tabIndex: 3,
@@ -546,6 +549,24 @@ export default {
     this.headTabSticky = scrollTop > this.headTabTop
   },
   methods: {
+    open(){
+      this.$refs.mySku.show()
+    },
+    async updaCart(sku){
+      //加入购物车
+      let data={
+        User_ID:'48',
+        cart_key:'CartList',
+        prod_id:this.detailData.Products_ID,
+        qty:sku.qty,
+        attr_id:sku.id
+      }
+      let arr=await updateCart(data).catch(e=>{throw  Error(e.msg||'加入购物车失败')})
+
+    },
+    buyNow(sku){
+      //立即购买
+    },
     async getProductDetail () {
       try {
         const data = {
