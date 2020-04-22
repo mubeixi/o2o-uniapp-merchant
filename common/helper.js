@@ -385,6 +385,15 @@ export const getCountdownFunc = ({ start_timeStamp, end_timeStamp, current = (ne
   return { d, h, m, s, is_start, is_end }
 }
 
+//输入金额时时验证
+export function check_money_in(money) {
+  if (!(/(^[1-9]([0-9]+)?(\.[0-9]{0,2})?$)|(^(0){1}$)|(^[0-9]\.([0-9]){0,2}?$)/.test(money))) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
 const Helper = {
   Object: {
     extend: (o, p) => {
