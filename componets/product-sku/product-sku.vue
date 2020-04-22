@@ -1,7 +1,7 @@
 <template>
 	<view v-if="isShow">
 		<layout-popup  ref="productSku"  :showPop="true"  @maskClicked="close">
-			<div class="cartSku">
+			<div class="cartSku"  @touchmove.prevent.stop="noop">
 				<div class="cartTop">
 					<image  class="image" @click="showImgDetal" :src="imgShow?imgShow+'-r200':(list.Products_JSON.ImgPath[0]?list.Products_JSON.ImgPath[0]+'-r200':'')" ></image>
 					<div class="cartTitle">
@@ -47,7 +47,7 @@
 				</div>
 			</div>
 
-			<div v-if="!haveCart"  class="skuBtn">
+			<div v-if="haveCart"  class="skuBtn">
 				<div class="sku-btn cart"  @click="updaCart">
 					加入购物车
 				</div>
@@ -105,6 +105,9 @@ export default {
     }
   },
   methods: {
+		noop(){
+
+		},
 		showImgDetal(){
 				let arr=[]
 				let str
@@ -205,13 +208,10 @@ export default {
 							val: this.list.skujosn[i]
 						});
 					}
-
 					this.list.skujosn_new = skujosn_new;
 					this.list.skuvaljosn = this.list.skuvaljosn;
-
 					this.postData.price=this.list.Products_PriceX
 					this.postData.count=this.list.Products_Count
-					console.log(this.list, 'ss')
 				}
 		  },
 			show () {
@@ -227,6 +227,7 @@ export default {
 <style lang="scss" scoped>
 .cartSku{
 		padding: 0rpx 20rpx;
+		z-index: 100;
 		.cartTop{
 			position: relative;
 			display: flex;
