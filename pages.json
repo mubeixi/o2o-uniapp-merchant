@@ -87,13 +87,13 @@
 			}
 		},
 		{
-			"path": "pages/person/VipList",
+			"path": "pages/user/VipList",
 			"style": {
 				"navigationBarTitleText": "会员等级",
 				"navigationStyle": "custom"
 			}
 		}, {
-			"path": "pages/person/Coupon",
+			"path": "pages/user/Coupon",
 			"style": {
 				"navigationBarTitleText": "优惠券",
 				"navigationStyle": "custom"

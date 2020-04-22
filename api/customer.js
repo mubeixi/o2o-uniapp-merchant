@@ -30,5 +30,13 @@ export const getCoupon = (param, options) => fetch({
   options
 })
 
+export const getUserInfo = (param, options) => fetch({
+  act: 'get_user_info',
+  param,
+  options
+})
+
+export const getAddressList = (param, options) => fetch({ act: 'get_address', param, options })
+
 // 用户领取优惠券
 export const getUserCoupon = (param, options) => fetch({ act: 'user_receive_coupon', param, options })
