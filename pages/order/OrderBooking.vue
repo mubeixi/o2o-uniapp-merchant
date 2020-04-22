@@ -1,6 +1,6 @@
 <template>
   <div :class="selectStore?'over':''" class="page-wrap">
-
+    <fun-err-msg :errs="formCheckResult"></fun-err-msg>
     <block v-if="orderInfo.is_virtual===0">
       <div @click="goAddressList" class="address bg-white">
         <image :src="'/static/client/location.png'|domain" alt="" class="loc_icon"></image>
@@ -55,7 +55,7 @@
     <div class="container" v-if="CartList">
 
       <!--这行代码特别关键 bind click="activeBizId=biz_id"-->
-      <div :key="biz_id" class="store-item bg-white" v-for="(bizData,biz_id) in CartList" @click="activeBizId=biz_id">
+      <div :key="biz_id" class="store-item bg-white" v-for="(bizData,biz_id) in CartList" @click="setActiveBizId(biz_id)">
         <div class="biz-info bor-b">
           <div style="display: flex;align-items: center;">
             <image :src="('https://newo2o.bafangka.com/static/member/images/login/loginWeixin.png'||biz_list[biz_id].biz_logo)|domain" class="biz_logo" />
@@ -98,12 +98,12 @@
             </div>
           </div>
 
-          <div class="bd" v-if="couponlist.length > 0">
+          <div class="bd" v-if="biz_list[biz_id].coupon_list.length > 0">
             <div @click="changeCoupon" class="o_title">
               <span>优惠券选择</span>
               <span style="text-align: right; color: #888;display: flex;align-items: center;">
-              <span>{{couponlist.length>0?(coupon_desc?coupon_desc:'您有优惠券使用'): '暂无可用优惠券'}}</span>
-              <image :src="'/static/client/right.png'|domain" alt="" class="right"></image>
+              <span>{{biz_list[biz_id].coupon_list.length>0?(coupon_desc?coupon_desc:'您有优惠券使用'): '暂无可用优惠券'}}</span>
+              <layout-icon type="iconicon-arrow-right" class="right" color="#999"></layout-icon>
             </span>
             </div>
           </div>
@@ -163,19 +163,20 @@
 
     <div :style="{'z-index':zIndex}" class="order_total">
       <div class="totalinfo">
-        <div class="info">共{{orderInfo.prod_count||0}}件商品 总计：
+        <div class="info">共{{prodCount}}件商品 总计：
           <text class="money">
             <text class="m_icon">￥</text>
-            {{orderInfo.Order_Fyepay||0}}
+            {{orderFyepay}}
           </text>
         </div>
         <div class="tips" v-if="orderInfo.obtain_desc">{{orderInfo.obtain_desc}}</div>
       </div>
       <div @click="seeDetail" class="mx">明细
-        <image :class="isSlide?'slidedown': ''" class="image" src="/static/top.png"></image>
+<!--        <image :class="isSlide?'slidedown': ''" class="image" src="/static/top.png"></image>-->
+        <layout-icon  color="#999" display="inline"  :type="isSlide?'iconicon-arrow-bottom':'iconicon-arrow-top'"></layout-icon>
       </div>
 
-      <button class="submit" @click="form_submit">提交订单</button>
+      <button class="submit" @click="submitFn">提交订单</button>
 
     </div>
 
@@ -216,6 +217,10 @@
           <label class="row flex flex-justify-between flex-vertical-b p-10" :key="shipid"  v-for="(ship,shipid) in popupExpressCompanys">
             <span class="flex1">{{ship}}</span>
             <radio :checked="shipid===ship_current" :value="shipid" class="radio" color="#F43131"/>
+          </label>
+          <label class="row flex flex-justify-between flex-vertical-b p-10">
+            <span class="flex1">到店自取</span>
+            <radio :checked="'is_store'===ship_current" value="is_store" class="radio" color="#F43131"/>
           </label>
         </radio-group>
         <div @click="$closePop('freightPop')" class="submit-btn">确定</div>
@@ -259,18 +264,19 @@ import BaseMixin from '@/mixins/BaseMixin'
 import { createOrder, createOrderCheck } from '@/api/order'
 import { getAddressList } from '@/api/customer'
 import LayoutLayer from '@/componets/layout-layer/layout-layer'
-import { modal } from '@/common/fun'
+import { hideLoading, modal, showLoading } from '@/common/fun'
 
-import Helper from '@/common/helper'
+import { getArrColumn, getObjectAttrNum, validateFun } from '@/common/helper'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
-
-const ObjectMap = Helper.Object.mapList
+import FunErrMsg from '@/componets/fun-err-msg/fun-err-msg'
+import { Exception } from '@/common/Exception'
 
 export default {
   mixins: [BaseMixin],
-  components: { LayoutIcon, LayoutLayer },
+  components: { FunErrMsg, LayoutIcon, LayoutLayer },
   data () {
     return {
+      formCheckResult: [],
       selfObj: null,
       selectStore: false,
       tabIdx: 0,
@@ -335,6 +341,31 @@ export default {
     }
   },
   computed: {
+    prodCount () {
+      try {
+        let count = 0
+        for (var biz_id in CartList) {
+          // 第二个是产品
+          for (var prod_id in CartList[biz_id]) {
+            count += Object.keys(CartList[biz_id][prod_id]).length
+          }
+        }
+        return count
+      } catch (e) {
+        return 0
+      }
+    },
+    orderFyepay () {
+      try {
+        let num = 0
+        for (const i in this.biz_list) {
+          num += this.biz_list[Order_Fyepay]
+        }
+        return num
+      } catch (e) {
+        return 0
+      }
+    },
     // 根据当前活跃商家id，展示对应的优惠券
     popupCoupons () {
       try {
@@ -371,6 +402,9 @@ export default {
     // ...mapGetters(['userInfo','initData'])
   },
   methods: {
+    setActiveBizId (biz_id) {
+      this.activeBizId = biz_id
+    },
     async _init_func () {
       if (!this.$checkIsLogin(1, 1)) return
       // if (JSON.stringify(this.userInfo) !== '{}') {
@@ -509,97 +543,99 @@ export default {
       })
     },
     // 提交订单
-    form_submit (e) {
-      if (!this.submited) {
-        this.submited = true
-        if (this.postData.need_invoice === 1 && this.postData.invoice_info === '' && this.initData.invoice_switch === 1) {
-          this.submited = false
-          if (this.postData.invoice_info === '') {
-            uni.showToast({
-              title: '发票信息不能为空',
-              icon: 'none'
-            })
-            return
-          }
-        }
+    async submitFn () {
+      
+      try {
+        
+        showLoading()
+        const bizListLen = getObjectAttrNum(this.biz_list) // 获得当前订单中有多少个商家，用来比较一些必填项的数量是否正确
 
-        if (this.tabIdx === 1 && this.postData.shipping_id !== 'is_store') {
-          this.submited = false
-          uni.showToast({
-            title: '请选择门店',
-            icon: 'none'
-          })
-          return
-        }
-        if (this.orderInfo.is_virtual === 0) {
-          if (!this.postData.shipping_id) {
-            uni.showToast({
-              title: '请选择物流',
-              icon: 'none'
-            })
-            this.submited = false
-            return
-          }
-        }
-
-        if (this.orderInfo.is_virtual === 1 || this.postData.shipping_id === 'is_store') {
-          // if (!this.user_name) {
-          //   uni.showToast({
-          //     title: '请填写购买人姓名',
-          //     icon: 'none'
-          //   })
-          //   this.submited = false
-          //   return
-          // }
-          //
-          // if (!this.user_mobile) {
-          //   uni.showToast({
-          //     title: '请填写购买人手机号',
-          //     icon: 'none'
-          //   })
-          //   this.submited = false
-          //   return
-          // }
-
-          this.postData.user_name = this.user_name
-          this.postData.user_mobile = this.user_mobile
-        }
-
-        if (this.postData.shipping_id === 'is_store') {
-          const obj = {}
-          for (const it in this.orderInfo.CartList) {
-            for (const iq in this.orderInfo.CartList[it]) {
-              obj[it] = {
-                [iq]: this.orderInfo.CartList[it][iq].store.Stores_ID
+        const rules = {
+          shipping_id: {
+            required: true,
+            use: {
+              len: (val, row) => {
+                console.log(val,bizListLen,getObjectAttrNum(val))
+                return getObjectAttrNum(val) === bizListLen
+              },
+              virtual: (val, row) => {
+                if (this.orderInfo.is_virtual === 0) {
+                  return Object.values(val).filter(val => val === 0 || val === '0').length > 0 // 如果数组中有为0的，就错了
+                }
+                return true
               }
+            },
+            message: {
+              required: '物流方式必填',
+              len: '每个商家都请设置物流',
+              virtual: '实体商品物流必须设置'
+            }
+          },
+          use_integral: {
+            required: true,
+            use: {
+              isnum: (val, row) => Object.values(val).filter(num => num < 0 || isNaN(num)).length > 0 // 积分中每个数字都要是大于等于0的数字
+            },
+            message: {
+              required: '积分抵扣选项必须设置',
+              isnum: '每个商家积分抵扣数值都为大于等于0的数'
+            }
+          },
+          use_money: {
+            required: true,
+            use: {
+              isnum: (val, row) => Object.values(val).filter(num => num < 0 || isNaN(num)).length > 0 // 使用余额中每个数字都要是大于等于0的数字
+            },
+            message: {
+              required: '使用余额的选项必须设置',
+              isnum: '每个商家使用余额数值都为大于等于0的数'
             }
           }
-          this.postData.self_pick_store_id = JSON.stringify(obj)
         }
 
-        if (this.shipping_store_id) {
-          this.postData.shipping_store_id = this.shipping_store_id
+        const checkRt = validateFun(this.postData, rules)
+        console.log(checkRt)
+        if (checkRt !== true) {
+          this.formCheckResult = checkRt
+          return
         }
-        createOrder(this.postData).then(res => {
-          // 如果order_totalPrice <= 0  直接跳转 订单列表页
-          if (res.data.Order_Status !== 1) {
-            // 直接跳转订单列表页
-            uni.redirectTo({
-              url: '/pages/order/order'
-            })
-            return
-          }
-          this.Order_ID = res.data.Order_ID
-          uni.redirectTo({
-            url: '/pages/pay/pay?Order_ID=' + res.data.Order_ID + '&pagefrom=check'
-          })
-        }).catch(e => {
-          uni.showToast({
-            title: e.msg,
-            icon: 'none'
-          })
-          this.submited = false
+
+        const {
+          shipping_id,
+          coupon_id,
+          use_integral,
+          need_invoice,
+          invoice_info,
+          use_money,
+          order_remark,
+          ...params
+        } = this.postData
+
+        Object.assign(params, {
+          shipping_id: JSON.stringify(shipping_id),
+          coupon_id: JSON.stringify(coupon_id),
+          use_integral: JSON.stringify(use_integral),
+          need_invoice: JSON.stringify(need_invoice),
+          invoice_info: JSON.stringify(invoice_info),
+          use_money: JSON.stringify(use_money),
+          order_remark: JSON.stringify(order_remark)
         })
+
+        const createOrderResult = await createOrder(params, { onlyData: true }).catch(e => { throw Error(e.msg || '下单失败') })
+
+        // 如果order_totalPrice <= 0  直接跳转 订单列表页
+        if (createOrderResult.Order_Status !== 1) {
+          // 直接跳转订单列表页
+          this.$linkTo('/pages/order/order')
+          return
+        }
+
+        this.$linkTo('/pages/pay/pay?Order_ID=' + createOrderResult.Order_ID + '&pagefrom=check')
+      } catch (e) {
+        console.log(e)
+        Exception.handle(e)
+      } finally {
+        hideLoading()
       }
     },
     // 积分抵扣开关
@@ -683,6 +719,7 @@ export default {
       const val = e.detail.value
       this.ship_current = val
       this.postData.shipping_id[this.activeBizId] = val
+      this.postData.shipping_name[this.activeBizId] = val === 'is_store' ? '到店自取' : this.popupExpressCompanys[val] // 也要设置下name
     },
     changeCoupon () {
       this.type = 'coupon'
