@@ -181,7 +181,7 @@ export default {
       this.$set(this.boxw, idx, 750 + 'rpx')
       this.$set(this.boxh, idx, 750 * height / width + 'rpx')
 
-      console.log(this.boxh, this.boxw)
+      // console.log(this.boxh, this.boxw)
     },
     indexChangeEvent (event) {
       const { current } = event.detail
