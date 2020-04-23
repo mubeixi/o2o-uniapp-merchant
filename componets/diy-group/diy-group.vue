@@ -73,6 +73,7 @@ import {
   createEmptyArray
 } from '@/common/helper'
 import { lazyImgUrl } from '../../common'
+import { linkTo } from '@/common/fun'
 
 export default {
   name: 'DiyGroup',
@@ -274,7 +275,7 @@ export default {
         linkType: 'default'
       }
 
-      this.$fun.linkTo(linkObj)
+      linkTo(linkObj)
     },
     itemMarginObj (idx) {
       const conf = this.goods.style.margin

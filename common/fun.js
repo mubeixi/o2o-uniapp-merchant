@@ -55,6 +55,24 @@ export const linkTo = (url, type = 'default') => {
   }
 }
 
+export const confirm = (options) => {
+  return new Promise(function (resolve, reject) {
+    uni.showModal({
+      ...options,
+      success: function (res) {
+        if (res.confirm) {
+          resolve(res)
+        } else if (res.cancel) {
+          reject(res)
+        }
+      },
+      fail: function (res) {
+        reject(res)
+      }
+    })
+  })
+}
+
 export const showLoading = (title = 'loading', mask = true) => {
   uni.showLoading({
     title,
@@ -64,4 +82,3 @@ export const showLoading = (title = 'loading', mask = true) => {
 export const hideLoading = () => {
   uni.hideLoading()
 }
-

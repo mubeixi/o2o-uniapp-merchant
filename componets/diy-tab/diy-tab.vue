@@ -88,6 +88,7 @@ import {
   goProductDetail
 } from '@/common/helper'
 import { lazyImgUrl } from '../../common'
+import { linkTo } from '@/common/fun'
 
 export default {
   name: 'DiyTab',
@@ -249,7 +250,7 @@ export default {
         linkType: 'default'
       }
 
-      this.$fun.linkTo(linkObj)
+      linkTo(linkObj)
     },
     clickTab (item, idx) {
       this.$set(this, 'tabActive', idx)

@@ -63,7 +63,16 @@ export const getProductCountInfo = (param, options) => fetch({ act: 'get_users_i
 // 获取商城的配置
 export const getSkinConfig = (param, options) => fetch({ act: 'get_shophome', param, options })
 
-//获取地址
+// 获取地址
 export const getAreaByPid = (param, options) => fetch({ act: 'getAreaByPid', param, options })
 
 export const getProdDetail = (param, options) => fetch({ act: 'prod_detail', param, options })
+
+// 长链接转换短链接
+export const traslateShorten = (param, options) => fetch({ act: 'save_redis_data', param, options })
+
+// 获取全局配置
+export const getSystemConf = (param, options) => fetch({ act: 'shopconfig', param, options })
+
+// jssdk签名
+export const getJsSign = (param, options) => fetch({ act: 'share_config', param, options })

@@ -16,6 +16,7 @@
 <script>
 
 import { getDomain } from '@/common/helper'
+import { linkTo } from '@/common/fun'
 
 export default {
   name: 'DiyNav',
@@ -57,7 +58,7 @@ export default {
   components: {},
   methods: {
     go (item) {
-      this.$fun.linkTo(item)
+      linkTo(item)
     },
     domainFunc (url) {
       return getDomain(url)

@@ -98,7 +98,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['userInfo']),
+    //...mapGetters(['userInfo']),
     couponList () {
       if (this.coupon.value.list.length < 1) {
         return []
