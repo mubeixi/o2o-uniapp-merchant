@@ -176,7 +176,7 @@
 				"text": "购物车"
 			},
 			{
-				"pagePath": "pages/index",
+				"pagePath": "pages/person/person",
 				"iconPath": "/static/tabbar/user.png",
 				"selectedIconPath": "/static/tabbar/user.png",
 				"text": "我的"

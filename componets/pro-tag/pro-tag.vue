@@ -1,6 +1,6 @@
 <template>
 	<div class="product">
-		<image :src="pro_src" class="pro-img"></image>
+		<image mode="heightFix" :src="pro_src" class="pro-img"></image>
 		<div class="pro-name">{{pro_name}}</div>
 		<div class="pro-price flex">
 			<div class="new-price"><div class="small-font">￥</div>{{pro_price}}</div>
