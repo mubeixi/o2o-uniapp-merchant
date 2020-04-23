@@ -15,18 +15,27 @@
         </div>
         <div class="cartCenter">
           <div class="cartAttr" v-for="(item,i) of list.skujosn_new" :key="i">
+<!--            <div class="sku">-->
+<!--              {{item.sku}}-->
+<!--            </div>-->
+<!--            <div class="skuValue" v-if="gift == 0">-->
+<!--              <div class="skuview" :class="ind==index?'skuCheck':''" @click="selectAttr(index)"-->
+<!--                   v-for="(mbx,index) of item.val" :key="index">{{mbx}}-->
+<!--              </div>-->
+<!--            </div>-->
+<!--            <div class="skuValue" v-else>-->
+<!--              <div class="skuview" :class="skuval[i]==index?'skuCheck':'unablechoose'" v-for="(mbx,index) of item.val"-->
+<!--                   :key="index">{{mbx}}-->
+<!--              </div>-->
+<!--            </div>-->
             <div class="sku">
               {{item.sku}}
             </div>
             <div class="skuValue" v-if="gift == 0">
-              <div class="skuview" :class="ind==index?'skuCheck':''" @click="selectAttr(index)"
-                   v-for="(mbx,index) of item.val" :key="index">{{mbx}}
-              </div>
+              <div class="skuview" :class="check_attr[item.sku]==index?'skuCheck':''" @click="selectAttr(index,item.sku)"  v-for="(mbx,index) of item.val" :key="index">{{mbx}}</div>
             </div>
             <div class="skuValue" v-else>
-              <div class="skuview" :class="skuval[i]==index?'skuCheck':'unablechoose'" v-for="(mbx,index) of item.val"
-                   :key="index">{{mbx}}
-              </div>
+              <div class="skuview" :class="skuval[i]==index?'skuCheck':'unablechoose'"  v-for="(mbx,index) of item.val" :key="index">{{mbx}}</div>
             </div>
           </div>
         </div>
@@ -71,6 +80,18 @@
 
 import layoutPopup from '@/componets/layout-popup/layout-popup.vue'
 
+const numberSort = function (arr, order_by) {
+  if (typeof order_by != 'undefined' && order_by == 'desc') { //desc
+    return arr.sort(function (v1, v2) {
+      return v2 - v1;
+    });
+  } else {  //asc
+    return arr.sort(function (v1, v2) {
+      return v1 - v2;
+    });
+  }
+}
+
 export default {
   components: { layoutPopup },
   props: {
@@ -107,7 +128,8 @@ export default {
         id: '', // 规格id
         price: '', // 价格
         count: 0// 库存
-      }
+      },
+      check_attr:{},
     }
   },
   methods: {
@@ -156,17 +178,75 @@ export default {
       this.close()
       this.$emit('sureSku', this.postData)
     },
-    selectAttr (index) {
-      this.ind = index
-      this.imgShow = this.list.skuvaljosn[index].Attr_Image
-      this.postData.id = this.list.skuvaljosn[index].Product_Attr_ID
-      this.postData.price = this.list.skuvaljosn[index].Attr_Price
-      this.postData.count = this.list.skuvaljosn[index].Property_count
-      if (this.postData.qty > this.postData.count) {
-        this.submitFlag = false
-      } else {
-        this.submitFlag = true
+    selectAttr (index,i) {
+
+      let value_index = index; //选择的属性值索引
+      let attr_index = i;   //选择的属性索引
+      //记录选择的属性
+      let check_attr = Object.assign(this.check_attr, { [attr_index]: value_index }); //记录选择的属性  attr_index外的[]必须
+      //属性处理
+      let check_attrid = [];
+      let check_attrname = [];
+      let check_attrnames = [];
+      for (let i in check_attr) {
+        var attr_id = check_attr[i];
+        check_attrid.push(attr_id);
+        check_attrname[attr_id] = i;
       }
+      //数组排序  按从小到大排
+      let check_attrid_arr = check_attrid;
+      check_attrid = numberSort(check_attrid);
+      //获取对应的属性名称
+      for (let i = 0; i < check_attrid.length; i++) {
+        let attr_id = check_attrid[i];
+        let attr_name = check_attrname[attr_id];
+        check_attrnames.push(attr_name + ':' + this.list.skujosn[attr_name][attr_id]);
+      }
+      check_attrid = check_attrid.join(';');
+      let attr_val = this.list.skuvaljosn[check_attrid];   //选择属性对应的属性值
+      //数组转化为字符串
+      check_attrnames = check_attrnames.join(';');
+      //更改第一个规格显示图片
+      for(let mbx in this.list.skuvaljosn){
+        let arr=mbx.split(';')
+        if(arr[0]==index){
+          //this.imgIndex=index
+          this.skuImg=this.list.skuvaljosn[mbx].Attr_Image
+          break
+        }
+      }
+      //属性判断
+      if (attr_val) {
+        this.postData.id = attr_val.Product_Attr_ID;   //选择属性的id
+        this.postData.count = attr_val.Property_count;   //选择属性的库存
+        this.postData.price = attr_val.Attr_Price?attr_val.Attr_Price:this.list.Products_PriceX; // 选择属性的价格
+        this.submitFlag = (!this.check_attr || Object.getOwnPropertyNames(this.check_attr).length != Object.getOwnPropertyNames(this.list.skujosn).length) ? false : true;
+      }
+      //判断属性库存
+      if (attr_val && attr_val.Property_count <= 0) {
+        this.submitFlag =  false;
+        return false;
+      }
+      this.check_attr = {};
+      this.check_attr = check_attr;
+      this.check_attrid_arr = check_attrid_arr;
+      this.submit_flag = (!this.check_attr || Object.getOwnPropertyNames(this.check_attr).length != Object.getOwnPropertyNames(this.list.skujosn).length) ? false : true;
+      //购买数量处理  大于最高时赋值最高值
+      if (this.postData.qty > this.postData.count) {
+        this.postData.qty = this.postData.count;
+      }
+
+
+      // this.ind = index
+      // this.imgShow = this.list.skuvaljosn[index].Attr_Image
+      // this.postData.id = this.list.skuvaljosn[index].Product_Attr_ID
+      // this.postData.price = this.list.skuvaljosn[index].Attr_Price
+      // this.postData.count = this.list.skuvaljosn[index].Property_count
+      // if (this.postData.qty > this.postData.count) {
+      //   this.submitFlag = false
+      // } else {
+      //   this.submitFlag = true
+      // }
     },
     addNum () {
       if (this.postData.qty < this.postData.count) {
@@ -204,6 +284,8 @@ export default {
       }
     },
     init () {
+      this.postData.price = this.list.Products_PriceX
+      this.postData.count = this.list.Products_Count
       if (this.list.skujosn) {
         const skujosn_new = []
         for (const i in this.list.skujosn) {
@@ -214,8 +296,6 @@ export default {
         }
         this.list.skujosn_new = skujosn_new
         this.list.skuvaljosn = this.list.skuvaljosn
-        this.postData.price = this.list.Products_PriceX
-        this.postData.count = this.list.Products_Count
       }
     },
     show () {
