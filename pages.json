@@ -117,12 +117,19 @@
 				"navigationBarTitleText": "订单详情",
 				"navigationStyle": "custom"
 			}
-		}
-	    ,{
+		},
+	    {
             "path" : "pages/order/ShoppingCart",
             "style": {
             	"navigationBarTitleText": "购物车",
             	"navigationStyle": "custom"
+            }
+        },
+        {
+            "path" : "pages/person/person",
+            "style": {
+              "navigationBarTitleText": "个人中心",
+              "navigationStyle": "custom"
             }
         }
     ],
