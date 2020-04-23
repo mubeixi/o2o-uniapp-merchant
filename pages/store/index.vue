@@ -646,21 +646,15 @@ export default {
 
   .tab-container {
     background: #fff;
-
-    .tab-page {
-      overflow-x: hidden;
-
-      &.scroll {
-        overflow-y: scroll
-      }
-
-      &.noscroll {
-        overflow-y: hidden;
-      }
-
-      .tab-page-wrap {
-      }
+    position: relative;
+    .tab-page-wrap {
+      position: absolute;
+      width: 750rpx;
+      height: 100%;
+      
+      
     }
+    
   }
 
   .coupon-goods-list {
