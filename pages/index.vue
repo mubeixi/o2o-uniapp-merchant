@@ -227,6 +227,20 @@
                 <layout-ad code="indexTop"></layout-ad>
               </div>
   
+             
+  
+
+              <div class="page-section-title">
+                <span class="before"></span>
+                <span class="text">钜惠推荐</span>
+                <span class="after"></span>
+              </div>
+  
+              <div v-for="(goods,idx) in goodsList" :key="idx">
+                <goods-item :vo="goods"></goods-item>
+              </div>
+  
+  
               <div class="page-section-title">
                 <span class="before"></span>
                 <span class="text">人气商家</span>
@@ -264,6 +278,8 @@
                   </block>
                 </div>
               </div>
+              
+              
   
               <layout-copyright></layout-copyright>
 
@@ -349,10 +365,12 @@ import DiyCube from '@/componets/diy-cube/diy-cube'
 import DiyTab from '@/componets/diy-tab/diy-tab'
 import DiyGroup from '@/componets/diy-group/diy-group'
 import DiyFlash from '@/componets/diy-flash/diy-flash'
+import GoodsItem from '@/componets/good-item/good-item'
 
 export default {
   mixins: [BaseMixin],
   components: {
+    GoodsItem,
     DiyFlash,
     DiyGroup,
     DiyTab,
