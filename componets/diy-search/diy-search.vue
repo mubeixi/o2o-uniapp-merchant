@@ -20,6 +20,8 @@
   </view>
 </template>
 <script>
+import { linkTo } from '@/common/fun'
+
 const styleDefault = {
   // bgColor: '#fff',
   // height: 30,
@@ -88,7 +90,7 @@ export default {
     toSearch () {
       // let path = '/pages/classify/search'
       const path = '/pages/classify/search?keyword=' + this.placeholderText
-      this.$fun.linkTo({
+      linkTo({
         link: path,
         linkType: 'default'
       })

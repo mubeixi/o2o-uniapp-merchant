@@ -28,6 +28,9 @@
 import {
   getDomain
 } from '@/common/helper'
+import {
+  linkTo
+} from '@/common/fun'
 
 export default {
   name: 'DiySwiper',
@@ -103,7 +106,7 @@ export default {
       this.singleH = e.detail.height
     },
     go (item) {
-      this.$fun.linkTo(item)
+      linkTo(item)
     },
     domainFunc (url) {
       return getDomain(url)

@@ -30,6 +30,12 @@
 			}
 		},
 		{
+			"path": "pages/order/OrderPay",
+			"style": {
+				"navigationBarTitleText": "支付台"
+			}
+		},
+		{
 			"path": "pages/favorite/index",
 			"style": {
 				"navigationStyle": "custom",
@@ -92,13 +98,15 @@
 				"navigationBarTitleText": "会员等级",
 				"navigationStyle": "custom"
 			}
-		}, {
+		},
+		{
 			"path": "pages/user/Coupon",
 			"style": {
 				"navigationBarTitleText": "优惠券",
 				"navigationStyle": "custom"
 			}
-		},{
+		},
+		{
 			"path": "pages/order/OrderBooking",
 			"style": {
 				"navigationBarTitleText": "订单确认"
@@ -118,7 +126,7 @@
 				"navigationStyle": "custom"
 			}
 		},
-	    {
+		{
             "path" : "pages/order/ShoppingCart",
             "style": {
             	"navigationBarTitleText": "购物车",

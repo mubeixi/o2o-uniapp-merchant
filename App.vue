@@ -5,6 +5,7 @@
 export default {
   onLaunch: function () {
     console.log('App Launch')
+    this.$store.dispatch('system/loadInitData')
     this.$store.dispatch('theme/refreshTheme')
   },
   onShow: function () {

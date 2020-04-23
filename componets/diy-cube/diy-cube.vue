@@ -15,6 +15,7 @@
 <script>
 
 import { getDomain } from '@/common/helper'
+import { linkTo } from '@/common/fun'
 
 export default {
   name: 'DiyCube',
@@ -92,7 +93,7 @@ export default {
   components: {},
   methods: {
     go (area) {
-      this.$fun.linkTo(area)
+      linkTo(area)
     },
     getWrapStyle () {
       const styleObj = {

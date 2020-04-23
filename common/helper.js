@@ -138,7 +138,7 @@ export const getObjectAttrNum = (obj, stict = true) => {
   if (!stict) return Object.keys(obj).length // 不区分是否继承而来
   let count = 0
   for (var i in obj) {
-    if (obj.hasOwnProperty(i))count++
+    if (obj.hasOwnProperty(i)) count++
   }
   return count
 }
@@ -377,7 +377,9 @@ export const getCountdownFunc = ({ start_timeStamp, end_timeStamp, current = (ne
   // 时间戳格式转换
   current = parseInt(current / 1000)
 
-  let countTime = 0; let is_start = false; let is_end = false
+  let countTime = 0
+  let is_start = false
+  let is_end = false
 
   // 还没开始
   if (start_timeStamp > current && end_timeStamp > current) {
@@ -398,7 +400,14 @@ export const getCountdownFunc = ({ start_timeStamp, end_timeStamp, current = (ne
   m = parseInt((countTime - d * 60 * 60 * 24 - h * 60 * 60) / 60)
   s = countTime - d * 60 * 60 * 24 - h * 60 * 60 - m * 60
 
-  return { d, h, m, s, is_start, is_end }
+  return {
+    d,
+    h,
+    m,
+    s,
+    is_start,
+    is_end
+  }
 }
 
 // 输入金额时时验证
@@ -408,6 +417,66 @@ export function check_money_in (money) {
   } else {
     return true
   }
+}
+
+/**
+ *
+ * @param {*} str
+ * @param {*} name
+ */
+export const GetQueryByString = (str, name) => {
+  // 获取？号出现几次
+  var tempArr = str.split('?')
+
+  // //如果大于1
+  if (tempArr.length - 1 > 1) {
+    var rt = null
+    for (var i in tempArr) {
+      var s = tempArr[i]
+      var reg1 = new RegExp('(^|&)' + name + '=([^&]*)(&|$)') // 构造一个含有目标参数的正则表达式对象
+      var r1 = s.match(reg1) // 匹配目标参数
+      if (r1 != null) {
+        rt = decodeURIComponent(r1[2])// 一直覆盖，要最后的就行了
+      }
+    }
+
+    return rt
+  }
+
+  var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)') // 构造一个含有目标参数的正则表达式对象
+  if (!str.split('?')[1]) return null
+  var r = str.split('?')[1].match(reg) // 匹配目标参数
+
+  if (r != null) {
+    return decodeURIComponent(r[2])
+  }
+  return null // 返回参数值
+}
+
+export function isWeiXin () {
+  // #ifdef H5
+  var ua = window.navigator.userAgent.toLowerCase()
+  if (
+    ua.match(/MicroMessenger/i) === 'micromessenger' &&
+    ua.match(/miniProgram/i) &&
+    ua.match(/miniProgram/i)[0] === 'miniprogram'
+  ) {
+    return 'xcx'
+  }
+  if (ua.match(/MicroMessenger/i) === 'micromessenger') {
+    return true
+  } else {
+    return false
+  }
+  // #endif
+
+  // #ifndef H5
+  return false
+  // #endif
+}
+
+export const urlencode = (str) => {
+  return encodeURIComponent(str).replace(/!/g, '%21').replace(/'/g, '%27').replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\*/g, '%2A').replace(/%20/g, '+')
 }
 
 const Helper = {

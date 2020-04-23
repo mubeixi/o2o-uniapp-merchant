@@ -3,6 +3,9 @@ import {
 } from '@/common/fun'
 import T from '../common/langue/i18n'
 import { checkIsLogin } from '@/common/helper'
+// #ifdef H5
+import { WX_JSSDK_INIT } from '@/common/env'
+// #endif
 
 export default {
   data () {
@@ -17,9 +20,12 @@ export default {
       TT: {}
     }
   },
+  computed: {
+  },
   methods: {
     $back: back,
-    $noop: () => {},
+    $noop: () => {
+    },
     $toast: toast,
     $error: error,
     $modal: modal,
@@ -52,7 +58,10 @@ export default {
     },
     tap () {
       // console.log('tap in mixin')
-    }
+    },
+    // #ifdef H5
+    WX_JSSDK_INIT
+    // #endif
   },
   onLoad () {
     this.systemInfo = uni.getSystemInfoSync()
@@ -69,18 +78,8 @@ export default {
       console.log(this.langues)
       this.$restLangueAssign(this.langues)
     }
-
     const locale = T.locale
     const locales = T.locales
     this.TT = locales[locale]
-  }
-}
-
-export const ColorMixin = {
-  methods: {
-    getPrimaryColor () {
-    },
-    setPrimaryColor () {
-    }
   }
 }

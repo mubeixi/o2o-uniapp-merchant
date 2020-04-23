@@ -20,332 +20,299 @@
     <!--  占位-->
     <div :style="{height:diyHeadHeight+'px'}"></div>
 
-    <swiper
-      :current="headTabIndex"
-      @change="indexChangeEvent"
-      class="tab-container"
-      :style="{top:diyHeadHeight+'px',height:(systemInfo.windowHeight-diyHeadHeight+'px')}">
-      <!--特价-->
-      <swiper-item class="tab-page">
-        <scroll-view class="tab-page-wrap" scroll-y :style="{height:(systemInfo.windowHeight-diyHeadHeight+'px')}">
-          <!--<div class="nav">
-            <ul class="nav-list" :style="{display:navs.length<6?'flex':'block'}">
-              <li @click="go(item)" v-for="(item,idx) in navs" :key="idx" class="nav-item"
-                  :style="{flex:navs.length<6?'1':''}">
-                <image mode="heightFix" class="icon-img" :src="item.src"></image>
-                <h4 class="title">{{item.title}}</h4>
-              </li>
-            </ul>
-          </div>
-          <layout-ad
-            style="background: white"
-            :imgs="slide.imgs"
-            indicatorDots="line"
-            dotsColor="#C5C5C5"
-            dotsActiveColor="#26C78D"
-            itemwidth="655rpx"
-            itemheight="144rpx"
-          ></layout-ad>-->
-
-          <view class="home-diy-wrap">
-            <section
-              v-for="(item, index) in templateList[tagIndex]"
-              :key="index"
-              class="section"
-              :class="[item]"
-              :data-name="item">
-              <diy-base
-                v-if="item.indexOf('base') !== -1"
-                :confData="templateData[tagIndex][index]"
-                :index="index"></diy-base>
-              <diy-swiper
-                v-if="item.indexOf('swiper') !== -1"
-                :confData="templateData[tagIndex][index]"
-                :index="index"></diy-swiper>
-              <diy-nav
-                v-if="item.indexOf('nav') !== -1"
-                :confData="templateData[tagIndex][index]"
-                :index="index"></diy-nav>
-              <diy-video
-                ref="video"
-                v-if="item.indexOf('video') !== -1"
-                :confData="templateData[tagIndex][index]"
-                :index="index"></diy-video>
-              <diy-hr
-                v-if="item.indexOf('hr') !== -1"
-                :confData="templateData[tagIndex][index]"
-                :index="index"></diy-hr>
-              <diy-space
-                v-if="item.indexOf('space') !== -1"
-                :confData="templateData[tagIndex][index]"
-                :index="index"></diy-space>
-              <diy-title
-                v-if="item.indexOf('title') !== -1"
-                :confData="templateData[tagIndex][index]"
-                :index="index"></diy-title>
-              <diy-text
-                v-if="item.indexOf('text') !== -1"
-                :confData="templateData[tagIndex][index]"
-                :index="index"></diy-text>
-              <diy-search
-                v-if="item.indexOf('search') !== -1"
-                :confData="templateData[tagIndex][index]"
-                :index="index"></diy-search>
-              <diy-notice
-                ref="notice"
-                v-if="item.indexOf('notice') !== -1"
-                :confData="templateData[tagIndex][index]"
-                :index="index"></diy-notice>
-              <diy-coupon
-                v-if="item.indexOf('coupon') !== -1"
-                :confData="templateData[tagIndex][index]"
-                :index="index"></diy-coupon>
-              <diy-goods
-                v-if="item.indexOf('goods') !== -1"
-                :confData="templateData[tagIndex][index]"
-                :index="index"></diy-goods>
-              <diy-cube
-                v-if="item.indexOf('cube') !== -1"
-                :confData="templateData[tagIndex][index]"
-                :index="index"></diy-cube>
-              <diy-tab
-                v-if="item.indexOf('tab') !== -1"
-                :confData="templateData[tagIndex][index]"
-                :index="index"></diy-tab>
-              <diy-group
-                v-if="item.indexOf('group') !== -1"
-                :confData="templateData[tagIndex][index]"
-                :index="index"></diy-group>
-              <diy-flash
-                v-if="item.indexOf('flash') !== -1"
-                :confData="templateData[tagIndex][index]"
-                :index="index"></diy-flash>
-              <diy-kill
-                v-if="item.indexOf('kill') !== -1"
-                :confData="templateData[tagIndex][index]"
-                :index="index"></diy-kill>
-            </section>
-          </view>
-
-          <div class="block kill">
-            <div class="block-title flex-ver-c">
-              <div class="block-title-text">今日秒杀</div>
-              <div class="block-title-more flex flex-ver-c c9 fz-12">
-                <span>查看全部</span>
-                <layout-icon type="iconicon-arrow-right" size="14" color="#999"></layout-icon>
-              </div>
-            </div>
-            <div class="block-content">
-              <div class="goods-list">
-                <div class="goods-item" v-for="(item,idx) in goodsList" :key="idx" @click="$toGoodsDetail(item.Products_ID)">
-                  <block v-if="idx<6">
-                    <div class="cover" :style="{backgroundImage:'url('+item.ImgPath+')'}">
-                      <div class="tip" style="background: #185e44;">同城配送</div>
-                    </div>
-                    <h5 class="title">{{item.Products_Name}}</h5>
-                    <div class="price-box">
-                      <div>
-                        <span class="sign">￥</span><span class="num">{{item.Products_PriceX}}</span>
-                      </div>
-                      <div class="tags">
-                        <span class="tag" v-if="item.discount">{{item.discount}}折</span>
-                      </div>
-                    </div>
-                  </block>
-                </div>
-              </div>
+    <div class="main tab-container" :style="{top:diyHeadHeight+'px',height:(systemInfo.windowHeight-diyHeadHeight+'px')}">
+      <scroll-view class="tab-page-wrap"  scroll-y  v-show="headTabIndex===0" >
+        <view class="home-diy-wrap">
+          <section
+            v-for="(item, index) in templateList[tagIndex]"
+            :key="index"
+            class="section"
+            :class="[item]"
+            :data-name="item">
+            <diy-base
+              v-if="item.indexOf('base') !== -1"
+              :confData="templateData[tagIndex][index]"
+              :index="index"></diy-base>
+            <diy-swiper
+              v-if="item.indexOf('swiper') !== -1"
+              :confData="templateData[tagIndex][index]"
+              :index="index"></diy-swiper>
+            <diy-nav
+              v-if="item.indexOf('nav') !== -1"
+              :confData="templateData[tagIndex][index]"
+              :index="index"></diy-nav>
+            <diy-video
+              ref="video"
+              v-if="item.indexOf('video') !== -1"
+              :confData="templateData[tagIndex][index]"
+              :index="index"></diy-video>
+            <diy-hr
+              v-if="item.indexOf('hr') !== -1"
+              :confData="templateData[tagIndex][index]"
+              :index="index"></diy-hr>
+            <diy-space
+              v-if="item.indexOf('space') !== -1"
+              :confData="templateData[tagIndex][index]"
+              :index="index"></diy-space>
+            <diy-title
+              v-if="item.indexOf('title') !== -1"
+              :confData="templateData[tagIndex][index]"
+              :index="index"></diy-title>
+            <diy-text
+              v-if="item.indexOf('text') !== -1"
+              :confData="templateData[tagIndex][index]"
+              :index="index"></diy-text>
+            <diy-search
+              v-if="item.indexOf('search') !== -1"
+              :confData="templateData[tagIndex][index]"
+              :index="index"></diy-search>
+            <diy-notice
+              ref="notice"
+              v-if="item.indexOf('notice') !== -1"
+              :confData="templateData[tagIndex][index]"
+              :index="index"></diy-notice>
+            <diy-coupon
+              v-if="item.indexOf('coupon') !== -1"
+              :confData="templateData[tagIndex][index]"
+              :index="index"></diy-coupon>
+            <diy-goods
+              v-if="item.indexOf('goods') !== -1"
+              :confData="templateData[tagIndex][index]"
+              :index="index"></diy-goods>
+            <diy-cube
+              v-if="item.indexOf('cube') !== -1"
+              :confData="templateData[tagIndex][index]"
+              :index="index"></diy-cube>
+            <diy-tab
+              v-if="item.indexOf('tab') !== -1"
+              :confData="templateData[tagIndex][index]"
+              :index="index"></diy-tab>
+            <diy-group
+              v-if="item.indexOf('group') !== -1"
+              :confData="templateData[tagIndex][index]"
+              :index="index"></diy-group>
+            <diy-flash
+              v-if="item.indexOf('flash') !== -1"
+              :confData="templateData[tagIndex][index]"
+              :index="index"></diy-flash>
+            <diy-kill
+              v-if="item.indexOf('kill') !== -1"
+              :confData="templateData[tagIndex][index]"
+              :index="index"></diy-kill>
+          </section>
+        </view>
+        <div class="block kill">
+          <div class="block-title flex-ver-c">
+            <div class="block-title-text">今日秒杀</div>
+            <div class="block-title-more flex flex-ver-c c9 fz-12">
+              <span>查看全部</span>
+              <layout-icon type="iconicon-arrow-right" size="14" color="#999"></layout-icon>
             </div>
           </div>
-          <div class="block live">
-
-            <div class="block-title">
-              <div class="block-title-text">钜惠推荐</div>
-              <div class="block-title-more flex flex-vertical-center c9 fz-12">
-                <!--          <span>查看全部</span>-->
-                <!--          <icon class="iconright" type="iconright" size="14" color="#999"></icon>-->
-              </div>
-            </div>
-            <div class="nav-box">
-              <ul class="nav-list">
-                <li class="nav-item"
-                    @click="changeLiveNav(idx)"
-                    v-for="(nav,idx) in liveNav"
-                    :key="idx"
-                    :class="{active:liveNavIndex === idx}"
-                >{{nav.title}}
-                </li>
-              </ul>
-            </div>
-            <div class="block-content">
-              <div class="live-list">
-                <block v-for="(item,idx) in goodsList" :key="idx">
-                <div class="live-item" v-if="idx<3"  @click="$toGoodsDetail(item.Products_ID)">
-                  
-                    <div class="left">
-                      <div class="cover" :style="{backgroundImage:'url('+item.ImgPath+')'}"></div>
+          <div class="block-content">
+            <div class="goods-list">
+              <div class="goods-item" v-for="(item,idx) in goodsList" :key="idx" @click="$toGoodsDetail(item.Products_ID)">
+                <block v-if="idx<6">
+                  <div class="cover" :style="{backgroundImage:'url('+item.ImgPath+')'}">
+                    <div class="tip" style="background: #185e44;">同城配送</div>
+                  </div>
+                  <h5 class="title">{{item.Products_Name}}</h5>
+                  <div class="price-box">
+                    <div>
+                      <span class="sign">￥</span><span class="num">{{item.Products_PriceX}}</span>
                     </div>
-                    <div class="right">
-                      <div class="title">
-                        <span class="live-status"><layout-icon display="inline" type="iconicon-count" color="#fff" size="14"></layout-icon>直播中</span>
-                        <span class="text">{{item.Products_Name}}</span>
-                      </div>
-                      <!--                    <div class="sale-count">已抢{{item.sale_count}}份</div>-->
-                      <div class="tags" v-if="item.tags">
-                        <span class="tag" v-for="(tag,idx) in item.tags" :key="idx">{{tag}}</span>
-                      </div>
-                      <div class="action">
-                        <image class="bgimg" src="/static/home/capsule.png"></image>
-                        <div class="fz-12 color-white price-box">
-                          <span style="color: #754827;">爆抢{{item.Products_Sales}}件</span>
-                          <div class="flex fz-10 flex-vertical-b">
-                            <span>￥</span><span class="fz-12">{{item.Products_PriceX}}</span>
-                            <span class="text-through p-l-4">￥{{item.Products_PriceY}}</span>
-                          </div>
-                        </div>
-                      </div>
-                      <!--                    <div class="action">-->
-                      <!--                      <div class="btn">抢</div>-->
-                      <!--                    </div>-->
+                    <div class="tags">
+                      <span class="tag" v-if="item.discount">{{item.discount}}折</span>
                     </div>
-                  
-                </div>
+                  </div>
                 </block>
               </div>
             </div>
           </div>
-          <copyright></copyright>
-        </scroll-view>
-      </swiper-item>
-      <!--同城闪送-->
-      <swiper-item class="tab-page">
-        <scroll-view class="tab-page-wrap" scroll-y :style="{height:(systemInfo.windowHeight-diyHeadHeight+'px')}">
+        </div>
+        <div class="block live">
 
-          <div class="section scroll-box  p-t-10 p-b-20 bg-white" @touchmove.stop.prevent="$noop">
-            <li class="scroll-item m-l-15 p-b-5 fz-15 c3"
-                @click="changeQuickCateNav(idx)"
-                v-for="(cate,idx) in firstCateList"
-                :key="idx"
-                :class="{active:quickFirstCateIdx === idx}"
-            >{{cate.Category_Name}}
-            </li>
-          </div>
-
-          <div class="section grid-box bg-white">
-            <swiper
-              :current="quickFirstCateIdx"
-              @change="quickCateIndexChange"
-              class="quick-cate-swiper"
-            >
-              <swiper-item class="quick-cate-swiper-item" v-for="(first,idx1) in firstCateList" :key="idx1">
-                <div class="grid-box">
-                  <div
-                    style="width: 150rpx;box-sizing: border-box;"
-                    class="grid-item p-t-10 p-b-10"
-                    @click="go(item)"
-                    v-for="(item,idx) in first.child"
-                    :key="idx"
-                  >
-                    <image style="vertical-align: top" class="icon-img b-radius-aircle w44 h44" mode="heightFix"
-                           :src="item.Category_Img"></image>
-                    <div class="title m-t-9 h14 fz-14 c3 text-nowrap" style="line-height: 14px">{{item.Category_Name}}
-                    </div>
-                  </div>
-                </div>
-              </swiper-item>
-            </swiper>
-
-          </div>
-
-          <div class="hr h10"></div>
-
-          <div class="p-t-20 p-b-20 bg-white">
-            <layout-ad code="indexTop"></layout-ad>
-          </div>
-
-          <div class="page-section-title">
-            <span class="before"></span>
-            <span class="text">人气商家</span>
-            <span class="after"></span>
-          </div>
-
-          <div class="store-top-item" v-for="(num,idx) in [1,2,3]" :key="idx">
-            <div class="store-info flex flex-vertical-c flex-justify-between">
-              <div class="p-l-10 p-r-10 flex flex-vertical-c">
-                <image class="logo"
-                       src="https://newo2o.bafangka.com/static/member/images/login/loginWeixin.png"></image>
-                <div class="p-l-10 c3">
-                  <div class="name fz-15 m-b-5"> 海的故事咖啡店</div>
-                  <div class="activity">全场满300包邮，1300封顶</div>
-                </div>
-              </div>
-              <div class="flex flex-vertical-c">
-                <span class="p-r-8 fz-14 c6">进入商家</span>
-                <layout-icon color="#999" type="iconicon-arrow-right"></layout-icon>
-              </div>
+          <div class="block-title">
+            <div class="block-title-text">钜惠推荐</div>
+            <div class="block-title-more flex flex-vertical-center c9 fz-12">
+              <!--          <span>查看全部</span>-->
+              <!--          <icon class="iconright" type="iconright" size="14" color="#999"></icon>-->
             </div>
-            <div class="store-goods-list">
-              <block v-for="(goods,idx) in goodsList" :key="idx">
-                <div class="store-goods-item" v-if="idx<3"  @click="$toGoodsDetail(item.Products_ID)">
+          </div>
+          <div class="nav-box">
+            <ul class="nav-list">
+              <li class="nav-item"
+                  @click="changeLiveNav(idx)"
+                  v-for="(nav,idx) in liveNav"
+                  :key="idx"
+                  :class="{active:liveNavIndex === idx}"
+              >{{nav.title}}
+              </li>
+            </ul>
+          </div>
+          <div class="block-content">
+            <div class="live-list">
+              <block v-for="(item,idx) in goodsList" :key="idx">
+                <div class="live-item" v-if="idx<3"  @click="$toGoodsDetail(item.Products_ID)">
 
-                  <image :style="{backgroundImage:'url('+goods.ImgPath+')'}" class="cover" />
-                  <div class="title fz-12 c3 p-t-7 p-b-7">{{goods.Products_Name}}</div>
-                  <div class="fz-10 c9 flex flex-vertical-b">
-                    <span class="price-selling">￥</span><span
-                    class="fz-12 price-selling">{{goods.Products_PriceX}}</span>
-                    <span class="text-through m-l-2">￥</span><span class="text-through">{{goods.Products_PriceY}}</span>
+                  <div class="left">
+                    <div class="cover" :style="{backgroundImage:'url('+item.ImgPath+')'}"></div>
+                  </div>
+                  <div class="right">
+                    <div class="title">
+                      <span class="live-status"><layout-icon display="inline" type="iconicon-count" color="#fff" size="14"></layout-icon>直播中</span>
+                      <span class="text">{{item.Products_Name}}</span>
+                    </div>
+                    <!--                    <div class="sale-count">已抢{{item.sale_count}}份</div>-->
+                    <div class="tags" v-if="item.tags">
+                      <span class="tag" v-for="(tag,idx) in item.tags" :key="idx">{{tag}}</span>
+                    </div>
+                    <div class="action">
+                      <image class="bgimg" src="/static/home/capsule.png"></image>
+                      <div class="fz-12 color-white price-box">
+                        <span style="color: #754827;">爆抢{{item.Products_Sales}}件</span>
+                        <div class="flex fz-10 flex-vertical-b">
+                          <span>￥</span><span class="fz-12">{{item.Products_PriceX}}</span>
+                          <span class="text-through p-l-4">￥{{item.Products_PriceY}}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <!--                    <div class="action">-->
+                    <!--                      <div class="btn">抢</div>-->
+                    <!--                    </div>-->
                   </div>
 
                 </div>
               </block>
             </div>
           </div>
+        </div>
+        <copyright></copyright>
+      </scroll-view>
+      <scroll-view class="tab-page-wrap" scroll-y v-show="headTabIndex===1" >
 
-          <layout-copyright></layout-copyright>
-        </scroll-view>
-      </swiper-item>
-      <!--好店-->
-      <swiper-item class="tab-page">
-        <scroll-view class="tab-page-wrap" scroll-y :style="{height:(systemInfo.windowHeight-diyHeadHeight+'px')}">
+        <div class="section scroll-box first-cate-list  bg-white" :style="{top:diyHeadHeight+'px'}" @touchmove.stop.prevent="$noop">
+          <li class="scroll-item fz-15 c3" @click="changeQuickCateNav(idx)" v-for="(cate,idx) in firstCateList" :key="idx">
+            {{cate.Category_Name}}
+            <span class="underline" v-show="quickFirstCateIdx === idx"></span>
+          </li>
+        </div>
 
-          <div class="section scroll-box  p-t-10 p-b-20 bg-white" @touchmove.stop.prevent="$noop">
-            <li class="scroll-item m-l-15 p-b-5 fz-15 c3"
-                @click="changeStoreCateNav(idx)"
-                v-for="(cate,idx) in firstCateList"
-                :key="idx"
-                :class="{active:storeFirstCateIdx === idx}"
-            >{{cate.Category_Name}}
-            </li>
-          </div>
-
-          <div class="section grid-box bg-white">
-            <swiper
-              :current="storeFirstCateIdx"
-              @change="storeCateIndexChange"
-              class="quick-cate-swiper"
-            >
-              <swiper-item class="quick-cate-swiper-item" v-for="(first,idx1) in firstCateList" :key="idx1">
-                <div class="grid-box">
-                  <div
-                    style="width: 150rpx;box-sizing: border-box;"
-                    class="grid-item p-t-10 p-b-10"
-                    @click="go(item)"
-                    v-for="(item,idx) in first.child"
-                    :key="idx"
-                  >
-                    <image style="vertical-align: top" class="icon-img b-radius-aircle w44 h44" mode="heightFix"
-                           :src="item.Category_Img"></image>
-                    <div class="title m-t-9 h14 fz-14 c3 text-nowrap" style="line-height: 14px">{{item.Category_Name}}
+        <swiper
+          :current="quickFirstCateIdx"
+          @change="quickCateIndexChange"
+          :style="{top:diyHeadHeight+44+'px',height:(systemInfo.windowHeight-diyHeadHeight-44+'px')}"
+          class="quick-cate-swiper"
+        >
+          <swiper-item class="quick-cate-swiper-item" v-for="(first,idx1) in firstCateList" :key="idx1">
+            
+            <scroll-view class="bg-white" scroll-y :style="{top:diyHeadHeight+'px',height:(systemInfo.windowHeight-diyHeadHeight-44+'px')}">
+              
+              <div class="grid-box">
+                <div
+                  style="width: 150rpx;box-sizing: border-box;"
+                  class="grid-item p-t-10 p-b-10"
+                  @click="go(item)"
+                  v-for="(item,idx) in first.child"
+                  :key="idx"
+                >
+                  <image style="vertical-align: top" class="icon-img b-radius-aircle w44 h44" mode="heightFix" :src="item.Category_Img"></image>
+                  <div class="title m-t-9 h14 fz-14 c3 text-nowrap" style="line-height: 14px">{{item.Category_Name}}</div>
+                </div>
+              </div>
+  
+              <div class="hr h10"></div>
+  
+              <div class="p-t-20 p-b-20 bg-white">
+                <layout-ad code="indexTop"></layout-ad>
+              </div>
+  
+              <div class="page-section-title">
+                <span class="before"></span>
+                <span class="text">人气商家</span>
+                <span class="after"></span>
+              </div>
+  
+              <div class="store-top-item" v-for="(num,idx) in [1,2,3]" :key="idx">
+                <div class="store-info flex flex-vertical-c flex-justify-between">
+                  <div class="p-l-10 p-r-10 flex flex-vertical-c">
+                    <image class="logo"
+                           src="https://newo2o.bafangka.com/static/member/images/login/loginWeixin.png"></image>
+                    <div class="p-l-10 c3">
+                      <div class="name fz-15 m-b-5"> 海的故事咖啡店</div>
+                      <div class="activity">全场满300包邮，1300封顶</div>
                     </div>
                   </div>
+                  <div class="flex flex-vertical-c">
+                    <span class="p-r-8 fz-14 c6">进入商家</span>
+                    <layout-icon color="#999" type="iconicon-arrow-right"></layout-icon>
+                  </div>
                 </div>
-              </swiper-item>
-            </swiper>
+                <div class="store-goods-list">
+                  <block v-for="(goods,idx) in goodsList" :key="idx">
+                    <div class="store-goods-item" v-if="idx<3"  @click="$toGoodsDetail(item.Products_ID)">
+          
+                      <image :style="{backgroundImage:'url('+goods.ImgPath+')'}" class="cover" />
+                      <div class="title fz-12 c3 p-t-7 p-b-7">{{goods.Products_Name}}</div>
+                      <div class="fz-10 c9 flex flex-vertical-b">
+                        <span class="price-selling">￥</span><span
+                        class="fz-12 price-selling">{{goods.Products_PriceX}}</span>
+                        <span class="text-through m-l-2">￥</span><span class="text-through">{{goods.Products_PriceY}}</span>
+                      </div>
+        
+                    </div>
+                  </block>
+                </div>
+              </div>
+  
+              <layout-copyright></layout-copyright>
 
-          </div>
-          <layout-copyright></layout-copyright>
-        </scroll-view>
-      </swiper-item>
-    </swiper>
+            </scroll-view>
+          </swiper-item>
+        </swiper>
+
+        
+      </scroll-view>
+
+      <scroll-view class="tab-page-wrap" scroll-y v-show="headTabIndex===2">
+
+        <div class="section scroll-box  p-t-10 p-b-20 bg-white" @touchmove.stop.prevent="$noop">
+          <li class="scroll-item m-l-15 p-b-5 fz-15 c3"
+              @click="changeStoreCateNav(idx)"
+              v-for="(cate,idx) in firstCateList"
+              :key="idx"
+              :class="{active:storeFirstCateIdx === idx}"
+          >{{cate.Category_Name}}
+          </li>
+        </div>
+
+        <div class="section grid-box bg-white">
+          <swiper
+            :current="storeFirstCateIdx"
+            @change="storeCateIndexChange"
+            class="quick-cate-swiper"
+          >
+            <swiper-item class="quick-cate-swiper-item" v-for="(first,idx1) in firstCateList" :key="idx1">
+              
+              <div class="grid-box bg-white">
+                <div
+                  style="width: 150rpx;box-sizing: border-box;"
+                  class="grid-item p-t-10 p-b-10"
+                  @click="go(item)"
+                  v-for="(item,idx) in first.child"
+                  :key="idx"
+                >
+                  <image style="vertical-align: top" class="icon-img b-radius-aircle w44 h44" mode="heightFix" :src="item.Category_Img"></image>
+                  <div class="title m-t-9 h14 fz-14 c3 text-nowrap" style="line-height: 14px">{{item.Category_Name}}</div>
+                </div>
+              </div>
+            </swiper-item>
+          </swiper>
+
+        </div>
+        <layout-copyright></layout-copyright>
+      </scroll-view>
+    </div>
 
   </div>
 </template>
@@ -568,10 +535,37 @@ export default {
     background: #f8f8f8;
   }
 
+  .first-cate-list{
+    position: fixed;
+    width: 750rpx;
+    height: 44px;
+    padding: 2px 8px;
+    box-sizing: border-box;
+    border-bottom: 1px solid #eee;
+    .scroll-item{
+      position: relative;
+      line-height: 40px;
+      padding: 0 8px;
+      .underline{
+        position: absolute;
+        bottom: 0px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 24rpx;
+        height: 4rpx;
+        background-color: $fun-primary-color;
+      }
+    }
+  }
+
   .quick-cate-swiper {
-    height: 174px;
+    position: fixed;
     width: 750rpx;
     overflow: hidden;
+    .quick-cate-swiper-item{
+      overflow-y: scroll;
+      
+    }
   }
 
   .live {
