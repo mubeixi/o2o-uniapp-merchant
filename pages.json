@@ -132,6 +132,13 @@
             	"navigationBarTitleText": "购物车",
             	"navigationStyle": "custom"
             }
+        },
+        {
+            "path" : "pages/person/person",
+            "style": {
+              "navigationBarTitleText": "个人中心",
+              "navigationStyle": "custom"
+            }
         }
     ],
 	"globalStyle": {
