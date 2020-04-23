@@ -104,13 +104,35 @@
 				"navigationBarTitleText": "会员等级",
 				"navigationStyle": "custom"
 			}
-		}, {
+		},
+		{
 			"path": "pages/user/Coupon",
 			"style": {
 				"navigationBarTitleText": "优惠券",
 				"navigationStyle": "custom"
 			}
-		},{
+		},
+		{
+			"path": "pages/order/OrderBooking",
+			"style": {
+				"navigationBarTitleText": "订单确认"
+			}
+		},
+		{
+			"path": "pages/order/OrderList",
+			"style": {
+				"navigationBarTitleText": "订单列表",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/order/OrderDetail",
+			"style": {
+				"navigationBarTitleText": "订单详情",
+				"navigationStyle": "custom"
+			}
+		},
+		{
             "path" : "pages/order/ShoppingCart",
             "style": {
             	"navigationBarTitleText": "购物车",
