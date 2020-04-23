@@ -1,5 +1,6 @@
-<style>
+<style lang="scss">
   /*每个页面公共css */
+  @import "./assets/app.scss";
 </style>
 <script>
 export default {

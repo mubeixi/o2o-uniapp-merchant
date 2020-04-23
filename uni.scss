@@ -178,60 +178,7 @@ page {
   color: #fff;
 }
 
-// 太多了占空间，常见尺寸就这么多
-@for $i from 4 through 30 {
-  .m-#{$i} {
-    margin: ($i)+px;
-  }
-  .m-t-#{$i} {
-    margin-top: ($i)+px;
-  }
-  .m-b-#{$i} {
-    margin-bottom: ($i)+px;
-  }
-  .m-l-#{$i} {
-    margin-left: ($i)+px;
-  }
-  .m-r-#{$i} {
-    margin-right: ($i)+px;
-  }
-  
-  .p-#{$i} {
-    padding: ($i)+px;
-  }
-  .p-t-#{$i} {
-    padding-top: ($i)+px;
-  }
-  .p-b-#{$i} {
-    padding-bottom: ($i)+px;
-  }
-  .p-l-#{$i} {
-    padding-left: ($i)+px;
-  }
-  .p-r-#{$i} {
-    padding-right: ($i)+px;
-  }
-  
-  .fz-#{$i} {
-    font-size: ($i)+px;
-  }
-}
 
-@for $i from 0 through 200 {
-  .w#{$i} {
-    width: ($i)+px;
-  }
-  .h#{$i} {
-    height: ($i)+px;
-  }
-}
-
-//圆角
-@for $i from 0 through 30 {
-  .b-radius-#{$i} {
-    border-radius: ($i)+px;
-  }
-}
 
 .b-radius-aircle {
   border-radius: 50%;

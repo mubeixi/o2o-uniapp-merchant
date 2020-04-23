@@ -595,8 +595,9 @@ import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import LayoutComment from '@/componets/layout-comment/layout-comment'
 import WzwGoodsAction from '@/componets/wzw-goods-action/wzw-goods-action'
 import {
-  showLoading,hideLoading
+  showLoading, hideLoading
 } from '@/common/fun'
+import { checkIsLogin } from '@/common/helper'
 
 export default {
   name: 'ProductDetail',
@@ -630,49 +631,6 @@ export default {
   },
   methods: {
     async toBooking () {
-      try {
-        showLoading()
-        // HUAWEI Mate 30 Pro
-        const postData = {
-          prod_id: 877, // 产品ID  在 onLoad中赋值
-          attr_id: 999, // 选择属性id
-          count: 555, // 选择属性的库存
-          qty: 1, // 购买数量
-          cart_key: 'DirectBuy', // 购物车类型   CartList（加入购物车）、DirectBuy（立即购买）、PTCartList（不能加入购物车）
-          productDetail_price: 11790
-        }
-        await updateCart(postData).catch(e => { throw Error(e.msg || '下单失败') })
-        this.$linkTo('/pages/order/OrderBooking?cart_key=DirectBuy')
-      } catch (e) {
-        this.$modal(e.message)
-      } finally {
-        hideLoading()
-      }
-    },
-    myPay () {
-      this.hasCart = true
-      this.$refs.mySku.show()
-    },
-    allPay () {
-      this.hasCart = false
-      this.$refs.mySku.show()
-    },
-    async updaCart (sku) {
-      // 加入购物车
-      const data = {
-        User_ID: '48',
-        cart_key: 'CartList',
-        prod_id: this.detailData.Products_ID,
-        qty: sku.qty,
-        attr_id: sku.id
-      }
-      const arr = await updateCart(data).catch(e => {
-        throw Error(e.msg || '加入购物车失败')
-      })
-    },
-    buyNow (sku) {
-      console.log(sku)
-      // 立即购买
       // try {
       //   showLoading()
       //   // HUAWEI Mate 30 Pro
@@ -691,6 +649,56 @@ export default {
       // } finally {
       //   hideLoading()
       // }
+    },
+    myPay () {
+      if (!checkIsLogin(1, 1)) return
+      this.hasCart = true
+      this.$refs.mySku.show()
+    },
+    allPay () {
+      if (!checkIsLogin(1, 1)) return
+      this.hasCart = false
+      this.$refs.mySku.show()
+    },
+    async updaCart (sku) {
+      // 加入购物车
+      const data = {
+        User_ID: '48',
+        cart_key: 'CartList',
+        prod_id: this.detailData.Products_ID,
+        qty: sku.qty,
+        attr_id: sku.id
+      }
+      const arr = await updateCart(data).catch(e => {
+        throw Error(e.msg || '加入购物车失败')
+      })
+    },
+    async buyNow (sku) {
+      // console.log(sku)
+      // 立即购买
+      try {
+        showLoading()
+        // HUAWEI Mate 30 Pro
+
+        // count: 553
+        // id: 990
+        // price: 11790
+        // qty: 1
+        const postData = {
+          prod_id: this.prod_id, // 产品ID  在 onLoad中赋值
+          attr_id: sku.id, // 选择属性id
+          count: sku.count, // 选择属性的库存
+          qty: sku.qty, // 购买数量
+          cart_key: 'DirectBuy', // 购物车类型   CartList（加入购物车）、DirectBuy（立即购买）、PTCartList（不能加入购物车）
+          productDetail_price: sku.price
+        }
+        await updateCart(postData).catch(e => { throw Error(e.msg || '下单失败') })
+        this.$linkTo('/pages/order/OrderBooking?cart_key=DirectBuy')
+      } catch (e) {
+        this.$modal(e.message)
+      } finally {
+        hideLoading()
+      }
     },
     async getProductDetail () {
       try {

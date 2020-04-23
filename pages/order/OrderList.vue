@@ -106,7 +106,6 @@
 
 </template>
 <script>
-import { linkTo } from '@/common/fun'
 
 export default {
   data () {
@@ -119,7 +118,7 @@ export default {
       this.index = num
     },
     goDetail (id) {
-      linkTo('/pages/order/OrderDetail')
+      this.$linkTo('/pages/order/OrderDetail')
     }
   }
 }

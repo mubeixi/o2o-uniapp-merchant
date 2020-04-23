@@ -1,5 +1,5 @@
 import {
-  toast, linkTo, error, modal, back
+  toast, linkToEasy, error, modal, backFunc
 } from '@/common/fun'
 import T from '../common/langue/i18n'
 import { checkIsLogin } from '@/common/helper'
@@ -26,15 +26,13 @@ export default {
   computed: {
   },
   methods: {
-    $domain:getDomain,
-    $back: back,
-    $noop: () => {
-    },
+    $back: backFunc,
+    $noop: () => {},
     $toast: toast,
     $error: error,
     $modal: modal,
-    $linkTo: linkTo,
-    $toGoodsDetail: (id) => linkTo(`/pages/product/detail?prod_id=${id}`),
+    $linkTo: linkToEasy,
+    $toGoodsDetail: (id) => linkToEasy(`/pages/product/detail?prod_id=${id}`),
     $checkIsLogin: checkIsLogin,
     $openPop (name) {
       this.$refs[name].show()
