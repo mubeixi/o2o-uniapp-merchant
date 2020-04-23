@@ -3,7 +3,7 @@
 		<div class="flex flex-justify-between header">
 			<LayoutIcon type="iconshezhi" size="24" color="#333"></LayoutIcon>
 			<div class="user-msg">
-				<image src="/static/home/xianshi.png" class="avatar"></image>
+				<image :src="'/static/home/xianshi.png'|domain" class="avatar"></image>
 				<div class="name">小攒的坚果</div>
 			</div>
 			<LayoutIcon type="iconicon" size="24" color="#333"></LayoutIcon>

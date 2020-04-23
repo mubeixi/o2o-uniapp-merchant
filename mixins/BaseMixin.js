@@ -6,6 +6,9 @@ import { checkIsLogin } from '@/common/helper'
 // #ifdef H5
 import { WX_JSSDK_INIT } from '@/common/env'
 // #endif
+import {
+  getDomain
+} from '@/common/helper'
 
 export default {
   data () {
@@ -23,6 +26,7 @@ export default {
   computed: {
   },
   methods: {
+    $domain:getDomain,
     $back: back,
     $noop: () => {
     },

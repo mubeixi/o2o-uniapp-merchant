@@ -100,7 +100,7 @@
 <!--      </template>-->
 <!--    </div>-->
     <div class="defaults">
-      <image src="/static/empty.png"></image>
+      <image :src="'/static/client/empty.png'|domain"></image>
     </div>
   </div>
 

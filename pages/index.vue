@@ -168,7 +168,7 @@
                       <span class="tag" v-for="(tag,idx) in item.tags" :key="idx">{{tag}}</span>
                     </div>
                     <div class="action">
-                      <image class="bgimg" src="/static/home/capsule.png"></image>
+                      <image class="bgimg" :src="'/static/client/home/capsule.png'|domain"></image>
                       <div class="fz-12 color-white price-box">
                         <span style="color: #754827;">爆抢{{item.Products_Sales}}件</span>
                         <div class="flex fz-10 flex-vertical-b">

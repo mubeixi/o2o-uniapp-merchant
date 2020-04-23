@@ -1,7 +1,7 @@
 <template>
   <view class="myall">
     <view class="img-div">
-      <image src="/static/free/paySuccess.png" style="width: 100%;height: 100%;"></image>
+      <image :src="'/static/client/free/paySuccess.png'|domain" style="width: 100%;height: 100%;"></image>
     </view>
     <view class="pay-succ">
       支付成功
@@ -16,9 +16,9 @@
           本次购物可享权益
         </view>
         <view class="youhuijuan">
-          <image class="allImg" src="/static/free/mbxcoupon.png"></image>
+          <image class="allImg" :src="'/static/client/free/mbxcoupon.png'|domain"></image>
           <view class="infoImg">
-            <image class="image" src="/static/free/mbxcoupon.png"></image>
+            <image class="image" :src="'/static/client/free/mbxcoupon.png'|domain"></image>
           </view>
           <view class="storeTitle">
             11
@@ -49,7 +49,7 @@
           <div class="fenge"><span class="red"></span><span class="caini">猜你喜欢</span><span class="red"></span></div>
           <div class="prolist">
             <div class="pro-item">
-              <img src="/static/active/bg.png" alt="">
+              <img :src="'/static/client/active/bg.png'|domain" alt="">
               <div class="item-name">32131</div>
               <div class="price">
                 <span class="n_price"><span>￥</span>32131</span>
@@ -65,7 +65,7 @@
       <div class="popup-layer">
       </div>
       <div class="popup-content">
-        <image src="/static/free/free.png" class="img-full"></image>
+        <image :src="'/static/client/free/free.png'|domain" class="img-full"></image>
         <div class="popup-title">
           恭喜您！
         </div>

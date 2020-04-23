@@ -11,7 +11,7 @@
         <div class="title color-white" :style="{lineHeight:menuButtonInfo.height+'px'}">外卖</div>
       </div>
     </div>
-    <div class="head" style="background-image: url('/static/delivery/desktop_top_bg.jpg')">
+    <div class="head" :style="{'background-image': url('/static/client/delivery/desktop_top_bg.jpg'|domain)}">
       <div :style="{height:menuButtonInfo.top+menuButtonInfo.height+15+'px'}"></div>
       <div class="store-info flex-vertical-c flex flex-justify-c">
         <image class="store-logo" src="https://newo2o.bafangka.com/static/member/images/login/loginWeixin.png"></image>
