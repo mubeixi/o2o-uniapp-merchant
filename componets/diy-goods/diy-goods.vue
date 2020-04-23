@@ -51,6 +51,7 @@ import {
 } from '../../common'
 
 import { getDomain } from '@/common/helper'
+import { linkTo } from '@/common/fun'
 
 export default {
   name: 'DiyGoods',
@@ -218,7 +219,7 @@ export default {
         linkType: 'default'
       }
 
-      this.$fun.linkTo(linkObj)
+     linkTo(linkObj)
     },
     itemMarginObj (idx) {
       const conf = this.goods.style.margin

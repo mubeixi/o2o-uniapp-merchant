@@ -8,6 +8,7 @@
 </template>
 <script>
 import { deepCopyStrict } from '../../common/tool'
+import { linkTo } from '@/common/fun'
 
 const styleDefault = {
   color: '#333',
@@ -41,7 +42,7 @@ export default {
   components: {},
   methods: {
     go () {
-      this.$fun.linkTo(this.text.value)
+      linkTo(this.text.value)
     }
   },
   created () {

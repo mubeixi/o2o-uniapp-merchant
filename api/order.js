@@ -27,3 +27,25 @@ export const updateCart = (param, options) => fetch({
   param,
   options
 })
+
+// 获取订单详情
+export const getOrderDetail = (param, options) => fetch({
+  act: 'get_order_detail',
+  param,
+  options
+})
+
+// 订单支付
+export const orderPay = (param, options) => fetch({
+  act: 'order_pay',
+  param,
+  options
+})
+
+
+export const confirmOrderPayStatus = (param, options) => fetch({
+  act: 'judge_ispay',
+  param,
+  options
+})
+

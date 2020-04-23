@@ -344,10 +344,10 @@ export default {
     prodCount () {
       try {
         let count = 0
-        for (var biz_id in CartList) {
+        for (var biz_id in this.CartList) {
           // 第二个是产品
-          for (var prod_id in CartList[biz_id]) {
-            count += Object.keys(CartList[biz_id][prod_id]).length
+          for (var prod_id in this.CartList[biz_id]) {
+            count += Object.keys(this.CartList[biz_id][prod_id]).length
           }
         }
         return count
@@ -359,7 +359,7 @@ export default {
       try {
         let num = 0
         for (const i in this.biz_list) {
-          num += this.biz_list[Order_Fyepay]
+          num += this.biz_list[i].Order_Fyepay
         }
         return num
       } catch (e) {
@@ -593,12 +593,12 @@ export default {
           }
         }
 
-        const checkRt = validateFun(this.postData, rules)
-        console.log(checkRt)
-        if (checkRt !== true) {
-          this.formCheckResult = checkRt
-          return
-        }
+        // const checkRt = validateFun(this.postData, rules)
+        // console.log(checkRt)
+        // if (checkRt !== true) {
+        //   this.formCheckResult = checkRt
+        //   return
+        // }
 
         const {
           shipping_id,
@@ -630,7 +630,7 @@ export default {
           return
         }
 
-        this.$linkTo('/pages/pay/pay?Order_ID=' + createOrderResult.Order_ID + '&pagefrom=check')
+        this.$linkTo('/pages/order/OrderPay?Order_ID=' + createOrderResult.Order_ID + '&pagefrom=check')
       } catch (e) {
         console.log(e)
         Exception.handle(e)
