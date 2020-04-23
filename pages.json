@@ -30,12 +30,6 @@
 			}
 		},
 		{
-			"path": "pages/order/OrderBooking",
-			"style": {
-				"navigationBarTitleText": "订单确认"
-			}
-		},
-		{
 			"path": "pages/order/OrderPay",
 			"style": {
 				"navigationBarTitleText": "支付台"
