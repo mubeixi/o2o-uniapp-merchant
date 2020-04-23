@@ -525,3 +525,14 @@ page {
     padding: 0 8px;
   }
 }
+
+
+.fun-goods{
+  &-list{
+    display: flex;
+  }
+  &-col{
+    flex: 1;
+  }
+  
+}

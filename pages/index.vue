@@ -1,6 +1,6 @@
 <template>
   <div class="page-wrap">
-    <div class="head-box" :style="{height:diyHeadHeight+'px',backgroundColor:topBgColor}">
+    <div class="head-box" :style="{height:diyHeadHeight+'px',backgroundColor:primaryColor}">
       <div class="head"
            :style="{height:menuButtonInfo.height+'px',paddingRight:diyHeadRight+'px',marginTop:menuButtonInfo.top+'px'}">
         <ul class="tab-box">
@@ -187,7 +187,8 @@
             </div>
           </div>
         </div>
-        <copyright></copyright>
+        <layout-copyright></layout-copyright>
+        <div class="h20"></div>
       </scroll-view>
       <scroll-view class="tab-page-wrap" scroll-y v-show="headTabIndex===1" >
 
@@ -201,13 +202,13 @@
         <swiper
           :current="quickFirstCateIdx"
           @change="quickCateIndexChange"
-          :style="{top:diyHeadHeight+44+'px',height:(systemInfo.windowHeight-diyHeadHeight-44+'px')}"
+          :style="{top:diyHeadHeight+firstCateHeight+'px',height:(cateViewHeight+'px')}"
           class="quick-cate-swiper"
         >
           <swiper-item class="quick-cate-swiper-item" v-for="(first,idx1) in firstCateList" :key="idx1">
-            
-            <scroll-view class="bg-white" scroll-y :style="{top:diyHeadHeight+'px',height:(systemInfo.windowHeight-diyHeadHeight-44+'px')}">
-              
+
+            <scroll-view class="bg-white scroll-view-wrap" scroll-y >
+
               <div class="grid-box">
                 <div
                   style="width: 150rpx;box-sizing: border-box;"
@@ -220,97 +221,59 @@
                   <div class="title m-t-9 h14 fz-14 c3 text-nowrap" style="line-height: 14px">{{item.Category_Name}}</div>
                 </div>
               </div>
-  
               <div class="hr h10"></div>
-  
+
               <div class="p-t-20 p-b-20 bg-white">
                 <layout-ad code="indexTop"></layout-ad>
               </div>
-  
-             
-  
 
               <div class="page-section-title">
-                <span class="before"></span>
+                <span class="before" :style="{backgroundColor: primaryColor}"></span>
                 <span class="text">钜惠推荐</span>
-                <span class="after"></span>
+                <span class="after"  :style="{backgroundColor: primaryColor}"></span>
               </div>
-  
-              <div v-for="(goods,idx) in goodsList" :key="idx">
-                <goods-item :vo="goods"></goods-item>
-              </div>
-  
-  
-              <div class="page-section-title">
-                <span class="before"></span>
-                <span class="text">人气商家</span>
-                <span class="after"></span>
-              </div>
-  
-              <div class="store-top-item" v-for="(num,idx) in [1,2,3]" :key="idx">
-                <div class="store-info flex flex-vertical-c flex-justify-between">
-                  <div class="p-l-10 p-r-10 flex flex-vertical-c">
-                    <image class="logo"
-                           src="https://newo2o.bafangka.com/static/member/images/login/loginWeixin.png"></image>
-                    <div class="p-l-10 c3">
-                      <div class="name fz-15 m-b-5"> 海的故事咖啡店</div>
-                      <div class="activity">全场满300包邮，1300封顶</div>
-                    </div>
-                  </div>
-                  <div class="flex flex-vertical-c">
-                    <span class="p-r-8 fz-14 c6">进入商家</span>
-                    <layout-icon color="#999" type="iconicon-arrow-right"></layout-icon>
-                  </div>
-                </div>
-                <div class="store-goods-list">
+
+              <div class="fun-goods-list bg-white b-radius-5 m-t-10" style="width: 710rpx;margin-left: 20rpx;" >
+                <div class="fun-goods-col" style="padding: 0 15rpx 0 30rpx">
                   <block v-for="(goods,idx) in goodsList" :key="idx">
-                    <div class="store-goods-item" v-if="idx<3"  @click="$toGoodsDetail(item.Products_ID)">
-          
-                      <image :style="{backgroundImage:'url('+goods.ImgPath+')'}" class="cover" />
-                      <div class="title fz-12 c3 p-t-7 p-b-7">{{goods.Products_Name}}</div>
-                      <div class="fz-10 c9 flex flex-vertical-b">
-                        <span class="price-selling">￥</span><span
-                        class="fz-12 price-selling">{{goods.Products_PriceX}}</span>
-                        <span class="text-through m-l-2">￥</span><span class="text-through">{{goods.Products_PriceY}}</span>
-                      </div>
-        
-                    </div>
+                    <goods-item v-if="idx%2===0"  :marketPrice="true" coverRadius="8rpx" :vo="goods" mode="top-bottom"></goods-item>
+                  </block>
+                </div>
+                <div class="fun-goods-col" style="padding: 0 30rpx 0 15rpx">
+                  <block v-for="(goods,idx) in goodsList" :key="idx">
+                    <goods-item v-if="idx%2===1"  :marketPrice="true" coverRadius="8rpx" :vo="goods" mode="top-bottom"></goods-item>
                   </block>
                 </div>
               </div>
-              
-              
-  
-              <layout-copyright></layout-copyright>
+
+              <div class="h20"></div>
 
             </scroll-view>
           </swiper-item>
         </swiper>
 
-        
       </scroll-view>
 
       <scroll-view class="tab-page-wrap" scroll-y v-show="headTabIndex===2">
 
-        <div class="section scroll-box  p-t-10 p-b-20 bg-white" @touchmove.stop.prevent="$noop">
-          <li class="scroll-item m-l-15 p-b-5 fz-15 c3"
-              @click="changeStoreCateNav(idx)"
-              v-for="(cate,idx) in firstCateList"
-              :key="idx"
-              :class="{active:storeFirstCateIdx === idx}"
-          >{{cate.Category_Name}}
+        <div class="section scroll-box first-cate-list  bg-white" :style="{top:diyHeadHeight+'px'}" @touchmove.stop.prevent="$noop">
+          <li class="scroll-item fz-15 c3" @click="changeQuickCateNav(idx)" v-for="(cate,idx) in firstCateList" :key="idx">
+            {{cate.Category_Name}}
+            <span class="underline" v-show="quickFirstCateIdx === idx"></span>
           </li>
         </div>
 
-        <div class="section grid-box bg-white">
-          <swiper
-            :current="storeFirstCateIdx"
-            @change="storeCateIndexChange"
-            class="quick-cate-swiper"
-          >
-            <swiper-item class="quick-cate-swiper-item" v-for="(first,idx1) in firstCateList" :key="idx1">
-              
-              <div class="grid-box bg-white">
+        <swiper
+          :current="quickFirstCateIdx"
+          @change="quickCateIndexChange"
+          :style="{top:diyHeadHeight+firstCateHeight+'px',height:(cateViewHeight+'px')}"
+          class="quick-cate-swiper"
+        >
+          <swiper-item class="quick-cate-swiper-item" v-for="(first,idx1) in firstCateList" :key="idx1">
+
+            <scroll-view class="bg-white scroll-view-wrap" scroll-y >
+
+              <div class="grid-box">
                 <div
                   style="width: 150rpx;box-sizing: border-box;"
                   class="grid-item p-t-10 p-b-10"
@@ -322,11 +285,55 @@
                   <div class="title m-t-9 h14 fz-14 c3 text-nowrap" style="line-height: 14px">{{item.Category_Name}}</div>
                 </div>
               </div>
-            </swiper-item>
-          </swiper>
+              <div class="hr h10"></div>
+              <div class="p-t-20 p-b-20 bg-white">
+                <layout-ad code="indexTop"></layout-ad>
+              </div>
 
-        </div>
-        <layout-copyright></layout-copyright>
+              <div style="background: #f8f8f8" class="p-b-15 p-t-15">
+                <div class="page-section-title">
+                  <span class="before" :style="{backgroundColor: primaryColor}"></span>
+                  <span class="text">人气商家</span>
+                  <span class="after" :style="{backgroundColor: primaryColor}"></span>
+                </div>
+
+                <div class="store-top-item"  v-for="(num,idx) in [1,2,3]" :key="idx">
+                  <div class="store-info flex flex-vertical-c flex-justify-between">
+                    <div class="p-l-10 p-r-10 flex flex-vertical-c">
+                      <image class="logo"
+                             src="https://newo2o.bafangka.com/static/member/images/login/loginWeixin.png"></image>
+                      <div class="p-l-10 c3">
+                        <div class="name fz-15 m-b-5"> 海的故事咖啡店</div>
+                        <div class="activity">全场满300包邮，1300封顶</div>
+                      </div>
+                    </div>
+                    <div class="flex flex-vertical-c">
+                      <span class="p-r-8 fz-14 c6">进入商家</span>
+                      <layout-icon color="#999" type="iconicon-arrow-right"></layout-icon>
+                    </div>
+                  </div>
+                  <div class="store-goods-list">
+                    <block v-for="(goods,idx) in goodsList" :key="idx">
+                      <div class="store-goods-item" v-if="idx<3"  @click="$toGoodsDetail(item.Products_ID)">
+
+                        <image :style="{backgroundImage:'url('+goods.ImgPath+')'}" class="cover" />
+                        <div class="title fz-12 c3 p-t-7 p-b-7">{{goods.Products_Name}}</div>
+                        <div class="fz-10 c9 flex flex-vertical-b">
+                          <span class="price-selling">￥</span><span class="fz-12 price-selling">{{goods.Products_PriceX}}</span>
+                          <span class="text-through m-l-4">￥</span><span class="text-through">{{goods.Products_PriceY}}</span>
+                        </div>
+
+                      </div>
+                    </block>
+                  </div>
+                </div>
+
+              </div>
+
+            </scroll-view>
+          </swiper-item>
+        </swiper>
+
       </scroll-view>
     </div>
 
@@ -388,8 +395,15 @@ export default {
     LayoutIcon
   },
   computed: {
+    cateViewHeight () {
+      try {
+        return this.systemInfo.windowHeight - this.diyHeadHeight - this.firstCateHeight
+      } catch (e) {
+        return 'auto'
+      }
+    },
     ...mapGetters({
-      topBgColor: 'theme/pimaryColor'
+      primaryColor: 'theme/pimaryColor'
     })
     // quickNavs () {
     //   try {
@@ -401,6 +415,7 @@ export default {
   },
   data () {
     return {
+      firstCateHeight: 44,
       tagIndex: 0,
       firstCateList: [], // 一级菜单
       quickFirstCateIdx: 0, // 同城闪送
@@ -581,8 +596,11 @@ export default {
     width: 750rpx;
     overflow: hidden;
     .quick-cate-swiper-item{
-      overflow-y: scroll;
-      
+      .scroll-view-wrap{
+        position: absolute;
+        width: 100%;
+        height: 100%;
+      }
     }
   }
 
@@ -941,7 +959,7 @@ export default {
   .store-top-item {
     width: 710rpx;
     overflow: hidden;
-    margin: 0 20rpx 30rpx;
+    margin:0 20rpx 30rpx;
     background: white;
     border-radius: 20rpx;
     padding: 20rpx 0;
