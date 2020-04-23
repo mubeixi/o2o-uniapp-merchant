@@ -374,7 +374,7 @@ export default {
       Storage.set('access_token', access_token)
       Storage.set('user_id', user_id)
 
-      // this.$store.dispatch('setUserInfo', userData)
+      this.$store.commit('user/SET_USER_INFO', userData)
 
       // 需要设置密码
       // if (userData.hasOwnProperty('biz_passwd')) {
