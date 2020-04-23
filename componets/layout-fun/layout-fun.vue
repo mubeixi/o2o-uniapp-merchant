@@ -1,5 +1,5 @@
 <template>
-	<div class="item">
+	<div class="item" :style="{width}">
 		<LayoutIcon :rotate="rotate" :type="type" :weight="weight" :display="display" :color="color" :size="size"></LayoutIcon>
 		<div class="icon-name">{{name}}</div>
 	</div>
@@ -11,6 +11,10 @@ export default {
     LayoutIcon
   },
 	props: {
+  	width:{
+		  type: String,
+		  default: '80rpx'
+	  },
     rotate: {
       type: String,
       default: '0deg'
@@ -46,7 +50,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 	.item {
-		width: 25%;
+
 		text-align: center;
 		font-size: 24rpx;
 		color: #333;

@@ -73,7 +73,7 @@
 <script>
 import { getAdvertList } from '@/api/common'
 import { getArrColumn, getDomain } from '@/common/helper'
-import { linkTo } from '@/common/fun'
+import { linkToEasy } from '@/common/fun'
 
 export default {
   name: 'LayoutAd',
@@ -170,7 +170,7 @@ export default {
       if (!this.code) return
       if (this.urls[idx]) {
         const { link } = this.urls[idx]
-        if (link) linkTo(link)
+        if (link) linkToEasy(link)
       }
     },
     handleImgLoad (e) {
