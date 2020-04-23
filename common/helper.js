@@ -109,7 +109,7 @@ export const compareObj = (obj1, obj2) => {
  */
 export const getArrColumn = (arr, column) => {
   if (!Array.isArray(arr)) {
-    throw new Error('数据必传')
+    throw new Error('第二个参数为一个数组')
   }
   if (typeof column !== 'string') {
     throw new Error('键名为字符串')
@@ -125,6 +125,22 @@ export const getArrColumn = (arr, column) => {
     rt.push(arr[k][column])
   }
   return rt
+}
+
+/**
+ * 获取对象的属性个数
+ * @param obj
+ * @param stict 严格模式下，只返回自己的，忽略原型链继承的
+ * @returns {boolean|number}
+ */
+export const getObjectAttrNum = (obj, stict = true) => {
+  if (typeof stict !== 'object') return false
+  if (!stict) return Object.keys(obj).length // 不区分是否继承而来
+  let count = 0
+  for (var i in obj) {
+    if (obj.hasOwnProperty(i))count++
+  }
+  return count
 }
 
 /**
@@ -305,8 +321,8 @@ export function sleep (fn, par, time = 3000) {
 export const goProductDetail = (id, is_group) => {
   if (!id) return
 
-  // let path = '/pages/detail/detail';
-  const path = is_group ? '/pages/detail/groupDetail' : '/pages/detail/detail'// 根据不同路径跳转
+  // let path = '/pages/product/detail';
+  const path = is_group ? '/pages/detail/groupDetail' : '/pages/product/detail'// 根据不同路径跳转
   uni.navigateTo({
     url: path + '?Products_ID=' + id
   })
@@ -385,8 +401,20 @@ export const getCountdownFunc = ({ start_timeStamp, end_timeStamp, current = (ne
   return { d, h, m, s, is_start, is_end }
 }
 
+// 输入金额时时验证
+export function check_money_in (money) {
+  if (!(/(^[1-9]([0-9]+)?(\.[0-9]{0,2})?$)|(^(0){1}$)|(^[0-9]\.([0-9]){0,2}?$)/.test(money))) {
+    return false
+  } else {
+    return true
+  }
+}
+
 const Helper = {
   Object: {
+    mapList: (list, fn) => {
+      list = list.map(fn)
+    },
     extend: (o, p) => {
       for (const prop in p) o[prop] = p[prop]
       return o

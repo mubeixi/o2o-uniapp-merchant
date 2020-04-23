@@ -199,7 +199,7 @@
 
   .store {
     position: sticky;
-    z-index: 999;
+    z-index: 8;
     top: 0;
     width: 750rpx;
     background-color: #ffffff;
@@ -374,6 +374,13 @@
     }
   }
 
+  .wzw-goods-action {
+    position: fixed;
+    left: 0px;
+    bottom: 0px;
+    z-index: 10;
+  }
+
 </style>
 
 <template>
@@ -397,7 +404,7 @@
               ¥{{detailData.Products_PriceY}}
             </span>
       </div>
-      <div class="product-price-right">
+      <div class="product-price-right" @click="toBooking">
         <image src="/static/product/product_share.png" class="full-img" style="width: 130% !important;"></image>
         <div class="product-share">
           分享赚
@@ -566,8 +573,14 @@
         </div>
       </swiper-item>
     </swiper>
-
-    <!--    <bottombuy></bottombuy>-->
+    <product-sku ref="mySku" @sureSku="save" :hasCart="hasCart" @updaCart="updaCart" @buyNow="buyNow"
+                 :proList="detailData"></product-sku>
+    <wzw-goods-action class="wzw-goods-action" @myPay="myPay" @allPay="allPay">
+      <span slot="leftText">单买¥</span>
+      <span slot="leftPrice">100.00</span>
+      <span slot="rightText">拼团购¥</span>
+      <span slot="rightPrice">100.00</span>
+    </wzw-goods-action>
   </div>
 </template>
 
@@ -575,19 +588,25 @@
 import BaseMixin from '@/mixins/BaseMixin'
 import { getProductDetail, getActiveInfo, getBizInfo, getStoreList } from '@/api/product'
 import { getCommitList } from '@/api/common'
+import ProductSku from '@/componets/product-sku/product-sku'
+import { updateCart } from '@/api/order'
 import { formatRichTextByUparseFn } from '@/common/filter'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import LayoutComment from '@/componets/layout-comment/layout-comment'
+import WzwGoodsAction from '@/componets/wzw-goods-action/wzw-goods-action'
 
 export default {
   name: 'ProductDetail',
   mixins: [BaseMixin],
   components: {
     LayoutIcon,
-    LayoutComment
+    LayoutComment,
+    ProductSku,
+    WzwGoodsAction
   },
   data () {
     return {
+      hasCart: false, // 是否有购物车
       tabIndex: 3,
       headTabSticky: false,
       prod_id: '1613', // 商品id
@@ -607,6 +626,49 @@ export default {
     this.headTabSticky = scrollTop > this.headTabTop
   },
   methods: {
+    myPay () {
+      this.hasCart = true
+      this.$refs.mySku.show()
+    },
+    allPay () {
+      this.hasCart = false
+      this.$refs.mySku.show()
+    },
+    async updaCart (sku) {
+      // 加入购物车
+      const data = {
+        User_ID: '48',
+        cart_key: 'CartList',
+        prod_id: this.detailData.Products_ID,
+        qty: sku.qty,
+        attr_id: sku.id
+      }
+      const arr = await updateCart(data).catch(e => {
+        throw Error(e.msg || '加入购物车失败')
+      })
+    },
+    buyNow (sku) {
+      console.log(sku)
+      // 立即购买
+      // try {
+      //   showLoading()
+      //   // HUAWEI Mate 30 Pro
+      //   const postData = {
+      //     prod_id: 877, // 产品ID  在 onLoad中赋值
+      //     attr_id: 999, // 选择属性id
+      //     count: 555, // 选择属性的库存
+      //     qty: 1, // 购买数量
+      //     cart_key: 'DirectBuy', // 购物车类型   CartList（加入购物车）、DirectBuy（立即购买）、PTCartList（不能加入购物车）
+      //     productDetail_price: 11790
+      //   }
+      //   await updateCart(postData).catch(e => { throw Error(e.msg || '下单失败') })
+      //   this.$linkTo('/pages/order/OrderBooking?cart_key=DirectBuy')
+      // } catch (e) {
+      //   this.$modal(e.message)
+      // } finally {
+      //   hideLoading()
+      // }
+    },
     async getProductDetail () {
       try {
         const data = {
@@ -678,7 +740,7 @@ export default {
     this.getProductDetail()
   },
   onLoad (options) {
-    // this.prod_id=options.prod_id
+    this.prod_id = options.prod_id
   },
   onReady () {
     // const query = uni.createSelectorQuery().in(this)

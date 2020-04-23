@@ -12,6 +12,16 @@ Vue.filter('formatTime', (str, fromatStr = 'YYYY.MM.DD') => {
   return moment(str).format(fromatStr)
 })
 
+Vue.filter('formatphone',(value) =>{
+  if(value) {
+    var len= value.length;
+    var xx= value.substring(3,len-4);
+    var values = value.replace(xx,"****");
+    return values;
+  }
+  return ''
+})
+
 Vue.filter('formatTimeFromNow', (str) => {
   return moment(str).startOf('day').fromNow()
 })

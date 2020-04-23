@@ -87,19 +87,45 @@
 			}
 		},
 		{
-			"path": "pages/person/VipList",
+			"path": "pages/user/VipList",
 			"style": {
 				"navigationBarTitleText": "会员等级",
 				"navigationStyle": "custom"
 			}
 		}, {
-			"path": "pages/person/Coupon",
+			"path": "pages/user/Coupon",
 			"style": {
 				"navigationBarTitleText": "优惠券",
 				"navigationStyle": "custom"
 			}
+		},{
+			"path": "pages/order/OrderBooking",
+			"style": {
+				"navigationBarTitleText": "订单确认"
+			}
+		},
+		{
+			"path": "pages/order/OrderList",
+			"style": {
+				"navigationBarTitleText": "订单列表",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/order/OrderDetail",
+			"style": {
+				"navigationBarTitleText": "订单详情",
+				"navigationStyle": "custom"
+			}
 		}
-	],
+	    ,{
+            "path" : "pages/order/ShoppingCart",
+            "style": {
+            	"navigationBarTitleText": "购物车",
+            	"navigationStyle": "custom"
+            }
+        }
+    ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarBackgroundColor": "#FFF",
@@ -129,10 +155,10 @@
 				"text": "好评"
 			},
 			{
-				"pagePath": "pages/index",
+				"pagePath": "pages/order/ShoppingCart",
 				"iconPath": "/static/tabbar/notify.png",
 				"selectedIconPath": "/static/tabbar/notify.png",
-				"text": "消息"
+				"text": "购物车"
 			},
 			{
 				"pagePath": "pages/index",
