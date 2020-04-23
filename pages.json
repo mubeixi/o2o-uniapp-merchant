@@ -98,6 +98,25 @@
 				"navigationBarTitleText": "优惠券",
 				"navigationStyle": "custom"
 			}
+		},{
+			"path": "pages/order/OrderBooking",
+			"style": {
+				"navigationBarTitleText": "订单确认"
+			}
+		},
+		{
+			"path": "pages/order/OrderList",
+			"style": {
+				"navigationBarTitleText": "订单列表",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/order/OrderDetail",
+			"style": {
+				"navigationBarTitleText": "订单详情",
+				"navigationStyle": "custom"
+			}
 		}
 	    ,{
             "path" : "pages/order/ShoppingCart",
