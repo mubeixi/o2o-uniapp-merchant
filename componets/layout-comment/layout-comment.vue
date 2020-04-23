@@ -9,7 +9,7 @@
     </div>
     <div class="content">{{comment.Note}}</div>
     <div class="actions">
-      <image class="icon" src="/static/comment.png"></image>
+      <image class="icon" :src="'/static/client/comment.png'|domain"></image>
       <span>{{comment.is_anonymous}}</span>
     </div>
   </div>

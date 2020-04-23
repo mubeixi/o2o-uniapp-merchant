@@ -80,10 +80,10 @@
 
           <!--便捷操作-->
           <div class="feature-list">
-            <image mode="scaleToFill" class="feature-item" src="/static/store/send.png"></image>
-            <image mode="scaleToFill" class="feature-item" src="/static/store/pay.png"></image>
-            <image mode="scaleToFill" class="feature-item" src="/static/store/join.png"></image>
-            <image mode="scaleToFill" class="feature-item" src="/static/store/member.png"></image>
+            <image mode="scaleToFill" class="feature-item" :src="'/static/client/store/send.png'|domain"></image>
+            <image mode="scaleToFill" class="feature-item" :src="'/static/client/store/pay.png'|domain"></image>
+            <image mode="scaleToFill" class="feature-item" :src="'/static/client/store/join.png'|domain"></image>
+            <image mode="scaleToFill" class="feature-item" :src="'/static/client/store/member.png'|domain"></image>
           </div>
 
           <!--虚拟产品-->
@@ -116,7 +116,7 @@
                         </div>
                       </div>
                       <div class="action">
-                        <image class="img" src="/static/store/cart.png"></image>
+                        <image class="img" :src="'/static/client/store/cart.png'|domain"></image>
                       </div>
                     </div>
 

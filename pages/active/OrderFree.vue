@@ -1,7 +1,7 @@
 <template>
   <div class="free">
     <div class="free-top">
-      <image class="img-full" src="/static/active/bg.png"></image>
+      <image class="img-full" :src="'/static/client/active/bg.png'|domain"></image>
       <div class="free-top-title">免单专区</div>
       <div class="free-top-time fz-12">
         活动时间：2020.04.11-2020.04.30

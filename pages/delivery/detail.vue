@@ -363,7 +363,7 @@
             </span>
       </div>
       <div class="product-price-right" @click="open">
-        <image src="/static/product/product_share.png" class="full-img" style="width: 130% !important;"></image>
+        <image :src="'/static/client/product/product_share.png'|domain" class="full-img" style="width: 130% !important;"></image>
         <div class="product-share">
           分享赚
         </div>
@@ -385,7 +385,7 @@
         <div class="flex1">
           <div class="flex">
             <div class="activity-item" v-for="(item,index) of active" :key="index">
-              <image src="/static/product/activity.png" class="activity-img"></image>
+              <image :src="'/static/client/product/activity.png'|domain" class="activity-img"></image>
               满{{item.reach}}减{{item.award}}
             </div>
           </div>
@@ -409,7 +409,7 @@
       </div>
 
       <div class="vip-img" >
-        <image src="/static/product/vip.png" class="full-img"></image>
+        <image :src="'/static/client/product/vip.png'|domain" class="full-img"></image>
       </div>
 
     </div>
@@ -417,7 +417,7 @@
     <!-- 服务保障   -->
     <div class="shouhou flex flex-vertical-center" v-if="detailData.Products_Promise.length>0">
       <div class="shouhou-item" v-for="(item,index) in detailData.Products_Promise" v-if="item.name" :key="index">
-        <image src="/static/product/checked.png" class="shouhou-img"></image>
+        <image :src="'/static/client/product/checked.png'|domain" class="shouhou-img"></image>
         {{item.name}}
       </div>
 

@@ -2,7 +2,7 @@
   <div class="wrap">
     <layout-page-title :letfFn="true" @clickLeft="bindBackFn" :title="pageTitle"></layout-page-title>
     <fun-err-msg :topStr="menuButtonInfo.height+menuButtonInfo.top+10+'px'" :errs="formCheckResult"></fun-err-msg>
-    <image class="img m-t-25" mode="widthFix" src="/static/copyright.png"></image>
+    <image class="img m-t-25" mode="widthFix" :src="'/static/client/copyright.png'|domain"></image>
 
     <div class="form">
       <form style="display: block" @submit="formSubmit" @reset="formReset">

@@ -13,11 +13,11 @@
     </div>
     <div class="order_msg bgwhite">
       <div class="biz_msg">
-        <image src="/static/copyright.png" class="biz_logo" alt="" />
+        <image :src="'/static/client/copyright.png'|domain" class="biz_logo" alt="" />
         <span class="biz_name">网中网</span>
       </div>
       <div class="pro">
-        <image class="pro-img" src="/static/comment.png" alt="" />
+        <image class="pro-img" :src="'/static/client/comment.png'|domain" alt="" />
         <div class="pro-msg">
           <div class="pro-name">产品名称</div>
           <div class="attr"><span>产品属性</span></div>

@@ -1,6 +1,6 @@
 <template>
   <div class="page-wrap">
-    <div class="head" style="background-image: url('/static/share/share_top.png')">
+    <div class="head" :style="{'background-image': url('/static/client/share/share_top.png'|domain)}">
       <div class="userInfo">
         <image class="avatar" src="https://newo2o.bafangka.com/static/member/images/login/loginWeixin.png"></image>
         <div class="nickname fz-16">function</div>

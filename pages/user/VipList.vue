@@ -1,12 +1,12 @@
 <template>
   <div class="vip-all">
     <div class="top">
-      <image src="/static/vip/vip-bg.png" class="img-full"></image>
+      <image :src="'/static/client/vip/vip-bg.png'|domain" class="img-full"></image>
       <swiper class="center" :indicator-dots="false" :autoplay="false" :duration="1000" :current="inds"
               @change="change">
         <swiper-item class="vipFir" :style="vipData.length==1?'margin-left:42rpx;':''" v-for="(item,index) of vipData"
                      :key="index">
-          <image src="/static/vip/vip.png" class="img-full"></image>
+          <image :src="'/static/client/vip/vip.png'|domain" class="img-full"></image>
           <div class="vip-title">
             {{item.level_name}}
           </div>
@@ -36,7 +36,7 @@
       </div>
       <div class="p-l-20 p-r-20 p-b-20">
         <div class="vip-coupon" v-for="(item,index) of coupon" :key="index">
-          <image src="/static/vip/coupon.png" class="img-full"></image>
+          <image :src="'/static/client/vip/coupon.png'|domain" class="img-full"></image>
           <div class="vip-coupon-title">满{{item.Coupon_Condition}}可用</div>
           <div class="vip-coupon-price">{{item.Coupon_Cash}}</div>
         </div>

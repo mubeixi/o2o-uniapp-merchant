@@ -140,7 +140,7 @@
         <view class="tips" v-if="orderInfo.obtain_desc">{{orderInfo.obtain_desc}}</view>
       </div>
       <view class="mx" @click="seeDetail">明细
-        <image class="image" :class="isSlide?'slidedown':''" src="/static/top.png"></image>
+        <image class="image" :class="isSlide?'slidedown':''" :src="'/static/client/top.png'|domain"></image>
       </view>
       <div class="submit" @click="submit">去支付</div>
     </div>

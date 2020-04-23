@@ -5,7 +5,7 @@
 		</view>
 		<block>
 			<view class="youhuijuan" v-for="(item,index) of pro" :key="index">
-				<image class="allImg" src="/static/mbxcoupon.png"></image>
+				<image class="allImg" :src="'/static/client/mbxcoupon.png'|domain"></image>
 				<view class="infoImg">
 					<image class="image" :src="item.Coupon_PhotoPath"></image>
 				</view>
