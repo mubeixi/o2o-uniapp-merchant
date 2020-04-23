@@ -27,7 +27,7 @@ const state = {
 }
 
 const mutations = {
-  setTheme (state, { themeName }) {
+  SET_THEME (state, { themeName }) {
     state.seletedTheme = themeName
   }
 }
@@ -35,15 +35,14 @@ const mutations = {
 const actions = {
   async refreshTheme ({ commit, state }, opts) {
     try {
-      showLoading('加载主题')
       const themeName = await getThemeData().catch(({ msg = '' }) => {
         throw Error(msg || '加载主题失败')
       })
-      commit('setTheme', { themeName })
+      commit('SET_THEME', { themeName })
     } catch (e) {
       modal(e.message)
     } finally {
-      hideLoading()
+
     }
   }
 }
