@@ -6,14 +6,14 @@ const colorYellow = '#FFE300'
 const getThemeData = () => {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      resolve('yellow')
+      resolve('green')
     }, 1000)
   })
 }
 
 const state = {
   // 主题
-  seletedTheme: 'green',
+  seletedTheme: 'yellow',
   themeList: {
     green: {
       name: 'green',
