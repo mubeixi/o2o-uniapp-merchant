@@ -127,11 +127,7 @@
 			}
 		},
 		{
-            "path" : "pages/order/ShoppingCart",
-            "style": {
-            	"navigationBarTitleText": "购物车",
-            	"navigationStyle": "custom"
-            }
+            "path" : "pages/order/ShoppingCart"
         },
         {
             "path" : "pages/person/person",

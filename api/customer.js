@@ -45,3 +45,6 @@ export const getUserCoupon = (param, options) => fetch({ act: 'user_receive_coup
 export const getFavouriteProdList = (param,options) => fetch({act:'get_favourite_prod_list', param,options})
 // 取消收藏
 export const cancelFavouriteProd = (param, options) => fetch({act: 'cancel_favourite_prod', param, options})
+// 用户购物车产品数量
+export const CartList = (param, options) => fetch({ act: 'get_cart', param, options })
+
