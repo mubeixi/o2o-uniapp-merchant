@@ -1,11 +1,20 @@
 <template>
 	<div>
+		<div class="cart-title flex flex-vertical-c flex-justify-c fz-16 c3">
+			<div>
+				购物车
+			</div>
+			<div class="cart-title-right" @click="isDel=!isDel"  v-if="!manage">
+				{{isDel?'取消':'管理'}}
+			</div>
+		</div>
+
 		<div class="content">
 			<div class="cartbox" v-if="total_count>0">
 				<div class="order_msg"   v-for="(pro,index) in CartList" :key="index">
 					<div class="biz_msg">
-						<div class="item-cart" >
-							<layout-icon  v-if="bizCheck[pro]" type="iconicon-check" size="18" color="#F43131"></layout-icon>
+						<div class="item-cart" @click="selectBiz(index)">
+							<layout-icon  v-if="bizCheck[index]" type="iconicon-check" size="18" color="#F43131"></layout-icon>
 							<layout-icon  v-else type="iconradio" size="18" color="#ccc"></layout-icon>
 						</div>
 						<img :src="bizList[index].biz_logo" class="biz_logo" />
@@ -28,8 +37,7 @@
 										<span class="span">￥</span>{{item.ProductsPriceX}}
 										<span class="amount">
 									  <span class="plus" :class="item.Qty == 1 ? 'disabled' : ''"  @click="updateCart(ind,indx,-1,index)">-</span>
-									  <input class="attr_num" v-model="item.Qty" type="number" />
-<!--											 @focus="setActiveAttr(ind,indx,item)" @blur="setAttrNum"-->
+									  <input class="attr_num" v-model="item.Qty" type="number" min="1" @focus="getQty(item.Qty)"  @blur="inputQty(ind,indx,$event,index,item.Qty)"/>
 									  <span class="plus" @click="updateCart(ind,indx,1,index)">+</span>
 									</span>
 									</div>
@@ -47,13 +55,19 @@
 		</div>
 
 
-		<div class="checkout" >
-			<div class="item-cart " >
-				<layout-icon type="iconradio" size="18" color="#ccc" class="m-r-5"></layout-icon>
+		<div class="checkout" v-if="!manage">
+			<div class="item-cart " @click="selectAll">
+				<layout-icon v-if="allCheck" type="iconicon-check" size="18" color="#F43131" class="m-r-5"></layout-icon>
+				<layout-icon v-else type="iconradio" size="18" color="#ccc" class="m-r-5"></layout-icon>
 				<span>全选</span>
 			</div>
-			<div class="total" >合计：<span>￥<span>{{totalPrice}}</span></span></div>
-			<div class="checkbtn" @click="submit">结算 </div>
+			<block v-if="!isDel">
+				<div class="total" >合计：<span>￥<span>{{totalPrice}}</span></span></div>
+				<div class="checkbtn" @click="submit">结算 </div>
+			</block>
+			<block v-else>
+				<div class="checkbtn" @click="DelCart">删除 </div>
+			</block>
 		</div>
 
 	</div>
@@ -61,7 +75,7 @@
 
 <script>
 import BaseMixin from '@/mixins/BaseMixin'
-import  {CartList} from  '@/api/customer'
+import  {CartList,DelCart} from  '@/api/customer'
 import  {updateCart} from  '@/api/order'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import Storage from  '@/common/Storage'
@@ -79,7 +93,15 @@ import { toast,error } from '@/common/fun'
 				allCheck:false,
 				bizCheck:{},//商家的选择
 				totalPrice:0,//选中总计
+				isDel:false,
+				fan:false,
+				qty:0,
 			};
+		},
+		computed: {
+			manage(){
+				return this.CartList.length == 0
+			},
 		},
 		watch:{
 			CartList:{
@@ -90,8 +112,75 @@ import { toast,error } from '@/common/fun'
 			}
 		},
 		methods:{
+			DelCart(){
+				let obj = {};
+				// 删除
+				for(let i in this.CartList) {
+					Storage.remove(i);
+					obj[i]={}
+					for(let j in this.CartList[i]){
+						obj[i][j]=[]
+					for(let k in this.CartList[i][j]) {
+							if(this.CartList[i][j][k].checked) {
+								obj[i][j].push(k)
+								Storage.remove(j + ';' + k);
+							}
+						}
+					}
+				}
+				Storage.remove('allCheck');
+				let data={
+					cart_key:'CartList',
+					prod_attr:JSON.stringify(obj)
+				}
+				DelCart(data).then(res=>{
+					this.init()
+				}).catch(e=>{})
+			},
+			getQty(qty){
+				this.qty=qty
+			},
+			inputQty(pid,attrId,e,bizId,qty){
+				let num=e.detail.value
+				if(num<=1){
+					this.CartList[bizId][pid][attrId].Qty=this.qty
+					error('数量最少为1件')
+					return
+				}
+				this.updateCart(pid,attrId,qty-num,bizId)
+			},
+			//全选
+			selectAll(){
+				let boo=true
+				if(this.allCheck){
+					boo=false
+				}
+				for(let i in this.CartList) {
+					for(let j in this.CartList[i]) {
+						for(let k in this.CartList[i][j]) {
+							this.CartList[i][j][k].checked =boo
+							Storage.set((j+";"+k),boo)
+						}
+					}
+				}
+
+				for(let it in this.bizCheck){
+					this.bizCheck[it]=boo
+					Storage.set(it,boo)
+				}
+				this.allCheck=boo
+				Storage.set('allCheck',boo)
+
+
+				this.SumPrice()
+				this.fan=!this.fan
+
+			},
+			selectBiz(bizId){
+
+			},
 			async updateCart(pid,attrId,skuQty,bizId){
-				if(this.CartList[bizId][pid][attrId].Qty==1){
+				if(this.CartList[bizId][pid][attrId].Qty==1&&skuQty<=0){
 					error('数量最少为1件')
 					return
 				}
@@ -110,10 +199,41 @@ import { toast,error } from '@/common/fun'
 				this.initCheck();
 			},
 			selectItem(bizId,pid,attr_id){
-				this.CartList[bizId][pid][attr_id].checked=true
-				//this.$set(this.CartList[bizId][pid][attr_id],'checked',true)
-				console.log(bizId,pid,attr_id,"ssss",this.CartList[bizId][pid][attr_id]['checked'])
+				console.log(!Storage.get((pid+";"+attr_id)),"ss")
 
+				Storage.set((pid+";"+attr_id),!Storage.get((pid+";"+attr_id)))
+				this.CartList[bizId][pid][attr_id].checked=Storage.get((pid+";"+attr_id))
+
+				//商家的选择
+				this.bizCheck[bizId]=true
+
+				for(let j in this.CartList[bizId]) {
+					for(let k in this.CartList[bizId][j]) {
+						if(!this.CartList[bizId][j][k].checked){
+							this.bizCheck[bizId]=false
+						}
+					}
+				}
+
+				for(let it in this.bizCheck){
+					Storage.set(it,this.bizCheck[it])
+				}
+
+				//每次来改变全选
+				this.allCheck=true
+				for(let i in this.CartList) {
+					for(let j in this.CartList[i]) {
+						for(let k in this.CartList[i][j]) {
+							if(!this.CartList[i][j][k].checked){
+								this.allCheck=false
+							}
+						}
+					}
+				}
+				Storage.set('allCheck',this.allCheck)
+
+				this.SumPrice()
+				this.fan=!this.fan
 			},
 			//初始化 选中状态
 			initCheck(){
@@ -131,6 +251,8 @@ import { toast,error } from '@/common/fun'
 						}
 					}
 				}
+				let all=Storage.get('allCheck')
+				this.allCheck=all?all:false
 				this.SumPrice();
 
 			},
@@ -140,7 +262,7 @@ import { toast,error } from '@/common/fun'
 				this.totalPrice = 0;
 				for(let i in this.CartList) {
 					for(let j in this.CartList[i]) {
-						for(let k in this.CartList[i][j][k]){
+						for(let k in this.CartList[i][j]){
 								let attr_id=Storage.get((j+";"+k))
 								let result =attr_id?attr_id:false
 								this.CartList[i][j][k].checked = result;
@@ -150,6 +272,7 @@ import { toast,error } from '@/common/fun'
 						}
 					}
 				}
+				console.log(total,"ss")
 				this.totalPrice = Number(total).toFixed(2) ;
 			},
 			async init(){
@@ -175,6 +298,17 @@ import { toast,error } from '@/common/fun'
 		/* #ifdef APP-PLUS */
 		//padding-top: var(--status-bar-height);
 		/* #endif */
+	}
+	.cart-title{
+		height: 86rpx;
+		width: 750rpx;
+		background-color: #FFFFFF;
+		position: relative;
+		&-right{
+			position: absolute;
+			top: 20rpx;
+			right: 20rpx;
+		}
 	}
 	.status_bar{
 		position: fixed;
