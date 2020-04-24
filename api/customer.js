@@ -40,3 +40,7 @@ export const getAddressList = (param, options) => fetch({ act: 'get_address', pa
 
 // 用户领取优惠券
 export const getUserCoupon = (param, options) => fetch({ act: 'user_receive_coupon', param, options })
+
+// 用户购物车产品数量
+export const CartList = (param, options) => fetch({ act: 'get_cart', param, options })
+
