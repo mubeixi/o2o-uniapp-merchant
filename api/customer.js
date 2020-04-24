@@ -40,3 +40,8 @@ export const getAddressList = (param, options) => fetch({ act: 'get_address', pa
 
 // 用户领取优惠券
 export const getUserCoupon = (param, options) => fetch({ act: 'user_receive_coupon', param, options })
+
+// 获取收藏列表
+export const getFavouriteProdList = (param,options) => fetch({act:'get_favourite_prod_list', param,options})
+// 取消收藏
+export const cancelFavouriteProd = (param, options) => fetch({act: 'cancel_favourite_prod', param, options})
