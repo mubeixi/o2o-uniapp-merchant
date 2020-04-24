@@ -1,50 +1,71 @@
 <template>
 	<div>
 		<div class="content">
-			<div class="cartbox" >
-				<div class="order_msg" >
+			<div class="cartbox" v-if="total_count>0">
+				<div class="order_msg"   v-for="(pro,index) in CartList" :key="index">
 					<div class="biz_msg">
 						<div class="item-cart" >
-							<layout-icon type="iconicon-check" size="18" color="#F43131"></layout-icon>
+							<layout-icon  v-if="bizCheck[pro]" type="iconicon-check" size="18" color="#F43131"></layout-icon>
+							<layout-icon  v-else type="iconradio" size="18" color="#ccc"></layout-icon>
 						</div>
-						<img src="https://new401t.bafangka.com/uploadfiles/wkbq6nc2kc/image/202001051047432513.jpg" class="biz_logo" />
-						<text class="biz_name">名字</text>
+						<img :src="bizList[index].biz_logo" class="biz_logo" />
+						<text class="biz_name">{{bizList[index].biz_shop_name}}</text>
 					</div>
-							<div class="pro">
-								<div class="item-cart" >
-									<layout-icon type="iconradio" size="18" color="#F43131"></layout-icon>
+					<block v-for="(proList,ind) in pro" :key="ind">
+						<block>
+							<div class="pro" v-for="(item,indx) in proList" :key="indx">
+								<div class="item-cart" @click="selectItem(index,ind,indx)">
+									<layout-icon v-if="item.checked" type="iconicon-check" size="18" color="#F43131"></layout-icon>
+									<layout-icon v-else type="iconradio" size="18" color="#ccc"></layout-icon>
 								</div>
-								<img class="pro-img" src="https://new401t.bafangka.com/uploadfiles/wkbq6nc2kc/image/202001051047432513.jpg" />
+								<img class="pro-img" :src="item.ImgPath" />
 								<div class="pro-msg">
-									<div class="pro-name">名字</div>
-									<div class="attr" >
-										<span>32</span>
+									<div class="pro-name">{{item.ProductsName}}</div>
+									<div class="attr"  v-if="item.Productsattrstrval">
+										<span>{{item.Productsattrstrval}}</span>
 									</div>
 									<div class="pro-price">
-										<span class="span">￥</span>{{attr.ProductsPriceX}}
+										<span class="span">￥</span>{{item.ProductsPriceX}}
 										<span class="amount">
-									  <span class="plus" :class="attr.Qty == 1 ? 'disabled' : ''" @click="updateCart(pro_id,attr_id,-1)">-</span>
-									  <input class="attr_num" v-model="attr.Qty" type="number" @focus="setActiveAttr(pro_id,attr_id)" @blur="setAttrNum" />
-									  <span class="plus" @click="updateCart(pro_id,attr_id,1)">+</span>
+									  <span class="plus" :class="item.Qty == 1 ? 'disabled' : ''"  @click="updateCart(ind,indx,-1,index)">-</span>
+									  <input class="attr_num" v-model="item.Qty" type="number" />
+<!--											 @focus="setActiveAttr(ind,indx,item)" @blur="setAttrNum"-->
+									  <span class="plus" @click="updateCart(ind,indx,1,index)">+</span>
 									</span>
 									</div>
 								</div>
 							</div>
+						</block>
+					</block>
 				</div>
 			</div>
-<!--			<div v-else class="none">-->
-<!--				<image class="img" src="/static/box.png" />-->
-<!--				<div><span>购物车空空如也</span><span class="tobuy" @click="gotoBuy">去逛逛</span></div>-->
-<!--			</div>-->
+			<div v-else class="none">
+				<image class="img" src="/static/box.png" />
+				<div><span>购物车空空如也</span><span class="tobuy" @click="gotoBuy">去逛逛</span></div>
+			</div>
 
-	</div>
+		</div>
+
+
+		<div class="checkout" >
+			<div class="item-cart " >
+				<layout-icon type="iconradio" size="18" color="#ccc" class="m-r-5"></layout-icon>
+				<span>全选</span>
+			</div>
+			<div class="total" >合计：<span>￥<span>{{totalPrice}}</span></span></div>
+			<div class="checkbtn" @click="submit">结算 </div>
+		</div>
+
 	</div>
 </template>
 
 <script>
 import BaseMixin from '@/mixins/BaseMixin'
 import  {CartList} from  '@/api/customer'
+import  {updateCart} from  '@/api/order'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
+import Storage from  '@/common/Storage'
+import { toast,error } from '@/common/fun'
 
 	export default {
 		mixins:[BaseMixin],
@@ -55,18 +76,89 @@ import LayoutIcon from '@/componets/layout-icon/layout-icon'
 				bizList:[],
 				total_count:'',
 				total_price:'',
-
+				allCheck:false,
+				bizCheck:{},//商家的选择
+				totalPrice:0,//选中总计
 			};
 		},
+		watch:{
+			CartList:{
+				handler(newValue, oldValue) {
+					console.log(oldValue,newValue,"ss")
+				},
+				deep: true
+			}
+		},
 		methods:{
-			async init(){
-				let cart = await CartList({cart_key:'CartList'},{onlyData:true}).catch(e=>{throw Error(e.msg||'获取购物车产品失败')})
+			async updateCart(pid,attrId,skuQty,bizId){
+				if(this.CartList[bizId][pid][attrId].Qty==1){
+					error('数量最少为1件')
+					return
+				}
 
+				let data={
+					cart_key:'CartList',
+					prod_id:pid,
+					attr_id:attrId,
+					qty:skuQty
+				}
+				let cart=await  updateCart(data,{onlyData: true,tip:'加载中'}).catch(e=>{throw  Error(e.msg||'修改失败')})
 				this.total_count= cart.total_count;
 				this.total_price= cart.total_price;
-				//this.initCheck();
 				this.CartList = cart.CartList;
 				this.bizList = cart.biz_list;
+				this.initCheck();
+			},
+			selectItem(bizId,pid,attr_id){
+				this.CartList[bizId][pid][attr_id].checked=true
+				//this.$set(this.CartList[bizId][pid][attr_id],'checked',true)
+				console.log(bizId,pid,attr_id,"ssss",this.CartList[bizId][pid][attr_id]['checked'])
+
+			},
+			//初始化 选中状态
+			initCheck(){
+				this.allCheck=true
+				for(let i in this.CartList) {
+					let biz_check=Storage.get(i)
+					this.bizCheck[i]=biz_check?biz_check:false
+					for(let j in this.CartList[i]) {
+						for(let k in this.CartList[i][j]) {
+							let attr_id=Storage.get((j+";"+k))
+							this.CartList[i][j][k].checked = attr_id?attr_id:false
+							if(!this.CartList[i][j][k].checked){
+								this.allCheck=false
+							}
+						}
+					}
+				}
+				this.SumPrice();
+
+			},
+			//计算总价格
+			SumPrice(){
+				let total = 0;
+				this.totalPrice = 0;
+				for(let i in this.CartList) {
+					for(let j in this.CartList[i]) {
+						for(let k in this.CartList[i][j][k]){
+								let attr_id=Storage.get((j+";"+k))
+								let result =attr_id?attr_id:false
+								this.CartList[i][j][k].checked = result;
+								if(this.CartList[i][j][k].checked) {
+									total += this.CartList[i][j][k].ProductsPriceX *  this.CartList[i][j][k].Qty;
+								}
+						}
+					}
+				}
+				this.totalPrice = Number(total).toFixed(2) ;
+			},
+			async init(){
+				let cart = await CartList({cart_key:'CartList'},{onlyData:true,tip:'加载中'}).catch(e=>{throw Error(e.msg||'获取购物车产品失败')})
+				this.total_count= cart.total_count;
+				this.total_price= cart.total_price;
+				this.CartList = cart.CartList;
+				this.bizList = cart.biz_list;
+				this.initCheck();
 			}
 		},
 		onShow(){
