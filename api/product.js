@@ -56,3 +56,11 @@ export const getSpikeProd = (param, options) => fetch({
   param,
   options
 })
+
+
+export const bizFlashsaleList = (param, options) => fetch({
+  act: 'bizFlashsaleList',
+  param,
+  options
+})
+
