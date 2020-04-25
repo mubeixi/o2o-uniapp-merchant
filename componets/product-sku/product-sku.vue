@@ -79,7 +79,7 @@
 <script>
 
 import layoutPopup from '@/componets/layout-popup/layout-popup.vue'
-
+import {error} from '@/common/fun.js'
 const numberSort = function (arr, order_by) {
   if (typeof order_by != 'undefined' && order_by == 'desc') { //desc
     return arr.sort(function (v1, v2) {
