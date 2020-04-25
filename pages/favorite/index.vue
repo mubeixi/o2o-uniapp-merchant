@@ -255,6 +255,9 @@ export default {
   created () {
     this.param.User_ID = Storage.get('User_ID')
     this._init_func()
+  },
+  onReachBottom(){
+
   }
 }
 </script>

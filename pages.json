@@ -135,7 +135,14 @@
               "navigationBarTitleText": "个人中心",
               "navigationStyle": "custom"
             }
-        }
+        },
+		{
+			"path" : "pages/active/FlashSale",
+			"style": {
+				"navigationBarTitleText": "限时抢购",
+				"navigationStyle": "custom"
+			}
+		}
         ,{
             "path" : "pages/active/Seckill",
             "style": {
