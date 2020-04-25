@@ -27,7 +27,7 @@
             <div class="bottom">
               <div class="price-selling"><span class="fz-12">￥</span><span
                 class="fz-14">{{goods.Products_PriceX}}</span></div>
-              <div class="gobuy">立即购买</div>
+              <div class="gobuy" @click="goBuy(goods.prod_id)">立即购买</div>
             </div>
           </div>
         </label>
@@ -80,7 +80,7 @@
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import BaseMixin from '@/mixins/BaseMixin'
 import { getProductList } from '@/api/product'
-import { modal,toast } from '@/common/fun'
+import { linkToEasy, modal, toast } from '@/common/fun'
 import { getFavouriteProdList,cancelFavouriteProd } from '@/api/customer'
 import Storage from '@/common/Storage'
 
@@ -134,6 +134,9 @@ export default {
     }
   },
   methods: {
+    goBuy(id) {
+      linkToEasy('/pages/product/detail?prod_id='+id)
+    },
     changeActive(index) {
       this.activeIndex = index;
       this.multiStore = false;
