@@ -1,5 +1,5 @@
 // 太多了占空间，常见尺寸就这么多
-@for $i from 4 through 30 {
+@for $i from 1 through 30 {
   .m-#{$i} {
     margin: ($i)+px;
   }
@@ -15,7 +15,7 @@
   .m-r-#{$i} {
     margin-right: ($i)+px;
   }
-  
+
   .p-#{$i} {
     padding: ($i)+px;
   }
@@ -31,7 +31,7 @@
   .p-r-#{$i} {
     padding-right: ($i)+px;
   }
-  
+
   .fz-#{$i} {
     font-size: ($i)+px;
   }

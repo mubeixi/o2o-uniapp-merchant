@@ -157,6 +157,13 @@
               "navigationStyle": "custom"
             }
         }
+        ,{
+            "path" : "pages/active/FlashSaleBiz",
+            "style": {
+            	"navigationBarTitleText": "限时抢购",
+            	"navigationStyle": "custom"
+            }
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
