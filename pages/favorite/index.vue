@@ -10,58 +10,56 @@
     </div>
     <div class="bg-white" :style="{height:menuButtonInfo.top+10+menuButtonInfo.height+50+'px'}"></div>
     <div class="tab bg-white" :style="{top:menuButtonInfo.top+10+menuButtonInfo.height+'px'}">
-      <div class="tab-item" :class="{active:activeIndex===0}" @click="activeIndex=0">收藏商品</div>
-      <div class="tab-item" :class="{active:activeIndex===1}" @click="activeIndex=1">收藏店铺</div>
+      <div class="tab-item" :class="{active:activeIndex===0}" @click="changeActive(0)">收藏商品</div>
+      <div class="tab-item" :class="{active:activeIndex===1}" @click="changeActive(1)">收藏店铺</div>
     </div>
     <div class="bg-white container">
       <div class="list" v-show="activeIndex===0">
-        <radio-group @change="radioChange">
-          <label class="item" v-for="(goods,idx) in goodsFavoriteList" :key="idx">
-            <div class="p-r-10" v-if="multiGoods">
-              <radio class="checkbox" style="transform: scale(0.8)" :value="goods.prod_id"></radio>
+        <label class="item" v-for="(goods,idx) in goodsFavoriteList" :key="idx">
+          <div class="p-r-10" v-if="multiGoods">
+            <LayoutIcon :type="goods.is_check ? 'iconicon-check' :'iconradio'" size="20" :color="goods.is_check ? '#25C790' : '#999'" @click="changeState(goods)"></LayoutIcon>
+<!--            <radio class="checkbox" style="transform: scale(0.8)" :value="goods.prod_id"></radio>-->
+          </div>
+          <image class="cover" :src="goods.ImgPath"></image>
+          <div class="info">
+            <div class="title">{{goods.Products_Name}}</div>
+            <div class="c8 m-t-15">{{goods.favourite_count}}人收藏</div>
+            <div class="bottom">
+              <div class="price-selling"><span class="fz-12">￥</span><span
+                class="fz-14">{{goods.Products_PriceX}}</span></div>
+              <div class="gobuy">立即购买</div>
             </div>
-            <image class="cover" :src="goods.ImgPath"></image>
-            <div class="info">
-              <div class="title">{{goods.Products_Name}}</div>
-              <div class="c8 m-t-15">{{goods.favourite_count}}人收藏</div>
-              <div class="bottom">
-                <div class="price-selling"><span class="fz-12">￥</span><span
-                  class="fz-14">{{goods.Products_PriceX}}</span></div>
-                <div class="gobuy">立即购买</div>
-              </div>
-            </div>
-          </label>
-        </radio-group>
+          </div>
+        </label>
       </div>
       <div v-show="activeIndex===1" class="storeList">
-        <radio-group @change="radioChange">
-          <div class="store-item" v-for="(store,idx) in storeFavoriteList" :key="idx">
-            <div class="p-r-10" v-if="multiStore">
-              <radio class="checkbox" style="transform: scale(0.8)" :value="store.id"></radio>
-            </div>
-            <div class="flex1 box">
-              <div class="top flex flex-vertical-c flex-justify-between">
-                <div class="flex flex-vertical-c">
-                  <image class="logo"
-                         :src="(store.biz_logo) | domain"></image>
-                  <div class="p-l-10 c3">{{store.biz_shop_name}}</div>
-                </div>
-                <layout-icon type="iconicon-arrow-right"></layout-icon>
-              </div>
-              <div class="content p-10 c8">
-                <div class="fz-14 ">电话：{{store.biz_mobile}}
-                  <layout-icon size="18" class="p-l-10" weight="bold" color="#26C78D" display="inline"
-                               type="iconicon-phone" @click="call(store.biz_mobile)"></layout-icon>
-                </div>
-                <div class="m-t-18 fz-14 ">地址：{{store.biz_address}}
-                  <layout-icon size="18" class="p-l-10" weight="bold" type="iconicon-address" display="inline"
-                               color="#26C78D" @click="openMap(store)"></layout-icon>
-                </div>
-              </div>
-            </div>
-
+        <div class="store-item" v-for="(store,idx) in storeFavoriteList" :key="idx">
+          <div class="p-r-10" v-if="multiStore">
+            <LayoutIcon :type="store.is_check ? 'iconicon-check' :'iconradio'" size="20" :color="store.is_check ? '#25C790' : '#999'" @click="changeState(store)"></LayoutIcon>
+<!--              <radio class="checkbox" style="transform: scale(0.8)" :value="store.id"></radio>-->
           </div>
-        </radio-group>
+          <div class="flex1 box">
+            <div class="top flex flex-vertical-c flex-justify-between">
+              <div class="flex flex-vertical-c">
+                <image class="logo"
+                       :src="(store.biz_logo) | domain"></image>
+                <div class="p-l-10 c3">{{store.biz_shop_name}}</div>
+              </div>
+              <layout-icon type="iconicon-arrow-right"></layout-icon>
+            </div>
+            <div class="content p-10 c8">
+              <div class="fz-14 ">电话：{{store.biz_mobile}}
+                <layout-icon size="18" class="p-l-10" weight="bold" color="#26C78D" display="inline"
+                             type="iconicon-phone" @click="call(store.biz_mobile)"></layout-icon>
+              </div>
+              <div class="m-t-18 fz-14 ">地址：{{store.biz_address}}
+                <layout-icon size="18" class="p-l-10" weight="bold" type="iconicon-address" display="inline"
+                             color="#26C78D" @click="openMap(store)"></layout-icon>
+              </div>
+            </div>
+          </div>
+
+        </div>
       </div>
     </div>
 
@@ -82,20 +80,46 @@
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import BaseMixin from '@/mixins/BaseMixin'
 import { getProductList } from '@/api/product'
-import { modal } from '@/common/fun'
+import { modal,toast } from '@/common/fun'
 import { getFavouriteProdList,cancelFavouriteProd } from '@/api/customer'
+import Storage from '@/common/Storage'
 
 export default {
   name: 'FavoriteIndex',
   mixins: [BaseMixin],
   components: { LayoutIcon },
+  watch: {
+    'allCheck': function(val){
+      if(val){
+        this.isSelectAll = true
+      }else {
+        this.isSelectAll = false
+      }
+    }
+  },
+  computed: {
+    selectes(){
+      if(this.activeIndex == 0) {
+      //  产品
+        return this.goodsFavoriteList.filter(item=>item.is_check)
+      }else {
+      //  商家
+        return this.storeFavoriteList.filter(item=>item.is_check)
+      }
+    },
+    allCheck(){
+      if(this.activeIndex == 0) {
+        return this.goodsFavoriteList && this.goodsFavoriteList.filter(item=>item.is_check).length == this.goodsFavoriteList.length || false
+      }else {
+        return this.storeFavoriteList && this.storeFavoriteList.filter(item=>item.is_check).length == this.storeFavoriteList.length || false
+      }
+    },
+  },
   data () {
     return {
-      selectes: [],
-      allCheck: false,
       multiGoods: false,
       multiStore: false,
-      activeIndex: 0,  //1是产品 2是商家
+      activeIndex: 0,  //0是产品 1是商家
       goodsFavoriteList: [],
       storeFavoriteList: [],
       pageSize: 10,
@@ -105,11 +129,19 @@ export default {
         type: 1,
         pageSize: 10,
         page: 1,
-        User_ID: 1
-      }
+      },
+      isSelectAll: false
     }
   },
   methods: {
+    changeActive(index) {
+      this.activeIndex = index;
+      this.multiStore = false;
+      this.multiGoods = false;
+    },
+    changeState(item){
+      item.is_check = !item.is_check
+    },
     call(phone){
       uni.makePhoneCall({
         phoneNumber: phone
@@ -127,13 +159,44 @@ export default {
     },
     // 取消收藏
     cancel(){
-
+      let arr = []
+      let list = []
+      if(this.activeIndex == 0) {
+        list = this.goodsFavoriteList.filter(item=>item.is_check)
+        list.forEach(item=>arr.push(item.prod_id))
+      }else {
+        list = this.storeFavoriteList.filter(item=>item.is_check)
+        list.forEach(item=>arr.push(item.id))
+      }
+      let param = {}
+      if(this.activeIndex == 0) {
+        param.prod_id = JSON.stringify(arr)
+      }else {
+        param.biz_id = JSON.stringify(arr)
+      }
+      cancelFavouriteProd(param).then(res=>{
+        toast(res.msg)
+        this._init_func();
+      }).catch(err=>modal(err.msg))
     },
     radioChange(e){
       console.log(e)
     },
     taggleAllCheck () {
-
+      this.isSelectAll = !this.isSelectAll
+      if(this.isSelectAll) {
+        if(this.activeIndex == 0) {
+          this.goodsFavoriteList.map(item=>item.is_check = true)
+        }else {
+          this.storeFavoriteList.map(item=>item.is_check = true)
+        }
+      }else {
+        if(this.activeIndex == 0) {
+          this.goodsFavoriteList.map(item=>item.is_check = false)
+        }else {
+          this.storeFavoriteList.map(item=>item.is_check = false)
+        }
+      }
     },
     openMuliti () {
       if (this.activeIndex === 0) {
@@ -152,6 +215,9 @@ export default {
         this.param.page = this.pro_page
         this.param.type = 1
         getFavouriteProdList(this.param, {onlyData: true}).then(res=>{
+          res.map(item=>{
+            item.is_check = false
+          })
           resolve(res)
         }).catch(err=>{
           reject(err)
@@ -163,6 +229,9 @@ export default {
         this.param.page = this.biz_page
         this.param.type = 2
         getFavouriteProdList(this.param,{ onlyData: true}).then(res=>{
+          res.map(item=>{
+            item.is_check = false
+          })
           resolve(res)
         }).catch(err=>{
           reject(err)
@@ -184,6 +253,7 @@ export default {
     }
   },
   created () {
+    this.param.User_ID = Storage.get('User_ID')
     this._init_func()
   }
 }
