@@ -9,6 +9,13 @@
 			}
 		},
 		{
+			"path": "pages/message/index",
+			"style": {
+				"navigationBarTitleText": "消息",
+				"navigationBarBackgroundColor": "#F6F6F6"
+			}
+		},
+		{
 			"path": "pages/demo"
 		},
 		{
