@@ -431,6 +431,40 @@
     margin-top: 16rpx;
   }
 /*分享结束*/
+  .refuseApplyDialog{
+    width: 560rpx;
+    box-sizing: border-box;
+    padding: 15px;
+    font-size: 14px;
+    .reason{
+      font-size: 14px;
+      min-height: 200px;
+      border: 1px solid #E3E3E3;
+      line-height: 1.4;
+      height: auto;
+      width: auto;
+      padding: 10px;
+    }
+    .control{
+      margin-top: 15px;
+      display: flex;
+      justify-content: center;
+      .action-btn{
+        width: 70px;
+        height: 36px;
+        line-height: 36px;
+        font-size: 14px;
+        text-align: center;
+        color: #666;
+        background: #e9e9e9;
+        &.btn-sub{
+          background: #f43131;
+          color: white;
+          margin-left: 10px;
+        }
+      }
+    }
+  }
 
 </style>
 
@@ -447,7 +481,7 @@
 <!--      距结束还有：<span class="end-time-day">1天</span><span class="end-time-block">01</span>：<span-->
 <!--      class="end-time-block">01</span>：<span class="end-time-block">01</span>-->
 <!--    </div>-->
-    <div class="product-price fz-14">
+    <div class="product-price fz-14" >
       <div class="product-price-left">
             <span class="product-price-red">
               <span class="fz-13">¥</span>{{detailData.Products_PriceX}}
@@ -562,7 +596,7 @@
           <div class="block-content">
             <div class="comment-list">
               <div v-for="(item,idx) in comments" :key="idx">
-                <layout-comment :isLast="comments.length-1===idx" :comment="item"  ></layout-comment>
+                <layout-comment :isLast="comments.length-1===idx" :comment="item"  @comment="clickComment"></layout-comment>
               </div>
 
             </div>
@@ -661,6 +695,18 @@
     </layout-popup>
 
 
+    <Model ref="proModel">
+      <div class="refuseApplyDialog">
+        <textarea class="reason" @input="bingReasonInput" :value="commentValue" placeholder-style="color:#999" placeholder="请输入评价" auto-height />
+        <div class="control">
+          <div @click="$closePop('proModel')" class="action-btn btn-cancel">取消</div>
+          <div @click="sureComment" class="btn-sub action-btn">确定</div>
+        </div>
+
+      </div>
+    </Model>
+
+
 
   </div>
 </template>
@@ -669,6 +715,7 @@
 import BaseMixin from '@/mixins/BaseMixin'
 import { getProductDetail, getActiveInfo, getBizInfo, getStoreList,getProductSharePic } from '@/api/product'
 import { getCommitList } from '@/api/common'
+import  {commentReply} from  '@/api/customer'
 import ProductSku from '@/componets/product-sku/product-sku'
 import { updateCart } from '@/api/order'
 import { formatRichTextByUparseFn } from '@/common/filter'
@@ -678,11 +725,12 @@ import WzwGoodsAction from '@/componets/wzw-goods-action/wzw-goods-action'
 import  LayoutPopup from  '@/componets/layout-popup/layout-popup'
 
 import {
-  showLoading, hideLoading
+  showLoading, hideLoading, error, toast,
 } from '@/common/fun'
 import { checkIsLogin,buildSharePath,getProductThumb } from '@/common/helper'
 import  uParse from '@/componets/gaoyia-parse/parse'
 import  Storage from  '@/common/Storage'
+import Model from  '@/componets/ModelComponents'
 export default {
   name: 'ProductDetail',
   mixins: [BaseMixin],
@@ -692,7 +740,8 @@ export default {
     ProductSku,
     WzwGoodsAction,
     uParse,
-    LayoutPopup
+    LayoutPopup,
+    Model
   },
   data () {
     return {
@@ -701,13 +750,18 @@ export default {
       headTabSticky: false,
       prod_id: '', // 商品id
       detailData: {
+        Products_Name:'',
+        Products_PriceX:'0',
+        Products_PriceY:'0',
         Products_JSON: {},
         Products_Promise: []
       }, // 商品数据
       active: [], // 满减活动列表
       store: [{ biz_go: '' }], // 门店
       storeList: [],
-      comments: []
+      comments: [],
+      commentValue:'',
+      commentItem:{},//要评论的对象
     }
   },
   onPageScroll (e) {
@@ -715,6 +769,33 @@ export default {
     this.headTabSticky = (scrollTop > this.headTabTop)
   },
   methods: {
+    bingReasonInput(e){
+      this.commentValue = e.detail.value
+    },
+    sureComment(){
+        if(!this.commentValue){
+          error('评论内容不能为空')
+          return
+        }
+        let data={
+          touserid:this.commentItem.User_ID,
+          commit_id:this.commentItem.Item_ID,
+          content:this.commentValue
+        }
+      commentReply(data).then(res=>{
+          toast('评论成功')
+          this.$closePop("proModel")
+      }).catch(e=>{
+        error(e.msg||'评论失败')
+        this.$closePop("proModel")
+      })
+
+
+    },
+    clickComment(item){
+      this.commentItem=item
+      this.$refs.proModel.show();
+    },
     async shareFunc(channel) {
       let _self = this
       let path = 'pages/product/detail?prod_id='+this.prod_id;
@@ -820,18 +901,22 @@ export default {
       this.hasCart = false
       this.$refs.mySku.show()
     },
-    async updaCart (sku) {
-      // 加入购物车
-      const data = {
-        User_ID: '48',
-        cart_key: 'CartList',
-        prod_id: this.detailData.Products_ID,
-        qty: sku.qty,
-        attr_id: sku.id
-      }
-      const arr = await updateCart(data).catch(e => {
-        throw Error(e.msg || '加入购物车失败')
-      })
+    updaCart (sku) {
+
+       // 加入购物车
+       const data = {
+         User_ID: '48',
+         cart_key: 'CartList',
+         prod_id: this.detailData.Products_ID,
+         qty: sku.qty,
+         attr_id: sku.id
+       }
+      updateCart(data).then(res=>{
+        toast('加入购物车成功')
+      }).catch(e => {
+          error(e.msg || '加入购物车失败')
+       })
+
     },
     async buyNow (sku) {
       // console.log(sku)
@@ -882,8 +967,9 @@ export default {
           throw Error(e.msg || '获取店铺信息失败')
         })
         this.comments = await getCommitList({
-          biz_id: this.detailData.biz_id,
-          pageSize: 3
+          Products_ID: this.detailData.Products_ID,
+          pageSize: 999,
+          page:1
         }, {
           onlyData: true,
           tip: '加载中',
