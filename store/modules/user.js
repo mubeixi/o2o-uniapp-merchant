@@ -28,7 +28,9 @@ const mutations = {
 }
 
 const actions = {
-
+  setUserInfo: ({ commit }, data) => {
+    commit('SET_USER_INFO', data)
+  }
 }
 
 const getters = {
