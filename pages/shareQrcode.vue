@@ -4,6 +4,7 @@
     <image class="preview" @click="preFn(current_url)" :src="current_url|domain" mode="widthFix" />
 
     <div class="handle-box">
+      <div class="remind-title fz-13 c3 text-center">选择海报模板</div>
       <div class="swiper" >
         <div class="swiper-item" @click="setSelect(poster)"  v-for="(poster,idx) in poster_list">
           <image class="swiper-itm-img" :src="poster.img|domain"></image>
@@ -139,7 +140,9 @@ export default {
   .preview{
     position: absolute;
     top: 20rpx;
-    bottom: 90rpx;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 464rpx;
     height: auto;
     max-width: 550rpx;
   }
@@ -149,23 +152,32 @@ export default {
     left: 0;
     position: fixed;
     width: 750rpx;
-    height: 374rpx;
+    height: 284rpx;
+    padding-bottom: 90rpx;
+    background: white;
+
+    .remind-title{
+      height: 90rpx;
+      line-height: 90rpx;
+    }
 
     .swiper{
-      background: white;
+      margin-bottom: 40rpx;
+      
       white-space: nowrap;
       overflow-x: scroll;
       overflow-y: hidden;
       z-index: 3;
+      height: 150rpx;
       .swiper-item{
         display: inline-block;
         width: 110rpx;
-        height: 250rpx;
+        height: 150rpx;
         margin-left: 20rpx;
         position: relative;
         .swiper-itm-img{
           width: 110rpx;
-          height: 250rpx;
+          height: 150rpx;
         }
       }
     }
