@@ -1,0 +1,188 @@
+<template>
+  <view class="page-wrap">
+
+    <image class="preview" @click="preFn(current_url)" :src="current_url|domain" mode="widthFix" />
+
+    <div class="handle-box">
+      <div class="swiper" >
+        <div class="swiper-item" @click="setSelect(poster)"  v-for="(poster,idx) in poster_list">
+          <image class="swiper-itm-img" :src="poster.img|domain"></image>
+        </div>
+      </div>
+      <div class="share-btn" @click="saveFn">保存海报</div>
+    </div>
+  </view>
+</template>
+<script>
+
+import BaseMixin from '@/mixins/BaseMixin'
+import { mapActions } from 'vuex'
+
+import { getDistributeWxQrcode, getPosterList } from '@/api/common'
+
+import { error, toast } from '@/common/fun'
+import { saveImageToDisk } from '@/common/helper'
+
+export default {
+  mixins: [BaseMixin],
+  data () {
+    return {
+      type: '',
+      again: '',
+      current_url: '',
+      current_poster: null,
+      currentIdx: 0,
+      is_build: false,
+      qrimg: '',
+      poster_list: [],
+      // userInfo:{},
+      disInfo: {},
+      info: {
+        dis_config: {},
+        total_sales: '',
+        total_income: '',
+        balance: ''
+      }//
+
+    }
+  },
+  computed: {
+    initData () {
+      return this.$store.state.system.initData
+    },
+    userInfo () {
+      return this.$store.getters['user/getUserInfo']()
+    }
+  },
+  onReady () {
+    // var context = uni.createCanvasContext('firstCanvas')
+    // context.arc(120, 80, 5, 0, 2 * Math.PI, true)
+    // context.stroke()
+    // context.draw()
+  },
+  onShow () {
+
+  },
+  onLoad (options) {
+    const { type, again } = options
+    this.type = type
+    this.again = again
+    this.initFunc(type, again)
+  },
+  methods: {
+    async saveFn () {
+      const handleRT = await saveImageToDisk({ fileUrl: this.current_url, type: 'online' })
+      if (handleRT === false) {
+        error('保存失败')
+        return
+      }
+      toast('保存成功')
+    },
+    setSelect (poster) {
+      this.current_poster = poster
+      getDistributeWxQrcode({ type: this.type, again: this.again, owner_id: this.userInfo.User_ID, poster_id: poster.id }, { tip: '生成中' }).then(res => {
+        this.current_url = res.data.img_url
+      })
+      // this.current_url = poster.img
+    },
+    preFn () {
+      if (!this.current_url) {
+        error('请选择模板')
+        return
+      }
+      uni.previewImage({
+        urls: [this.current_url]
+      })
+    },
+    // async shareFn () {
+    //   if (this.is_build) return// 防止太快点击
+    //   this.is_build = true
+    //   const getPosterDataResult = await getPosterDetail({ id: this.poster_list[this.currentIdx].id })
+    //   const posterConf = JSON.parse(getPosterDataResult.data.data)
+    // },
+    handleChange (e) {
+      this.currentIdx = e.detail.current
+    },
+    ...mapActions(['getUserInfo']),
+    async initFunc (type, again) {
+      try {
+        // 先获取二维码
+        // let qrRet = await getDistributeWxQrcode({type,again,owner_id:this.userInfo.User_ID},{tip:'生成中'})
+        // this.qrimg = qrRet.data.img_url;
+
+        const getPosterListResult = await getPosterList({ pageSize: 999 })
+        const lists = getPosterListResult.data
+        this.poster_list = lists.map(item => {
+          item.img += '-r200'
+          return item
+        })
+
+        if (this.poster_list.length > 0) {
+          getDistributeWxQrcode({ type, again, owner_id: this.userInfo.User_ID, poster_id: this.poster_list[0].id }, { tip: '生成中' }).then(res => {
+            this.current_url = res.data.img_url
+          })
+          // = this.poster_list[0].img
+        }
+      } catch (e) {
+        error(e.msg || '获取海报模板失败')
+      }
+    },
+    goBack () {
+      this.$back()
+    }
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+
+  .preview{
+    position: absolute;
+    top: 20rpx;
+    bottom: 90rpx;
+    height: auto;
+    max-width: 550rpx;
+  }
+  .handle-box{
+    z-index: 9;
+    bottom: 0px;
+    left: 0;
+    position: fixed;
+    width: 750rpx;
+    height: 374rpx;
+
+    .swiper{
+      background: white;
+      white-space: nowrap;
+      overflow-x: scroll;
+      overflow-y: hidden;
+      z-index: 3;
+      .swiper-item{
+        display: inline-block;
+        width: 110rpx;
+        height: 250rpx;
+        margin-left: 20rpx;
+        position: relative;
+        .swiper-itm-img{
+          width: 110rpx;
+          height: 250rpx;
+        }
+      }
+    }
+
+    .share-btn{
+      position: absolute;
+      bottom: 0;
+      width: 750rpx;
+      text-align: center;
+      height: 90rpx;
+      line-height: 90rpx;
+      background: $fun-primary-color;
+      color: white;
+    }
+
+  }
+  .page-wrap{
+
+  }
+</style>
