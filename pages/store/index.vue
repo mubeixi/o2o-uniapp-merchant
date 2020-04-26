@@ -245,7 +245,7 @@
                 </div>
               </div>
               <div class="photo-list">
-                <div class="photo-item" @click="priviewFn(imgs)" v-for="(img,idx2) in imgs.photo" :key="idx2" :style="{backgroundImage:'url('+img.photo_img+')'}"></div>
+                <div class="photo-item" @click="priviewFn(imgs,idx2)" v-for="(img,idx2) in imgs.photo" :key="idx2" :style="{backgroundImage:'url('+img.photo_img+')'}"></div>
               </div>
             </div>
           
@@ -370,10 +370,10 @@ export default {
     }
   },
   methods: {
-    priviewFn (imgs) {
+    priviewFn (imgs,current ) {
       const urls = getArrColumn(imgs.photo, 'photo_img')
       uni.previewImage({
-        urls
+        urls,current
       })
     },
     testFun (e) {
