@@ -3,6 +3,8 @@
   @import "./assets/app.scss";
 </style>
 <script>
+import  {users_id} from '@/common/env'
+import  Storage from  '@/common/Storage'
 export default {
   onLaunch: function () {
     console.log('App Launch')
@@ -10,6 +12,7 @@ export default {
     this.$store.dispatch('theme/refreshTheme')
   },
   onShow: function () {
+    Storage.set('users_id',users_id)
     console.log('App Show')
   },
   onHide: function () {
