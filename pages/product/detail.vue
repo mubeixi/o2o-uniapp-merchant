@@ -380,21 +380,73 @@
     bottom: 0px;
     z-index: 10;
   }
+.back-icon{
+  position: fixed;
+  top: 60rpx;
+  left: 20rpx;
+  //opacity: 0.5;
+  z-index: 9;
+}
+/*分享开始*/
+  .shareinfo {
+    background: #fff;
+    width: 100%;
+    padding: 30rpx 0 60rpx;
+    color: #333;
+    z-index: 100;
+    border-top-left-radius: 10rpx;
+    border-top-right-radius: 10rpx;
+  }
+  .shareinfo{
+    padding-bottom: 0;
+    color: #333;
+    font-size: 24rpx;
+  }
+  .shareinfo>div {
+    text-align: center;
+  }
+  .s_top {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .s_top .img {
+    width: 76rpx;
+    height: 76rpx;
+    display: block;
+    margin: 0 auto 10rpx;
+  }
+  .s_top>div:nth-child(1) {
+    /*margin-right: 120rpx;*/
+  }
+  .s_bottom {
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    background: #e8e8e8;
+    color: #666;
+    font-size: 26rpx;
+    text-align: center;
+    line-height: 60rpx;
+    margin-top: 16rpx;
+  }
+/*分享结束*/
 
 </style>
 
 <template>
   <div class="page-wrap">
+    <layout-icon type="iconback" size="24" color="#999"  class="back-icon"  @click="$back()"></layout-icon>
     <swiper style="height:750rpx;width: 750rpx;" indicator-dots="true" indicator-active-color="#26C78D"
             indicator-color="#ffffff" autoplay="true" interval="3000" duration="500" circular="true">
       <swiper-item v-for="(item,index) of detailData.Products_JSON.ImgPath" :key="index">
-        <image :src="item" class="full-img" />
+        <image :src="item" class="full-img" @click="previewImg(index)" />
       </swiper-item>
     </swiper>
-    <div class="end-time">
-      距结束还有：<span class="end-time-day">1天</span><span class="end-time-block">01</span>：<span
-      class="end-time-block">01</span>：<span class="end-time-block">01</span>
-    </div>
+<!--    <div class="end-time">-->
+<!--      距结束还有：<span class="end-time-day">1天</span><span class="end-time-block">01</span>：<span-->
+<!--      class="end-time-block">01</span>：<span class="end-time-block">01</span>-->
+<!--    </div>-->
     <div class="product-price fz-14">
       <div class="product-price-left">
             <span class="product-price-red">
@@ -466,7 +518,7 @@
     </div>
     <div class="line-f8"></div>
     <!--  店铺信息  -->
-    <ul class="store flex flex-vertical-center" id="tabs" :class="{isStickly:headTabSticky}">
+    <ul class="store flex flex-vertical-center " id="tabs" :class="{isStickly:headTabSticky}">
       <li class="li-item" :class="{'color-store':tabIndex===0}" @click="tabIndex=0">
         介绍
         <span class="active" v-if="tabIndex==0"></span>
@@ -492,7 +544,7 @@
     >
       <swiper-item class="tab-pages">
         <div :style="{height:(systemInfo.windowHeight+'px')}" class="over">
-          <!--          <u-parse :content="detailData.Products_Description"></u-parse>-->
+            <u-parse :content="detailData.Products_Description"></u-parse>
         </div>
       </swiper-item>
       <swiper-item class="tab-pages">
@@ -581,12 +633,41 @@
       <span slot="rightText">拼团购¥</span>
       <span slot="rightPrice">100.00</span>
     </wzw-goods-action>
+
+
+    <!--    分享 -->
+    <layout-popup  ref="share">
+      <div class="shareinfo" >
+        <div class="s_top flex">
+          <div class="flex1" @click="shareFunc('wx')">
+            <image class='img' src="/static/share/share1.png" alt=""></image>
+            <div>发送好友</div>
+          </div>
+          <div class="flex1" @click="shareFunc('wxtimeline')">
+            <image class='img' src="/static/share/share3.png" alt=""></image>
+            <div>朋友圈</div>
+          </div>
+          <div class="flex1" @click="shareFunc('wxmini')" >
+            <img class='img' src="/static/share/share4.png" alt="">
+            <div>微信小程序</div>
+          </div>
+          <div class="flex1" @click="shareFunc('pic')">
+            <image class='img' src="/static/share/share2.png" alt=""></image>
+            <div>分享海报</div>
+          </div>
+        </div>
+        <div class="s_bottom" @click="cancel">取消</div>
+      </div>
+    </layout-popup>
+
+
+
   </div>
 </template>
 
 <script>
 import BaseMixin from '@/mixins/BaseMixin'
-import { getProductDetail, getActiveInfo, getBizInfo, getStoreList } from '@/api/product'
+import { getProductDetail, getActiveInfo, getBizInfo, getStoreList,getProductSharePic } from '@/api/product'
 import { getCommitList } from '@/api/common'
 import ProductSku from '@/componets/product-sku/product-sku'
 import { updateCart } from '@/api/order'
@@ -594,11 +675,14 @@ import { formatRichTextByUparseFn } from '@/common/filter'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import LayoutComment from '@/componets/layout-comment/layout-comment'
 import WzwGoodsAction from '@/componets/wzw-goods-action/wzw-goods-action'
+import  LayoutPopup from  '@/componets/layout-popup/layout-popup'
+
 import {
   showLoading, hideLoading
 } from '@/common/fun'
-import { checkIsLogin } from '@/common/helper'
-
+import { checkIsLogin,buildSharePath,getProductThumb } from '@/common/helper'
+import  uParse from '@/componets/gaoyia-parse/parse'
+import  Storage from  '@/common/Storage'
 export default {
   name: 'ProductDetail',
   mixins: [BaseMixin],
@@ -606,14 +690,16 @@ export default {
     LayoutIcon,
     LayoutComment,
     ProductSku,
-    WzwGoodsAction
+    WzwGoodsAction,
+    uParse,
+    LayoutPopup
   },
   data () {
     return {
       hasCart: false, // 是否有购物车
       tabIndex: 3,
       headTabSticky: false,
-      prod_id: '1613', // 商品id
+      prod_id: '', // 商品id
       detailData: {
         Products_JSON: {},
         Products_Promise: []
@@ -626,29 +712,103 @@ export default {
   },
   onPageScroll (e) {
     const { scrollTop } = e
-    console.log(scrollTop, this.headTabTop, 'ss')
-    this.headTabSticky = scrollTop > this.headTabTop
+    this.headTabSticky = (scrollTop > this.headTabTop)
   },
   methods: {
-    async toBooking () {
-      // try {
-      //   showLoading()
-      //   // HUAWEI Mate 30 Pro
-      //   const postData = {
-      //     prod_id: 877, // 产品ID  在 onLoad中赋值
-      //     attr_id: 999, // 选择属性id
-      //     count: 555, // 选择属性的库存
-      //     qty: 1, // 购买数量
-      //     cart_key: 'DirectBuy', // 购物车类型   CartList（加入购物车）、DirectBuy（立即购买）、PTCartList（不能加入购物车）
-      //     productDetail_price: 11790
-      //   }
-      //   await updateCart(postData).catch(e => { throw Error(e.msg || '下单失败') })
-      //   this.$linkTo('/pages/order/OrderBooking?cart_key=DirectBuy')
-      // } catch (e) {
-      //   this.$modal(e.message)
-      // } finally {
-      //   hideLoading()
-      // }
+    async shareFunc(channel) {
+      let _self = this
+      let path = 'pages/product/detail?prod_id='+this.prod_id;
+      let front_url = this.initData.front_url;
+      let shareObj = {
+        title: this.detailData.Products_Name,
+        desc: this.detailData.Products_BriefDescription,
+        imageUrl: getProductThumb(this.detailData.ImgPath),
+        path: buildSharePath(path)
+      };
+
+      switch (channel) {
+        case 'wx':
+          uni.share({
+            provider: "weixin",
+            scene: "WXSceneSession",
+            type: 0,
+            href: front_url + shareObj.path,
+            title: shareObj.title,
+            summary: shareObj.desc,
+            imageUrl: shareObj.imageUrl,
+            success: function (res) {
+            },
+            fail: function (err) {
+            }
+          });
+          break;
+        case 'wxtimeline':
+          uni.share({
+            provider: "weixin",
+            scene: "WXSenceTimeline",
+            type: 0,
+            href: front_url + shareObj.path,
+            title: shareObj.title,
+            summary: shareObj.desc,
+            imageUrl: shareObj.imageUrl,
+            success: function (res) {
+            },
+            fail: function (err) {
+            }
+          });
+          break;
+        case 'wxmini':
+          uni.share({
+            provider: 'weixin',
+            scene: "WXSceneSession",
+            type: 5,
+            imageUrl: shareObj.imageUrl,
+            title: shareObj.title,
+            miniProgram: {
+              id: _self.wxMiniOriginId,
+              path: '/' + shareObj.path,
+              type: 0,
+              webUrl: 'http://uniapp.dcloud.io'
+            },
+            success: ret => {
+            }
+          });
+          break;
+        case 'pic':
+          //this.$toast('comming soon')
+          let res= await getProductSharePic({'product_id':this.prod_id},{tip:'努力加载中',mask:true})
+          Storage.set('temp_sharepic_info',res.data)
+          let sharePic =res.data.img_url
+          if(!sharePic){
+            error('获取分享参数失败');
+            return;
+          }
+          setTimeout(function(){
+            uni.navigateTo({
+              url:'/pages/product/SharePic/SharePic'
+            })
+          },200)
+          // uni.previewImage({
+          // 	urls: [sharePic],
+          // 	indicator:'default',
+          // 	current:0
+          // });
+          break;
+      }
+    },
+    //预览图片
+    previewImg(index){
+      uni.previewImage({
+        urls: this.detailData.Products_JSON.ImgPath,
+        indicator:'default',
+        current:index
+      });
+    },
+    cancel(){
+      this.$refs.share.close()
+    },
+    toBooking () {
+     this.$refs.share.show()
     },
     myPay () {
       if (!checkIsLogin(1, 1)) return
@@ -767,11 +927,14 @@ export default {
       this.tabIndex = current
     }
   },
-  onShow () {
-    this.getProductDetail()
+  computed: {
+    initData () {
+      return this.$store.state.system.initData
+    }
   },
   onLoad (options) {
     this.prod_id = options.prod_id
+    this.getProductDetail()
   },
   onReady () {
     // const query = uni.createSelectorQuery().in(this)

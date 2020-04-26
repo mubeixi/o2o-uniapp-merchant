@@ -70,3 +70,11 @@ export const bizFlashsaleList = (param, options) => fetch({
   options
 })
 
+//获取商品海报
+export const getProductSharePic = (param, options) => fetch({
+  act: 'shareProduct',
+  param,
+  options
+})
+
+

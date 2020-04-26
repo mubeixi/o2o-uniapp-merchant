@@ -134,7 +134,10 @@
 			}
 		},
 		{
-            "path" : "pages/order/ShoppingCart"
+            "path" : "pages/order/ShoppingCart",
+			"style": {
+				"navigationStyle": "custom"
+			}
         },
         {
             "path" : "pages/person/person",
@@ -162,6 +165,12 @@
             "style": {
             	"navigationBarTitleText": "限时抢购",
             	"navigationStyle": "custom"
+            }
+        }
+        ,{
+            "path" : "pages/product/SharePic/SharePic",
+            "style": {
+            	"navigationBarTitleText": "分享海报"
             }
         }
     ],

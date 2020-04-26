@@ -10,7 +10,7 @@ import {
 
 export const apiBaseUrl = 'https://newo2o.bafangka.com'
 export const staticUrl = 'https://newo2o.bafangka.com'
-
+export const users_id = 'wkbq6nc2kc'
 
 // #ifdef H5
 function setWxConfig (config) {
