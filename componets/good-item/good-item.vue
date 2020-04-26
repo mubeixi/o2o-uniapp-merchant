@@ -27,7 +27,7 @@
 }
 </style>
 <template>
-  <div class="product-panel" :class="[mode]" :style="{marginBottom}">
+  <div class="product-panel" :class="[mode]" :style="{marginBottom}" @click="clickFn(vo.Products_ID)">
     <slot name="cover">
       <div class="product-cover" :style="{backgroundImage:'url('+getDomainUrl(vo.ImgPath)+')',borderRadius:coverRadius}" ></div>
     </slot>
@@ -50,6 +50,7 @@
 import {
   getDomain
 } from '@/common/helper'
+import { linkToEasy } from '@/common/fun'
 
 export default {
   name: 'GoodsItem',
@@ -104,6 +105,9 @@ export default {
     }
   },
   methods: {
+    clickFn(id){
+      linkToEasy(`/pages/product/detail?prod_id=${id}`)
+    },
     getDomainUrl:(url)=>getDomain(url)
   }
 }

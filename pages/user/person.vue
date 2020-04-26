@@ -6,9 +6,13 @@
         <LayoutIcon type="iconshezhi" size="24" color="#333"></LayoutIcon>
         <LayoutIcon class="p-l-10" type="iconicon" size="24" color="#333"  @click="$linkTo('/pages/person/DailyCheck')"></LayoutIcon>
       </div>
-      <div class="user-msg">
+      <div class="user-msg" v-if="userInfo.Users_ID">
+        <image :src="userInfo.User_HeadImg" class="avatar"></image>
+        <div class="name">{{userInfo.User_NickName}}</div>
+      </div>
+      <div class="user-msg" v-else @click="$linkTo('/pages/user/login')">
         <image src="/static/home/xianshi.png" class="avatar"></image>
-        <div class="name">小攒的坚果</div>
+        <div class="name">点击登录</div>
       </div>
 
     </div>
@@ -40,16 +44,22 @@
       </div>
     </div>
     <div class="functions flex flex-justify-between">
-      <block v-for="item in funList">
+      <block v-for="item in iconList">
         <LayoutFun width="150rpx" :type="item.className" :name="item.name" :color="item.color"></LayoutFun>
       </block>
     </div>
     <div class="intro">为你推荐</div>
     <div class="product-list flex">
-      <block v-for="item in proList">
-        <ProTag :pro_src="item.src" :pro_name="item.name" :pro_price="item.price"
-                :pro_price_old="item.old_price"></ProTag>
-      </block>
+
+        <pro-tag
+          v-for="(item,idx) in proList"
+          :key="idx"
+          :pro_src="item.ImgPath"
+          :pro_name="item.Products_Name"
+          :pro_price="item.Products_PriceX"
+          :pro_price_old="item.Products_PriceY"
+        />
+
     </div>
   </div>
 </template>
@@ -59,7 +69,13 @@ import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import LayoutFun from '@/componets/layout-fun/layout-fun'
 import ProTag from '@/componets/pro-tag/pro-tag'
 import BaseMixin from '@/mixins/BaseMixin'
-
+import {
+  getProductList
+} from '@/api/product'
+import { getUserInfo } from '@/api/customer'
+import {
+  mapActions, mapGetters
+} from 'vuex'
 export default {
   mixins: [BaseMixin],
   components: {
@@ -69,7 +85,7 @@ export default {
   },
   data () {
     return {
-      funList: [
+      iconList: [
         {
           className: 'iconpintuan',
           name: '拼团订单',
@@ -131,33 +147,29 @@ export default {
           color: '#69C276'
         }
       ],
-      proList: [
-        {
-          src: 'https://newo2o.bafangka.com/uploadfiles/wkbq6nc2kc/image/202004231839393040.png',
-          name: '北海道玫瑰味双层芝士礼盒送礼蛋糕乳酪慕斯',
-          price: '189.00',
-          old_price: '260.00'
-        },
-        {
-          src: 'https://newo2o.bafangka.com/uploadfiles/wkbq6nc2kc/image/202004231839393040.png',
-          name: '北海道玫瑰味双层芝士礼盒送礼蛋糕乳酪慕斯',
-          price: '189.00',
-          old_price: '260.00'
-        },
-        {
-          src: 'https://newo2o.bafangka.com/uploadfiles/wkbq6nc2kc/image/202004231839393040.png',
-          name: '北海道玫瑰味双层芝士礼盒送礼蛋糕乳酪慕斯',
-          price: '189.00',
-          old_price: '260.00'
-        },
-        {
-          src: 'https://newo2o.bafangka.com/uploadfiles/wkbq6nc2kc/image/202004231839393040.png',
-          name: '北海道玫瑰味双层芝士礼盒送礼蛋糕乳酪慕斯',
-          price: '189.00',
-          old_price: '260.00'
-        }
-      ]
+      proList: []
     }
+  },
+  computed: {
+    userInfo () {
+      return this.$store.getters['user/getUserInfo']()
+    }
+  },
+  methods: {
+    async _init_func () {
+      this.proList = await getProductList({}, { onlyData: true }).catch(e => { throw Error(e.msg || '获取推荐商品信息失败') })
+    },
+    ...mapActions({
+      setUserInfo: 'user/setUserInfo'
+    })
+  },
+  onShow () {
+    getUserInfo().then(res => {
+      this.setUserInfo(res.data)
+    }).catch(err => {})
+  },
+  created () {
+    this._init_func()
   }
 }
 </script>

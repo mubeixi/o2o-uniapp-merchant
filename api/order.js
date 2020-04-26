@@ -1,4 +1,5 @@
 import { fetch } from '@/common/request'
+import Storage from '@/common/Storage'
 
 // 获取订单操作
 export const createOrderCheck = (param, options) => fetch({
@@ -8,11 +9,23 @@ export const createOrderCheck = (param, options) => fetch({
 })
 
 // 提交订单
-export const createOrder = (param, options) => fetch({
-  act: 'create_order',
-  param,
-  options
-})
+export const createOrder = (param, options) => {
+  // 获取推荐人id
+  let owner_id = Storage.get('owner_id')
+  if (!owner_id) {
+    owner_id = 0
+  }
+  const _param = {
+    ...param,
+    owner_id
+  }
+
+  return fetch({
+    act: 'create_order',
+    param:_param,
+    options
+  })
+}
 
 // 获取购物车信息
 export const getCart = (param, options) => fetch({
@@ -42,10 +55,8 @@ export const orderPay = (param, options) => fetch({
   options
 })
 
-
 export const confirmOrderPayStatus = (param, options) => fetch({
   act: 'judge_ispay',
   param,
   options
 })
-
