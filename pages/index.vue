@@ -114,7 +114,7 @@
               <div class="goods-item" v-for="(item,idx) in goodsList" :key="idx" @click="$toGoodsDetail(item.Products_ID)">
                 <block v-if="idx<6">
                   <div class="cover" :style="{backgroundImage:'url('+item.ImgPath+')'}">
-                    <div class="tip" style="background: #185e44;">同城配送</div>
+<!--                    <div class="tip" style="background: #185e44;">同城配送</div>-->
                   </div>
                   <h5 class="title">{{item.Products_Name}}</h5>
                   <div class="price-box">

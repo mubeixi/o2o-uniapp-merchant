@@ -34,81 +34,79 @@
 </template>
 
 <script>
-	import BaseMixin from '@/mixins/BaseMixin.js'
-	import  {bizFlashsaleList,getBizInfo} from  '@/api/product'
-	import  {getCountdownFunc} from  '@/common/helper'
+import BaseMixin from '@/mixins/BaseMixin.js'
+import { bizFlashsaleList, getBizInfo } from '@/api/product'
+import { getCountdownFunc } from '@/common/helper'
 
-	export default {
-		mixins:[BaseMixin],
-		data() {
-			return {
-					page:1,
-					pageSize:5,
-					biz_id:7,
-					totalCount:0,
-				  seckillData:[],
-					bizInfo:[]
-			};
-		},
-		methods:{
-			//倒计时
-			stampFunc(){
-				for (let item of this.seckillData) {
-					let start_time=item.start_time
-					let end_time=item.end_time
+export default {
+  mixins: [BaseMixin],
+  data () {
+    return {
+      page: 1,
+      pageSize: 5,
+      biz_id: 7,
+      totalCount: 0,
+				  seckillData: [],
+      bizInfo: []
+    }
+  },
+  methods: {
+    // 倒计时
+    stampFunc () {
+      for (const item of this.seckillData) {
+        let start_time = item.start_time
+        let end_time = item.end_time
 
+        start_time = start_time.replace(/-/g, '/')
+        start_time = new Date(start_time)
+        start_time = start_time.getTime()
+        start_time = start_time / 1000
 
-					start_time = start_time.replace(/-/g, '/');
-					start_time = new Date(start_time);
-					start_time = start_time.getTime();
-					start_time=start_time/1000
+        end_time = end_time.replace(/-/g, '/')
+        end_time = new Date(end_time)
+        end_time = end_time.getTime()
+        end_time = end_time / 1000
 
-					end_time = end_time.replace(/-/g, '/');
-					end_time = new Date(end_time);
-					end_time = end_time.getTime();
-					end_time = end_time/1000
+        const data = getCountdownFunc({ start_timeStamp: start_time, end_timeStamp: end_time })
+        this.$set(item, 'countdown', data)
+      }
+    },
+    async init ({ isInit = false }) {
+      const data = {
+        page: this.page,
+        pageSize: this.pageSize,
+        biz_id: this.biz_id
+      }
+      const arr = await bizFlashsaleList(data, { tip: '加载中' }).catch(e => { throw Error(e.msg || '获取秒杀列表失败') })
+      this.totalCount = arr.totalCount
+      if (isInit) {
+        this.seckillData = arr.data
+      } else {
+        arr.data.map(item => {
+          this.seckillData.push(item)
+        })
+      }
 
-					let data = getCountdownFunc({start_timeStamp: start_time, end_timeStamp: end_time})
-					this.$set(item, 'countdown', data);
-				}
-			},
-			async init({isInit=false}){
-				let data={
-					page:this.page,
-					pageSize: this.pageSize,
-					biz_id:this.biz_id
-				}
-				let arr=await bizFlashsaleList(data,{tip:'加载中'}).catch(e=>{throw  Error(e.msg||"获取秒杀列表失败")})
-				this.totalCount=arr.totalCount
-				if(isInit){
-					this.seckillData=arr.data
-				}else{
-					arr.data.map(item=>{
-						this.seckillData.push(item)
-					})
-				}
-
-				setInterval(this.stampFunc, 1000)
-
-			},
-			async getBiz(){
-				this.bizInfo=await  getBizInfo({biz_id:this.biz_id},{onlyData:true}).catch(e=>{throw  Error(e.msg||'获取商家信息错误')})
-			},
-		},
-		onLoad(options){
-			//this.biz_id=options.biz_id
-			this.getBiz()
-		},
-		onShow(){
-			this.page=1
-			this.init({isInit:true});
-		},
-		onReachBottom() {
-			if(this.totalCount<=this.seckillData.length) return
-			this.page++
-			this.init({isInit:false})
-		}
-	}
+      setInterval(this.stampFunc, 1000)
+    },
+    async getBiz () {
+      this.bizInfo = await getBizInfo({ biz_id: this.biz_id }, { onlyData: true }).catch(e => { throw Error(e.msg || '获取商家信息错误') })
+    }
+  },
+  onLoad (options) {
+    // this.biz_id=options.biz_id
+    this.getBiz()
+  },
+  onShow () {
+    this.page = 1
+    this.init({ isInit: true })
+  },
+  onReachBottom () {
+    if (this.totalCount <= this.seckillData.length) return
+    this.page++
+    this.init({ isInit: false })
+  }
+}
 </script>
 
 <style lang="scss" scoped>
