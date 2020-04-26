@@ -562,7 +562,7 @@
           <div class="block-content">
             <div class="comment-list">
               <div v-for="(item,idx) in comments" :key="idx">
-                <layout-comment :isLast="comments.length-1===idx" :comment="item"></layout-comment>
+                <layout-comment :isLast="comments.length-1===idx" :comment="item"  ></layout-comment>
               </div>
 
             </div>
