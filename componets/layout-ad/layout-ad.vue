@@ -74,6 +74,7 @@
 import { getAdvertList } from '@/api/common'
 import { getArrColumn, getDomain } from '@/common/helper'
 import { linkToEasy } from '@/common/fun'
+import { Exception } from '@/common/Exception'
 
 export default {
   name: 'LayoutAd',
@@ -155,12 +156,14 @@ export default {
   },
   async created () {
     if (this.code) {
-      const imgs = await getAdvertList({ ad_code: this.code }, { onlyData: true }).catch(err => {
-        throw Error(err.msg || '初始化广告组件失败')
-      })
-      const tempimgs = getArrColumn(imgs, 'image')
-      this.imgList = tempimgs.map(imgsrc => getDomain(imgsrc))
-      this.urls = getArrColumn(imgs, 'link')
+      try {
+        const imgs = await getAdvertList({ ad_code: this.code }, { onlyData: true }).catch(err => { throw Error(err.msg || '初始化广告组件失败') })
+        const tempimgs = getArrColumn(imgs, 'image')
+        this.imgList = tempimgs.map(imgsrc => getDomain(imgsrc))
+        this.urls = getArrColumn(imgs, 'link')
+      } catch (e) {
+        Exception.handle(e)
+      }
     } else {
       this.imgList = this.imgs
     }

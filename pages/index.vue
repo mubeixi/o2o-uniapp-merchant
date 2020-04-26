@@ -313,7 +313,7 @@
                   </div>
                   <div class="store-goods-list">
                     <block v-for="(goods,idx) in merchant.prod" :key="idx">
-                      <div class="store-goods-item" v-if="idx<3"  @click.stop="$toGoodsDetail(item.Products_ID)">
+                      <div class="store-goods-item" v-if="idx<3"  @click.stop="$toGoodsDetail(goods.Products_ID)">
 
                         <image :style="{backgroundImage:'url('+goods.ImgPath+')'}" class="cover" />
                         <div class="title fz-12 c3 p-t-7 p-b-7">{{goods.Products_Name}}</div>
