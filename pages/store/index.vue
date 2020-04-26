@@ -58,7 +58,7 @@
         <div id="scrollView1" class="tab-page-wrap">
 
           <!--优惠券-->
-          <scroll-view class="coupon-section" scroll-x>
+          <scroll-view class="coupon-section" scroll-x v-if="couponList.length>0">
             <div class="coupon-item" v-for="(coupon,idx) in couponList" :key="idx">
               <div class="containier">
                 <div class="price">
@@ -74,9 +74,9 @@
           </scroll-view>
 
           <!--限时抢购-->
-          <div class="activity-list">
-            <div class="activity-item" v-for="(item,idx) in activityList" :key="idx">{{item.name}}</div>
-          </div>
+          <scroll-view scroll-x class="activity-list" @touchmove.stop v-if="activityList.length>0">
+            <div class="activity-item" v-for="(item,idx) in activityList" :key="idx" @click="$linkTo('/pages/active/FlashSaleBiz?biz_id='+bid+'&spike_id='+item.id)">{{item.name}}</div>
+          </scroll-view>
 
           <!--便捷操作-->
           <div class="feature-list">
@@ -248,7 +248,7 @@
                 <div class="photo-item" @click="priviewFn(imgs,idx2)" v-for="(img,idx2) in imgs.photo" :key="idx2" :style="{backgroundImage:'url('+img.photo_img+')'}"></div>
               </div>
             </div>
-          
+
         </div>
       </swiper-item>
       <swiper-item class="tab-page">
@@ -370,10 +370,13 @@ export default {
     }
   },
   methods: {
-    priviewFn (imgs,current ) {
+    toActivity (item) {
+
+    },
+    priviewFn (imgs, current) {
       const urls = getArrColumn(imgs.photo, 'photo_img')
       uni.previewImage({
-        urls,current
+        urls, current
       })
     },
     testFun (e) {
@@ -433,10 +436,6 @@ export default {
           throw Error('获取优惠券失败')
         })
 
-        this.activityList = await getBizSpikeList({ biz_id: this.bid }, { onlyData: true }).catch((e) => {
-          throw Error('获取限时抢购数据失败')
-        })
-
         this.comments = await getCommitList({
           biz_id: this.bid,
           pageSize: 3
@@ -477,6 +476,11 @@ export default {
           })
           query.exec()
         })
+
+        this.activityList = await getBizSpikeList({ biz_id: this.bid }, { onlyData: true }).catch((e) => {
+          throw Error('获取限时抢购数据失败')
+        })
+
         hideLoading()
       } catch (e) {
         hideLoading()
@@ -590,13 +594,16 @@ export default {
 
   .activity {
     &-list {
-      padding: 0 0 10rpx 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      overflow-y: hidden;
+      overflow-x: scroll;
+      width: 750rpx;
+      box-sizing: border-box;
+      padding: 0 20rpx 10rpx 20rpx;
+      white-space: nowrap;
     }
 
     &-item {
+      display: inline-block;
       margin-right: 6px;
       padding: 4px;
       border-radius: 4px;
@@ -604,9 +611,6 @@ export default {
       color: $fun-red-color;
       border: 1px solid #FF9090;
 
-      &:last-child {
-        margin-right: 0;
-      }
     }
   }
 

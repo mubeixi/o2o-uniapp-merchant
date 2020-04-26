@@ -163,7 +163,7 @@ export default {
 
     .swiper{
       margin-bottom: 40rpx;
-      
+
       white-space: nowrap;
       overflow-x: scroll;
       overflow-y: hidden;
