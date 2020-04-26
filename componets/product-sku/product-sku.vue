@@ -152,23 +152,28 @@ export default {
       })
     },
     updaCart () {
-      if (!this.submitFlag) {
-        uni.showToast({
-          title: '请选择正确的规格和数量',
-          icon: 'none'
-        })
-        return
+      if(this.proList.skuvaljosn){
+        if (!this.submitFlag) {
+          uni.showToast({
+            title: '请选择正确的规格和数量',
+            icon: 'none'
+          })
+          return
+        }
       }
+
       this.close()
       this.$emit('updaCart', this.postData)
     },
     buyNow () {
-      if (!this.submitFlag) {
-        uni.showToast({
-          title: '请选择正确的规格和数量',
-          icon: 'none'
-        })
-        return
+      if(this.proList.skuvaljosn){
+        if (!this.submitFlag) {
+          uni.showToast({
+            title: '请选择正确的规格和数量',
+            icon: 'none'
+          })
+          return
+        }
       }
       this.close()
       this.$emit('buyNow', this.postData)
@@ -236,17 +241,6 @@ export default {
         this.postData.qty = this.postData.count;
       }
 
-
-      // this.ind = index
-      // this.imgShow = this.list.skuvaljosn[index].Attr_Image
-      // this.postData.id = this.list.skuvaljosn[index].Product_Attr_ID
-      // this.postData.price = this.list.skuvaljosn[index].Attr_Price
-      // this.postData.count = this.list.skuvaljosn[index].Property_count
-      // if (this.postData.qty > this.postData.count) {
-      //   this.submitFlag = false
-      // } else {
-      //   this.submitFlag = true
-      // }
     },
     addNum () {
       if (this.postData.qty < this.postData.count) {

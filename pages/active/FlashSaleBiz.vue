@@ -1,8 +1,9 @@
 <template>
   <div class="flashSale-all" :style="{backgroundImage:'url(/static/flash-sale-bg.jpg)'}">
-    <div class="flex flex-vertical-c flex-justify-c  seckill-title">
+    <div class="flex flex-vertical-c   seckill-title"  >
+      <layout-icon type="iconicon-arrow-left" size="20" color="#fff"  class="back-icon m-r-2"  @click="$back()"></layout-icon>
       <image class="seckill-title-img m-r-10" :src="bizInfo[0].biz_logo"></image>
-      {{bizInfo[0].biz_shop_name}}（{{bizInfo[0].biz_address}}）
+      <span class="seckill-title-text" :style="{width:(menuButtonInfo.left-80)+'px'}">{{bizInfo[0].biz_shop_name}}（{{bizInfo[0].biz_address}}）</span>
     </div>
 
     <div class="flashSale-time flex flex-justify-c flex-vertical-c m-b-44">
@@ -42,10 +43,11 @@
 import BaseMixin from '@/mixins/BaseMixin.js'
 import { getBizInfo, bizSpikeList } from '@/api/product'
 import { getCountdownFunc } from '@/common/helper'
-
+import LayoutIcon from '@/componets/layout-icon/layout-icon'
 let groupStamInstance = null
 export default {
   mixins: [BaseMixin],
+  components:{LayoutIcon},
   data () {
     return {
       biz_id: null,
@@ -128,18 +130,25 @@ export default {
   }
 
   .seckill-title {
+    padding-left: 5px;
     height: 80rpx;
     line-height: 80rpx;
-    width: 750rpx;
-    overflow-x: hidden;
-    font-size: 36rpx;
+    box-sizing: border-box;
     color: #FFFFFF;
     font-weight: bold;
     margin-top: 80rpx;
-
+    &-text{
+      display: inline-block;
+      height: 80rpx;
+      line-height: 80rpx;
+      overflow: hidden;
+      text-overflow:ellipsis;
+      white-space: nowrap;
+    }
     &-img {
       width: 80rpx;
       height: 80rpx;
+      border-radius: 50%;
     }
   }
 
