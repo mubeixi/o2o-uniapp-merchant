@@ -297,24 +297,23 @@
                   <span class="after" :style="{backgroundColor: primaryColor}"></span>
                 </div>
 
-                <div class="store-top-item"  v-for="(num,idx) in [1,2,3]" :key="idx">
+                <div class="store-top-item"  v-for="(merchant,idx) in merchantList" :key="idx" @click="$linkTo('/pages/store/index?bid='+merchant.id)">
                   <div class="store-info flex flex-vertical-c flex-justify-between">
                     <div class="p-l-10 p-r-10 flex flex-vertical-c">
-                      <image class="logo"
-                             src="https://newo2o.bafangka.com/static/member/images/login/loginWeixin.png"></image>
+                      <image class="logo" :src="merchant.biz_logo"></image>
                       <div class="p-l-10 c3">
-                        <div class="name fz-15 m-b-5"> 海的故事咖啡店</div>
-                        <div class="activity">全场满300包邮，1300封顶</div>
+                        <div class="name fz-15 m-b-5"> {{merchant.biz_shop_name}}</div>
+                        <div class="activity" v-if="merchant.active && merchant.active.length>0">满{{merchant.active[0].reach}}减{{merchant.active[0].award}}</div>
                       </div>
                     </div>
-                    <div class="flex flex-vertical-c">
-                      <span class="p-r-8 fz-14 c6">进入商家</span>
+                    <div class="flex flex-vertical-c p-r-6">
+                      <span class="p-r-4 fz-14 c6">进入商家</span>
                       <layout-icon color="#999" type="iconicon-arrow-right"></layout-icon>
                     </div>
                   </div>
                   <div class="store-goods-list">
-                    <block v-for="(goods,idx) in goodsList" :key="idx">
-                      <div class="store-goods-item" v-if="idx<3"  @click="$toGoodsDetail(item.Products_ID)">
+                    <block v-for="(goods,idx) in merchant.prod" :key="idx">
+                      <div class="store-goods-item" v-if="idx<3"  @click.stop="$toGoodsDetail(item.Products_ID)">
 
                         <image :style="{backgroundImage:'url('+goods.ImgPath+')'}" class="cover" />
                         <div class="title fz-12 c3 p-t-7 p-b-7">{{goods.Products_Name}}</div>
@@ -348,6 +347,9 @@ import {
 import {
   getSkinConfig
 } from '@/api/common'
+import {
+  getBizInfo
+} from '@/api/store'
 import { Exception } from '@/common/Exception'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import Mock from '@/dev/Mock'
@@ -373,6 +375,7 @@ import DiyTab from '@/componets/diy-tab/diy-tab'
 import DiyGroup from '@/componets/diy-group/diy-group'
 import DiyFlash from '@/componets/diy-flash/diy-flash'
 import GoodsItem from '@/componets/good-item/good-item'
+import { hideLoading, showLoading } from '@/common/fun'
 
 export default {
   mixins: [BaseMixin],
@@ -428,7 +431,8 @@ export default {
       slide: [],
       navs: [],
       templateList: [],
-      templateData: []
+      templateData: [],
+      merchantList: []
 
     }
   },
@@ -465,6 +469,7 @@ export default {
   },
   methods: {
     async _init_func () {
+      showLoading('初始化数据')
       try {
         this.liveNav = await Mock.getDataByRequest('liveNav', 100)
 
@@ -519,9 +524,19 @@ export default {
           }
         }
 
+        this.merchantList = await getBizInfo({
+          get_prod: 3,
+          with_prod: 1,
+          get_active: 1
+        }, { onlyData: true }).catch((e) => {
+          throw Error('获取人气商家列表失败')
+        })
+
         // this.$toast('加载成功','none')
       } catch (e) {
         Exception.handle(e)
+      } finally {
+        hideLoading()
       }
     },
     get_tmpl_data () {
@@ -969,6 +984,7 @@ export default {
         width: 86rpx;
         height: 86rpx;
         border-radius: 50%;
+        background: #f2f2f2;
       }
 
       .name {

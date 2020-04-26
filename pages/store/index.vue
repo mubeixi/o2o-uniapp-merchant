@@ -233,7 +233,22 @@
       </swiper-item>
       <swiper-item class="tab-page">
         <div id="scrollView3" class="tab-page-wrap">
-          相册
+
+            <!--只显示有照片的相册 v-if="imgs.photo && imgs.photo.length>0"-->
+            <div class="photo-section"  v-for="(imgs,idx1) in photoList" :key="idx1" >
+              <div class="php-section-title m-b-10 flex flex-vertical-c">
+                <div class="label"></div>
+                <div class="text flex1 c3">{{imgs.cate_name}}</div>
+                <div class="flex flex-vertical-c" @click="$linkTo('/pages/store/photo?bid='+bid+'&tab='+idx1)">
+                  <span class="c9 fz-12">查看更多</span>
+                  <layout-icon size="14" color="#999" type="iconicon-arrow-right"></layout-icon>
+                </div>
+              </div>
+              <div class="photo-list">
+                <div class="photo-item" @click="priviewFn(imgs,idx2)" v-for="(img,idx2) in imgs.photo" :key="idx2" :style="{backgroundImage:'url('+img.photo_img+')'}"></div>
+              </div>
+            </div>
+          
         </div>
       </swiper-item>
       <swiper-item class="tab-page">
@@ -253,13 +268,14 @@
 
 <script>
 import BaseMixin from '@/mixins/BaseMixin'
-import { getBizInfo, getBizSpikeList, getStoreList } from '@/api/store'
+import { getBizInfo, getBizSpikeList, getCategoryList, getStoreList } from '@/api/store'
 import { hideLoading, modal, showLoading } from '@/common/fun'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import { getProductList, getBizProdCateList } from '@/api/product'
 import { getCouponList, getCommitList } from '@/api/common'
 import LayoutComment from '@/componets/layout-comment/layout-comment'
 import LayoutCopyright from '@/componets/layout-copyright/layout-copyright'
+import { getArrColumn } from '@/common/helper'
 
 export default {
   name: 'StoreIndex',
@@ -324,6 +340,7 @@ export default {
           color: '#c7596c'
         }
       ],
+      photoList: [],
       pageScrollTop: 0,
       headTabTop: 0,
       chidScrollTop: 0,
@@ -353,6 +370,12 @@ export default {
     }
   },
   methods: {
+    priviewFn (imgs,current ) {
+      const urls = getArrColumn(imgs.photo, 'photo_img')
+      uni.previewImage({
+        urls,current
+      })
+    },
     testFun (e) {
       console.log(e)
     },
@@ -427,6 +450,8 @@ export default {
         }, { onlyData: true }).catch((e) => {
           throw Error('获取门店列表数据失败')
         })
+
+        this.photoList = await getCategoryList({ biz_id: this.bid, get_photo: 4 }, { onlyData: 1 }).catch(e => { throw Error(e.msg || '获取相册信息失败') })
 
         this.$nextTick().then(() => {
           const query = uni.createSelectorQuery()
@@ -651,10 +676,39 @@ export default {
       position: absolute;
       width: 750rpx;
       height: 100%;
-      
-      
+
     }
-    
+
+  }
+
+  .photo-section{
+    margin: 10rpx 10rpx 40rpx;
+    .php-section-title{
+      .label{
+        width: 6rpx;
+        height: 30rpx;
+        background: #26C78D;
+        margin-right: 8px;
+      }
+      .text{
+        font-size: 15px;
+        font-weight: bold;
+      }
+    }
+    .photo-list{
+      display: flex;
+      flex-wrap: wrap;
+    }
+    .photo-item{
+      width: 350rpx;
+      height: 350rpx;
+      margin-bottom: 10rpx;
+      margin-right: 10rpx;
+      @include cover-img();
+      &:nth-child(even){
+        margin-right: 0;
+      }
+    }
   }
 
   .coupon-goods-list {
