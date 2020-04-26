@@ -8,14 +8,11 @@
       <span class="create_at">{{comment.CreateTime|formatTime('YYYY-MM-DD')}}</span>
     </div>
     <div class="content">{{comment.Note}}</div>
-    <div class="actions" @click.stop="comment">
+    <div class="actions" @click.stop="commentMethod">
       <image class="icon" :src="'/static/client/comment.png'|domain"></image>
-      <span>{{comment.is_anonymous}}</span>
+      <span>{{comment.child.length}}</span>
     </div>
 
-    <Model ref="model">
-      dasdasdasdasdasdd
-    </Model>
 
   </div>
 </template>
@@ -32,11 +29,8 @@ export default {
     comment: {}
   },
   methods: {
-    show(){
-      this.$refs.model.show()
-    },
-    comment(){
-      this.show()
+    commentMethod(){
+      this.$emit('comment', this.comment)
     },
     tap () {
       console.log(this.comment)
