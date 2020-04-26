@@ -7,10 +7,11 @@ import {
 import {
   upload, getAccessToken
 } from './request'
-import  Srotage from  '@/common/Storage'
-import store from "@/store";
+import Srotage from '@/common/Storage'
+import store from '@/store'
 
 import Schema from 'validate'
+import Promisify from '@/common/Promisify'
 
 export const objTranslate = (obj) => JSON.parse(JSON.stringify(obj))
 
@@ -477,34 +478,30 @@ export function isWeiXin () {
   // #endif
 }
 
-//构造分享事件
+// 构造分享事件
 /**
  *
  * @param path 这个里面无需传owenr_id和users_id
  * @return {string}
  */
 export const buildSharePath = (path) => {
-
-  let users_ID = Srotage.get('users_id');
-  let userInfo = store.state.userInfo || Srotage.get('userInfo');
+  const users_ID = Srotage.get('users_id')
+  const userInfo = store.state.userInfo || Srotage.get('userInfo')
   const User_ID = Srotage.get('user_id')
 
-  let search = '';
+  let search = ''
 
   if (path.indexOf('users_id') === -1) {
     search += (users_ID ? ('users_id=' + users_ID) : '')
   }
 
-
   if (path.indexOf('owner_id') === -1) {
-
-    let owner_id = 0;
+    let owner_id = 0
     if (userInfo.User_ID && userInfo.Is_Distribute === 1) {
       owner_id = userInfo.User_ID
     }
     search += ('&owner_id=' + owner_id)
   }
-
 
   let ret = ''
   if (path.indexOf('?') != -1) {
@@ -514,8 +511,8 @@ export const buildSharePath = (path) => {
   }
 
   if (ret.indexOf('users_id') === -1) {
-    error('组建分享参数失败');
-    throw "必须有users_id"
+    error('组建分享参数失败')
+    throw '必须有users_id'
   }
 
   console.log(`share path is ${ret}`)
@@ -523,26 +520,55 @@ export const buildSharePath = (path) => {
   return ret
 }
 
-
 /**
  *获取商品缩略图
  * @param img
  * @param size n3最小
  */
 export const getProductThumb = (img, size) => {
-  if (!size) size = 'n3';
+  if (!size) size = 'n3'
 
-  let tempArr = img.split('/');
-  let name = tempArr.pop();
-  name = size + '/' + name;
+  const tempArr = img.split('/')
+  let name = tempArr.pop()
+  name = size + '/' + name
 
   return [...tempArr, name].join('/')
-
 }
-
 
 export const urlencode = (str) => {
   return encodeURIComponent(str).replace(/!/g, '%21').replace(/'/g, '%27').replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\*/g, '%2A').replace(/%20/g, '+')
+}
+
+/**
+ * 下载文件
+ * @param url
+ * @returns {Promise<boolean>}
+ */
+const downLoadFile = async (url) => {
+  try {
+    const downRT = await Promisify('downloadFile', { url }).catch(e => { throw Error(e.errMsg) })
+    const { tempFilePath } = downRT
+    if (!tempFilePath) throw Error('图片下载失败')
+    return tempFilePath
+  } catch (e) {
+    return false
+  }
+}
+
+/**
+ * 保存图片到本地
+ * @param fileUrl
+ * @param type
+ * @returns {Promise<boolean|*>}
+ */
+export const saveImageToDisk = async ({ fileUrl, type = 'local' }) => {
+  try {
+    const fileTempPath = type === 'local' ? fileUrl : await downLoadFile(fileUrl)
+    await Promisify('saveImageToPhotosAlbum', { filePath: fileTempPath }).catch(e => { throw Error(e.errMsg) })
+    return fileTempPath
+  } catch (e) {
+    return false
+  }
 }
 
 const Helper = {

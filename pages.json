@@ -145,13 +145,19 @@
 				"navigationStyle": "custom"
 			}
         },
-        {
-            "path" : "pages/user/person",
-            "style": {
-              "navigationBarTitleText": "个人中心",
-              "navigationStyle": "custom"
-            }
-        },
+		{
+			"path" : "pages/user/person",
+			"style": {
+				"navigationBarTitleText": "个人中心",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/shareQrcode",
+			"style": {
+				"navigationBarTitleText": "分享海报"
+			}
+		},
 		{
 			"path" : "pages/active/FlashSale",
 			"style": {
