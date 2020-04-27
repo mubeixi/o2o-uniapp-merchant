@@ -558,7 +558,7 @@
         </div>
       </div>
 
-      <div class="vip-img">
+      <div class="vip-img" @click="goVipList">
         <image :src="'/static/client/product/vip.png'|domain" class="full-img"></image>
       </div>
 
@@ -646,7 +646,7 @@
               <div class="store-info-title">
                 {{store[0].biz_shop_name}}
               </div>
-              <div class="store-info-call m-b-10">
+              <div class="store-info-call m-b-10" @click="$cellPhone(store[0].biz_account)">
                 <layout-icon type="icontime" size="14" color="#999"></layout-icon>
                 <span style="margin: 0rpx 26rpx 0rpx 16rpx"> {{store[0].biz_account}}</span>
                 <layout-icon type="iconicon-phone" size="14" color="#26C78D"></layout-icon>
@@ -671,17 +671,17 @@
               </div>
             </div>
             <div class="store-list-item" v-for="(st,ind) of storeList" :key="ind">
-              <div class="store-list-title">
+              <div class="store-list-title"  @click.stop="goStore(st.biz_id)">
                 {{st.biz_shop_name}}
               </div>
               <div class="flex flex-justify-between store-list-address">
-                <div class="store-list-font">
+                <div class="store-list-font" @click="$openLocation(st.store_lat,st.store_lon,st.store_name)">
                   {{st.area_address}}
                 </div>
                 <div class="flex flex-vertical-center">
-                  <layout-icon type="iconicon-address" size="17" color="#26C78D"></layout-icon>
+                  <layout-icon type="iconicon-address" size="17" color="#26C78D"  @click="$openLocation(st.store_lat,st.store_lon,st.store_name)"></layout-icon>
                   <span class="store-su"></span>
-                  <layout-icon type="iconicon-phone" size="17" color="#26C78D"></layout-icon>
+                  <layout-icon type="iconicon-phone" size="17" color="#26C78D" @click.stop="$cellPhone(st.store_mobile)"></layout-icon>
                 </div>
               </div>
             </div>
@@ -691,7 +691,7 @@
     </swiper>
     <product-sku ref="mySku" @sureSku="save" :hasCart="hasCart" @updaCart="updaCart" @buyNow="buyNow"
                  :proList="detailData"></product-sku>
-    <wzw-goods-action class="wzw-goods-action" @myPay="myPay" @allPay="allPay">
+    <wzw-goods-action class="wzw-goods-action" @goStore="goStore(detailData.biz_id)" @goShare="toBooking"  @myPay="myPay" @allPay="allPay">
       <span slot="leftText">单买¥</span>
       <span slot="leftPrice">100.00</span>
       <span slot="rightText">拼团购¥</span>
@@ -700,29 +700,29 @@
 
 
     <!--    分享 -->
-    <layout-popup  ref="share">
-      <div class="shareinfo" >
-        <div class="s_top flex">
-          <div class="flex1" @click="shareFunc('wx')">
-            <image class='img' src="/static/share/share1.png" alt=""></image>
-            <div>发送好友</div>
-          </div>
-          <div class="flex1" @click="shareFunc('wxtimeline')">
-            <image class='img' src="/static/share/share3.png" alt=""></image>
-            <div>朋友圈</div>
-          </div>
-          <div class="flex1" @click="shareFunc('wxmini')" >
-            <img class='img' src="/static/share/share4.png" alt="">
-            <div>微信小程序</div>
-          </div>
-          <div class="flex1" @click="shareFunc('pic')">
-            <image class='img' src="/static/share/share2.png" alt=""></image>
-            <div>分享海报</div>
-          </div>
-        </div>
-        <div class="s_bottom" @click="cancel">取消</div>
-      </div>
-    </layout-popup>
+<!--    <layout-popup  ref="share">-->
+<!--      <div class="shareinfo" >-->
+<!--        <div class="s_top flex">-->
+<!--          <div class="flex1" @click="shareFunc('wx')">-->
+<!--            <image class='img' src="/static/share/share1.png" alt=""></image>-->
+<!--            <div>发送好友</div>-->
+<!--          </div>-->
+<!--          <div class="flex1" @click="shareFunc('wxtimeline')">-->
+<!--            <image class='img' src="/static/share/share3.png" alt=""></image>-->
+<!--            <div>朋友圈</div>-->
+<!--          </div>-->
+<!--          <div class="flex1" @click="shareFunc('wxmini')" >-->
+<!--            <img class='img' src="/static/share/share4.png" alt="">-->
+<!--            <div>微信小程序</div>-->
+<!--          </div>-->
+<!--          <div class="flex1" @click="shareFunc('pic')">-->
+<!--            <image class='img' src="/static/share/share2.png" alt=""></image>-->
+<!--            <div>分享海报</div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div class="s_bottom" @click="cancel">取消</div>-->
+<!--      </div>-->
+<!--    </layout-popup>-->
 
 
     <Model ref="proModel">
@@ -799,6 +799,14 @@ export default {
     this.headTabSticky = (scrollTop > this.headTabTop)
   },
   methods: {
+    goVipList(){
+      let url='/pages/user/VipList?bid='+this.detailData.biz_id
+      this.$linkTo(url)
+    },
+    goStore(bid){
+      let url='/pages/store/index?bid='+bid
+      this.$linkTo(url)
+    },
     bingReasonInput(e){
       this.commentValue = e.detail.value
     },
@@ -926,11 +934,9 @@ export default {
         current:index
       });
     },
-    cancel(){
-      this.$refs.share.close()
-    },
     toBooking () {
-     this.$refs.share.show()
+          let url='/pages/share/go?prod_id='+this.prod_id
+          this.$linkTo(url)
     },
     myPay () {
       if (!checkIsLogin(1, 1)) return
