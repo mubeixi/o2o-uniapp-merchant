@@ -34,7 +34,7 @@
         <div class="order-desc">待评价</div>
       </div>
     </div>
-    <div class="quanyi">
+    <div class="quanyi" @click="$linkTo('/pages/user/EquityCard')">
       <LayoutIcon type="iconquanyi" color="#DA8E4B" size="26" class="v-icon"></LayoutIcon>
       <div class="quanyi-title">超值权益卡</div>
       <div class="quanyi-ad">海量积分赠送·满立减优惠券</div>
