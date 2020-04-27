@@ -25,6 +25,18 @@
 			}
 		},
 		{
+			"path": "pages/search/index",
+			"style": {
+				"navigationBarTitleText": "全局搜索"
+			}
+		},
+		{
+			"path": "pages/search/result",
+			"style": {
+				"navigationBarTitleText": "商品列表"
+			}
+		},
+		{
 			"path": "pages/store/photo",
 			"style": {
 				"navigationBarTitleText": "相册"

@@ -39,7 +39,7 @@
 <!--              <radio class="checkbox" style="transform: scale(0.8)" :value="store.id"></radio>-->
           </div>
           <div class="flex1 box">
-            <div class="top flex flex-vertical-c flex-justify-between">
+            <div class="top flex flex-vertical-c flex-justify-between" @click="goStore(store.biz_id)">
               <div class="flex flex-vertical-c">
                 <image class="logo"
                        :src="(store.biz_logo) | domain"></image>
@@ -127,13 +127,20 @@ export default {
       biz_page: 1,
       param: {
         type: 1,
-        pageSize: 10,
+        pageSize: 4,
         page: 1,
       },
-      isSelectAll: false
+      isSelectAll: false,
+      is_biz_more: true, //是否还有更多商家
+      is_pro_more: true,  //是否还有更多产品
+      store_total: 0,
+      pro_total: 0
     }
   },
   methods: {
+    goStore(bid) {
+      linkToEasy('/pages/store/index?bid='+bid)
+    },
     goBuy(id) {
       linkToEasy('/pages/product/detail?prod_id='+id)
     },
@@ -217,11 +224,17 @@ export default {
       return new Promise((resolve,reject)=>{
         this.param.page = this.pro_page
         this.param.type = 1
-        getFavouriteProdList(this.param, {onlyData: true}).then(res=>{
-          res.map(item=>{
+        getFavouriteProdList(this.param).then(res=>{
+          this.pro_total = res.totalCount
+          if(Number(res.totalCount) <= this.goodsFavoriteList.length){
+            this.is_pro_more = false
+            return;
+          }
+          this.pro_page++;
+          res.data.map(item=>{
             item.is_check = false
           })
-          resolve(res)
+          resolve(this.goodsFavoriteList.concat(res.data))
         }).catch(err=>{
           reject(err)
         })
@@ -231,11 +244,17 @@ export default {
       return new Promise((resolve,reject)=>{
         this.param.page = this.biz_page
         this.param.type = 2
-        getFavouriteProdList(this.param,{ onlyData: true}).then(res=>{
-          res.map(item=>{
+        getFavouriteProdList(this.param).then(res=>{
+          this.store_total = res.totalCount
+          if(Number(res.totalCount) < this.storeFavoriteList.length) {
+            this.is_biz_more = false
+            return
+          }
+          this.biz_page++;
+          res.data.map(item=>{
             item.is_check = false
           })
-          resolve(res)
+          resolve(this.storeFavoriteList.concat(res.data))
         }).catch(err=>{
           reject(err)
         })
@@ -260,7 +279,20 @@ export default {
     this._init_func()
   },
   onReachBottom(){
-
+    if(this.activeIndex == 0 && this.is_pro_more) {
+    //  商品
+      this.getProList().then(res=>{
+        this.goodsFavoriteList = res
+      }).catch(e=>{
+        throw Error(e.msg || '获取收藏列表失败')
+      })
+    }else if(this.activeIndex == 1 && this.is_biz_more) {
+      this.getStoreList().then(res=>{
+        this.storeFavoriteList = res
+      }).catch(e=>{
+        throw Error(e.msg || '获取商家列表失败')
+      })
+    }
   }
 }
 </script>
@@ -418,7 +450,6 @@ export default {
 
       .btn {
         display: block;
-        width: 96rpx;
         height: 54rpx;
         line-height: 54rpx;
         font-size: 14px;
