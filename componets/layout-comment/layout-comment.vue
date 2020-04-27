@@ -8,15 +8,19 @@
       <span class="create_at">{{comment.CreateTime|formatTime('YYYY-MM-DD')}}</span>
     </div>
     <div class="content">{{comment.Note}}</div>
-    <div class="actions">
+    <div class="actions" @click.stop="commentMethod">
       <image class="icon" :src="'/static/client/comment.png'|domain"></image>
-      <span>{{comment.is_anonymous}}</span>
+      <span>{{comment.child.length}}</span>
     </div>
+
+
   </div>
 </template>
 <script>
+import Model from '@/componets/ModelComponents'
 export default {
   name: 'LayoutComment',
+  components:{Model},
   props: {
     isLast: {
       type: Boolean,
@@ -25,6 +29,9 @@ export default {
     comment: {}
   },
   methods: {
+    commentMethod(){
+      this.$emit('comment', this.comment)
+    },
     tap () {
       console.log(this.comment)
       this.$emit('click', this.comment)

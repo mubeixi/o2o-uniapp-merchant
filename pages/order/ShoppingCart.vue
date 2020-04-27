@@ -1,5 +1,7 @@
 <template>
 	<div>
+		<div class="status-title">
+		</div>
 		<div class="cart-title flex flex-vertical-c flex-justify-c fz-16 c3">
 			<div>
 				购物车
@@ -112,6 +114,28 @@ import { toast,error } from '@/common/fun'
 			}
 		},
 		methods:{
+			submit(){
+				let obj = {};
+				// 删除
+				for(let i in this.CartList) {
+					Storage.remove(i);
+					obj[i]={}
+					for(let j in this.CartList[i]){
+						obj[i][j]=[]
+						for(let k in this.CartList[i][j]) {
+							if(this.CartList[i][j][k].checked) {
+								obj[i][j].push(k)
+								Storage.remove(j + ';' + k);
+							}
+						}
+					}
+				}
+				Storage.remove('allCheck');
+				let cart_buy=JSON.stringify(obj)
+				let url="/pages/order/OrderBooking?cart_key=CartList"
+				this.$store.cart_buy=cart_buy
+				this.$linkTo(url)
+			},
 			DelCart(){
 				let obj = {};
 				// 删除
@@ -299,6 +323,11 @@ import { toast,error } from '@/common/fun'
 		//padding-top: var(--status-bar-height);
 		/* #endif */
 	}
+	.status-title{
+		height:var(--status-bar-height);
+		width: 750rpx;
+		background-color: #FFFFFF;
+	}
 	.cart-title{
 		height: 86rpx;
 		width: 750rpx;
@@ -307,7 +336,7 @@ import { toast,error } from '@/common/fun'
 		&-right{
 			position: absolute;
 			top: 20rpx;
-			right: 20rpx;
+			left: 20rpx;
 		}
 	}
 	.status_bar{

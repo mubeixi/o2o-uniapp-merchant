@@ -47,7 +47,8 @@
 <template>
   <div class="wrap">
     <swiper
-      :style="{width:w,height:h}"
+      v-if="imgList.length>0"
+      :style="{width:w,height:h,padding:paddingStr}"
       class="swiper"
       @change="indexChangeEvent"
       :indicator-dots="indicatorDots==='circle'"
@@ -74,6 +75,7 @@
 import { getAdvertList } from '@/api/common'
 import { getArrColumn, getDomain } from '@/common/helper'
 import { linkToEasy } from '@/common/fun'
+import { Exception } from '@/common/Exception'
 
 export default {
   name: 'LayoutAd',
@@ -81,6 +83,18 @@ export default {
     imgs: {
       type: Array,
       default: () => []
+    },
+    lazyLoad: {
+      type: Boolean,
+      default: false
+    },
+    ready: {
+      type: Boolean,
+      default: false
+    },
+    paddingStr: {
+      type: String,
+      default: '0px'
     },
     width: {
       default: '750rpx',
@@ -124,7 +138,16 @@ export default {
     duration: {
       default: 500
     },
+    position: {
+      default: '',
+      type: String
+    },
+    cateId: {
+      default: '',
+      type: String
+    },
     code: {
+      default: '',
       type: String
     }
   },
@@ -153,19 +176,36 @@ export default {
       current: 0
     }
   },
-  async created () {
-    if (this.code) {
-      const imgs = await getAdvertList({ ad_code: this.code }, { onlyData: true }).catch(err => {
-        throw Error(err.msg || '初始化广告组件失败')
-      })
-      const tempimgs = getArrColumn(imgs, 'image')
-      this.imgList = tempimgs.map(imgsrc => getDomain(imgsrc))
-      this.urls = getArrColumn(imgs, 'link')
-    } else {
-      this.imgList = this.imgs
+  watch: {
+    ready: {
+      handler (val, oldVal) {
+        if (val && !oldVal) this._init_func()
+      }
+    }
+  },
+  created () {
+    if (!this.lazyLoad) {
+      this._init_func()
     }
   },
   methods: {
+    async _init_func () {
+      if (this.imgs.length < 1) {
+        if (!this.code && !this.cateId && !this.position) throw Error('广告位的imgs长度为0是，请传入code或者（cateId+position的搭配）')
+        const postData = { ad_code: this.code, cate_id: this.cateId, position: this.position }
+
+        try {
+          const imgs = await getAdvertList({ ...postData }, { onlyData: true }).catch(err => { throw Error(err.msg || '初始化广告组件失败') })
+          const tempimgs = getArrColumn(imgs, 'image')
+          this.imgList = tempimgs.map(imgsrc => getDomain(imgsrc))
+          this.urls = getArrColumn(imgs, 'link')
+        } catch (e) {
+          Exception.handle(e)
+        }
+      } else {
+        this.imgList = this.imgs
+      }
+    },
     bindClick (idx) {
       if (!this.code) return
       if (this.urls[idx]) {

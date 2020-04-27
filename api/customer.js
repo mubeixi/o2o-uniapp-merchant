@@ -51,3 +51,12 @@ export const CartList = (param, options) => fetch({ act: 'get_cart', param, opti
 // 用户购物车产品数量
 export const DelCart = (param, options) => fetch({ act: 'del_cart', param, options })
 
+
+// 获取签到页信息
+export const getSignin = (param, options) => fetch({ act: 'get_signin', param, options })
+// 签到
+export const userSignin = (param, options) => fetch({ act: 'signin', param, options })
+
+
+// 评论回复
+export const commentReply = (param, options) => fetch({ act: 'commentReply', param, options })

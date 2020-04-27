@@ -8,9 +8,10 @@ import {
 } from '@/common/helper'
 // #endif
 
+// export const apiBaseUrl = 'https://www.newo2osrc.com'
 export const apiBaseUrl = 'https://newo2o.bafangka.com'
 export const staticUrl = 'https://newo2o.bafangka.com'
-
+export const users_id = 'wkbq6nc2kc'
 
 // #ifdef H5
 function setWxConfig (config) {
@@ -18,7 +19,7 @@ function setWxConfig (config) {
 }
 
 export const WX_JSSDK_INIT = (vm, jsApiListList) => new Promise((resolve, reject) => {
-  if (!isWeiXin()) reject(false)
+  if (!isWeiXin()) reject(new Error(false))
 
   if (vm.JSSDK_READY) {
     resolve(wx)
@@ -37,9 +38,9 @@ export const WX_JSSDK_INIT = (vm, jsApiListList) => new Promise((resolve, reject
     const jsApiList = jsApiListList || ['onMenuShareAppMessage', 'onMenuShareTimeline', 'openLocation', 'getLocation', 'scanQRCode', 'chooseImage', 'previewImage', 'uploadImage']
     // ['chooseImage', 'previewImage', 'uploadImage', 'openLocation','getLocation', 'chooseWXPay', 'getSystemInfo', 'onMenuShareAppMessage','onMenuShareTimeline','scanQRCode'];
     if (debug) {
-      ls.set('jssdk_debug', 1)
+      Storage.set('jssdk_debug', 1)
     } else {
-      ls.set('jssdk_debug', 0)
+      Storage.set('jssdk_debug', 0)
     }
     const { noncestr, timestamp, appId, signature } = config
 

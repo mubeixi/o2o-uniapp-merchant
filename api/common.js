@@ -76,3 +76,12 @@ export const getSystemConf = (param, options) => fetch({ act: 'shopconfig', para
 
 // jssdk签名
 export const getJsSign = (param, options) => fetch({ act: 'share_config', param, options })
+
+// 获取海报模板
+export const getPosterList = (param, options) => fetch({ act: 'getPosterList', param, options })
+
+// 获取海报模板详情
+export const getPosterDetail = (param, options) => fetch({ act: 'getPosterDetail', param, options })
+
+// 获取分销中心-分销二维码
+export const getDistributeWxQrcode = (param, options) => fetch({ act: 'get_distribute_wxqrcode', param, options })

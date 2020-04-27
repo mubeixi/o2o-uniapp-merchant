@@ -25,6 +25,12 @@
 			}
 		},
 		{
+			"path": "pages/store/photo",
+			"style": {
+				"navigationBarTitleText": "相册"
+			}
+		},
+		{
 			"path": "pages/share/index",
 			"style": {
 				"navigationBarTitleText": "分享赚"
@@ -134,15 +140,24 @@
 			}
 		},
 		{
-            "path" : "pages/order/ShoppingCart"
+            "path" : "pages/order/ShoppingCart",
+			"style": {
+				"navigationStyle": "custom"
+			}
         },
-        {
-            "path" : "pages/person/person",
-            "style": {
-              "navigationBarTitleText": "个人中心",
-              "navigationStyle": "custom"
-            }
-        },
+		{
+			"path" : "pages/user/person",
+			"style": {
+				"navigationBarTitleText": "个人中心",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/shareQrcode",
+			"style": {
+				"navigationBarTitleText": "分享海报"
+			}
+		},
 		{
 			"path" : "pages/active/FlashSale",
 			"style": {
@@ -157,7 +172,48 @@
               "navigationStyle": "custom"
             }
         }
+        ,{
+            "path" : "pages/active/FlashSaleBiz",
+            "style": {
+            	"navigationBarTitleText": "限时抢购",
+            	"navigationStyle": "custom"
+            }
+        }
+        ,{
+            "path" : "pages/product/SharePic/SharePic",
+            "style": {
+            	"navigationBarTitleText": "分享海报"
+            }
+        }
+        ,{
+            "path" : "pages/user/DailyCheck",
+            "style": {
+            	"navigationBarTitleText": "签到"
+            }
+        }
+        ,{
+            "path" : "pages/user/EquityCard",
+            "style" : {
+				"navigationBarTitleText": "权益",
+				"navigationBarBackgroundColor": "#3A3731"
+			}
+        }
     ],
+	"subPackages":[{
+			"root": "pagesA",
+			"name": "onther",
+			"pages":[{
+                    "path" : "user/user",
+                    "style" : {}
+                }
+            ]
+	}],
+	"preloadRule": {
+		"pages/index": {
+			"network": "all",
+			"packages": ["onther"]
+		}
+	},
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarBackgroundColor": "#FFF",
@@ -171,13 +227,13 @@
 		"list": [{
 				"pagePath": "pages/index",
 				"iconPath": "/static/tabbar/find.png",
-				"selectedIconPath": "/static/tabbar/find.png",
+				"selectedIconPath": "/static/tabbar/find-a.png",
 				"text": "发现"
 			},
 			{
 				"pagePath": "pages/index",
 				"iconPath": "/static/tabbar/live.png",
-				"selectedIconPath": "/static/tabbar/live.png",
+				"selectedIconPath": "/static/tabbar/live-a.png",
 				"text": "直播"
 			},
 			{
@@ -189,13 +245,13 @@
 			{
 				"pagePath": "pages/order/ShoppingCart",
 				"iconPath": "/static/tabbar/notify.png",
-				"selectedIconPath": "/static/tabbar/notify.png",
+				"selectedIconPath": "/static/tabbar/notify-a.png",
 				"text": "购物车"
 			},
 			{
-				"pagePath": "pages/person/person",
+				"pagePath": "pages/user/person",
 				"iconPath": "/static/tabbar/user.png",
-				"selectedIconPath": "/static/tabbar/user.png",
+				"selectedIconPath": "/static/tabbar/user-a.png",
 				"text": "我的"
 			}
 		]

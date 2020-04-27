@@ -544,9 +544,7 @@ export default {
     },
     // 提交订单
     async submitFn () {
-      
       try {
-        
         showLoading()
         const bizListLen = getObjectAttrNum(this.biz_list) // 获得当前订单中有多少个商家，用来比较一些必填项的数量是否正确
 
@@ -555,7 +553,7 @@ export default {
             required: true,
             use: {
               len: (val, row) => {
-                console.log(val,bizListLen,getObjectAttrNum(val))
+                console.log(val, bizListLen, getObjectAttrNum(val))
                 return getObjectAttrNum(val) === bizListLen
               },
               virtual: (val, row) => {
@@ -622,7 +620,10 @@ export default {
         })
 
         const createOrderResult = await createOrder(params, { onlyData: true }).catch(e => { throw Error(e.msg || '下单失败') })
-
+        // 订单的分销信息，在成功下单后就清除
+        if (Storage.get('owner_id')) {
+          Storage.remove('owner_id')
+        }
         // 如果order_totalPrice <= 0  直接跳转 订单列表页
         if (createOrderResult.Order_Status !== 1) {
           // 直接跳转订单列表页
