@@ -199,6 +199,21 @@
 			}
         }
     ],
+	"subPackages":[{
+			"root": "pagesA",
+			"name": "onther",
+			"pages":[{
+                    "path" : "user/user",
+                    "style" : {}
+                }
+            ]
+	}],
+	"preloadRule": {
+		"pages/index": {
+			"network": "all",
+			"packages": ["onther"]
+		}
+	},
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarBackgroundColor": "#FFF",
