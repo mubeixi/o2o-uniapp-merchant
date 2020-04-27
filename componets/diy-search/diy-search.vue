@@ -89,7 +89,7 @@ export default {
   methods: {
     toSearch () {
       // let path = '/pages/classify/search'
-      const path = '/pages/classify/search?keyword=' + this.placeholderText
+      const path = '/pages/search/index?keyword=' + this.placeholderText
       linkTo({
         link: path,
         linkType: 'default'
