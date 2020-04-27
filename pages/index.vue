@@ -517,6 +517,8 @@ export default {
 
         this.loadLiveGoodsList(0) // 加载第一个分类的商品
 
+        this.loadMerchantList()
+
         // this.$toast('加载成功','none')
       } catch (e) {
         Exception.handle(e)

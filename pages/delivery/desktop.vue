@@ -106,6 +106,7 @@ import {
   getProductList
 } from '@/api/product'
 import LayoutLayer from '@/componets/layout-layer/layout-layer'
+import { modal } from '@/common/fun'
 
 export default {
   name: 'DeliveryDesktop',
@@ -116,6 +117,7 @@ export default {
   },
   data () {
     return {
+      bid:null,
       product: {},
       cateActiveIdx: 0,
       showList: [],
@@ -236,6 +238,14 @@ export default {
     //     this.showList = []
     //   }
     // }
+  },
+  onLoad (options) {
+    if (!options.bid) {
+      modal('店铺id缺失')
+      return
+    }
+    this.bid = options.bid
+    //this._init_func()
   },
   created () {
     this.changeTab(0)
