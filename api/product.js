@@ -9,6 +9,12 @@ export const getProductList = (param, options) => fetch({
   options
 })
 
+export const getFlashsaleList = (param, options) => fetch({
+  act: 'get_flashsale',
+  param,
+  options
+})
+
 // 获取产品分类
 export const getProductCategory = (param, options) => fetch({
   act: 'pro_cate',
