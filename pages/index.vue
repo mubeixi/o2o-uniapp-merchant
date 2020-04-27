@@ -146,13 +146,13 @@
                   v-for="(nav,idx) in liveNav"
                   :key="idx"
                   :class="{active:liveNavIndex === idx}"
-              >{{nav.title}}
+              >{{nav.Category_Name}}
               </li>
             </ul>
           </div>
           <div class="block-content">
             <div class="live-list">
-              <block v-for="(item,idx) in goodsList" :key="idx">
+              <block v-for="(item,idx) in liveGoodsList" :key="idx">
                 <div class="live-item" v-if="idx<3"  @click="$toGoodsDetail(item.Products_ID)">
 
                   <div class="left">
@@ -214,8 +214,8 @@
                   style="width: 150rpx;box-sizing: border-box;"
                   class="grid-item p-t-10 p-b-10"
                   @click="go(item)"
-                  v-for="(item,idx) in first.child"
-                  :key="idx"
+                  v-for="(item,idx2) in first.child"
+                  :key="idx2"
                 >
                   <image style="vertical-align: top" class="icon-img b-radius-aircle w44 h44" mode="heightFix" :src="item.Category_Img"></image>
                   <div class="title m-t-9 h14 fz-14 c3 text-nowrap" style="line-height: 14px">{{item.Category_Name}}</div>
@@ -223,8 +223,8 @@
               </div>
               <div class="hr h10"></div>
 
-              <div class="p-t-20 p-b-20 bg-white">
-                <layout-ad code="indexTop"></layout-ad>
+              <div class="bg-white">
+                <layout-ad :lazy-load="true" :ready="quickFirstCateIdx===idx1" paddingStr="20px 0 20px 0" code="hotcity" :cate-id="first.Category_ID" position="city" ></layout-ad>
               </div>
 
               <div class="page-section-title">
@@ -235,12 +235,12 @@
 
               <div class="fun-goods-list bg-white b-radius-5 m-t-10" style="width: 710rpx;margin-left: 20rpx;" >
                 <div class="fun-goods-col" style="padding: 0 15rpx 0 30rpx">
-                  <block v-for="(goods,idx) in goodsList" :key="idx">
+                  <block v-for="(goods,idx) in quickGoodsList" :key="idx">
                     <goods-item v-if="idx%2===0"  :marketPrice="true" coverRadius="8rpx" :vo="goods" mode="top-bottom"></goods-item>
                   </block>
                 </div>
                 <div class="fun-goods-col" style="padding: 0 30rpx 0 15rpx">
-                  <block v-for="(goods,idx) in goodsList" :key="idx">
+                  <block v-for="(goods,idx) in quickGoodsList" :key="idx">
                     <goods-item v-if="idx%2===1"  :marketPrice="true" coverRadius="8rpx" :vo="goods" mode="top-bottom"></goods-item>
                   </block>
                 </div>
@@ -257,15 +257,15 @@
       <scroll-view class="tab-page-wrap" scroll-y v-show="headTabIndex===2">
 
         <div class="section scroll-box first-cate-list  bg-white" :style="{top:diyHeadHeight+'px'}" @touchmove.stop.prevent="$noop">
-          <li class="scroll-item fz-15 c3" @click="changeQuickCateNav(idx)" v-for="(cate,idx) in firstCateList" :key="idx">
+          <li class="scroll-item fz-15 c3" @click="changeStoreCateNav(idx)" v-for="(cate,idx) in firstCateList" :key="idx">
             {{cate.Category_Name}}
-            <span class="underline" v-show="quickFirstCateIdx === idx"></span>
+            <span class="underline" v-show="storeFirstCateIdx === idx"></span>
           </li>
         </div>
 
         <swiper
-          :current="quickFirstCateIdx"
-          @change="quickCateIndexChange"
+          :current="storeFirstCateIdx"
+          @change="storeCateIndexChange"
           :style="{top:diyHeadHeight+firstCateHeight+'px',height:(cateViewHeight+'px')}"
           class="quick-cate-swiper"
         >
@@ -286,8 +286,8 @@
                 </div>
               </div>
               <div class="hr h10"></div>
-              <div class="p-t-20 p-b-20 bg-white">
-                <layout-ad code="indexTop"></layout-ad>
+              <div class="bg-white">
+                <layout-ad :lazy-load="true" :ready="storeFirstCateIdx===idx1" paddingStr="20px 0 20px 0" code="hotcity" :cate-id="first.Category_ID" position="hot" ></layout-ad>
               </div>
 
               <div style="background: #f8f8f8" class="p-b-15 p-t-15">
@@ -342,7 +342,7 @@
 <script>
 import BaseMixin from '@/mixins/BaseMixin'
 import {
-  getProductCategory, getProductList
+  getProductCategory, getProductList, getFlashsaleList
 } from '@/api/product'
 import {
   getSkinConfig
@@ -422,18 +422,49 @@ export default {
       tagIndex: 0,
       firstCateList: [], // 一级菜单
       quickFirstCateIdx: 0, // 同城闪送
+      quickGoodsList: [], // 钜惠推荐商品
       storeFirstCateIdx: 0, // 好店
+      merchantList: [], // 人气商家
       liveNavIndex: 0,
       headTabIndex: 0,
       liveNav: [],
-      liveList: [],
+      liveGoodsList: [],
+      killList: [],
       goodsList: [],
-      slide: [],
-      navs: [],
       templateList: [],
-      templateData: [],
-      merchantList: []
+      templateData: []
 
+    }
+  },
+  watch: {
+    headTabIndex: {
+      handler (idx, oldIdx) {
+        if (idx !== oldIdx) {
+          if (idx === 1) {
+            if (this.quickGoodsList.length < 1) this.loadQuickGoodsList(0)
+          }
+          if (idx === 2) {
+
+          }
+        }
+      }
+    },
+    quickFirstCateIdx: {
+      handler (idx, oldIdx) {
+        if (idx !== oldIdx) {
+          if (idx === 1) {
+            this.loadQuickGoodsList(idx)
+          }
+          if (idx === 2) {
+
+          }
+        }
+      }
+    },
+    liveNavIndex: {
+      handler (idx, oldIdx) {
+        if (idx !== oldIdx) this.loadLiveGoodsList(idx)
+      }
     }
   },
   onLoad () {
@@ -471,26 +502,70 @@ export default {
     async _init_func () {
       showLoading('初始化数据')
       try {
-        this.liveNav = await Mock.getDataByRequest('liveNav', 100)
+        const handleRT = await this.get_tmpl_data()
+        if (handleRT !== true) throw handleRT // hanldeRT不是true就是一个Error实例，直接抛出
 
-        this.liveList = await Mock.getDataByRequest('liveList', 100)
-
-        this.goodsList = await getProductList({}, { onlyData: true }).catch(err => {
-          throw Error(err.msg || '初始化商品失败')
+        this.killList = await getFlashsaleList({}, { onlyData: true }).catch(err => {
+          throw Error(err.msg || '初始化秒杀商品失败')
         })
-
-        this.slide = await Mock.getDataByRequest('slide', 100)
-
-        this.navs = await Mock.getDataByRequest('navs', 100)
 
         this.firstCateList = await getProductCategory({}, { onlyData: true }).catch(() => {
           throw Error('获取商品分类失败')
         })
 
-        const mixinData = await this.get_tmpl_data()
-        if (mixinData === false) return
-        const templateData = mixinData.plugin
-        this.system = mixinData.system
+        this.liveNav = this.firstCateList.concat([]) // 也是一级分类
+
+        this.loadLiveGoodsList(0) // 加载第一个分类的商品
+
+        // this.$toast('加载成功','none')
+      } catch (e) {
+        Exception.handle(e)
+      } finally {
+        hideLoading()
+      }
+    },
+    async loadMerchantList (idx) {
+      // const cateId = this.liveNav[idx].Category_ID
+
+      // 商家无法利用一级分类获取到
+      this.merchantList = await getBizInfo({
+        get_prod: 3,
+        with_prod: 1,
+        get_active: 1
+      }, { onlyData: true }).catch((e) => {
+        throw Error('获取人气商家列表失败')
+      })
+    },
+    /**
+     * 根据条件获取商品，并且赋值给指定的对象
+     * @param postData
+     * @param obj
+     * @returns {Promise<void>}
+     */
+    async loadGoodsList (postData, obj) {
+      if (!obj)obj = []
+      obj = await getProductList({ ...postData }, { onlyData: true }).catch(e => { throw Error(e.msg || '获取商品列表失败') })
+      // console.log(obj)
+      return obj.concat([])
+    },
+    async loadQuickGoodsList (idx) {
+      const cateId = this.firstCateList[idx].Category_ID
+      if (!cateId) return
+      // 需要刷新页面
+      this.quickGoodsList = await this.loadGoodsList({ Cate_ID: cateId })
+    },
+    async loadLiveGoodsList (idx) {
+      const cateId = this.liveNav[idx].Category_ID
+
+      this.liveGoodsList = await getProductList({ Cate_ID: cateId, pageSize: 3 }, { onlyData: true }).catch(e => { throw Error(e.msg || '刷新直播商品列表失败') })
+    },
+    async get_tmpl_data () {
+      try {
+        const { Home_Json: resultData } = await getSkinConfig({}, { onlyData: true }).catch(e => { throw Error(e.msg || '获取首页模板失败') })
+
+        const mixinData = typeof resultData === 'string' ? JSON.parse(resultData) : resultData
+
+        const { plugin: templateData, system } = mixinData
 
         // 存储页面数据
         this.templateData = [] // 页面数据的二维数组。
@@ -523,36 +598,10 @@ export default {
             })
           }
         }
-
-        this.merchantList = await getBizInfo({
-          get_prod: 3,
-          with_prod: 1,
-          get_active: 1
-        }, { onlyData: true }).catch((e) => {
-          throw Error('获取人气商家列表失败')
-        })
-
-        // this.$toast('加载成功','none')
+        return true
       } catch (e) {
-        Exception.handle(e)
-      } finally {
-        hideLoading()
+        return e
       }
-    },
-    get_tmpl_data () {
-      let rt = {}
-      return new Promise((resolve, reject) => {
-        getSkinConfig().then(res => {
-          if (res.data.Home_Json) {
-            rt = JSON.parse(res.data.Home_Json)
-            resolve(rt)
-          } else {
-            reject(false)
-          }
-        }).catch(e => {
-          reject(false)
-        })
-      })
     },
     indexChangeEvent (event) {
       const { current } = event.detail
