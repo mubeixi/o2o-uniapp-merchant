@@ -206,10 +206,10 @@ export default {
 
         const postData = {
           login_method: 'wx_lp',
-          lp_code,
+          code:lp_code,
           lp_raw_data,
-          account: this.phone,
-          code: this.captcha
+          mobile: this.phone,
+          captcha: this.captcha
         }
         const rule = {
           login_method: {
@@ -427,7 +427,7 @@ export default {
         })
         const { errorCode, data } = await userLogin({
           login_method: 'wx_lp',
-          lp_code,
+          code:lp_code,
           lp_raw_data
         }, { tip: '登录中' }).catch((err) => {
           throw Error(err.msg || '第三方登录请求错误')
