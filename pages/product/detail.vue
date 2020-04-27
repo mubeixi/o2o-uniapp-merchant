@@ -762,7 +762,8 @@
 
 <script>
 import BaseMixin from '@/mixins/BaseMixin'
-import { getProductDetail, getActiveInfo, getBizInfo, getStoreList, getProductSharePic } from '@/api/product'
+import { getProductDetail, getActiveInfo, getStoreList, getProductSharePic } from '@/api/product'
+import { getBizInfo } from '@/api/store'
 import { getCommitList } from '@/api/common'
 import { commentReply } from '@/api/customer'
 import ProductSku from '@/componets/product-sku/product-sku'
@@ -803,7 +804,7 @@ export default {
         Products_PriceX: '0',
         Products_PriceY: '0',
         Products_JSON: {},
-        Products_Promise: [],
+        Products_Promise: []
       }, // 商品数据
       active: [], // 满减活动列表
       store: [{ biz_go: '' }], // 门店
@@ -915,7 +916,7 @@ export default {
               id: _self.wxMiniOriginId,
               path: '/' + shareObj.path,
               type: 0,
-              webUrl: 'http://uniapp.dcloud.io',
+              webUrl: 'http://uniapp.dcloud.io'
             },
             success: ret => {
             }
@@ -997,7 +998,7 @@ export default {
           count: sku.count, // 选择属性的库存
           qty: sku.qty, // 购买数量
           cart_key: 'DirectBuy', // 购物车类型   CartList（加入购物车）、DirectBuy（立即购买）、PTCartList（不能加入购物车）
-          productDetail_price: sku.price,
+          productDetail_price: sku.price
         }
         await updateCart(postData).catch(e => {
           throw Error(e.msg || '下单失败')
@@ -1012,12 +1013,12 @@ export default {
     async getProductDetail () {
       try {
         const data = {
-          prod_id: this.prod_id,
+          prod_id: this.prod_id
         }
         this.detailData = await getProductDetail(data, {
           onlyData: true,
           tip: '加载中',
-          mask: true,
+          mask: true
         }).catch(e => {
           throw Error(e.msg || '获取商品详情失败')
         })
@@ -1026,7 +1027,7 @@ export default {
         this.store = await getBizInfo({ biz_id: this.detailData.biz_id }, {
           onlyData: true,
           tip: '加载中',
-          mask: true,
+          mask: true
         }).catch(e => {
           throw Error(e.msg || '获取店铺信息失败')
         })
@@ -1037,7 +1038,7 @@ export default {
         }, {
           onlyData: true,
           tip: '加载中',
-          mask: true,
+          mask: true
         }).catch((e) => {
           throw Error('获取评论数据失败')
         })
@@ -1045,14 +1046,14 @@ export default {
         this.storeList = await getStoreList({ biz_id: this.detailData.biz_id }, {
           onlyData: true,
           tip: '加载中',
-          mask: true,
+          mask: true
         }).catch(e => {
           throw Error(e.msg || '获取店铺列表失败')
         })
 
         const res = await getActiveInfo({
           biz_id: this.detailData.biz_id,
-          type: 'manjian',
+          type: 'manjian'
         }, { onlyData: true }).catch(e => {
         })
         if (res != null && res.active_info) {
@@ -1075,29 +1076,29 @@ export default {
     changeTabIndex (event) {
       const { current, source } = event.detail
       this.tabIndex = current
-    },
+    }
   },
   computed: {
     initData () {
       return this.$store.state.system.initData
-    },
+    }
   },
   onLoad (options) {
     this.prod_id = options.prod_id
     this.getProductDetail()
   },
   // #ifdef MP-WEIXIN || MP-ALIPAY || MP-BAIDU || MP-TOUTIAO
-  //自定义小程序分享
+  // 自定义小程序分享
   onShareAppMessage () {
-    let path = '/pages/product/detail?prod_id=' + this.prod_id
-    let shareObj = {
+    const path = '/pages/product/detail?prod_id=' + this.prod_id
+    const shareObj = {
       title: this.detailData.Products_Name,
       desc: this.detailData.Products_BriefDescription,
       imageUrl: this.detailData.ImgPath,
-      path: buildSharePath(path),
+      path: buildSharePath(path)
     }
     return shareObj
-  },
+  }
   // #endif
 }
 </script>

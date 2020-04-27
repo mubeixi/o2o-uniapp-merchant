@@ -43,12 +43,7 @@ export const getActiveInfo = (param, options) => fetch({
   options
 })
 
-// 获取商家详情和入驻信息
-export const getBizInfo = (param, options) => fetch({
-  act: 'getBizInfo',
-  param,
-  options
-})
+
 
 // 获取商家列表
 export const getStoreList = (param, options) => fetch({

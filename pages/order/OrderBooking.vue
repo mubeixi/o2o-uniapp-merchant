@@ -3,7 +3,8 @@
     <fun-err-msg :errs="formCheckResult"></fun-err-msg>
     <block v-if="orderInfo.is_virtual===0">
       <div @click="goAddressList" class="address bg-white">
-        <image :src="'/static/client/location.png'|domain" alt="" class="loc_icon"></image>
+
+        <layout-icon type="iconicon-address"  class="loc_icon" size="24" color="#F53636"></layout-icon>
         <div class="add_msg" v-if="addressinfo.Address_Name">
           <div class="name">收货人：{{addressinfo.Address_Name}} <span>{{addressinfo.Address_Mobile | formatphone}}</span>
           </div>
@@ -14,7 +15,7 @@
         <div class="add_msg" v-else>
           <div>暂无收货地址，去添加</div>
         </div>
-        <image :src="'/static/client/right.png'|domain" alt="" class="right"></image>
+        <layout-icon type="iconicon-arrow-right" class="right"></layout-icon>
       </div>
 
       <div class="remind-wrap" v-if="!addressinfo.Address_Name">
@@ -52,14 +53,14 @@
       </div>
     </div>
 
-    <div class="container" v-if="CartList">
+    <div class="container" v-if="CartListReady && bizListReady">
 
       <!--这行代码特别关键 bind click="activeBizId=biz_id"-->
-      <div :key="biz_id" class="store-item bg-white" v-for="(bizData,biz_id) in CartList" @click="setActiveBizId(biz_id)">
+      <div  class="store-item bg-white" v-for="(bizData,biz_id) in CartList" :key="biz_id" @click="setActiveBizId(biz_id)">
         <div class="biz-info bor-b">
           <div style="display: flex;align-items: center;">
-            <image :src="('https://newo2o.bafangka.com/static/member/images/login/loginWeixin.png'||biz_list[biz_id].biz_logo)|domain" class="biz_logo" />
-            <span class="biz_name">{{biz_list[biz_id].biz_name}}</span>
+            <image :src="bizList[biz_id].biz_logo" class="biz_logo" />
+            <span class="biz_name">{{bizList[biz_id].biz_name}}</span>
           </div>
         </div>
         <div class="biz-goods-list">
@@ -83,7 +84,7 @@
           </block>
         </div>
         <div class="other">
-          <div class="bd"  v-if="biz_list[biz_id].is_virtual === 0">
+          <div class="bd"  v-if="bizList[biz_id].is_virtual === 0">
             <div @click="changeShip(biz_id)" class="o_title">
               <span>运费选择</span>
               <span style="text-align:right; color: #888;" class="flex flex-vertical-c">
@@ -98,11 +99,11 @@
             </div>
           </div>
 
-          <div class="bd" v-if="biz_list[biz_id].coupon_list.length > 0">
+          <div class="bd" v-if="bizList[biz_id].coupon_list.length > 0">
             <div @click="changeCoupon" class="o_title">
               <span>优惠券选择</span>
               <span style="text-align: right; color: #888;display: flex;align-items: center;">
-              <span>{{biz_list[biz_id].coupon_list.length>0?(coupon_desc?coupon_desc:'您有优惠券使用'): '暂无可用优惠券'}}</span>
+              <span>{{bizList[biz_id].coupon_list.length>0?(coupon_desc?coupon_desc:'您有优惠券使用'): '暂无可用优惠券'}}</span>
               <layout-icon type="iconicon-arrow-right" class="right" color="#999"></layout-icon>
             </span>
             </div>
@@ -289,8 +290,10 @@ export default {
       addressinfo: {}, // 收货地址信息
 
       activeBizId: null, // 活跃的商户id,很多操作之前都需要先改变这个
-      CartList: false,
-      biz_list: false,
+      CartList: {},
+      bizList: {},
+      CartListReady: false,
+      bizListReady: false,
 
       orderInfo: {
         is_use_money: 0,
@@ -358,8 +361,8 @@ export default {
     orderFyepay () {
       try {
         let num = 0
-        for (const i in this.biz_list) {
-          num += this.biz_list[i].Order_Fyepay
+        for (const i in this.bizList) {
+          num += this.bizList[i].Order_Fyepay
         }
         return num
       } catch (e) {
@@ -369,7 +372,7 @@ export default {
     // 根据当前活跃商家id，展示对应的优惠券
     popupCoupons () {
       try {
-        return this.biz_list[this.activeBizId].coupon_list
+        return this.bizList[this.activeBizId].coupon_list
       } catch (e) {
         return {}
       }
@@ -377,7 +380,7 @@ export default {
     // 根据当前活跃商家id，展示对应的物流方式
     popupExpressCompanys () {
       try {
-        return this.biz_list[this.activeBizId].shipping_company
+        return this.bizList[this.activeBizId].shipping_company
       } catch (e) {
         return {}
       }
@@ -407,12 +410,7 @@ export default {
     },
     async _init_func () {
       if (!this.$checkIsLogin(1, 1)) return
-      // if (JSON.stringify(this.userInfo) !== '{}') {
-      //   getUserInfo().then(res => {
-      //     this.setUserInfo(res.data)
-      //   }).catch(e => {
-      //   })
-      // }
+
       const addressList = await getAddressList({}, { onlyData: true }).catch(() => {})
       if (Array.isArray(addressList) && addressList.length > 0) {
         this.addressinfo = addressList[0]
@@ -546,7 +544,7 @@ export default {
     async submitFn () {
       try {
         showLoading()
-        const bizListLen = getObjectAttrNum(this.biz_list) // 获得当前订单中有多少个商家，用来比较一些必填项的数量是否正确
+        const bizListLen = getObjectAttrNum(this.bizList) // 获得当前订单中有多少个商家，用来比较一些必填项的数量是否正确
 
         const rules = {
           shipping_id: {
@@ -781,8 +779,13 @@ export default {
 
       // 初始化的时候只有这个必传（也就是说默认的时候不算运费，毕竟运费可以通过选择运费后实时计算)
       const params = isInit ? { cart_key: this.postData.cart_key } : this.postData
+
+      // 来自购物车，需要加上这个
+      if (params.cart_key === 'CartList') {
+        params.cart_buy = JSON.stringify(this.postData.cart_buy)
+      }
       createOrderCheck(params).then(res => {
-        const { CartList, biz_list, ...orderInfo } = res.data
+        const { CartList, biz_list: bizList, ...orderInfo } = res.data
 
         console.log(orderInfo)
 
@@ -810,8 +813,11 @@ export default {
           this.$set(this.postData.order_remark, biz_id, '')// 订单备注
         }
 
-        this.$set(this, 'biz_list', biz_list)
+        this.$set(this, 'bizList', bizList)
         this.$set(this, 'CartList', CartList)
+
+        this.CartListReady = true
+        this.bizListReady = true
 
         this.orderInfo = Object.assign(oldOrderInfo, orderInfo)
         if (this.orderInfo.coupon_list.length > 0) {
@@ -857,6 +863,18 @@ export default {
     }
     if (options.checkfrom) {
       this.checkfrom = options.checkfrom
+    }
+
+    if (options.cart_key === 'CartList') {
+      const cart_buy = this.$store.state.cart_buy
+      for (var i in cart_buy) {
+        for (var j in cart_buy[i]) {
+          if (Array.isArray(cart_buy[i][j]) && cart_buy[i][j].length === 0) {
+            delete cart_buy[i][j]
+          }
+        }
+      }
+      this.postData.cart_buy = cart_buy
     }
 
     // 页面直接传值很方便，为什么这么难受
@@ -952,7 +970,9 @@ export default {
     padding-bottom: 60px;
 
     .store-item {
-      margin-bottom: 15px;
+      margin:0 20rpx 30rpx;
+      border-radius: 8rpx;
+      overflow: hidden;
     }
   }
 
