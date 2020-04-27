@@ -69,3 +69,8 @@ export const addFavourite = (param, options) => fetch({ act: 'add_favourite_prod
 // 取消收藏
 export const cancelFavourite = (param, options) => fetch({ act: 'cancel_favourite_prod', param, options })
 
+// 创建权益卡订单
+export const createRightsCardOrder = (param, options) => fetch({ act: 'createRightsCardOrder', param, options })
+
+// 支付权益卡订单
+export const rightsCardPay = (param, options) => fetch({ act: 'rightsCardPay', param, options })
