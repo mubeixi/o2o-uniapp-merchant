@@ -2,7 +2,7 @@ import {
   toast, linkToEasy, error, modal, backFunc, cellPhone, openLocation
 } from '@/common/fun'
 import T from '../common/langue/i18n'
-import { checkIsLogin } from '@/common/helper'
+import { buildSharePath, checkIsLogin } from '@/common/helper'
 // #ifdef H5
 import { WX_JSSDK_INIT } from '@/common/env'
 // #endif
@@ -86,5 +86,11 @@ export default {
     const locale = T.locale
     const locales = T.locales
     this.TT = locales[locale]
-  }
+  },
+  // #ifdef MP-WEIXIN || MP-ALIPAY || MP-BAIDU || MP-TOUTIAO
+  //自定义小程序分享
+  onShareAppMessage () {
+  
+  },
+  // #endif
 }

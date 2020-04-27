@@ -37,7 +37,8 @@
 
 <script>
 import BaseMixin from '@/mixins/BaseMixin.js'
-import { bizFlashsaleList, getBizInfo } from '@/api/product'
+import { bizFlashsaleList } from '@/api/product'
+import {getBizInfo} from '@/api/store'
 import { getCountdownFunc } from '@/common/helper'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 export default {

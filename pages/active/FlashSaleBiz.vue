@@ -41,7 +41,8 @@
 
 <script>
 import BaseMixin from '@/mixins/BaseMixin.js'
-import { getBizInfo, bizSpikeList } from '@/api/product'
+import { bizSpikeList } from '@/api/product'
+import {getBizInfo} from '@/api/store'
 import { getCountdownFunc } from '@/common/helper'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 let groupStamInstance = null
