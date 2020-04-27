@@ -118,7 +118,7 @@ page {
   height: constant(safe-area-inset-bottom);
   height: env(safe-area-inset-bottom);
   width: 100%;
-  
+
   &.fixed {
     position: fixed;
     bottom: 0;
@@ -188,47 +188,50 @@ page {
 /* flex布局 */
 .flex {
   display: flex;
-  
+
   .flex1 {
     flex: 1;
   }
-  
+
   &-row {
     flex-direction: row;
   }
-  
+
   &-column {
     flex-direction: column;
   }
-  
+
   //水平
   &-vertical-c {
     align-items: center;
   }
-  
+
   &-vertical-b {
     align-items: flex-end;
   }
-  
+
   &-vertical-t {
     align-items: flex-end;
   }
-  
+
   //内容分布
   &-justify-c {
     justify-content: center;
   }
-  
+
   &-justify-l {
     justify-content: flex-start;
   }
-  
+
   &-justify-r {
     justify-content: flex-end;
   }
-  
+
   &-justify-between {
     justify-content: space-between;
+  }
+  &-wrap{
+    flex-wrap: wrap;
   }
 }
 
@@ -237,32 +240,32 @@ page {
   padding-left: 20rpx;
   box-sizing: border-box;
   margin-bottom: 30rpx;
-  
+
   &:last-child {
     margin-bottom: 0;
   }
-  
+
   .cell-item {
     display: flex;
     align-items: center;
     border-bottom: 1px solid #eee;
     padding: 20rpx 0;
-    
+
     &:last-child {
       border-bottom: none;
     }
-    
+
     .label {
-      
+
       color: #999;
     }
-    
+
     .content {
       flex: 1;
       text-align: right;
       color: #444;
     }
-    
+
     .right {
       margin: 0 10px;
     }
@@ -276,7 +279,7 @@ page {
         &:not(:empty) {
           width: 180rpx;
         }
-        
+
         color: #333;
       }
     }
@@ -284,49 +287,49 @@ page {
 }
 
 .scroll {
-  
+
   &-box {
     background: white;
     overflow-y: hidden;
     overflow-x: scroll;
-    
+
     &::-webkit-scrollbar {
       display: none;
     }
-    
+
   }
-  
+
   &-item {
     display: inline-block;
-    
+
     &.active {
       color: $fun-green-color;
       border-bottom: 2px solid $fun-green-color;
     }
   }
-  
+
 }
 
 .grid {
-  
+
   &-box {
     display: flex;
     flex-wrap: wrap;
   }
-  
+
   &-item {
     text-align: center;
-    
+
     .icon-img {
-    
+
     }
-    
+
     .icon {
-    
+
     }
-    
+
     .title {
-    
+
     }
   }
 }
@@ -373,25 +376,25 @@ page {
   &-underline {
     text-decoration: underline;
   }
-  
+
   &-through {
     text-decoration: line-through;
   }
-  
+
   &-nowrap {
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
   }
-  
+
   &-center {
     text-align: center;
   }
-  
+
   &-left {
     text-align: left;
   }
-  
+
   &-right {
     text-align: right;
   }
@@ -401,22 +404,22 @@ page {
 .block {
   &-title {
     display: flex;
-    
+
     &-text {
       flex: 1;
       font-size: 18px;
       color: #333;
     }
-    
+
     &-more {
       display: flex;
-      
+
     }
   }
-  
+
   &-nav {
     &-item {
-    
+
     }
   }
 }
@@ -450,21 +453,21 @@ page {
   display: flex;
   align-items: center;
   justify-content: center;
-  
+
   .before, .after {
     width: 23px;
     height: 2px;
     background: $fun-yellow-color;
   }
-  
+
   .before {
-  
+
   }
-  
+
   .after {
-  
+
   }
-  
+
   .text {
     color: #333;
     font-weight: bold;
@@ -481,5 +484,5 @@ page {
   &-col{
     flex: 1;
   }
-  
+
 }

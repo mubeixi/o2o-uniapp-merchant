@@ -210,6 +210,12 @@
 				"navigationBarBackgroundColor": "#3A3731"
 			}
         }
+        ,{
+            "path" : "pages/user/Praise",
+            "style": {
+            	"navigationBarTitleText": "好评"
+            }
+        }
     ],
 	"subPackages":[{
 			"root": "pagesA",
@@ -249,7 +255,7 @@
 				"text": "直播"
 			},
 			{
-				"pagePath": "pages/index",
+				"pagePath": "pages/user/Praise",
 				"iconPath": "/static/tabbar/praise.png",
 				"selectedIconPath": "/static/tabbar/praise.png",
 				"text": "好评"
