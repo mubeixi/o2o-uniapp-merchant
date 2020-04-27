@@ -20,9 +20,9 @@
         <div class="action-item">
           <layout-icon size="26" type="iconicon-timeline" color="#26C78D"></layout-icon>
         </div>
-        <div class="action-item">
+        <button open-type="share" class="action-item share-btn">
           <layout-icon size="26" type="iconicon-share" color="#26C78D"></layout-icon>
-        </div>
+        </button>
         <!--        <image mode="widthFix" class="action-item" src="/static/store/address.png"></image>-->
         <!--        <image mode="widthFix" class="action-item" src="/static/store/phone.png"></image>-->
         <!--        <image mode="widthFix" class="action-item" src="/static/store/favorite.png"></image>-->
@@ -82,7 +82,7 @@
           <div class="feature-list">
             <image @click="$linkTo('/pages/delivery/desktop?bid='+bid)" mode="scaleToFill" class="feature-item" :src="'/static/client/store/send.png'|domain"></image>
             <image mode="scaleToFill" class="feature-item" :src="'/static/client/store/pay.png'|domain"></image>
-            <image mode="scaleToFill" class="feature-item" :src="'/static/client/store/join.png'|domain"></image>
+            <image @click="$linkTo('/pages/product/apply?bid='+bid)" mode="scaleToFill" class="feature-item" :src="'/static/client/store/join.png'|domain"></image>
             <image @click="$linkTo('/pages/user/VipList?bid='+bid)" mode="scaleToFill" class="feature-item" :src="'/static/client/store/member.png'|domain"></image>
           </div>
 
@@ -221,7 +221,6 @@
 
         </div>
       </swiper-item>
-
       <swiper-item class="tab-page">
         <div id="scrollView2" class="tab-page-wrap p-t-15">
           <div class="p-10">地址:<span class="p-l-10">{{storeInfo.biz_address}}</span></div>
@@ -286,13 +285,7 @@
       <swiper-item class="tab-page">
         <div id="scrollView5" class="tab-page-wrap comment-section">
           <!--评论列表-->
-          <div class="block-title">
-            <div class="block-title-text">留言评论</div>
-            <div class="block-title-more flex flex-vertical-center c9 fz-12">
-              <span>查看全部</span>
-              <icon class="iconright" type="iconright" size="14" color="#999"></icon>
-            </div>
-          </div>
+
           <div class="block-content">
             <div class="comment-list">
               <div v-for="(item,idx) in comments" :key="idx"  class="comment-item">
@@ -343,7 +336,7 @@ import { getProductList, getBizProdCateList } from '@/api/product'
 import { getCouponList, getCommitList } from '@/api/common'
 import LayoutComment from '@/componets/layout-comment/layout-comment'
 import LayoutCopyright from '@/componets/layout-copyright/layout-copyright'
-import { getArrColumn } from '@/common/helper'
+import { buildSharePath, getArrColumn } from '@/common/helper'
 import LayoutModal from '@/componets/layout-modal/layout-modal'
 import {
   commentReply,
@@ -573,9 +566,17 @@ export default {
 
         this.photoList = await getCategoryList({ biz_id: this.bid, get_photo: 4 }, { onlyData: 1 }).catch(e => { throw Error(e.msg || '获取相册信息失败') })
 
+        this.activityList = await getBizSpikeList({ biz_id: this.bid }, { onlyData: true }).catch((e) => {
+          throw Error('获取限时抢购数据失败')
+        })
+
+        const { is_favourite = 0 } = await checkFavourite({ biz_id: this.bid }, { onlyData: true }).catch(() => {})
+        this.isFavourite = is_favourite
+
         this.$nextTick().then(() => {
           const query = uni.createSelectorQuery()
           query.select('#scrollView1').boundingClientRect(data => {
+            console.log(data)
             this.scrollHeightS[0] = data.height
             this.headTabIndex === 0 && this.upSwiperHeight()
           })
@@ -597,13 +598,6 @@ export default {
           })
           query.exec()
         })
-
-        this.activityList = await getBizSpikeList({ biz_id: this.bid }, { onlyData: true }).catch((e) => {
-          throw Error('获取限时抢购数据失败')
-        })
-
-        const { is_favourite = 0 } = await checkFavourite({ biz_id: this.bid }, { onlyData: true }).catch(() => {})
-        this.isFavourite = is_favourite
         hideLoading()
       } catch (e) {
         hideLoading()
@@ -629,6 +623,9 @@ export default {
   onShow () {
 
   },
+  mounted () {
+
+  },
   onLoad (options) {
     if (!options.bid) {
       modal('店铺id缺失')
@@ -640,6 +637,19 @@ export default {
   created () {
 
   },
+  // #ifdef MP-WEIXIN || MP-ALIPAY || MP-BAIDU || MP-TOUTIAO
+  // 自定义小程序分享
+  onShareAppMessage () {
+    const path = '/pages/store/index?bid=' + this.bid
+    const shareObj = {
+      title: this.storeInfo.biz_shop_name,
+      desc: this.storeInfo.intro,
+      imageUrl: this.storeInfo.biz_logo,
+      path: buildSharePath(path)
+    }
+    return shareObj
+  },
+  // #endif
   onReady () {
     const query = uni.createSelectorQuery()
     query.select('#stickyTab').boundingClientRect()
@@ -957,6 +967,12 @@ export default {
         /*width: 40rpx;*/
         /*height: auto;*/
         //padding: 0 40rpx;
+        &.share-btn{
+          background: none;
+          &::after{
+            border:none;
+          }
+        }
       }
     }
 
@@ -985,12 +1001,10 @@ export default {
 
   .tab-container {
     background: #fff;
-    position: relative;
-    .tab-page-wrap {
-      position: absolute;
-      width: 750rpx;
-      height: 100%;
 
+    .tab-page-wrap {
+
+      width: 750rpx;
     }
 
   }
