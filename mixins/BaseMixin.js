@@ -1,5 +1,5 @@
 import {
-  toast, linkToEasy, error, modal, backFunc
+  toast, linkToEasy, error, modal, backFunc,cellPhone,openLocation
 } from '@/common/fun'
 import T from '../common/langue/i18n'
 import { checkIsLogin } from '@/common/helper'
@@ -26,6 +26,8 @@ export default {
   computed: {
   },
   methods: {
+    $openLocation:openLocation,
+    $cellPhone:cellPhone,
     $back: backFunc,
     $noop: () => {},
     $toast: toast,

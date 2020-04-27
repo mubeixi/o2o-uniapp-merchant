@@ -4,8 +4,9 @@
       <image :src="'/static/client/vip/vip-bg.png'|domain" class="img-full"></image>
       <swiper class="center" :indicator-dots="false" :autoplay="false" :duration="1000" :current="inds"
               @change="change">
-        <swiper-item class="vipFir" :style="vipData.length==1?'margin-left:42rpx;':''" v-for="(item,index) of vipData"
+        <swiper-item class="vipFir"  v-for="(item,index) of vipData"
                      :key="index">
+					<!-- :style="vipData.length==1?'margin-left:43rpx;':''" -->
           <image :src="'/static/client/vip/vip.png'|domain" class="img-full"></image>
           <div class="vip-title">
             {{item.level_name}}
@@ -87,7 +88,8 @@ export default {
       vipData: [{ basic_rights: '' }],
       inds: 0,
       coupon: [],
-      pro: []
+      pro: [],
+	  biz_id:''
     }
   },
   methods: {
@@ -119,7 +121,7 @@ export default {
     },
     async init () {
       try {
-        const arr = await getUserLevel({ biz_id: 3 }, {
+        const arr = await getUserLevel({ biz_id: this.biz_id }, {
           onlyData: true,
           tip: '加载中'
         }).catch(e => {
@@ -151,6 +153,9 @@ export default {
   },
   onShow () {
     this.init()
+  },
+  onLoad(options) {
+  	this.biz_id=options.bid
   }
 }
 </script>

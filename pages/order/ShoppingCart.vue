@@ -50,7 +50,7 @@
 				</div>
 			</div>
 			<div v-else class="none">
-				<image class="img" src="/static/box.png" />
+				<image class="img" :src="'/static/client/box.png'|domain" />
 				<div><span>购物车空空如也</span><span class="tobuy" @click="gotoBuy">去逛逛</span></div>
 			</div>
 
