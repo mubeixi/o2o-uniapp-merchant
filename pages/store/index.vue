@@ -8,14 +8,14 @@
         <div class="title">{{storeInfo.biz_shop_name}}</div>
       </div>
       <div class="actions">
-        <div class="action-item">
+        <div class="action-item" @click="$openLocation(storeInfo.biz_lat,storeInfo.biz_lon,storeInfo.biz_shop_name,storeInfo.biz_address)">
           <layout-icon size="26" type="iconicon-address" color="#26C78D"></layout-icon>
         </div>
-        <div class="action-item">
+        <div class="action-item" @click.stop="$cellPhone(storeInfo.biz_mobile)">
           <layout-icon size="26" type="iconicon-phone" color="#26C78D"></layout-icon>
         </div>
-        <div class="action-item">
-          <layout-icon size="26" type="iconicon-favorite" color="#26C78D"></layout-icon>
+        <div class="action-item" @click="taggleFavorite">
+          <layout-icon size="26" type="iconicon-favorite" :color="isFavourite?'#26C78D':'#999'"></layout-icon>
         </div>
         <div class="action-item">
           <layout-icon size="26" type="iconicon-timeline" color="#26C78D"></layout-icon>
@@ -253,15 +253,83 @@
       </swiper-item>
       <swiper-item class="tab-page">
         <div id="scrollView4" class="tab-page-wrap">
-          门店
+          <div class="over store-section">
+            <div class="store-list">
+              <div class="flex flex-justify-between">
+                <div class="store-list-top fz-15" style="color: #333333;font-weight: bold">
+                  <span class="block-div"></span>
+                  门店列表
+                </div>
+                <div class="store-list-top">
+                  {{storeList.length}}家
+                </div>
+              </div>
+              <div class="store-list-item" v-for="(st,ind) of storeList" :key="ind">
+                <div class="store-list-title"  @click.stop="goStore(st.biz_id)">
+                  {{st.store_name}}
+                </div>
+                <div class="flex flex-justify-between store-list-address">
+                  <div class="store-list-font" @click="$openLocation(st.store_lat,st.store_lon,st.store_name)">
+                    {{st.area_address}}
+                  </div>
+                  <div class="flex flex-vertical-center">
+                    <layout-icon type="iconicon-address" size="17" color="#26C78D"  @click="$openLocation(st.store_lat,st.store_lon,st.store_name)"></layout-icon>
+                    <span class="store-su"></span>
+                    <layout-icon type="iconicon-phone" size="17" color="#26C78D" @click.stop="$cellPhone(st.store_mobile)"></layout-icon>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </swiper-item>
       <swiper-item class="tab-page">
-        <div id="scrollView5" class="tab-page-wrap">
-          点评
+        <div id="scrollView5" class="tab-page-wrap comment-section">
+          <!--评论列表-->
+          <div class="block-title">
+            <div class="block-title-text">留言评论</div>
+            <div class="block-title-more flex flex-vertical-center c9 fz-12">
+              <span>查看全部</span>
+              <icon class="iconright" type="iconright" size="14" color="#999"></icon>
+            </div>
+          </div>
+          <div class="block-content">
+            <div class="comment-list">
+              <div v-for="(item,idx) in comments" :key="idx"  class="comment-item">
+                <layout-comment :isLast="comments.length-1===idx" :comment="item"  @comment="clickComment"></layout-comment>
+                <div class="comment-send"  v-if="item.child.length>0">
+                  <block  v-for="(com,ind) of item.child" :key="ind">
+                    <block v-for="(co,indx) of com" :key="indx">
+                      <div class="fz-12 c3 comment-send-item" @click.stop="clickCommentSend(item,co.groupid,co.userid)">
+                        <block v-if="co.touserid==item.User_ID">
+                          <span class="color-comment p-r-5">{{co.user_nickname}}:</span> {{co.content}}
+                        </block>
+                        <block v-else>
+                          <span class="color-comment p-r-2">{{co.user_nickname}}</span>回复<span class="color-comment p-r-5">{{co.to_user_nickname}}</span>{{co.content}}
+                        </block>
+                      </div>
+                    </block>
+
+                  </block>
+                </div>
+              </div>
+
+            </div>
+          </div>
         </div>
       </swiper-item>
     </swiper>
+
+    <layout-modal ref="commentModal">
+      <div class="refuseApplyModal">
+        <textarea class="reason" @input="bingReasonInput" :value="commentValue" placeholder-style="color:#999" placeholder="请输入评价" auto-height />
+        <div class="control">
+          <div @click="$closePop('commentModal')" class="action-btn btn-cancel">取消</div>
+          <div @click="sureComment" class="btn-sub action-btn">确定</div>
+        </div>
+
+      </div>
+    </layout-modal>
 
   </div>
 </template>
@@ -269,17 +337,26 @@
 <script>
 import BaseMixin from '@/mixins/BaseMixin'
 import { getBizInfo, getBizSpikeList, getCategoryList, getStoreList } from '@/api/store'
-import { hideLoading, modal, showLoading } from '@/common/fun'
+import { error, hideLoading, modal, showLoading, toast } from '@/common/fun'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import { getProductList, getBizProdCateList } from '@/api/product'
 import { getCouponList, getCommitList } from '@/api/common'
 import LayoutComment from '@/componets/layout-comment/layout-comment'
 import LayoutCopyright from '@/componets/layout-copyright/layout-copyright'
 import { getArrColumn } from '@/common/helper'
+import LayoutModal from '@/componets/layout-modal/layout-modal'
+import {
+  commentReply,
+  checkFavourite,
+  addFavourite,
+  cancelFavourite
+} from '@/api/customer'
+import { Exception } from '@/common/Exception'
 
 export default {
   name: 'StoreIndex',
   components: {
+    LayoutModal,
     LayoutCopyright,
     LayoutComment,
     LayoutIcon
@@ -289,6 +366,7 @@ export default {
   data () {
     return {
       childSwiperHeight: 'auto',
+      isFavourite: false,
       bid: null,
       scrollHeightS: [0, 0, 0, 0],
       storeList: [],
@@ -370,6 +448,49 @@ export default {
     }
   },
   methods: {
+    taggleFavorite () {
+      this.isFavourite = !this.isFavourite
+      const Action = this.isFavourite ? addFavourite : cancelFavourite
+      Action({ biz_id: this.bid }).catch((e) => {
+        Exception.handle(e)
+      })
+    },
+    bingReasonInput (e) {
+      this.commentValue = e.detail.value
+    },
+    sureComment () {
+      if (!this.commentValue) {
+        error('评论内容不能为空')
+        return
+      }
+      const data = {
+        touserid: this.commentItem.User_ID,
+        commit_id: this.commentItem.Item_ID,
+        content: this.commentValue
+      }
+      if (this.commentItem.groupid) {
+        data.groupid = this.commentItem.groupid
+      }
+      commentReply(data).then(res => {
+        toast('评论成功')
+        this.commentValue = ''
+        this.$closePop('commentModal')
+      }).catch(e => {
+        error(e.msg || '评论失败')
+        this.$closePop('commentModal')
+      })
+    },
+    clickComment (item) {
+      this.commentItem = item
+      this.$refs.commentModal.show()
+      this.commentItem.groupid = ''
+    },
+    clickCommentSend (item, goupId, userId) {
+      this.commentItem = item
+      this.commentItem.groupid = goupId
+      this.commentItem.User_ID = userId
+      this.$refs.commentModal.show()
+    },
     toActivity (item) {
 
     },
@@ -481,6 +602,8 @@ export default {
           throw Error('获取限时抢购数据失败')
         })
 
+        const { is_favourite = 0 } = await checkFavourite({ biz_id: this.bid }, { onlyData: true }).catch(() => {})
+        this.isFavourite = is_favourite
         hideLoading()
       } catch (e) {
         hideLoading()
@@ -530,6 +653,193 @@ export default {
 <style lang="scss" scoped>
   .page-wrap {
     background: #f2f2f2;
+  }
+
+  .refuseApplyModal{
+    width: 560rpx;
+    box-sizing: border-box;
+    padding: 15px;
+    font-size: 14px;
+    .reason{
+      font-size: 14px;
+      min-height: 200px;
+      border: 1px solid #E3E3E3;
+      line-height: 1.4;
+      height: auto;
+      width: auto;
+      padding: 10px;
+    }
+    .control{
+      margin-top: 15px;
+      display: flex;
+      justify-content: center;
+      .action-btn{
+        width: 70px;
+        height: 36px;
+        line-height: 36px;
+        font-size: 14px;
+        text-align: center;
+        color: #666;
+        background: #e9e9e9;
+        &.btn-sub{
+          background: #f43131;
+          color: white;
+          margin-left: 10px;
+        }
+      }
+    }
+  }
+  .comment-send{
+    width: 700rpx;
+    box-sizing: border-box;
+    padding: 30rpx 20rpx;
+    background-color: #F6F6F6;
+    border-radius: 6rpx;
+    margin-top: 10px;
+    &-item{
+      width: 600rpx;
+      line-height: 40rpx;
+    }
+  }
+
+  .comment-section{
+
+    padding: 30rpx 25rpx;
+    box-sizing: border-box;
+    background: white;
+
+    .color-comment{
+      color: #476DB9;
+    }
+    .comment-item{
+      border-bottom: 1px solid  #E8E8E8;
+      padding-bottom: 30rpx;
+    }
+
+    .block-title {
+      padding: 20px 0;
+
+      .block-title-text {
+        font-weight: bold;
+      }
+    }
+
+    .comment-list {
+
+    }
+
+    .commtent-add {
+      margin: 50rpx 25rpx;
+      background: #F7F7F7;
+      min-height: 150rpx;
+      padding: 20rpx;
+
+      .textarea {
+        font-size: 14px;
+        line-height: 1.4;
+
+        &::placeholder {
+          color: #999;
+        }
+      }
+    }
+
+  }
+
+  .store-section{
+
+    .store-su {
+      width: 1px;
+      height: 34rpx;
+      background-color: #EBEBEB;
+      margin: 0px 24rpx;
+      display: inline-block;
+    }
+
+    .store-base-info {
+      width: 750rpx;
+      box-sizing: border-box;
+      padding: 52rpx 20rpx 20rpx 30rpx;
+    }
+
+    .store-info-title {
+      width: 540rpx;
+      height: 30rpx;
+      overflow: hidden;
+      line-height: 30rpx;
+      font-size: 30rpx;
+      font-weight: bold;
+      color: rgba(51, 51, 51, 1);
+      line-height: 30rpx;
+      margin-bottom: 24rpx;
+    }
+
+    .store-info-call {
+      height: 28rpx;
+      line-height: 28rpx;
+      display: flex;
+      font-size: 13px;
+      color: #999999;
+    }
+
+    .store-list {
+      width: 710rpx;
+      margin: 0 auto;
+      padding-top: 30rpx;
+      padding-bottom: 10rpx;
+    }
+
+    .store-list-top {
+      height: 32rpx;
+      display: flex;
+      align-items: center;
+      font-size: 13px;
+      color: #999999;
+    }
+
+    .block-div {
+      background-color: #26C78D;
+      width: 8rpx;
+      height: 32rpx;
+      margin-right: 16rpx;
+      display: inline-block;
+    }
+
+    .store-list-item {
+      width: 710rpx;
+      padding: 30rpx 24rpx;
+      box-sizing: border-box;
+      border-bottom: 1px solid #EBEBEB;
+    }
+
+    .store-list-title {
+      width: 600rpx;
+      height: 28px;
+      font-size: 14px;
+      color: rgba(51, 51, 51, 1);
+      line-height: 28px;
+      margin-bottom: 10rpx;
+    }
+
+    .isStickly {
+      border-bottom: 1px solid #eee;
+    }
+
+    .store-list-address {
+      width: 100%;
+      box-sizing: border-box;
+      padding-left: 2rpx;
+      height: 34rpx;
+      line-height: 34rpx;
+      align-items: center;
+    }
+
+    .store-list-font {
+      color: #999999;
+      font-size: 12px;
+      height: 12px;
+      line-height: 12px;
+    }
   }
 
   .coupon-section {
