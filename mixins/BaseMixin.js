@@ -26,6 +26,7 @@ export default {
   computed: {
   },
   methods: {
+    $getDomain: getDomain,
     $openLocation:openLocation,
     $cellPhone:cellPhone,
     $back: backFunc,

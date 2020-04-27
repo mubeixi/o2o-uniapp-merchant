@@ -184,7 +184,7 @@ export default {
       margin-right: 10px;
 
       &:before, &:after {
-        background-image: url("/static/coupon-left.png");
+        background-image: url("/static/diy/coupon-left.png");
         content: "";
         position: absolute;
         top: 0;
@@ -270,7 +270,7 @@ export default {
       background: white;
 
       &:before {
-        background-image: url("/static/coupon-left.png");
+        background-image: url("/static/diy/coupon-left.png");
         content: "";
         position: absolute;
         top: 0;
@@ -315,7 +315,7 @@ export default {
         background-size: 100% 100%;
         background-repeat: no-repeat;
         background-position: left center;
-        background-image: url('/static/coupon-right.png');
+        background-image: url('/static/diy/coupon-right.png');
 
         .go {
           position: absolute;
@@ -349,7 +349,7 @@ export default {
       background: white;
 
       &:before, &:after {
-        background-image: url("/static/coupon-left.png");
+        background-image: url("/static/diy/coupon-left.png");
         content: "";
         position: absolute;
         top: 0;
