@@ -58,6 +58,8 @@ export const userSignin = (param, options) => fetch({ act: 'signin', param, opti
 // 评论回复
 export const commentReply = (param, options) => fetch({ act: 'commentReply', param, options })
 
+export const getRightsCard = (param, options) => fetch({ act: 'getRightsCard', param, options })
+
 // 检测商品或者商家是否收藏
 export const checkFavourite = (param, options) => fetch({ act: 'check_prod_favourite', param, options })
 
@@ -66,3 +68,4 @@ export const addFavourite = (param, options) => fetch({ act: 'add_favourite_prod
 
 // 取消收藏
 export const cancelFavourite = (param, options) => fetch({ act: 'cancel_favourite_prod', param, options })
+

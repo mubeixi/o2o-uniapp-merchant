@@ -383,14 +383,16 @@
     bottom: 0px;
     z-index: 10;
   }
-.back-icon{
-  position: fixed;
-  top: 60rpx;
-  left: 20rpx;
-  //opacity: 0.5;
-  z-index: 9;
-}
-/*分享开始*/
+
+  .back-icon {
+    position: fixed;
+    top: 60rpx;
+    left: 20rpx;
+    //opacity: 0.5;
+    z-index: 9;
+  }
+
+  /*分享开始*/
   .shareinfo {
     background: #fff;
     width: 100%;
@@ -400,28 +402,34 @@
     border-top-left-radius: 10rpx;
     border-top-right-radius: 10rpx;
   }
-  .shareinfo{
+
+  .shareinfo {
     padding-bottom: 0;
     color: #333;
     font-size: 24rpx;
   }
-  .shareinfo>div {
+
+  .shareinfo > div {
     text-align: center;
   }
+
   .s_top {
     display: flex;
     justify-content: center;
     align-items: center;
   }
+
   .s_top .img {
     width: 76rpx;
     height: 76rpx;
     display: block;
     margin: 0 auto 10rpx;
   }
-  .s_top>div:nth-child(1) {
+
+  .s_top > div:nth-child(1) {
     /*margin-right: 120rpx;*/
   }
+
   .s_bottom {
     position: relative;
     bottom: 0;
@@ -433,13 +441,15 @@
     line-height: 60rpx;
     margin-top: 16rpx;
   }
-/*分享结束*/
-  .refuseApplyDialog{
+
+  /*分享结束*/
+  .refuseApplyDialog {
     width: 560rpx;
     box-sizing: border-box;
     padding: 15px;
     font-size: 14px;
-    .reason{
+
+    .reason {
       font-size: 14px;
       min-height: 200px;
       border: 1px solid #E3E3E3;
@@ -448,11 +458,13 @@
       width: auto;
       padding: 10px;
     }
-    .control{
+
+    .control {
       margin-top: 15px;
       display: flex;
       justify-content: center;
-      .action-btn{
+
+      .action-btn {
         width: 70px;
         height: 36px;
         line-height: 36px;
@@ -460,7 +472,8 @@
         text-align: center;
         color: #666;
         background: #e9e9e9;
-        &.btn-sub{
+
+        &.btn-sub {
           background: #f43131;
           color: white;
           margin-left: 10px;
@@ -468,23 +481,27 @@
       }
     }
   }
-  .comment-send{
+
+  .comment-send {
     width: 700rpx;
     box-sizing: border-box;
     padding: 30rpx 20rpx;
     background-color: #F6F6F6;
     border-radius: 6rpx;
     margin-top: 10px;
-    &-item{
+
+    &-item {
       width: 600rpx;
       line-height: 40rpx;
     }
   }
-  .color-comment{
+
+  .color-comment {
     color: #476DB9;
   }
-  .comment-item{
-    border-bottom: 1px solid  #E8E8E8;
+
+  .comment-item {
+    border-bottom: 1px solid #E8E8E8;
     padding-bottom: 30rpx;
   }
 
@@ -492,18 +509,18 @@
 
 <template>
   <div class="page-wrap">
-    <layout-icon type="iconback" size="24" color="#999"  class="back-icon"  @click="$back()"></layout-icon>
+    <layout-icon type="iconback" size="24" color="#999" class="back-icon" @click="$back()"></layout-icon>
     <swiper style="height:750rpx;width: 750rpx;" indicator-dots="true" indicator-active-color="#26C78D"
             indicator-color="#ffffff" autoplay="true" interval="3000" duration="500" circular="true">
       <swiper-item v-for="(item,index) of detailData.Products_JSON.ImgPath" :key="index">
-        <image :src="item" class="full-img" @click="previewImg(index)" />
+        <image :src="item" class="full-img" @click="previewImg(index)"/>
       </swiper-item>
     </swiper>
-<!--    <div class="end-time">-->
-<!--      距结束还有：<span class="end-time-day">1天</span><span class="end-time-block">01</span>：<span-->
-<!--      class="end-time-block">01</span>：<span class="end-time-block">01</span>-->
-<!--    </div>-->
-    <div class="product-price fz-14" >
+    <!--    <div class="end-time">-->
+    <!--      距结束还有：<span class="end-time-day">1天</span><span class="end-time-block">01</span>：<span-->
+    <!--      class="end-time-block">01</span>：<span class="end-time-block">01</span>-->
+    <!--    </div>-->
+    <div class="product-price fz-14">
       <div class="product-price-left">
             <span class="product-price-red">
               <span class="fz-13">¥</span>{{detailData.Products_PriceX}}
@@ -513,7 +530,8 @@
             </span>
       </div>
       <div class="product-price-right" @click="toBooking">
-        <image :src="'/static/client/product/product_share.png'|domain" class="full-img" style="width: 130% !important;"></image>
+        <image :src="'/static/client/product/product_share.png'|domain" class="full-img"
+               style="width: 130% !important;"></image>
         <div class="product-share">
           分享赚
         </div>
@@ -596,7 +614,7 @@
     >
       <swiper-item class="tab-pages">
         <div :style="{height:(systemInfo.windowHeight+'px')}" class="over">
-            <u-parse :content="detailData.Products_Description"></u-parse>
+          <u-parse :content="detailData.Products_Description"></u-parse>
         </div>
       </swiper-item>
       <swiper-item class="tab-pages">
@@ -613,22 +631,24 @@
           </div>
           <div class="block-content">
             <div class="comment-list">
-              <div v-for="(item,idx) in comments" :key="idx"  class="comment-item">
-                <layout-comment :isLast="comments.length-1===idx" :comment="item"  @comment="clickComment"></layout-comment>
-                <div class="comment-send"  v-if="item.child.length>0">
-                   <block  v-for="(com,ind) of item.child" :key="ind">
-                     <block v-for="(co,indx) of com" :key="indx">
-                       <div class="fz-12 c3 comment-send-item" @click.stop="clickCommentSend(item,co.groupid,co.userid)">
-                         <block v-if="co.touserid==item.User_ID">
-                           <span class="color-comment p-r-5">{{co.user_nickname}}:</span> {{co.content}}
-                         </block>
-                         <block v-else>
-                           <span class="color-comment p-r-2">{{co.user_nickname}}</span>回复<span class="color-comment p-r-5">{{co.to_user_nickname}}</span>{{co.content}}
-                         </block>
-                       </div>
-                     </block>
+              <div v-for="(item,idx) in comments" :key="idx" class="comment-item">
+                <layout-comment :isLast="comments.length-1===idx" :comment="item"
+                                @comment="clickComment"></layout-comment>
+                <div class="comment-send" v-if="item.child.length>0">
+                  <block v-for="(com,ind) of item.child" :key="ind">
+                    <block v-for="(co,indx) of com" :key="indx">
+                      <div class="fz-12 c3 comment-send-item" @click.stop="clickCommentSend(item,co.groupid,co.userid)">
+                        <block v-if="co.touserid==item.User_ID">
+                          <span class="color-comment p-r-5">{{co.user_nickname}}:</span> {{co.content}}
+                        </block>
+                        <block v-else>
+                          <span class="color-comment p-r-2">{{co.user_nickname}}</span>回复<span
+                          class="color-comment p-r-5">{{co.to_user_nickname}}</span>{{co.content}}
+                        </block>
+                      </div>
+                    </block>
 
-                   </block>
+                  </block>
                 </div>
               </div>
 
@@ -679,9 +699,11 @@
                   {{st.area_address}}
                 </div>
                 <div class="flex flex-vertical-center">
-                  <layout-icon type="iconicon-address" size="17" color="#26C78D"  @click="$openLocation(st.store_lat,st.store_lon,st.store_name)"></layout-icon>
+                  <layout-icon type="iconicon-address" size="17" color="#26C78D"
+                               @click="$openLocation(st.store_lat,st.store_lon,st.store_name)"></layout-icon>
                   <span class="store-su"></span>
-                  <layout-icon type="iconicon-phone" size="17" color="#26C78D" @click.stop="$cellPhone(st.store_mobile)"></layout-icon>
+                  <layout-icon type="iconicon-phone" size="17" color="#26C78D"
+                               @click.stop="$cellPhone(st.store_mobile)"></layout-icon>
                 </div>
               </div>
             </div>
@@ -691,7 +713,8 @@
     </swiper>
     <product-sku ref="mySku" @sureSku="save" :hasCart="hasCart" @updaCart="updaCart" @buyNow="buyNow"
                  :proList="detailData"></product-sku>
-    <wzw-goods-action class="wzw-goods-action" @goStore="goStore(detailData.biz_id)" @goShare="toBooking"  @myPay="myPay" @allPay="allPay">
+    <wzw-goods-action class="wzw-goods-action" @goStore="goStore(detailData.biz_id)" @goShare="toBooking" @myPay="myPay"
+                      @allPay="allPay">
       <span slot="leftText">单买¥</span>
       <span slot="leftPrice">100.00</span>
       <span slot="rightText">拼团购¥</span>
@@ -699,33 +722,34 @@
     </wzw-goods-action>
 
     <!--    分享 -->
-<!--    <layout-popup  ref="share">-->
-<!--      <div class="shareinfo" >-->
-<!--        <div class="s_top flex">-->
-<!--          <div class="flex1" @click="shareFunc('wx')">-->
-<!--            <image class='img' src="/static/share/share1.png" alt=""></image>-->
-<!--            <div>发送好友</div>-->
-<!--          </div>-->
-<!--          <div class="flex1" @click="shareFunc('wxtimeline')">-->
-<!--            <image class='img' src="/static/share/share3.png" alt=""></image>-->
-<!--            <div>朋友圈</div>-->
-<!--          </div>-->
-<!--          <div class="flex1" @click="shareFunc('wxmini')" >-->
-<!--            <img class='img' src="/static/share/share4.png" alt="">-->
-<!--            <div>微信小程序</div>-->
-<!--          </div>-->
-<!--          <div class="flex1" @click="shareFunc('pic')">-->
-<!--            <image class='img' src="/static/share/share2.png" alt=""></image>-->
-<!--            <div>分享海报</div>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <div class="s_bottom" @click="cancel">取消</div>-->
-<!--      </div>-->
-<!--    </layout-popup>-->
+    <!--    <layout-popup  ref="share">-->
+    <!--      <div class="shareinfo" >-->
+    <!--        <div class="s_top flex">-->
+    <!--          <div class="flex1" @click="shareFunc('wx')">-->
+    <!--            <image class='img' src="/static/share/share1.png" alt=""></image>-->
+    <!--            <div>发送好友</div>-->
+    <!--          </div>-->
+    <!--          <div class="flex1" @click="shareFunc('wxtimeline')">-->
+    <!--            <image class='img' src="/static/share/share3.png" alt=""></image>-->
+    <!--            <div>朋友圈</div>-->
+    <!--          </div>-->
+    <!--          <div class="flex1" @click="shareFunc('wxmini')" >-->
+    <!--            <img class='img' src="/static/share/share4.png" alt="">-->
+    <!--            <div>微信小程序</div>-->
+    <!--          </div>-->
+    <!--          <div class="flex1" @click="shareFunc('pic')">-->
+    <!--            <image class='img' src="/static/share/share2.png" alt=""></image>-->
+    <!--            <div>分享海报</div>-->
+    <!--          </div>-->
+    <!--        </div>-->
+    <!--        <div class="s_bottom" @click="cancel">取消</div>-->
+    <!--      </div>-->
+    <!--    </layout-popup>-->
 
     <layout-modal ref="commentModal">
       <div class="refuseApplyDialog">
-        <textarea class="reason" @input="bingReasonInput" :value="commentValue" placeholder-style="color:#999" placeholder="请输入评价" auto-height />
+        <textarea class="reason" @input="bingReasonInput" :value="commentValue" placeholder-style="color:#999"
+                  placeholder="请输入评论" auto-height/>
         <div class="control">
           <div @click="$closePop('commentModal')" class="action-btn btn-cancel">取消</div>
           <div @click="sureComment" class="btn-sub action-btn">确定</div>
@@ -779,7 +803,7 @@ export default {
         Products_PriceX: '0',
         Products_PriceY: '0',
         Products_JSON: {},
-        Products_Promise: []
+        Products_Promise: [],
       }, // 商品数据
       active: [], // 满减活动列表
       store: [{ biz_go: '' }], // 门店
@@ -891,7 +915,7 @@ export default {
               id: _self.wxMiniOriginId,
               path: '/' + shareObj.path,
               type: 0,
-              webUrl: 'http://uniapp.dcloud.io'
+              webUrl: 'http://uniapp.dcloud.io',
             },
             success: ret => {
             }
@@ -973,9 +997,11 @@ export default {
           count: sku.count, // 选择属性的库存
           qty: sku.qty, // 购买数量
           cart_key: 'DirectBuy', // 购物车类型   CartList（加入购物车）、DirectBuy（立即购买）、PTCartList（不能加入购物车）
-          productDetail_price: sku.price
+          productDetail_price: sku.price,
         }
-        await updateCart(postData).catch(e => { throw Error(e.msg || '下单失败') })
+        await updateCart(postData).catch(e => {
+          throw Error(e.msg || '下单失败')
+        })
         this.$linkTo('/pages/order/OrderBooking?cart_key=DirectBuy')
       } catch (e) {
         this.$modal(e.message)
@@ -986,12 +1012,12 @@ export default {
     async getProductDetail () {
       try {
         const data = {
-          prod_id: this.prod_id
+          prod_id: this.prod_id,
         }
         this.detailData = await getProductDetail(data, {
           onlyData: true,
           tip: '加载中',
-          mask: true
+          mask: true,
         }).catch(e => {
           throw Error(e.msg || '获取商品详情失败')
         })
@@ -1000,7 +1026,7 @@ export default {
         this.store = await getBizInfo({ biz_id: this.detailData.biz_id }, {
           onlyData: true,
           tip: '加载中',
-          mask: true
+          mask: true,
         }).catch(e => {
           throw Error(e.msg || '获取店铺信息失败')
         })
@@ -1011,7 +1037,7 @@ export default {
         }, {
           onlyData: true,
           tip: '加载中',
-          mask: true
+          mask: true,
         }).catch((e) => {
           throw Error('获取评论数据失败')
         })
@@ -1019,14 +1045,14 @@ export default {
         this.storeList = await getStoreList({ biz_id: this.detailData.biz_id }, {
           onlyData: true,
           tip: '加载中',
-          mask: true
+          mask: true,
         }).catch(e => {
           throw Error(e.msg || '获取店铺列表失败')
         })
 
         const res = await getActiveInfo({
           biz_id: this.detailData.biz_id,
-          type: 'manjian'
+          type: 'manjian',
         }, { onlyData: true }).catch(e => {
         })
         if (res != null && res.active_info) {
@@ -1049,24 +1075,29 @@ export default {
     changeTabIndex (event) {
       const { current, source } = event.detail
       this.tabIndex = current
-    }
+    },
   },
   computed: {
     initData () {
       return this.$store.state.system.initData
-    }
+    },
   },
   onLoad (options) {
     this.prod_id = options.prod_id
     this.getProductDetail()
   },
-  onReady () {
-    // const query = uni.createSelectorQuery().in(this)
-    // query.select('#tabs').boundingClientRect(data => {
-    //   console.log(data,"sss")
-    //   this.headTabTop = data.top
-    // }).exec();
-
-  }
+  // #ifdef MP-WEIXIN || MP-ALIPAY || MP-BAIDU || MP-TOUTIAO
+  //自定义小程序分享
+  onShareAppMessage () {
+    let path = '/pages/product/detail?prod_id=' + this.prod_id
+    let shareObj = {
+      title: this.detailData.Products_Name,
+      desc: this.detailData.Products_BriefDescription,
+      imageUrl: this.detailData.ImgPath,
+      path: buildSharePath(path),
+    }
+    return shareObj
+  },
+  // #endif
 }
 </script>
