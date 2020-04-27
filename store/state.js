@@ -1,3 +1,4 @@
 export default {
-  payTempObj:{}
+  payTempObj:{},
+  cart_buy:null
 }

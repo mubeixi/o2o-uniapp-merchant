@@ -11,11 +11,11 @@
         <div class="title color-white" :style="{lineHeight:menuButtonInfo.height+'px'}">外卖</div>
       </div>
     </div>
-    <div class="head" :style="{'background-image': url('/static/client/delivery/desktop_top_bg.jpg'|domain)}">
+    <div class="head" :style="{backgroundImage: 'url('+$getDomain('/static/client/delivery/desktop_top_bg.jpg')+')'}">
       <div :style="{height:menuButtonInfo.top+menuButtonInfo.height+15+'px'}"></div>
       <div class="store-info flex-vertical-c flex flex-justify-c">
-        <image class="store-logo" src="https://newo2o.bafangka.com/static/member/images/login/loginWeixin.png"></image>
-        <span class="store-title fz-16 p-l-8">大漠孤烟直</span>
+        <image class="store-logo" :src="bizInfo.biz_logo"></image>
+        <span class="store-title fz-16 p-l-8">{{bizInfo.biz_shop_name}}</span>
       </div>
     </div>
     <div class="bg-white" style="height: 60rpx;"></div>
@@ -25,15 +25,15 @@
              @click="setCateActuveIdx(idx)">
           <block v-if="idx===0">
             <layout-icon display="inline" type="iconicon-fire" color="#FF0000"></layout-icon>
-            <span class="p-l-4">{{item.name}}</span>
+            <span class="p-l-4">{{item.cate_name}}</span>
           </block>
-          <block v-else>{{item.name}}</block>
+          <block v-else>{{item.cate_name}}</block>
         </div>
 
       </div>
       <scroll-view scroll-y="true" class="list">
         <div class="goods-item" v-for="(goods,idx) in showList" :key="idx" @click="toDetail(goods)">
-          <div class="cover" :style="{backgroundImage:'url('+goods.ImgPath+')'}"></div>
+          <div class="cover" :style="{backgroundImage:'url('+$getDomain(goods.ImgPath)+')'}"></div>
           <div class="info">
             <div class="title">{{goods.Products_Name}}</div>
             <div class="fz-12 c9 p-t-6 p-b-6">销量：{{goods.Products_Sales}}</div>
@@ -41,7 +41,7 @@
               class="price-selling fz-14">{{goods.Products_PriceX}}</span></div>
           </div>
           <div class="action m-r-20" @click.stop="$noop">
-            <div class="btn-open-attr" @click.stop="openAttrLayer(goods)" v-if="goods.skujosn">选择规格</div>
+            <div class="btn-open-attr" @click.stop="openAttrLayer(goods.Products_ID)" v-if="goods.skujosn">选择规格</div>
             <div v-else class="flex flex-vertical-c">
               <block v-if="goods.num>0">
                 <layout-icon @click.stop="goodsNumMinus(goods)" size="24" color="#26C78D"
@@ -56,13 +56,17 @@
       </scroll-view>
     </div>
 
-    <div class="bottom">
+    <div class="goods-bottom-action">
       <div class="cart">
-        <layout-icon class="cart-icon" type="iconicon-cart"></layout-icon>
-        <div class="tag">{{carts.length}}</div>
+        <div class="icon-wrap">
+          <layout-icon class="cart-icon" size="18" color="#fff" type="iconicon-cart"></layout-icon>
+          <div class="tag">{{carts.length}}</div>
+        </div>
       </div>
-      <div class="flex1">配送费4元</div>
-      <div class="buy">￥30元启动</div>
+      <div class="box">
+        <div class="prompt"></div>
+        <div class="buy">￥{{bizInfo.city_express_config.limit_config.start_send_money}}元起送</div>
+      </div>
     </div>
 
     <layout-layer ref="attr" positions="center">
@@ -102,11 +106,15 @@
 import BaseMixin from '@/mixins/BaseMixin'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import {
-  getProductDetail,
+  getBizProdCateList, getProductDetail,
   getProductList
 } from '@/api/product'
 import LayoutLayer from '@/componets/layout-layer/layout-layer'
 import { modal } from '@/common/fun'
+import { Exception } from '@/common/Exception'
+import {
+  getBizInfo
+} from '@/api/store'
 
 export default {
   name: 'DeliveryDesktop',
@@ -117,47 +125,18 @@ export default {
   },
   data () {
     return {
-      bid:null,
+      bid: null,
       product: {},
+      bizInfo: {},
       cateActiveIdx: 0,
       showList: [],
       pageSize: 999,
+      skujosn_new: null,
+      skuvaljosn: null,
       cateList: [
         {
-          name: '热销',
+          cate_name: '热销',
           id: '',
-          finish: false,
-          list: [],
-          totalCount: 0,
-          page: 1
-        },
-        {
-          name: '进店必买',
-          id: 1,
-          finish: false,
-          list: [],
-          totalCount: 0,
-          page: 1
-        },
-        {
-          name: '美味套餐',
-          id: 1,
-          finish: false,
-          list: [],
-          totalCount: 0,
-          page: 1
-        },
-        {
-          name: '盖浇饭',
-          id: 1,
-          finish: false,
-          list: [],
-          totalCount: 0,
-          page: 1
-        },
-        {
-          name: '麻辣香锅',
-          id: 1,
           finish: false,
           list: [],
           totalCount: 0,
@@ -168,7 +147,7 @@ export default {
   },
   computed: {
     carts () {
-      return [1, 2, 3, 4]
+      return [1, 2, 3, 4, 5, 6, 7]
     }
   },
   watch: {
@@ -195,22 +174,62 @@ export default {
     confirmAdd () {
       this.$closePop('attr')
     },
-    openAttrLayer (goodsInfo) {
-      console.log(goodsInfo)
+    async openAttrLayer (prod_id) {
+      const goodsInfo = await getProductDetail({ prod_id }, {
+        onlyData: true,
+        tip: 'loading',
+        mask: true
+      }).catch(e => {
+        throw Error(e.msg || '获取商品详情失败')
+      })
+
       this.product = goodsInfo
+
+      if (goodsInfo.skujosn) {
+        const skujosn_new = []
+        for (const i in goodsInfo.skujosn) {
+          skujosn_new.push({
+            sku: i,
+            val: goodsInfo.skujosn[i]
+          })
+        }
+        this.skujosn_new = skujosn_new
+        this.skuvaljosn = goodsInfo.skuvaljosn
+      }
       this.$openPop('attr')
     },
     setCateActuveIdx (idx) {
       this.cateActiveIdx = idx
       this.changeTab(idx)
     },
+    async _init_func () {
+      try {
+        const cateList = await getBizProdCateList({ pageSize: 999, biz_id: this.bid }, { onlyData: true }).catch(e => { throw Error(e.msg || '获取商家自定义分类失败') })
+        this.cateList = this.cateList.concat(cateList)
+
+        this.changeTab(0)
+
+        const bizInfo = await getBizInfo({ biz_id: this.bid }, { onlyData: true }).catch(e => {
+          throw Error(e.msg || '获取店铺信息失败')
+        })
+        this.bizInfo = bizInfo[0]
+      } catch (e) {
+        Exception.handle(e)
+      }
+    },
     async changeTab (idx) {
       try {
-        const { list = [], page = 1 } = this.cateList[idx]
+        const { list = [], page = 1, id: biz_cate_id } = this.cateList[idx]
+        const commParam = {
+          biz_id: this.bid, // 限定商家
+          is_waimai: 1// 外卖
+        }
         // 第一次
         if (list.length === 0 && page === 1) {
           const ret = await getProductList({
             pageSize: this.pageSize,
+            biz_cate_id, // 如果点击的是热门，那么就是不传参数，获得所有
+            ...commParam,
             page
           }).catch(e => {
             throw Error(e.msg || '获取商品列表失败')
@@ -245,14 +264,76 @@ export default {
       return
     }
     this.bid = options.bid
-    //this._init_func()
+    this._init_func()
   },
   created () {
-    this.changeTab(0)
+
   }
 }
 </script>
 <style lang="scss" scoped>
+
+  .goods-bottom-action{
+    position: fixed;
+    bottom: 0;
+    width: 750rpx;
+    height: 95rpx;
+    color: #fff;
+    font-size: 12px;
+    .cart{
+      position: absolute;
+      top: -8rpx;
+      left: 48rpx;
+      width: 85rpx;
+      height: 85rpx;
+      border-radius: 50%;
+      overflow: hidden;
+      background: #5B5B5B;
+      z-index: 4;
+      .icon-wrap{
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%,-50%);
+        .tag{
+          position: absolute;
+          right: -7px;
+          top:-7px;
+          background: $fun-red-color;
+          border-radius: 50%;
+          overflow: hidden;
+          width: 14px;
+          height: 14px;
+          font-size: 12px;
+          line-height: 14px;
+          text-align: center;
+        }
+      }
+
+    }
+    .box{
+      position: absolute;
+      bottom: 0;
+      width: 750rpx;
+
+      background: rgba(0,0,0,.5);
+      display: flex;
+      align-items: center;
+      .prompt{
+        flex: 1;
+        padding-left: 158rpx;
+      }
+      .buy{
+        width: 200rpx;
+        background: $fun-primary-color;
+        height: 85rpx;
+        line-height: 85rpx;
+        text-align: center;
+
+      }
+    }
+
+  }
   .attr-form-wrap {
     width: 660rpx;
     background: #fff;
@@ -382,6 +463,9 @@ export default {
         height: 74rpx;
         line-height: 74rpx;
         text-align: center;
+        padding: 0 6px;
+        overflow: hidden;
+        text-overflow: ellipsis;
         border-bottom: 1px solid #fff;
         font-size: 13px;
         color: #333;
