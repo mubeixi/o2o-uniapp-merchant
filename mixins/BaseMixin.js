@@ -26,6 +26,7 @@ export default {
   computed: {
   },
   methods: {
+    $getDomain: getDomain,
     $back: backFunc,
     $noop: () => {},
     $toast: toast,

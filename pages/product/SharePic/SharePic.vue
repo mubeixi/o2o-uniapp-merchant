@@ -1,7 +1,7 @@
 <template>
   <div class="wrap">
     <div class="bg"></div>
-    <div class="moneybox font14">分销佣金<span class="font14" style="color: #f43838">￥</span><span class="money">{{info.product.share_commission}}</span>
+    <div class="moneybox font14" :style="{backgroundImage:'url('+$getDomain('/static/client/moneybox.png')+')'}">分销佣金<span class="font14" style="color: #f43838">￥</span><span class="money">{{info.product.share_commission}}</span>
     </div>
     <div class="imgbox" @click="preview">
       <image class="img" :src="info.img_url"></image>
@@ -65,7 +65,6 @@ export default {
       color: #555;
       border-radius: 6px;
       overflow: hidden;
-      background-image: url("/static/moneybox.png");
 
       .money {
         color: #f43838;
