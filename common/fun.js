@@ -56,6 +56,22 @@ export const linkToEasy = (url, type = 'default') => {
     })
   }
 }
+export const openLocation=(latitude,longitude,name)=>{
+  uni.openLocation({
+    latitude: latitude,
+    longitude: longitude,
+    name:name,
+    success: function () {
+
+    }
+  });
+}
+export const cellPhone=(phone)=>{
+  uni.makePhoneCall({
+    phoneNumber: phone
+  });
+}
+
 
 export const linkTo = (linkObj) => {
   console.log(linkObj)

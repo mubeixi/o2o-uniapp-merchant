@@ -2,7 +2,7 @@
 	<view  class="all" v-if="pro">
 		<view class="top">
 			<view class="yuan" @click="signinMethod">
-				<image class="image" src="/static/qiandao.png"></image>
+				<image class="image" :src="'/static/client/qiandao.png'|domain"></image>
 				<layout-icon type="iconedit"  color="#f43939" class="qiandao" size="22"></layout-icon>
 				<view class="qiandaoliji">
 					{{pro.signin?'已经签到':'立即签到'}}
@@ -15,8 +15,8 @@
 
 		<view class="jilu" >
 			<view class="chang" v-for="(item,index) in continue_" :key="index">
-				<image class="image" v-if="index<continues" src="/static/checked.png" ></image>
-				<image class="image"  v-else src="/static/unchecked.png" ></image>
+				<image class="image" v-if="index<continues" :src="'/static/client/checked.png'|domain" ></image>
+				<image class="image"  v-else :src="'/static/client/unchecked.png'|domain" ></image>
 				<view class="view">
 					第{{index+1}}天
 				</view>
