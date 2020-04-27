@@ -54,6 +54,10 @@ function noop () {
 export default {
   name: 'WzwPay',
   props: {
+    is_use_order_pay: {
+      type: Boolean,
+      default: true
+    },
     is_use_money: {
       type: Number,
       default: 1
@@ -281,7 +285,7 @@ export default {
       }
     },
     async $_init_wxpay_env () {
-      
+
       const initData = await this.getInitData()
 
       const login_methods = initData.login_methods
@@ -370,6 +374,14 @@ export default {
           need_invoice: this.need_invoice,
           invoice_info: this.invoice_info,
           order_remark: this.order_remark
+        }
+        let obj={
+          pay_type: this.pay_type,
+          user_pay_password: this.user_pay_password, // 余额支付密码
+        }
+        if(!this.is_use_order_pay){
+          this.$emit('payMehtod',obj)
+          return
         }
 
         // 如果用户支付金额为0，即全部用余额
