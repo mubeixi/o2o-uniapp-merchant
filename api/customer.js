@@ -60,3 +60,6 @@ export const userSignin = (param, options) => fetch({ act: 'signin', param, opti
 
 // 评论回复
 export const commentReply = (param, options) => fetch({ act: 'commentReply', param, options })
+
+// 评论回复
+export const getRightsCard = (param, options) => fetch({ act: 'getRightsCard', param, options })
