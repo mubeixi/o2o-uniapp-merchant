@@ -17,10 +17,10 @@
   </div>
 </template>
 <script>
-import Model from '@/componets/ModelComponents'
+
 export default {
   name: 'LayoutComment',
-  components:{Model},
+  components:{},
   props: {
     isLast: {
       type: Boolean,

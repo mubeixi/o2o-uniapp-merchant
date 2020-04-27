@@ -691,8 +691,8 @@
               </div>
             </div>
             <div class="store-list-item" v-for="(st,ind) of storeList" :key="ind">
-              <div class="store-list-title" @click.stop="goStore(st.biz_id)">
-                {{st.biz_shop_name}}
+              <div class="store-list-title"  @click.stop="goStore(st.biz_id)">
+                {{st.store_name}}
               </div>
               <div class="flex flex-justify-between store-list-address">
                 <div class="store-list-font" @click="$openLocation(st.store_lat,st.store_lon,st.store_name)">
@@ -721,7 +721,6 @@
       <span slot="rightPrice">100.00</span>
     </wzw-goods-action>
 
-
     <!--    分享 -->
     <!--    <layout-popup  ref="share">-->
     <!--      <div class="shareinfo" >-->
@@ -747,19 +746,16 @@
     <!--      </div>-->
     <!--    </layout-popup>-->
 
-
-    <Model ref="proModel">
+    <layout-modal ref="commentModal">
       <div class="refuseApplyDialog">
         <textarea class="reason" @input="bingReasonInput" :value="commentValue" placeholder-style="color:#999"
                   placeholder="请输入评论" auto-height/>
         <div class="control">
-          <div @click="$closePop('proModel')" class="action-btn btn-cancel">取消</div>
+          <div @click="$closePop('commentModal')" class="action-btn btn-cancel">取消</div>
           <div @click="sureComment" class="btn-sub action-btn">确定</div>
         </div>
-
       </div>
-    </Model>
-
+    </layout-modal>
 
   </div>
 </template>
@@ -778,24 +774,23 @@ import WzwGoodsAction from '@/componets/wzw-goods-action/wzw-goods-action'
 import LayoutPopup from '@/componets/layout-popup/layout-popup'
 
 import {
-  showLoading, hideLoading, error, toast,
+  showLoading, hideLoading, error, toast
 } from '@/common/fun'
 import { checkIsLogin, buildSharePath, getProductThumb } from '@/common/helper'
 import uParse from '@/componets/gaoyia-parse/parse'
 import Storage from '@/common/Storage'
-import Model from '@/componets/ModelComponents'
-
+import LayoutModal from '@/componets/layout-modal/layout-modal'
 export default {
   name: 'ProductDetail',
   mixins: [BaseMixin],
   components: {
+    LayoutModal,
     LayoutIcon,
     LayoutComment,
     ProductSku,
     WzwGoodsAction,
     uParse,
-    LayoutPopup,
-    Model,
+    LayoutPopup
   },
   data () {
     return {
@@ -815,7 +810,7 @@ export default {
       storeList: [],
       comments: [],
       commentValue: '',
-      commentItem: {},//要评论的对象
+      commentItem: {}// 要评论的对象
     }
   },
   onPageScroll (e) {
@@ -824,11 +819,11 @@ export default {
   },
   methods: {
     goVipList () {
-      let url = '/pages/user/VipList?bid=' + this.detailData.biz_id
+      const url = '/pages/user/VipList?bid=' + this.detailData.biz_id
       this.$linkTo(url)
     },
     goStore (bid) {
-      let url = '/pages/store/index?bid=' + bid
+      const url = '/pages/store/index?bid=' + bid
       this.$linkTo(url)
     },
     bingReasonInput (e) {
@@ -839,10 +834,10 @@ export default {
         error('评论内容不能为空')
         return
       }
-      let data = {
+      const data = {
         touserid: this.commentItem.User_ID,
         commit_id: this.commentItem.Item_ID,
-        content: this.commentValue,
+        content: this.commentValue
       }
       if (this.commentItem.groupid) {
         data.groupid = this.commentItem.groupid
@@ -850,33 +845,32 @@ export default {
       commentReply(data).then(res => {
         toast('评论成功')
         this.commentValue = ''
-        this.$closePop('proModel')
+        this.$closePop('commentModal')
       }).catch(e => {
         error(e.msg || '评论失败')
-        this.$closePop('proModel')
+        this.$closePop('commentModal')
       })
-
     },
     clickComment (item) {
       this.commentItem = item
-      this.$refs.proModel.show()
+      this.$refs.commentModal.show()
       this.commentItem.groupid = ''
     },
     clickCommentSend (item, goupId, userId) {
       this.commentItem = item
       this.commentItem.groupid = goupId
       this.commentItem.User_ID = userId
-      this.$refs.proModel.show()
+      this.$refs.commentModal.show()
     },
     async shareFunc (channel) {
-      let _self = this
-      let path = 'pages/product/detail?prod_id=' + this.prod_id
-      let front_url = this.initData.front_url
-      let shareObj = {
+      const _self = this
+      const path = 'pages/product/detail?prod_id=' + this.prod_id
+      const front_url = this.initData.front_url
+      const shareObj = {
         title: this.detailData.Products_Name,
         desc: this.detailData.Products_BriefDescription,
         imageUrl: getProductThumb(this.detailData.ImgPath),
-        path: buildSharePath(path),
+        path: buildSharePath(path)
       }
 
       switch (channel) {
@@ -892,7 +886,7 @@ export default {
             success: function (res) {
             },
             fail: function (err) {
-            },
+            }
           })
           break
         case 'wxtimeline':
@@ -907,7 +901,7 @@ export default {
             success: function (res) {
             },
             fail: function (err) {
-            },
+            }
           })
           break
         case 'wxmini':
@@ -924,24 +918,21 @@ export default {
               webUrl: 'http://uniapp.dcloud.io',
             },
             success: ret => {
-            },
+            }
           })
           break
         case 'pic':
-          //this.$toast('comming soon')
-          let res = await getProductSharePic({ 'product_id': this.prod_id }, {
-            tip: '努力加载中',
-            mask: true,
-          })
+          // this.$toast('comming soon')
+          const res = await getProductSharePic({ product_id: this.prod_id }, { tip: '努力加载中', mask: true })
           Storage.set('temp_sharepic_info', res.data)
-          let sharePic = res.data.img_url
+          const sharePic = res.data.img_url
           if (!sharePic) {
             error('获取分享参数失败')
             return
           }
           setTimeout(function () {
             uni.navigateTo({
-              url: '/pages/product/SharePic/SharePic',
+              url: '/pages/product/SharePic/SharePic'
             })
           }, 200)
           // uni.previewImage({
@@ -952,16 +943,16 @@ export default {
           break
       }
     },
-    //预览图片
+    // 预览图片
     previewImg (index) {
       uni.previewImage({
         urls: this.detailData.Products_JSON.ImgPath,
         indicator: 'default',
-        current: index,
+        current: index
       })
     },
     toBooking () {
-      let url = '/pages/share/go?prod_id=' + this.prod_id
+      const url = '/pages/share/go?prod_id=' + this.prod_id
       this.$linkTo(url)
     },
     myPay () {
@@ -975,21 +966,19 @@ export default {
       this.$refs.mySku.show()
     },
     updaCart (sku) {
-
       // 加入购物车
       const data = {
         User_ID: '48',
         cart_key: 'CartList',
         prod_id: this.detailData.Products_ID,
         qty: sku.qty,
-        attr_id: sku.id,
+        attr_id: sku.id
       }
       updateCart(data).then(res => {
         toast('加入购物车成功')
       }).catch(e => {
         error(e.msg || '加入购物车失败')
       })
-
     },
     async buyNow (sku) {
       // console.log(sku)
@@ -1044,7 +1033,7 @@ export default {
         this.comments = await getCommitList({
           Products_ID: this.detailData.Products_ID,
           pageSize: 999,
-          page: 1,
+          page: 1
         }, {
           onlyData: true,
           tip: '加载中',

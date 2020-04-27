@@ -56,22 +56,22 @@ export const linkToEasy = (url, type = 'default') => {
     })
   }
 }
-export const openLocation=(latitude,longitude,name)=>{
+export const openLocation = (latitude, longitude, name, address) => {
   uni.openLocation({
-    latitude: latitude,
-    longitude: longitude,
-    name:name,
-    success: function () {
-
+    latitude: parseFloat(latitude),
+    longitude: parseFloat(longitude),
+    name,
+    address,
+    fail (res) {
+      console.log(res)
     }
-  });
+  })
 }
-export const cellPhone=(phone)=>{
+export const cellPhone = (phone) => {
   uni.makePhoneCall({
     phoneNumber: phone
-  });
+  })
 }
-
 
 export const linkTo = (linkObj) => {
   console.log(linkObj)
