@@ -81,7 +81,7 @@ import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import BaseMixin from '@/mixins/BaseMixin'
 import { getProductList } from '@/api/product'
 import { linkToEasy, modal, toast } from '@/common/fun'
-import { getFavouriteProdList,cancelFavouriteProd } from '@/api/customer'
+import { getFavouriteProdList,cancelFavourite } from '@/api/customer'
 import Storage from '@/common/Storage'
 
 export default {
@@ -184,7 +184,7 @@ export default {
       }else {
         param.biz_id = JSON.stringify(arr)
       }
-      cancelFavouriteProd(param).then(res=>{
+      cancelFavourite(param).then(res=>{
         toast(res.msg)
         this._init_func();
       }).catch(err=>modal(err.msg))

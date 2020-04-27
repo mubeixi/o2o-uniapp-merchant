@@ -672,7 +672,7 @@
             </div>
             <div class="store-list-item" v-for="(st,ind) of storeList" :key="ind">
               <div class="store-list-title"  @click.stop="goStore(st.biz_id)">
-                {{st.biz_shop_name}}
+                {{st.store_name}}
               </div>
               <div class="flex flex-justify-between store-list-address">
                 <div class="store-list-font" @click="$openLocation(st.store_lat,st.store_lon,st.store_name)">
@@ -697,7 +697,6 @@
       <span slot="rightText">拼团购¥</span>
       <span slot="rightPrice">100.00</span>
     </wzw-goods-action>
-
 
     <!--    分享 -->
 <!--    <layout-popup  ref="share">-->
@@ -724,54 +723,50 @@
 <!--      </div>-->
 <!--    </layout-popup>-->
 
-
-    <Model ref="proModel">
+    <layout-modal ref="commentModal">
       <div class="refuseApplyDialog">
         <textarea class="reason" @input="bingReasonInput" :value="commentValue" placeholder-style="color:#999" placeholder="请输入评价" auto-height />
         <div class="control">
-          <div @click="$closePop('proModel')" class="action-btn btn-cancel">取消</div>
+          <div @click="$closePop('commentModal')" class="action-btn btn-cancel">取消</div>
           <div @click="sureComment" class="btn-sub action-btn">确定</div>
         </div>
-
       </div>
-    </Model>
-
-
+    </layout-modal>
 
   </div>
 </template>
 
 <script>
 import BaseMixin from '@/mixins/BaseMixin'
-import { getProductDetail, getActiveInfo, getBizInfo, getStoreList,getProductSharePic } from '@/api/product'
+import { getProductDetail, getActiveInfo, getBizInfo, getStoreList, getProductSharePic } from '@/api/product'
 import { getCommitList } from '@/api/common'
-import  {commentReply} from  '@/api/customer'
+import { commentReply } from '@/api/customer'
 import ProductSku from '@/componets/product-sku/product-sku'
 import { updateCart } from '@/api/order'
 import { formatRichTextByUparseFn } from '@/common/filter'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import LayoutComment from '@/componets/layout-comment/layout-comment'
 import WzwGoodsAction from '@/componets/wzw-goods-action/wzw-goods-action'
-import  LayoutPopup from  '@/componets/layout-popup/layout-popup'
+import LayoutPopup from '@/componets/layout-popup/layout-popup'
 
 import {
-  showLoading, hideLoading, error, toast,
+  showLoading, hideLoading, error, toast
 } from '@/common/fun'
-import { checkIsLogin,buildSharePath,getProductThumb } from '@/common/helper'
-import  uParse from '@/componets/gaoyia-parse/parse'
-import  Storage from  '@/common/Storage'
-import Model from  '@/componets/ModelComponents'
+import { checkIsLogin, buildSharePath, getProductThumb } from '@/common/helper'
+import uParse from '@/componets/gaoyia-parse/parse'
+import Storage from '@/common/Storage'
+import LayoutModal from '@/componets/layout-modal/layout-modal'
 export default {
   name: 'ProductDetail',
   mixins: [BaseMixin],
   components: {
+    LayoutModal,
     LayoutIcon,
     LayoutComment,
     ProductSku,
     WzwGoodsAction,
     uParse,
-    LayoutPopup,
-    Model
+    LayoutPopup
   },
   data () {
     return {
@@ -780,9 +775,9 @@ export default {
       headTabSticky: false,
       prod_id: '', // 商品id
       detailData: {
-        Products_Name:'',
-        Products_PriceX:'0',
-        Products_PriceY:'0',
+        Products_Name: '',
+        Products_PriceX: '0',
+        Products_PriceY: '0',
         Products_JSON: {},
         Products_Promise: []
       }, // 商品数据
@@ -790,8 +785,8 @@ export default {
       store: [{ biz_go: '' }], // 门店
       storeList: [],
       comments: [],
-      commentValue:'',
-      commentItem:{},//要评论的对象
+      commentValue: '',
+      commentItem: {}// 要评论的对象
     }
   },
   onPageScroll (e) {
@@ -799,68 +794,66 @@ export default {
     this.headTabSticky = (scrollTop > this.headTabTop)
   },
   methods: {
-    goVipList(){
-      let url='/pages/user/VipList?bid='+this.detailData.biz_id
+    goVipList () {
+      const url = '/pages/user/VipList?bid=' + this.detailData.biz_id
       this.$linkTo(url)
     },
-    goStore(bid){
-      let url='/pages/store/index?bid='+bid
+    goStore (bid) {
+      const url = '/pages/store/index?bid=' + bid
       this.$linkTo(url)
     },
-    bingReasonInput(e){
+    bingReasonInput (e) {
       this.commentValue = e.detail.value
     },
-    sureComment(){
-        if(!this.commentValue){
-          error('评论内容不能为空')
-          return
-        }
-        let data={
-          touserid:this.commentItem.User_ID,
-          commit_id:this.commentItem.Item_ID,
-          content:this.commentValue
-        }
-        if(this.commentItem.groupid){
-          data.groupid=this.commentItem.groupid
-        }
-      commentReply(data).then(res=>{
-          toast('评论成功')
-        this.commentValue=''
-          this.$closePop("proModel")
-      }).catch(e=>{
-        error(e.msg||'评论失败')
-        this.$closePop("proModel")
+    sureComment () {
+      if (!this.commentValue) {
+        error('评论内容不能为空')
+        return
+      }
+      const data = {
+        touserid: this.commentItem.User_ID,
+        commit_id: this.commentItem.Item_ID,
+        content: this.commentValue
+      }
+      if (this.commentItem.groupid) {
+        data.groupid = this.commentItem.groupid
+      }
+      commentReply(data).then(res => {
+        toast('评论成功')
+        this.commentValue = ''
+        this.$closePop('commentModal')
+      }).catch(e => {
+        error(e.msg || '评论失败')
+        this.$closePop('commentModal')
       })
-
-
     },
-    clickComment(item){
-      this.commentItem=item
-      this.$refs.proModel.show();
-      this.commentItem.groupid=''
+    clickComment (item) {
+      this.commentItem = item
+      this.$refs.commentModal.show()
+      this.commentItem.groupid = ''
     },
-    clickCommentSend(item,goupId,userId){
-      this.commentItem=item
-      this.commentItem.groupid=goupId
-      this.commentItem.User_ID=userId
-      this.$refs.proModel.show();
+    clickCommentSend (item, goupId, userId) {
+      this.commentItem = item
+      this.commentItem.groupid = goupId
+      this.commentItem.User_ID = userId
+      this.$refs.commentModal.show()
     },
-    async shareFunc(channel) {
-      let _self = this
-      let path = 'pages/product/detail?prod_id='+this.prod_id;
-      let front_url = this.initData.front_url;
-      let shareObj = {
+    async shareFunc (channel) {
+      const _self = this
+      const path = 'pages/product/detail?prod_id=' + this.prod_id
+      const front_url = this.initData.front_url
+      const shareObj = {
         title: this.detailData.Products_Name,
         desc: this.detailData.Products_BriefDescription,
         imageUrl: getProductThumb(this.detailData.ImgPath),
         path: buildSharePath(path)
-      };
+      }
 
       switch (channel) {
         case 'wx':
           uni.share({
-            provider: "weixin",
-            scene: "WXSceneSession",
+            provider: 'weixin',
+            scene: 'WXSceneSession',
             type: 0,
             href: front_url + shareObj.path,
             title: shareObj.title,
@@ -870,12 +863,12 @@ export default {
             },
             fail: function (err) {
             }
-          });
-          break;
+          })
+          break
         case 'wxtimeline':
           uni.share({
-            provider: "weixin",
-            scene: "WXSenceTimeline",
+            provider: 'weixin',
+            scene: 'WXSenceTimeline',
             type: 0,
             href: front_url + shareObj.path,
             title: shareObj.title,
@@ -885,12 +878,12 @@ export default {
             },
             fail: function (err) {
             }
-          });
-          break;
+          })
+          break
         case 'wxmini':
           uni.share({
             provider: 'weixin',
-            scene: "WXSceneSession",
+            scene: 'WXSceneSession',
             type: 5,
             imageUrl: shareObj.imageUrl,
             title: shareObj.title,
@@ -902,41 +895,41 @@ export default {
             },
             success: ret => {
             }
-          });
-          break;
+          })
+          break
         case 'pic':
-          //this.$toast('comming soon')
-          let res= await getProductSharePic({'product_id':this.prod_id},{tip:'努力加载中',mask:true})
-          Storage.set('temp_sharepic_info',res.data)
-          let sharePic =res.data.img_url
-          if(!sharePic){
-            error('获取分享参数失败');
-            return;
+          // this.$toast('comming soon')
+          const res = await getProductSharePic({ product_id: this.prod_id }, { tip: '努力加载中', mask: true })
+          Storage.set('temp_sharepic_info', res.data)
+          const sharePic = res.data.img_url
+          if (!sharePic) {
+            error('获取分享参数失败')
+            return
           }
-          setTimeout(function(){
+          setTimeout(function () {
             uni.navigateTo({
-              url:'/pages/product/SharePic/SharePic'
+              url: '/pages/product/SharePic/SharePic'
             })
-          },200)
+          }, 200)
           // uni.previewImage({
           // 	urls: [sharePic],
           // 	indicator:'default',
           // 	current:0
           // });
-          break;
+          break
       }
     },
-    //预览图片
-    previewImg(index){
+    // 预览图片
+    previewImg (index) {
       uni.previewImage({
         urls: this.detailData.Products_JSON.ImgPath,
-        indicator:'default',
-        current:index
-      });
+        indicator: 'default',
+        current: index
+      })
     },
     toBooking () {
-          let url='/pages/share/go?prod_id='+this.prod_id
-          this.$linkTo(url)
+      const url = '/pages/share/go?prod_id=' + this.prod_id
+      this.$linkTo(url)
     },
     myPay () {
       if (!checkIsLogin(1, 1)) return
@@ -949,21 +942,19 @@ export default {
       this.$refs.mySku.show()
     },
     updaCart (sku) {
-
-       // 加入购物车
-       const data = {
-         User_ID: '48',
-         cart_key: 'CartList',
-         prod_id: this.detailData.Products_ID,
-         qty: sku.qty,
-         attr_id: sku.id
-       }
-      updateCart(data).then(res=>{
+      // 加入购物车
+      const data = {
+        User_ID: '48',
+        cart_key: 'CartList',
+        prod_id: this.detailData.Products_ID,
+        qty: sku.qty,
+        attr_id: sku.id
+      }
+      updateCart(data).then(res => {
         toast('加入购物车成功')
       }).catch(e => {
-          error(e.msg || '加入购物车失败')
-       })
-
+        error(e.msg || '加入购物车失败')
+      })
     },
     async buyNow (sku) {
       // console.log(sku)
@@ -1016,7 +1007,7 @@ export default {
         this.comments = await getCommitList({
           Products_ID: this.detailData.Products_ID,
           pageSize: 999,
-          page:1
+          page: 1
         }, {
           onlyData: true,
           tip: '加载中',
