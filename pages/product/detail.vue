@@ -205,13 +205,15 @@
     background-color: #ffffff;
     height: 82rpx;
     box-sizing: border-box;
-    padding: 26rpx 72rpx;
+    padding: 0rpx 72rpx;
     justify-content: space-between;
 
     .li-item {
       width: 60rpx;
-      height: 32rpx;
-      line-height: 32rpx;
+      height: 84rpx;
+      line-height: 84rpx;
+      flex: 1;
+      text-align: center;
       font-size: 16px;
       color: #333333;
       font-weight: bold;
@@ -228,8 +230,9 @@
       background: #26C78D;
       border-radius: 3px;
       position: absolute;
-      left: 12rpx;
-      bottom: -24rpx;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 0rpx;
     }
   }
 
@@ -465,6 +468,25 @@
       }
     }
   }
+  .comment-send{
+    width: 700rpx;
+    box-sizing: border-box;
+    padding: 30rpx 20rpx;
+    background-color: #F6F6F6;
+    border-radius: 6rpx;
+    margin-top: 10px;
+    &-item{
+      width: 600rpx;
+      line-height: 40rpx;
+    }
+  }
+  .color-comment{
+    color: #476DB9;
+  }
+  .comment-item{
+    border-bottom: 1px solid  #E8E8E8;
+    padding-bottom: 30rpx;
+  }
 
 </style>
 
@@ -562,12 +584,8 @@
         <span class="active" v-if="tabIndex==1"></span>
       </li>
       <li class="li-item" :class="{'color-store':tabIndex===2}" @click="tabIndex=2">
-        须知
-        <span class="active" v-if="tabIndex==2"></span>
-      </li>
-      <li class="li-item" :class="{'color-store':tabIndex===3}" @click="tabIndex=3">
         门店
-        <span class="active" v-if="tabIndex==3"></span>
+        <span class="active" v-if="tabIndex==2"></span>
       </li>
     </ul>
     <swiper
@@ -595,16 +613,28 @@
           </div>
           <div class="block-content">
             <div class="comment-list">
-              <div v-for="(item,idx) in comments" :key="idx">
+              <div v-for="(item,idx) in comments" :key="idx"  class="comment-item">
                 <layout-comment :isLast="comments.length-1===idx" :comment="item"  @comment="clickComment"></layout-comment>
+                <div class="comment-send"  v-if="item.child.length>0">
+                   <block  v-for="(com,ind) of item.child" :key="ind">
+                     <block v-for="(co,indx) of com" :key="indx">
+                       <div class="fz-12 c3 comment-send-item" @click.stop="clickCommentSend(item,co.groupid,co.userid)">
+                         <block v-if="co.touserid==item.User_ID">
+                           <span class="color-comment p-r-5">{{co.user_nickname}}:</span> {{co.content}}
+                         </block>
+                         <block v-else>
+                           <span class="color-comment p-r-2">{{co.user_nickname}}</span>回复<span class="color-comment p-r-5">{{co.to_user_nickname}}</span>{{co.content}}
+                         </block>
+                       </div>
+                     </block>
+
+                   </block>
+                </div>
               </div>
 
             </div>
           </div>
         </div>
-      </swiper-item>
-      <swiper-item class="tab-pages">
-        须知
       </swiper-item>
       <swiper-item class="tab-pages">
         <div :style="{height:(systemInfo.windowHeight+'px')}" class="over">
@@ -746,7 +776,7 @@ export default {
   data () {
     return {
       hasCart: false, // 是否有购物车
-      tabIndex: 3,
+      tabIndex: 0,
       headTabSticky: false,
       prod_id: '', // 商品id
       detailData: {
@@ -782,8 +812,12 @@ export default {
           commit_id:this.commentItem.Item_ID,
           content:this.commentValue
         }
+        if(this.commentItem.groupid){
+          data.groupid=this.commentItem.groupid
+        }
       commentReply(data).then(res=>{
           toast('评论成功')
+        this.commentValue=''
           this.$closePop("proModel")
       }).catch(e=>{
         error(e.msg||'评论失败')
@@ -794,6 +828,13 @@ export default {
     },
     clickComment(item){
       this.commentItem=item
+      this.$refs.proModel.show();
+      this.commentItem.groupid=''
+    },
+    clickCommentSend(item,goupId,userId){
+      this.commentItem=item
+      this.commentItem.groupid=goupId
+      this.commentItem.User_ID=userId
       this.$refs.proModel.show();
     },
     async shareFunc(channel) {
