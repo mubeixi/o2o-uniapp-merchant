@@ -42,14 +42,12 @@
           </div>
           <div class="action m-r-20" @click.stop="$noop">
             <div class="btn-open-attr" @click.stop="openAttrLayer(goods.Products_ID)" v-if="goods.skujosn">选择规格</div>
-            <div v-else class="flex flex-vertical-c">
+            <div v-else class="flex flex-vertical-c" @click="setActiveGoodsIdx(idx)">
               <block v-if="goods.num>0">
-                <layout-icon @click.stop="goodsNumMinus(goods)" size="24" color="#26C78D"
-                             type="iconicon-minus"></layout-icon>
-                <input v-model="goods.num" class="input-num text-center fz-12" />
+                <layout-icon @click.stop="goodsNumMinus(goods)" size="24" color="#26C78D" type="iconicon-minus"></layout-icon>
+                <input :value="goods.num" @input="changeGoodsNum" class="input-num text-center fz-12" />
               </block>
-              <layout-icon @click.stop="goodsNumPlus(goods)" size="24" color="#26C78D"
-                           type="iconicon-plus"></layout-icon>
+              <layout-icon @click.stop="goodsNumPlus(goods)" size="24" color="#26C78D" type="iconicon-plus"></layout-icon>
             </div>
           </div>
         </div>
@@ -58,32 +56,63 @@
 
     <div class="goods-bottom-action">
       <div class="cart">
-        <div class="icon-wrap">
+        <div class="icon-wrap" @click="$openPop('carts')">
           <layout-icon class="cart-icon" size="18" color="#fff" type="iconicon-cart"></layout-icon>
-          <div class="tag">{{carts.length}}</div>
+          <div class="tag">{{totalNum}}</div>
         </div>
       </div>
       <div class="box">
-        <div class="prompt"></div>
-        <div class="buy">￥{{bizInfo.city_express_config.limit_config.start_send_money}}元起送</div>
+        <div class="prompt">￥{{totalPrice}}</div>
+        <div class="buy" @click="buyNow">
+          <block v-if="totalPrice>bizInfo.city_express_config.limit_config.start_send_money">下单</block>
+          <block v-else>
+            ￥{{bizInfo.city_express_config.limit_config.start_send_money}}元起送
+          </block>
+        </div>
       </div>
     </div>
+
+    <layout-layer ref="carts" radius="20rpx" positions="bottom" bottomStr="85rpx">
+      <div class="carts-box" :style="{height:systemInfo.windowHeight*0.6+'px'}">
+        <div class="carts-list">
+          <div class="carts-item" v-for="(row,idx) in carts" :key="idx">
+            <div class="carts-item-cover" :style="{backgroundImage:'url('+row.ImgPath+')'}"></div>
+            <div class="carts-item-info">
+              <div class="title">{{row.Products_Name}}</div>
+              <div class="attr-text">{{row.attr_text}}</div>
+              <div class="actions">
+                <div class="price-box fz-12 flex1">
+                  <span class="price-selling">￥</span><span class="price-selling fz-14">{{row.Products_PriceX}}</span><span class="p-l-4 price-market text-through">￥{{row.Products_PriceY}}</span>
+                </div>
+                <div style="width: 150rpx" class="action flex flex-vertical-c" @click="setActiveAttrIdx(idx)">
+                  <block v-if="row.num>0">
+                    <layout-icon @click.stop="attrNumMinus(row)" size="24" color="#26C78D" type="iconicon-minus"></layout-icon>
+                    <input @input="changeAttrNum" :value="row.num" class="input-num text-center fz-12" />
+                  </block>
+                  <layout-icon @click.stop="attrNumPlus(row)" size="24" color="#26C78D" type="iconicon-plus"></layout-icon>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </layout-layer>
 
     <layout-layer ref="attr" positions="center">
       <div class="attr-form-wrap">
         <div class="attr-head">
-          <span class="title">黄焖鸡米饭</span>
+          <span class="title">{{product.Products_Name}}</span>
           <layout-icon @click="$closePop('attr')" class="close" type="icondelete"></layout-icon>
         </div>
         <div class="form">
-          <div class="cartAttr" v-for="(item,i) of product.skujosn" :key="i">
-            <div class="sku-title c3">{{i}}</div>
+          <div class="cartAttr" v-for="(item,i) of skujosn_new" :key="i">
+            <div class="sku-title c3">{{item.sku}}</div>
             <div class="sku-val-list">
               <div
                 class="sku-val-item"
-                :class="parseInt(Math.random()*2+1)===2 || check_attr[item.sku]==index?'checked':''"
-                @click="selectAttr(index,i)"
-                v-for="(text,index) of item"
+                :class="check_attr[item.sku]==index?'checked':''"
+                @click="selectAttr(index,item.sku)"
+                v-for="(text,index) of item.val"
                 :key="index"
               >{{text}}
               </div>
@@ -91,9 +120,24 @@
           </div>
         </div>
         <div class="actions">
-          <div><span class="price-selling fz-12">￥</span><span
-            class="price-selling fz-14 c3">15.00</span><span>（原味）</span></div>
-          <div @click="confirmAdd" class="confirm-btn">加入购物车</div>
+          <div>
+            <span class="price-selling fz-12">￥</span>
+            <span class="price-selling fz-14 c3">{{attrInfo.price}}</span>
+            <span class="c9 fz-12 p-l-4">
+              {{attrInfo.attr_text}}
+            </span>
+          </div>
+          <div>
+            <div v-if="attrInfo.num<1" @click="confirmAdd" class="confirm-btn" :class="{disabled:!submitFlag}">加入购物车</div>
+            <div v-else class="flex flex-vertical-c" style="width: 150rpx">
+              <block v-if="attrInfo.num>0">
+                <layout-icon @click.stop="delNum" size="24" color="#26C78D" type="iconicon-minus"></layout-icon>
+                <input v-model="attrInfo.num" class="input-num text-center fz-12" />
+              </block>
+              <layout-icon @click.stop="addNum" size="24" color="#26C78D" type="iconicon-plus"></layout-icon>
+            </div>
+          </div>
+
         </div>
       </div>
     </layout-layer>
@@ -110,12 +154,22 @@ import {
   getProductList
 } from '@/api/product'
 import LayoutLayer from '@/componets/layout-layer/layout-layer'
-import { modal } from '@/common/fun'
+import { error, modal } from '@/common/fun'
 import { Exception } from '@/common/Exception'
 import {
   getBizInfo
 } from '@/api/store'
-
+import {
+  mergeObject,
+  numberSort
+} from '@/common/helper'
+const attrInfoTmpl = {
+  num: 0,
+  attr_id: '', // 规格id
+  attr_text: '',
+  price: '', // 价格
+  count: 0// 库存
+}
 export default {
   name: 'DeliveryDesktop',
   mixins: [BaseMixin],
@@ -125,6 +179,8 @@ export default {
   },
   data () {
     return {
+      activeAttrIdx: 0,
+      activeGoodsIdx: 0,
       bid: null,
       product: {},
       bizInfo: {},
@@ -133,6 +189,15 @@ export default {
       pageSize: 999,
       skujosn_new: null,
       skuvaljosn: null,
+      check_attr: {},
+      submitFlag: false,
+      attrInfo: {
+        num: 0,
+        attr_id: '', // 规格id
+        attr_text: '',
+        price: '', // 价格
+        count: 0// 库存
+      },
       cateList: [
         {
           cate_name: '热销',
@@ -146,8 +211,14 @@ export default {
     }
   },
   computed: {
+    totalNum () {
+      return this.$store.getters['delivery/getTotalNum']()
+    },
+    totalPrice () {
+      return this.$store.getters['delivery/getTotalMoney']()
+    },
     carts () {
-      return [1, 2, 3, 4, 5, 6, 7]
+      return this.$store.getters['delivery/getCartList']()
     }
   },
   watch: {
@@ -160,19 +231,212 @@ export default {
     // }
   },
   methods: {
+    buyNow () {
+      if (this.totalPrice > 0 && this.totalPrice > this.bizInfo.city_express_config.limit_config.start_send_money) {
+        this.$linkTo('/pages/order/OrderBooking?cart_key=waimai')
+      } else {
+        modal('未达到配送价')
+      }
+    },
+    setActiveGoodsIdx (idx) {
+      this.activeGoodsIdx = idx
+    },
+    setActiveAttrIdx (idx) {
+      this.activeAttrIdx = idx
+    },
+    selectAttr (index, i) {
+      const value_index = index // 选择的属性值索引
+      const attr_index = i // 选择的属性索引
+      // 记录选择的属性
+      const check_attr = Object.assign(this.check_attr, { [attr_index]: value_index }) // 记录选择的属性  attr_index外的[]必须
+      // 属性处理
+      let check_attrid = []
+      const check_attrname = []
+      let check_attrnames = []
+      for (const i in check_attr) {
+        var attr_id = check_attr[i]
+        check_attrid.push(attr_id)
+        check_attrname[attr_id] = i
+      }
+      // 数组排序  按从小到大排
+      const check_attrid_arr = check_attrid
+      check_attrid = numberSort(check_attrid)
+      // 获取对应的属性名称
+      for (let i = 0; i < check_attrid.length; i++) {
+        const attr_id = check_attrid[i]
+        const attr_name = check_attrname[attr_id]
+        check_attrnames.push(attr_name + ':' + this.product.skujosn[attr_name][attr_id])
+      }
+      check_attrid = check_attrid.join(';')
+      const attr_val = this.skuvaljosn[check_attrid] // 选择属性对应的属性值
+      // 数组转化为字符串
+      check_attrnames = check_attrnames.join(';')
+      // 更改第一个规格显示图片
+      for (const mbx in this.skuvaljosn) {
+        const arr = mbx.split(';')
+        if (arr[0] === index) {
+          // this.imgIndex=index
+          this.skuImg = this.skuvaljosn[mbx].Attr_Image
+          break
+        }
+      }
+      console.log(attr_val)
+      // 属性判断
+      if (attr_val) {
+        this.attrInfo.attr_id = attr_val.Product_Attr_ID // 选择属性的id
+        this.attrInfo.attr_text = attr_val.Attr_Value_text
+        this.attrInfo.count = attr_val.Property_count // 选择属性的库存
+        this.attrInfo.price = attr_val.Attr_Price ? attr_val.Attr_Price : this.product.Products_PriceX // 选择属性的价格
+
+        const atrr_id = attr_val.Product_Attr_ID
+        const isCartHas = this.$store.getters['delivery/getRow'](atrr_id)
+        console.log(isCartHas, attr_val)
+        // 如果已经存在
+        if (isCartHas !== false) {
+          this.attrInfo = mergeObject(this.attrInfo, isCartHas, true)
+        } else {
+          this.attrInfo.num = 0// 新增的时候，数量为0
+        }
+
+        this.submitFlag = !((!this.check_attr || Object.getOwnPropertyNames(this.check_attr).length !== Object.getOwnPropertyNames(this.product.skujosn).length))
+      } else {
+        this.attrInfo = { ...attrInfoTmpl }
+      }
+
+      // 判断属性库存
+      if (attr_val && attr_val.Property_count <= 0) {
+        this.submitFlag = false
+        return false
+      }
+      this.check_attr = {}
+      this.check_attr = check_attr
+      this.check_attrid_arr = check_attrid_arr
+      this.submit_flag = !((!this.check_attr || Object.getOwnPropertyNames(this.check_attr).length !== Object.getOwnPropertyNames(this.product.skujosn).length))
+      // 购买数量处理  大于最高时赋值最高值
+      if (this.attrInfo.num > this.attrInfo.count) {
+        this.attrInfo.num = this.attrInfo.count
+      }
+    },
+    addNum () {
+      if (this.attrInfo.num < this.attrInfo.count) {
+        this.attrInfo.num = Number(this.attrInfo.num) + 1
+      } else {
+        uni.showToast({
+          title: '购买数量不能大于库存量',
+          icon: 'none'
+        })
+        this.attrInfo.num = this.attrInfo.count
+      }
+
+      this.$store.commit('delivery/ADD_GOODS', { num: 1, product: { ...this.product, ...this.attrInfo } })
+    },
+    delNum () {
+      if (this.attrInfo.num > 0) {
+        this.attrInfo.num -= 1
+      } else {
+        uni.showToast({
+          title: '购买数量不能小于0',
+          icon: 'none'
+        })
+        this.attrInfo.num = 0
+      }
+    },
+    // 用户手动输入数量
+    setCount (e) {
+      const amount = parseInt(e.detail.value)
+      if (this.attrInfo.num === amount) return
+      const action = this.attrInfo.num > amount ? 'minus' : 'add'
+      if (amount < 0) {
+        this.attrInfo.num = 0
+        error('至少购买一件')
+        return
+      }
+      if (amount > this.attrInfo.count) {
+        this.attrInfo.num = this.attrInfo.count
+        error('购买数量不能超过库存量')
+        return
+      }
+
+      // 实际也是加减的意思
+      if (action === 'add') {
+        this.$store.commit('delivery/ADD_GOODS', { num: amount - this.attrInfo.num, product: { ...this.product, ...this.attrInfo } })
+      }
+      if (action === 'minus') {
+        this.$store.commit('delivery/MINUS_GOODS', { num: this.attrInfo.num - amount, product: { ...this.product, ...this.attrInfo } })
+      }
+    },
     toDetail (goodsInfo) {
       this.$linkTo('/pages/delivery/detail?prod_id=' + goodsInfo.Products_ID)
     },
+    attrNumMinus (attr) {
+      this.$store.commit('delivery/MINUS_GOODS', { num: 1, product: { attr_id: attr.attr_id } })
+    },
+    attrNumPlus (attr) {
+      this.$store.commit('delivery/ADD_GOODS', { num: 1, product: { attr_id: attr.attr_id } })
+    },
+    changeAttrNum (e) {
+      let amount = parseInt(e.detail.value)
+      const currentAttrInfo = this.carts[this.activeAttrIdx]
+      if (currentAttrInfo.num === amount) return
+      if (amount < 0) {
+        amount = currentAttrInfo.num
+        error('至少购买一件')
+      }
+      if (amount > currentAttrInfo.count) {
+        amount = currentAttrInfo.count
+        error('购买数量不能超过库存量')
+      }
+
+      this.$store.commit('delivery/SET_GOODS_NUM', { num: amount, product: { attr_id: currentAttrInfo.attr_id } })
+    },
+    // 商品是没有规格的，所以同意用noattr_xxx，加上商品id来标识attr_id.
     goodsNumMinus (goodsInfo) {
       const num = goodsInfo.num ? goodsInfo.num - 1 : 0
       this.$set(goodsInfo, 'num', num)
+      this.$store.commit('delivery/MINUS_GOODS', { num: 1, product: { attr_id: 'noattr_' + goodsInfo.Products_ID } })
     },
     goodsNumPlus (goodsInfo) {
       const num = goodsInfo.num ? goodsInfo.num + 1 : 1
       this.$set(goodsInfo, 'num', num)
+
+      // const attrInfoTmpl = {
+      //   num: 0,
+      //   attr_id: '', // 规格id
+      //   attr_text: '',
+      //   price: '', // 价格
+      //   count: 0// 库存
+      // }
+      // 拼接一下
+      const productInfo = {
+        ...attrInfoTmpl,
+        attr_id: 'noattr_' + goodsInfo.Products_ID,
+        attr_text: '无规格',
+        price: goodsInfo.Products_PriceX,
+        count: goodsInfo.Products_Count
+      }
+      this.$store.commit('delivery/ADD_GOODS', { num: 1, product: { ...goodsInfo, ...productInfo } })
     },
+    changeGoodsNum (e) {
+      let amount = parseInt(e.detail.value)
+      const currentGoods = this.showList[this.activeGoodsIdx]
+      if (currentGoods.num === amount) return
+      if (amount < 0) {
+        amount = currentGoods.num
+        error('至少购买一件')
+      }
+      if (amount > currentGoods.count) {
+        amount = currentGoods.count
+        error('购买数量不能超过库存量')
+      }
+
+      this.$store.commit('delivery/SET_GOODS_NUM', { num: amount, product: { attr_id: 'noattr_' + currentGoods.Products_ID } })
+    },
+
     confirmAdd () {
-      this.$closePop('attr')
+      if (!this.submitFlag) return
+      this.attrInfo.num++
+      this.$store.commit('delivery/ADD_GOODS', { num: 1, product: { ...this.product, ...this.attrInfo } })
+      // this.$closePop('attr')
     },
     async openAttrLayer (prod_id) {
       const goodsInfo = await getProductDetail({ prod_id }, {
@@ -183,6 +447,8 @@ export default {
         throw Error(e.msg || '获取商品详情失败')
       })
 
+      this.attrInfo = { ...attrInfoTmpl } // 重置
+      this.check_attr = {}// 重置
       this.product = goodsInfo
 
       if (goodsInfo.skujosn) {
@@ -273,6 +539,50 @@ export default {
 </script>
 <style lang="scss" scoped>
 
+  .carts{
+    &-box{
+      width: 750rpx;
+      overflow-x: hidden;
+      overflow-y: scroll;
+    }
+    &-list{
+      padding: 30rpx 30rpx 60rpx;
+      width: 750rpx;
+      box-sizing: border-box;
+    }
+    &-item{
+      height: 186rpx;
+      display: flex;
+      align-items: center;
+      &-cover{
+        @include cover-img();
+        width: 122rpx;
+        height: 122rpx;
+        border-radius: 4rpx;
+        margin-right: 22rpx;
+      }
+      &-info{
+        width: 546rpx;
+        .title{
+          font-size: 16px;
+          color: #333;
+        }
+        .attr-text{
+          font-size: 12px;
+          color: #999;
+          margin-top: 10rpx;
+        }
+        .actions{
+          margin: 18rpx 0;
+          height: 54rpx;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+      }
+    }
+  }
+
   .goods-bottom-action{
     position: fixed;
     bottom: 0;
@@ -280,6 +590,7 @@ export default {
     height: 95rpx;
     color: #fff;
     font-size: 12px;
+    z-index: 103;
     .cart{
       position: absolute;
       top: -8rpx;
@@ -302,7 +613,6 @@ export default {
           background: $fun-red-color;
           border-radius: 50%;
           overflow: hidden;
-          width: 14px;
           height: 14px;
           font-size: 12px;
           line-height: 14px;
@@ -357,6 +667,9 @@ export default {
         border: none;
         font-size: 12px;
         color: #fff;
+        &.disabled{
+          background: #999;
+        }
       }
     }
 
@@ -446,7 +759,7 @@ export default {
   .container {
     position: fixed;
     top: 340rpx;
-    bottom: 0rpx;
+    bottom: 85rpx;
     width: 750rpx;
     background: #fff;
     display: flex;
@@ -492,6 +805,7 @@ export default {
           width: 118rpx;
           height: 118rpx;
           background: #f2f2f2;
+          @include cover-img();
         }
 
         .info {
