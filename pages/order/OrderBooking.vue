@@ -161,7 +161,7 @@
         </div>
       </div>
 
-      <div class="section-box bg-white">
+      <div class="section-box bg-white" v-if="tmplFromList.length>0">
         <diy-form @update="upOrderTmplData"  eid="material" ref="material" :forms="tmplFromList"></diy-form>
       </div>
 
@@ -267,7 +267,7 @@
 // import StoreListComponents from "../../components/StoreListComponents";
 
 import BaseMixin from '@/mixins/BaseMixin'
-import { createOrder, createOrderCheck } from '@/api/order'
+import { createOrder, createOrderCheck, getBizOrderTemplateList } from '@/api/order'
 import { getAddressList } from '@/api/customer'
 import LayoutLayer from '@/componets/layout-layer/layout-layer'
 import { hideLoading, modal, showLoading } from '@/common/fun'
@@ -283,7 +283,9 @@ export default {
   components: { DiyForm, FunErrMsg, LayoutIcon, LayoutLayer },
   data () {
     return {
+      bid: null,
       tmplFromList: [], // 订单模板
+      order_temp_id: null,
 
       formCheckResult: [],
       selfObj: null,
@@ -321,7 +323,7 @@ export default {
       faPiaoChecked: false,
       ship_current: 0,
       deliveryCartList: [], // 外卖的数据接口
-      order_temp_data: '', // 特殊传，下单模版产品必传，指定下单模版的产品的必填数据，json
+      order_temp_data: [], // 特殊传，下单模版产品必传，指定下单模版的产品的必填数据，json
       postData: {
         cart_key: '',
         cart_buy: '',
@@ -430,7 +432,14 @@ export default {
       this.postData.address_id = this.addressinfo.Address_ID
 
       // 获取用户收货地址，获取订单信息，后台判断运费信息
-      this.checkOrderParam({ isInit: true })
+      await this.checkOrderParam({ isInit: true })
+      if (this.order_temp_id && this.bid) {
+        const { temp_info: temp_infoStr = '' } = await getBizOrderTemplateList({ id: this.order_temp_id, biz_id: this.bid }, { onlyData: true }).catch(err => { modal(err.msg) })
+        if (temp_infoStr) {
+          const temp_info = JSON.parse(temp_infoStr)
+          this.tmplFromList = temp_info.formData
+        }
+      }
     },
     changgeTabIdx (index) {
       this.tabIdx = index
@@ -791,7 +800,7 @@ export default {
      * 更新下单信息
      * @param isInit 初次请求需要标记为true,因为有些操作只有第一次的时候才做
      */
-    checkOrderParam ({ isInit = false }) {
+    async checkOrderParam ({ isInit = false }) {
       const oldOrderInfo = { ...this.orderInfo }
 
       // 初始化的时候只有这个必传（也就是说默认的时候不算运费，毕竟运费可以通过选择运费后实时计算)
@@ -801,67 +810,62 @@ export default {
       if (['CartList', 'waimai'].includes(params.cart_key)) {
         params.cart_buy = JSON.stringify(this.postData.cart_buy)
       }
-      createOrderCheck(params).then(res => {
-        const { CartList, biz_list: bizList, ...orderInfo } = res.data
+      const preOrderData = await createOrderCheck({ ...params }, { onlyData: true }).catch(e => { modal(e.msg) })
 
-        console.log(orderInfo)
+      const { CartList, biz_list: bizList, ...orderInfo } = preOrderData
 
-        // 第一层是商户
-        // for (var biz_id in CartList) {
-        //   // 第二个是产品
-        //   for (var prod_id in CartList[biz_id]) {
-        //     // 同一个产品可能同时多个规格
-        //     for (var attr in CartList[biz_id][prod_id]) {
-        //
-        //
-        //     }
-        //   }
-        // }
+      console.log(orderInfo)
 
-        for (var biz_id in CartList) {
-          this.$set(this.postData.shipping_id, biz_id, 0)// 初始化对应数量的物流方式，默认全是0.如果是实物订单，则在提交的时候校验就好了
-          this.$set(this.postData.shipping_name, biz_id, '')// 初始化对应数量的物流方式，默认全是0.如果是实物订单，则在提交的时候校验就好了
+      // 第一层是商户
+      // for (var biz_id in CartList) {
+      //   // 第二个是产品
+      //   for (var prod_id in CartList[biz_id]) {
+      //     // 同一个产品可能同时多个规格
+      //     for (var attr in CartList[biz_id][prod_id]) {
+      //
+      //
+      //     }
+      //   }
+      // }
 
-          this.$set(this.postData.coupon_id, biz_id, '')// 优惠券
-          this.$set(this.postData.use_integral, biz_id, 0)// 积分抵扣
-          this.$set(this.postData.need_invoice, biz_id, 0)// 是否需要发票
-          this.$set(this.postData.invoice_info, biz_id, '')// 发票信息
-          this.$set(this.postData.use_money, biz_id, '')// 使用余额
-          this.$set(this.postData.order_remark, biz_id, '')// 订单备注
+      for (var biz_id in CartList) {
+        this.$set(this.postData.shipping_id, biz_id, 0)// 初始化对应数量的物流方式，默认全是0.如果是实物订单，则在提交的时候校验就好了
+        this.$set(this.postData.shipping_name, biz_id, '')// 初始化对应数量的物流方式，默认全是0.如果是实物订单，则在提交的时候校验就好了
+
+        this.$set(this.postData.coupon_id, biz_id, '')// 优惠券
+        this.$set(this.postData.use_integral, biz_id, 0)// 积分抵扣
+        this.$set(this.postData.need_invoice, biz_id, 0)// 是否需要发票
+        this.$set(this.postData.invoice_info, biz_id, '')// 发票信息
+        this.$set(this.postData.use_money, biz_id, '')// 使用余额
+        this.$set(this.postData.order_remark, biz_id, '')// 订单备注
+      }
+
+      this.$set(this, 'bizList', bizList)
+      this.$set(this, 'CartList', CartList)
+
+      this.CartListReady = true
+      this.bizListReady = true
+
+      this.orderInfo = Object.assign(oldOrderInfo, orderInfo)
+      if (Array.isArray(this.orderInfo.coupon_list) && this.orderInfo.coupon_list.length > 0) {
+        this.orderInfo.coupon_list.push({ Coupon_ID: '' })
+      }
+
+      // 如果该规格有门店 就优先后台设置的
+      if (this.orderInfo.all_has_stores === 1 && isInit === true && this.orderInfo.is_virtual !== 1) {
+        this.tabIdx = this.initData.order_submit_first
+      }
+
+      this.couponlist = orderInfo.coupon_list
+
+      this.orderLoading = true
+      if (orderInfo.Order_Shipping && orderInfo.Order_Shipping.shipping_id) this.postData.shipping_id = orderInfo.Order_Shipping.shipping_id
+      this.idD = this.postData.shipping_id
+      for (var k in this.orderInfo.shipping_company) {
+        if (k === this.postData.shipping_id) {
+          this.shipping_name = `${this.orderInfo.shipping_company[k]}`
         }
-
-        this.$set(this, 'bizList', bizList)
-        this.$set(this, 'CartList', CartList)
-
-        this.CartListReady = true
-        this.bizListReady = true
-
-        this.orderInfo = Object.assign(oldOrderInfo, orderInfo)
-        if (this.orderInfo.coupon_list.length > 0) {
-          this.orderInfo.coupon_list.push({ Coupon_ID: '' })
-        }
-
-        // 如果该规格有门店 就优先后台设置的
-        if (this.orderInfo.all_has_stores === 1 && isInit === true && this.orderInfo.is_virtual !== 1) {
-          this.tabIdx = this.initData.order_submit_first
-        }
-
-        this.couponlist = orderInfo.coupon_list
-
-        this.orderLoading = true
-        this.postData.shipping_id = orderInfo.Order_Shipping.shipping_id
-        this.idD = this.postData.shipping_id
-        for (var k in this.orderInfo.shipping_company) {
-          if (k === this.postData.shipping_id) {
-            this.shipping_name = `${this.orderInfo.shipping_company[k]}`
-          }
-        }
-      }).catch(e => {
-        uni.showToast({
-          title: e.msg,
-          icon: 'none'
-        })
-      })
+      }
     }
     // ...mapActions(['getUserInfo','setUserInfo']),
   },
@@ -880,6 +884,23 @@ export default {
     }
     if (options.checkfrom) {
       this.checkfrom = options.checkfrom
+    }
+
+    // 如果有物流模板，必须要有biz_id
+    if (options.order_temp_id) {
+      this.order_temp_id = options.order_temp_id
+      if (!options.biz_id) {
+        modal('biz_id必传')
+        return
+      }
+      this.bid = options.biz_id
+    }
+
+    if (['CartList', 'waimai'].includes(options.cart_key)) {
+      if (!options.biz_id) {
+        modal('biz_id必传')
+        return
+      }
     }
 
     if (options.cart_key === 'CartList') {

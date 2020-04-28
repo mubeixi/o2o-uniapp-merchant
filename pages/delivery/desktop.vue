@@ -233,7 +233,7 @@ export default {
   methods: {
     buyNow () {
       if (this.totalPrice > 0 && this.totalPrice > this.bizInfo.city_express_config.limit_config.start_send_money) {
-        this.$linkTo('/pages/order/OrderBooking?cart_key=waimai')
+        this.$linkTo('/pages/order/OrderBooking?cart_key=waimai&biz_id'+this.bid)
       } else {
         modal('未达到配送价')
       }

@@ -984,7 +984,7 @@ export default {
         await updateCart(postData).catch(e => {
           throw Error(e.msg || '下单失败')
         })
-        let url='/pages/order/OrderBooking?cart_key=DirectBuy&order_temp_id='+this.detailData.order_temp_id
+        let url='/pages/order/OrderBooking?cart_key=DirectBuy&order_temp_id='+this.detailData.order_temp_id+'&biz_id='+this.detailData.biz_id
         this.$linkTo(url)
       } catch (e) {
         this.$modal(e.message)
