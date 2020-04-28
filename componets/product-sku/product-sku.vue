@@ -15,21 +15,8 @@
         </div>
         <div class="cartCenter">
           <div class="cartAttr" v-for="(item,i) of list.skujosn_new" :key="i">
-<!--            <div class="sku">-->
-<!--              {{item.sku}}-->
-<!--            </div>-->
-<!--            <div class="skuValue" v-if="gift == 0">-->
-<!--              <div class="skuview" :class="ind==index?'skuCheck':''" @click="selectAttr(index)"-->
-<!--                   v-for="(mbx,index) of item.val" :key="index">{{mbx}}-->
-<!--              </div>-->
-<!--            </div>-->
-<!--            <div class="skuValue" v-else>-->
-<!--              <div class="skuview" :class="skuval[i]==index?'skuCheck':'unablechoose'" v-for="(mbx,index) of item.val"-->
-<!--                   :key="index">{{mbx}}-->
-<!--              </div>-->
-<!--            </div>-->
             <div class="sku">
-              {{item.sku}}
+              {{item.sku=='mobile_prod_attr_name'?'规格':item.sku}}
             </div>
             <div class="skuValue" v-if="gift == 0">
               <div class="skuview" :class="check_attr[item.sku]==index?'skuCheck':''" @click="selectAttr(index,item.sku)"  v-for="(mbx,index) of item.val" :key="index">{{mbx}}</div>
@@ -176,7 +163,8 @@ export default {
         }
       }
       this.close()
-      this.$emit('submit', this.postData)
+      console.log("pro")
+      this.$emit('submitSure', this.postData)
     },
     buyNow () {
       if(this.proList.skuvaljosn){
@@ -233,12 +221,14 @@ export default {
           break
         }
       }
+
       //属性判断
       if (attr_val) {
         this.postData.id = attr_val.Product_Attr_ID;   //选择属性的id
         this.postData.count = attr_val.Property_count;   //选择属性的库存
         this.postData.price = attr_val.Attr_Price?attr_val.Attr_Price:this.list.Products_PriceX; // 选择属性的价格
-        this.submitFlag = (!this.check_attr || Object.getOwnPropertyNames(this.check_attr).length != Object.getOwnPropertyNames(this.list.skujosn).length) ? false : true;
+        this.submitFlag = (!this.check_attr ) ? false : true;
+        //this.submitFlag = (!this.check_attr || Object.getOwnPropertyNames(this.check_attr).length != Object.getOwnPropertyNames(this.list.skujosn).length) ? false : true;
       }
       //判断属性库存
       if (attr_val && attr_val.Property_count <= 0) {
@@ -294,15 +284,27 @@ export default {
       this.postData.price = this.list.Products_PriceX
       this.postData.count = this.list.Products_Count
       if (this.list.skujosn) {
-        const skujosn_new = []
+        let skujosn_new = []
         for (const i in this.list.skujosn) {
           skujosn_new.push({
             sku: i,
             val: this.list.skujosn[i]
           })
         }
+        //新增如果有手机的规格
+        for (const i in this.list.skujosn) {
+          if(i=='mobile_prod_attr_name'){
+            skujosn_new=[{
+              sku:i,
+              val: this.list.skujosn[i]
+            }]
+          }
+        }
+        //结束
+
         this.list.skujosn_new = skujosn_new
         this.list.skuvaljosn = this.list.skuvaljosn
+        console.log(this.list,"ss")
       }
     },
     show () {
@@ -367,6 +369,8 @@ export default {
 
     .cartCenter {
       margin-top: 20rpx;
+      max-height: 300px;
+      overflow: scroll;
 
       .cartAttr {
         //display: flex;
