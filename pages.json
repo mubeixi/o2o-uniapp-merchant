@@ -147,8 +147,7 @@
 		{
 			"path": "pages/order/OrderList",
 			"style": {
-				"navigationBarTitleText": "订单列表",
-				"navigationStyle": "custom"
+				"navigationBarTitleText": "订单列表"
 			}
 		},
 		{
@@ -217,14 +216,39 @@
 				"navigationBarBackgroundColor": "#3A3731"
 			}
         }
+        ,{
+            "path" : "pages/user/Praise",
+            "style": {
+            	"navigationBarTitleText": "好评"
+            }
+        }
     ],
 	"subPackages":[{
 			"root": "pagesA",
 			"name": "onther",
 			"pages":[{
-                    "path" : "user/user",
-                    "style" : {}
+                    "path" : "user/EditPersonalMsg",
+                    "style": {
+                    	"navigationBarTitleText": "修改资料"
+                    }
                 }
+                ,{
+                    "path" : "user/PersonalMsg",
+                    "style": {
+                    	"navigationBarTitleText": "修改资料"
+                    }
+                },{
+					"path" : "user/AddressList",
+					"style": {
+						"navigationBarTitleText": "地址管理"
+					}
+				},{
+					"path" : "user/EditAddress",
+					"style": {
+						"navigationBarTitleText": "修改收货地址"
+					}
+				}
+
             ]
 	}],
 	"preloadRule": {
@@ -256,7 +280,7 @@
 				"text": "直播"
 			},
 			{
-				"pagePath": "pages/index",
+				"pagePath": "pages/user/Praise",
 				"iconPath": "/static/tabbar/praise.png",
 				"selectedIconPath": "/static/tabbar/praise.png",
 				"text": "好评"

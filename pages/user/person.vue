@@ -6,7 +6,7 @@
         <LayoutIcon type="iconshezhi" size="24" color="#333"></LayoutIcon>
         <LayoutIcon class="p-l-10" type="iconicon" size="24" color="#333"  @click="$linkTo('/pages/person/DailyCheck')"></LayoutIcon>
       </div>
-      <div class="user-msg" v-if="userInfo.Users_ID">
+      <div class="user-msg" v-if="userInfo.Users_ID"  @click="$linkTo('/pagesA/user/PersonalMsg')">
         <image :src="userInfo.User_HeadImg" class="avatar"></image>
         <div class="name">{{userInfo.User_NickName}}</div>
       </div>
@@ -17,24 +17,24 @@
 
     </div>
     <div class="orders flex align-items-center">
-      <div class="order-item">
+      <div class="order-item" @click="goOrder(1)">
         <LayoutIcon type="icondaifukuan" color="#9CA2F9" size="26"></LayoutIcon>
         <div class="order-desc">待付款</div>
       </div>
-      <div class="order-item">
+      <div class="order-item" @click="goOrder(2)">
         <LayoutIcon type="iconfahuotixing" color="#88C79A" size="26"></LayoutIcon>
         <div class="order-desc">待发货</div>
       </div>
-      <div class="order-item">
+      <div class="order-item" @click="goOrder(3)">
         <LayoutIcon type="icondaishouhuo" color="#FDBB59" size="26"></LayoutIcon>
         <div class="order-desc">待收货</div>
       </div>
-      <div class="order-item">
+      <div class="order-item" @click="goOrder(4)">
         <LayoutIcon type="iconpingjia" color="#7DCAF7" size="26"></LayoutIcon>
         <div class="order-desc">待评价</div>
       </div>
     </div>
-    <div class="quanyi">
+    <div class="quanyi" @click="$linkTo('/pages/user/EquityCard')">
       <LayoutIcon type="iconquanyi" color="#DA8E4B" size="26" class="v-icon"></LayoutIcon>
       <div class="quanyi-title">超值权益卡</div>
       <div class="quanyi-ad">海量积分赠送·满立减优惠券</div>
@@ -44,8 +44,8 @@
       </div>
     </div>
     <div class="functions flex flex-justify-between">
-      <block v-for="item in iconList">
-        <LayoutFun width="150rpx" :type="item.className" :name="item.name" :color="item.color"></LayoutFun>
+      <block v-for="(item,index) of  iconList" :key="index">
+        <LayoutFun width="150rpx" :type="item.className" @openNext="openNext" :index="index" :name="item.name" :color="item.color"></LayoutFun>
       </block>
     </div>
     <div class="intro">为你推荐</div>
@@ -156,6 +156,17 @@ export default {
     }
   },
   methods: {
+    openNext(index){
+      switch (index) {
+        case 9:
+            this.$linkTo('/pagesA/user/AddressList')
+          break
+      }
+    },
+    goOrder(index){
+      let url='/pages/order/OrderList?type=shop&&index='+index
+      this.$linkTo(url)
+    },
     async _init_func () {
       this.proList = await getProductList({}, { onlyData: true }).catch(e => { throw Error(e.msg || '获取推荐商品信息失败') })
     },

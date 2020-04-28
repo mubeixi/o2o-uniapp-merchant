@@ -1,5 +1,5 @@
 <template>
-	<div class="item" :style="{width}">
+	<div class="item" :style="{width}" @click="openNext">
 		<LayoutIcon :rotate="rotate" :type="type" :weight="weight" :display="display" :color="color" :size="size"></LayoutIcon>
 		<div class="icon-name">{{name}}</div>
 	</div>
@@ -10,7 +10,16 @@ export default {
   components: {
     LayoutIcon
   },
+	methods:{
+		openNext(){
+			this.$emit('openNext',this.index)
+		}
+	},
 	props: {
+		index:{
+			type: Number,
+			default: 0
+		},
   	width:{
 		  type: String,
 		  default: '80rpx'

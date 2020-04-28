@@ -69,37 +69,40 @@
 </template>
 
 <script>
-import { getRightsCard,rightsCardPay,createRightsCardOrder } from '@/api/customer'
+import { getRightsCard, rightsCardPay, createRightsCardOrder } from '@/api/customer'
 import BaseMixin from '@/mixins/BaseMixin'
-import {error} from '@/common/fun'
+import { error } from '@/common/fun'
 import WzwPay from '@/componets/wzw-pay/wzw-pay'
 import Pay from '@/common/Pay'
+
 export default {
   mixins: { BaseMixin },
-  components:{WzwPay},
+  components: { WzwPay },
   data () {
     return {
       inds: 0,
       rightCard: [],
-      order_id:'',
-      pay_type:''
+      order_id: '',
+      pay_type: '',
     }
   },
   methods: {
-    async payMehtod(item){
-      console.log(item,"ss")
-      let data={
-        order_id:this.order_id,
-        pay_method:item.pay_type
+    async payMehtod (item) {
+      console.log(item, 'ss')
+      let data = {
+        order_id: this.order_id,
+        pay_method: item.pay_type,
       }
-     let payCan =await rightsCardPay(data,{tip:'加载中'}).catch(e=>{error(e.msg||'创建订单失败')})
+      let payCan = await rightsCardPay(data, { tip: '加载中' }).catch(e => {
+        error(e.msg || '创建订单失败')
+      })
       Pay(this, item.pay_type, payCan)
     },
     payFailCall (err) {
       uni.showToast({
         title: err.msg ? err.msg : '支付失败',
         icon: 'none',
-        duration: 2000
+        duration: 2000,
       })
 
       // uni.redirectTo({
@@ -135,7 +138,7 @@ export default {
             } else if (res.cancel) {
 
             }
-          }
+          },
         })
         return
       }
@@ -149,14 +152,19 @@ export default {
 
       toast('支付成功')
 
-          uni.redirectTo({
-            url: '/pages/user/person'
-          })
+      uni.redirectTo({
+        url: '/pages/user/person',
+      })
 
     },
-    async submit(){
-      let order=await createRightsCardOrder({card_id:this.rightCard[this.inds].id},{onlyData: true,tip:'加载中'}).catch(e=>{error(e.msg||'创建订单失败')})
-      this.order_id=order.order_id
+    async submit () {
+      let order = await createRightsCardOrder({ card_id: this.rightCard[this.inds].id }, {
+        onlyData: true,
+        tip: '加载中',
+      }).catch(e => {
+        error(e.msg || '创建订单失败')
+      })
+      this.order_id = order.order_id
       this.$refs.payLayer.show()
     },
     change (e) {
