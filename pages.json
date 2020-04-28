@@ -147,8 +147,7 @@
 		{
 			"path": "pages/order/OrderList",
 			"style": {
-				"navigationBarTitleText": "订单列表",
-				"navigationStyle": "custom"
+				"navigationBarTitleText": "订单列表"
 			}
 		},
 		{
@@ -228,9 +227,28 @@
 			"root": "pagesA",
 			"name": "onther",
 			"pages":[{
-                    "path" : "user/user",
-                    "style" : {}
+                    "path" : "user/EditPersonalMsg",
+                    "style": {
+                    	"navigationBarTitleText": "修改资料"
+                    }
                 }
+                ,{
+                    "path" : "user/PersonalMsg",
+                    "style": {
+                    	"navigationBarTitleText": "修改资料"
+                    }
+                },{
+					"path" : "user/AddressList",
+					"style": {
+						"navigationBarTitleText": "地址管理"
+					}
+				},{
+					"path" : "user/EditAddress",
+					"style": {
+						"navigationBarTitleText": "修改收货地址"
+					}
+				}
+
             ]
 	}],
 	"preloadRule": {

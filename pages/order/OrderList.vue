@@ -4,123 +4,182 @@
       <div class="nav-item" :class="index==0?'active':''" @click="changIndex(0)">全部</div>
       <div class="nav-item" :class="index==1?'active':''" @click="changIndex(1)">
         待付款
-        <div class="jiaobiao">1</div>
+        <div class="jiaobiao" v-if="orderNum.waitpay">{{orderNum.waitpay}}</div>
       </div>
       <div class="nav-item" :class="index==2?'active':''" @click="changIndex(2)">
         待发货
-        <div class="jiaobiao">2</div>
+        <div class="jiaobiao" v-if="orderNum.waitsend">{{orderNum.waitsend}}</div>
       </div>
       <div class="nav-item" :class="index==3?'active':''" @click="changIndex(3)">
         待收货
-        <div class="jiaobiao">3</div>
+        <div class="jiaobiao" v-if="orderNum.waitconfirm">{{orderNum.waitconfirm}}</div>
       </div>
       <div class="nav-item" :class="index==4?'active':''" @click="changIndex(4)">
         待评价
-        <div class="jiaobiao">4</div>
+        <div class="jiaobiao" v-if="orderNum.waitcomment">{{orderNum.waitcomment}}</div>
       </div>
     </div>
+    <block v-if="orderList.length>0">
+      <div class="order" v-for="(order,index) of orderList" :key="index">
+        <div style="background-color: #F3F3F3;height: 20rpx;width: 100%;position: absolute;left: 0rpx;"></div>
+        <div style="height: 20rpx;"></div>
+        <div class="bizinfo">
+          <img class="img" :src="order.ShopLogo" alt=""/>
+          <span class="bizname">{{order.ShopName}}</span>
+          <span class="status">{{order.Order_Status_desc}}</span>
+        </div>
+        <div class="pro" v-for="(pro,ind) of order.prod_list" :key="ind">
+          <div class="pro-div">
+            <img class="pro-img" :src="pro.prod_img"/>
+          </div>
+          <div class="pro-msg">
+            <div class="pro-name">{{pro.prod_name}}</div>
+            <div class="attr" v-if="pro.attr_info"><span>{{pro.attr_info.attr_name}}</span></div>
+            <div class="attrs" v-else></div>
+            <div class="pro-price fz-12"><span>￥</span>{{pro.prod_price}} <span
+              class="amount">x{{pro.prod_count}}</span></div>
+          </div>
+        </div>
+        <div class="text-right total">共{{order.prod_list.length}}件商品 实付：<span class="price"><span>￥</span> {{order.Order_TotalPrice}} <block
+          v-if="item.Order_Shipping.Price>0">(含运费{{item.Order_Shipping.Price}}元)</block></span></div>
+        <div class="btn-group" v-if="order.Order_Status==-1">
+          <span @click.stop="delOrder(order.prod_list,index)">删除订单</span>
+        </div>
+        <div class="btn-group" v-if="order.Order_Status==0">
+          <span @click.stop="cancelOrder(order.prod_list,index)">取消订单</span>
+        </div>
+        <div class="btn-group" v-if="order.Order_Status==1">
+          <span @click.stop="cancelOrder(order.prod_list,index)">取消订单</span>
+          <span class="active" @click.stop="goPay(order)">立即付款</span>
+        </div>
+        <div class="btn-group" v-else-if="order.Order_Status==2&&order.Order_Type != 'gift'">
+          <span class="active" @click.stop="goPay(order)">申请退款</span>
+        </div>
+        <div class="btn-group" v-else-if="order.Order_Status==3">
+          <div v-if="order.allow_extend_receipt" @click.stop="openExtendReceiptFn(order)" class="extend_receipt">
+            <div class="funicon icon-more1 icon font22 " style="color: #777;"></div>
+            <div @click.stop="extendReceiptFn(order)" v-if="item.extend" class="tooltip">确认延迟</div>
+          </div>
+          <span @click.stop="goLogistics(order)" v-if="order.Order_Shipping.shipping_id!=2">查看物流</span>
+          <span @click.stop="goPay(order)" style="margin-left: 15rpx;"
+                v-if="order.Order_Shipping.shipping_id!=2">申请退款退货</span>
+          <span class="active" @click.stop="confirmOrder(order,index)">确认收货</span>
+          <!-- @click="goPay(item)"跳转退款 -->
+        </div>
+        <div class="btn-group" v-else-if="order.Order_Status==4 && order.Is_Commit == 0 && order.Is_Backup == 0">
+          <span class="active" @click.stop="goPay(order)">立即评价</span>
+        </div>
+      </div>
+    </block>
 
-    <div class="order" @click="goDetail">
-      <div style="background-color: #F3F3F3;height: 20rpx;width: 100%;position: absolute;left: 0rpx;"></div>
-      <div style="height: 20rpx;"></div>
-      <div class="bizinfo">
-        <img class="img" src="static/copyright.png" alt="" />
-        <span class="bizname">网中网公司</span>
-        <span class="status">待付款</span>
-      </div>
-      <div class="pro">
-        <div class="pro-div">
-          <img class="pro-img" src="static/comment.png" />
-        </div>
-        <div class="pro-msg">
-          <div class="pro-name">测试产品</div>
-          <div class="attr"><span>属性</span></div>
-          <div class="pro-price fz-12"><span>￥</span>100 <span class="amount">x5</span></div>
-        </div>
-      </div>
-      <div class="text-right total">共1件商品 实付：<span class="price"><span>￥</span> 100 (含运费10元)</span></div>
-      <div class="btn-group">
-        <span>取消订单</span>
-        <span class="active">立即付款</span>
-      </div>
-    </div>
-<!--    <div class="order" v-for="(item,index) of data" :key="index" @click="goDetail(item)">-->
-<!--      <template v-if="item.prod_list.length>0">-->
-<!--        <div style="background-color: #F3F3F3;height: 20rpx;width: 100%;position: absolute;left: 0rpx;"></div>-->
-<!--        <div style="height: 20rpx;"></div>-->
-<!--        <div class="bizinfo">-->
-<!--          <img class="img" :src="item.ShopLogo|domain" alt="">-->
-<!--          <span class="bizname">{{item.ShopName}}</span>-->
-<!--          <span class="status">{{item.Order_Status_desc}}</span>-->
-<!--        </div>-->
-<!--        <block v-for="(i,k) of item.prod_list" :key="k">-->
-<!--          <div class="pro">-->
-<!--            <div class="pro-div">-->
-<!--              <img class="pro-img" :src="i.prod_img">-->
-<!--            </div>-->
-<!--            <div class="pro-msg">-->
-<!--              <div class="pro-name">{{i.prod_name}}</div>-->
-<!--              <div class="attr" v-if="i.attr_info"><span>{{i.attr_info.attr_name}}</span></div>-->
-<!--              <div class="attr" v-else style="background-color: #FFFFFF;"><span></span></div>-->
-<!--              <div class="pro-price"><span>￥</span>{{i.prod_price}} <span class="amount">x{{i.prod_count}}</span></div>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </block>-->
-<!--        <div class="text-right total">共{{item.prod_list.length}}件商品 实付：<span class="price"><span>￥</span> {{item.Order_TotalPrice}} <block-->
-<!--          v-if="item.Order_Shipping.Price>0">(含运费{{item.Order_Shipping.Price}}元)</block></span></div>-->
-<!--        <div class="btn-group" v-if="item.Order_Status==-1">-->
-<!--          <span @click.stop="delOrder(item.prod_list,index)">删除订单</span>-->
-<!--        </div>-->
-<!--        <div class="btn-group" v-if="item.Order_Status==0">-->
-<!--          <span @click.stop="cancelOrder(item.prod_list,index)">取消订单</span>-->
-<!--        </div>-->
-<!--        <div class="btn-group" v-if="item.Order_Status==1">-->
-<!--          <span @click.stop="cancelOrder(item.prod_list,index)">取消订单</span>-->
-<!--          <span class="active" @click.stop="goPay(item)">立即付款</span>-->
-<!--        </div>-->
-<!--        <div class="btn-group" v-else-if="item.Order_Status==2&&item.Order_Type != 'gift'">-->
-<!--          <span class="active" @click.stop="goPay(item)">申请退款</span>-->
-<!--        </div>-->
-<!--        <div class="btn-group" v-else-if="item.Order_Status==3">-->
-<!--          <div v-if="item.allow_extend_receipt" @click.stop="openExtendReceiptFn(item)" class="extend_receipt">-->
-<!--            <div class="funicon icon-more1 icon font22 " style="color: #777;"></div>-->
-<!--            <div @click.stop="extendReceiptFn(item)" v-if="item.extend" class="tooltip">确认延迟</div>-->
-<!--          </div>-->
-<!--          <span @click.stop="goLogistics(item)" v-if="item.Order_Shipping.shipping_id!=2">查看物流</span>-->
-<!--          <span @click.stop="goPay(item)" style="margin-left: 15rpx;"-->
-<!--                v-if="item.Order_Shipping.shipping_id!=2">申请退款退货</span>-->
-<!--          <span class="active" @click.stop="confirmOrder(item,index)">确认收货</span>-->
-<!--        </div>-->
-<!--        <div class="btn-group" v-else-if="item.Order_Status==4 && item.Is_Commit == 0 && item.Is_Backup == 0">-->
-<!--          <span class="active" @click.stop="goPay(item)">立即评价</span>-->
-<!--        </div>-->
-<!--      </template>-->
-<!--      <template v-if="item.prod_list.length>0">-->
-<!--        <div style="background-color: #F3F3F3;height: 20rpx;width: 100%;position: absolute;left: 0rpx;"></div>-->
-<!--      </template>-->
-<!--    </div>-->
-    <div class="defaults">
+
+    <div class="defaults" v-else>
       <image :src="'/static/client/empty.png'|domain"></image>
     </div>
   </div>
 
 </template>
 <script>
+import { getOrderList, cancelOrder, getOrderNum } from '@/api/order'
+import BaseMixin from '@/mixins/BaseMixin'
+import { error, toast } from '@/common/fun'
 
 export default {
+  mixins: [BaseMixin],
   data () {
     return {
-      index: 0
+      index: 0,
+      type: '',
+      page: 1,
+      pageSize: 5,
+      totalCount: 0,
+      orderList: [],
+      orderNum: {},
     }
   },
   methods: {
+    //取消订单
+    cancelOrder (item, index) {
+      if (this.isLoading) return
+      this.isLoading = true
+      let Order_ID
+      for (let i in item) {
+        if (item[i].Order_ID) {
+          Order_ID = item[i].Order_ID
+        }
+      }
+      if (Order_ID) {
+        cancelOrder({ Order_ID }).then(res => {
+          this.isLoading = false
+          // 取消订单，仅改变了订单的状态
+          this.data[index].Order_Status = -1
+          this.getOrderNum()
+          uni.showToast({
+            title: res.msg,
+            icon: 'none',
+          })
+        }).catch(e => {
+          this.isLoading = false
+        })
+      }
+    },
+    //获取订单角标数
+    getOrderNum () {
+      getOrderNum({ Order_Type: this.Order_Type }).then(res => {
+        this.orderNum = res.data
+      }).catch(e => {
+      })
+    },
     changIndex (num) {
       this.index = num
+      this.page = 1
+      this.orderList = []
+      this.getOrder()
+    },
+    async getOrder (item) {
+      let data = {
+        page: this.page,
+        pageSize: this.pageSize,
+        Order_Type: this.type,
+      }
+      if (this.index > 0) {
+        data.Order_Status = this.index
+      }
+      let orderLsit = await getOrderList(data).catch(e => {
+        error(e.msg || '获取订单列表失败')
+      })
+      orderLsit.data.map(item => {
+        item.Order_Shipping = JSON.parse(item.Order_Shipping)
+      })
+
+      this.totalCount = orderLsit.totalCount
+      if (item == 'init') {
+        this.orderList = orderLsit.data
+      } else {
+        orderLsit.data.map(item => {
+          this.orderList.push(item)
+        })
+      }
     },
     goDetail (id) {
       this.$linkTo('/pages/order/OrderDetail')
+    },
+  },
+  onShow () {
+    this.page = 1
+    this.getOrder('init')
+    this.getOrderNum()
+  },
+  onLoad (options) {
+    this.type = options.type
+    this.index = options.index
+  },
+  onReachBottom () {
+    if (this.orderList.length < this.totalCount) {
+      this.page++
+      this.getOrder()
     }
-  }
+  },
 }
 </script>
 <style scoped lang="scss">
@@ -292,6 +351,16 @@ export default {
       height: 50rpx;
       line-height: 50rpx;
       background: #FFF5F5;
+      color: #666;
+      font-size: 24rpx;
+      padding: 0 20rpx;
+      margin-bottom: 20rpx;
+    }
+
+    .attrs {
+      display: inline-block;
+      height: 50rpx;
+      line-height: 50rpx;
       color: #666;
       font-size: 24rpx;
       padding: 0 20rpx;

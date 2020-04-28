@@ -60,3 +60,21 @@ export const confirmOrderPayStatus = (param, options) => fetch({
   param,
   options
 })
+
+export const getOrderList = (param, options) => fetch({
+  act: 'get_order',
+  param,
+  options
+})
+
+export const cancelOrder = (param, options) => fetch({
+  act: 'cancel_order',
+  param,
+  options
+})
+
+export const getOrderNum = (param, options) => fetch({
+  act: 'get_order_num',
+  param,
+  options
+})

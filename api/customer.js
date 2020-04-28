@@ -36,8 +36,16 @@ export const getUserInfo = (param, options) => fetch({
   options
 })
 
-export const getAddressList = (param, options) => fetch({ act: 'get_address', param, options })
+export const updateUserInfo = (param, options) => fetch({
+  act: 'update_user_info',
+  param,
+  options
+})
 
+export const getAddressList = (param, options) => fetch({ act: 'get_address', param, options })
+export const delAddress = (param, options) => fetch({ act: 'del_address', param, options })
+export const addAddress = (param, options) => fetch({ act: 'add_address', param, options })
+export const editAddress = (param, options) => fetch({ act: 'edit_address', param, options })
 // 用户领取优惠券
 export const getUserCoupon = (param, options) => fetch({ act: 'user_receive_coupon', param, options })
 
@@ -74,3 +82,5 @@ export const createRightsCardOrder = (param, options) => fetch({ act: 'createRig
 
 // 支付权益卡订单
 export const rightsCardPay = (param, options) => fetch({ act: 'rightsCardPay', param, options })
+
+

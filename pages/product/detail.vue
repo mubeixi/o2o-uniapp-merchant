@@ -711,7 +711,7 @@
         </div>
       </swiper-item>
     </swiper>
-    <product-sku ref="mySku" @sureSku="save" :hasCart="hasCart" @updaCart="updaCart" @buyNow="buyNow"
+    <product-sku ref="mySku" @sureSku="save" :hasCart="hasCart" @submit="submit" @updaCart="updaCart" @buyNow="buyNow"
                  :proList="detailData"></product-sku>
     <wzw-goods-action class="wzw-goods-action" @goStore="goStore(detailData.biz_id)" @goShare="toBooking" @myPay="myPay"
                       @allPay="allPay">
@@ -959,12 +959,43 @@ export default {
     myPay () {
       if (!checkIsLogin(1, 1)) return
       this.hasCart = true
+      if(this.detailData.order_temp_id){
+        this.hasCart = false
+      }
       this.$refs.mySku.show()
     },
     allPay () {
       if (!checkIsLogin(1, 1)) return
       this.hasCart = false
       this.$refs.mySku.show()
+    },
+    async submit(sku){
+      try {
+        showLoading()
+        // HUAWEI Mate 30 Pro
+
+        // count: 553
+        // id: 990
+        // price: 11790
+        // qty: 1
+        const postData = {
+          prod_id: this.prod_id, // 产品ID  在 onLoad中赋值
+          attr_id: sku.id, // 选择属性id
+          count: sku.count, // 选择属性的库存
+          qty: sku.qty, // 购买数量
+          cart_key: 'DirectBuy', // 购物车类型   CartList（加入购物车）、DirectBuy（立即购买）、PTCartList（不能加入购物车）
+          productDetail_price: sku.price
+        }
+        await updateCart(postData).catch(e => {
+          throw Error(e.msg || '下单失败')
+        })
+        let url='/pages/order/OrderBooking?cart_key=DirectBuy&order_temp_id='+this.detailData.order_temp_id
+        this.$linkTo(url)
+      } catch (e) {
+        this.$modal(e.message)
+      } finally {
+        hideLoading()
+      }
     },
     updaCart (sku) {
       // 加入购物车
