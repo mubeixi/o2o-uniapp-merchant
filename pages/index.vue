@@ -960,7 +960,7 @@ export default {
     top: 0;
     width: 750rpx;
     box-sizing: border-box;
-    z-index: 2;
+    z-index: 22;
     //background: $fun-green-color;
   }
 

@@ -13,6 +13,33 @@ import store from '@/store'
 import Schema from 'validate'
 import Promisify from '@/common/Promisify'
 
+/**
+ * 两个对象的骚操作，并返回一个新对象。这个操作应该避免影响原来的对象.
+ * 提示:这个方法只适用于简单值组成的对象
+ * @param left
+ * @param right
+ * @param cover
+ * @param insert
+ * @returns {*}
+ */
+export const mergeObject = (left, right, cover = false, insert = false) => {
+  const result = {}
+  if (!cover && !insert) return Object.assign(result, left, right)
+
+  for (var i in left) {
+    result[i] = cover && right.hasOwnProperty(i) ? right[i] : left[i] // 如果tmpl有对应的属性，就覆盖掉
+  }
+
+  // 插入只有right中有的属性
+  if (insert) {
+    for (var j in right) {
+      if (!left.hasOwnProperty(j))result[j] = right[j]
+    }
+  }
+
+  return result
+}
+
 export const objTranslate = (obj) => JSON.parse(JSON.stringify(obj))
 
 function checkValue (val, vals) {
@@ -570,6 +597,20 @@ export const saveImageToDisk = async ({ fileUrl, type = 'local' }) => {
     return false
   }
 }
+
+export const numberSort = function (arr, order_by) {
+  if (typeof order_by !== 'undefined' && order_by == 'desc') { // desc
+    return arr.sort(function (v1, v2) {
+      return v2 - v1
+    })
+  } else { // asc
+    return arr.sort(function (v1, v2) {
+      return v1 - v2
+    })
+  }
+}
+
+
 
 const Helper = {
   Object: {
