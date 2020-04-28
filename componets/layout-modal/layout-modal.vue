@@ -3,7 +3,7 @@
     <view v-show="ifshow" @tap="ableClose" @touchmove.stop.prevent class="popup-layer"
           :style="{backgroundColor:bgColor}"></view>
     <view @touchmove.stop.prevent v-show="ifshow"
-          :class="[positions==='top'?'top':'center']"
+          :class="[positions]"
           :style="{backgroundColor:mainBgColor}"
           ref="popRef" class="popup-content" @tap.stop="stopEvent">
       <slot></slot>

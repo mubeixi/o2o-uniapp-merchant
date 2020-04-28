@@ -116,7 +116,7 @@
                         </div>
                       </div>
                       <div class="action">
-                        <image class="img" :src="'/static/client/store/cart.png'|domain"></image>
+                        <!--<image class="img" :src="'/static/client/store/cart.png'|domain"></image>-->
                       </div>
                     </div>
 

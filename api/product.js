@@ -3,11 +3,10 @@ import {
 } from '@/common/request'
 
 // 获取产品列表
-export const getProductList = (param, options) => fetch({
-  act: 'get_prod',
-  param,
-  options
-})
+export const getProductList = (param, options) => {
+  if (param.hasOwnProperty('biz_id'))param.biz_ids = param.biz_id // hack biz_id参数变更
+  return fetch({ act: 'get_prod', param, options })
+}
 
 export const getFlashsaleList = (param, options) => fetch({
   act: 'get_flashsale',
@@ -43,8 +42,6 @@ export const getActiveInfo = (param, options) => fetch({
   options
 })
 
-
-
 // 获取商家列表
 export const getStoreList = (param, options) => fetch({
   act: 'getStoreList',
@@ -71,11 +68,9 @@ export const bizFlashsaleList = (param, options) => fetch({
   options
 })
 
-//获取商品海报
+// 获取商品海报
 export const getProductSharePic = (param, options) => fetch({
   act: 'shareProduct',
   param,
   options
 })
-
-

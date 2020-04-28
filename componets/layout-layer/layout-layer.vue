@@ -1,8 +1,8 @@
 <template>
   <div v-if="ifshow">
-    <div @tap="ableClose" @touchmove.stop.prevent class="popup-layer" :style="{backgroundColor:bgColor}"></div>
-    <div @touchmove.stop.prevent :class="[positions]"
-         :style="{backgroundColor:mainBgColor,borderRadius:radius?radius:''}" ref="popRef" class="popup-content"
+    <div @tap="ableClose" @touchmove.stop.prevent class="popup-layer" :style="{backgroundColor:bgColor,bottom:bottomStr}"></div>
+    <div :class="[positions]"
+         :style="{backgroundColor:mainBgColor,borderTopLeftRadius:radius,borderTopRightRadius:radius,bottom:bottomStr}" ref="popRef" class="popup-content"
          @tap.stop="stopEvent">
       <slot name="title"><div v-if="title" class="p-10 text-center c4">{{title}}</div></slot>
       <slot></slot>
@@ -14,8 +14,8 @@
 export default {
   name: 'LayoutLayer',
   props: {
-    title:{
-      type:String
+    title: {
+      type: String
     },
     bgColor: {
       type: String,
@@ -28,6 +28,10 @@ export default {
     positions: {
       type: String,
       default: 'bottom'
+    },
+    bottomStr: {
+      type: String,
+      default: ''
     },
     showPop: {
       type: Boolean,
@@ -85,10 +89,10 @@ export default {
     position: fixed;
     z-index: 99;
     background-color: rgba(0, 0, 0, .5);
-    height: 100%;
     width: 100%;
     top: 0px;
     left: 0px;
+    bottom: 0px;
     overflow: hidden;
   }
 
