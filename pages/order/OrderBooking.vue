@@ -34,6 +34,7 @@
       </div>
 
     </block>
+
     <div class="container" v-if="orderInfo.is_virtual === 1">
       <div class="other">
         <div class="bd">
@@ -56,7 +57,7 @@
     <div class="container" v-if="CartListReady && bizListReady">
 
       <!--这行代码特别关键 bind click="activeBizId=biz_id"-->
-      <div  class="store-item bg-white" v-for="(bizData,biz_id) in CartList" :key="biz_id" @click="setActiveBizId(biz_id)">
+      <div  class="section-box store-item bg-white" v-for="(bizData,biz_id) in CartList" :key="biz_id" @click="setActiveBizId(biz_id)">
         <div class="biz-info bor-b">
           <div style="display: flex;align-items: center;">
             <image :src="bizList[biz_id].biz_logo" class="biz_logo" />
@@ -158,6 +159,10 @@
           </div>
 
         </div>
+      </div>
+
+      <div class="section-box bg-white">
+        <diy-form @update="upOrderTmplData"  eid="material" ref="material" :forms="tmplFromList"></diy-form>
       </div>
 
     </div>
@@ -267,16 +272,19 @@ import { getAddressList } from '@/api/customer'
 import LayoutLayer from '@/componets/layout-layer/layout-layer'
 import { hideLoading, modal, showLoading } from '@/common/fun'
 
-import { getArrColumn, getObjectAttrNum, validateFun } from '@/common/helper'
+import { getArrColumn, getObjectAttrNum, objTranslate, validateFun } from '@/common/helper'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import FunErrMsg from '@/componets/fun-err-msg/fun-err-msg'
 import { Exception } from '@/common/Exception'
+import DiyForm from '@/componets/diy-form/diy-form'
 
 export default {
   mixins: [BaseMixin],
-  components: { FunErrMsg, LayoutIcon, LayoutLayer },
+  components: { DiyForm, FunErrMsg, LayoutIcon, LayoutLayer },
   data () {
     return {
+      tmplFromList: [], // 订单模板
+
       formCheckResult: [],
       selfObj: null,
       selectStore: false,
@@ -312,7 +320,8 @@ export default {
       userMoneyChecked: false,
       faPiaoChecked: false,
       ship_current: 0,
-
+      deliveryCartList: [], // 外卖的数据接口
+      order_temp_data: '', // 特殊传，下单模版产品必传，指定下单模版的产品的必填数据，json
       postData: {
         cart_key: '',
         cart_buy: '',
@@ -405,6 +414,9 @@ export default {
     // ...mapGetters(['userInfo','initData'])
   },
   methods: {
+    upOrderTmplData (data) {
+      this.order_temp_data = objTranslate(data)
+    },
     setActiveBizId (biz_id) {
       this.activeBizId = biz_id
     },
@@ -617,6 +629,11 @@ export default {
           order_remark: JSON.stringify(order_remark)
         })
 
+        // 来自购物车和外卖，需要加上这个
+        if (['CartList', 'waimai'].includes(this.postData.cart_key)) {
+          params.cart_buy = JSON.stringify(this.postData.cart_buy)
+        }
+
         const createOrderResult = await createOrder(params, { onlyData: true }).catch(e => { throw Error(e.msg || '下单失败') })
         // 订单的分销信息，在成功下单后就清除
         if (Storage.get('owner_id')) {
@@ -780,8 +797,8 @@ export default {
       // 初始化的时候只有这个必传（也就是说默认的时候不算运费，毕竟运费可以通过选择运费后实时计算)
       const params = isInit ? { cart_key: this.postData.cart_key } : this.postData
 
-      // 来自购物车，需要加上这个
-      if (params.cart_key === 'CartList') {
+      // 来自购物车和外卖，需要加上这个
+      if (['CartList', 'waimai'].includes(params.cart_key)) {
         params.cart_buy = JSON.stringify(this.postData.cart_buy)
       }
       createOrderCheck(params).then(res => {
@@ -877,6 +894,28 @@ export default {
       this.postData.cart_buy = cart_buy
     }
 
+    // cart_key==waimai：{"biz_id_1":{"prod_id_1":{"attr_id_1":"购买数量","attr_id_2":"购买数量"},"prod_id_2":["购买数量"]}}，例如：{"1":{"1561":{"2125":"1"},"1564":["2"]}}
+    if (options.cart_key === 'waimai') {
+      const cart_buy = {}
+      const deliveryCartList = this.$store.getters['delivery/getCartList']()
+      console.log(deliveryCartList)
+      for (var row of deliveryCartList) {
+        // 创建biz_id
+        if (!cart_buy.hasOwnProperty(row.biz_id))cart_buy[row.biz_id] = {}
+        // 创建product_id
+        if (!cart_buy[row.biz_id].hasOwnProperty(row.Products_ID))cart_buy[row.biz_id][row.Products_ID] = {}
+
+        // 根据是否有属性，来做不同的事情
+        if (isNaN(row.attr_id) && row.attr_id.indexOf('noattr') !== -1) {
+          cart_buy[row.biz_id][row.Products_ID] = [row.num]
+        } else {
+          cart_buy[row.biz_id][row.Products_ID][row.attr_id] = row.num
+        }
+      }
+      this.postData.cart_buy = cart_buy
+      // this.deliveryCartList = deliveryCartList
+    }
+
     // 页面直接传值很方便，为什么这么难受
     uni.$on('bind_select_address', (data) => {
       this.back_address_id = data.Address_ID
@@ -969,10 +1008,13 @@ export default {
   .container {
     padding-bottom: 60px;
 
-    .store-item {
+    .section-box{
       margin:0 20rpx 30rpx;
       border-radius: 8rpx;
       overflow: hidden;
+    }
+    .store-item {
+
     }
   }
 
