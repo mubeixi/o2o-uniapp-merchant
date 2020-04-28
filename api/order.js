@@ -84,3 +84,9 @@ export const getBizOrderTemplateList = (param, options) => fetch({
   param,
   options
 })
+
+export const delOrder = (param, options) => fetch({
+  act: 'del_order',
+  param,
+  options
+})
