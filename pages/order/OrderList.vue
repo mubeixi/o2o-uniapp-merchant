@@ -80,7 +80,7 @@
 
 </template>
 <script>
-import { getOrderList, cancelOrder, getOrderNum } from '@/api/order'
+import { getOrderList, cancelOrder, getOrderNum,delOrder } from '@/api/order'
 import BaseMixin from '@/mixins/BaseMixin'
 import { error, toast } from '@/common/fun'
 
@@ -112,7 +112,7 @@ export default {
         cancelOrder({ Order_ID }).then(res => {
           this.isLoading = false
           // 取消订单，仅改变了订单的状态
-          this.data[index].Order_Status = -1
+          this.orderList[index].Order_Status = -1
           this.getOrderNum()
           uni.showToast({
             title: res.msg,
@@ -120,6 +120,29 @@ export default {
           })
         }).catch(e => {
           this.isLoading = false
+        })
+      }
+    },
+    delOrder(item,index){
+      if(this.isLoading)return
+      this.isLoading=true;
+      let Order_ID;
+      for(let i in item){
+        if(item[i].Order_ID){
+          Order_ID=item[i].Order_ID;
+        }
+      }
+      if(Order_ID){
+        delOrder({Order_ID}).then(res=>{
+          this.isLoading=false;
+          this.orderList.splice(index,1);
+          this.getOrderNum();
+          uni.showToast({
+            title:res.msg,
+            icon:"none"
+          })
+        }).catch(e=>{
+          this.isLoading=false;
         })
       }
     },
