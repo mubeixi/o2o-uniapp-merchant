@@ -4,7 +4,7 @@
       <div v-if="item.type==='input'" class="form-cell-item cell-item" :class="{nobor:idx===formList.length-1}">
         <div class="form-cell-item__label">{{item.label}}</div>
         <div class="form-cell-item__content">
-          <input placeholder-class="__placeholder" @input="inputChange($event,idx)" :value="item.value" class="input" :placeholder="item.desc" />
+          <input placeholder-class="__placeholder" @input="inputChange" :value="item.value" class="input" :placeholder="item.desc" />
         </div>
       </div>
       <div v-if="item.type==='picker'" class="form-cell-item cell-item" :class="{nobor:idx===formList.length-1}">
@@ -23,12 +23,12 @@
         <div class="form-cell-item__label">{{item.label}}</div>
         <div class="form-cell-item__content">
 
-          <address @up="updateAddress" ref="address">
+          <wzw-address @up="updateAddress" ref="address">
             <div @click="openPop('address')">
               <div class="__placeholder" v-if="!item.value">{{item.desc||'选择位置'}}</div>
-              <div v-if="item.value">{{item.value}}</div>
+              <div v-if="item.value" class="fz-12" style="line-height: 16px;">{{item.value}}</div>
             </div>
-          </address>
+          </wzw-address>
         </div>
         <div class="form-cell-item__right">
           <layout-icon type="iconicon-arrow-right" color="#999"></layout-icon>
@@ -37,12 +37,13 @@
       <div v-if="item.type==='img'" class="form-upload-item cell-item" :class="{nobor:idx===formList.length-1}">
         <div class="form-upload-item__label">{{item.label}}</div>
         <div class="form-upload-item__content">
-<!--          <upload-image-->
-<!--            :key="idx"-->
-<!--            :limit="1"-->
-<!--            :ext="idx"-->
-<!--            @done="upImgSuccess"-->
-<!--          ></upload-image>-->
+
+          <upload-image
+            :key="idx"
+            :limit="1"
+            :ext="idx"
+            @done="upImgSuccess"
+          ></upload-image>
         </div>
       </div>
     </div>
@@ -51,15 +52,15 @@
 </template>
 
 <script>
-import {
-  sleep, strSplit, objTranslate
-} from '@/common/helper'
+import { objTranslate } from '@/common/helper'
 import { hideLoading, showLoading } from '@/common/fun'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
+import UploadImage from '@/componets/upload-image/upload-image'
+import WzwAddress from '@/componets/wzw-address/wzw-address'
 
 export default {
   name: 'DiyForm',
-  components: { LayoutIcon },
+  components: { WzwAddress, UploadImage, LayoutIcon },
   props: {
     eid: {
       type: String,
@@ -106,7 +107,7 @@ export default {
   },
   methods: {
     openPop (name) {
-      this.$refs[name].show()
+      this.$refs[name][0].show()
     },
     updateAddress (data) {
       // console.log(data)
@@ -133,15 +134,15 @@ export default {
       this.$set(this.formList[_idx], 'value', val)
     },
     pickerChange (e) {
-      const val = e.$wx.detail.value
+      const val = e.detail.value
       this.setVal(this.formList[this.idx].options[val])
     },
-    inputChange (e, idx) {
-      const val = e.$wx.detail.value
-      this.setVal(val, idx)
+    inputChange (e) {
+      const val = e.detail.value
+      this.setVal(val, this.idx)
     },
     addressCall ({ province, city, area, town }) {
-      // const val = e.$wx.detail.value
+      // const val = e.detail.value
       this.setVal(Object.values({ province, city, area, town }).join(' '))
     },
     upImgSuccess ({ imgs, ext }) {
