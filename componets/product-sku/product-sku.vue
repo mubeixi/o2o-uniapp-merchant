@@ -80,17 +80,9 @@
 
 import layoutPopup from '@/componets/layout-popup/layout-popup.vue'
 import {error} from '@/common/fun.js'
-const numberSort = function (arr, order_by) {
-  if (typeof order_by != 'undefined' && order_by == 'desc') { //desc
-    return arr.sort(function (v1, v2) {
-      return v2 - v1;
-    });
-  } else {  //asc
-    return arr.sort(function (v1, v2) {
-      return v1 - v2;
-    });
-  }
-}
+import {
+  numberSort
+} from '@/common/helper'
 
 export default {
   components: { layoutPopup },

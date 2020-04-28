@@ -78,3 +78,9 @@ export const getOrderNum = (param, options) => fetch({
   param,
   options
 })
+
+export const getBizOrderTemplateList = (param, options) => fetch({
+  act: 'getBizOrderTemplateList',
+  param,
+  options
+})

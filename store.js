@@ -7,6 +7,7 @@ import * as mutations from './store/mutations'
 import system from './store/modules/system'
 import theme from './store/modules/theme'
 import user from './store/modules/user'
+import delivery from '@/store/modules/delivery'
 
 Vue.use(Vuex)
 
@@ -14,7 +15,8 @@ export default new Vuex.Store({
   modules: {
     system,
     theme,
-    user
+    user,
+    delivery
   },
   state,
   mutations
