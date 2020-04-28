@@ -165,6 +165,19 @@ export default {
       this.close()
       this.$emit('updaCart', this.postData)
     },
+    submit(){
+      if(this.proList.skuvaljosn){
+        if (!this.submitFlag) {
+          uni.showToast({
+            title: '请选择正确的规格和数量',
+            icon: 'none'
+          })
+          return
+        }
+      }
+      this.close()
+      this.$emit('submit', this.postData)
+    },
     buyNow () {
       if(this.proList.skuvaljosn){
         if (!this.submitFlag) {

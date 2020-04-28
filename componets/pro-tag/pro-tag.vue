@@ -1,5 +1,5 @@
 <template>
-	<div class="product">
+	<div class="product" @click="openNext">
 		<image mode="heightFix" :src="pro_src" class="pro-img"></image>
 		<div class="pro-name">{{pro_name}}</div>
 		<div class="pro-price flex">
