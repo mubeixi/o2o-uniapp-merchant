@@ -161,6 +161,9 @@ export default {
   methods: {
     openNext (index) {
       switch (index) {
+        case 5:
+          this.$linkTo('/pagesA/user/IntegralCenter')
+          break
         case 6:
           this.$linkTo('/pages/favorite/index')
           break
