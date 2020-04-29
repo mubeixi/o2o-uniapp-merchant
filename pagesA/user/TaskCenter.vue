@@ -127,15 +127,16 @@ export default {
       })
     },
     goJump (item) {
-      if (item.cu) {
-        uni.switchTab({
-          url: item.jump_url,
-        })
-      } else {
-        uni.navigateTo({
-          url: item.jump_url,
-        })
-      }
+		this.$linkTo(item.jump_url)
+      // if (item.cu) {
+      //   uni.switchTab({
+      //     url: item.jump_url,
+      //   })
+      // } else {
+      //   uni.navigateTo({
+      //     url: item.jump_url,
+      //   })
+      // }
 
     },
     goBack () {
