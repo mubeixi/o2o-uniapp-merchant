@@ -504,6 +504,100 @@
     border-bottom: 1px solid #E8E8E8;
     padding-bottom: 30rpx;
   }
+  /* 领券start */
+  .section2 {
+    padding: 30rpx 20rpx;
+    font-size: 24rpx;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: white;
+    border-bottom: 20rpx solid #f8f8f8;
+  }
+  .section2 .btn {
+    padding: 0 10rpx;
+    color: #26C78D;
+    border: 1px solid #26C78D;
+  }
+  .right {
+    display: flex;
+    align-items: center;
+    font-size: 26rpx;
+    color: #666666;
+    font-weight: 500;
+  }
+  .right .img{
+    width: 20rpx;
+    height: 26rpx;
+    margin-left: 20rpx;
+  }
+  /* 领券 end */
+  .ticks{
+    max-height: 1050rpx;
+    position: relative;
+    padding-top: 0rpx !important;
+    // overflow: scroll;
+  }
+  .t_title {
+    font-size: 30rpx;
+    color: #333;
+    text-align:center;
+    position: relative;
+    width: 100%;
+    z-index: 999;
+    height: 90rpx;
+    line-height: 90rpx;
+    background-color: #FFFFFF;
+  }
+  .t_title .delIcon {
+
+    position: absolute;
+    top: 0rpx;
+    right: 20rpx;
+  }
+  .t_content {
+    position: relative;
+    width: 720rpx;
+    height: 160rpx;
+    background-color: #FDF1E5;
+    background-size: cover;
+    margin: 0 auto 30rpx;
+    padding: 20rpx 0 28rpx 40rpx;
+    box-sizing: border-box;
+    font-size: 22rpx;
+    color:  #F43131 ;
+  }
+  .t_left {
+    float: left;
+  }
+  .t_left .t_left_t .money {
+    font-size: 42rpx;
+    margin-right: 10rpx;
+  }
+  .t_left .t_left_t {
+    font-size: 24rpx;
+    margin-bottom: 10rpx;
+  }
+  .t_left .t_left_b{
+    margin-top: 6rpx;
+  }
+  .t_left .t_left_t i {
+    font-size: 22rpx;
+    font-style: normal;
+  }
+  .t_left .t_left_c,.t_left .t_left_b{
+    font-size: 22rpx;
+  }
+  .t_right {
+    float: right;
+    height: 116rpx;
+    line-height: 116rpx;
+    padding: 0 36rpx;
+    font-size: 30rpx;
+    border-left: 2rpx dotted #999;
+    //width: 124rpx;
+    text-align: center;
+  }
 
 </style>
 
@@ -543,6 +637,14 @@
     </div>
     <div class="product-title">
       {{detailData.Products_Name}}
+    </div>
+    <!-- 领券 -->
+    <div class="section2"  @click="$openPop('couponModal')">
+      <div class="btn">领券</div>
+      <div class="right" >
+        店铺优惠券
+        <layout-icon type="iconicon-arrow-right" size="20"></layout-icon>
+      </div>
     </div>
     <div class="line-f8" style="margin-top: 30rpx" v-if="active.length>0"></div>
     <div class="product-activity">
@@ -757,6 +859,25 @@
       </div>
     </layout-modal>
 
+    <layout-popup ref="couponModal">
+      <view style="max-height: 1050rpx;" >
+        <div class="t_title ">
+          领券
+          <layout-icon type="icondel" size="14" class="delIcon"  color="#999" @click="$closePop('couponModal')" ></layout-icon>
+        </div>
+        <scroll-view class="ticks" v-if="type=='ticks'" scroll-y=true  @scrolltolower="goNextPage">
+          <div class="t_content" v-for="(item,i) of couponList" :key="i">
+            <div class="t_left">
+              <div class="t_left_t"><span>￥</span><span class="money">{{item.Coupon_Cash}}</span><span>店铺优惠券<text v-if="item.Coupon_UseArea==0">(实体店)</text></span></div>
+              <div class="t_left_c">{{item.Coupon_Subject}}</div>
+              <div class="t_left_b">有效期{{item.Coupon_StartTime}}-{{item.Coupon_EndTime}}</div>
+            </div>
+            <div class="t_right" @click="getMyCoupon(item.Coupon_ID,i)">立即领取</div>
+          </div>
+        </scroll-view>
+      </view>
+    </layout-popup>
+
   </div>
 </template>
 
@@ -764,7 +885,7 @@
 import BaseMixin from '@/mixins/BaseMixin'
 import { getProductDetail, getActiveInfo, getStoreList, getProductSharePic } from '@/api/product'
 import { getBizInfo } from '@/api/store'
-import { getCommitList } from '@/api/common'
+import { getCommitList,getCouponList } from '@/api/common'
 import { commentReply } from '@/api/customer'
 import ProductSku from '@/componets/product-sku/product-sku'
 import { updateCart } from '@/api/order'
@@ -811,6 +932,10 @@ export default {
       storeList: [],
       comments: [],
       commentValue: '',
+      pageSize:5,//评论的分页
+      page:1,//评论的分页
+      couponList:[],
+      totalCount:0,
       commentItem: {}// 要评论的对象
     }
   },
@@ -819,6 +944,22 @@ export default {
     this.headTabSticky = (scrollTop > this.headTabTop)
   },
   methods: {
+    getCoupon(){
+      let data={
+        pageSize:this.pageSize,
+        page:this.page,
+        status:3,
+        front_show:1,
+        biz_id:this.detailData.biz_id
+      }
+      getCouponList(data).then(res=>{
+        for(let i of res.data){
+          this.couponList.push(i);
+        }
+        this.totalCount=res.totalCount;
+      }).catch(e=>{
+      })
+    },
     goVipList () {
       const url = '/pages/user/VipList?bid=' + this.detailData.biz_id
       this.$linkTo(url)
@@ -831,6 +972,7 @@ export default {
       this.commentValue = e.detail.value
     },
     sureComment () {
+      if (!checkIsLogin(1, 1)) return
       if (!this.commentValue) {
         error('评论内容不能为空')
         return
@@ -1057,6 +1199,11 @@ export default {
         }).catch(e => {
           throw Error(e.msg || '获取店铺信息失败')
         })
+        //获取评论
+        this.page=1
+        this.couponList=[]
+        this.getCoupon()
+
         this.comments = await getCommitList({
           Products_ID: this.detailData.Products_ID,
           pageSize: 999,

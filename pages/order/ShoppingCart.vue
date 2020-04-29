@@ -65,6 +65,21 @@
       </block>
     </div>
 
+
+    <div class="intro">为你推荐</div>
+    <div class="product-list flex">
+
+      <pro-tag
+        v-for="(item,idx) in proList"
+        :key="idx"
+        :pro_src="item.ImgPath"
+        :pro_name="item.Products_Name"
+        :pro_price="item.Products_PriceX"
+        :pro_price_old="item.Products_PriceY"
+      />
+
+    </div>
+
   </div>
 </template>
 
@@ -74,11 +89,14 @@ import { CartList, DelCart } from '@/api/customer'
 import { updateCart } from '@/api/order'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import Storage from '@/common/Storage'
+import {
+  getProductList
+} from '@/api/product'
 import { error } from '@/common/fun'
-
+import ProTag from '@/componets/pro-tag/pro-tag'
 export default {
   mixins: [BaseMixin],
-  components: { LayoutIcon },
+  components: { LayoutIcon,ProTag },
   data () {
     return {
       CartList: [],
@@ -90,7 +108,8 @@ export default {
       totalPrice: 0, // 选中总计
       isDel: false,
       fan: false,
-      qty: 0
+      qty: 0,
+      proList:[],
     }
   },
   computed: {
@@ -127,7 +146,7 @@ export default {
       //const cart_buy = JSON.stringify(obj)
       const url = '/pages/order/OrderBooking?cart_key=CartList'
       this.$store.state.cart_buy = obj
-      
+
       this.$linkTo(url)
     },
     DelCart () {
@@ -308,6 +327,9 @@ export default {
       this.CartList = cart.CartList
       this.bizList = cart.biz_list
       this.initCheck()
+
+
+      this.proList = await getProductList({}, { onlyData: true }).catch(e => { throw Error(e.msg || '获取推荐商品信息失败') })
     }
   },
   onShow () {
@@ -675,5 +697,15 @@ export default {
       width: 34rpx;
       height: 34rpx;
     }
+  }
+  .intro {
+    text-align: center;
+    margin: 60rpx 0 32rpx;
+    font-size: 34rpx;
+  }
+
+  .product-list {
+    flex-wrap: wrap;
+    justify-content: space-around;
   }
 </style>

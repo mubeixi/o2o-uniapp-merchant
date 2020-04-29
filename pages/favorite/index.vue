@@ -4,7 +4,7 @@
       class="flex flex-vertical-c navigator"
       :style="{paddingTop:menuButtonInfo.top+'px',paddingBottom:10+'px',height:menuButtonInfo.height+'px'}"
       style="background: #F8F8F8;">
-      <layout-icon class="p-l-10 p-r-15" type="iconicon-arrow-left"></layout-icon>
+      <layout-icon class="p-l-10 p-r-15" type="iconicon-arrow-left" @click="$back()"></layout-icon>
       <span @click="openMuliti">管理</span>
       <span class="title">收藏</span>
     </div>
