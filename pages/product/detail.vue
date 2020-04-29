@@ -1137,7 +1137,6 @@ export default {
     updaCart (sku) {
       // 加入购物车
       const data = {
-        User_ID: '48',
         cart_key: 'CartList',
         prod_id: this.detailData.Products_ID,
         qty: sku.qty,
