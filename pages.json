@@ -134,8 +134,7 @@
 		{
 			"path": "pages/user/Coupon",
 			"style": {
-				"navigationBarTitleText": "优惠券",
-				"navigationStyle": "custom"
+				"navigationBarTitleText": "优惠券"
 			}
 		},
 		{
@@ -247,8 +246,19 @@
 					"style": {
 						"navigationBarTitleText": "修改收货地址"
 					}
+				},{
+					"path" : "order/RefundList",
+					"style": {
+						"navigationBarTitleText": "退款售后"
+					}
 				}
 
+                ,{
+                    "path" : "order/RefundDetail",
+                    "style": {
+                    	"navigationBarTitleText": "退款详情"
+                    }
+                }
             ]
 	}],
 	"preloadRule": {
