@@ -34,6 +34,7 @@ const actions = {
 }
 
 const getters = {
+  userInfo: (state) => state.userInfo || Storage.get('userInfo'),
   // 利用方法的方式去获取
   getUserInfo: (state) => () => {
     try {

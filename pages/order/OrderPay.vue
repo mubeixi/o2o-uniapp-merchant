@@ -12,7 +12,7 @@
     </div>
     <!-- <page-title title="付款" :rightHidden="true" bgcolor="#ffffff"></page-title> -->
     <div class="state bgwhite">
-      <image class="img" :src="'/static/client/wait.png'|domain" />
+      <layout-icon size="20" color="#F53636" type="icondengdai"></layout-icon>
       <span class="state-desc">等待买家付款</span>
     </div>
     <div class="address bgwhite" v-if="orderInfo.Order_IsVirtual == 0">
@@ -24,90 +24,88 @@
         </div>
       </div>
     </div>
-    <div class="container bgwhite">
-      <div class="order_msg">
-        <div class="biz_msg">
-          <image :src="orderInfo.ShopLogo|domain" class="biz_logo" alt="" />
-          <span class="biz_name">{{orderInfo.ShopName}}</span>
-        </div>
-        <div class="pro" v-for="(pro,pro_id) in orderInfo.prod_list" :key="pro_id">
-          <image class="pro-img" :src="pro.prod_img" alt="" />
-          <div class="pro-msg">
-            <div class="pro-name">{{pro.prod_name}}</div>
-            <div class="attr" v-if="pro.attr_info"><span>{{pro.attr_info.attr_name}}</span></div>
-            <div class="pro-price"><span>￥</span>{{pro.prod_price}} <span class="amount">x<span class="num">{{pro.prod_count}}</span></span>
+    <div class="container">
+      <div class="order-section bg-white" v-for="(orderInfo,idx) in orderList" :key="idx">
+        <div class="order_msg">
+          <div class="biz_msg">
+            <image :src="orderInfo.biz_logo|domain" class="biz_logo" alt="" />
+            <span class="biz_name">{{orderInfo.biz_name}}</span>
+          </div>
+          <div class="pro" v-for="(pro,pro_id) in orderInfo.prod_list" :key="pro_id">
+            <image class="pro-img" :src="pro.prod_img" alt="" />
+            <div class="pro-msg">
+              <div class="pro-name">{{pro.prod_name}}</div>
+              <div class="attr" v-if="pro.attr_info"><span>{{pro.attr_info.attr_name}}</span></div>
+              <div class="pro-price"><span>￥</span>{{pro.prod_price}} <span class="amount">x<span class="num">{{pro.prod_count}}</span></span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-
-      <div class="other">
-        <div class="bd">
-          <div class="o_title">
-            <span>运费选择</span>
-            <span style="text-align:right;" class="c8">
+        <div class="other">
+          <div class="bd">
+            <div class="o_title">
+              <span>运费选择</span>
+              <span style="text-align:right;" class="c8">
 						<span>{{orderInfo.Order_Shipping.Express}}</span>
 						<span> {{orderInfo.Order_Shipping.Price > 0 ? (' 运费：' + orderInfo.Order_Shipping.Price) : ' 免运费'}}</span>
 					</span>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="other" v-if="pagefrom != 'gift'">
-        <div class="bd">
-          <div class="o_title">
-            <span>优惠券选择</span>
-            <span class="c8">{{orderInfo.Coupon_Money}}元优惠券</span>
+        <div class="other" v-if="pagefrom != 'gift'">
+          <div class="bd">
+            <div class="o_title">
+              <span>优惠券选择</span>
+              <span class="c8">{{orderInfo.Coupon_Money}}元优惠券</span>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="other" v-if="pagefrom != 'gift'">
-        <div class="bd">
-          <div class="o_title">
-            <span>积分抵扣</span>
-            <span class="c8">{{orderInfo.Integral_Money}}</span>
+        <div class="other" v-if="pagefrom != 'gift'">
+          <div class="bd">
+            <div class="o_title">
+              <span>积分抵扣</span>
+              <span class="c8">{{orderInfo.Integral_Money}}</span>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="other" v-if="orderInfo.is_use_money && orderInfo.is_use_money == 1">
-        <div class="bd">
-          <div class="o_title">
-            <span>是否使用余额</span>
-            <switch :checked="moneyChecked" size='25px' color="#04B600" @change="moneyChange" />
-          </div>
-          <!-- <div class="o_desc c8">{{orderInfo.Order_Yebc}}</div> -->
-          <input type="number" v-if="openMoney" v-model="user_money" :disabled="!openMoney"
-                 :placeholder="orderInfo.Order_Yebc"
-                 @blur="moneyInputHandle" />
-        </div>
-      </div>
-      <div class="other" v-if="pagefrom != 'gift' && initData.invoice_switch == 1">
-        <div class="bd">
-          <div class="o_title">
-            <span>是否开具发票</span>
-            <switch :checked="invoiceChecked" size='25px' color="#04B600" @change="invoiceChange" />
-          </div>
-          <!-- <div class="o_desc c8">{{orderInfo.Order_InvoiceInfo}}</div> -->
-          <input type="text" v-if="openInvoice" v-model="invoice_info" :disabled="!openInvoice" />
-        </div>
-      </div>
-      <div class="other">
-        <div class="bd">
-          <div class="o_title  words">
-            <span>买家留言</span>
-            <input class="msg c8" v-model="order_remark">
+        <div class="other" v-if="orderInfo.is_use_money === 1">
+          <div class="bd">
+            <div class="o_title">
+              <span>是否使用余额</span>
+              <switch style="transform: scale(0.8)" :checked="postData.use_money_conf[orderInfo.Order_ID]" size='25px' color="#04B600" @change="moneyChange($event,orderInfo.Order_ID)" />
+            </div>
+            <div class="o_de c9">该订单可使用余额:<text>{{parseFloat(userInfo.User_Money) < parseFloat(orderInfo.Order_Fyepay) ? userInfo.User_Money : orderInfo.Order_Fyepay}}</text></div>
+            <input class="fz-12" type="number" v-if="postData.use_money_conf[orderInfo.Order_ID]" v-model="postData.use_money[orderInfo.Order_ID]" placeholder="点此输入金额" @blur="moneyInputHandle($event,orderInfo.Order_ID,idx)" />
           </div>
         </div>
-      </div>
-      <div class="total">
-        <span>共<span>{{orderInfo.prod_list.length}}</span>件商品</span>
-        <span class="mbx">小计：<span class="money moneys">￥</span><span
-          class="money">{{orderInfo.Order_Fyepay}}</span></span>
+        <div class="other" v-if="pagefrom !== 'gift' && orderInfo.invoice_switch">
+          <div class="bd">
+            <div class="o_title">
+              <span>是否开具发票</span>
+              <switch style="transform: scale(0.8)" :checked="postData.need_invoice[orderInfo.Order_ID]" size='25px' color="#04B600" @change="invoiceChange($event,orderInfo.Order_ID)" />
+            </div>
+            <input class="fz-12" placeholder="点此输入发票抬头和纳税人识别号" @blur="faPiaoConfirm($event,orderInfo.Order_ID)" type="text" v-if="postData.need_invoice[orderInfo.Order_ID]" v-model="postData.invoice_info[orderInfo.Order_ID]" />
+          </div>
+        </div>
+        <div class="other">
+          <div class="bd">
+            <div class="o_title  words">
+              <span>买家留言</span>
+              <input placeholder="点此填写留言内容" :value="postData.order_remark[orderInfo.Order_ID]" @input="remarkConfirm($event,orderInfo.Order_ID)" class="msg c8 fz-12" />
+            </div>
+          </div>
+        </div>
+        <div class="total">
+          <span>共<span>{{orderInfo.prod_list.length}}</span>件商品</span>
+          <span class="mbx">小计：<span class="money moneys">￥</span><span
+            class="money">{{orderInfo.Order_Fyepay}}</span></span>
+        </div>
       </div>
     </div>
 
     <div style="height:100px;background:#f8f8f8;"></div>
 
-    <layout-layer ref="popupMX" :direction="'top'" @maskClicked="handClicked" :bottomHeight="50">
+    <layout-layer ref="pupupDetail" :direction="'top'" @maskClicked="handClicked" :bottomHeight="50">
       <view class="mxdetail">
         <view class="mxtitle">明细</view>
         <view class="mxitem">产品
@@ -135,28 +133,29 @@
     </layout-layer>
     <div class="order_total" :style="{'z-index': zIndex}">
       <div class="totalinfo">
-        <div class="info">共{{orderInfo.prod_list.length}}件商品 总计：<span
-          class="mbxa">￥<span>{{orderInfo.Order_Fyepay}}</span></span></div>
+        <div class="info">共{{numTotal}}件商品 需支付：<span
+          class="mbxa">￥<span>{{pay_money}}</span></span></div>
         <view class="tips" v-if="orderInfo.obtain_desc">{{orderInfo.obtain_desc}}</view>
       </div>
       <view class="mx" @click="seeDetail">明细
         <image class="image" :class="isSlide?'slidedown':''" :src="'/static/client/top.png'|domain"></image>
       </view>
-      <div class="submit" @click="submit">去支付</div>
+      <div class="submit" @click="submitPayFn">去支付</div>
     </div>
 
     <div class="safearea-box"></div>
 
     <wzw-pay
+      v-if="ready"
       ref="payLayer"
       :is_use_money="is_use"
       :isOpen="isOpen"
-      :Order_ID="Order_ID"
-      :pay_money="pay_money"
-      :use_money="user_money"
-      :need_invoice="need_invoice"
-      :invoice_info="invoice_info"
-      :order_remark="order_remark"
+      :Order_ID="payConf.Order_ID"
+      :pay_money="payConf.pay_money"
+      :use_money="payConf.use_money"
+      :need_invoice="payConf.need_invoice"
+      :invoice_info="payConf.invoice_info"
+      :order_remark="payConf.order_remark"
       :paySuccessCall="paySuccessCall"
       :payFailCall="payFailCall"
     />
@@ -167,23 +166,71 @@
 <script>
 
 import { mapGetters, mapState } from 'vuex'
-import { getOrderDetail, orderPay } from '@/api/order'
-import { GetQueryByString, isWeiXin, urlencode } from '@/common/helper'
+import { getOrderDetail, getPreOrderDetail, orderPay } from '@/api/order'
+import { getArrColumn, GetQueryByString, isWeiXin, objTranslate, urlencode } from '@/common/helper'
 import Storage from '@/common/Storage'
-import { hideLoading, modal, showLoading, toast } from '@/common/fun'
+import { error, hideLoading, modal, showLoading, toast } from '@/common/fun'
 import BaseMixin from '@/mixins/BaseMixin'
 import LayoutLayer from '@/componets/layout-layer/layout-layer'
 import WzwPay from '@/componets/wzw-pay/wzw-pay'
+import LayoutIcon from '@/componets/layout-icon/layout-icon'
+import { farmatPayParam } from '@/pages/order/pay'
+import { Exception } from '@/common/Exception'
 
 export default {
   name: 'OrderPay',
   mixins: [BaseMixin],
   components: {
+    LayoutIcon,
     WzwPay,
     LayoutLayer
   },
+  computed: {
+
+    useMoneyCount () {
+      try {
+        const moneyList = Object.values(this.postData.use_money)
+        let count = 0
+        for (var num of moneyList) {
+          if (num) count += parseFloat(num)
+        }
+        return count
+      } catch (e) {
+        return 0
+      }
+    },
+
+    numTotal () {
+      let num = 0
+      for (const order of this.orderList) {
+        for (const prod of order.prod_list) {
+          if (prod.prod_count)num += prod.prod_count
+        }
+      }
+      return num
+    },
+    initData () {
+      return this.$store.state.system.initData
+    },
+    invoiceChecked () {
+      return this.openInvoice
+    },
+    moneyChecked () {
+      return this.openMoney
+    },
+    // isOpen () {
+    //   return this.orderInfo.Order_Fyepay != 0
+    // },
+    ...mapGetters({
+      userInfo: 'user/userInfo'
+    })
+  },
   data () {
     return {
+      ready:false,
+      isOpen:false,
+      orderList: [], // 所有订单的列表
+      mode: 'single',
       funvm: null,
       paySuccessCallFn: null,
       code: '',
@@ -192,12 +239,26 @@ export default {
       JSSDK_INIT: false,
       show: false, // 遮罩层
       wl_show: false, // 物流选择
-      postData: {},
+      payConf: {
+        Order_ID: '',
+        pay_money: '',
+        use_money: '',
+        need_invoice: '',
+        invoice_info: '',
+        order_remark: ''
+      },
+      postData: {
+        use_money: {}, // 余额支付金额
+        use_money_conf: {}, // 用来控制配置的，不提交
+        need_invoice: {},
+        invoice_info: {}, // 发票抬头
+        order_remark: {} // 买家留言
+      },
       orderInfo: '',
       addressInfo: '',
       Order_ID: 0,
+      pay_money: 0,
       totalMoney: 0, // 应支付金额
-      pay_money: 0, // 开启余额支付，表示余额支付的钱，pay_type 为 remainder_pay ,
       pay_type: 'remainder_pay', // remainder_pay余额支付，余额补差    wechat 微信支付  ali 支付宝支付
       user_pay_password: '', // 余额补差，支付密码
       cate: 'method',
@@ -217,72 +278,47 @@ export default {
       is_use: 1
     }
   },
-  onLoad (options) {
-    if (options.Order_ID) {
-      this.Order_ID = options.Order_ID
-    }
-    if (options.pagefrom) {
-      this.pagefrom = options.pagefrom
-    }
 
-    // 获取支付方式
-    this.pay_arr = this.initData.pay_arr
-  },
-  filters: {},
-  onShow () {
-    // console.log(this.initData,this.$store.state.system.initData,this.$store.getters['system/initData'])
-    this._init_func()
-    // this.get_user_info();// 获取用于可用余额
-  },
-  computed: {
-    initData () {
-      return this.$store.state.system.initData
-    },
-    invoiceChecked () {
-      return this.openInvoice
-    },
-    moneyChecked () {
-      return this.openMoney
-    },
-    isOpen () {
-      return this.orderInfo.Order_Fyepay != 0
-    }
-  },
-  created () {
-    this.$store.commit('SET_PAY_TEMP_OBJ', this)
-
-    // #ifdef H5
-    if (isWeiXin()) {
-      this.code = GetQueryByString(location.href, 'code')
-      if (this.code) {
-        this.pay_type = 'wx_mp'// 需要手动设置一下
-        this.self_orderPay(1)
-      }
-    }
-    // #endif
-  },
   methods: {
-    // ...mapActions([userInfo'getInitData']),
-    // 获取用户支付方式
-    chooseType (name) {
-      this.pay_type = name
-      this.$refs.popupLayer.close()
-      // 判断是否使用了余额，
-      if (this.user_money > 0 || name === 'remainder_pay') {
-        // 使用了 余额支付
-        this.password_input = true
-      } else {
-        // 未使用余额支付, 直接调用
-        this.self_orderPay()
-      }
+    // 更新参数
+    refreshPayConf () {
+      // 单个或者合单都可以
+      this.payConf.Order_ID = this.Order_ID
+      this.payConf.pay_money = this.pay_money
+
+      const {
+        need_invoice,
+        invoice_info,
+        use_money,
+        order_remark
+      } = objTranslate(this.postData)
+
+      Object.assign(this.payConf, {
+        need_invoice: JSON.stringify(need_invoice),
+        invoice_info: JSON.stringify(invoice_info),
+        use_money: JSON.stringify(use_money),
+        order_remark: JSON.stringify(order_remark)
+      })
+    },
+    refreshPayMoney () {
+      this.pay_money = parseFloat(this.orderInfo.Order_Fyepay) - this.useMoneyCount
+    },
+    // 发票抬头输入完成
+    faPiaoConfirm (e, Order_ID) {
+      const invoice_info = e.detail.value
+      this.postData.invoice_info[Order_ID] = invoice_info
+    },
+    // 留言
+    remarkConfirm (e, Order_ID) {
+      this.postData.order_remark[Order_ID] = e.detail.value
     },
     // 查看明细
     seeDetail () {
       if (!this.isSlide) {
         this.zIndex = 9999999
-        this.$refs.popupMX.show()
+        this.$refs.pupupDetail.show()
       } else {
-        this.$refs.popupMX.close()
+        this.$refs.pupupDetail.close()
         setTimeout(() => {
           this.zIndex = 99
         }, 500)
@@ -295,156 +331,25 @@ export default {
       }, 500)
       this.isSlide = false
     },
-    // 订单详情
-    async _init_func () {
-      try {
-        showLoading()
-        const orderInfo = await getOrderDetail({ Order_ID: this.Order_ID }, { onlyData: 1 }).catch(() => { throw Error('获取订单信息错误') })
-
-        console.log(orderInfo)
-        for (var i in orderInfo) {
-          if (i === 'Order_Shipping' && typeof orderInfo[i] ==='string') {
-            orderInfo[i] = JSON.parse(orderInfo[i])
-          }
-          if (i === 'prod_list') {
-            for (var j in orderInfo[i]) {
-              for (var k in orderInfo[i][j]) {
-                if (k === 'attr_info' && typeof orderInfo[i][j][k] === 'string') {
-                  orderInfo[i][j][k] = JSON.parse(orderInfo[i][j][k])
-                }
-              }
-            }
-          }
-        }
-        this.orderInfo = orderInfo
-        this.Order_Type = orderInfo.Order_Type
-        this.is_use = this.orderInfo.is_use_money
-        this.openMoney = this.orderInfo.is_use_money === 1
-        Storage.set('type', this.Order_Type)
-        Storage.set('pagefrom', this.pagefrom)
-        // pay_money 应该支付的钱
-        // user_money 使用的余额
-        this.pay_money = this.orderInfo.Order_Fyepay
-        this.user_money = this.orderInfo.Order_Yebc
-        this.openMoney = this.orderInfo.Order_Yebc > 0
-        // if(!this.openMoney){
-        // 	this.is_use=0
-        // }
-        this.need_invoice = this.orderInfo.Order_NeedInvoice
-        this.openInvoice = this.orderInfo.Order_NeedInvoice > 0
-        this.invoice_info = this.orderInfo.Order_InvoiceInfo
-        this.order_remark = this.orderInfo.Order_Remark
-        
-      } catch (e) {
-        modal(e.message)
-      }finally {
-        hideLoading()
-      }
-    },
-    // 用户重新更改了余额
-    moneyInputHandle (e) {
-      // #ifdef H5
-      // uni.pageScrollTo({
-      // 	scrollTop: 0,
-      // 	duration: 200
-      // });
-      // #endif
-      var money = e.detail.value
-      this.user_money = Number(money).toFixed(2)
-      if (this.user_money < 0 || isNaN(this.user_money)) {
-        uni.showToast({
-          title: '您输入的金额有误',
-          icon: 'none'
-        })
-        this.user_money = 0
-        this.submit_flag = false
-        return
-      }
-      if (this.orderInfo.Order_TotalPrice - money < 0) {
-        uni.showToast({
-          title: '最大金额不能超过订单金额',
-          icon: 'none'
-        })
-        this.user_money = this.orderInfo.Order_TotalPrice
-        // this.orderInfo.Order_TotalPrice = money;
-        this.orderInfo.Order_Fyepay = 0.00
-        this.pay_money = 0.00
-        return
-      }
-      this.pay_money = Number(this.orderInfo.Order_TotalPrice - money).toFixed(2)
-      this.orderInfo.Order_Fyepay = Number(this.orderInfo.Order_TotalPrice - money).toFixed(2)
-    },
-    // 余额支付开关
-    moneyChange (e) {
-      var checked = e.detail.value
-      if (checked) {
-        // this.is_use=1
-        this.openMoney = true
-        this.user_money = Number(this.orderInfo.Order_Yebc).toFixed(2)
-        this.orderInfo.Order_Fyepay = Number(this.orderInfo.Order_TotalPrice - this.user_money).toFixed(2)
-        this.pay_money = Number(this.orderInfo.Order_TotalPrice - this.user_money).toFixed(2)
-      } else {
-        // this.is_use=0
-        this.openMoney = false
-        this.orderInfo.Order_Fyepay = Number(this.orderInfo.Order_TotalPrice).toFixed(2)
-        this.pay_money = Number(this.orderInfo.Order_TotalPrice).toFixed(2)
-        this.user_money = 0
-      }
-    },
-    // 留言
-    remarkHandle (e) {
-      // #ifdef H5
-      // uni.pageScrollTo({
-      // 	scrollTop: 0,
-      // 	duration: 200
-      // });
-      // #endif
-      const remark = e.detail.value
-      this.order_remark = remark
-    },
-    // 发票信息修改
-    invoiceHandle (e) {
-      // #ifdef H5
-      // uni.pageScrollTo({
-      // 	scrollTop: 0,
-      // 	duration: 200
-      // });
-      // #endif
-      const invoice = e.detail.value
-      this.invoice_info = invoice
-      if (this.openInvoice) {
-        this.invoice_info = invoice
-      }
-    },
-    // 发票开关
-    invoiceChange (e) {
-      var checked = e.detail.value
-      if (checked) {
-        this.need_invoice = 1
-        this.openInvoice = true
-        this.invoice_info = this.orderInfo.Order_InvoiceInfo
-      } else {
-        this.openInvoice = false
-        this.need_invoice = 0
-      }
-    },
-    // 点击遮罩
-    showOverlay () {
-      this.show = false
-      this.wl_show = false
-    },
     // 去支付
-    submit () {
+    submitPayFn () {
       setTimeout(() => {
         this.zIndex = 99
         this.isSlide = false
       }, 500)
-      this.$refs.popupMX.close()
+
+      // 关闭明细的popup,避免被遮盖
+      this.$refs.pupupDetail.close()
+
       // 如果用户全部使用了余额支付，就不要走弹窗再选择支付方式了,直接输入密码
-      if (this.pay_money == 0) {
+      if (this.pay_money === 0) {
         this.password_input = true
         return
       }
+
+      // 刷新数据
+      this.refreshPayConf()
+
       this.$refs.payLayer.show()
       return
       // 发票信息
@@ -477,6 +382,140 @@ export default {
         }
       }
     },
+    // 订单详情
+    async _init_func () {
+      try {
+        showLoading()
+
+        if (this.mode === 'single') {
+          const orderInfo = await getOrderDetail({ Order_ID: this.Order_ID }, { onlyData: 1 }).catch(() => { throw Error('获取订单信息错误') })
+
+          console.log(orderInfo)
+          for (var i in orderInfo) {
+            if (i === 'Order_Shipping' && typeof orderInfo[i] === 'string') {
+              orderInfo[i] = JSON.parse(orderInfo[i])
+            }
+            if (i === 'prod_list') {
+              for (var j in orderInfo[i]) {
+                for (var k in orderInfo[i][j]) {
+                  if (k === 'attr_info' && typeof orderInfo[i][j][k] === 'string') {
+                    orderInfo[i][j][k] = JSON.parse(orderInfo[i][j][k])
+                  }
+                }
+              }
+            }
+          }
+          this.orderInfo = orderInfo
+          this.Order_Type = orderInfo.Order_Type
+          //this.is_use = this.orderInfo.is_use_money
+          this.openMoney = this.orderInfo.is_use_money === 1
+          Storage.set('type', this.Order_Type)
+          Storage.set('pagefrom', this.pagefrom)
+          // pay_money 应该支付的钱
+          // user_money 使用的余额
+          // this.pay_money = this.orderInfo.Order_Fyepay
+          this.user_money = this.orderInfo.Order_Yebc
+          this.openMoney = this.orderInfo.Order_Yebc > 0
+          // if(!this.openMoney){
+          // 	this.is_use=0
+          // }
+          this.need_invoice = this.orderInfo.Order_NeedInvoice
+          this.openInvoice = this.orderInfo.Order_NeedInvoice > 0
+          this.invoice_info = this.orderInfo.Order_InvoiceInfo
+          this.order_remark = this.orderInfo.Order_Remark
+        }
+
+        if (this.mode === 'multi') {
+          const orderInfo = await getPreOrderDetail({ pre_sn: this.Order_ID }, { onlyData: 1 }).catch(() => { throw Error('获取合单信息错误') })
+
+          console.log(orderInfo)
+          const { order_list, ...info } = orderInfo
+
+          this.orderList = order_list
+          
+
+          for (var orderItem of order_list) {
+            this.$set(this.postData.need_invoice, orderItem.Order_ID, orderItem.Order_NeedInvoice ? 1 : 0)// 是否需要发票
+            this.$set(this.postData.invoice_info, orderItem.Order_ID, orderItem.Order_InvoiceInfo || '')// 发票信息
+            this.$set(this.postData.use_money, orderItem.Order_ID, parseFloat(orderItem.Order_Yebc) > 0 ? orderItem.Order_Yebc : '')// 使用余额
+            this.$set(this.postData.use_money_conf, orderItem.Order_ID, parseFloat(orderItem.Order_Yebc) > 0 ? 1 : 0)// 使用余额
+            this.$set(this.postData.order_remark, orderItem.Order_ID, orderItem.order_remark || '')// 订单备注
+          }
+  
+  
+  
+          this.orderInfo = info
+          this.refreshPayMoney()
+          
+          this.refreshPayConf()
+          
+          if(this.orderInfo.Order_Fyepay != 0)this.isOpen = true
+          
+          this.ready = true
+          
+
+          // this.pay_money = this.orderInfo.Order_Fyepay
+        }
+      } catch (e) {
+        modal(e.message)
+      } finally {
+        hideLoading()
+      }
+    },
+    // 用户重新更改了余额
+    moneyInputHandle (e, Order_ID, order_idx) {
+      try {
+        const input_money = parseFloat(Number(e.detail.value).toFixed(2))
+        console.log(input_money)
+        // 重置
+        if (input_money <= 0 || isNaN(input_money)) {
+          this.postData.use_money[Order_ID] = ''
+          throw Error('您输入的金额有误')
+        }
+
+        // 如果价格过大
+        if (input_money > parseFloat(this.orderList[order_idx].Order_Fyepay)) {
+          this.postData.use_money[Order_ID] = ''
+          throw Error('输入金额超过订单总价')
+        }
+
+        if (input_money + this.useMoneyCount <= parseFloat(this.userInfo.User_Money)) {
+          this.postData.use_money[Order_ID] = input_money
+        } else {
+          this.postData.use_money[Order_ID] = ''
+          throw Error('金额不符合格式')
+        }
+      } catch (e) {
+        Exception.handle(e)
+      } finally {
+        this.refreshPayMoney()
+      }
+    },
+    // 余额支付开关
+    moneyChange (e, Order_ID) {
+      const open = e.detail.value
+      console.log(Order_ID, e)
+      this.postData.use_money_conf[Order_ID] = open ? 1 : 0
+    },
+
+    // 发票开关
+    invoiceChange (e, Order_ID) {
+      var checked = e.detail.value
+      if (checked) {
+        this.postData.need_invoice[Order_ID] = 1
+        // this.openInvoice = true
+        // this.invoice_info = this.orderInfo.Order_InvoiceInfo
+      } else {
+        // this.openInvoice = false
+        this.postData.need_invoice[Order_ID] = 0
+      }
+    },
+    // 点击遮罩
+    showOverlay () {
+      this.show = false
+      this.wl_show = false
+    },
+
     async $_init_wxpay_env () {
       const initData = await this.getInitData()
 
@@ -634,9 +673,17 @@ export default {
         // })
       } else {
         if (pagefrom == 'check') {
-          uni.redirectTo({
-            url: '/pages/order/paySuccess?Order_Type=' + Order_Type + '&OrderId=' + _that.Order_ID
-          })
+          // 合单无法跳转
+          if (this.mode === 'single') {
+            uni.redirectTo({
+              url: '/pages/order/paySuccess?Order_Type=' + Order_Type + '&OrderId=' + _that.Order_ID
+            })
+          } else {
+            uni.redirectTo({
+              url: '/pages/order/order?index=2'
+            })
+          }
+
           // uni.redirectTo({
           // 	url:'/pages/order/order?index=2&Order_Type='+Order_Type
           // })
@@ -843,11 +890,8 @@ export default {
         Order_ID: this.Order_ID,
         pay_type: 'remainder_pay',
         pay_money: this.pay_money,
-        use_money: this.user_money,
         user_pay_password: this.user_pay_password,
-        need_invoice: this.need_invoice,
-        invoice_info: this.invoice_info,
-        order_remark: this.order_remark
+        ...farmatPayParam(this.postData)
       }, {
         mask: true,
         tip: '正在加载中'
@@ -858,6 +902,39 @@ export default {
       })
       this.password_input = false
     }
+  },
+  onLoad (options) {
+    if (options.Order_ID) {
+      this.Order_ID = options.Order_ID
+      // 标记为多个或者单个
+      this.mode = options.Order_ID.indexOf('PRE') === -1 ? 'single' : 'multi'
+    } else {
+      modal('Order_ID参数必填')
+    }
+    if (options.pagefrom) {
+      this.pagefrom = options.pagefrom
+    }
+
+    // 获取支付方式
+    this.pay_arr = this.initData.pay_arr
+  },
+  onShow () {
+    // console.log(this.initData,this.$store.state.system.initData,this.$store.getters['system/initData'])
+    this._init_func()
+    // this.get_user_info();// 获取用于可用余额
+  },
+  created () {
+    this.$store.commit('SET_PAY_TEMP_OBJ', this)
+
+    // #ifdef H5
+    if (isWeiXin()) {
+      this.code = GetQueryByString(location.href, 'code')
+      if (this.code) {
+        this.pay_type = 'wx_mp'// 需要手动设置一下
+        this.self_orderPay(1)
+      }
+    }
+    // #endif
   }
 }
 </script>
@@ -951,6 +1028,12 @@ export default {
 
   /* 收货地址 end */
   /* 订单信息 start */
+
+  .order-section{
+    margin: 0 20rpx 30rpx;
+    border-radius: 8rpx;
+    overflow: hidden;
+  }
   .order_msg {
     padding: 20rpx 30rpx 0px;
   }
@@ -1046,6 +1129,14 @@ export default {
 
   .o_title .van-switch {
     float: right;
+  }
+
+  .o_de {
+    font-size: 22rpx;
+    margin-top: 10rpx;
+    text {
+      color: #F43131;
+    }
   }
 
   .o_desc {

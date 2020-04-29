@@ -104,9 +104,9 @@
           <span class="title">{{product.Products_Name}}</span>
           <layout-icon @click="$closePop('attr')" class="close" type="icondelete"></layout-icon>
         </div>
-        <div class="form">
-          <div class="cartAttr" v-for="(item,i) of skujosn_new" :key="i">
-            <div class="sku-title c3">{{item.sku}}</div>
+        <div class="form cart-attr-box">
+          <div class="cartAttr" v-for="(item,i) of product.skujosn_new" :key="i">
+            <div class="sku-title c3">{{item.sku==='mobile_prod_attr_name'?'规格':item.sku}}</div>
             <div class="sku-val-list">
               <div
                 class="sku-val-item"
@@ -161,7 +161,7 @@ import {
 } from '@/api/store'
 import {
   mergeObject,
-  numberSort
+  numberSort, objTranslate,
 } from '@/common/helper'
 const attrInfoTmpl = {
   num: 0,
@@ -233,7 +233,7 @@ export default {
   methods: {
     buyNow () {
       if (this.totalPrice > 0 && this.totalPrice > this.bizInfo.city_express_config.limit_config.start_send_money) {
-        this.$linkTo('/pages/order/OrderBooking?cart_key=waimai&biz_id'+this.bid)
+        this.$linkTo('/pages/order/OrderBooking?cart_key=waimai&biz_id=' + this.bid)
       } else {
         modal('未达到配送价')
       }
@@ -259,7 +259,7 @@ export default {
         check_attrname[attr_id] = i
       }
       // 数组排序  按从小到大排
-      const check_attrid_arr = check_attrid
+      let check_attrid_arr = check_attrid;
       check_attrid = numberSort(check_attrid)
       // 获取对应的属性名称
       for (let i = 0; i < check_attrid.length; i++) {
@@ -268,15 +268,15 @@ export default {
         check_attrnames.push(attr_name + ':' + this.product.skujosn[attr_name][attr_id])
       }
       check_attrid = check_attrid.join(';')
-      const attr_val = this.skuvaljosn[check_attrid] // 选择属性对应的属性值
+      const attr_val = this.product.skuvaljosn[check_attrid] // 选择属性对应的属性值
       // 数组转化为字符串
       check_attrnames = check_attrnames.join(';')
       // 更改第一个规格显示图片
-      for (const mbx in this.skuvaljosn) {
+      for (const mbx in this.product.skuvaljosn) {
         const arr = mbx.split(';')
         if (arr[0] === index) {
           // this.imgIndex=index
-          this.skuImg = this.skuvaljosn[mbx].Attr_Image
+          this.skuImg = this.product.skuvaljosn[mbx].Attr_Image
           break
         }
       }
@@ -287,7 +287,9 @@ export default {
         this.attrInfo.attr_text = attr_val.Attr_Value_text
         this.attrInfo.count = attr_val.Property_count // 选择属性的库存
         this.attrInfo.price = attr_val.Attr_Price ? attr_val.Attr_Price : this.product.Products_PriceX // 选择属性的价格
-
+  
+          this.submitFlag = (!this.check_attr ) ? false : true;
+        
         const atrr_id = attr_val.Product_Attr_ID
         const isCartHas = this.$store.getters['delivery/getRow'](atrr_id)
         console.log(isCartHas, attr_val)
@@ -297,21 +299,21 @@ export default {
         } else {
           this.attrInfo.num = 0// 新增的时候，数量为0
         }
-
-        this.submitFlag = !((!this.check_attr || Object.getOwnPropertyNames(this.check_attr).length !== Object.getOwnPropertyNames(this.product.skujosn).length))
+        
+        
       } else {
         this.attrInfo = { ...attrInfoTmpl }
       }
 
+      console.log(attr_val)
       // 判断属性库存
       if (attr_val && attr_val.Property_count <= 0) {
         this.submitFlag = false
         return false
       }
-      this.check_attr = {}
       this.check_attr = check_attr
-      this.check_attrid_arr = check_attrid_arr
-      this.submit_flag = !((!this.check_attr || Object.getOwnPropertyNames(this.check_attr).length !== Object.getOwnPropertyNames(this.product.skujosn).length))
+      this.submitFlag = (!this.check_attr || Object.keys(this.check_attr).length !== Object.keys(this.product.skujosn_new).length) ? false : true;
+
       // 购买数量处理  大于最高时赋值最高值
       if (this.attrInfo.num > this.attrInfo.count) {
         this.attrInfo.num = this.attrInfo.count
@@ -452,15 +454,27 @@ export default {
       this.product = goodsInfo
 
       if (goodsInfo.skujosn) {
-        const skujosn_new = []
+        let skujosn_new = []
         for (const i in goodsInfo.skujosn) {
           skujosn_new.push({
             sku: i,
             val: goodsInfo.skujosn[i]
           })
         }
-        this.skujosn_new = skujosn_new
-        this.skuvaljosn = goodsInfo.skuvaljosn
+
+        // 新增如果有手机的规格
+        for (const i in goodsInfo.skujosn) {
+          if (i === 'mobile_prod_attr_name') {
+            skujosn_new = [{
+              sku: i,
+              val: goodsInfo.skujosn[i]
+            }]
+          }
+        }
+        // 结束
+
+        this.product.skujosn_new = skujosn_new
+        this.product.skuvaljosn = goodsInfo.skuvaljosn
       }
       this.$openPop('attr')
     },
@@ -686,7 +700,13 @@ export default {
     }
 
     .form {
+
+    }
+
+    .cart-attr-box{
       padding-bottom: 15px;
+      max-height: 400px;
+      overflow-y: scroll;
     }
 
     .cartAttr {
