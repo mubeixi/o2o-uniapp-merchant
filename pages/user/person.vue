@@ -167,6 +167,9 @@ export default {
         case 7:
           this.$linkTo('/pages/user/Coupon')
           break
+        case 8:
+          this.$linkTo('/pagesA/user/TaskCenter')
+          break
         case 9:
           this.$linkTo('/pagesA/user/AddressList')
           break

@@ -259,6 +259,29 @@
                     	"navigationBarTitleText": "退款详情"
                     }
                 }
+                ,{
+                    "path" : "user/TaskCenter",
+                    "style" : {
+						"navigationBarTitleText": "任务中心",
+						"app-plus": {
+							"titleNView": false
+						}
+					}
+                }
+                ,{
+                    "path" : "order/PublishComment",
+                    "style": {
+                    	"navigationBarTitleText": "发布评价"
+                    }
+                }
+                ,{
+                    "path" : "user/IntegralCenter",
+                    "style": {
+                    	"navigationBarTitleText": "积分",
+						"navigationBarBackgroundColor": "#ff5c33",
+						"navigationBarTextStyle": "white"
+                    }
+                }
             ]
 	}],
 	"preloadRule": {

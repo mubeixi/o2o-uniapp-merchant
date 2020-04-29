@@ -35,6 +35,17 @@ export const getUserInfo = (param, options) => fetch({
   param,
   options
 })
+export const transferIntegral = (param, options) => fetch({
+  act: 'transfer_integral',
+  param,
+  options
+})
+export const userIntegralRecord = (param, options) => fetch({
+  act: 'user_integral_record',
+  param,
+  options
+})
+
 
 export const updateUserInfo = (param, options) => fetch({
   act: 'update_user_info',
@@ -84,3 +95,5 @@ export const createRightsCardOrder = (param, options) => fetch({ act: 'createRig
 export const rightsCardPay = (param, options) => fetch({ act: 'rightsCardPay', param, options })
 
 
+// 支付权益卡订单
+export const getTaskCenter = (param, options) => fetch({ act: 'get_task_center', param, options })
