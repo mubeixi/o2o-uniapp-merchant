@@ -884,7 +884,7 @@
 import BaseMixin from '@/mixins/BaseMixin'
 import { getProductDetail, getActiveInfo, getStoreList, getProductSharePic } from '@/api/product'
 import { getBizInfo } from '@/api/store'
-import { getCommitList,getCouponList } from '@/api/common'
+import { getCommitList, getCouponList } from '@/api/common'
 import { commentReply } from '@/api/customer'
 import ProductSku from '@/componets/product-sku/product-sku'
 import { updateCart } from '@/api/order'
@@ -924,7 +924,7 @@ export default {
         Products_PriceX: '0',
         Products_PriceY: '0',
         Products_JSON: {},
-        Products_Description:'',
+        Products_Description: '',
         Products_Promise: []
       }, // 商品数据
       active: [], // 满减活动列表
@@ -932,10 +932,10 @@ export default {
       storeList: [],
       comments: [],
       commentValue: '',
-      pageSize:5,//评论的分页
-      page:1,//评论的分页
-      couponList:[],
-      totalCount:0,
+      pageSize: 5, // 评论的分页
+      page: 1, // 评论的分页
+      couponList: [],
+      totalCount: 0,
       commentItem: {}// 要评论的对象
     }
   },
@@ -944,20 +944,20 @@ export default {
     this.headTabSticky = (scrollTop > this.headTabTop)
   },
   methods: {
-    getCoupon(){
-      let data={
-        pageSize:this.pageSize,
-        page:this.page,
-        status:3,
-        front_show:1,
-        biz_id:this.detailData.biz_id
+    getCoupon () {
+      const data = {
+        pageSize: this.pageSize,
+        page: this.page,
+        status: 3,
+        front_show: 1,
+        biz_id: this.detailData.biz_id
       }
-      getCouponList(data).then(res=>{
-        for(let i of res.data){
-          this.couponList.push(i);
+      getCouponList(data).then(res => {
+        for (const i of res.data) {
+          this.couponList.push(i)
         }
-        this.totalCount=res.totalCount;
-      }).catch(e=>{
+        this.totalCount = res.totalCount
+      }).catch(e => {
       })
     },
     goVipList () {
@@ -1102,7 +1102,7 @@ export default {
     myPay () {
       if (!checkIsLogin(1, 1)) return
       this.hasCart = true
-      if(this.detailData.order_temp_id||this.detailData.Products_IsVirtual==1){
+      if (this.detailData.order_temp_id || this.detailData.Products_IsVirtual == 1) {
         this.hasCart = false
       }
       this.$refs.mySku.show()
@@ -1112,22 +1112,22 @@ export default {
       this.hasCart = false
       this.$refs.mySku.show()
     },
-    async submitSure(sku){
+    async submitSure (sku) {
       try {
-        console.log("derail")
+        console.log('derail')
         showLoading()
         const postData = {
           prod_id: this.prod_id, // 产品ID  在 onLoad中赋值
           attr_id: sku.id, // 选择属性id
           // count: sku.count, // 选择属性的库存
           qty: sku.qty, // 购买数量
-          cart_key: 'DirectBuy', // 购物车类型   CartList（加入购物车）、DirectBuy（立即购买）、PTCartList（不能加入购物车）
+          cart_key: 'DirectBuy' // 购物车类型   CartList（加入购物车）、DirectBuy（立即购买）、PTCartList（不能加入购物车）
           // productDetail_price: sku.price
         }
         await updateCart(postData).catch(e => {
           throw Error(e.msg || '下单失败')
         })
-        let url='/pages/order/OrderBooking?cart_key=DirectBuy&order_temp_id='+this.detailData.order_temp_id+'&biz_id='+this.detailData.biz_id
+        const url = '/pages/order/OrderBooking?cart_key=DirectBuy&order_temp_id=' + this.detailData.order_temp_id + '&biz_id=' + this.detailData.biz_id
         this.$linkTo(url)
       } catch (e) {
         this.$modal(e.message)
@@ -1180,46 +1180,33 @@ export default {
     },
     async getProductDetail () {
       try {
+        showLoading()
+
+        // 获取优惠券
+        this.page = 1
+        this.couponList = []
+        this.getCoupon()
+
         const data = {
           prod_id: this.prod_id
         }
-        this.detailData = await getProductDetail(data, {
-          onlyData: true,
-          tip: '加载中',
-          mask: true
-        }).catch(e => {
-          throw Error(e.msg || '获取商品详情失败')
-        })
+        this.detailData = await getProductDetail(data, { onlyData: true }).catch(e => { throw Error(e.msg || '获取商品详情失败') })
         this.detailData.Products_Description = formatRichTextByUparseFn(this.detailData.Products_Description)
 
-        this.store = await getBizInfo({ biz_id: this.detailData.biz_id }, {
-          onlyData: true,
-          tip: '加载中',
-          mask: true
-        }).catch(e => {
-          throw Error(e.msg || '获取店铺信息失败')
-        })
-        //获取评论
-        this.page=1
-        this.couponList=[]
-        this.getCoupon()
+        this.store = await getBizInfo({ biz_id: this.detailData.biz_id }, { onlyData: true }).catch(e => { throw Error(e.msg || '获取店铺信息失败') })
 
         this.comments = await getCommitList({
           Products_ID: this.detailData.Products_ID,
           pageSize: 999,
           page: 1
         }, {
-          onlyData: true,
-          tip: '加载中',
-          mask: true
+          onlyData: true
         }).catch((e) => {
           throw Error('获取评论数据失败')
         })
 
         this.storeList = await getStoreList({ biz_id: this.detailData.biz_id }, {
-          onlyData: true,
-          tip: '加载中',
-          mask: true
+          onlyData: true
         }).catch(e => {
           throw Error(e.msg || '获取店铺列表失败')
         })
@@ -1244,6 +1231,8 @@ export default {
         })
       } catch (e) {
         this.$modal(e.message)
+      } finally {
+        hideLoading()
       }
     },
     changeTabIndex (event) {
@@ -1252,10 +1241,10 @@ export default {
     }
   },
   computed: {
-    imgs(){
+    imgs () {
       try {
         return this.detailData.Products_JSON.ImgPath
-      }catch (e) {
+      } catch (e) {
         return []
       }
     },

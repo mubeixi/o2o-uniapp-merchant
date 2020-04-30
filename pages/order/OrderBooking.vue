@@ -36,19 +36,21 @@
     </block>
 
     <div class="container" v-if="orderInfo.is_virtual === 1">
-      <div class="other">
-        <div class="bd">
-          <div class="o_title  words">
-            <span>购买人姓名</span>
-            <input class="inputs" placeholder="请填写姓名" type="text" v-model="user_name">
+      <div class="section-box bg-white">
+        <div class="other">
+          <div class="bd">
+            <div class="o_title  words">
+              <span>购买人姓名</span>
+              <input class="inputs" placeholder="请填写姓名" type="text" v-model="user_name">
+            </div>
           </div>
         </div>
-      </div>
-      <div class="other">
-        <div class="bd">
-          <div class="o_title  words">
-            <span>购买人手机号</span>
-            <input class="inputs" placeholder="请填写手机号码" type="text" v-model="user_mobile">
+        <div class="other">
+          <div class="bd">
+            <div class="o_title  words">
+              <span>购买人手机号</span>
+              <input class="inputs" placeholder="请填写手机号码" type="text" v-model="user_mobile">
+            </div>
           </div>
         </div>
       </div>
@@ -190,9 +192,7 @@
       <div @click="seeDetail" class="mx">明细
         <layout-icon :type="isSlide?'iconicon-arrow-down':'iconicon-arrow-top'" color="#999" display="inline"></layout-icon>
       </div>
-
       <button @click="submitFn" class="submit">提交订单</button>
-
     </div>
 
     <div class="safearea-box"></div>
@@ -225,7 +225,6 @@
         </div>
       </div>
     </layout-layer>
-
     <layout-layer ref="freightPop" title="选择快递">
       <div class="freight-popup-wrap popup-wrap">
         <radio-group @change="ShipRadioChange">
@@ -243,7 +242,6 @@
       </div>
 
     </layout-layer>
-
     <layout-layer ref="couponPop">
       <div class="coupon-popup-wrap popup-wrap">
         <radio-group @change="CouponRadioChange">
@@ -649,29 +647,44 @@ export default {
     },
     // 余额支付输入完成
     confirm_user_money (e, biz_id) {
-      const input_money = parseFloat(Number(e.detail.value).toFixed(2))
-      // 重置
-      if (input_money <= 0 || isNaN(input_money)) {
-        this.postData.use_money[biz_id] = ''
-        error('您输入的金额有误')
-        return
-      }
+      try {
+        const val = e.detail.value
+        if (isNaN(val)) {
+          throw Error('金额不符合格式')
+        }
+        const input_money = parseFloat(Number(val).toFixed(2))
 
-      // 如果价格过大
-      if (input_money > parseFloat(this.bizList[biz_id].Order_TotalPrice)) {
-        this.postData.use_money[biz_id] = ''
-        error('输入金额超过订单总价')
-        return
-      }
+        if (isNaN(input_money)) {
+          throw Error('金额格式化失败')
+        }
+        // 重置
+        if (input_money <= 0) {
+          this.postData.use_money[biz_id] = ''
+          throw Error('输入的金额不能小于0')
+        }
 
-      if (input_money + this.useMoneyCount <= parseFloat(this.userInfo.User_Money)) {
-        this.postData.use_money[biz_id] = input_money
-      } else {
-        this.postData.use_money[biz_id] = ''
-        error('金额不符合格式')
-        return
+        // 如果价格过大
+        if (input_money > parseFloat(this.bizList[biz_id].Order_TotalPrice)) {
+          this.postData.use_money[biz_id] = ''
+          throw Error('输入金额超过订单总价')
+        }
+
+        console.log(input_money, input_money + this.useMoneyCount, parseFloat(this.userInfo.User_Money))
+
+        if (input_money + this.useMoneyCount > parseFloat(this.userInfo.User_Money)) {
+          throw Error('余额不足抵扣已选商品')
+        }
+
+        if (input_money + this.useMoneyCount <= parseFloat(this.userInfo.User_Money)) {
+          this.postData.use_money[biz_id] = input_money
+        }
+
+        this.checkOrderParam()
+      } catch (e) {
+        Exception.handle(e)
+      } finally {
+      
       }
-      this.checkOrderParam()
     },
     // 留言
     remarkConfirm (e, biz_id) {

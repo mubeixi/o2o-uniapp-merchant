@@ -20,8 +20,8 @@
     <!--  占位-->
     <div :style="{height:diyHeadHeight+'px'}"></div>
 
-    <div class="main tab-container" :style="{top:diyHeadHeight+'px',height:(systemInfo.windowHeight-diyHeadHeight+'px')}">
-      <scroll-view class="tab-page-wrap"  scroll-y  v-show="headTabIndex===0" >
+    <div class="main tab-container" :style="{height:(systemInfo.windowHeight-diyHeadHeight+'px')}">
+      <scroll-view :style="{height:(systemInfo.windowHeight-diyHeadHeight+'px')}" class="tab-page-wrap"  scroll-y  v-show="headTabIndex===0" >
         <view class="home-diy-wrap">
           <section
             v-for="(item, index) in templateList[tagIndex]"
@@ -190,7 +190,7 @@
         <layout-copyright></layout-copyright>
         <div class="h20"></div>
       </scroll-view>
-      <scroll-view class="tab-page-wrap" scroll-y v-show="headTabIndex===1" >
+      <scroll-view :style="{height:(systemInfo.windowHeight-diyHeadHeight+'px')}" class="tab-page-wrap" scroll-y v-show="headTabIndex===1" >
 
         <div class="section scroll-box first-cate-list  bg-white" :style="{top:diyHeadHeight+'px'}" @touchmove.stop.prevent="$noop">
           <li class="scroll-item fz-15 c3" @click="changeQuickCateNav(idx)" v-for="(cate,idx) in firstCateList" :key="idx">
@@ -253,8 +253,7 @@
         </swiper>
 
       </scroll-view>
-
-      <scroll-view class="tab-page-wrap" scroll-y v-show="headTabIndex===2">
+      <scroll-view :style="{height:(systemInfo.windowHeight-diyHeadHeight+'px')}" class="tab-page-wrap" scroll-y v-show="headTabIndex===2">
 
         <div class="section scroll-box first-cate-list  bg-white" :style="{top:diyHeadHeight+'px'}" @touchmove.stop.prevent="$noop">
           <li class="scroll-item fz-15 c3" @click="changeStoreCateNav(idx)" v-for="(cate,idx) in firstCateList" :key="idx">
@@ -452,12 +451,7 @@ export default {
     quickFirstCateIdx: {
       handler (idx, oldIdx) {
         if (idx !== oldIdx) {
-          if (idx === 1) {
-            this.loadQuickGoodsList(idx)
-          }
-          if (idx === 2) {
-
-          }
+          this.loadQuickGoodsList(idx)
         }
       }
     },
@@ -468,6 +462,9 @@ export default {
     }
   },
   onLoad () {
+	  
+	  
+	  
     console.log(this.$store.getters['theme/pimaryColor'])
   },
   created () {
@@ -495,7 +492,14 @@ export default {
     //     socketMsgQueue.push(msg);
     //   }
     // }
-
+		this.systemInfo = uni.getSystemInfoSync()
+	  // #ifdef MP-WEIXIN
+	  this.menuButtonInfo = uni.getMenuButtonBoundingClientRect()
+	  const { height, top, left } = this.menuButtonInfo
+	  this.diyHeadHeight = top + height + (top - this.systemInfo.statusBarHeight) + 10
+	  this.diyHeadRight = this.systemInfo.windowWidth - left
+	  // #endif
+    console.log(this.systemInfo,this.menuButtonInfo)
     this._init_func()
   },
   methods: {
@@ -545,8 +549,11 @@ export default {
      * @returns {Promise<void>}
      */
     async loadGoodsList (postData, obj) {
+      // console.log(postData)
       if (!obj)obj = []
+      // showLoading()
       obj = await getProductList({ ...postData }, { onlyData: true }).catch(e => { throw Error(e.msg || '获取商品列表失败') })
+      // hideLoading()
       // console.log(obj)
       return obj.concat([])
     },
@@ -554,7 +561,9 @@ export default {
       const cateId = this.firstCateList[idx].Category_ID
       if (!cateId) return
       // 需要刷新页面
-      this.quickGoodsList = await this.loadGoodsList({ Cate_ID: cateId })
+      const list = await this.loadGoodsList({ Cate_ID: cateId })
+      // console.log(list)
+      this.quickGoodsList = list
     },
     async loadLiveGoodsList (idx) {
       const cateId = this.liveNav[idx].Category_ID
@@ -632,6 +641,14 @@ export default {
 <style lang="scss" scoped>
   .page-wrap {
     background: #f8f8f8;
+  }
+  
+  .tab-container{
+    position: relative;
+    width: 750rpx;
+    .tab-page-wrap{
+      width: 750rpx;
+    }
   }
 
   .first-cate-list{
