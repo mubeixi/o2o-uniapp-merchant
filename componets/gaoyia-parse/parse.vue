@@ -133,7 +133,7 @@
 					chars: charsHandler
 				};
 				let results = HtmlToJson(parseData, customHandler, imageProp, this);
-
+				console.log(results)
 				this.imageUrls = results.imageUrls;
 				// this.nodes = results.nodes;
 				this.nodes = [];
@@ -206,7 +206,8 @@
 		},
 		watch: {
 			content:function(newVal, oldVal){
-				this.setHtml()
+
+				newVal && this.setHtml()
 			}
 			// content: {
 			// 	handler: function(newVal, oldVal) {

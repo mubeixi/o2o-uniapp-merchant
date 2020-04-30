@@ -4,7 +4,7 @@
     <block v-if="orderInfo.is_virtual===0">
       <div @click="goAddressList" class="address bg-white">
 
-        <layout-icon type="iconicon-address" class="loc_icon" size="24" color="#F53636"></layout-icon>
+        <layout-icon class="loc_icon" color="#F53636" size="24" type="iconicon-address"></layout-icon>
         <div class="add_msg" v-if="addressinfo.Address_Name">
           <div class="name">收货人：{{addressinfo.Address_Name}} <span>{{addressinfo.Address_Mobile | formatphone}}</span>
           </div>
@@ -15,7 +15,7 @@
         <div class="add_msg" v-else>
           <div>暂无收货地址，去添加</div>
         </div>
-        <layout-icon type="iconicon-arrow-right" class="right"></layout-icon>
+        <layout-icon class="right" type="iconicon-arrow-right"></layout-icon>
       </div>
 
       <div class="remind-wrap" v-if="!addressinfo.Address_Name">
@@ -57,8 +57,8 @@
     <div class="container" v-if="CartListReady && bizListReady">
 
       <!--这行代码特别关键 bind click="activeBizId=biz_id"-->
-      <div class="section-box store-item bg-white" v-for="(bizData,biz_id) in CartList" :key="biz_id"
-           @click="setActiveBizId(biz_id)">
+      <div :key="biz_id" @click="setActiveBizId(biz_id)" class="section-box store-item bg-white"
+           v-for="(bizData,biz_id) in CartList">
         <div class="biz-info bor-b">
           <div style="display: flex;align-items: center;">
             <image :src="bizList[biz_id].biz_logo" class="biz_logo" />
@@ -90,14 +90,14 @@
           <div class="bd" v-if="bizList[biz_id].is_virtual === 0">
             <div @click="changeShip(biz_id)" class="o_title">
               <span>配送方式</span>
-              <span style="text-align:right; color: #888;" class="flex flex-vertical-c">
+              <span class="flex flex-vertical-c" style="text-align:right; color: #888;">
                 <span>
                   <block v-if="postData.shipping_name[biz_id]">
                     {{postData.shipping_name[biz_id]}} {{(' ' + (orderInfo.Order_Shipping.Price > 0 ? '￥'+orderInfo.Order_Shipping.Price : '免运费'))}}
                   </block>
                   <block v-else>请选择物流</block>
                 </span>
-                <layout-icon type="iconicon-arrow-right" class="right" color="#999"></layout-icon>
+                <layout-icon class="right" color="#999" type="iconicon-arrow-right"></layout-icon>
               </span>
             </div>
           </div>
@@ -107,25 +107,26 @@
               <span>优惠券选择</span>
               <span style="text-align: right; color: #888;display: flex;align-items: center;">
               <span>{{bizList[biz_id].coupon_list.length>0?(coupon_desc?coupon_desc:'您有优惠券使用'): '暂无可用优惠券'}}</span>
-              <layout-icon type="iconicon-arrow-right" class="right" color="#999"></layout-icon>
+              <layout-icon class="right" color="#999" type="iconicon-arrow-right"></layout-icon>
             </span>
             </div>
           </div>
 
-          <div class="bd" v-if="1||bizList[biz_id].invoice_switch === 1" @click="focusInvoice(biz_id)">
+          <div @click="focusInvoice(biz_id)" class="bd" v-if="1||bizList[biz_id].invoice_switch === 1">
             <div class="o_title">
               <span>是否开具发票</span>
-              <switch style="transform: scale(0.8)" :checked="postData.need_invoice[biz_id]"
-                      @change="faPiaoChange($event,biz_id)" color="#04B600" />
+              <switch :checked="postData.need_invoice[biz_id]" @change="faPiaoChange($event,biz_id)"
+                      color="#04B600" style="transform: scale(0.8)" />
             </div>
-            <input @blur="faPiaoConfirm($event,biz_id)" v-model="postData.invoice_info[biz_id]" class="o_desc" placeholder="点此输入发票抬头和纳税人识别号" type="text" v-if="postData.need_invoice[biz_id]" />
+            <input @blur="faPiaoConfirm($event,biz_id)" class="o_desc" placeholder="点此输入发票抬头和纳税人识别号"
+                   type="text" v-if="postData.need_invoice[biz_id]" v-model="postData.invoice_info[biz_id]" />
           </div>
 
           <div class="bd" v-if="bizList[biz_id].max_diyong_intergral > 0">
             <div class="o_title">
               <span>是否参与积分抵扣</span>
-              <switch style="transform: scale(0.8)" :checked="intergralChecked" @change="intergralSwitchChange"
-                      color="#04B600" />
+              <switch :checked="intergralChecked" @change="intergralSwitchChange" color="#04B600"
+                      style="transform: scale(0.8)" />
             </div>
             <div class="o_de" v-if="intergralChecked">您当前共有
               <text>{{userInfo.User_Integral}}</text>
@@ -144,8 +145,8 @@
           <div class="bd" v-if="bizList[biz_id].is_use_money === 1">
             <div class="o_title">
               <span>是否使用余额</span>
-              <switch style="transform: scale(0.8)" :checked="postData.use_money_conf[biz_id]"
-                      @change="userMoneyChange($event,biz_id)" color="#04B600" />
+              <switch :checked="postData.use_money_conf[biz_id]" @change="userMoneyChange($event,biz_id)"
+                      color="#04B600" style="transform: scale(0.8)" />
             </div>
             <div class="o_de">您当前最多使用余额:
               <text>{{isAllowUseMoney ? userInfo.User_Money : bizList[biz_id].Order_TotalPrice}}
@@ -153,11 +154,11 @@
             </div>
             <input
               @blur="confirm_user_money($event,biz_id)"
-              v-model="postData.use_money[biz_id]"
               class="o_desc"
               placeholder="点此输入金额"
               type="number"
-              v-if="postData.use_money_conf[biz_id]" />
+              v-if="postData.use_money_conf[biz_id]"
+              v-model="postData.use_money[biz_id]" />
           </div>
 
           <div class="bd">
@@ -171,7 +172,7 @@
       </div>
 
       <div class="section-box bg-white" v-if="tmplFromList.length>0">
-        <diy-form @update="upOrderTmplData" eid="material" ref="material" :forms="tmplFromList"></diy-form>
+        <diy-form :forms="tmplFromList" @update="upOrderTmplData" eid="material" ref="material"></diy-form>
       </div>
 
     </div>
@@ -187,42 +188,40 @@
         <div class="tips" v-if="orderInfo.obtain_desc">{{orderInfo.obtain_desc}}</div>
       </div>
       <div @click="seeDetail" class="mx">明细
-        <!--        <image :class="isSlide?'slidedown': ''" class="image" src="/static/top.png"></image>-->
-        <layout-icon color="#999" display="inline" :type="isSlide?'iconicon-arrow-bottom':'iconicon-arrow-top'"></layout-icon>
+        <layout-icon :type="isSlide?'iconicon-arrow-down':'iconicon-arrow-top'" color="#999" display="inline"></layout-icon>
       </div>
 
-      <button class="submit" @click="submitFn">提交订单</button>
+      <button @click="submitFn" class="submit">提交订单</button>
 
     </div>
 
     <div class="safearea-box"></div>
 
-    <layout-layer :bottomHeight="bottomHeight" title="运费选择" @maskClicked="handClicked" ref="popupMX">
+    <layout-layer :bottomHeight="bottomHeight" @maskClicked="handClicked" ref="popupMX" title="明细">
       <div class="mxdetail">
-        <div class="mxtitle">明细</div>
         <div class="mxitem">产品原价
-          <text class="num">{{orderInfo.Order_TotalAmount-orderInfo.Order_Shipping.Price}}</text>
+          <text class="num">{{allTotalAmount-allOrderShipping}}</text>
         </div>
         <div class="mxitem" v-if="checkfrom">{{active_name}}
-          <text class="num">{{orderInfo.Order_Fyepay}}</text>
+          <text class="num">{{Order_Fyepay}}</text>
         </div>
-        <div class="mxitem" v-if="orderInfo.user_curagio_money > 0">会员折扣
-          <text class="num">-{{orderInfo.user_curagio_money}}</text>
+        <view class="mxitem" v-if="allUserCuragioMoney > 0">会员折扣
+          <text class="num">-{{allUserCuragioMoney}}</text>
+        </view>
+        <view class="mxitem" v-if="allManjianCash > 0">满减
+          <text class="num">-{{allManjianCash}}</text>
+        </view>
+        <view class="mxitem" v-if="allCouponMoney > 0">优惠券
+          <text class="num">-{{allCouponMoney}}</text>
+        </view>
+        <view class="mxitem" v-if="allIntegralMoney > 0">积分抵用
+          <text class="num">-{{allIntegralMoney}}</text>
+        </view>
+        <div class="mxitem" v-if="useMoneyCount > 0">余额
+          <text class="num">-{{useMoneyCount}}</text>
         </div>
-        <div class="mxitem" v-if="orderInfo.Manjian_Cash > 0">满减
-          <text class="num">-{{orderInfo.Manjian_Cash}}</text>
-        </div>
-        <div class="mxitem" v-if="orderInfo.Coupon_Money > 0">优惠券
-          <text class="num">-{{orderInfo.Coupon_Money}}</text>
-        </div>
-        <div class="mxitem" v-if="orderInfo.Integral_Money > 0">积分抵用
-          <text class="num">-{{orderInfo.Integral_Money}}</text>
-        </div>
-        <div class="mxitem" v-if="orderInfo.Order_Yebc > 0">余额
-          <text class="num">-{{orderInfo.Order_Yebc}}</text>
-        </div>
-        <div class="mxitem" v-if="orderInfo.Order_Shipping.Price > 0">运费
-          <text class="num">+{{orderInfo.Order_Shipping.Price}}</text>
+        <div class="mxitem" v-if="allOrderShipping > 0">运费
+          <text class="num">+{{allOrderShipping}}</text>
         </div>
       </div>
     </layout-layer>
@@ -230,13 +229,14 @@
     <layout-layer ref="freightPop" title="选择快递">
       <div class="freight-popup-wrap popup-wrap">
         <radio-group @change="ShipRadioChange">
-          <label class="row flex flex-justify-between flex-vertical-b p-10" :key="shipid" v-for="(ship,shipid) in popupExpressCompanys">
+          <label :key="shipid" class="row flex flex-justify-between flex-vertical-b p-10"
+                 v-for="(ship,shipid) in popupExpressCompanys">
             <span class="flex1">{{ship}}</span>
             <radio :checked="shipid===ship_current" :value="shipid" class="radio" color="#F43131" />
           </label>
           <label class="row flex flex-justify-between flex-vertical-b p-10">
             <span class="flex1">到店自取</span>
-            <radio :checked="'is_store'===ship_current" value="is_store" class="radio" color="#F43131" />
+            <radio :checked="'is_store'===ship_current" class="radio" color="#F43131" value="is_store" />
           </label>
         </radio-group>
         <div @click="$closePop('freightPop')" class="submit-btn">确定</div>
@@ -247,13 +247,13 @@
     <layout-layer ref="couponPop">
       <div class="coupon-popup-wrap popup-wrap">
         <radio-group @change="CouponRadioChange">
-          <label class="row flex flex-justify-between flex-vertical-b p-10" :key="i" v-for="(coupon,i) in popupCoupons">
+          <label :key="i" class="row flex flex-justify-between flex-vertical-b p-10" v-for="(coupon,i) in popupCoupons">
             <span class="flex1">满{{coupon.Coupon_Condition}} - {{coupon.Coupon_Cash > 0 ? coupon.Coupon_Cash : coupon.Coupon_Discount}}</span>
             <radio :checked="i===coupon_current" :value="coupon.Coupon_ID" class="radio" color="#F43131" />
           </label>
           <label class="row flex flex-justify-between flex-vertical-b p-10">
             <span class="flex1">不使用优惠</span>
-            <radio :checked="'nouse'===coupon_current" value="nouse" class="radio" color="#F43131" />
+            <radio :checked="'nouse'===coupon_current" class="radio" color="#F43131" value="nouse" />
           </label>
         </radio-group>
         <div @click="$closePop('couponPop')" class="submit-btn">确定</div>
@@ -273,12 +273,13 @@ import { getAddressList } from '@/api/customer'
 import LayoutLayer from '@/componets/layout-layer/layout-layer'
 import { error, hideLoading, modal, showLoading } from '@/common/fun'
 import Storage from '@/common/Storage'
-import { getArrColumn, getObjectAttrNum, objTranslate, validateFun } from '@/common/helper'
+import { getObjectAttrNum, objTranslate } from '@/common/helper'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import FunErrMsg from '@/componets/fun-err-msg/fun-err-msg'
 import { Exception } from '@/common/Exception'
 import DiyForm from '@/componets/diy-form/diy-form'
 import { mapGetters } from 'vuex'
+import { computeArrayColumnSum } from '@/pages/order/pay'
 
 export default {
   mixins: [BaseMixin],
@@ -294,17 +295,11 @@ export default {
       bid: null,
       tmplFromList: [], // 订单模板
       order_temp_id: null,
-
       formCheckResult: [],
       selfObj: null,
       selectStore: false,
       tabIdx: 0,
-      show: false, // 遮罩层
-      wl_show: false, // 物流选择
-      checked: true,
-      checked1: true,
-      checked2: true,
-      checked3: true,
+
       addressinfo: {}, // 收货地址信息
 
       activeBizId: null, // 活跃的商户id,很多操作之前都需要先改变这个
@@ -364,6 +359,26 @@ export default {
     }
   },
   computed: {
+    allTotalAmount () {
+      return computeArrayColumnSum(this.bizList, 'Order_TotalAmount')
+    },
+    allUserCuragioMoney () {
+      return computeArrayColumnSum(this.bizList, 'user_curagio_money')
+    },
+    allCouponMoney () {
+      return computeArrayColumnSum(this.bizList, 'Coupon_Money')
+    },
+    allManjianCash () {
+      return computeArrayColumnSum(this.bizList, 'Manjian_Cash')
+    },
+    allIntegralMoney () {
+      return computeArrayColumnSum(this.bizList, 'Integral_Money')
+    },
+    allOrderShipping () {
+      // 用...来代表子属性
+      return computeArrayColumnSum(this.bizList, 'Order_Shipping...Price')
+    },
+
     isAllowUseMoney () {
       try {
         return parseFloat(this.userInfo.User_Money) < parseFloat(this.bizList[biz_id].Order_TotalPrice)
@@ -591,7 +606,7 @@ export default {
     // 跳转地址列表页
     goAddressList () {
       uni.navigateTo({
-        url: '/pages/addressList/addressList?from=checkout&addressid=' + this.postData.address_id
+        url: '/pagesA/user/AddressList?from=checkout&addressid=' + this.postData.address_id
       })
     },
     // 跳转新增地址页面
@@ -712,43 +727,6 @@ export default {
       this.ship_current = this.postData.shipping_id[biz_id]
       this.$openPop('freightPop')
     },
-    closeMethod () {
-      if (this.type === 'coupon') {
-        // 不使用优惠
-        if (!this.postData.coupon_id) {
-          this.coupon_desc = '暂不使用优惠'
-          this.checkOrderParam()
-          this.$refs.freight.close()
-          return
-        }
-        for (var i in this.couponlist) {
-          if (this.couponlist[i].Coupon_ID === this.postData.coupon_id) {
-            this.coupon_desc = `满${this.couponlist[i].Coupon_Condition} - ${this.couponlist[i].Coupon_Cash > 0 ? this.couponlist[i].Coupon_Cash : this.couponlist[i].Coupon_Discount}`
-          }
-        }
-      } else {
-        for (var i in this.orderInfo.shipping_company) {
-          if (i === this.postData.shipping_id) {
-            this.shipping_name = `${this.orderInfo.shipping_company[i]}`
-          }
-        }
-      }
-
-      this.checkOrderParam()
-      this.$refs.freight.close()
-    },
-    getAddress () {
-
-      // // 添加、选择收获地址返回
-      // // 有收获地址，则更新（防止收获地址编辑后返回）
-      // const Address_ID = this.back_address_id || this.addressinfo.Address_ID
-      //
-      // return new Promise((resolve, reject) => {
-      //
-      //
-      // })
-
-    },
     /**
      * 更新下单信息
      * @param isInit 初次请求需要标记为true,因为有些操作只有第一次的时候才做
@@ -759,7 +737,10 @@ export default {
       let params = {}
       // 初始化的时候只有这个必传（也就是说默认的时候不算运费，毕竟运费可以通过选择运费后实时计算)
       if (isInit) {
-        params = { cart_key: this.postData.cart_key, address_id: this.postData.address_id }
+        params = {
+          cart_key: this.postData.cart_key,
+          address_id: this.postData.address_id
+        }
       } else {
         const { shipping_id, coupon_id, use_integral, need_invoice, invoice_info, use_money, order_remark, ..._params } = objTranslate(this.postData)
 
@@ -1112,6 +1093,8 @@ export default {
   }
 
   .mxdetail {
+    width: 750rpx;
+    box-sizing: border-box;
     font-size: 28rpx;
     line-height: 80rpx;
     padding: 20rpx 30rpx;

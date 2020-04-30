@@ -6,6 +6,9 @@
 import  {users_id} from '@/common/env'
 import  Storage from  '@/common/Storage'
 export default {
+  globalData: {
+    videoInstance:[]
+  },
   onLaunch: function () {
     console.log('App Launch')
     this.$store.dispatch('system/loadInitData')

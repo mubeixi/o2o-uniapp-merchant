@@ -139,9 +139,12 @@ export const compareObj = (obj1, obj2) => {
  * @returns {[]}
  */
 export const getArrColumn = (arr, column) => {
-  if (!Array.isArray(arr)) {
-    throw new Error('第二个参数为一个数组')
+  if(typeof arr !=='object'){
+    throw new Error('第二个参数为一个数组或者对象')
   }
+  // if (!Array.isArray(arr)) {
+  //   throw new Error('第二个参数为一个数组')
+  // }
   if (typeof column !== 'string') {
     throw new Error('键名为字符串')
   }
@@ -171,6 +174,9 @@ export const getArrColumn = (arr, column) => {
   }
   return rt
 }
+
+
+
 
 /**
  * 获取对象的属性个数

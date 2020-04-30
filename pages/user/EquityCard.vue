@@ -4,7 +4,7 @@
       <swiper class="center" :indicator-dots="false" :autoplay="false" :duration="1000" :current="inds"
               @change="change">
         <swiper-item class="vipFir" v-for="(item,index) of rightCard" :key="index">
-          <image src="/static/rightCard.png" class="img-full"></image>
+          <image :src="'/static/client/rightCard.png'|domain" class="img-full"></image>
           <div class="fz-20 equity-card-title">
             {{item.card_name}}
           </div>

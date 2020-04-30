@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<!-- #ifdef H5 || MP -->
-		<image v-show="!loading"
+		<image v-if="!loading"
 			   style="width: 750rpx"
 				:mode="node.attr.mode"
 				:lazy-load="node.attr.lazyLoad"
