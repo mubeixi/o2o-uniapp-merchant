@@ -132,7 +132,8 @@ export const compareObj = (obj1, obj2) => {
 }
 
 /**
- * 从元素是对象的一维数组中，获取指定的键名对应的值组成的简单值一维数组
+ * 从元素是对象的一维数组中，获取指定的键名对应的值组成的简单值一维数组.
+ * 支持两级（也就是可以获取数组对象中的指定属性的子属性
  * @param arr
  * @param column
  * @returns {[]}
@@ -148,11 +149,25 @@ export const getArrColumn = (arr, column) => {
     throw new Error('键名必传')
   }
   const rt = []
-  for (var k in arr) {
-    if (typeof arr[k] !== 'object') {
-      throw new Error('获取的数值为简单值')
+  // 这就约束column中没有...号，如果有代表着子属性
+  if (column.indexOf('...') !== -1) {
+    // 两级
+    const key1 = column.split('...')[0]
+    const key2 = column.split('...')[1]
+
+    for (var k in arr) {
+      if (typeof arr[k] !== 'object') {
+        throw new Error('获取的数值为简单值')
+      }
+      rt.push(arr[k][key1][key2])
     }
-    rt.push(arr[k][column])
+  } else {
+    for (var k in arr) {
+      if (typeof arr[k] !== 'object') {
+        throw new Error('获取的数值为简单值')
+      }
+      rt.push(arr[k][column])
+    }
   }
   return rt
 }
@@ -610,8 +625,6 @@ export const numberSort = function (arr, order_by) {
   }
 }
 
-
-
 const Helper = {
   Object: {
     mapList: (list, fn) => {
@@ -638,7 +651,5 @@ const Helper = {
     }
   }
 }
-
-
 
 export default Helper
