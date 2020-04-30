@@ -4,13 +4,13 @@
       <div v-if="item.type==='input'" class="form-cell-item cell-item" :class="{nobor:idx===formList.length-1}">
         <div class="form-cell-item__label">{{item.label}}</div>
         <div class="form-cell-item__content">
-          <input placeholder-class="__placeholder" @input="inputChange" :value="item.value" class="input" :placeholder="item.desc" />
+          <input placeholder-class="__placeholder" @input="inputChange($event,idx)" :value="item.value" class="input" :placeholder="item.desc" />
         </div>
       </div>
       <div v-if="item.type==='picker'" class="form-cell-item cell-item" :class="{nobor:idx===formList.length-1}">
         <div class="form-cell-item__label">{{item.label}}</div>
         <div class="form-cell-item__content">
-          <picker style="width: 100%" :range="item.options" @change="pickerChange">
+          <picker style="width: 100%" :range="item.options" @change="pickerChange($event,idx)">
             <div class="" v-if="item.value">{{item.value}}</div>
             <div class="__placeholder" v-else>{{item.desc||'请选择'}}</div>
           </picker>
@@ -133,13 +133,13 @@ export default {
       const _idx = idx || this.idx
       this.$set(this.formList[_idx], 'value', val)
     },
-    pickerChange (e) {
+    pickerChange (e,idx) {
       const val = e.detail.value
-      this.setVal(this.formList[this.idx].options[val])
+      this.setVal(this.formList[idx].options[val])
     },
-    inputChange (e) {
+    inputChange (e,idx) {
       const val = e.detail.value
-      this.setVal(val, this.idx)
+      this.setVal(val, idx)
     },
     addressCall ({ province, city, area, town }) {
       // const val = e.detail.value
