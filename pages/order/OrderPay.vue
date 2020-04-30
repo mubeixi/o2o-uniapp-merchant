@@ -105,40 +105,14 @@
 
     <div style="height:100px;background:#f8f8f8;"></div>
 
-    <layout-layer ref="pupupDetail" :direction="'top'" @maskClicked="handClicked" :bottomHeight="50">
-      <view class="mxdetail">
-        <view class="mxtitle">明细</view>
-        <view class="mxitem">产品
-          <text class="num">+{{orderInfo.Order_TotalAmount}}</text>
-        </view>
-        <view class="mxitem" v-if="orderInfo.user_curagio_money > 0">会员折扣
-          <text class="num">-{{orderInfo.user_curagio_money}}</text>
-        </view>
-        <view class="mxitem" v-if="orderInfo.Manjian_Cash > 0">满减
-          <text class="num">-{{orderInfo.Manjian_Cash}}</text>
-        </view>
-        <view class="mxitem" v-if="orderInfo.Coupon_Money > 0">优惠券
-          <text class="num">-{{orderInfo.Coupon_Money}}</text>
-        </view>
-        <view class="mxitem" v-if="orderInfo.Integral_Money > 0">积分抵用
-          <text class="num">-{{orderInfo.Integral_Money}}</text>
-        </view>
-        <view class="mxitem" v-if="user_money > 0">余额
-          <text class="num">-{{user_money}}</text>
-        </view>
-        <view class="mxitem" v-if="orderInfo.Order_Shipping.Price > 0">运费
-          <text class="num">+{{orderInfo.Order_Shipping.Price}}</text>
-        </view>
-      </view>
-    </layout-layer>
     <div class="order_total" :style="{'z-index': zIndex}">
       <div class="totalinfo">
-        <div class="info">共{{numTotal}}件商品 需支付：<span
-          class="mbxa">￥<span>{{pay_money}}</span></span></div>
+        <div class="info">共{{numTotal}}件商品 总计：<span
+          class="mbxa">￥<span>{{Order_Fyepay}}</span></span></div>
         <view class="tips" v-if="orderInfo.obtain_desc">{{orderInfo.obtain_desc}}</view>
       </div>
       <view class="mx" @click="seeDetail">明细
-        <image class="image" :class="isSlide?'slidedown':''" :src="'/static/client/top.png'|domain"></image>
+        <layout-icon display="inline" :type="isSlide?'iconicon-arrow-down':'iconicon-arrow-top'"></layout-icon>
       </view>
       <div class="submit" @click="submitPayFn">去支付</div>
     </div>
@@ -160,6 +134,33 @@
       :payFailCall="payFailCall"
     />
 
+    <layout-layer ref="pupupDetail" :direction="'top'" @maskClicked="handClicked" :bottomHeight="50">
+      <view class="mxdetail">
+        <view class="mxtitle">明细</view>
+        <view class="mxitem">产品
+          <text class="num">+{{allTotalAmount}}</text>
+        </view>
+        <view class="mxitem" v-if="allUserCuragioMoney > 0">会员折扣
+          <text class="num">-{{allUserCuragioMoney}}</text>
+        </view>
+        <view class="mxitem" v-if="allManjianCash > 0">满减
+          <text class="num">-{{allManjianCash}}</text>
+        </view>
+        <view class="mxitem" v-if="orderInfo.Coupon_Money > 0">优惠券
+          <text class="num">-{{orderInfo.Coupon_Money}}</text>
+        </view>
+        <view class="mxitem" v-if="allIntegralMoney > 0">积分抵用
+          <text class="num">-{{allIntegralMoney}}</text>
+        </view>
+        <view class="mxitem" v-if="useMoneyCount > 0">余额
+          <text class="num">-{{useMoneyCount}}</text>
+        </view>
+        <view class="mxitem" v-if="allOrderShipping > 0">运费
+          <text class="num">+{{allOrderShipping}}</text>
+        </view>
+      </view>
+    </layout-layer>
+
   </div>
 </template>
 
@@ -174,7 +175,7 @@ import BaseMixin from '@/mixins/BaseMixin'
 import LayoutLayer from '@/componets/layout-layer/layout-layer'
 import WzwPay from '@/componets/wzw-pay/wzw-pay'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
-import { farmatPayParam } from '@/pages/order/pay'
+import { computeArrayColumnSum, farmatPayParam } from '@/pages/order/pay'
 import { Exception } from '@/common/Exception'
 
 export default {
@@ -186,7 +187,38 @@ export default {
     LayoutLayer
   },
   computed: {
-
+    allTotalAmount () {
+      return computeArrayColumnSum(this.orderList, 'Order_TotalAmount')
+    },
+    allUserCuragioMoney () {
+      return computeArrayColumnSum(this.orderList, 'user_curagio_money')
+    },
+    allCouponMoney () {
+      return computeArrayColumnSum(this.orderList, 'Coupon_Money')
+    },
+    allManjianCash () {
+      return computeArrayColumnSum(this.orderList, 'Manjian_Cash')
+    },
+    allIntegralMoney () {
+      return computeArrayColumnSum(this.orderList, 'Integral_Money')
+    },
+    allOrderShipping () {
+      // 用...来代表子属性
+      return computeArrayColumnSum(this.orderList, 'Order_Shipping...Price')
+    },
+    Order_Fyepay () {
+      try {
+        let num = 0
+        for (const i in this.orderList) {
+          if (!isNaN(this.orderList[i].Order_Fyepay)) {
+            num += parseFloat(this.orderList[i].Order_Fyepay)
+          }
+        }
+        return num
+      } catch (e) {
+        return 0
+      }
+    },
     useMoneyCount () {
       try {
         const moneyList = Object.values(this.postData.use_money)
@@ -585,7 +617,7 @@ export default {
         error('用户取消支付')
         return
       }
-  
+
       error(msg || '支付失败')
 
       // uni.redirectTo({
@@ -952,6 +984,7 @@ export default {
   }
 
   .mxdetail {
+    width: 690rpx;
     font-size: 28rpx;
     line-height: 80rpx;
     padding: 20rpx 30rpx;

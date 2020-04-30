@@ -148,8 +148,7 @@
                       @change="userMoneyChange($event,biz_id)" color="#04B600" />
             </div>
             <div class="o_de">您当前最多使用余额:
-              <text>{{parseFloat(userInfo.User_Money) < parseFloat(bizList[biz_id].Order_TotalPrice) ? userInfo.User_Money :
-                bizList[biz_id].Order_TotalPrice}}
+              <text>{{isAllowUseMoney ? userInfo.User_Money : bizList[biz_id].Order_TotalPrice}}
               </text>
             </div>
             <input
@@ -182,7 +181,7 @@
         <div class="info">共{{prodCount}}件商品 总计：
           <text class="money">
             <text class="m_icon">￥</text>
-            {{orderFyepay}}
+            {{Order_Fyepay}}
           </text>
         </div>
         <div class="tips" v-if="orderInfo.obtain_desc">{{orderInfo.obtain_desc}}</div>
@@ -365,7 +364,13 @@ export default {
     }
   },
   computed: {
-
+    isAllowUseMoney () {
+      try {
+        return parseFloat(this.userInfo.User_Money) < parseFloat(this.bizList[biz_id].Order_TotalPrice)
+      } catch (e) {
+        return false
+      }
+    },
     useMoneyCount () {
       try {
         const moneyList = Object.values(this.postData.use_money)
@@ -392,7 +397,7 @@ export default {
         return 0
       }
     },
-    orderFyepay () {
+    Order_Fyepay () {
       try {
         let num = 0
         for (const i in this.bizList) {
@@ -631,7 +636,7 @@ export default {
     confirm_user_money (e, biz_id) {
       const input_money = parseFloat(Number(e.detail.value).toFixed(2))
       // 重置
-      if (input_money <= 0 ||isNaN(input_money)) {
+      if (input_money <= 0 || isNaN(input_money)) {
         this.postData.use_money[biz_id] = ''
         error('您输入的金额有误')
         return
@@ -927,9 +932,9 @@ export default {
 
         // 校验自定义表单
         if (this.order_temp_id) {
-          for (const item of this.tmplFromList) {
+          for (const item of this.order_temp_data) {
             if (item.require && !item.value) {
-              throw Error(`基本信息-${item.label}必填`)
+              throw Error(`订单模板-${item.label}必填`)
             }
           }
           params.order_temp_data = JSON.stringify(this.order_temp_data)
