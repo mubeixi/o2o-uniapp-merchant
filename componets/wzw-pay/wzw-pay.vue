@@ -16,7 +16,7 @@
     <view ref="popRef" class="popup-content" @tap.stop="stopEvent" :style="_location">
 
       <block v-for="(item,index) in initData.pay_arr" :key="index">
-        <div class="iMbx" v-if="index!='remainder_pay'||(is_use_money==1)" @click="chooseType(index)">
+        <div class="iMbx" v-if="index!='remainder_pay'||(is_use_money)" @click="chooseType(index)">
           <div class="c_method">
             {{item}}
             <text>￥{{pay_money}}</text>
@@ -47,6 +47,7 @@ import Storage from '@/common/Storage'
 // #endif
 // import { unipayFunc } from '../common/pay'
 import Pay from '@/common/Pay'
+import { Exception } from '@/common/Exception'
 
 function noop () {
 }
@@ -58,9 +59,10 @@ export default {
       type: Boolean,
       default: true
     },
+    // 是否支持余额支付
     is_use_money: {
-      type: Number,
-      default: 1
+      type: Boolean,
+      default: true
     },
     // 是否自动显示
     isOpen: {
@@ -81,7 +83,7 @@ export default {
       type: [Number, String],
       require: true
     },
-    // 使用的余额
+    // 使用的余额，可能是数字，也可能是字符串
     use_money: {
       type: [Number, String],
       require: true
@@ -90,7 +92,7 @@ export default {
 
     // 是否需要发票
     need_invoice: {
-      type: Number,
+      type: Boolean,
       default: false
     },
     // 发票信息
@@ -168,7 +170,6 @@ export default {
 
   },
   created () {
-
     const self = this
 
     // #ifdef MP-TOUTIAO
@@ -227,6 +228,8 @@ export default {
         _toggle = null
       }, 300)
 
+      console.log(this)
+
       // this.translateValue = 0;
     },
     close () {
@@ -275,17 +278,32 @@ export default {
         return
       }
 
-      // 判断是否使用了余额，
-      if (this.use_money > 0 || name == 'remainder_pay') {
-        // 使用了 余额支付
-        this.password_input = true
-      } else {
-        // 未使用余额支付, 直接调用
-        this.self_orderPay()
+      try {
+        let useMoney = this.use_money
+        if (typeof useMoney === 'string' && isNaN(useMoney)) {
+          useMoney = JSON.parse(useMoney)
+          // 对象
+          if (Object.prototype.toString.call(useMoney) === '[object Object]') {
+            // 有使用余额的
+            if (Object.values(useMoney).filter(val => val > 0).length > 0) {
+              this.password_input = true
+              return
+            }
+          }
+        } else {
+          if (parseFloat(this.use_money) > 0) {
+            this.password_input = true
+            return
+          }
+        }
+      } catch (e) {
+        Exception.handle(e)
       }
+
+      // 未使用余额支付, 直接调用
+      this.self_orderPay()
     },
     async $_init_wxpay_env () {
-
       const initData = await this.getInitData()
 
       const login_methods = initData.login_methods
@@ -360,11 +378,6 @@ export default {
 
       // 不是跳转的
       if (!is_forward) {
-        if (this.need_invoice == 1 && this.invoice_info == '') {
-          toast('发票信息不能为空', 'none')
-          return
-        }
-
         payConf = {
           Order_ID: this.Order_ID,
           pay_type: this.pay_type,
@@ -375,12 +388,12 @@ export default {
           invoice_info: this.invoice_info,
           order_remark: this.order_remark
         }
-        let obj={
+        const obj = {
           pay_type: this.pay_type,
-          user_pay_password: this.user_pay_password, // 余额支付密码
+          user_pay_password: this.user_pay_password // 余额支付密码
         }
-        if(!this.is_use_order_pay){
-          this.$emit('payMehtod',obj)
+        if (!this.is_use_order_pay) {
+          this.$emit('payMehtod', obj)
           return
         }
 

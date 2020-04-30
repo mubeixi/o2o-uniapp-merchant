@@ -22,7 +22,7 @@ export const createOrder = (param, options) => {
 
   return fetch({
     act: 'create_order',
-    param:_param,
+    param: _param,
     options
   })
 }
@@ -79,8 +79,16 @@ export const getOrderNum = (param, options) => fetch({
   options
 })
 
+// 获取订单模板
 export const getBizOrderTemplateList = (param, options) => fetch({
   act: 'getBizOrderTemplateList',
+  param,
+  options
+})
+
+// 获取合单详情
+export const getPreOrderDetail = (param, options) => fetch({
+  act: 'getPreOrderDetail',
   param,
   options
 })

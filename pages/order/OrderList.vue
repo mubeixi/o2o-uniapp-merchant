@@ -98,6 +98,23 @@ export default {
     }
   },
   methods: {
+    //跳转申请退款 支付   发表评论
+    goPay(item){
+      if(item.Order_Status==1){
+        uni.navigateTo({
+          url:"/pages/order/OrderPay?Order_ID="+item.Order_ID
+        })
+      }else if(item.Order_Status==2||item.Order_Status==3){
+        uni.navigateTo({
+          url:'/pagesA/person/refund?Order_ID='+item.Order_ID
+        })
+      }else if(item.Order_Status==4){
+        uni.navigateTo({
+          url:'/pages/order/publishComment?Order_ID='+item.Order_ID
+        })
+      }
+    
+    },
     //取消订单
     cancelOrder (item, index) {
       if (this.isLoading) return

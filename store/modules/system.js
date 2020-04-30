@@ -43,15 +43,7 @@ const actions = {
 }
 
 const getters = {
-  initData (state) {
-    try {
-      const data = state.initData || Storage.get('initData')
-      console.log(data)
-      if (!data) throw Error('initData获取失败')
-    } catch (e) {
-      return {}
-    }
-  }
+  initData: (state) => state.initData || Storage.get('initData')
 }
 
 export default {
