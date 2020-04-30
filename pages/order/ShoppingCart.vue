@@ -147,6 +147,7 @@ export default {
       const url = '/pages/order/OrderBooking?cart_key=CartList'
       this.$store.state.cart_buy = obj
 
+      this.manage = false
       this.$linkTo(url)
     },
     DelCart () {
@@ -636,6 +637,7 @@ export default {
   /* 结算 */
   .checkout {
     position: fixed;
+    z-index: 3;
     bottom: 50px;
     width: 100%;
     height: 100rpx;

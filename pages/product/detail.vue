@@ -606,8 +606,8 @@
     <layout-icon type="iconback" size="24" color="#999" class="back-icon" @click="$back()"></layout-icon>
     <swiper style="height:750rpx;width: 750rpx;" indicator-dots="true" indicator-active-color="#26C78D"
             indicator-color="#ffffff" autoplay="true" interval="3000" duration="500" circular="true">
-      <swiper-item v-for="(item,index) of detailData.Products_JSON.ImgPath" :key="index">
-        <image :src="item" class="full-img" @click="previewImg(index)"/>
+      <swiper-item v-for="(item,index) of imgs" :key="index">
+        <image v-if="item" :src="item" class="full-img" @click="previewImg(index)"/>
       </swiper-item>
     </swiper>
     <!--    <div class="end-time">-->
@@ -624,8 +624,7 @@
             </span>
       </div>
       <div class="product-price-right" @click="toBooking">
-        <image :src="'/static/client/product/product_share.png'|domain" class="full-img"
-               style="width: 130% !important;"></image>
+        <image :src="'/static/client/product/product_share.png'|domain" class="full-img" style="width: 130% !important;"></image>
         <div class="product-share">
           分享赚
         </div>
@@ -762,7 +761,7 @@
         <div :style="{height:(systemInfo.windowHeight+'px')}" class="over">
           <div class="store-info flex">
             <div style="width: 96rpx;height: 96rpx;margin-right: 28rpx">
-              <image :src="store[0].biz_logo" class="full-img"></image>
+              <image :src="store[0].biz_logo" class="full-img" v-if="store[0].biz_logo"></image>
             </div>
             <div v-if="store[0].biz_shop_name">
               <div class="store-info-title">
@@ -925,6 +924,7 @@ export default {
         Products_PriceX: '0',
         Products_PriceY: '0',
         Products_JSON: {},
+        Products_Description:'',
         Products_Promise: []
       }, // 商品数据
       active: [], // 满减活动列表
@@ -1088,8 +1088,9 @@ export default {
     },
     // 预览图片
     previewImg (index) {
+      const imgs = this.imgs
       uni.previewImage({
-        urls: this.detailData.Products_JSON.ImgPath,
+        urls: imgs,
         indicator: 'default',
         current: index
       })
@@ -1251,6 +1252,13 @@ export default {
     }
   },
   computed: {
+    imgs(){
+      try {
+        return this.detailData.Products_JSON.ImgPath
+      }catch (e) {
+        return []
+      }
+    },
     initData () {
       return this.$store.state.system.initData
     }

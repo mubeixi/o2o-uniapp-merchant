@@ -112,7 +112,7 @@
         <view class="tips" v-if="orderInfo.obtain_desc">{{orderInfo.obtain_desc}}</view>
       </div>
       <view class="mx" @click="seeDetail">明细
-        <layout-icon display="inline" :type="isSlide?'iconicon-arrow-down':'iconicon-arrow-top'"></layout-icon>
+        <layout-icon display="inline" :type="isSlide?'iconicon-arrow-down':'iconicon-arrow-top'"  color="#999" ></layout-icon>
       </view>
       <div class="submit" @click="submitPayFn">去支付</div>
     </div>
@@ -146,8 +146,8 @@
         <view class="mxitem" v-if="allManjianCash > 0">满减
           <text class="num">-{{allManjianCash}}</text>
         </view>
-        <view class="mxitem" v-if="orderInfo.Coupon_Money > 0">优惠券
-          <text class="num">-{{orderInfo.Coupon_Money}}</text>
+        <view class="mxitem" v-if="allCouponMoney > 0">优惠券
+          <text class="num">-{{allCouponMoney}}</text>
         </view>
         <view class="mxitem" v-if="allIntegralMoney > 0">积分抵用
           <text class="num">-{{allIntegralMoney}}</text>
