@@ -25,7 +25,7 @@
     </view>
 
     <view class="top">
-      <image class="bgImg" src="/static/jifen.jpg"></image>
+      <image class="bgImg" :src="'/static/client/jifen.jpg'|domain"></image>
       <layout-icon type="iconjifen1" class="momo" size="16" color="#fff"></layout-icon>
 
       <view class="prices">

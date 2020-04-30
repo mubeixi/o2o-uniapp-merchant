@@ -606,7 +606,7 @@ export default {
     // 跳转地址列表页
     goAddressList () {
       uni.navigateTo({
-        url: '/pages/addressList/addressList?from=checkout&addressid=' + this.postData.address_id
+        url: '/pagesA/user/AddressList?from=checkout&addressid=' + this.postData.address_id
       })
     },
     // 跳转新增地址页面
@@ -1093,7 +1093,8 @@ export default {
   }
 
   .mxdetail {
-    width: 690rpx;
+    width: 750rpx;
+    box-sizing: border-box;
     font-size: 28rpx;
     line-height: 80rpx;
     padding: 20rpx 30rpx;

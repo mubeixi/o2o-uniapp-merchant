@@ -4,7 +4,7 @@
     <view class="status_bar" style="background:#2e323c;"></view>
     <!-- #endif -->
     <view class="top">
-      <image class="widthTen" src="/static/taskCenter.png"></image>
+      <image class="widthTen" :src="'/static/client/taskCenter.png'|domain"></image>
       <layout-icon class="goBack" @click="goBack" type="iconicon-arrow-left" size="20"></layout-icon>
 
       <view class="titles">任务中心</view>

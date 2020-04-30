@@ -25,13 +25,13 @@
       </div>
     </div>
     <div class="container">
-      <div class="order-section bg-white" v-for="(orderInfo,idx) in orderList" :key="idx">
+      <div class="order-section bg-white" v-for="(orderItem,idx) in orderList" :key="idx">
         <div class="order_msg">
           <div class="biz_msg">
-            <image :src="orderInfo.biz_logo|domain" class="biz_logo" alt="" />
-            <span class="biz_name">{{orderInfo.biz_name}}</span>
+            <image :src="orderItem.biz_logo|domain" class="biz_logo" alt="" />
+            <span class="biz_name">{{orderItem.biz_name}}</span>
           </div>
-          <div class="pro" v-for="(pro,pro_id) in orderInfo.prod_list" :key="pro_id">
+          <div class="pro" v-for="(pro,pro_id) in orderItem.prod_list" :key="pro_id">
             <image class="pro-img" :src="pro.prod_img" alt="" />
             <div class="pro-msg">
               <div class="pro-name">{{pro.prod_name}}</div>
@@ -46,8 +46,8 @@
             <div class="o_title">
               <span>运费选择</span>
               <span style="text-align:right;" class="c8">
-						<span>{{orderInfo.Order_Shipping.Express}}</span>
-						<span> {{orderInfo.Order_Shipping.Price > 0 ? (' 运费：' + orderInfo.Order_Shipping.Price) : ' 免运费'}}</span>
+						<span>{{orderItem.Order_Shipping.Express}}</span>
+						<span> {{orderItem.Order_Shipping.Price > 0 ? (' 运费：' + orderItem.Order_Shipping.Price) : ' 免运费'}}</span>
 					</span>
             </div>
           </div>
@@ -56,7 +56,7 @@
           <div class="bd">
             <div class="o_title">
               <span>优惠券选择</span>
-              <span class="c8">{{orderInfo.Coupon_Money}}元优惠券</span>
+              <span class="c8">{{orderItem.Coupon_Money}}元优惠券</span>
             </div>
           </div>
         </div>
@@ -64,41 +64,41 @@
           <div class="bd">
             <div class="o_title">
               <span>积分抵扣</span>
-              <span class="c8">{{orderInfo.Integral_Money}}</span>
+              <span class="c8">{{orderItem.Integral_Money}}</span>
             </div>
           </div>
         </div>
-        <div class="other" v-if="orderInfo.is_use_money === 1">
+        <div class="other" v-if="orderItem.is_use_money === 1">
           <div class="bd">
             <div class="o_title">
               <span>是否使用余额</span>
-              <switch style="transform: scale(0.8)" :checked="postData.use_money_conf[orderInfo.Order_ID]" size='25px' color="#04B600" @change="moneyChange($event,orderInfo.Order_ID)" />
+              <switch style="transform: scale(0.8)" :checked="postData.use_money_conf[orderItem.Order_ID]" size='25px' color="#04B600" @change="moneyChange($event,orderItem.Order_ID)" />
             </div>
-            <div class="o_de c9">该订单可使用余额:<text>{{parseFloat(userInfo.User_Money) < parseFloat(orderInfo.Order_Fyepay) ? userInfo.User_Money : orderInfo.Order_Fyepay}}</text></div>
-            <input class="fz-12" type="number" v-if="postData.use_money_conf[orderInfo.Order_ID]" v-model="postData.use_money[orderInfo.Order_ID]" placeholder="点此输入金额" @blur="moneyInputHandle($event,orderInfo.Order_ID,idx)" />
+            <div class="o_de c9">该订单可使用余额:<text>{{parseFloat(userInfo.User_Money) < parseFloat(orderItem.Order_Fyepay) ? userInfo.User_Money : orderItem.Order_Fyepay}}</text></div>
+            <input class="fz-12" type="number" v-if="postData.use_money_conf[orderItem.Order_ID]" v-model="postData.use_money[orderItem.Order_ID]" placeholder="点此输入金额" @blur="moneyInputHandle($event,orderItem.Order_ID,idx)" />
           </div>
         </div>
-        <div class="other" v-if="pagefrom !== 'gift' && orderInfo.invoice_switch">
+        <div class="other" v-if="pagefrom !== 'gift' && orderItem.invoice_switch">
           <div class="bd">
             <div class="o_title">
               <span>是否开具发票</span>
-              <switch style="transform: scale(0.8)" :checked="postData.need_invoice[orderInfo.Order_ID]" size='25px' color="#04B600" @change="invoiceChange($event,orderInfo.Order_ID)" />
+              <switch style="transform: scale(0.8)" :checked="postData.need_invoice[orderItem.Order_ID]" size='25px' color="#04B600" @change="invoiceChange($event,orderItem.Order_ID)" />
             </div>
-            <input class="fz-12" placeholder="点此输入发票抬头和纳税人识别号" @blur="faPiaoConfirm($event,orderInfo.Order_ID)" type="text" v-if="postData.need_invoice[orderInfo.Order_ID]" v-model="postData.invoice_info[orderInfo.Order_ID]" />
+            <input class="fz-12" placeholder="点此输入发票抬头和纳税人识别号" @blur="faPiaoConfirm($event,orderItem.Order_ID)" type="text" v-if="postData.need_invoice[orderItem.Order_ID]" v-model="postData.invoice_info[orderItem.Order_ID]" />
           </div>
         </div>
         <div class="other">
           <div class="bd">
             <div class="o_title  words">
               <span>买家留言</span>
-              <input placeholder="点此填写留言内容" :value="postData.order_remark[orderInfo.Order_ID]" @input="remarkConfirm($event,orderInfo.Order_ID)" class="msg c8 fz-12" />
+              <input placeholder="点此填写留言内容" :value="postData.order_remark[orderItem.Order_ID]" @input="remarkConfirm($event,orderItem.Order_ID)" class="msg c8 fz-12" />
             </div>
           </div>
         </div>
         <div class="total">
-          <span>共<span>{{orderInfo.prod_list.length}}</span>件商品</span>
+          <span>共<span>{{orderItem.prod_list.length}}</span>件商品</span>
           <span class="mbx">小计：<span class="money moneys">￥</span><span
-            class="money">{{orderInfo.Order_Fyepay}}</span></span>
+            class="money">{{orderItem.Order_Fyepay}}</span></span>
         </div>
       </div>
     </div>
@@ -310,7 +310,6 @@ export default {
       is_use: 1
     }
   },
-
   methods: {
     // 更新参数
     refreshPayConf () {
@@ -419,71 +418,38 @@ export default {
       try {
         showLoading()
 
+        let order_list = null
+        console.log(this.mode)
         if (this.mode === 'single') {
           const orderInfo = await getOrderDetail({ Order_ID: this.Order_ID }, { onlyData: 1 }).catch(() => { throw Error('获取订单信息错误') })
-
-          console.log(orderInfo)
-          for (var i in orderInfo) {
-            if (i === 'Order_Shipping' && typeof orderInfo[i] === 'string') {
-              orderInfo[i] = JSON.parse(orderInfo[i])
-            }
-            if (i === 'prod_list') {
-              for (var j in orderInfo[i]) {
-                for (var k in orderInfo[i][j]) {
-                  if (k === 'attr_info' && typeof orderInfo[i][j][k] === 'string') {
-                    orderInfo[i][j][k] = JSON.parse(orderInfo[i][j][k])
-                  }
-                }
-              }
-            }
-          }
+          order_list = [orderInfo]
           this.orderInfo = orderInfo
-          this.Order_Type = orderInfo.Order_Type
-          // this.is_use = this.orderInfo.is_use_money
-          this.openMoney = this.orderInfo.is_use_money === 1
-          Storage.set('type', this.Order_Type)
-          Storage.set('pagefrom', this.pagefrom)
-          // pay_money 应该支付的钱
-          // user_money 使用的余额
-          // this.pay_money = this.orderInfo.Order_Fyepay
-          this.user_money = this.orderInfo.Order_Yebc
-          this.openMoney = this.orderInfo.Order_Yebc > 0
-          // if(!this.openMoney){
-          // 	this.is_use=0
-          // }
-          this.need_invoice = this.orderInfo.Order_NeedInvoice
-          this.openInvoice = this.orderInfo.Order_NeedInvoice > 0
-          this.invoice_info = this.orderInfo.Order_InvoiceInfo
-          this.order_remark = this.orderInfo.Order_Remark
-        }
-
-        if (this.mode === 'multi') {
-          const orderInfo = await getPreOrderDetail({ pre_sn: this.Order_ID }, { onlyData: 1 }).catch(() => { throw Error('获取合单信息错误') })
-
-          console.log(orderInfo)
-          const { order_list, ...info } = orderInfo
-
-          this.orderList = order_list
-
-          for (var orderItem of order_list) {
-            this.$set(this.postData.need_invoice, orderItem.Order_ID, orderItem.Order_NeedInvoice ? 1 : 0)// 是否需要发票
-            this.$set(this.postData.invoice_info, orderItem.Order_ID, orderItem.Order_InvoiceInfo || '')// 发票信息
-            this.$set(this.postData.use_money, orderItem.Order_ID, parseFloat(orderItem.Order_Yebc) > 0 ? orderItem.Order_Yebc : '')// 使用余额
-            this.$set(this.postData.use_money_conf, orderItem.Order_ID, parseFloat(orderItem.Order_Yebc) > 0 ? 1 : 0)// 使用余额
-            this.$set(this.postData.order_remark, orderItem.Order_ID, orderItem.order_remark || '')// 订单备注
-          }
-
+        } else if (this.mode === 'multi') {
+          const orderListInfo = await getPreOrderDetail({ pre_sn: this.Order_ID }, { onlyData: 1 }).catch(() => { throw Error('获取合单信息错误') })
+          const { order_list: list, ...info } = orderListInfo
+          order_list = list
           this.orderInfo = info
-          this.refreshPayMoney()
-
-          this.refreshPayConf()
-
-          if (this.orderInfo.Order_Fyepay != 0) this.isOpen = true
-
-          this.ready = true
-
-          // this.pay_money = this.orderInfo.Order_Fyepay
         }
+        console.log(this.orderInfo)
+        console.log(order_list)
+
+        this.orderList = order_list
+
+        for (var orderItem of order_list) {
+          this.$set(this.postData.need_invoice, orderItem.Order_ID, orderItem.Order_NeedInvoice ? 1 : 0)// 是否需要发票
+          this.$set(this.postData.invoice_info, orderItem.Order_ID, orderItem.Order_InvoiceInfo || '')// 发票信息
+          this.$set(this.postData.use_money, orderItem.Order_ID, parseFloat(orderItem.Order_Yebc) > 0 ? orderItem.Order_Yebc : '')// 使用余额
+          this.$set(this.postData.use_money_conf, orderItem.Order_ID, parseFloat(orderItem.Order_Yebc) > 0 ? 1 : 0)// 使用余额
+          this.$set(this.postData.order_remark, orderItem.Order_ID, orderItem.order_remark || '')// 订单备注
+        }
+
+        this.refreshPayMoney()
+
+        this.refreshPayConf()
+
+        if (this.orderInfo.Order_Fyepay !== 0) this.isOpen = true
+
+        this.ready = true
       } catch (e) {
         modal(e.message)
       } finally {

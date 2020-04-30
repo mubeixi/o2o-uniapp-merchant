@@ -147,7 +147,7 @@ export default {
       const url = '/pages/order/OrderBooking?cart_key=CartList'
       this.$store.state.cart_buy = obj
 
-      this.manage = false
+      this.isDel =false
       this.$linkTo(url)
     },
     DelCart () {
