@@ -227,8 +227,8 @@ export default {
   },
   data () {
     return {
-      ready:false,
-      isOpen:false,
+      ready: false,
+      isOpen: false,
       orderList: [], // 所有订单的列表
       mode: 'single',
       funvm: null,
@@ -407,7 +407,7 @@ export default {
           }
           this.orderInfo = orderInfo
           this.Order_Type = orderInfo.Order_Type
-          //this.is_use = this.orderInfo.is_use_money
+          // this.is_use = this.orderInfo.is_use_money
           this.openMoney = this.orderInfo.is_use_money === 1
           Storage.set('type', this.Order_Type)
           Storage.set('pagefrom', this.pagefrom)
@@ -432,7 +432,6 @@ export default {
           const { order_list, ...info } = orderInfo
 
           this.orderList = order_list
-          
 
           for (var orderItem of order_list) {
             this.$set(this.postData.need_invoice, orderItem.Order_ID, orderItem.Order_NeedInvoice ? 1 : 0)// 是否需要发票
@@ -441,18 +440,15 @@ export default {
             this.$set(this.postData.use_money_conf, orderItem.Order_ID, parseFloat(orderItem.Order_Yebc) > 0 ? 1 : 0)// 使用余额
             this.$set(this.postData.order_remark, orderItem.Order_ID, orderItem.order_remark || '')// 订单备注
           }
-  
-  
-  
+
           this.orderInfo = info
           this.refreshPayMoney()
-          
+
           this.refreshPayConf()
-          
-          if(this.orderInfo.Order_Fyepay != 0)this.isOpen = true
-          
+
+          if (this.orderInfo.Order_Fyepay != 0) this.isOpen = true
+
           this.ready = true
-          
 
           // this.pay_money = this.orderInfo.Order_Fyepay
         }
@@ -495,7 +491,12 @@ export default {
     moneyChange (e, Order_ID) {
       const open = e.detail.value
       console.log(Order_ID, e)
-      this.postData.use_money_conf[Order_ID] = open ? 1 : 0
+      if (open) {
+        this.postData.use_money_conf[Order_ID] = 1
+      } else {
+        this.postData.use_money_conf[Order_ID] = 0
+        this.postData.use_money[Order_ID] = '' // 重置
+      }
     },
 
     // 发票开关
@@ -579,11 +580,13 @@ export default {
       window.location.href = wxAuthUrl
     },
     payFailCall (err) {
-      uni.showToast({
-        title: err.msg ? err.msg : '支付失败',
-        icon: 'none',
-        duration: 2000
-      })
+      const { msg, errMsg } = err
+      if (errMsg === 'requestPayment:fail cancel') {
+        error('用户取消支付')
+        return
+      }
+  
+      error(msg || '支付失败')
 
       // uni.redirectTo({
       // 	url: '/pages/order/order?index=1'
