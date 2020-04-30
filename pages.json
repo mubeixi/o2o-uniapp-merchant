@@ -134,8 +134,7 @@
 		{
 			"path": "pages/user/Coupon",
 			"style": {
-				"navigationBarTitleText": "优惠券",
-				"navigationStyle": "custom"
+				"navigationBarTitleText": "优惠券"
 			}
 		},
 		{
@@ -247,8 +246,42 @@
 					"style": {
 						"navigationBarTitleText": "修改收货地址"
 					}
+				},{
+					"path" : "order/RefundList",
+					"style": {
+						"navigationBarTitleText": "退款售后"
+					}
 				}
 
+                ,{
+                    "path" : "order/RefundDetail",
+                    "style": {
+                    	"navigationBarTitleText": "退款详情"
+                    }
+                }
+                ,{
+                    "path" : "user/TaskCenter",
+                    "style" : {
+						"navigationBarTitleText": "任务中心",
+						"app-plus": {
+							"titleNView": false
+						}
+					}
+                }
+                ,{
+                    "path" : "order/PublishComment",
+                    "style": {
+                    	"navigationBarTitleText": "发布评价"
+                    }
+                }
+                ,{
+                    "path" : "user/IntegralCenter",
+                    "style": {
+                    	"navigationBarTitleText": "积分",
+						"navigationBarBackgroundColor": "#ff5c33",
+						"navigationBarTextStyle": "white"
+                    }
+                }
             ]
 	}],
 	"preloadRule": {

@@ -92,3 +92,30 @@ export const getPreOrderDetail = (param, options) => fetch({
   param,
   options
 })
+
+export const delOrder = (param, options) => fetch({
+  act: 'del_order',
+  param,
+  options
+})
+export const cancelRefund = (param, options) => fetch({
+  act: 'cancel_refund',
+  param,
+  options
+})
+
+export const getBackOrder = (param, options) => fetch({
+  act: 'get_back_order',
+  param,
+  options
+})
+export const getBackOrderDetail = (param, options) => fetch({
+  act: 'get_back_order_detail',
+  param,
+  options
+})
+export const refundSend = (param, options) => fetch({
+  act: 'refund_send',
+  param,
+  options
+})
