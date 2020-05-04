@@ -46,7 +46,6 @@ export const userIntegralRecord = (param, options) => fetch({
   options
 })
 
-
 export const updateUserInfo = (param, options) => fetch({
   act: 'update_user_info',
   param,
@@ -94,6 +93,20 @@ export const createRightsCardOrder = (param, options) => fetch({ act: 'createRig
 // 支付权益卡订单
 export const rightsCardPay = (param, options) => fetch({ act: 'rightsCardPay', param, options })
 
-
 // 支付权益卡订单
 export const getTaskCenter = (param, options) => fetch({ act: 'get_task_center', param, options })
+
+// 获取用户资金变动记录
+export const getUserMoneyRecord = (param, options) => fetch({ act: 'user_money_record', param, options })
+
+// 获取用户的余额记录
+export const getUserChargeRecord = (param, options) => fetch({ act: 'user_charge_record', param, options })
+
+// 余额充值
+export const depositBalance = (param, options) => fetch({ act: 'deposit_balance', param, options })
+
+// 余额转出
+export const transferBalance = (param, options) => fetch({ act: 'transfer_balance', param, options })
+
+// 获取余额充值优惠
+export const getBalance = (param, options) => fetch({ act: 'get_balance', param, options })

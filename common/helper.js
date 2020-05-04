@@ -2,7 +2,7 @@ import {
   staticUrl
 } from './env'
 import {
-  error
+  error,confirm
 } from './fun'
 import {
   upload, getAccessToken
@@ -295,23 +295,7 @@ export const getDomain = (url) => {
   return url
 }
 
-export const confirm = (options) => {
-  return new Promise(function (resolve, reject) {
-    uni.showModal({
-      ...options,
-      success: function (res) {
-        if (res.confirm) {
-          resolve(res)
-        } else if (res.cancel) {
-          reject(res)
-        }
-      },
-      fail: function (res) {
-        reject(res)
-      }
-    })
-  })
-}
+
 
 /**
  * 检测是否登录
