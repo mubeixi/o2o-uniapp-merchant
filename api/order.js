@@ -1,6 +1,40 @@
 import { fetch } from '@/common/request'
 import Storage from '@/common/Storage'
 
+
+// 评论
+export const comment = (param, options) => fetch({
+  act: 'comment',
+  param,
+  options
+})
+
+// 退款
+export const orderRefund = (param, options) => fetch({
+  act: 'order_refund',
+  param,
+  options
+})
+
+// 获取申请退货退款
+export const getRefund = (param, options) => fetch({
+  act: 'get_refund_info',
+  param,
+  options
+})
+
+// 支付购买会员卡订单
+export const userLevelPay = (param, options) => fetch({
+  act: 'userLevelPay',
+  param,
+  options
+})
+// 创建购买会员卡订单
+export const createBuyLevelOrder = (param, options) => fetch({
+  act: 'createBuyLevelOrder',
+  param,
+  options
+})
 // 获取订单操作
 export const createOrderCheck = (param, options) => fetch({
   act: 'create_order_check',
