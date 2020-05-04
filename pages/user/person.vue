@@ -46,8 +46,7 @@
     </div>
     <div class="functions flex flex-justify-between">
       <block v-for="(item,index) of  iconList" :key="index">
-        <LayoutFun width="150rpx" :type="item.className" @openNext="openNext" :index="index" :name="item.name"
-                   :color="item.color"></LayoutFun>
+        <LayoutFun width="150rpx" :type="item.className" @openNext="openNext" :index="index" :name="item.name" :color="item.color"></LayoutFun>
       </block>
     </div>
     <div class="intro">为你推荐</div>
@@ -72,11 +71,11 @@ import LayoutFun from '@/componets/layout-fun/layout-fun'
 import ProTag from '@/componets/pro-tag/pro-tag'
 import BaseMixin from '@/mixins/BaseMixin'
 import {
-  getProductList,
+  getProductList
 } from '@/api/product'
 import { getUserInfo } from '@/api/customer'
 import {
-  mapActions, mapGetters,
+  mapActions, mapGetters
 } from 'vuex'
 
 export default {
@@ -84,7 +83,7 @@ export default {
   components: {
     LayoutIcon,
     LayoutFun,
-    ProTag,
+    ProTag
   },
   data () {
     return {
@@ -93,73 +92,87 @@ export default {
           className: 'iconpintuan',
           name: '拼团订单',
           color: '#FE7602',
+          link: ''
         },
         {
           className: 'iconxianshiqianggou',
           name: '限时折扣单',
           color: '#ADCF81',
+          link: ''
         },
         {
           className: 'iconmiaosha',
           name: '秒杀订单',
           color: '#54AEED',
+          link: ''
         },
         {
           className: 'iconzengpin',
           name: '我的赠品',
           color: '#E8779F',
+          link: '/pagesA/user/MyGift'
         },
         {
           className: 'iconyue',
           name: '余额',
           color: '#69C276',
+          link: ''
         },
         {
           className: 'iconjifen',
           name: '积分',
           color: '#52CCCD',
+          link: '/pagesA/user/IntegralCenter'
         },
         {
           className: 'iconshoucang18-copy',
           name: '收藏',
           color: '#FF7F79',
+          link: '/pages/favorite/index'
         },
         {
           className: 'iconyouhuiquan',
           name: '优惠券',
           color: '#D1BE71',
+          link: '/pages/user/Coupon'
         },
         {
           className: 'iconrenwu',
           name: '任务中心',
           color: '#54AEED',
+          link: '/pagesA/user/TaskCenter'
         },
         {
           className: 'icondizhi',
           name: '地址管理',
           color: '#E8779F',
+          link: '/pagesA/user/AddressList'
         },
         {
           className: 'icontuikuan',
           name: '退款/售后',
           color: '#FE7602',
+          link: '/pagesA/order/RefundList'
         },
         {
           className: 'iconfenxiao',
           name: '分销中心',
           color: '#69C276',
-        },
+          link: ''
+        }
       ],
-      proList: [],
+      proList: []
     }
   },
   computed: {
     userInfo () {
       return this.$store.getters['user/getUserInfo']()
-    },
+    }
   },
   methods: {
     openNext (index) {
+      this.$linkTo(this.iconList[index].link)
+      return
       switch (index) {
         case 5:
           this.$linkTo('/pagesA/user/IntegralCenter')
@@ -182,7 +195,7 @@ export default {
       }
     },
     goOrder (index) {
-      let url = '/pages/order/OrderList?type=shop&&index=' + index
+      const url = '/pages/order/OrderList?type=shop&&index=' + index
       this.$linkTo(url)
     },
     async _init_func () {
@@ -191,8 +204,8 @@ export default {
       })
     },
     ...mapActions({
-      setUserInfo: 'user/setUserInfo',
-    }),
+      setUserInfo: 'user/setUserInfo'
+    })
   },
   onShow () {
     getUserInfo().then(res => {
@@ -202,7 +215,7 @@ export default {
   },
   created () {
     this._init_func()
-  },
+  }
 }
 </script>
 <style lang="scss" scoped>

@@ -281,8 +281,13 @@
 						"navigationBarBackgroundColor": "#ff5c33",
 						"navigationBarTextStyle": "white"
                     }
-                }
-            ]
+                },{
+					"path": "user/MyGift",
+					"style": {
+						"navigationBarTitleText": "赠品中心"
+					}
+				}
+			]
 	}],
 	"preloadRule": {
 		"pages/index": {

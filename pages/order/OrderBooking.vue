@@ -1,6 +1,6 @@
 <template>
   <div :class="selectStore?'over':''" class="page-wrap">
-    <fun-err-msg :errs="formCheckResult"></fun-err-msg>
+    <fun-err-msg ref="refMsg" :errs.sync="formCheckResult"></fun-err-msg>
     <block v-if="orderInfo.is_virtual===0">
       <div @click="goAddressList" class="address bg-white">
 
@@ -263,15 +263,13 @@
 
 <script>
 
-// import StoreListComponents from "../../components/StoreListComponents";
-
 import BaseMixin from '@/mixins/BaseMixin'
 import { createOrder, createOrderCheck, getBizOrderTemplateList } from '@/api/order'
 import { getAddressList } from '@/api/customer'
 import LayoutLayer from '@/componets/layout-layer/layout-layer'
-import { error, hideLoading, modal, showLoading } from '@/common/fun'
+import { hideLoading, modal, showLoading } from '@/common/fun'
 import Storage from '@/common/Storage'
-import { getObjectAttrNum, objTranslate } from '@/common/helper'
+import { getObjectAttrNum, objTranslate, validateFun } from '@/common/helper'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import FunErrMsg from '@/componets/fun-err-msg/fun-err-msg'
 import { Exception } from '@/common/Exception'
@@ -289,7 +287,7 @@ export default {
   },
   data () {
     return {
-
+      gift: false,
       bid: null,
       tmplFromList: [], // 订单模板
       order_temp_id: null,
@@ -683,7 +681,7 @@ export default {
       } catch (e) {
         Exception.handle(e)
       } finally {
-      
+
       }
     },
     // 留言
@@ -844,59 +842,8 @@ export default {
     // 提交订单
     async submitFn () {
       try {
-        showLoading()
-
+        this.formCheckResult = []
         const bizListLen = getObjectAttrNum(this.bizList) // 获得当前订单中有多少个商家，用来比较一些必填项的数量是否正确
-
-        const rules = {
-          shipping_id: {
-            required: true,
-            use: {
-              len: (val, row) => {
-                console.log(val, bizListLen, getObjectAttrNum(val))
-                return getObjectAttrNum(val) === bizListLen
-              },
-              virtual: (val, row) => {
-                if (this.orderInfo.is_virtual === 0) {
-                  return Object.values(val).filter(val => val === 0 || val === '0').length > 0 // 如果数组中有为0的，就错了
-                }
-                return true
-              }
-            },
-            message: {
-              required: '物流方式必填',
-              len: '每个商家都请设置物流',
-              virtual: '实体商品物流必须设置'
-            }
-          },
-          use_integral: {
-            required: true,
-            use: {
-              isnum: (val, row) => Object.values(val).filter(num => num < 0 || isNaN(num)).length > 0 // 积分中每个数字都要是大于等于0的数字
-            },
-            message: {
-              required: '积分抵扣选项必须设置',
-              isnum: '每个商家积分抵扣数值都为大于等于0的数'
-            }
-          },
-          use_money: {
-            required: true,
-            use: {
-              isnum: (val, row) => Object.values(val).filter(num => num < 0 || isNaN(num)).length > 0 // 使用余额中每个数字都要是大于等于0的数字
-            },
-            message: {
-              required: '使用余额的选项必须设置',
-              isnum: '每个商家使用余额数值都为大于等于0的数'
-            }
-          }
-        }
-
-        // const checkRt = validateFun(this.postData, rules)
-        // console.log(checkRt)
-        // if (checkRt !== true) {
-        //   this.formCheckResult = checkRt
-        //   return
-        // }
 
         const {
           shipping_id,
@@ -908,6 +855,21 @@ export default {
           order_remark,
           ...params
         } = objTranslate(this.postData)
+
+        if (this.orderInfo.is_virtual === 0 && Object.values(shipping_id).filter(val => val === 0 || val === '0').length > 0) {
+          throw Error('实体商品物流必须设置')
+        }
+
+        if (getObjectAttrNum(shipping_id) !== bizListLen) {
+          throw Error('每个商家都请设置物流')
+        }
+
+        if (Object.values(use_integral).filter(num => (num < 0 || isNaN(num)) && num !== '').length > 0) {
+          throw Error('每个商家积分抵扣数值都为大于等于0的数')
+        }
+        if (Object.values(use_money).filter(num => (num < 0 || isNaN(num)) && num !== '').length > 0) {
+          throw Error('每个商家使用余额数值都为大于等于0的数')
+        }
 
         Object.assign(params, {
           shipping_id: JSON.stringify(shipping_id),
@@ -958,6 +920,8 @@ export default {
           this.postData.user_mobile = this.user_mobile
         }
 
+        showLoading()
+
         const createOrderResult = await createOrder(params, { onlyData: true }).catch(e => {
           throw Error(e.msg || '下单失败')
         })
@@ -967,8 +931,12 @@ export default {
         }
         // 如果order_totalPrice <= 0  直接跳转 订单列表页
         if (createOrderResult.Order_Status !== 1) {
+          if (this.gift) {
+            this.$linkTo('/pagesA/user/MyGift?checked=1')
+            return
+          }
           // 直接跳转订单列表页
-          this.$linkTo('/pages/order/order')
+          this.$linkTo('/pages/order/OrderList')
           return
         }
 
@@ -976,6 +944,7 @@ export default {
       } catch (e) {
         console.log(e)
         this.formCheckResult = [e.message]
+        this.$refs.refMsg.show()
         Exception.handle(e)
       } finally {
         hideLoading()
@@ -1000,6 +969,12 @@ export default {
     }
     if (options.checkfrom) {
       this.checkfrom = options.checkfrom
+    }
+    if (options.gift) {
+      this.gift = true
+      uni.setNavigationBarTitle({
+        title: '赠品订单确认'
+      })
     }
 
     // 如果有物流模板，必须要有biz_id

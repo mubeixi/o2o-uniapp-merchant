@@ -31,6 +31,20 @@ Vue.filter('zero', (val) => {
   return val || 0
 })
 
+Vue.filter('formatTime', (timestamp) => {
+  return formatTime(timestamp)
+})
+
+export const formatTime = function (date) {
+  const year = new Date(date * 1000).getFullYear()
+  const month = new Date(date * 1000).getMonth() + 1
+  const day = new Date(date * 1000).getDate()
+  const hour = new Date(date * 1000).getHours()
+  const minute = new Date(date * 1000).getMinutes()
+  const second = new Date(date * 1000).getSeconds()
+  return [year, month, day].map(formatNumber).join('/') + ' ' + [hour, minute, second].map(formatNumber).join(':')
+}
+
 export const formatRichTextByUparseFn = (html) => {
   if (!html) return
   let newContent = html.replace(/<embed[^>]*>/gi, function (match, capture) {
