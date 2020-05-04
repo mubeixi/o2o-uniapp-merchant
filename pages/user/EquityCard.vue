@@ -22,7 +22,7 @@
           </div>
         </swiper-item>
       </swiper>
-
+      
       <div class="flex flex-vertical-c score-coupon">
         <div class="score-coupon-item" v-if="rightCard[inds].card_content.score">
           <image src="/static/rightCardScore.png" class="score-img"></image>
@@ -36,24 +36,24 @@
             赠送优惠券
           </div>
         </div>
-
+      
       </div>
-
+    
     </div>
-
+    
     <div class="buy-know m-t-29 fz-17 c3 m-b-20">
       购买须知
     </div>
     <div class="buy-know-list fz-13 c8">
       {{rightCard[inds].descr}}
-
+    
     </div>
-
+    
     <div style="width: 750rpx;height: 90rpx"></div>
     <div class="submit fz-17" @click="submit">
       <span class="fz-12">¥</span>{{rightCard[inds].price}} 立即购买
     </div>
-
+    
     <wzw-pay
       ref="payLayer"
       :isOpen='false'
@@ -63,13 +63,13 @@
       :payFailCall="payFailCall"
       @payMehtod="payMehtod"
     />
-
-
+  
+  
   </div>
 </template>
 
 <script>
-import { getRightsCard, rightsCardPay, createRightsCardOrder } from '@/api/customer'
+import { createRightsCardOrder, getRightsCard, rightsCardPay } from '@/api/customer'
 import BaseMixin from '@/mixins/BaseMixin'
 import { error } from '@/common/fun'
 import WzwPay from '@/componets/wzw-pay/wzw-pay'
@@ -104,7 +104,7 @@ export default {
         icon: 'none',
         duration: 2000,
       })
-
+      
       // uni.redirectTo({
       // 	url: '/pages/order/order?index=1'
       // })
@@ -116,17 +116,17 @@ export default {
     },
     paySuccessCall (res) {
       var _that = this
-      if (res && res.code && res.code == 2) {
+      if (res && res.code && res.code === 2) {
         _that.payFailCall()
         return
       }
-      if (res && res.code && res.code == 1) {
+      if (res && res.code && res.code === 1) {
         toast('用户取消支付', 'none')
         return
       }
-
+      
       // 头条小程序
-      if (res && res.code && res.code == 9) {
+      if (res && res.code && res.code === 9) {
         uni.showModal({
           title: '提示',
           content: '是否完成支付',
@@ -134,28 +134,28 @@ export default {
           confirmText: '已支付',
           success: function (res) {
             if (res.confirm) {
-
+            
             } else if (res.cancel) {
-
+            
             }
           },
         })
         return
       }
-
+      
       // 0：支付成功 1：支付超时 2：支付失败 3：支付关闭 4：支付取消 9：订单状态开发者自行获取
-
-      if (res && res.code && res.code == 4) {
+      
+      if (res && res.code && res.code === 4) {
         toast('用户取消支付', 'none')
         return
       }
-
+      
       toast('支付成功')
-
+      
       uni.redirectTo({
-        url: '/pages/user/person',
+        url: '/pages/user/index',
       })
-
+      
     },
     async submit () {
       let order = await createRightsCardOrder({ card_id: this.rightCard[this.inds].id }, {
@@ -193,7 +193,7 @@ export default {
     width: 750rpx;
     padding-top: 50rpx;
     box-sizing: border-box;
-
+    
     &-title {
       color: #4E4436;
       height: 38rpx;
@@ -202,7 +202,7 @@ export default {
       top: 48rpx;
       left: 320rpx;
     }
-
+    
     &-coupon {
       height: 22rpx;
       line-height: 22rpx;
@@ -211,7 +211,7 @@ export default {
       top: 158rpx;
       left: 26rpx;
     }
-
+    
     &-no {
       color: #5C533D;
       height: 18rpx;
@@ -220,15 +220,15 @@ export default {
       top: 160rpx;
       right: 18rpx;
     }
-
+    
   }
-
+  
   .center {
     width: 700rpx;
     height: 400rpx;
     margin: 0 auto;
     white-space: nowrap;
-
+    
     .vipFir {
       width: 700rpx !important;
       height: 400rpx !important;
@@ -236,7 +236,7 @@ export default {
       position: relative;
     }
   }
-
+  
   .div-block {
     width: 20rpx;
     height: 4rpx;
@@ -244,7 +244,7 @@ export default {
     background-color: #3A3731;
     margin-right: 8rpx;
   }
-
+  
   .div-block-active {
     width: 20rpx;
     height: 4rpx;
@@ -252,14 +252,14 @@ export default {
     background-color: #FFFFFF;
     margin-right: 8rpx;
   }
-
+  
   .indicator-div {
     position: absolute;
     top: 236rpx;
     left: 50%;
     transform: translateX(-50%);
   }
-
+  
   .score-coupon {
     width: 700rpx;
     height: 120rpx;
@@ -268,18 +268,18 @@ export default {
     left: 24rpx;
     padding: 0rpx 30rpx;
     box-sizing: border-box;
-
+    
     &-item {
       margin-right: 74rpx;
       text-align: center;
     }
-
+    
     .score-img {
       width: 80rpx;
       height: 80rpx;
       margin: 0 auto;
     }
-
+    
     .score-text {
       color: #FEF1C6;
       height: 24rpx;
@@ -288,20 +288,20 @@ export default {
       text-align: center;
     }
   }
-
+  
   .buy-know {
     width: 750rpx;
     height: 28rpx;
     line-height: 28rpx;
     text-align: center;
   }
-
+  
   .buy-know-list {
     width: 710rpx;
     margin: 0 auto;
     line-height: 52rpx;
   }
-
+  
   .submit {
     position: fixed;
     bottom: 0px;

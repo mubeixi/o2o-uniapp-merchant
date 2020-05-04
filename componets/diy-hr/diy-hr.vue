@@ -6,9 +6,7 @@
   </view>
 </template>
 <script>
-import {
-  deepCopyStrict
-} from '@/common/helper'
+import { deepCopyStrict } from '@/common/helper'
 
 const styleDefault = {
   color: '#e7e7e7',

@@ -1,4 +1,4 @@
-import { toast, modal } from '@/common/fun'
+import { modal, toast } from '@/common/fun'
 import { isDev } from '@/common/env'
 
 /**

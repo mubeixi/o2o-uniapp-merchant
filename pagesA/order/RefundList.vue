@@ -1,7 +1,7 @@
 <template>
-  <div  class="myall">
-    <!--    <page-title title="我的订单" rightHidden="true" class="titless"></page-title>-->
-    <div class="order" v-for="(item,index) of data" :key="index" >
+  <div class="myall">
+    
+    <div class="order" v-for="(item,index) of data" :key="index">
       <template v-if="item.prod_list.length>0">
         <div style="background-color: #F3F3F3;height: 20rpx;width: 100%;position: absolute;left: 0rpx;"></div>
         <div style="height: 20rpx;"></div>
@@ -25,17 +25,18 @@
         <div class="text-right fz-14 m-b-10 c9">
           共<span class="c5">{{item.prod_list.length}}</span>件商品,
           <span>退回余额:<span class="fz-16 danger-color"><span class="span fz-12">￥</span>{{item.refund_money_fee}} </span>,</span>
-          <span>原路退回:<span class="fz-16 danger-color"><span class="span fz-12">￥</span>{{item.refund_pay_fee}} </span></span>
+          <span>原路退回:<span class="fz-16 danger-color"><span
+            class="span fz-12">￥</span>{{item.refund_pay_fee}} </span></span>
         </div>
         <div class="btn-group">
           <span class="span" style="border: 0rpx;color: red;">{{item.Back_Status_desc}}</span>
           <span class="span" v-if="item.Back_Status==0" @click="cancelRefund(item,index)">取消退款</span>
-          <span class="span" v-else-if="item.Back_Status==1"  @click="goDetail(item)">买家发货</span>
+          <span class="span" v-else-if="item.Back_Status==1" @click="goDetail(item)">买家发货</span>
         </div>
       </template>
     </div>
     <div class="defaults" v-if="data.length<=0">
-      <image :src="'/static/client/defaultImg.png'|domain" ></image>
+      <image :src="'/static/client/defaultImg.png'|domain"></image>
     </div>
   </div>
 
@@ -43,151 +44,160 @@
 
 <script>
 
-import {getBackOrder,cancelRefund} from '@/api/order'
+import { cancelRefund, getBackOrder } from '@/api/order'
 import BaseMixin from '@/mixins/BaseMixin'
+
 export default {
-  mixins:[BaseMixin],
-  data(){
+  mixins: [BaseMixin],
+  data () {
     return {
       index: 0,
-      data:[],
-      pageSize:5,
-      page:1,
-      totalCount:0,
-      isLoading:false
+      data: [],
+      pageSize: 5,
+      page: 1,
+      totalCount: 0,
+      isLoading: false,
     }
   },
-  onShow(){
-    this.data=[];
-    this.page=1;
-    this.getBackOrder();
+  onShow () {
+    this.data = []
+    this.page = 1
+    this.getBackOrder()
   },
-  onLoad(option){
-    this.index=option.index;
+  onLoad (option) {
+    this.index = option.index
   },
-  onReachBottom(){
-    if(this.data.length<this.totalCount){
-      this.page++;
-      this.getBackOrder();
+  onReachBottom () {
+    if (this.data.length < this.totalCount) {
+      this.page++
+      this.getBackOrder()
     }
   },
-  methods:{
+  methods: {
     //取消退款
-    cancelRefund(item,index){
-      if(this.isLoading) return;
-      this.isLoading=true;
-      cancelRefund({Back_ID:item.Back_ID}).then(res=>{
+    cancelRefund (item, index) {
+      if (this.isLoading) return
+      this.isLoading = true
+      cancelRefund({ Back_ID: item.Back_ID }).then(res => {
         uni.showToast({
-          title:res.msg,
-          icon:'none'
+          title: res.msg,
+          icon: 'none',
         })
-        this.data.splice(index,1);
-      }).catch(e=>{
+        this.data.splice(index, 1)
+      }).catch(e => {
       })
-      this.isLoading=false;
+      this.isLoading = false
     },
-    getBackOrder(){
-      getBackOrder().then(res=>{
-        this.data=res.data;
-        this.totalCount=res.totalCount;
-      }).catch(e=>{
+    getBackOrder () {
+      getBackOrder().then(res => {
+        this.data = res.data
+        this.totalCount = res.totalCount
+      }).catch(e => {
       })
     },
-    goDetail(item){
-      let url="/pagesA/order/RefundDetail?Back_ID="+item.Back_ID
+    goDetail (item) {
+      let url = '/pagesA/order/RefundDetail?Back_ID=' + item.Back_ID
       this.$linkTo(url)
-
+      
     },
     //跳转申请退款 支付   发表评论
-    goPay(item){
-           if(item.Order_Status==1){
+    goPay (item) {
+      if (item.Order_Status == 1) {
         uni.navigateTo({
-          url:"/pages/pay/pay?Order_ID="+item.Order_ID
+          url: '/pages/pay/pay?Order_ID=' + item.Order_ID,
         })
-      }else if(item.Order_Status==2||item.Order_Status==3){
+      } else if (item.Order_Status == 2 || item.Order_Status == 3) {
         uni.navigateTo({
-          url:'/pagesA/person/refund?Order_ID='+item.Order_ID
+          url: '/pagesA/person/refund?Order_ID=' + item.Order_ID,
         })
-      }else if(item.Order_Status==4){
+      } else if (item.Order_Status == 4) {
         uni.navigateTo({
-          url:'/pages/order/publishComment?Order_ID='+item.Order_ID
+          url: '/pages/order/publishComment?Order_ID=' + item.Order_ID,
         })
       }
-
+      
     },
-
-  }
+    
+  },
 }
 </script>
 
 <style scoped lang="scss">
-  .myall{
+  .myall {
     min-height: 100vh;
     background-color: #FFFFFF !important;
   }
-  .titless{
+  
+  .titless {
     position: fixed;
-    top: 0rpx;
-    left: 0rpx;
+    top: 0 rpx;
+    left: 0 rpx;
     width: 100%;
     z-index: 999;
   }
+  
   .navs {
     z-index: 999;
     position: fixed;
-    top:0rpx;
+    top: 0 rpx;
     /* #ifdef APP-PLUS */
-    top: var(--status-bar-height);//86rpx;
+    top: var(--status-bar-height); //86rpx;
     /* #endif */
-
-    left: 0rpx;
-    width: 750rpx;
+    
+    left: 0 rpx;
+    width: 750 rpx;
     box-sizing: border-box;
     display: flex;
     align-items: center;
-    height: 100rpx;
-    line-height: 100rpx;
+    height: 100 rpx;
+    line-height: 100 rpx;
     background: #fff;
-    font-size: 28rpx;
+    font-size: 28 rpx;
     padding: 0 10px;
+    
     .nav-item {
       flex: 1;
       box-sizing: border-box;
       text-align: center;
       position: relative;
-      .jiaobiao{
+      
+      .jiaobiao {
         position: absolute;
-        top: 24rpx;
-        right: 20rpx;
-        width: 20rpx;
-        height: 20rpx;
+        top: 24 rpx;
+        right: 20 rpx;
+        width: 20 rpx;
+        height: 20 rpx;
         border-radius: 50%;
         background-color: #FFFFFF;
-        border: 1px solid  #F43131;
-        font-size: 15rpx;
+        border: 1px solid #F43131;
+        font-size: 15 rpx;
         display: flex;
         align-items: center;
         justify-content: center;
         color: #F43131;
       }
     }
+    
     .nav-item.active {
       color: red;
       border-bottom: 2px solid red;
     }
   }
-  .space{
+  
+  .space {
     /* #ifdef APP-PLUS */
     margin-top: var(--status-bar-height);
     /* #endif */
-
+    
   }
+  
   .order {
-    padding: 0rpx 20rpx;
+    padding: 0 rpx 20 rpx;
     background: #fff;
     position: relative;
+    
     .bizinfo {
-      margin-top: 20rpx;
+      margin-top: 20 rpx;
       display: flex;
       align-items: center;
       // justify-content: space-between;
@@ -200,33 +210,39 @@ export default {
       // }
       .bizname {
         // flex: 1;
-        font-size: 28rpx;
+        font-size: 28 rpx;
       }
+      
       .status {
         color: red;
-        font-size: 26rpx;
+        font-size: 26 rpx;
       }
     }
+    
     .pro {
       display: flex;
-      margin-bottom: 50rpx;
-      margin-top: 30rpx;
+      margin-bottom: 50 rpx;
+      margin-top: 30 rpx;
     }
-    .pro-msg{
-      margin-left: 27rpx;
-      width: 476rpx;
+    
+    .pro-msg {
+      margin-left: 27 rpx;
+      width: 476 rpx;
     }
-    .pro-div{
-      width: 200rpx;
-      height: 200rpx;
+    
+    .pro-div {
+      width: 200 rpx;
+      height: 200 rpx;
     }
+    
     .pro-img {
       width: 100%;
       height: 100%;
     }
+    
     .pro-name {
-      font-size: 26rpx;
-      margin-bottom: 20rpx;
+      font-size: 26 rpx;
+      margin-bottom: 20 rpx;
       text-overflow: -o-ellipsis-lastline;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -234,58 +250,69 @@ export default {
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
     }
+    
     .attr {
       display: inline-block;
-      height: 50rpx;
-      line-height: 50rpx;
+      height: 50 rpx;
+      line-height: 50 rpx;
       background: #FFF5F5;
       color: #666;
-      font-size: 24rpx;
-      padding: 0 20rpx;
-      margin-bottom: 20rpx;
+      font-size: 24 rpx;
+      padding: 0 20 rpx;
+      margin-bottom: 20 rpx;
     }
+    
     .pro-price {
       color: #F43131;
-      font-size: 36rpx;
+      font-size: 36 rpx;
     }
+    
     .pro-price span {
-      font-size: 24rpx;
+      font-size: 24 rpx;
       font-style: normal;
     }
+    
     .amount {
-      font-size: 30rpx;
+      font-size: 30 rpx;
       float: right;
       color: #333;
     }
+    
     .total {
-      font-size: 24rpx;
-      margin: 40rpx 0rpx;
-      margin-right: 15rpx;
+      font-size: 24 rpx;
+      margin: 40 rpx 0 rpx;
+      margin-right: 15 rpx;
+      
       .price {
         color: red;
-        font-size: 30rpx;
-        .p-span{
-          font-size: 24rpx;
+        font-size: 30 rpx;
+        
+        .p-span {
+          font-size: 24 rpx;
         }
       }
     }
+    
     .btn-group {
       text-align: right;
-      padding-bottom: 30rpx;
+      padding-bottom: 30 rpx;
+      
       .span {
         display: inline-block;
         //width: 150rpx;
-        padding: 0rpx 24rpx;
-        height: 60rpx;
-        line-height: 60rpx;
+        padding: 0 rpx 24 rpx;
+        height: 60 rpx;
+        line-height: 60 rpx;
         text-align: center;
         border: 1px solid #999;
-        border-radius:10rpx;
+        border-radius: 10 rpx;
         color: #999;
-        font-size: 26rpx;
-        &:last-child{
-          margin-left: 14rpx;
+        font-size: 26 rpx;
+        
+        &:last-child {
+          margin-left: 14 rpx;
         }
+        
         &.active {
           color: #fff;
           background: #F43131;
@@ -294,16 +321,19 @@ export default {
       }
     }
   }
+  
   .text-right {
     text-align: right;
   }
-  .defaults{
+  
+  .defaults {
     margin: 0 auto;
-    width: 640rpx;
-    height: 480rpx;
-    padding-top: 100rpx;
+    width: 640 rpx;
+    height: 480 rpx;
+    padding-top: 100 rpx;
   }
-  .danger-color{
+  
+  .danger-color {
     color: #f43131;
   }
 </style>

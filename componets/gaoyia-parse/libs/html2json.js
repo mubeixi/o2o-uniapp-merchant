@@ -12,8 +12,8 @@
  * detail : http://weappdev.com/t/wxparse-alpha0-1-html-markdown/184
  */
 
-import wxDiscode from './wxDiscode';
-import HTMLParser from './htmlparser';
+import wxDiscode from './wxDiscode'
+import HTMLParser from './htmlparser'
 
 function makeMap(str) {
   const obj = {};

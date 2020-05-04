@@ -12,6 +12,7 @@
             v-if="headTabIndex === 2" class="underline"></span></li>
         </ul>
         <div class="search-box"
+             @click="$linkTo('/pages/search/index')"
              :style="{borderRadius: menuButtonInfo.height/2+'px',height:menuButtonInfo.height+'px',}">
           <layout-icon class="iconsearch" type="iconicon-search" size="16" color="#fff"></layout-icon>
         </div>
@@ -19,9 +20,10 @@
     </div>
     <!--  占位-->
     <div :style="{height:diyHeadHeight+'px'}"></div>
-
+    
     <div class="main tab-container" :style="{height:(systemInfo.windowHeight-diyHeadHeight+'px')}">
-      <scroll-view :style="{height:(systemInfo.windowHeight-diyHeadHeight+'px')}" class="tab-page-wrap"  scroll-y  v-show="headTabIndex===0" >
+      <scroll-view :style="{height:(systemInfo.windowHeight-diyHeadHeight+'px')}" class="tab-page-wrap" scroll-y
+                   v-show="headTabIndex===0">
         <view class="home-diy-wrap">
           <section
             v-for="(item, index) in templateList[tagIndex]"
@@ -111,10 +113,11 @@
           </div>
           <div class="block-content">
             <div class="goods-list">
-              <div class="goods-item" v-for="(item,idx) in goodsList" :key="idx" @click="$toGoodsDetail(item.Products_ID)">
+              <div class="goods-item" v-for="(item,idx) in goodsList" :key="idx"
+                   @click="$toGoodsDetail(item.Products_ID)">
                 <block v-if="idx<6">
                   <div class="cover" :style="{backgroundImage:'url('+item.ImgPath+')'}">
-<!--                    <div class="tip" style="background: #185e44;">同城配送</div>-->
+                    <!--                    <div class="tip" style="background: #185e44;">同城配送</div>-->
                   </div>
                   <h5 class="title">{{item.Products_Name}}</h5>
                   <div class="price-box">
@@ -131,7 +134,7 @@
           </div>
         </div>
         <div class="block live">
-
+          
           <div class="block-title">
             <div class="block-title-text">钜惠推荐</div>
             <div class="block-title-more flex flex-vertical-center c9 fz-12">
@@ -153,14 +156,15 @@
           <div class="block-content">
             <div class="live-list">
               <block v-for="(item,idx) in liveGoodsList" :key="idx">
-                <div class="live-item" v-if="idx<3"  @click="$toGoodsDetail(item.Products_ID)">
-
+                <div class="live-item" v-if="idx<3" @click="$toGoodsDetail(item.Products_ID)">
+                  
                   <div class="left">
                     <div class="cover" :style="{backgroundImage:'url('+item.ImgPath+')'}"></div>
                   </div>
                   <div class="right">
                     <div class="title">
-                      <span class="live-status"><layout-icon display="inline" type="iconicon-count" color="#fff" size="14"></layout-icon>直播中</span>
+                      <span class="live-status"><layout-icon display="inline" type="iconicon-count" color="#fff"
+                                                             size="14"></layout-icon>直播中</span>
                       <span class="text">{{item.Products_Name}}</span>
                     </div>
                     <!--                    <div class="sale-count">已抢{{item.sale_count}}份</div>-->
@@ -181,7 +185,7 @@
                     <!--                      <div class="btn">抢</div>-->
                     <!--                    </div>-->
                   </div>
-
+                
                 </div>
               </block>
             </div>
@@ -190,15 +194,18 @@
         <layout-copyright></layout-copyright>
         <div class="h20"></div>
       </scroll-view>
-      <scroll-view :style="{height:(systemInfo.windowHeight-diyHeadHeight+'px')}" class="tab-page-wrap" scroll-y v-show="headTabIndex===1" >
-
-        <div class="section scroll-box first-cate-list  bg-white" :style="{top:diyHeadHeight+'px'}" @touchmove.stop.prevent="$noop">
-          <li class="scroll-item fz-15 c3" @click="changeQuickCateNav(idx)" v-for="(cate,idx) in firstCateList" :key="idx">
+      <scroll-view :style="{height:(systemInfo.windowHeight-diyHeadHeight+'px')}" class="tab-page-wrap" scroll-y
+                   v-show="headTabIndex===1">
+        
+        <div class="section scroll-box first-cate-list  bg-white" :style="{top:diyHeadHeight+'px'}"
+             @touchmove.stop.prevent="$noop">
+          <li class="scroll-item fz-15 c3" @click="changeQuickCateNav(idx)" v-for="(cate,idx) in firstCateList"
+              :key="idx">
             {{cate.Category_Name}}
             <span class="underline" v-show="quickFirstCateIdx === idx"></span>
           </li>
         </div>
-
+        
         <swiper
           :current="quickFirstCateIdx"
           @change="quickCateIndexChange"
@@ -206,62 +213,70 @@
           class="quick-cate-swiper"
         >
           <swiper-item class="quick-cate-swiper-item" v-for="(first,idx1) in firstCateList" :key="idx1">
-
-            <scroll-view class="bg-white scroll-view-wrap" scroll-y >
-
+            
+            <scroll-view class="bg-white scroll-view-wrap" scroll-y>
+              
               <div class="grid-box">
                 <div
                   style="width: 150rpx;box-sizing: border-box;"
                   class="grid-item p-t-10 p-b-10"
-                  @click="go(item)"
+                  @click="bindCateClick(item)"
                   v-for="(item,idx2) in first.child"
                   :key="idx2"
                 >
-                  <image style="vertical-align: top" class="icon-img b-radius-aircle w44 h44" mode="heightFix" :src="item.Category_Img"></image>
-                  <div class="title m-t-9 h14 fz-14 c3 text-nowrap" style="line-height: 14px">{{item.Category_Name}}</div>
+                  <image style="vertical-align: top" class="icon-img b-radius-aircle w44 h44" mode="heightFix"
+                         :src="item.Category_Img"></image>
+                  <div class="title m-t-9 h14 fz-14 c3 text-nowrap" style="line-height: 14px">{{item.Category_Name}}
+                  </div>
                 </div>
               </div>
               <div class="hr h10"></div>
-
+              
               <div class="bg-white">
-                <layout-ad :lazy-load="true" :ready="quickFirstCateIdx===idx1" paddingStr="20px 0 20px 0" code="hotcity" :cate-id="first.Category_ID" position="city" ></layout-ad>
+                <layout-ad :lazy-load="true" :ready="quickFirstCateIdx===idx1" paddingStr="20px 0 20px 0" code="hotcity"
+                           :cate-id="first.Category_ID" position="city"></layout-ad>
               </div>
-
+              
               <div class="page-section-title">
                 <span class="before" :style="{backgroundColor: primaryColor}"></span>
                 <span class="text">钜惠推荐</span>
-                <span class="after"  :style="{backgroundColor: primaryColor}"></span>
+                <span class="after" :style="{backgroundColor: primaryColor}"></span>
               </div>
-
-              <div class="fun-goods-list bg-white b-radius-5 m-t-10" style="width: 710rpx;margin-left: 20rpx;" >
+              
+              <div class="fun-goods-list bg-white b-radius-5 m-t-10" style="width: 710rpx;margin-left: 20rpx;">
                 <div class="fun-goods-col" style="padding: 0 15rpx 0 30rpx">
                   <block v-for="(goods,idx) in quickGoodsList" :key="idx">
-                    <goods-item v-if="idx%2===0"  :marketPrice="true" coverRadius="8rpx" :vo="goods" mode="top-bottom"></goods-item>
+                    <goods-item v-if="idx%2===0" :marketPrice="true" coverRadius="8rpx" :vo="goods"
+                                mode="top-bottom"></goods-item>
                   </block>
                 </div>
                 <div class="fun-goods-col" style="padding: 0 30rpx 0 15rpx">
                   <block v-for="(goods,idx) in quickGoodsList" :key="idx">
-                    <goods-item v-if="idx%2===1"  :marketPrice="true" coverRadius="8rpx" :vo="goods" mode="top-bottom"></goods-item>
+                    <goods-item v-if="idx%2===1" :marketPrice="true" coverRadius="8rpx" :vo="goods"
+                                mode="top-bottom"></goods-item>
                   </block>
                 </div>
               </div>
-
+              
               <div class="h20"></div>
-
+            
             </scroll-view>
           </swiper-item>
         </swiper>
-
+      
       </scroll-view>
-      <scroll-view :style="{height:(systemInfo.windowHeight-diyHeadHeight+'px')}" class="tab-page-wrap" scroll-y v-show="headTabIndex===2">
-
-        <div class="section scroll-box first-cate-list  bg-white" :style="{top:diyHeadHeight+'px'}" @touchmove.stop.prevent="$noop">
-          <li class="scroll-item fz-15 c3" @click="changeStoreCateNav(idx)" v-for="(cate,idx) in firstCateList" :key="idx">
+      <scroll-view :style="{height:(systemInfo.windowHeight-diyHeadHeight+'px')}" class="tab-page-wrap" scroll-y
+                   v-show="headTabIndex===2">
+        
+        <div class="section scroll-box first-cate-list  bg-white" :style="{top:diyHeadHeight+'px'}"
+             @touchmove.stop.prevent="$noop">
+          <li class="scroll-item fz-15 c3" @click="changeStoreCateNav(idx)" v-for="(cate,idx) in firstCateList"
+              :key="idx">
             {{cate.Category_Name}}
             <span class="underline" v-show="storeFirstCateIdx === idx"></span>
           </li>
         </div>
-
+        
         <swiper
           :current="storeFirstCateIdx"
           @change="storeCateIndexChange"
@@ -269,40 +284,46 @@
           class="quick-cate-swiper"
         >
           <swiper-item class="quick-cate-swiper-item" v-for="(first,idx1) in firstCateList" :key="idx1">
-
-            <scroll-view class="bg-white scroll-view-wrap" scroll-y >
-
+            
+            <scroll-view class="bg-white scroll-view-wrap" scroll-y>
+              
               <div class="grid-box">
                 <div
                   style="width: 150rpx;box-sizing: border-box;"
                   class="grid-item p-t-10 p-b-10"
-                  @click="go(item)"
+                  @click="bindCateClick(item)"
                   v-for="(item,idx) in first.child"
                   :key="idx"
                 >
-                  <image style="vertical-align: top" class="icon-img b-radius-aircle w44 h44" mode="heightFix" :src="item.Category_Img"></image>
-                  <div class="title m-t-9 h14 fz-14 c3 text-nowrap" style="line-height: 14px">{{item.Category_Name}}</div>
+                  <image style="vertical-align: top" class="icon-img b-radius-aircle w44 h44" mode="heightFix"
+                         :src="item.Category_Img"></image>
+                  <div class="title m-t-9 h14 fz-14 c3 text-nowrap" style="line-height: 14px">{{item.Category_Name}}
+                  </div>
                 </div>
               </div>
               <div class="hr h10"></div>
               <div class="bg-white">
-                <layout-ad :lazy-load="true" :ready="storeFirstCateIdx===idx1" paddingStr="20px 0 20px 0" code="hotcity" :cate-id="first.Category_ID" position="hot" ></layout-ad>
+                <layout-ad :lazy-load="true" :ready="storeFirstCateIdx===idx1" paddingStr="20px 0 20px 0" code="hotcity"
+                           :cate-id="first.Category_ID" position="hot"></layout-ad>
               </div>
-
+              
               <div style="background: #f8f8f8" class="p-b-15 p-t-15">
                 <div class="page-section-title">
                   <span class="before" :style="{backgroundColor: primaryColor}"></span>
                   <span class="text">人气商家</span>
                   <span class="after" :style="{backgroundColor: primaryColor}"></span>
                 </div>
-
-                <div class="store-top-item"  v-for="(merchant,idx) in merchantList" :key="idx" @click="$linkTo('/pages/store/index?bid='+merchant.id)">
+                
+                <div class="store-top-item" v-for="(merchant,idx) in merchantList" :key="idx"
+                     @click="$linkTo('/pages/store/index?bid='+merchant.id)">
                   <div class="store-info flex flex-vertical-c flex-justify-between">
                     <div class="p-l-10 p-r-10 flex flex-vertical-c">
                       <image class="logo" :src="merchant.biz_logo"></image>
                       <div class="p-l-10 c3">
                         <div class="name fz-15 m-b-5"> {{merchant.biz_shop_name}}</div>
-                        <div class="activity" v-if="merchant.active && merchant.active.length>0">满{{merchant.active[0].reach}}减{{merchant.active[0].award}}</div>
+                        <div class="activity" v-if="merchant.active && merchant.active.length>0">
+                          满{{merchant.active[0].reach}}减{{merchant.active[0].award}}
+                        </div>
                       </div>
                     </div>
                     <div class="flex flex-vertical-c p-r-6">
@@ -312,52 +333,43 @@
                   </div>
                   <div class="store-goods-list">
                     <block v-for="(goods,idx2) in merchant.prod" :key="idx2">
-                      <div class="store-goods-item" v-if="idx2<3"  @click.stop="$toGoodsDetail(goods.Products_ID)">
-
+                      <div class="store-goods-item" v-if="idx2<3" @click.stop="$toGoodsDetail(goods.Products_ID)">
+                        
                         <image :style="{backgroundImage:'url('+goods.ImgPath+')'}" class="cover" />
                         <div class="title fz-12 c3 p-t-7 p-b-7">{{goods.Products_Name}}</div>
                         <div class="fz-10 c9 flex flex-vertical-b">
                           <span class="price-selling">￥</span><span class="fz-12 price-selling">{{goods.Products_PriceX}}</span>
-                          <span class="text-through m-l-4">￥</span><span class="text-through">{{goods.Products_PriceY}}</span>
+                          <span class="text-through m-l-4">￥</span><span
+                          class="text-through">{{goods.Products_PriceY}}</span>
                         </div>
-
+                      
                       </div>
                     </block>
                   </div>
                 </div>
-
+              
               </div>
-
+            
             </scroll-view>
           </swiper-item>
         </swiper>
-
+      
       </scroll-view>
     </div>
-
+  
   </div>
 </template>
 
 <script>
 import BaseMixin from '@/mixins/BaseMixin'
-import {
-  getProductCategory, getProductList, getFlashsaleList
-} from '@/api/product'
-import {
-  getSkinConfig
-} from '@/api/common'
-import {
-  getBizInfo
-} from '@/api/store'
+import { getFlashsaleList, getProductCategory, getProductList } from '@/api/product'
+import { getSkinConfig } from '@/api/common'
+import { getBizInfo } from '@/api/store'
 import { Exception } from '@/common/Exception'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
-import Mock from '@/dev/Mock'
 import LayoutCopyright from '@/componets/layout-copyright/layout-copyright'
 import LayoutAd from '@/componets/layout-ad/layout-ad'
-import {
-  mapGetters
-} from 'vuex'
-
+import { mapGetters } from 'vuex'
 /**
  * 自定义组件
  */
@@ -394,7 +406,7 @@ export default {
     DiyBase,
     LayoutAd,
     LayoutCopyright,
-    LayoutIcon
+    LayoutIcon,
   },
   computed: {
     cateViewHeight () {
@@ -405,8 +417,8 @@ export default {
       }
     },
     ...mapGetters({
-      primaryColor: 'theme/pimaryColor'
-    })
+      primaryColor: 'theme/pimaryColor',
+    }),
     // quickNavs () {
     //   try {
     //     return this.firstCateList[this.quickFirstCateIdx].child
@@ -431,8 +443,8 @@ export default {
       killList: [],
       goodsList: [],
       templateList: [],
-      templateData: []
-
+      templateData: [],
+      
     }
   },
   watch: {
@@ -443,28 +455,25 @@ export default {
             if (this.quickGoodsList.length < 1) this.loadQuickGoodsList(0)
           }
           if (idx === 2) {
-
+          
           }
         }
-      }
+      },
     },
     quickFirstCateIdx: {
       handler (idx, oldIdx) {
         if (idx !== oldIdx) {
           this.loadQuickGoodsList(idx)
         }
-      }
+      },
     },
     liveNavIndex: {
       handler (idx, oldIdx) {
         if (idx !== oldIdx) this.loadLiveGoodsList(idx)
-      }
-    }
+      },
+    },
   },
   onLoad () {
-	  
-	  
-	  
     console.log(this.$store.getters['theme/pimaryColor'])
   },
   created () {
@@ -492,14 +501,14 @@ export default {
     //     socketMsgQueue.push(msg);
     //   }
     // }
-		this.systemInfo = uni.getSystemInfoSync()
-	  // #ifdef MP-WEIXIN
-	  this.menuButtonInfo = uni.getMenuButtonBoundingClientRect()
-	  const { height, top, left } = this.menuButtonInfo
-	  this.diyHeadHeight = top + height + (top - this.systemInfo.statusBarHeight) + 10
-	  this.diyHeadRight = this.systemInfo.windowWidth - left
-	  // #endif
-    console.log(this.systemInfo,this.menuButtonInfo)
+    this.systemInfo = uni.getSystemInfoSync()
+    // #ifdef MP-WEIXIN
+    this.menuButtonInfo = uni.getMenuButtonBoundingClientRect()
+    const { height, top, left } = this.menuButtonInfo
+    this.diyHeadHeight = top + height + (top - this.systemInfo.statusBarHeight) + 10
+    this.diyHeadRight = this.systemInfo.windowWidth - left
+    // #endif
+    console.log(this.systemInfo, this.menuButtonInfo)
     this._init_func()
   },
   methods: {
@@ -508,21 +517,21 @@ export default {
       try {
         const handleRT = await this.get_tmpl_data()
         if (handleRT !== true) throw handleRT // hanldeRT不是true就是一个Error实例，直接抛出
-
+        
         this.killList = await getFlashsaleList({}, { onlyData: true }).catch(err => {
           throw Error(err.msg || '初始化秒杀商品失败')
         })
-
+        
         this.firstCateList = await getProductCategory({}, { onlyData: true }).catch(() => {
           throw Error('获取商品分类失败')
         })
-
+        
         this.liveNav = this.firstCateList.concat([]) // 也是一级分类
-
+        
         this.loadLiveGoodsList(0) // 加载第一个分类的商品
-
+        
         this.loadMerchantList()
-
+        
         // this.$toast('加载成功','none')
       } catch (e) {
         Exception.handle(e)
@@ -530,14 +539,18 @@ export default {
         hideLoading()
       }
     },
+    bindCateClick (cate) {
+      console.log(cate)
+      this.$linkTo(`/pages/search/result?Cate_ID=${cate.Category_ID}`)
+    },
     async loadMerchantList (idx) {
       // const cateId = this.liveNav[idx].Category_ID
-
+      
       // 商家无法利用一级分类获取到
       this.merchantList = await getBizInfo({
         get_prod: 3,
         with_prod: 1,
-        get_active: 1
+        get_active: 1,
       }, { onlyData: true }).catch((e) => {
         throw Error('获取人气商家列表失败')
       })
@@ -550,9 +563,11 @@ export default {
      */
     async loadGoodsList (postData, obj) {
       // console.log(postData)
-      if (!obj)obj = []
+      if (!obj) obj = []
       // showLoading()
-      obj = await getProductList({ ...postData }, { onlyData: true }).catch(e => { throw Error(e.msg || '获取商品列表失败') })
+      obj = await getProductList({ ...postData }, { onlyData: true }).catch(e => {
+        throw Error(e.msg || '获取商品列表失败')
+      })
       // hideLoading()
       // console.log(obj)
       return obj.concat([])
@@ -567,17 +582,24 @@ export default {
     },
     async loadLiveGoodsList (idx) {
       const cateId = this.liveNav[idx].Category_ID
-
-      this.liveGoodsList = await getProductList({ Cate_ID: cateId, pageSize: 3 }, { onlyData: true }).catch(e => { throw Error(e.msg || '刷新直播商品列表失败') })
+      
+      this.liveGoodsList = await getProductList({
+        Cate_ID: cateId,
+        pageSize: 3,
+      }, { onlyData: true }).catch(e => {
+        throw Error(e.msg || '刷新直播商品列表失败')
+      })
     },
     async get_tmpl_data () {
       try {
-        const { Home_Json: resultData } = await getSkinConfig({}, { onlyData: true }).catch(e => { throw Error(e.msg || '获取首页模板失败') })
-
+        const { Home_Json: resultData } = await getSkinConfig({}, { onlyData: true }).catch(e => {
+          throw Error(e.msg || '获取首页模板失败')
+        })
+        
         const mixinData = typeof resultData === 'string' ? JSON.parse(resultData) : resultData
-
+        
         const { plugin: templateData, system } = mixinData
-
+        
         // 存储页面数据
         this.templateData = [] // 页面数据的二维数组。
         this.templateList = [] // 页面组件的二维数组。
@@ -634,8 +656,8 @@ export default {
     },
     changeLiveNav (idx) {
       this.liveNavIndex = idx
-    }
-  }
+    },
+  },
 }
 </script>
 <style lang="scss" scoped>
@@ -643,26 +665,29 @@ export default {
     background: #f8f8f8;
   }
   
-  .tab-container{
+  .tab-container {
     position: relative;
     width: 750rpx;
-    .tab-page-wrap{
+    
+    .tab-page-wrap {
       width: 750rpx;
     }
   }
-
-  .first-cate-list{
+  
+  .first-cate-list {
     position: fixed;
     width: 750rpx;
     height: 44px;
     padding: 2px 8px;
     box-sizing: border-box;
     border-bottom: 1px solid #eee;
-    .scroll-item{
+    
+    .scroll-item {
       position: relative;
       line-height: 40px;
       padding: 0 8px;
-      .underline{
+      
+      .underline {
         position: absolute;
         bottom: 0px;
         left: 50%;
@@ -673,51 +698,52 @@ export default {
       }
     }
   }
-
+  
   .quick-cate-swiper {
     position: fixed;
     width: 750rpx;
     overflow: hidden;
-    .quick-cate-swiper-item{
-      .scroll-view-wrap{
+    
+    .quick-cate-swiper-item {
+      .scroll-view-wrap {
         position: absolute;
         width: 100%;
         height: 100%;
       }
     }
   }
-
+  
   .live {
     padding: 0 25rpx;
     background: white;
-
+    
     .block-title {
       padding: 20px 0 10px 0;
-
+      
       .block-title-text {
         font-weight: bold;
       }
     }
-
+    
     .nav-box {
       color: #666666;
       margin-bottom: 10px;
-
+      
       .nav-list {
         overflow-y: hidden;
         overflow-x: scroll;
-
+        
         &::-webkit-scrollbar {
           display: none;
         }
-
+        
         .nav-item {
           padding: 0;
           margin-right: 30rpx;
           height: 30px;
           line-height: 30px;
           display: inline-block;
-
+          
           &.active {
             color: $fun-green-color;
             border-bottom: 2px solid $fun-green-color;
@@ -725,11 +751,11 @@ export default {
         }
       }
     }
-
+    
     .live-list {
       display: flex;
       flex-wrap: wrap;
-
+      
       .live-item {
         width: 700rpx;
         padding: 0 0 10px 0;
@@ -737,15 +763,15 @@ export default {
         font-size: 14px;
         border-bottom: 1px dashed #eee;
         display: flex;
-
+        
         &:last-child {
           margin-bottom: 0;
           border-bottom: none;
         }
-
+        
         .left {
           width: 300rpx;
-
+          
           .cover {
             width: 300rpx;
             height: 300rpx;
@@ -754,14 +780,14 @@ export default {
             border-bottom-left-radius: 10rpx;
             overflow: hidden;
           }
-
+          
         }
-
+        
         .right {
           margin-left: 10px;
           padding-top: 10px;
           font-size: 12px;
-
+          
           .title {
             font-size: 13px;
             max-height: 36px;
@@ -769,14 +795,14 @@ export default {
             margin-top: 10px;
             color: #333;
             overflow: hidden;
-
+            
             .text {
               white-space: normal;
               overflow: hidden;
               text-overflow: ellipsis;
               margin-right: 3px;
             }
-
+            
             .live-status {
               display: inline-block;
               margin-right: 4px;
@@ -790,36 +816,36 @@ export default {
               border-bottom-right-radius: 8px;
             }
           }
-
+          
           .price-box {
             display: flex;
             margin-bottom: 6px;
-
+            
             .selling-price {
               color: $fun-red-color;
-
+              
               .num {
                 font-size: 14px;
               }
             }
-
+            
             .market-price {
               display: flex;
               align-items: flex-end;
               text-decoration: line-through;
               color: #999;
-
+              
             }
           }
-
+          
           .sale-count {
             margin-bottom: 6px;
             color: #999;
           }
-
+          
           .tags {
             margin-bottom: 6px;
-
+            
             .tag {
               display: inline-block;
               margin-right: 4px;
@@ -830,17 +856,17 @@ export default {
               font-size: 10px;
               height: 16px;
               line-height: 16px;
-
+              
             }
           }
-
+          
           .action {
             margin-top: 44rpx;
             position: relative;
             width: 370rpx;
             height: 68rpx;
-
-            .bgimg{
+            
+            .bgimg {
               position: absolute;
               width: 370rpx;
               height: 68rpx;
@@ -848,7 +874,8 @@ export default {
               top: 0;
               z-index: 1;
             }
-            .price-box{
+            
+            .price-box {
               height: 68rpx;
               padding: 0 10rpx 0 16rpx;
               position: relative;
@@ -857,45 +884,45 @@ export default {
               align-items: center;
               justify-content: space-between;
             }
-
+            
           }
         }
       }
     }
   }
-
+  
   .kill {
     padding: 0 25rpx;
     background: white;
-
+    
     .block-title {
       padding: 20px 0 10px 0;
-
+      
       .block-title-text {
         font-weight: bold;
       }
     }
-
+    
     .goods-list {
       display: flex;
       flex-wrap: wrap;
-
+      
       .goods-item {
         width: 220rpx;
         margin-right: 20rpx;
         margin-bottom: 20rpx;
         font-size: 12px;
-
+        
         &:nth-child(3n+0) {
           margin-right: 0;
         }
-
+        
         .cover {
           width: 220rpx;
           height: 220rpx;
           @include cover-img();
           position: relative;
-
+          
           .tip {
             position: absolute;
             left: 0;
@@ -909,7 +936,7 @@ export default {
             background: rgba(30, 146, 104, .6);
           }
         }
-
+        
         .title {
           margin: 4px 0;
           color: #333;
@@ -918,20 +945,20 @@ export default {
           overflow: hidden;
           text-overflow: ellipsis;
         }
-
+        
         .price-box {
           display: flex;
-
+          
           .sign {
             color: $fun-red-color;
           }
-
+          
           .num {
             color: $fun-red-color;
             font-size: 14px;
           }
         }
-
+        
         .tags {
           .tag {
             display: inline-block;
@@ -950,20 +977,20 @@ export default {
       }
     }
   }
-
+  
   .nav {
     background: white;
-
+    
     &-item {
       padding: 25px 0 10px;
       text-align: center;
-
+      
       .icon-img {
         height: 60rpx;
         width: 60rpx;
         vertical-align: top;
       }
-
+      
       .title {
         margin-top: 4px;
         font-size: 14px;
@@ -971,7 +998,7 @@ export default {
       }
     }
   }
-
+  
   .head-box {
     position: fixed;
     top: 0;
@@ -980,27 +1007,27 @@ export default {
     z-index: 22;
     //background: $fun-green-color;
   }
-
+  
   .head {
     padding-left: 20rpx;
     display: flex;
     align-items: center;
     color: white;
-
+    
     .tab-box {
       flex: 1;
       display: flex;
       align-items: flex-end;
-
+      
       .tab-item {
         margin-right: 40rpx;
         padding-bottom: 8px;
         position: relative;
-
+        
         &:last-child {
           margin-right: 0;
         }
-
+        
         .underline {
           visibility: hidden;
           position: absolute;
@@ -1011,24 +1038,24 @@ export default {
           left: 50%;
           transform: translateX(-50%);
         }
-
+        
         &.active {
           font-size: 40rpx;
-
+          
           .underline {
             visibility: visible;
           }
         }
       }
     }
-
+    
     .search-box {
       position: relative;
       margin-right: 20rpx;
       width: 120rpx;
       text-align: right;
       background: rgba(255, 255, 255, .5);
-
+      
       .iconsearch {
         color: white;
         position: absolute;
@@ -1038,15 +1065,15 @@ export default {
       }
     }
   }
-
+  
   .store-top-item {
     width: 710rpx;
     overflow: hidden;
-    margin:0 20rpx 30rpx;
+    margin: 0 20rpx 30rpx;
     background: white;
     border-radius: 20rpx;
     padding: 20rpx 0;
-
+    
     .store-info {
       .logo {
         width: 86rpx;
@@ -1054,11 +1081,11 @@ export default {
         border-radius: 50%;
         background: #f2f2f2;
       }
-
+      
       .name {
-
+      
       }
-
+      
       .activity {
         padding: 2px 6px;
         font-size: 10px;
@@ -1067,34 +1094,34 @@ export default {
         border-radius: 5rpx;
       }
     }
-
+    
     .store-goods-list {
       display: flex;
       padding: 30rpx 10rpx;
     }
-
+    
     .store-goods-item {
       width: 215rpx;
       overflow: hidden;
       margin-right: 14rpx;
-
+      
       &:last-child {
         margin-right: 0;
       }
-
+      
       .title {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
       }
-
+      
       .cover {
         width: 215rpx;
         height: 215rpx;
         @include cover-img();
       }
     }
-
+    
   }
 
 </style>

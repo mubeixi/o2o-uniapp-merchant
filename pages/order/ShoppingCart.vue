@@ -11,7 +11,7 @@
         {{isDel?'取消':'管理'}}
       </div>
     </div>
-
+    
     <div class="content">
       <div class="cartbox" v-if="total_count>0">
         <div :key="index" class="order_msg" v-for="(pro,index) in CartList">
@@ -36,7 +36,12 @@
                   <div class="attr" v-if="item.Productsattrstrval">
                     <span>{{item.Productsattrstrval}}</span>
                   </div>
-                  <div class="pro-price"><span class="span">￥</span>{{item.ProductsPriceX}}<span class="amount"><span :class="item.Qty===1?'disabled':''" @click="updateCart(ind,indx,-1,index)" class="plus">-</span><input @blur="inputQty(ind,indx,$event,index,item.Qty)" @focus="getQty(item.Qty)" class="attr_num" min="1" type="number" v-model="item.Qty" /><span @click="updateCart(ind,indx,1,index)" class="plus">+</span></span>
+                  <div class="pro-price"><span class="span">￥</span>{{item.ProductsPriceX}}<span class="amount"><span
+                    :class="item.Qty===1?'disabled':''" @click="updateCart(ind,indx,-1,index)"
+                    class="plus">-</span><input @blur="inputQty(ind,indx,$event,index,item.Qty)"
+                                                @focus="getQty(item.Qty)" class="attr_num" min="1" type="number"
+                                                v-model="item.Qty" /><span @click="updateCart(ind,indx,1,index)"
+                                                                           class="plus">+</span></span>
                   </div>
                 </div>
               </div>
@@ -48,9 +53,9 @@
         <image :src="'/static/client/box.png'|domain" class="img" />
         <div><span>购物车空空如也</span><span @click="gotoBuy" class="tobuy">去逛逛</span></div>
       </div>
-
+    
     </div>
-
+    
     <div class="checkout" v-if="!manage">
       <div @click="selectAll" class="item-cart ">
         <layout-icon class="m-r-5" color="#F43131" size="18" type="iconicon-check" v-if="allCheck"></layout-icon>
@@ -65,11 +70,11 @@
         <div @click="DelCart" class="checkbtn">删除</div>
       </block>
     </div>
-
-
+    
+    
     <div class="intro">为你推荐</div>
     <div class="product-list flex">
-
+      
       <pro-tag
         v-for="(item,idx) in proList"
         :key="idx"
@@ -79,9 +84,9 @@
         :pro_price="item.Products_PriceX"
         :pro_price_old="item.Products_PriceY"
       />
-
+    
     </div>
-
+  
   </div>
 </template>
 
@@ -91,14 +96,16 @@ import { CartList, DelCart } from '@/api/customer'
 import { updateCart } from '@/api/order'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import Storage from '@/common/Storage'
-import {
-  getProductList
-} from '@/api/product'
+import { getProductList } from '@/api/product'
 import { error } from '@/common/fun'
 import ProTag from '@/componets/pro-tag/pro-tag'
+
 export default {
   mixins: [BaseMixin],
-  components: { LayoutIcon,ProTag },
+  components: {
+    LayoutIcon,
+    ProTag,
+  },
   data () {
     return {
       CartList: [],
@@ -111,21 +118,21 @@ export default {
       isDel: false,
       fan: false,
       qty: 0,
-      proList:[],
+      proList: [],
     }
   },
   computed: {
     manage () {
       return this.CartList.length === 0
-    }
+    },
   },
   watch: {
     CartList: {
       handler (newValue, oldValue) {
         console.log(oldValue, newValue, 'ss')
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
   methods: {
     submit () {
@@ -148,8 +155,8 @@ export default {
       //const cart_buy = JSON.stringify(obj)
       const url = '/pages/order/OrderBooking?cart_key=CartList'
       this.$store.state.cart_buy = obj
-
-      this.isDel =false
+      
+      this.isDel = false
       this.$linkTo(url)
     },
     DelCart () {
@@ -171,7 +178,7 @@ export default {
       Storage.remove('allCheck')
       const data = {
         cart_key: 'CartList',
-        prod_attr: JSON.stringify(obj)
+        prod_attr: JSON.stringify(obj),
       }
       DelCart(data).then(res => {
         this.init()
@@ -204,35 +211,35 @@ export default {
           }
         }
       }
-
+      
       for (const it in this.bizCheck) {
         this.bizCheck[it] = boo
         Storage.set(it, boo)
       }
       this.allCheck = boo
       Storage.set('allCheck', boo)
-
+      
       this.SumPrice()
       this.fan = !this.fan
     },
     selectBiz (bizId) {
-
+    
     },
     async updateCart (pid, attrId, skuQty, bizId) {
       if (this.CartList[bizId][pid][attrId].Qty === 1 && skuQty <= 0) {
         error('数量最少为1件')
         return
       }
-
+      
       const data = {
         cart_key: 'CartList',
         prod_id: pid,
         attr_id: attrId,
-        qty: skuQty
+        qty: skuQty,
       }
       const cart = await updateCart(data, {
         onlyData: true,
-        tip: '加载中'
+        tip: '加载中',
       }).catch(e => {
         throw Error(e.msg || '修改失败')
       })
@@ -244,13 +251,13 @@ export default {
     },
     selectItem (bizId, pid, attr_id) {
       console.log(!Storage.get((pid + ';' + attr_id)), 'ss')
-
+      
       Storage.set((pid + ';' + attr_id), !Storage.get((pid + ';' + attr_id)))
       this.CartList[bizId][pid][attr_id].checked = Storage.get((pid + ';' + attr_id))
-
+      
       // 商家的选择
       this.bizCheck[bizId] = true
-
+      
       for (const j in this.CartList[bizId]) {
         for (const k in this.CartList[bizId][j]) {
           if (!this.CartList[bizId][j][k].checked) {
@@ -258,11 +265,11 @@ export default {
           }
         }
       }
-
+      
       for (const it in this.bizCheck) {
         Storage.set(it, this.bizCheck[it])
       }
-
+      
       // 每次来改变全选
       this.allCheck = true
       for (const i in this.CartList) {
@@ -275,7 +282,7 @@ export default {
         }
       }
       Storage.set('allCheck', this.allCheck)
-
+      
       this.SumPrice()
       this.fan = !this.fan
     },
@@ -321,7 +328,7 @@ export default {
     async init () {
       const cart = await CartList({ cart_key: 'CartList' }, {
         onlyData: true,
-        tip: '加载中'
+        tip: '加载中',
       }).catch(e => {
         throw Error(e.msg || '获取购物车产品失败')
       })
@@ -330,15 +337,16 @@ export default {
       this.CartList = cart.CartList
       this.bizList = cart.biz_list
       this.initCheck()
-
-
-      this.proList = await getProductList({}, { onlyData: true }).catch(e => { throw Error(e.msg || '获取推荐商品信息失败') })
-    }
+      
+      this.proList = await getProductList({}, { onlyData: true }).catch(e => {
+        throw Error(e.msg || '获取推荐商品信息失败')
+      })
+    },
   },
   onShow () {
     this.init()
-  }
-
+  },
+  
 }
 </script>
 
@@ -350,13 +358,13 @@ export default {
     //padding-top: var(--status-bar-height);
     /* #endif */
   }
-
+  
   .status-title {
     height: var(--status-bar-height);
     width: 750rpx;
     background-color: #FFFFFF;
   }
-
+  
   .cart-title {
     padding-top: var(--status-bar-height);
     height: 86rpx;
@@ -374,7 +382,7 @@ export default {
       left: 20rpx;
     }
   }
-
+  
   .status_bar {
     position: fixed;
     top: 0;
@@ -382,7 +390,7 @@ export default {
     width: 750rpx;
     background: white;
   }
-
+  
   .nav-title {
     position: fixed;
     top: 0rpx;
@@ -393,35 +401,35 @@ export default {
     top: var(--status-bar-height);
     /* #endif */
   }
-
+  
   .space-div {
     padding-top: var(--status-bar-height);
     height: 86rpx;
     background: white;
   }
-
+  
   .spaceDiv {
     height: 86rpx;
     background: #f8f8f8;
   }
-
+  
   .content {
     /* #ifndef H5 */
     /*margin-top: 86rpx;*/
     /* #endif */
     padding-top: 30rpx;
     padding-bottom: 160rpx;
-
+    
   }
-
+  
   .cartbox {
     margin: 0 30rpx;
   }
-
+  
   .van-checkbox {
     margin-right: 5px;
   }
-
+  
   /* 订单信息 start */
   .order_msg {
     padding: 20rpx 19rpx 0px;
@@ -429,42 +437,42 @@ export default {
     overflow: hidden;
     margin-bottom: 30rpx;
   }
-
+  
   .biz_msg {
     display: flex;
     align-items: center;
     margin-bottom: 30rpx;
   }
-
+  
   .biz_logo {
     width: 70rpx;
     height: 70rpx;
     margin-right: 20rpx;
     border-radius: 35rpx;
   }
-
+  
   .biz_name {
     font-size: 28rpx;
   }
-
+  
   .pro {
     display: flex;
     margin-bottom: 50rpx;
   }
-
+  
   .pro-msg {
     flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
   }
-
+  
   .pro-img {
     width: 200rpx;
     height: 200rpx;
     margin-right: 32rpx;
   }
-
+  
   .pro-name {
     font-size: 26rpx;
     margin-bottom: 18rpx;
@@ -478,7 +486,7 @@ export default {
     text-overflow: ellipsis;
     -webkit-box-orient: vertical;
   }
-
+  
   .attr {
     display: inline-block;
     height: 50rpx;
@@ -493,17 +501,17 @@ export default {
       background: #FFF5F5;
     }
   }
-
+  
   .pro-price {
     color: #F43131;
     font-size: 36rpx;
   }
-
+  
   .pro-price .span {
     font-size: 24rpx;
     font-style: normal;
   }
-
+  
   .amount {
     float: right;
     display: flex;
@@ -511,7 +519,7 @@ export default {
     height: 50rpx;
     width: 168rpx;
   }
-
+  
   .amount {
     .attr_num {
       width: 72rpx;
@@ -527,7 +535,7 @@ export default {
       min-height: 0;
     }
   }
-
+  
   .plus {
     width: 48rpx;
     height: 50rpx;
@@ -535,19 +543,19 @@ export default {
     text-align: center;
     line-height: 50rpx;
     box-sizing: border-box;
-
+    
     &.disabled {
       background: #efefef;
     }
   }
-
+  
   /* 订单信息 end */
   /* 猜你喜欢 */
   .container {
     margin-top: 30rpx;
     padding: 0 20rpx;
   }
-
+  
   .fenge {
     text-align: center;
     padding: 30rpx 0;
@@ -555,30 +563,30 @@ export default {
     justify-content: center;
     align-items: center;
   }
-
+  
   .caini {
     font-size: 30rpx;
     margin-left: 13rpx;
     margin-right: 13rpx;
   }
-
+  
   .prolist {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
   }
-
+  
   .pro-item {
     width: 48%;
     margin-bottom: 15px;
     background: #fff;
   }
-
+  
   .pro-item img {
     width: 345rpx;
     height: 345rpx;
   }
-
+  
   .item-name {
     font-size: 24rpx;
     padding: 0 10rpx;
@@ -589,35 +597,35 @@ export default {
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
   }
-
+  
   .red {
     background-color: #F43131;
     display: inline-block;
     height: 3rpx;
     width: 44rpx;
   }
-
+  
   .price {
     margin-top: 20rpx;
     padding: 0 10rpx 20rpx;
   }
-
+  
   .n_price {
     color: #ff0000;
     font-size: 34rpx;
-
+    
     span {
       font-size: 24rpx;
     }
   }
-
+  
   .o_price {
     margin-left: 15rpx;
     color: #afafaf;
     font-size: 24rpx;
     text-decoration: line-through;
   }
-
+  
   /* 购物车为空 */
   .none {
     text-align: center;
@@ -625,12 +633,12 @@ export default {
     color: #B0B0B0;
     font-size: 26rpx;
   }
-
+  
   .none .img {
     height: 220rpx;
     width: 200rpx;
   }
-
+  
   .tobuy {
     color: #F43131;
     border: 2rpx solid #F43131;
@@ -640,7 +648,7 @@ export default {
     border-radius: 20rpx;
     margin-left: 20rpx;
   }
-
+  
   /* 结算 */
   .checkout {
     position: fixed;
@@ -655,18 +663,18 @@ export default {
     background: #fff;
     box-sizing: border-box;
   }
-
+  
   // #ifdef  MP
   .checkout {
     bottom: 0;
   }
-
+  
   // #endif
   // #ifdef APP-PLUS
   .checkout {
     bottom: 0;
   }
-
+  
   // #endif
   .checkbtn {
     background: #F43131;
@@ -678,41 +686,42 @@ export default {
     font-size: 28rpx;
     border-radius: 8px;
   }
-
+  
   .total {
     flex: 1;
     text-align: right;
     margin-right: 40rpx;
     font-size: 26rpx;
   }
-
+  
   .total > span {
     color: #F43131;
     font-size: 26rpx;
   }
-
+  
   .total > span > span {
     font-style: normal;
     font-size: 32rpx;
   }
-
+  
   .item-cart {
     display: flex;
     align-items: center;
     margin-right: 17rpx;
     font-size: 28rpx;
-
+    
     .img {
       width: 34rpx;
       height: 34rpx;
     }
   }
+  
   .intro {
     text-align: center;
     margin: 60rpx 0 32rpx;
     font-size: 34rpx;
   }
-
+  
   .product-list {
     flex-wrap: wrap;
     justify-content: space-around;

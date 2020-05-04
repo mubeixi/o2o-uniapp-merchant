@@ -38,7 +38,7 @@ export default {
   name: 'ShareIndex',
   mixins: [BaseMixin],
   components: {
-    LayoutIcon
+    LayoutIcon,
   },
   data () {
     return {
@@ -46,7 +46,7 @@ export default {
       shareInfo: {},
       detailData: {},
       goodsList: [],
-      adData: ['https://newo2o.bafangka.com/uploadfiles/wkbq6nc2kc/image/202004191033295234.png', 'https://newo2o.bafangka.com/uploadfiles/wkbq6nc2kc/image/202004191039274962.png', 'https://newo2o.bafangka.com/uploadfiles/wkbq6nc2kc/image/202004191044146586.jpg']
+      adData: ['https://newo2o.bafangka.com/uploadfiles/wkbq6nc2kc/image/202004191033295234.png', 'https://newo2o.bafangka.com/uploadfiles/wkbq6nc2kc/image/202004191039274962.png', 'https://newo2o.bafangka.com/uploadfiles/wkbq6nc2kc/image/202004191044146586.jpg'],
     }
   },
   methods: {
@@ -65,7 +65,7 @@ export default {
       try {
         showLoading()
         const data = {
-          prod_id: this.prod_id
+          prod_id: this.prod_id,
         }
         this.detailData = await getProductDetail(data, { onlyData: true }).catch(e => {
           throw Error(e.msg || '获取商品信息失败')
@@ -73,7 +73,7 @@ export default {
         this.shareInfo = await getBizShare({
           ...data,
           biz_id: 3,
-          qrcode_type: getEnv()
+          qrcode_type: getEnv(),
         }, { onlyData: true }).catch(e => {
           throw Error(e.msg || '获取商品信息失败')
         })
@@ -81,36 +81,36 @@ export default {
       } catch (e) {
         modal(e.message)
       }
-    }
+    },
   },
   onLoad (options) {
     this.prod_id = options.prod_id
     this._init_func()
   },
   created () {
-
-  }
+  
+  },
 }
 </script>
 <style lang="scss" scoped>
-
+  
   .page-wrap {
     padding-top: 46rpx;
     background: #f8f8f8;
     min-height: 100vh;
   }
-
+  
   .text-box {
     width: 700rpx;
     margin: 0 25rpx;
     background: white;
     box-sizing: border-box;
     padding: 20rpx;
-
+    
     .top {
-
+    
     }
-
+    
     .text-share-btn {
       background: linear-gradient(to right, #FF0006, #FF8417);
       width: 160rpx;
@@ -120,17 +120,17 @@ export default {
       line-height: 62rpx;
       border-radius: 4rpx;
     }
-
+    
     .container {
       margin-top: 15px;
       background: #F4F4F4;
     }
   }
-
+  
   .bottom {
     color: #fff;
     margin: 55rpx 25rpx;
-
+    
     .bottom-share-btn {
       border-radius: 4rpx;
       width: 186rpx;
@@ -138,7 +138,7 @@ export default {
       border: 1px solid #FF0000;
       color: #FF0000;
     }
-
+    
     .bottom-save-btn {
       border-radius: 4rpx;
       width: 484rpx;

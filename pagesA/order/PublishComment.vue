@@ -1,5 +1,5 @@
 <template>
-	<view @click="commonClick" class="all">
+	<view class="all">
 		<!-- <page-title title="发表评论" rightHidden="true" bgcolor="#ffffff"></page-title> -->
 		<view style="height: 40rpx;width: 100%;">
 

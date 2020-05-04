@@ -17,9 +17,9 @@
       </scroll-view>
       <scroll-view v-if="is_has_child" class="nav-right" scroll-y :style="'height:'+height+'px'" scroll-with-animation>
         <view v-for="(first,index) in classifyData" :key="index" class="box">
-          <block v-if="categoryActive == index">
+          <block v-if="categoryActive === index">
             <block v-for="(second,j) in first.child" :key="j">
-
+              
               <!--<block v-if="is_has_child(classifyData)">-->
               <block v-if="j==0">
                 <view v-if="first.Category_Img" class="imgTop">
@@ -35,11 +35,11 @@
                 <image :src="item.Category_Img" />
                 <view class="nav-right-txt">{{item.Category_Name}}</view>
               </view>
-
+              
               <!--</block>-->
-
+              
               <!--<block v-else>-->
-
+              
               <!--<block v-if="j==0">-->
               <!--<view class="titles">-->
               <!--<view class="titleSum">{{first.Category_Name}}</view>-->
@@ -49,20 +49,20 @@
               <!--<img  class="imgs" :src="first.Category_Img">-->
               <!--</view>-->
               <!--</block>-->
-
+              
               <!--<view :id="j==0?'first':''" class="nav-right-item"  @click="cart(second)">-->
               <!--<image :src="second.Category_Img" />-->
               <!--<view class="nav-right-txt">{{second.Category_Name}}</view>-->
               <!--</view>-->
               <!--</block>-->
-
+            
             </block>
-
+            
             <!--<view class="bottomBorder">-->
-
+            
             <!--</view>-->
           </block>
-
+        
         </view>
       </scroll-view>
       <scroll-view v-if="!is_has_child" class="nav-right" scroll-y :scroll-top="scrollTop" @scroll="scroll"
@@ -90,9 +90,7 @@
 
 <script>
 import BaseMixin from '@/mixins/BaseMixin'
-import {
-  getProductCategory
-} from '@/api/product'
+import { getProductCategory } from '@/api/product'
 
 export default {
   name: 'ProductClassify',
@@ -110,7 +108,7 @@ export default {
       leftItemHeight: 51, // 49行会计算出新值进行覆盖
       navLeftHeight: 0, // 左边scroll-view 内层nav的总高度
       diff: 0, // 左边scroll-view 内层nav的总高度与视口之差
-      tabBarHeight: 50// 如果此页面为Tab页面，自己改变高度值,,一般tab高度为51
+      tabBarHeight: 50,// 如果此页面为Tab页面，自己改变高度值,,一般tab高度为51
     }
   },
   computed: {
@@ -124,19 +122,19 @@ export default {
     is_has_child () {
       let rt = false
       for (const cate of this.easy_list) {
-        if (cate.level == 2) {
+        if (cate.level === 2) {
           rt = true
           break
         }
       }
-
+      
       return rt
-    }
+    },
   },
   methods: {
     goSearch () {
       uni.navigateTo({
-        url: '/pages/product/search'
+        url: '/pages/product/search',
       })
     },
     getList () {
@@ -194,13 +192,13 @@ export default {
     categoryClickMain (index) {
       this.categoryActive = index
       // this.scrollTop = 0;
-      this.scrollTop == this.arr[index] ? this.scrollTop = this.scrollTop + 1 : this.scrollTop = this.arr[index]// 防止两次相等造成点击不触发滚动时间
+      this.scrollTop === this.arr[index] ? this.scrollTop = this.scrollTop + 1 : this.scrollTop = this.arr[index]// 防止两次相等造成点击不触发滚动时间
     },
     cart (item) {
       uni.navigateTo({
-        url: '/pages/classify/result?Cate_ID=' + item.Category_ID
+        url: '/pages/classify/result?Cate_ID=' + item.Category_ID,
       })
-    }
+    },
   },
   onLoad: function () {
     this.height = uni.getSystemInfoSync().windowHeight - this.tabBarHeight
@@ -214,7 +212,7 @@ export default {
     // 	this.getHeightList();
     // })
     this.getList()
-  }
+  },
 }
 </script>
 <style scoped>

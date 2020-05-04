@@ -27,13 +27,13 @@
         </div>
       </div>
     </div>
-
+    
     <div class="free-title m-b-18">
       <div class="free-line"></div>
       <span class="fz-16 c3 m-l-10 m-r-10">推荐商品</span>
       <div class="free-line"></div>
     </div>
-
+    
     <scroll-view class="scroll-view_H  " scroll-x="true" @scroll="scroll" scroll-left="120">
       <div class=" uni-bg-red m-r-10" v-for="(pro,ind) of prod" :key="ind">
         <div class="img-div">
@@ -51,15 +51,15 @@
           </div>
         </div>
       </div>
-
+    
     </scroll-view>
-
+    
     <div class="free-title m-b-18">
       <div class="free-line"></div>
       <span class="fz-16 c3 m-l-10 m-r-10">全部商品</span>
       <div class="free-line"></div>
     </div>
-
+    
     <div class="free-list flex ">
       <div class="free-list-item " v-for="(item,index) of prodData" :key="index">
         <div class="free-list-item-img m-b-9">
@@ -77,9 +77,9 @@
           </div>
         </div>
       </div>
-
+    
     </div>
-
+  
   </div>
 </template>
 
@@ -99,7 +99,7 @@ export default {
       page: 1,
       pageSize: 4,
       totalCount: 0,
-      prodData: []
+      prodData: [],
     }
   },
   methods: {
@@ -107,7 +107,7 @@ export default {
       const data = {
         free_order: 1,
         page: this.page,
-        pageSize: this.pageSize
+        pageSize: this.pageSize,
       }
       const arr = await getProd(data, { tip: '加载中' }).catch(e => {
         throw Error(e.msg || '获取推荐商品失败')
@@ -125,25 +125,25 @@ export default {
       try {
         const active = await getActiveInfo({ type: 'freeorder' }, {
           onlyData: true,
-          tip: '加载中'
+          tip: '加载中',
         }).catch(e => {
           throw Error(e.msg || '获取活动失败')
         })
         this.prod = await getProd({
           free_order_recommend: 1,
           page: 1,
-          pageSize: 999
+          pageSize: 999,
         }, {
           onlyData: true,
-          tip: '加载中'
+          tip: '加载中',
         }).catch(e => {
           throw Error(e.msg || '获取推荐商品失败')
         })
         this.getList()
       } catch (e) {
-
+      
       }
-    }
+    },
   },
   onShow () {
     this.page = 1
@@ -154,7 +154,7 @@ export default {
       this.page++
       this.getList(1)
     }
-  }
+  },
 }
 </script>
 
@@ -163,13 +163,13 @@ export default {
     width: 750rpx;
     overflow-x: hidden;
   }
-
+  
   .free-top {
     width: 750rpx;
     height: 370rpx;
     position: relative;
     margin-bottom: 196rpx;
-
+    
     &-title {
       font-size: 21px;
       color: #FFFFFF;
@@ -178,7 +178,7 @@ export default {
       top: 40rpx;
       left: 292rpx;
     }
-
+    
     &-time {
       width: 458rpx;
       height: 60rpx;
@@ -191,7 +191,7 @@ export default {
       left: 146rpx;
       color: #FFFFFF;
     }
-
+    
     &-active {
       width: 710rpx;
       background: rgba(255, 255, 255, 1);
@@ -202,27 +202,27 @@ export default {
       position: absolute;
       top: 220rpx;
       left: 20rpx;
-
+      
       &-content {
         line-height: 40rpx;
       }
     }
   }
-
+  
   .free-title {
     height: 30rpx;
     line-height: 30rpx;
     display: flex;
     justify-content: center;
     align-items: center;
-
+    
     .free-line {
       width: 46rpx;
       height: 4rpx;
       background: rgba(255, 0, 0, 1);
     }
   }
-
+  
   .scroll-view_H {
     width: 750rpx;
     height: 330rpx;
@@ -230,17 +230,17 @@ export default {
     box-sizing: border-box;
     margin-bottom: 70rpx;
     white-space: nowrap;
-
+    
     .uni-bg-red {
       width: 240rpx;
       height: 330rpx;
       display: inline-block;
-
+      
       .img-div {
         width: 240rpx;
         height: 240rpx;
       }
-
+      
       .pro-title {
         width: 240rpx;
         height: 24rpx;
@@ -250,33 +250,33 @@ export default {
         text-overflow: ellipsis;
         white-space: nowrap;
       }
-
+      
       .price {
         color: #f00;
-
+        
         .fz-11 {
           text-decoration: line-through;
         }
       }
-
+      
     }
   }
-
+  
   .free-list {
     width: 750rpx;
     padding-left: 20rpx;
     flex-wrap: wrap;
-
+    
     &-item {
       width: 344rpx;
       margin-right: 20rpx;
       margin-bottom: 40rpx;
-
+      
       &-img {
         width: 344rpx;
         height: 344rpx;
       }
-
+      
       &-title {
         width: 344rpx;
         overflow: hidden;
@@ -287,16 +287,16 @@ export default {
         height: 56rpx;
         line-height: 28rpx;
       }
-
+      
       &-price {
         color: #f00;
-
+        
         .c9 {
           text-decoration: line-through;
         }
       }
     }
-
+    
   }
 
 </style>

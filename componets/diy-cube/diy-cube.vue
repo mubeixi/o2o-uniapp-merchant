@@ -112,10 +112,10 @@ export default {
         width: (area.x1 - area.x) * this.rowW + 'px',
         height: (area.y1 - area.y) * this.colH + 'px',
 
-        borderTopWidth: area.y == 0 ? 0 : this.cube.style.margin / 2 + 'px',
-        borderLeftWidth: area.x == 0 ? 0 : this.cube.style.margin / 2 + 'px',
-        borderRightWidth: area.x1 == this.cube.config.row ? 0 : this.cube.style.margin / 2 + 'px',
-        borderBottomWidth: area.y1 == this.cube.config.row ? 0 : this.cube.style.margin / 2 + 'px'
+        borderTopWidth: area.y === 0 ? 0 : this.cube.style.margin / 2 + 'px',
+        borderLeftWidth: area.x === 0 ? 0 : this.cube.style.margin / 2 + 'px',
+        borderRightWidth: area.x1 === this.cube.config.row ? 0 : this.cube.style.margin / 2 + 'px',
+        borderBottomWidth: area.y1 === this.cube.config.row ? 0 : this.cube.style.margin / 2 + 'px'
 
       }
       // if(area.bgimg){

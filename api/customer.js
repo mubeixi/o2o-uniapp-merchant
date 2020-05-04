@@ -43,18 +43,19 @@ export const updateUserMobile = (param, options) => fetch({
 
 
 export const userLogin = (data, options) => {
+export const userLogin = (param, options) => {
   // 获取推荐人id
   let owner_id = Storage.get('owner_id')
   if (!owner_id) {
     owner_id = 0
   }
-  const param = {
-    ...data,
+  const params = {
+    ...param,
     owner_id
   }
   return fetch({
     act: 'user_login',
-    param,
+    param: params,
     options
   })
 }
@@ -80,7 +81,6 @@ export const userIntegralRecord = (param, options) => fetch({
   param,
   options
 })
-
 
 export const updateUserInfo = (param, options) => fetch({
   act: 'update_user_info',
@@ -134,6 +134,139 @@ export const createRightsCardOrder = (param, options) => fetch({ act: 'createRig
 // 支付权益卡订单
 export const rightsCardPay = (param, options) => fetch({ act: 'rightsCardPay', param, options })
 
-
 // 支付权益卡订单
 export const getTaskCenter = (param, options) => fetch({ act: 'get_task_center', param, options })
+
+// 获取用户资金变动记录
+export const getUserMoneyRecord = (param, options) => fetch({ act: 'user_money_record', param, options })
+
+// 获取用户的余额记录
+export const getUserChargeRecord = (param, options) => fetch({ act: 'user_charge_record', param, options })
+
+// 余额充值
+export const depositBalance = (param, options) => fetch({ act: 'deposit_balance', param, options })
+
+// 余额转出
+export const transferBalance = (param, options) => fetch({ act: 'transfer_balance', param, options })
+
+// 获取余额充值优惠
+export const getBalance = (param, options) => fetch({ act: 'get_balance', param, options })
+
+// 获取分销中心首页数据
+export const getDisInit = (param, options) => fetch({ act: 'get_dis_init', param, options })
+
+// 获取团队对应等级人数
+export const getDisTeamCount = (param, options) => fetch({ act: 'get_dis_team_count', param, options })
+
+// 获取团队对应等级人数
+export const getDisTeamList = (param, options) => fetch({ act: 'get_dis_team_list', param, options })
+
+// 获取用户提现方式
+export const getUserWithdrawMethod = (param, options) => fetch({ act: 'get_user_withdraw_method', param, options })
+
+// 用户新增提现方式
+export const addUserWithdrawMethod = (param, options) => fetch({ act: 'add_user_withdraw_method', param, options })
+
+// 获取商城提现方式
+export const getShopWithdrawMethod = (param, options) => fetch({ act: 'get_shop_withdraw_method', param, options })
+
+// 申请提现
+export const withdrawApply = (param, options) => fetch({ act: 'withdraw_apply', param, options })
+
+// 分销商提交订单
+export const getWithdrawConfig = (param, options) => fetch({ act: 'get_withdraw_config', param, options })
+
+// 获取结算详情
+export const settlement = (param, options) => fetch({ act: 'settlement', param, options })
+
+// 获取结算列表
+export const getSettlements = (param, options) => fetch({ act: 'get_settlements', param, options })
+
+// 获取申请提现记录
+export const getWithdrawRecordList = (param, options) => fetch({ act: 'get_withdraw_record_list', param, options })
+
+// 删除提现方式
+export const delUserWithdrawMethod = (param, options) => fetch({ act: 'del_user_withdraw_method', param, options })
+
+// 获取分销功能模块
+export const getFuncModule = (param, options) => fetch({ act: 'getFuncModule', param, options })
+
+// 分销佣金 管理列表
+export const getManageRecordList = (param, options) => fetch({ act: 'getManageRecordList', param, options })
+
+// 申请成为区域代理
+export const agentApply = (param, options) => fetch({ act: 'agent_apply', param, options })
+
+// 区域代理支付
+export const agentApplyPay = (param, options) => fetch({ act: 'agent_apply_pay', param, options })
+
+// 股东支付
+export const shaApplyPay = (param, options) => fetch({ act: 'sha_apply_pay', param, options })
+
+// 取消代理申请
+export const cancelAgentApply = (param, options) => fetch({ act: 'cancel_agent_apply', param, options })
+// 取消股东申请
+export const cancelShaApply = (param, options) => fetch({ act: 'cancel_sha_apply', param, options })
+
+// 申请成为股东
+export const shaApply = (param, options) => fetch({ act: 'sha_apply', param, options })
+
+// 获取成为分销商配置信息
+export const disApplyInit = (param, options) => fetch({ act: 'dis_apply_init', param, options })
+
+// 申请成为分销商
+export const disApply = (param, options) => fetch({ act: 'dis_apply', param, options })
+
+// 获取区域代理申请记录
+export const getAgentApply = (param, options) => fetch({ act: 'get_agent_apply', param, options })
+
+// 获取股东申请记录
+export const getShaApply = (param, options) => fetch({ act: 'get_sha_apply', param, options })
+
+// 购买分销商
+export const disBuy = (param, options) => fetch({ act: 'dis_buy', param, options })
+
+// 获取佣金列表 爵位
+export const getNobiRecordList = (param, options) => fetch({ act: 'get_nobi_record_list', param, options })
+
+// 获取佣金列表分销
+export const getDisRecordList = (param, options) => fetch({ act: 'get_dis_record_list', param, options })
+
+// 获取佣金列表 股东
+export const getShaRecordList = (param, options) => fetch({ act: 'get_sha_record_list', param, options })
+
+// 获取佣金列表 区域代理
+export const getAgentRecordList = (param, options) => fetch({ act: 'get_agent_record_list', param, options })
+
+// 获取分销微信二维码
+export const getDistributeWxQrcode = (param, options) => fetch({ act: 'get_distribute_wxqrcode', param, options })
+
+// 获取爵位晋升
+export const nobiInfo = (param, options) => fetch({ act: 'nobi_info', param, options })
+
+// 获取分销商信息
+export const getUserDisInfo = (param, options) => fetch({ act: 'get_user_dis_info', param, options })
+
+// 获取分销商信息
+export const getDisUserList = (param, options) => fetch({ act: 'get_dis_user_list', param, options })
+
+// 修改分销商分享语 店名  头像信息
+export const updateUserDisInfo = (param, options) => fetch({ act: 'update_user_dis_info', param, options })
+
+// 获取区域代理
+export const agentInfo = (param, options) => fetch({ act: 'agent_info', param, options })
+
+// 获取股东
+export const shaInit = (param, options) => fetch({ act: 'sha_init', param, options })
+
+// 获取
+export const getBalanceRank = (param, options) => fetch({ act: 'get_balance_rank', param, options })
+
+// 分销累计利润接口
+export const getBalanceDetail = (param, options) => fetch({ act: 'getBalanceDetail', param, options })
+
+// 推广小助手 添加文章
+export const addPromotionArticle = (param, options) => fetch({ act: 'add_promotion_article', param, options })
+
+// 获取团队业绩来源
+export const getTeamSalesList = (param, options) => fetch({ act: 'getTeamSalesList', param, options })

@@ -16,7 +16,7 @@
             <div class="cover"
                  :style="{width:itemw,height:itemH,backgroundSize:tab.config.fill?tab.config.fill:'cover',backgroundImage:'url('+domainFunc(item.ImgPath)+')'}">
               <div v-show="tab.config.attr.tag.show" :class="tab.config.attr.tag.style"
-                   v-if="['new','hot'].indexOf(tab.config.attr.tag.style)!=-1" class="tag">
+                   v-if="['new','hot'].indexOf(tab.config.attr.tag.style)!==-1" class="tag">
                 {{tab.config.attr.tag.style=='hot'?'hot':'new'}}
               </div>
               <div v-show="tab.config.attr.tag.show" v-else class="tag img"><img
@@ -51,7 +51,7 @@
           <!--            <div class="cover"-->
           <!--                 :style="{width:itemw,height:itemw,backgroundImage:'url('+domainFunc(infoTmpl.ImgPath)+')'}">-->
           <!--              <div v-show="tab.config.attr.tag.show" :class="tab.config.attr.tag.style"-->
-          <!--                   v-if="['new','hot'].indexOf(tab.config.attr.tag.style)!=-1" class="tag">-->
+          <!--                   v-if="['new','hot'].indexOf(tab.config.attr.tag.style)!==-1" class="tag">-->
           <!--                {{tab.config.attr.tag.style=='hot'?'hot':'new'}}-->
           <!--              </div>-->
           <!--              <div v-show="tab.config.attr.tag.show" v-else class="tag img"><img-->
@@ -80,13 +80,8 @@
 </template>
 <script>
 
-import {
-  getProductList
-} from '@/api/product'
-import {
-  getDomain,
-  goProductDetail
-} from '@/common/helper'
+import { getProductList } from '@/api/product'
+import { getDomain, goProductDetail } from '@/common/helper'
 import { lazyImgUrl } from '../../common'
 import { linkTo } from '@/common/fun'
 
@@ -143,7 +138,7 @@ export default {
       const ratio = this.tab.config.ratio ? this.tab.config.ratio : 1
       let num = 0
 
-      if (this.tab.config.showmode == 'border-bgwhite') {
+      if (this.tab.config.showmode === 'border-bgwhite') {
         full -= 4// 4个边框
       }
 
@@ -182,7 +177,7 @@ export default {
     itemw () {
       let full = this.fullWidth
 
-      if (this.tab.config.showmode == 'border-bgwhite') {
+      if (this.tab.config.showmode === 'border-bgwhite') {
         full -= 4// 4个边框
       }
 
@@ -305,14 +300,14 @@ export default {
           break
         case 2:
 
-          left = idx % 2 == 0 ? 0 : conf / 2
-          right = idx % 2 == 0 ? conf / 2 : 0
+          left = idx % 2 === 0 ? 0 : conf / 2
+          right = idx % 2 === 0 ? conf / 2 : 0
           break
       }
 
       if (idx === 0) top = 0
       // 这个需要是2
-      if (idx === 1 && this.tab.config.style == 2) top = 0
+      if (idx === 1 && this.tab.config.style === 2) top = 0
 
       return {
         marginTop: top + 'px',

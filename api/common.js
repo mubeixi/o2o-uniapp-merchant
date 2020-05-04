@@ -1,6 +1,4 @@
-import {
-  fetch
-} from '@/common/request'
+import { fetch } from '@/common/request'
 
 // 优惠券列表
 export const getCouponList = (param, options) => fetch({
@@ -85,3 +83,7 @@ export const getPosterDetail = (param, options) => fetch({ act: 'getPosterDetail
 
 // 获取分销中心-分销二维码
 export const getDistributeWxQrcode = (param, options) => fetch({ act: 'get_distribute_wxqrcode', param, options })
+
+// 获取乡镇
+export const getTown = (param, options) => fetch({ act: 'get_town', param, options })
+

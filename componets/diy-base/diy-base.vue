@@ -40,9 +40,7 @@
   </view>
 </template>
 <script>
-import {
-  getProductCountInfo
-} from '@/api/common'
+import { getProductCountInfo } from '@/api/common'
 import { getDomain } from '@/common/helper'
 
 export default {

@@ -13,13 +13,13 @@
                :style="{width:itemw,height:itemH,backgroundSize:goods.config.fill?goods.config.fill:'cover',backgroundImage:'url('+domainFunc(item.ImgPath)+')'}">
             <div v-show="goods.config.attr && goods.config.attr.tag.show"
                  :class="goods.config.attr.tag.style"
-                 v-if="['new','hot'].indexOf(goods.config.attr.tag.style)!=-1" class="tag">
+                 v-if="['new','hot'].indexOf(goods.config.attr.tag.style)!==-1" class="tag">
               {{goods.config.attr.tag.style=='hot'?'hot':'new'}}
             </div>
             <div v-show="goods.config.attr.tag.show" v-else class="tag img"><img
               :src="goods.config.attr.tag.img|domain" /></div>
 
-            <div v-if="goods.config.style!=3" class="stamp">距{{item.countdown.is_start?'结束':'开始'}}<span
+            <div v-if="goods.config.style!==3" class="stamp">距{{item.countdown.is_start?'结束':'开始'}}<span
               class="countdown_tag2">{{item.countdown.d|zero}}</span>天<span class="countdown_tag">{{item.countdown.h|zero}}</span>时<span
               class="countdown_tag">{{item.countdown.m|zero}}</span>分<span class="countdown_tag">{{item.countdown.s|zero}}</span>秒<span
               class="count" v-if="goods.config.style==1">拼团库存{{item.Products_Count}}</span></div>
@@ -33,7 +33,7 @@
               <div v-show="goods.config.attr.desc.show" class="font12 graytext desc">
                 {{item.Products_BriefDescription||'暂无介绍'}}
               </div>
-              <div v-if="goods.config.style!=1" v-show="goods.config.attr.price.show" class="price"><span
+              <div v-if="goods.config.style!==1" v-show="goods.config.attr.price.show" class="price"><span
                 class="graytext2 font12">拼团价 </span><span class="sign">￥</span><span
                 style="font-weight: 600">{{item.pintuan_pricex}}</span><span
                 class="graytext2 market-price font12"> ￥{{item.Products_PriceX}} </span>
@@ -63,15 +63,8 @@
 </template>
 <script>
 
-import {
-  getProductList
-} from '@/api/product'
-import {
-  getDomain,
-  goProductDetail,
-  getCountdownFunc,
-  createEmptyArray
-} from '@/common/helper'
+import { getProductList } from '@/api/product'
+import { createEmptyArray, getCountdownFunc, getDomain, goProductDetail } from '@/common/helper'
 import { lazyImgUrl } from '../../common'
 import { linkTo } from '@/common/fun'
 
@@ -129,7 +122,7 @@ export default {
     itemw () {
       let full = this.fullWidth
 
-      if (this.goods.config.showmode == 'border-bgwhite') {
+      if (this.goods.config.showmode === 'border-bgwhite') {
         full -= 4// 4个边框
       }
 
@@ -158,7 +151,7 @@ export default {
       const ratio = this.goods.config.ratio ? this.goods.config.ratio : 1
       let num = 0
 
-      if (this.goods.config.showmode == 'border-bgwhite') {
+      if (this.goods.config.showmode === 'border-bgwhite') {
         full -= 4// 4个边框
       }
       if (this.goods.config.style === 2) {
@@ -300,14 +293,14 @@ export default {
         case 2:
 
           // top = 0;
-          left = idx % 2 == 0 ? 0 : conf / 2
-          right = idx % 2 == 0 ? conf / 2 : 0
+          left = idx % 2 === 0 ? 0 : conf / 2
+          right = idx % 2 === 0 ? conf / 2 : 0
           break
       }
 
       if (idx === 0) top = 0
       // 这个需要是2
-      if (idx === 1 && this.goods.config.style == 2) top = 0
+      if (idx === 1 && this.goods.config.style === 2) top = 0
       return {
         marginTop: top + 'px',
         marginBottom: bottom + 'px',

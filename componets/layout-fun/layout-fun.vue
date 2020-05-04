@@ -6,6 +6,7 @@
 </template>
 <script>
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
+
 export default {
   components: {
     LayoutIcon

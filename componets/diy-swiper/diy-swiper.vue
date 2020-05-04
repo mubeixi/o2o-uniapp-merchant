@@ -25,12 +25,8 @@
   </view>
 </template>
 <script>
-import {
-  getDomain
-} from '@/common/helper'
-import {
-  linkTo
-} from '@/common/fun'
+import { getDomain } from '@/common/helper'
+import { linkTo } from '@/common/fun'
 
 export default {
   name: 'DiySwiper',
