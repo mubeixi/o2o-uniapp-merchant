@@ -1,7 +1,7 @@
 <template>
   <div class="wrap">
     <layout-page-title :letfFn="true" @clickLeft="bindBackFn" :title="pageTitle"></layout-page-title>
-    <fun-err-msg :topStr="menuButtonInfo.height+menuButtonInfo.top+10+'px'" :errs="formCheckResult"></fun-err-msg>
+    <fun-err-msg  ref="refMsg" :topStr="menuButtonInfo.height+menuButtonInfo.top+10+'px'" :errs="formCheckResult"></fun-err-msg>
     <image class="img m-t-25" mode="widthFix" :src="'/static/client/copyright.png'|domain"></image>
 
     <div class="form">
@@ -243,6 +243,7 @@ export default {
         const checkRt = validateFun(postData, rule)
         if (checkRt !== true) {
           this.formCheckResult = checkRt
+          this.$refs.refMsg.show()
           return
         }
 
@@ -315,6 +316,7 @@ export default {
         const checkRt = validateFun(postData, rule)
         if (checkRt !== true) {
           this.formCheckResult = checkRt
+          this.$refs.refMsg.show()
           throw Error('请正确填写资料')
         }
 

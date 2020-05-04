@@ -139,13 +139,7 @@ export default {
       this.Products_ID = option.pid
     }
     this.Cate_ID = option.Cate_ID
-    const than = this // 注意this的指向
-    uni.getStorage({
-      key: 'searchAll',
-      success (res) {
-        than.searchAll = res.data
-      }
-    })
+    this.searchAll = Storage.get('searchAll')
     this.getProd()
   },
   onPullDownRefresh () {

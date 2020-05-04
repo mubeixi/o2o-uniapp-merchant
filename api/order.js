@@ -60,19 +60,25 @@ export const confirmOrderPayStatus = (param, options) => fetch({
   param,
   options
 })
-
+// 获取订单列表
 export const getOrderList = (param, options) => fetch({
   act: 'get_order',
   param,
   options
 })
-
+// 取消订单
 export const cancelOrder = (param, options) => fetch({
   act: 'cancel_order',
   param,
   options
 })
-
+// 订单确认收货
+export const confirmOrder = (param, options) => fetch({
+  act: 'confirm_order',
+  param,
+  options
+})
+// 获取订单状态角标数
 export const getOrderNum = (param, options) => fetch({
   act: 'get_order_num',
   param,
