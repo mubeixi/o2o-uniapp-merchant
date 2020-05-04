@@ -76,7 +76,6 @@ import { checkIsLogin } from '@/common/helper'
 import {
   getProductList
 } from '@/api/product'
-import { getProductList } from '@/api/product'
 import { getUserInfo } from '@/api/customer'
 import { mapActions } from 'vuex'
 
