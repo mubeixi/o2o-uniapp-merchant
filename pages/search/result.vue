@@ -107,6 +107,7 @@
 <script>
 import { getProductList } from '@/api/product'
 import BaseMixin from '@/mixins/BaseMixin'
+import Storage from '@/common/Storage'
 
 export default {
   mixins: [BaseMixin],
@@ -258,28 +259,28 @@ export default {
       let data
       if (this.inputValue) {
         data = {
-          Users_ID: 'wkbq6nc2kc',
+
           Products_Name: this.inputValue,
           page: this.page,
           pageSize: this.pageSize
         }
       } else if (this.Cate_ID) {
         data = {
-          Users_ID: 'wkbq6nc2kc',
+
           Cate_ID: this.Cate_ID,
           page: this.page,
           pageSize: this.pageSize
         }
       } else {
         data = {
-          Users_ID: 'wkbq6nc2kc',
+
           page: this.page,
           pageSize: this.pageSize
         }
       }
-      if (item == 'sales') {
+      if (item === 'sales') {
         data.order_by = item
-      } else if (item == 'price') {
+      } else if (item === 'price') {
         data.order_by = item
         if (this.isSheng === 1) {
           data.order_by_direction = 'asc'
