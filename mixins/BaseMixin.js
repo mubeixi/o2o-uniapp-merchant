@@ -1,9 +1,10 @@
 import { backFunc, cellPhone, error, linkToEasy, modal, openLocation, toast } from '@/common/fun'
 import T from '../common/langue/i18n'
-// #endif
+
 import { checkIsLogin, getDomain } from '@/common/helper'
 // #ifdef H5
 import { WX_JSSDK_INIT } from '@/common/env'
+// #endif
 
 export default {
   data () {

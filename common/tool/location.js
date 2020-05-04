@@ -2,9 +2,11 @@
  * 地理位置类
  *
  */
+// #ifdef H5
+import {WX_JSSDK_INIT} from '@/common/env'
+// #endif
+import {isWeiXin} from '@/common/helper'
 
-import { isWeiXin } from '../tool'
-import { WX_JSSDK_INIT } from '../mixin'
 import permision from '../permission'
 
 const failOpt = {
