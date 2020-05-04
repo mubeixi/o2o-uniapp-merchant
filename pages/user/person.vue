@@ -5,7 +5,7 @@
       <div class="left-icon-box">
         <LayoutIcon type="iconshezhi" size="24" color="#333"></LayoutIcon>
         <LayoutIcon class="p-l-10" type="iconicon" size="24" color="#333"
-                    @click="$linkTo('/pages/person/DailyCheck')"></LayoutIcon>
+                    @click="$linkTo('/pages/user/DailyCheck')"></LayoutIcon>
       </div>
       <div class="user-msg" v-if="userInfo.Users_ID" @click="$linkTo('/pagesA/user/PersonalMsg')">
         <image :src="userInfo.User_HeadImg" class="avatar"></image>

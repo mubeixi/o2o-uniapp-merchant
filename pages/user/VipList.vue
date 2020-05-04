@@ -77,9 +77,9 @@
 </template>
 
 <script>
-import BaseMixin from '@/mixins/BaseMixin'
-import { getUserLevel, getShopGiftList, getCouponList } from '@/api/common'
 
+import { getUserLevel, getShopGiftList, getCouponList } from '@/api/common'
+import BaseMixin from '@/mixins/BaseMixin'
 export default {
   name: 'VipList',
   mixins: [BaseMixin],
