@@ -1,6 +1,6 @@
 <style lang="scss" scoped>
   .tag {
-
+  
   }
 </style>
 
@@ -25,10 +25,9 @@
 // import address from '@/componets/form-address/form-address'
 import productSku from '@/componets/product-sku/product-sku'
 import { getProdDetail } from '@/api/common.js'
-// import UserAddrss from '@/componets/form-address/form-address'
-
 import WzwGoodsAction from '@/componets/wzw-goods-action/wzw-goods-action'
 import BaseMixin from '@/mixins/BaseMixin'
+// import UserAddrss from '@/componets/form-address/form-address'
 
 export default {
   name: 'Demo',
@@ -36,11 +35,11 @@ export default {
   components: {
     // UserAddrss,
     productSku,
-    WzwGoodsAction
+    WzwGoodsAction,
   },
   data () {
     return {
-      list: {}
+      list: {},
     }
   },
   methods: {
@@ -53,13 +52,13 @@ export default {
     open () {
       console.log(this)
       this.$refs.mySku.show()
-    }
+    },
   },
   onShow () {
     getProdDetail({ prod_id: 1613 }).then(res => {
       const product = res.data
       this.list = product
     })
-  }
+  },
 }
 </script>

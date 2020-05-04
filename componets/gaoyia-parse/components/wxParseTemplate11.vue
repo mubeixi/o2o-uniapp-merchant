@@ -53,12 +53,12 @@
 </template>
 
 <script>
-	import wxParseImg from './wxParseImg';
-	import wxParseVideo from './wxParseVideo';
-	import wxParseAudio from './wxParseAudio';
-	import wxParseTable from './wxParseTable';
-	
-	export default {
+import wxParseImg from './wxParseImg'
+import wxParseVideo from './wxParseVideo'
+import wxParseAudio from './wxParseAudio'
+import wxParseTable from './wxParseTable'
+
+export default {
 		name: 'wxParseTemplate11',
 		props: {
 			node: {},

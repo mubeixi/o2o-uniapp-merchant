@@ -1,6 +1,6 @@
 <template>
   <div class="bd">
-
+    
     <div class="top">
       <icon type="search" size="34rpx" class="search_icon" />
       <input type="text" v-model="inputValue" class="searchs" @click="goSearch" disabled />
@@ -20,7 +20,7 @@
         <view class="xiangshang">
           <image class="image" :src="'/static/client/result/tops.png'|domain" v-if="isSheng==1"></image>
           <image class="image" :src="'/static/client/result/top.png'|domain" v-else></image>
-
+          
           <image class="image" :src="'/static/client/result/bottoms.png'|domain" v-if="isSheng==2"
                  style="bottom: 0rpx;"></image>
           <image class="image" :src="'/static/client/result/bottom.png'|domain" v-else style="bottom: 0rpx;"></image>
@@ -28,7 +28,7 @@
         <div class="line">
         </div>
       </div>
-
+      
       <div :class="[active === 3 ? 'checked' : '','tab']" class="filterbox">
         <div class="filter" :style="{color:showShai?'#F43131':''}" @click.stop="change">筛选</div>
         <template v-show="!showShai">
@@ -36,11 +36,11 @@
                  class="imgm sorttype"></image>
           <image :src="'/static/client/result/jx.png'|domain" @click="changeCate" v-else class="imgm sorttype"></image>
         </template>
-
+        
         <div class="line"></div>
       </div>
       <!--position: absolute;top: 25rpx;right: 28rpx;position: absolute;top: 0rpx;right: 0rpx;-->
-
+    
     </div>
     <div class="shaixuan" v-if="showShai" @click.stop catchtouchmove="false">
       <view class="priceInterval">价格区间(元)</view>
@@ -59,12 +59,12 @@
         <view class="view sure" @click="sureSearch">确定</view>
       </view>
       <view class="zhao" @click="closeShow" catchtouchmove="false">
-
+      
       </view>
     </div>
-
+    
     <view style="width: 100%;height: 210rpx;background: white;">
-
+    
     </view>
     <div v-if="cate==1">
       <div class="cate1">
@@ -74,7 +74,7 @@
             <div class="title">{{item.Products_Name}}</div>
             <div class="price">
               <span class="n_price"><text>￥</text>{{item.Products_PriceX}}</span>
-              <span class="o_price" v-if="item.Products_PriceY!=item.Products_PriceX"><text>￥</text>{{item.Products_PriceY}}</span>
+              <span class="o_price" v-if="item.Products_PriceY!==item.Products_PriceX"><text>￥</text>{{item.Products_PriceY}}</span>
             </div>
             <div class="sold">已售{{item.Products_Sales}}件</div>
           </div>
@@ -92,7 +92,7 @@
             <div class="title">{{item.Products_Name}}</div>
             <div class="price">
               <span class="n_price"><text class="text">￥</text>{{item.Products_PriceX}}</span>
-              <span class="o_price"><text class="text" v-if="item.Products_PriceY!=item.Products_PriceX">￥</text>{{item.Products_PriceY}}</span>
+              <span class="o_price"><text class="text" v-if="item.Products_PriceY!==item.Products_PriceX">￥</text>{{item.Products_PriceY}}</span>
             </div>
           </div>
         </div>
@@ -129,7 +129,7 @@ export default {
       Cate_ID: 0, // 列表id
       isSheng: 0, // 是否升序
       Products_ID: '',
-      refer: ''// 来源
+      refer: '',// 来源
     }
   },
   onLoad: function (option) {
@@ -151,7 +151,7 @@ export default {
     this.getProd(this.orderby)
   },
   onShow () {
-
+  
   },
   onReachBottom () {
     if (this.pro.length < this.count) {
@@ -159,9 +159,9 @@ export default {
       this.getProd(this.orderby)
     }
   },
-
+  
   created () {
-
+  
   },
   methods: {
     // 跳转搜索页
@@ -171,7 +171,7 @@ export default {
         return
       }
       uni.navigateTo({
-        url: '/pages/classify/search'
+        url: '/pages/classify/search',
       })
     },
     shipping (i) {
@@ -191,7 +191,7 @@ export default {
         uni.showToast({
           title: '价格为数字',
           icon: 'none',
-          duration: 2000
+          duration: 2000,
         })
         return
       }
@@ -199,7 +199,7 @@ export default {
         uni.showToast({
           title: '最低价不能大于最高价',
           icon: 'none',
-          duration: 2000
+          duration: 2000,
         })
       }
       this.pro = []
@@ -251,7 +251,7 @@ export default {
         this.searchAll.push(this.inputValue) // 将输入框的值添加到搜索记录数组中存储
         uni.setStorage({
           key: 'searchAll',
-          data: than.searchAll
+          data: than.searchAll,
         })
       }
     },
@@ -259,23 +259,23 @@ export default {
       let data
       if (this.inputValue) {
         data = {
-
+          
           Products_Name: this.inputValue,
           page: this.page,
-          pageSize: this.pageSize
+          pageSize: this.pageSize,
         }
       } else if (this.Cate_ID) {
         data = {
-
+          
           Cate_ID: this.Cate_ID,
           page: this.page,
-          pageSize: this.pageSize
+          pageSize: this.pageSize,
         }
       } else {
         data = {
-
+          
           page: this.page,
-          pageSize: this.pageSize
+          pageSize: this.pageSize,
         }
       }
       if (item === 'sales') {
@@ -335,8 +335,8 @@ export default {
         return
       }
       this.showShai = true
-    }
-  }
+    },
+  },
 }
 </script>
 <style lang="scss" scoped>
@@ -346,7 +346,7 @@ export default {
     overflow: hidden;
     background: white;
   }
-
+  
   .top {
     position: relative;
     display: flex;
@@ -358,18 +358,18 @@ export default {
     top: 0rpx;
     background-color: #FFFFFF;
     z-index: 999;
-
+    
     .search_icon {
       position: absolute;
       top: 46rpx;
       left: 61rpx;
     }
-
+    
     .back {
       width: 23rpx;
       height: 37rpx;
     }
-
+    
     .search {
       width: 645rpx;
       height: 65rpx;
@@ -381,7 +381,7 @@ export default {
       margin-left: 41rpx;
       box-sizing: border-box;
     }
-
+    
     .searchs {
       width: 710rpx;
       height: 65rpx;
@@ -392,7 +392,7 @@ export default {
       color: #333;
       box-sizing: border-box;
     }
-
+    
     .clear {
       position: absolute;
       top: 43rpx;
@@ -401,13 +401,13 @@ export default {
       height: 37rpx;
       z-index: 9999;
     }
-
+    
     .clears {
       width: 37rpx;
       height: 37rpx;
     }
   }
-
+  
   .tabs {
     display: flex;
     font-size: 30rpx;
@@ -426,15 +426,15 @@ export default {
     width: 100%;
     box-sizing: border-box;
   }
-
+  
   .tab.checked {
     color: #F43131;
   }
-
+  
   .tab.checked .line {
     background: #F43131;
   }
-
+  
   .tab {
     flex: 1;
     //width: 180rpx;
@@ -444,67 +444,67 @@ export default {
     text-align: center;
     margin-bottom: 20rpx;
     position: relative;
-
+    
     .line {
       position: absolute;
       left: 50%;
       transform: translateX(-50%);
     }
-
+    
     &.pricebox {
       display: flex;
       align-items: center;
       justify-content: center;
     }
-
+    
     &.filterbox {
       display: flex;
       align-items: center;
       justify-content: center;
-
+      
       .filter {
         display: block;
         line-height: 60rpx;
         //padding-right: 6px;
         margin-right: 20px;
       }
-
+      
     }
-
+    
   }
-
+  
   .tab .sorttype {
-
+    
     height: 34rpx;
     width: 40rpx;
     //margin-left: 10rpx;
     //vertical-align: middle;
   }
-
+  
   .tab .line {
     width: 100rpx;
     height: 4rpx;
     bottom: -20rpx;
     //margin: 20rpx auto 0 ;
   }
-
+  
   .cate1 {
     .pro {
       display: flex;
       padding: 0 20rpx;
       margin-bottom: 20rpx;
-
+      
       .pro-img {
         margin-right: 20rpx;
         width: 270rpx;
         height: 270rpx;
       }
-
+      
       .pro_desc {
         flex: 1;
         padding-top: 29rpx;
         text-align: left;
-
+        
         .title {
           overflow: hidden;
           text-overflow: ellipsis;
@@ -515,28 +515,28 @@ export default {
           line-height: 30rpx;
           height: 60rpx;
         }
-
+        
         .price {
           margin-top: 21rpx;
         }
-
+        
         .price .text {
           font-size: 24rpx;
           font-style: normal;
         }
-
+        
         .n_price {
           color: #F43131;
           font-size: 36rpx;
           margin-right: 10rpx;
         }
-
+        
         .o_price {
           color: #afafaf;
           font-size: 28rpx;
           text-decoration: line-through;
         }
-
+        
         .sold {
           color: #666;
           font-size: 19rpx;
@@ -545,27 +545,27 @@ export default {
       }
     }
   }
-
+  
   .cate2 {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0 20rpx;
     flex-wrap: wrap;
-
+    
     .pro {
       width: 345rpx;
-
+      
       .pro-img {
         width: 100%;
         height: 345rpx;
       }
-
+      
       .pro_desc {
         padding: 17rpx 15rpx 34rpx 11rpx;
         color: #333;
         font-size: 24rpx;
-
+        
         .title {
           overflow: hidden;
           text-overflow: ellipsis;
@@ -576,28 +576,28 @@ export default {
           line-height: 30rpx;
           height: 60rpx;
         }
-
+        
         .price {
           margin-top: 21rpx;
         }
-
+        
         .price .text {
           font-size: 20rpx;
           font-style: normal;
         }
-
+        
         .n_price {
           color: #F43131;
           font-size: 36rpx;
           margin-right: 10rpx;
         }
-
+        
         .o_price {
           color: #afafaf;
           font-size: 28rpx;
           text-decoration: line-through;
         }
-
+        
         .sold {
           color: #666;
           font-size: 20rpx;
@@ -605,14 +605,14 @@ export default {
         }
       }
     }
-
+    
   }
-
+  
   .imgm {
     width: 36rpx;
     height: 34rpx;
   }
-
+  
   .shaixuan {
     box-sizing: border-box;
     position: absolute;
@@ -622,12 +622,12 @@ export default {
     z-index: 999;
     padding-top: 20rpx;
     left: 0rpx;
-
+    
     view {
       padding-left: 20rpx;
       padding-right: 20rpx;
     }
-
+    
     .priceInterval {
       font-size: 26rpx;
       color: #999999;
@@ -635,11 +635,11 @@ export default {
       height: 27rpx;
       line-height: 27rpx;
     }
-
+    
     .inputPrice {
       display: flex;
       margin-bottom: 50rpx;
-
+      
       .view {
         width: 29rpx;
         height: 55rpx;
@@ -651,7 +651,7 @@ export default {
         color: rgba(153, 153, 153, 1);
         margin: 0 20rpx;
       }
-
+      
       input {
         width: 192rpx;
         height: 55rpx;
@@ -660,11 +660,11 @@ export default {
         text-align: center;
       }
     }
-
+    
     .isShipping {
       display: flex;
       margin-bottom: 100rpx;
-
+      
       .span {
         width: 110rpx;
         height: 55rpx;
@@ -677,19 +677,19 @@ export default {
         color: #FFFFFF;
         margin-right: 27rpx;
       }
-
+      
       .checked {
         background-color: #F43131 !important;
       }
     }
-
+    
     .submit {
       display: flex;
       width: 100%;
       height: 80rpx;
       padding-left: 0rpx;
       padding-right: 0rpx;
-
+      
       .view {
         width: 50%;
         height: 80rpx;
@@ -698,17 +698,17 @@ export default {
         color: #FFFFFF;
         font-size: 30rpx;
       }
-
+      
       .reset {
         background-color: #B9B9B9;
       }
-
+      
       .sure {
         background-color: #F43131;
       }
     }
   }
-
+  
   .zhao {
     height: 800rpx;
     width: 100%;
@@ -721,23 +721,23 @@ export default {
     background-color: #000;
     opacity: 0.6;
   }
-
+  
   .defaults {
     margin: 0 auto;
     width: 640rpx;
     height: 480rpx;
     margin-top: 100rpx;
   }
-
+  
   .xiangshang {
     width: 7px;
     height: 12px;
-
+    
     .image {
       width: 7px;
       height: 4px;
       display: block;
-
+      
       &:last-child {
         margin-top: 2px;
       }

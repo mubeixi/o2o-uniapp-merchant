@@ -3,8 +3,9 @@
   @import "./assets/app.scss";
 </style>
 <script>
-import  {users_id} from '@/common/env'
-import  Storage from  '@/common/Storage'
+import { users_id } from '@/common/env'
+import Storage from '@/common/Storage'
+
 export default {
   globalData: {
     videoInstance:[]

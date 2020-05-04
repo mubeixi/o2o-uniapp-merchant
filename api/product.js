@@ -1,6 +1,4 @@
-import {
-  fetch
-} from '@/common/request'
+import { fetch } from '@/common/request'
 
 // 获取产品列表
 export const getProductList = (param, options) => {

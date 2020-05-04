@@ -1,14 +1,9 @@
-import {
-  toast, linkToEasy, error, modal, backFunc, cellPhone, openLocation
-} from '@/common/fun'
+import { backFunc, cellPhone, error, linkToEasy, modal, openLocation, toast } from '@/common/fun'
 import T from '../common/langue/i18n'
-import { buildSharePath, checkIsLogin } from '@/common/helper'
+// #endif
+import { checkIsLogin, getDomain } from '@/common/helper'
 // #ifdef H5
 import { WX_JSSDK_INIT } from '@/common/env'
-// #endif
-import {
-  getDomain
-} from '@/common/helper'
 
 export default {
   data () {

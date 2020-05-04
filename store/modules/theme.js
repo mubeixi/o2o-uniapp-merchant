@@ -1,4 +1,4 @@
-import { hideLoading, modal, showLoading } from '@/common/fun'
+import { modal } from '@/common/fun'
 
 const colorGreen = '#26C78D'
 const colorYellow = '#FFE300'

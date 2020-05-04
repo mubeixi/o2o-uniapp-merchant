@@ -12,7 +12,6 @@
 
 <script>
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
-import {backFunc} from '@/common/fun'
 
 export default {
   name: 'layoutPageTitle',

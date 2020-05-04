@@ -1,11 +1,7 @@
 // #ifdef H5
 import wx from 'weixin-js-sdk'
-import {
-  getJsSign
-} from '@/api/common'
-import {
-  isWeiXin
-} from '@/common/helper'
+import { getJsSign } from '@/api/common'
+import { isWeiXin } from '@/common/helper'
 // #endif
 
 export const isDev = process.env.NODE_ENV !== 'production'

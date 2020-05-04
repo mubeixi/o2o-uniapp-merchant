@@ -3,7 +3,8 @@
     <!-- #ifdef APP-PLUS -->
     <view class="status_bar" style="background: #fff"><!-- 这里是状态栏 --></view>
     <!-- #endif -->
-    <page-title title="我的提现方式" :rightHidden="false" bgcolor="#ffffff" :right="isShow ? '取消' : '管理'" @rightHandle="handle"></page-title>
+    <page-title title="我的提现方式" :rightHidden="false" bgcolor="#ffffff" :right="isShow ? '取消' : '管理'"
+                @rightHandle="handle"></page-title>
     <view class="content">
       <block v-for="(item,index) of data " :key="index">
         <view class="cardInfo" @click="change(item)" v-if="item.Method_Type=='bank_card'||item.Method_Type=='alipay'">
@@ -42,7 +43,7 @@ export default {
       data: [], // 用户提现方式
       User_Method_ID: -1, // 传过来选中的提现方式
       isShow: false, // 是否显示删除
-      withdraw_from: 1
+      withdraw_from: 1,
     }
   },
   onLoad (options) {
@@ -54,7 +55,7 @@ export default {
     uni.getSystemInfo({
       success: function (res) {
         that.height = res.screenHeight - 68
-      }
+      },
     })
   },
   onShow () {
@@ -68,7 +69,7 @@ export default {
     del (item) {
       const that = this
       const data = {
-        User_Method_ID: item.User_Method_ID
+        User_Method_ID: item.User_Method_ID,
       }
       uni.showModal({
         title: '确定要删除吗？',
@@ -77,13 +78,13 @@ export default {
           if (res.confirm) {
             delUserWithdrawMethod(data).then(res => {
               uni.showToast({
-                title: res.msg
+                title: res.msg,
               })
               that.getUserWithdrawMethod()
             }).catch(e => {
             })
           }
-        }
+        },
       })
     },
     // 管理切换选中 删除
@@ -98,10 +99,10 @@ export default {
       }
       this.User_Method_ID = item.User_Method_ID
       Storage.set('myMethod', this.User_Method_ID)
-
+      
       // 返回上一页
       uni.navigateBack({
-        delta: 1
+        delta: 1,
       })
     },
     // 获取用户提现方式
@@ -114,10 +115,10 @@ export default {
     // 添加提现方式
     addMethod () {
       uni.navigateTo({
-        url: '/pagesA/distributor/AddWithdrawal?form=' + this.withdraw_from
+        url: '/pagesA/distributor/AddWithdrawal?form=' + this.withdraw_from,
       })
-    }
-  }
+    },
+  },
 }
 </script>
 
@@ -127,56 +128,56 @@ export default {
     box-sizing: border-box;
     min-height: 100vh;
   }
-
+  
   .content {
     margin: 0 auto;
-    margin-top: 40rpx;
-    width: 710rpx;
-
+    margin-top: 40 rpx;
+    width: 710 rpx;
+    
     .cardInfo {
       box-sizing: border-box;
-      width: 710rpx;
-      height: 75rpx;
-      line-height: 75rpx;
-      margin-bottom: 20rpx;
+      width: 710 rpx;
+      height: 75 rpx;
+      line-height: 75 rpx;
+      margin-bottom: 20 rpx;
       background-color: #FFFFFF;
-      border-radius: 5rpx;
-      padding-left: 30rpx;
+      border-radius: 5 rpx;
+      padding-left: 30 rpx;
       position: relative;
-      font-size: 28rpx;
+      font-size: 28 rpx;
       color: #333333;
-
+      
       &:last-child {
-        margin-bottom: 0rpx;
+        margin-bottom: 0 rpx;
       }
-
+      
       .image {
-        width: 32rpx;
-        height: 23rpx;
+        width: 32 rpx;
+        height: 23 rpx;
         position: absolute;
-        top: 26rpx;
-        right: 35rpx;
+        top: 26 rpx;
+        right: 35 rpx;
       }
     }
-
+    
   }
-
+  
   .del {
-    width: 25rpx !important;
-    height: 30rpx !important;
+    width: 25 rpx !important;
+    height: 30 rpx !important;
   }
-
+  
   .addMethod {
-    width: 460rpx;
-    height: 76rpx;
-    line-height: 76rpx;
+    width: 460 rpx;
+    height: 76 rpx;
+    line-height: 76 rpx;
     background: #F43131;
-    border-radius: 10rpx;
+    border-radius: 10 rpx;
     margin: 0 auto;
     text-align: center;
-    font-size: 30rpx;
+    font-size: 30 rpx;
     color: #FFFFFF;
-    margin-top: 128rpx;
-    margin-bottom: 100rpx;
+    margin-top: 128 rpx;
+    margin-bottom: 100 rpx;
   }
 </style>

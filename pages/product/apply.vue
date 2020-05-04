@@ -7,7 +7,7 @@
           <div class="title">{{item.Products_Name}}</div>
           <div class="price">
             <span class="n_price"><text>￥</text>{{item.Products_PriceX}}</span>
-            <span class="o_price" v-if="item.Products_PriceY!=item.Products_PriceX"><text>￥</text>{{item.Products_PriceY}}</span>
+            <span class="o_price" v-if="item.Products_PriceY!==item.Products_PriceX"><text>￥</text>{{item.Products_PriceY}}</span>
           </div>
           <div class="sold">已售{{item.Products_Sales}}件</div>
         </div>
@@ -32,7 +32,7 @@ export default {
       pro: [],
       bid: null,
       page: 1,
-      pageSize: 6
+      pageSize: 6,
     }
   },
   onLoad: function (options) {
@@ -41,11 +41,11 @@ export default {
       return
     }
     this.bid = options.bid
-
+    
     this.getProd()
   },
   onShow () {
-
+  
   },
   onReachBottom () {
     if (this.pro.length < this.count) {
@@ -53,9 +53,9 @@ export default {
       this.getProd(this.orderby)
     }
   },
-
+  
   created () {
-
+  
   },
   methods: {
     async getProd (item) {
@@ -63,7 +63,7 @@ export default {
         page: this.page,
         biz_id: this.bid,
         order_temp: 1, // 下单模板商品
-        pageSize: this.pageSize
+        pageSize: this.pageSize,
       }
       getProductList(postData).then(res => {
         this.pro = this.pro.concat(res.data)
@@ -74,8 +74,8 @@ export default {
     },
     gotoDetail (item) {
       this.$linkTo('/pages/product/detail?prod_id=' + item)
-    }
-  }
+    },
+  },
 }
 </script>
 <style lang="scss" scoped>
@@ -85,31 +85,31 @@ export default {
     overflow: hidden;
     background: white;
   }
-
+  
   .defaults {
     margin: 0 auto;
     width: 640rpx;
     height: 480rpx;
     margin-top: 100rpx;
   }
-
+  
   .cate1 {
     .pro {
       display: flex;
       padding: 0 20rpx;
       margin-bottom: 20rpx;
-
+      
       .pro-img {
         margin-right: 20rpx;
         width: 270rpx;
         height: 270rpx;
       }
-
+      
       .pro_desc {
         flex: 1;
         padding-top: 29rpx;
         text-align: left;
-
+        
         .title {
           overflow: hidden;
           text-overflow: ellipsis;
@@ -120,28 +120,28 @@ export default {
           line-height: 30rpx;
           height: 60rpx;
         }
-
+        
         .price {
           margin-top: 21rpx;
         }
-
+        
         .price .text {
           font-size: 24rpx;
           font-style: normal;
         }
-
+        
         .n_price {
           color: #F43131;
           font-size: 36rpx;
           margin-right: 10rpx;
         }
-
+        
         .o_price {
           color: #afafaf;
           font-size: 28rpx;
           text-decoration: line-through;
         }
-
+        
         .sold {
           color: #666;
           font-size: 19rpx;
@@ -150,7 +150,7 @@ export default {
       }
     }
   }
-
+  
   .imgm {
     width: 36rpx;
     height: 34rpx;

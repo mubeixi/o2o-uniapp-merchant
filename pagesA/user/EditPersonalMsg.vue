@@ -1,8 +1,8 @@
 <template>
   <view class="bgColor-white">
-
-    <input class="v_input" placeholder="修改用户名" type="text" v-if="type === 0" v-model="userInfo.User_Name"/>
-    <input class="v_input" placeholder="修改昵称" type="text" v-if="type === 1" v-model="userInfo.User_NickName"/>
+    
+    <input class="v_input" placeholder="修改用户名" type="text" v-if="type === 0" v-model="userInfo.User_Name" />
+    <input class="v_input" placeholder="修改昵称" type="text" v-if="type === 1" v-model="userInfo.User_NickName" />
     <block v-if="type === 2">
       <view class="area-item">
         <text class="area-label">请选择生日</text>
@@ -12,10 +12,10 @@
         </picker>
       </view>
     </block>
-    <input class="v_input" placeholder="修改邮箱" type="text" v-if="type === 3" v-model="userInfo.User_Email"/>
+    <input class="v_input" placeholder="修改邮箱" type="text" v-if="type === 3" v-model="userInfo.User_Email" />
     <block v-if="type === 4">
-
-
+      
+      
       <wzw-address :area="selectAreaId[2]" :city="selectAreaId[1]" :province="selectAreaId[0]" :town="selectAreaId[3]"
                    @up="updateAddress" class="address m-l-10 flex flex-vertical-center" ref="address">
       </wzw-address>
@@ -27,7 +27,7 @@
       </view>
       <view class="area-item">
         <text class="area-label">详细地址</text>
-        <input placeholder="请输入详细地址" type="text" v-model="User_Address"/>
+        <input placeholder="请输入详细地址" type="text" v-model="User_Address" />
       </view>
     </block>
     <view @click="save" class="save">保存</view>
@@ -106,7 +106,7 @@ export default {
         this.saveAddress()
         return
       }
-
+      
       if (this.loading) return
       if (this.type === 0) {
         if (!this.userInfo.User_Name) {
@@ -143,7 +143,7 @@ export default {
           })
           return
         }
-
+        
         let that = this
         uni.showModal({
           title: '提示',
@@ -175,7 +175,7 @@ export default {
                 error(e.msg)
                 that.loading = false
               })
-
+              
             } else if (res.cancel) {
               return
             }
@@ -206,7 +206,7 @@ export default {
         error(e.msg)
         this.loading = false
       })
-
+      
     },
     //修改名字
     getTitle () {
@@ -224,7 +224,7 @@ export default {
           this.title = '修改地址'
           break
       }
-
+      
       uni.setNavigationBarTitle({
         title: this.title,
       })
@@ -236,7 +236,7 @@ export default {
       }).catch(e => {
         error(e.msg || '获取信息失败')
       })
-
+      
       this.dateValue = this.userInfo.User_Birthday
       this.User_Address = this.userInfo.User_Address
       this.selectArea = this.userInfo.User_Province_name + this.userInfo.User_City_name + this.userInfo.User_Area_name + this.userInfo.User_Tow_name
@@ -246,7 +246,7 @@ export default {
         this.selectAreaId.push(Number(this.userInfo.User_Area))
         this.selectAreaId.push(Number(this.userInfo.User_Tow))
       }
-
+      
     },
   },
   onLoad (option) {
@@ -262,7 +262,7 @@ export default {
   onShow () {
     this.init()
   },
-
+  
 }
 </script>
 
@@ -272,55 +272,55 @@ export default {
     padding-top: 20px;
     box-sizing: border-box;
   }
-
+  
   .v_input {
     border: 1px solid #efefef;
     width: 90%;
     margin: 0 auto;
-    height: 80rpx;
-    line-height: 80rpx;
-    font-size: 30rpx;
-    padding-left: 20rpx;
+    height: 80 rpx;
+    line-height: 80 rpx;
+    font-size: 30 rpx;
+    padding-left: 20 rpx;
     box-sizing: border-box;
-    border-radius: 10rpx;
+    border-radius: 10 rpx;
   }
-
+  
   .save {
-    height: 80rpx;
+    height: 80 rpx;
     width: 90%;
-    line-height: 80rpx;
+    line-height: 80 rpx;
     color: #fff;
     background: #F43131;
-    margin: 40rpx auto;
+    margin: 40 rpx auto;
     text-align: center;
-    border-radius: 10rpx;
+    border-radius: 10 rpx;
   }
-
+  
   .area-item {
     display: flex;
     align-items: center;
-    padding: 30rpx 20rpx;
+    padding: 30 rpx 20 rpx;
     border-bottom: 1px solid #e3e3e3;
-    font-size: 28rpx;
-
+    font-size: 28 rpx;
+    
     .area-label {
       display: inline-block;
-      width: 180rpx;
-      margin-right: 10rpx;
+      width: 180 rpx;
+      margin-right: 10 rpx;
     }
   }
-
+  
   .picker {
     display: flex;
-
+    
     .p_item {
       flex: 1;
       // text-align: center;
     }
   }
-
+  
   .area-text {
-    width: 600rpx;
+    width: 600 rpx;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

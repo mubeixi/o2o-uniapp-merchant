@@ -29,7 +29,7 @@
           </block>
           <block v-else>{{item.cate_name}}</block>
         </div>
-
+      
       </div>
       <scroll-view scroll-y="true" class="list">
         <div class="goods-item" v-for="(goods,idx) in showList" :key="idx" @click="toDetail(goods)">
@@ -44,16 +44,18 @@
             <div class="btn-open-attr" @click.stop="openAttrLayer(goods.Products_ID)" v-if="goods.skujosn">选择规格</div>
             <div v-else class="flex flex-vertical-c" @click="setActiveGoodsIdx(idx)">
               <block v-if="goods.num>0">
-                <layout-icon @click.stop="goodsNumMinus(goods)" size="24" color="#26C78D" type="iconicon-minus"></layout-icon>
+                <layout-icon @click.stop="goodsNumMinus(goods)" size="24" color="#26C78D"
+                             type="iconicon-minus"></layout-icon>
                 <input :value="goods.num" @input="changeGoodsNum" class="input-num text-center fz-12" />
               </block>
-              <layout-icon @click.stop="goodsNumPlus(goods)" size="24" color="#26C78D" type="iconicon-plus"></layout-icon>
+              <layout-icon @click.stop="goodsNumPlus(goods)" size="24" color="#26C78D"
+                           type="iconicon-plus"></layout-icon>
             </div>
           </div>
         </div>
       </scroll-view>
     </div>
-
+    
     <div class="goods-bottom-action">
       <div class="cart">
         <div class="icon-wrap" @click="$openPop('carts')">
@@ -71,7 +73,7 @@
         </div>
       </div>
     </div>
-
+    
     <layout-layer ref="carts" radius="20rpx" positions="bottom" bottomStr="85rpx">
       <div class="carts-box" :style="{height:systemInfo.windowHeight*0.6+'px'}">
         <div class="carts-list">
@@ -82,14 +84,18 @@
               <div class="attr-text">{{row.attr_text}}</div>
               <div class="actions">
                 <div class="price-box fz-12 flex1">
-                  <span class="price-selling">￥</span><span class="price-selling fz-14">{{row.Products_PriceX}}</span><span class="p-l-4 price-market text-through">￥{{row.Products_PriceY}}</span>
+                  <span class="price-selling">￥</span><span
+                  class="price-selling fz-14">{{row.Products_PriceX}}</span><span
+                  class="p-l-4 price-market text-through">￥{{row.Products_PriceY}}</span>
                 </div>
                 <div style="width: 150rpx" class="action flex flex-vertical-c" @click="setActiveAttrIdx(idx)">
                   <block v-if="row.num>0">
-                    <layout-icon @click.stop="attrNumMinus(row)" size="24" color="#26C78D" type="iconicon-minus"></layout-icon>
+                    <layout-icon @click.stop="attrNumMinus(row)" size="24" color="#26C78D"
+                                 type="iconicon-minus"></layout-icon>
                     <input @input="changeAttrNum" :value="row.num" class="input-num text-center fz-12" />
                   </block>
-                  <layout-icon @click.stop="attrNumPlus(row)" size="24" color="#26C78D" type="iconicon-plus"></layout-icon>
+                  <layout-icon @click.stop="attrNumPlus(row)" size="24" color="#26C78D"
+                               type="iconicon-plus"></layout-icon>
                 </div>
               </div>
             </div>
@@ -97,7 +103,7 @@
         </div>
       </div>
     </layout-layer>
-
+    
     <layout-layer ref="attr" positions="center">
       <div class="attr-form-wrap">
         <div class="attr-head">
@@ -128,7 +134,8 @@
             </span>
           </div>
           <div>
-            <div v-if="attrInfo.num<1" @click="confirmAdd" class="confirm-btn" :class="{disabled:!submitFlag}">加入购物车</div>
+            <div v-if="attrInfo.num<1" @click="confirmAdd" class="confirm-btn" :class="{disabled:!submitFlag}">加入购物车
+            </div>
             <div v-else class="flex flex-vertical-c" style="width: 150rpx">
               <block v-if="attrInfo.num>0">
                 <layout-icon @click.stop="delNum" size="24" color="#26C78D" type="iconicon-minus"></layout-icon>
@@ -137,11 +144,11 @@
               <layout-icon @click.stop="addNum" size="24" color="#26C78D" type="iconicon-plus"></layout-icon>
             </div>
           </div>
-
+        
         </div>
       </div>
     </layout-layer>
-
+  
   </div>
 
 </template>
@@ -149,33 +156,26 @@
 <script>
 import BaseMixin from '@/mixins/BaseMixin'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
-import {
-  getBizProdCateList, getProductDetail,
-  getProductList
-} from '@/api/product'
+import { getBizProdCateList, getProductDetail, getProductList } from '@/api/product'
 import LayoutLayer from '@/componets/layout-layer/layout-layer'
 import { error, modal } from '@/common/fun'
 import { Exception } from '@/common/Exception'
-import {
-  getBizInfo
-} from '@/api/store'
-import {
-  mergeObject,
-  numberSort, objTranslate,
-} from '@/common/helper'
+import { getBizInfo } from '@/api/store'
+import { mergeObject, numberSort } from '@/common/helper'
+
 const attrInfoTmpl = {
   num: 0,
   attr_id: '', // 规格id
   attr_text: '',
   price: '', // 价格
-  count: 0// 库存
+  count: 0,// 库存
 }
 export default {
   name: 'DeliveryDesktop',
   mixins: [BaseMixin],
   components: {
     LayoutLayer,
-    LayoutIcon
+    LayoutIcon,
   },
   data () {
     return {
@@ -196,7 +196,7 @@ export default {
         attr_id: '', // 规格id
         attr_text: '',
         price: '', // 价格
-        count: 0// 库存
+        count: 0,// 库存
       },
       cateList: [
         {
@@ -205,9 +205,9 @@ export default {
           finish: false,
           list: [],
           totalCount: 0,
-          page: 1
-        }
-      ]
+          page: 1,
+        },
+      ],
     }
   },
   computed: {
@@ -219,7 +219,7 @@ export default {
     },
     carts () {
       return this.$store.getters['delivery/getCartList']()
-    }
+    },
   },
   watch: {
     // cateActiveIdx: {
@@ -259,7 +259,7 @@ export default {
         check_attrname[attr_id] = i
       }
       // 数组排序  按从小到大排
-      let check_attrid_arr = check_attrid;
+      let check_attrid_arr = check_attrid
       check_attrid = numberSort(check_attrid)
       // 获取对应的属性名称
       for (let i = 0; i < check_attrid.length; i++) {
@@ -287,8 +287,8 @@ export default {
         this.attrInfo.attr_text = attr_val.Attr_Value_text
         this.attrInfo.count = attr_val.Property_count // 选择属性的库存
         this.attrInfo.price = attr_val.Attr_Price ? attr_val.Attr_Price : this.product.Products_PriceX // 选择属性的价格
-  
-          this.submitFlag = (!this.check_attr ) ? false : true;
+        
+        this.submitFlag = (!this.check_attr) ? false : true
         
         const atrr_id = attr_val.Product_Attr_ID
         const isCartHas = this.$store.getters['delivery/getRow'](atrr_id)
@@ -300,11 +300,10 @@ export default {
           this.attrInfo.num = 0// 新增的时候，数量为0
         }
         
-        
       } else {
         this.attrInfo = { ...attrInfoTmpl }
       }
-
+      
       console.log(attr_val)
       // 判断属性库存
       if (attr_val && attr_val.Property_count <= 0) {
@@ -312,8 +311,8 @@ export default {
         return false
       }
       this.check_attr = check_attr
-      this.submitFlag = (!this.check_attr || Object.keys(this.check_attr).length !== Object.keys(this.product.skujosn_new).length) ? false : true;
-
+      this.submitFlag = (!this.check_attr || Object.keys(this.check_attr).length !== Object.keys(this.product.skujosn_new).length) ? false : true
+      
       // 购买数量处理  大于最高时赋值最高值
       if (this.attrInfo.num > this.attrInfo.count) {
         this.attrInfo.num = this.attrInfo.count
@@ -325,12 +324,15 @@ export default {
       } else {
         uni.showToast({
           title: '购买数量不能大于库存量',
-          icon: 'none'
+          icon: 'none',
         })
         this.attrInfo.num = this.attrInfo.count
       }
-
-      this.$store.commit('delivery/ADD_GOODS', { num: 1, product: { ...this.product, ...this.attrInfo } })
+      
+      this.$store.commit('delivery/ADD_GOODS', {
+        num: 1,
+        product: { ...this.product, ...this.attrInfo },
+      })
     },
     delNum () {
       if (this.attrInfo.num > 0) {
@@ -338,7 +340,7 @@ export default {
       } else {
         uni.showToast({
           title: '购买数量不能小于0',
-          icon: 'none'
+          icon: 'none',
         })
         this.attrInfo.num = 0
       }
@@ -358,23 +360,35 @@ export default {
         error('购买数量不能超过库存量')
         return
       }
-
+      
       // 实际也是加减的意思
       if (action === 'add') {
-        this.$store.commit('delivery/ADD_GOODS', { num: amount - this.attrInfo.num, product: { ...this.product, ...this.attrInfo } })
+        this.$store.commit('delivery/ADD_GOODS', {
+          num: amount - this.attrInfo.num,
+          product: { ...this.product, ...this.attrInfo },
+        })
       }
       if (action === 'minus') {
-        this.$store.commit('delivery/MINUS_GOODS', { num: this.attrInfo.num - amount, product: { ...this.product, ...this.attrInfo } })
+        this.$store.commit('delivery/MINUS_GOODS', {
+          num: this.attrInfo.num - amount,
+          product: { ...this.product, ...this.attrInfo },
+        })
       }
     },
     toDetail (goodsInfo) {
       this.$linkTo('/pages/delivery/detail?prod_id=' + goodsInfo.Products_ID)
     },
     attrNumMinus (attr) {
-      this.$store.commit('delivery/MINUS_GOODS', { num: 1, product: { attr_id: attr.attr_id } })
+      this.$store.commit('delivery/MINUS_GOODS', {
+        num: 1,
+        product: { attr_id: attr.attr_id },
+      })
     },
     attrNumPlus (attr) {
-      this.$store.commit('delivery/ADD_GOODS', { num: 1, product: { attr_id: attr.attr_id } })
+      this.$store.commit('delivery/ADD_GOODS', {
+        num: 1,
+        product: { attr_id: attr.attr_id },
+      })
     },
     changeAttrNum (e) {
       let amount = parseInt(e.detail.value)
@@ -388,19 +402,25 @@ export default {
         amount = currentAttrInfo.count
         error('购买数量不能超过库存量')
       }
-
-      this.$store.commit('delivery/SET_GOODS_NUM', { num: amount, product: { attr_id: currentAttrInfo.attr_id } })
+      
+      this.$store.commit('delivery/SET_GOODS_NUM', {
+        num: amount,
+        product: { attr_id: currentAttrInfo.attr_id },
+      })
     },
     // 商品是没有规格的，所以同意用noattr_xxx，加上商品id来标识attr_id.
     goodsNumMinus (goodsInfo) {
       const num = goodsInfo.num ? goodsInfo.num - 1 : 0
       this.$set(goodsInfo, 'num', num)
-      this.$store.commit('delivery/MINUS_GOODS', { num: 1, product: { attr_id: 'noattr_' + goodsInfo.Products_ID } })
+      this.$store.commit('delivery/MINUS_GOODS', {
+        num: 1,
+        product: { attr_id: 'noattr_' + goodsInfo.Products_ID },
+      })
     },
     goodsNumPlus (goodsInfo) {
       const num = goodsInfo.num ? goodsInfo.num + 1 : 1
       this.$set(goodsInfo, 'num', num)
-
+      
       // const attrInfoTmpl = {
       //   num: 0,
       //   attr_id: '', // 规格id
@@ -414,9 +434,12 @@ export default {
         attr_id: 'noattr_' + goodsInfo.Products_ID,
         attr_text: '无规格',
         price: goodsInfo.Products_PriceX,
-        count: goodsInfo.Products_Count
+        count: goodsInfo.Products_Count,
       }
-      this.$store.commit('delivery/ADD_GOODS', { num: 1, product: { ...goodsInfo, ...productInfo } })
+      this.$store.commit('delivery/ADD_GOODS', {
+        num: 1,
+        product: { ...goodsInfo, ...productInfo },
+      })
     },
     changeGoodsNum (e) {
       let amount = parseInt(e.detail.value)
@@ -430,49 +453,55 @@ export default {
         amount = currentGoods.count
         error('购买数量不能超过库存量')
       }
-
-      this.$store.commit('delivery/SET_GOODS_NUM', { num: amount, product: { attr_id: 'noattr_' + currentGoods.Products_ID } })
+      
+      this.$store.commit('delivery/SET_GOODS_NUM', {
+        num: amount,
+        product: { attr_id: 'noattr_' + currentGoods.Products_ID },
+      })
     },
-
+    
     confirmAdd () {
       if (!this.submitFlag) return
       this.attrInfo.num++
-      this.$store.commit('delivery/ADD_GOODS', { num: 1, product: { ...this.product, ...this.attrInfo } })
+      this.$store.commit('delivery/ADD_GOODS', {
+        num: 1,
+        product: { ...this.product, ...this.attrInfo },
+      })
       // this.$closePop('attr')
     },
     async openAttrLayer (prod_id) {
       const goodsInfo = await getProductDetail({ prod_id }, {
         onlyData: true,
         tip: 'loading',
-        mask: true
+        mask: true,
       }).catch(e => {
         throw Error(e.msg || '获取商品详情失败')
       })
-
+      
       this.attrInfo = { ...attrInfoTmpl } // 重置
       this.check_attr = {}// 重置
       this.product = goodsInfo
-
+      
       if (goodsInfo.skujosn) {
         let skujosn_new = []
         for (const i in goodsInfo.skujosn) {
           skujosn_new.push({
             sku: i,
-            val: goodsInfo.skujosn[i]
+            val: goodsInfo.skujosn[i],
           })
         }
-
+        
         // 新增如果有手机的规格
         for (const i in goodsInfo.skujosn) {
           if (i === 'mobile_prod_attr_name') {
             skujosn_new = [{
               sku: i,
-              val: goodsInfo.skujosn[i]
+              val: goodsInfo.skujosn[i],
             }]
           }
         }
         // 结束
-
+        
         this.product.skujosn_new = skujosn_new
         this.product.skuvaljosn = goodsInfo.skuvaljosn
       }
@@ -484,11 +513,16 @@ export default {
     },
     async _init_func () {
       try {
-        const cateList = await getBizProdCateList({ pageSize: 999, biz_id: this.bid }, { onlyData: true }).catch(e => { throw Error(e.msg || '获取商家自定义分类失败') })
+        const cateList = await getBizProdCateList({
+          pageSize: 999,
+          biz_id: this.bid,
+        }, { onlyData: true }).catch(e => {
+          throw Error(e.msg || '获取商家自定义分类失败')
+        })
         this.cateList = this.cateList.concat(cateList)
-
+        
         this.changeTab(0)
-
+        
         const bizInfo = await getBizInfo({ biz_id: this.bid }, { onlyData: true }).catch(e => {
           throw Error(e.msg || '获取店铺信息失败')
         })
@@ -502,7 +536,7 @@ export default {
         const { list = [], page = 1, id: biz_cate_id } = this.cateList[idx]
         const commParam = {
           biz_id: this.bid, // 限定商家
-          is_waimai: 1// 外卖
+          is_waimai: 1,// 外卖
         }
         // 第一次
         if (list.length === 0 && page === 1) {
@@ -510,14 +544,14 @@ export default {
             pageSize: this.pageSize,
             biz_cate_id, // 如果点击的是热门，那么就是不传参数，获得所有
             ...commParam,
-            page
+            page,
           }).catch(e => {
             throw Error(e.msg || '获取商品列表失败')
           })
           const list = ret.data.map(goods => {
             return {
               ...goods,
-              num: 0
+              num: 0,
             }
           })
           this.$set(this.cateList[idx], 'list', list)
@@ -528,7 +562,7 @@ export default {
       } catch (e) {
         this.showList = []
       }
-    }
+    },
     // async loadGoods () {
     //   try {
     //     const newData = await getProductList({ pageSize: 999 }, { onlyData: true }).catch(e => { throw Error(e.msg || '获取商品列表失败') })
@@ -547,46 +581,53 @@ export default {
     this._init_func()
   },
   created () {
-
-  }
+  
+  },
 }
 </script>
 <style lang="scss" scoped>
-
-  .carts{
-    &-box{
+  
+  .carts {
+    &-box {
       width: 750rpx;
       overflow-x: hidden;
       overflow-y: scroll;
     }
-    &-list{
+    
+    &-list {
       padding: 30rpx 30rpx 60rpx;
       width: 750rpx;
       box-sizing: border-box;
     }
-    &-item{
+    
+    &-item {
       height: 186rpx;
       display: flex;
       align-items: center;
-      &-cover{
+      
+      &-cover {
         @include cover-img();
         width: 122rpx;
         height: 122rpx;
         border-radius: 4rpx;
         margin-right: 22rpx;
       }
-      &-info{
+      
+      &-info {
         width: 546rpx;
-        .title{
+        
+        .title {
           font-size: 16px;
           color: #333;
         }
-        .attr-text{
+        
+        .attr-text {
           font-size: 12px;
           color: #999;
           margin-top: 10rpx;
         }
-        .actions{
+        
+        .actions {
           margin: 18rpx 0;
           height: 54rpx;
           display: flex;
@@ -596,8 +637,8 @@ export default {
       }
     }
   }
-
-  .goods-bottom-action{
+  
+  .goods-bottom-action {
     position: fixed;
     bottom: 0;
     width: 750rpx;
@@ -605,7 +646,8 @@ export default {
     color: #fff;
     font-size: 12px;
     z-index: 103;
-    .cart{
+    
+    .cart {
       position: absolute;
       top: -8rpx;
       left: 48rpx;
@@ -615,15 +657,17 @@ export default {
       overflow: hidden;
       background: #5B5B5B;
       z-index: 4;
-      .icon-wrap{
+      
+      .icon-wrap {
         position: absolute;
         left: 50%;
         top: 50%;
-        transform: translate(-50%,-50%);
-        .tag{
+        transform: translate(-50%, -50%);
+        
+        .tag {
           position: absolute;
           right: -7px;
-          top:-7px;
+          top: -7px;
           background: $fun-red-color;
           border-radius: 50%;
           overflow: hidden;
@@ -633,36 +677,40 @@ export default {
           text-align: center;
         }
       }
-
+      
     }
-    .box{
+    
+    .box {
       position: absolute;
       bottom: 0;
       width: 750rpx;
-
-      background: rgba(0,0,0,.5);
+      
+      background: rgba(0, 0, 0, .5);
       display: flex;
       align-items: center;
-      .prompt{
+      
+      .prompt {
         flex: 1;
         padding-left: 158rpx;
       }
-      .buy{
+      
+      .buy {
         width: 200rpx;
         background: $fun-primary-color;
         height: 85rpx;
         line-height: 85rpx;
         text-align: center;
-
+        
       }
     }
-
+    
   }
+  
   .attr-form-wrap {
     width: 660rpx;
     background: #fff;
     border-radius: 10rpx;
-
+    
     .actions {
       display: flex;
       height: 90rpx;
@@ -670,7 +718,7 @@ export default {
       align-items: center;
       justify-content: space-between;
       padding: 0 30rpx;
-
+      
       .confirm-btn {
         width: 145rpx;
         height: 50rpx;
@@ -681,45 +729,46 @@ export default {
         border: none;
         font-size: 12px;
         color: #fff;
-        &.disabled{
+        
+        &.disabled {
           background: #999;
         }
       }
     }
-
+    
     .attr-head {
       padding: 14px;
       text-align: center;
       position: relative;
-
+      
       .close {
         position: absolute;
         right: 10px;
         top: 14;
       }
     }
-
+    
     .form {
-
+    
     }
-
-    .cart-attr-box{
+    
+    .cart-attr-box {
       padding-bottom: 15px;
       max-height: 400px;
       overflow-y: scroll;
     }
-
+    
     .cartAttr {
       padding: 15px 15px 0;
-
+      
       .sku-title {
         margin-bottom: 12px;
       }
-
+      
       .sku-val-list {
         display: flex;
         flex-wrap: wrap;
-
+        
         .sku-val-item {
           padding: 4px 6px;
           font-size: 12px;
@@ -728,7 +777,7 @@ export default {
           margin-right: 20rpx;
           margin-bottom: 20rpx;
           box-sizing: border-box;
-
+          
           &.checked {
             border: 1px solid $fun-primary-color;
             color: $fun-primary-color;
@@ -738,44 +787,44 @@ export default {
       }
     }
   }
-
+  
   .navigation-bar {
     position: relative;
-
+    
     .left-icon {
       position: absolute;
       left: 15px;
       top: 50%;
       transform: translateY(-50%);
     }
-
+    
     .title {
       text-align: center;
       font-size: 16px;
     }
   }
-
+  
   .head {
     background-color: #fff;
     height: 280rpx;
     @include cover-img();
   }
-
+  
   .store-info {
-
+    
     .store-logo {
       width: 80rpx;
       height: 80rpx;
       border-radius: 50%;
       overflow: hidden;
     }
-
+    
     .store-title {
       color: #fff;
     }
-
+    
   }
-
+  
   .container {
     position: fixed;
     top: 340rpx;
@@ -784,14 +833,14 @@ export default {
     background: #fff;
     display: flex;
     justify-content: space-between;
-
+    
     .cate {
       width: 150rpx;
       height: 100%;
       overflow-x: hidden;
       overflow-y: scroll;
       background: #F8F8F8;
-
+      
       .cate-item {
         height: 74rpx;
         line-height: 74rpx;
@@ -802,48 +851,48 @@ export default {
         border-bottom: 1px solid #fff;
         font-size: 13px;
         color: #333;
-
+        
         &.active {
           background: #fff;
         }
       }
     }
-
+    
     .list {
       width: 585rpx;
       height: 100%;
       overflow-x: hidden;
       overflow-y: scroll;
-
+      
       .goods-item {
         display: flex;
         align-items: center;
         padding: 20rpx 0;
         border-bottom: 1px solid #E1E1E1;
-
+        
         .cover {
           width: 118rpx;
           height: 118rpx;
           background: #f2f2f2;
           @include cover-img();
         }
-
+        
         .info {
           flex: 1;
           padding-left: 20rpx;
-
+          
           .title {
             font-size: 13px;
             color: #333;
           }
         }
-
+        
         .action {
           .input-num {
             display: inline;
             width: 50rpx;
           }
-
+          
           .btn-open-attr {
             background: $fun-primary-color;
             font-size: 10px;

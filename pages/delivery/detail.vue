@@ -513,7 +513,7 @@
     <swiper style="height:750rpx;width: 750rpx;" indicator-dots="true" indicator-active-color="#26C78D"
             indicator-color="#ffffff" autoplay="true" interval="3000" duration="500" circular="true">
       <swiper-item v-for="(item,index) of detailData.Products_JSON.ImgPath" :key="index">
-        <image :src="item" class="full-img" @click="previewImg(index)"/>
+        <image :src="item" class="full-img" @click="previewImg(index)" />
       </swiper-item>
     </swiper>
     <!--    <div class="end-time">-->
@@ -691,7 +691,7 @@
               </div>
             </div>
             <div class="store-list-item" v-for="(st,ind) of storeList" :key="ind">
-              <div class="store-list-title"  @click.stop="goStore(st.biz_id)">
+              <div class="store-list-title" @click.stop="goStore(st.biz_id)">
                 {{st.store_name}}
               </div>
               <div class="flex flex-justify-between store-list-address">
@@ -749,7 +749,7 @@
     <layout-modal ref="commentModal">
       <div class="refuseApplyDialog">
         <textarea class="reason" @input="bingReasonInput" :value="commentValue" placeholder-style="color:#999"
-                  placeholder="请输入评论" auto-height/>
+                  placeholder="请输入评论" auto-height />
         <div class="control">
           <div @click="$closePop('commentModal')" class="action-btn btn-cancel">取消</div>
           <div @click="sureComment" class="btn-sub action-btn">确定</div>
@@ -762,7 +762,7 @@
 
 <script>
 import BaseMixin from '@/mixins/BaseMixin'
-import { getProductDetail, getActiveInfo, getStoreList, getProductSharePic } from '@/api/product'
+import { getActiveInfo, getProductDetail, getProductSharePic, getStoreList } from '@/api/product'
 import { getBizInfo } from '@/api/store'
 import { getCommitList } from '@/api/common'
 import { commentReply } from '@/api/customer'
@@ -774,13 +774,12 @@ import LayoutComment from '@/componets/layout-comment/layout-comment'
 import WzwGoodsAction from '@/componets/wzw-goods-action/wzw-goods-action'
 import LayoutPopup from '@/componets/layout-popup/layout-popup'
 
-import {
-  showLoading, hideLoading, error, toast
-} from '@/common/fun'
-import { checkIsLogin, buildSharePath, getProductThumb } from '@/common/helper'
+import { error, hideLoading, showLoading, toast } from '@/common/fun'
+import { buildSharePath, checkIsLogin, getProductThumb } from '@/common/helper'
 import uParse from '@/componets/gaoyia-parse/parse'
 import Storage from '@/common/Storage'
 import LayoutModal from '@/componets/layout-modal/layout-modal'
+
 export default {
   name: 'ProductDetail',
   mixins: [BaseMixin],
@@ -791,7 +790,7 @@ export default {
     ProductSku,
     WzwGoodsAction,
     uParse,
-    LayoutPopup
+    LayoutPopup,
   },
   data () {
     return {
@@ -804,14 +803,14 @@ export default {
         Products_PriceX: '0',
         Products_PriceY: '0',
         Products_JSON: {},
-        Products_Promise: []
+        Products_Promise: [],
       }, // 商品数据
       active: [], // 满减活动列表
       store: [{ biz_go: '' }], // 门店
       storeList: [],
       comments: [],
       commentValue: '',
-      commentItem: {}// 要评论的对象
+      commentItem: {},// 要评论的对象
     }
   },
   onPageScroll (e) {
@@ -838,7 +837,7 @@ export default {
       const data = {
         touserid: this.commentItem.User_ID,
         commit_id: this.commentItem.Item_ID,
-        content: this.commentValue
+        content: this.commentValue,
       }
       if (this.commentItem.groupid) {
         data.groupid = this.commentItem.groupid
@@ -871,7 +870,7 @@ export default {
         title: this.detailData.Products_Name,
         desc: this.detailData.Products_BriefDescription,
         imageUrl: getProductThumb(this.detailData.ImgPath),
-        path: buildSharePath(path)
+        path: buildSharePath(path),
       }
       
       switch (channel) {
@@ -887,7 +886,7 @@ export default {
             success: function (res) {
             },
             fail: function (err) {
-            }
+            },
           })
           break
         case 'wxtimeline':
@@ -902,7 +901,7 @@ export default {
             success: function (res) {
             },
             fail: function (err) {
-            }
+            },
           })
           break
         case 'wxmini':
@@ -916,15 +915,18 @@ export default {
               id: _self.wxMiniOriginId,
               path: '/' + shareObj.path,
               type: 0,
-              webUrl: 'http://uniapp.dcloud.io'
+              webUrl: 'http://uniapp.dcloud.io',
             },
             success: ret => {
-            }
+            },
           })
           break
         case 'pic':
           // this.$toast('comming soon')
-          const res = await getProductSharePic({ product_id: this.prod_id }, { tip: '努力加载中', mask: true })
+          const res = await getProductSharePic({ product_id: this.prod_id }, {
+            tip: '努力加载中',
+            mask: true,
+          })
           Storage.set('temp_sharepic_info', res.data)
           const sharePic = res.data.img_url
           if (!sharePic) {
@@ -933,7 +935,7 @@ export default {
           }
           setTimeout(function () {
             uni.navigateTo({
-              url: '/pages/product/SharePic/SharePic'
+              url: '/pages/product/SharePic/SharePic',
             })
           }, 200)
           // uni.previewImage({
@@ -949,7 +951,7 @@ export default {
       uni.previewImage({
         urls: this.detailData.Products_JSON.ImgPath,
         indicator: 'default',
-        current: index
+        current: index,
       })
     },
     toBooking () {
@@ -973,7 +975,7 @@ export default {
         cart_key: 'CartList',
         prod_id: this.detailData.Products_ID,
         qty: sku.qty,
-        attr_id: sku.id
+        attr_id: sku.id,
       }
       updateCart(data).then(res => {
         toast('加入购物车成功')
@@ -998,7 +1000,7 @@ export default {
           count: sku.count, // 选择属性的库存
           qty: sku.qty, // 购买数量
           cart_key: 'DirectBuy', // 购物车类型   CartList（加入购物车）、DirectBuy（立即购买）、PTCartList（不能加入购物车）
-          productDetail_price: sku.price
+          productDetail_price: sku.price,
         }
         await updateCart(postData).catch(e => {
           throw Error(e.msg || '下单失败')
@@ -1013,12 +1015,12 @@ export default {
     async getProductDetail () {
       try {
         const data = {
-          prod_id: this.prod_id
+          prod_id: this.prod_id,
         }
         this.detailData = await getProductDetail(data, {
           onlyData: true,
           tip: '加载中',
-          mask: true
+          mask: true,
         }).catch(e => {
           throw Error(e.msg || '获取商品详情失败')
         })
@@ -1027,18 +1029,18 @@ export default {
         this.store = await getBizInfo({ biz_id: this.detailData.biz_id }, {
           onlyData: true,
           tip: '加载中',
-          mask: true
+          mask: true,
         }).catch(e => {
           throw Error(e.msg || '获取店铺信息失败')
         })
         this.comments = await getCommitList({
           Products_ID: this.detailData.Products_ID,
           pageSize: 999,
-          page: 1
+          page: 1,
         }, {
           onlyData: true,
           tip: '加载中',
-          mask: true
+          mask: true,
         }).catch((e) => {
           throw Error('获取评论数据失败')
         })
@@ -1046,14 +1048,14 @@ export default {
         this.storeList = await getStoreList({ biz_id: this.detailData.biz_id }, {
           onlyData: true,
           tip: '加载中',
-          mask: true
+          mask: true,
         }).catch(e => {
           throw Error(e.msg || '获取店铺列表失败')
         })
         
         const res = await getActiveInfo({
           biz_id: this.detailData.biz_id,
-          type: 'manjian'
+          type: 'manjian',
         }, { onlyData: true }).catch(e => {
         })
         if (res != null && res.active_info) {
@@ -1076,12 +1078,12 @@ export default {
     changeTabIndex (event) {
       const { current, source } = event.detail
       this.tabIndex = current
-    }
+    },
   },
   computed: {
     initData () {
       return this.$store.state.system.initData
-    }
+    },
   },
   onLoad (options) {
     this.prod_id = options.prod_id
@@ -1095,10 +1097,10 @@ export default {
       title: this.detailData.Products_Name,
       desc: this.detailData.Products_BriefDescription,
       imageUrl: this.detailData.ImgPath,
-      path: buildSharePath(path)
+      path: buildSharePath(path),
     }
     return shareObj
-  }
+  },
   // #endif
 }
 </script>

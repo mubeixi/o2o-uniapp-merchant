@@ -240,7 +240,7 @@ var calendar = {
     } // 若参数错误 返回-1
     var ms = m - 1
     if (ms === 1) { // 2月份的闰平规律测算后确认返回28或29
-      return (((y % 4 === 0) && (y % 100 != 0) || (y % 400 === 0)) ? 29 : 28)
+      return (((y % 4 === 0) && (y % 100 !== 0) || (y % 400 === 0)) ? 29 : 28)
     } else {
       return (this.solarMonth[ms])
     }
@@ -548,7 +548,7 @@ var calendar = {
     var leapOffset = 0
     var leapMonth = this.leapMonth(y)
     var leapDay = this.leapDays(y)
-    if (isLeapMonth && (leapMonth != m)) {
+    if (isLeapMonth && (leapMonth !== m)) {
       return -1
     }// 传参要求计算该闰月公历 但该年得出的闰月与传参的月份并不同
     if (y === 2100 && m === 12 && d > 1 || y === 1900 && m === 1 && d < 31) {

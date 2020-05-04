@@ -1,7 +1,9 @@
 <template>
   <div class="wrap">
     <div class="bg"></div>
-    <div class="moneybox font14" :style="{backgroundImage:'url('+$getDomain('/static/client/moneybox.png')+')'}">分销佣金<span class="font14" style="color: #f43838">￥</span><span class="money">{{info.product.share_commission}}</span>
+    <div class="moneybox font14" :style="{backgroundImage:'url('+$getDomain('/static/client/moneybox.png')+')'}">
+      分销佣金<span class="font14" style="color: #f43838">￥</span><span
+      class="money">{{info.product.share_commission}}</span>
     </div>
     <div class="imgbox" @click="preview">
       <image class="img" :src="info.img_url"></image>
@@ -17,7 +19,7 @@ export default {
   mixins: [BaseMixin],
   data () {
     return {
-      info: {}
+      info: {},
     }
   },
   methods: {
@@ -25,19 +27,19 @@ export default {
       uni.previewImage({
         urls: [this.info.img_url],
         indicator: 'default',
-        current: 0
+        current: 0,
       })
-    }
+    },
   },
   created () {
     this.info = Storage.get('temp_sharepic_info')
-
+    
     uni.showToast({
       position: 'top',
       icon: 'none',
-      title: '点击图片后,长按保存'
+      title: '点击图片后,长按保存',
     })
-  }
+  },
 }
 </script>
 
@@ -45,7 +47,7 @@ export default {
   .wrap {
     padding: 20rpx;
     position: relative;
-
+    
     .bg {
       position: fixed;
       top: 0;
@@ -55,7 +57,7 @@ export default {
       z-index: 0;
       background-image: url("https://new401.bafangka.com/uploadfiles/wkbq6nc2kc/image/5daa7f9be1.jpg");
     }
-
+    
     .moneybox {
       position: relative;
       z-index: 2;
@@ -65,18 +67,18 @@ export default {
       color: #555;
       border-radius: 6px;
       overflow: hidden;
-
+      
       .money {
         color: #f43838;
         font-size: 18px;
       }
     }
-
+    
     .imgbox {
       position: relative;
       z-index: 2;
       margin-top: 40rpx;
-
+      
       .img {
         width: 710rpx;
         /*height:1100rpx;*/

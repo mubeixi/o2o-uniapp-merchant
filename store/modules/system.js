@@ -1,7 +1,6 @@
 import Storage from '@/common/Storage'
-import { hideLoading, modal, showLoading } from '@/common/fun'
+import { modal } from '@/common/fun'
 import { getSystemConf } from '@/api/common'
-import { sleep } from '@/common/helper'
 
 const state = {
   initData: false

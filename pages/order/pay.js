@@ -6,14 +6,14 @@ export const farmatPayParam = (postData) => {
     need_invoice,
     invoice_info,
     use_money,
-    order_remark
+    order_remark,
   } = objTranslate(postData)
-
+  
   return {
     need_invoice: JSON.stringify(need_invoice),
     invoice_info: JSON.stringify(invoice_info),
     use_money: JSON.stringify(use_money),
-    order_remark: JSON.stringify(order_remark)
+    order_remark: JSON.stringify(order_remark),
   }
 }
 
@@ -22,7 +22,7 @@ function sumArr (arr) {
   let count = 0
   for (let num of arr) {
     if (isNaN(num)) throw Error('数组中元素必须为数字或者数字字符串')
-    if (typeof num === 'string')num = parseFloat(num)
+    if (typeof num === 'string') num = parseFloat(num)
     count += num
   }
   return count

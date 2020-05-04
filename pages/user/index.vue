@@ -12,10 +12,10 @@
         <div class="name">{{userInfo.User_NickName}}</div>
       </div>
       <div class="user-msg" v-else @click="$linkTo('/pages/user/login')">
-        <image src="/static/home/xianshi.png" class="avatar"></image>
+        <image :src="'/static/client/home/xianshi.png'|domain" class="avatar"></image>
         <div class="name">点击登录</div>
       </div>
-
+    
     </div>
     <div class="orders flex align-items-center">
       <div class="order-item" @click="goOrder(1)">
@@ -46,12 +46,13 @@
     </div>
     <div class="functions flex flex-justify-between">
       <block v-for="(item,index) of  iconList" :key="index">
-        <LayoutFun width="150rpx" :type="item.className" @openNext="openNext" :index="index" :name="item.name" :color="item.color"></LayoutFun>
+        <LayoutFun width="150rpx" :type="item.className" @openNext="openNext" :index="index" :name="item.name"
+                   :color="item.color"></LayoutFun>
       </block>
     </div>
     <div class="intro">为你推荐</div>
     <div class="product-list flex">
-
+      
       <pro-tag
         v-for="(item,idx) in proList"
         :key="idx"
@@ -60,7 +61,7 @@
         :pro_price="item.Products_PriceX"
         :pro_price_old="item.Products_PriceY"
       />
-
+    
     </div>
   </div>
 </template>
@@ -70,20 +71,16 @@ import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import LayoutFun from '@/componets/layout-fun/layout-fun'
 import ProTag from '@/componets/pro-tag/pro-tag'
 import BaseMixin from '@/mixins/BaseMixin'
-import {
-  getProductList
-} from '@/api/product'
+import { getProductList } from '@/api/product'
 import { getUserInfo } from '@/api/customer'
-import {
-  mapActions, mapGetters
-} from 'vuex'
+import { mapActions } from 'vuex'
 
 export default {
   mixins: [BaseMixin],
   components: {
     LayoutIcon,
     LayoutFun,
-    ProTag
+    ProTag,
   },
   data () {
     return {
@@ -92,82 +89,82 @@ export default {
           className: 'iconpintuan',
           name: '拼团订单',
           color: '#FE7602',
-          link: ''
+          link: '',
         },
         {
           className: 'iconxianshiqianggou',
           name: '限时折扣单',
           color: '#ADCF81',
-          link: ''
+          link: '',
         },
         {
           className: 'iconmiaosha',
           name: '秒杀订单',
           color: '#54AEED',
-          link: ''
+          link: '',
         },
         {
           className: 'iconzengpin',
           name: '我的赠品',
           color: '#E8779F',
-          link: '/pagesA/user/MyGift'
+          link: '/pagesA/user/MyGift',
         },
         {
           className: 'iconyue',
           name: '余额',
           color: '#69C276',
-          link: '/pagesA/user/BalanceCenter'
+          link: '/pagesA/user/BalanceCenter',
         },
         {
           className: 'iconjifen',
           name: '积分',
           color: '#52CCCD',
-          link: '/pagesA/user/IntegralCenter'
+          link: '/pagesA/user/IntegralCenter',
         },
         {
           className: 'iconshoucang18-copy',
           name: '收藏',
           color: '#FF7F79',
-          link: '/pages/favorite/index'
+          link: '/pages/favorite/index',
         },
         {
           className: 'iconyouhuiquan',
           name: '优惠券',
           color: '#D1BE71',
-          link: '/pages/user/Coupon'
+          link: '/pages/user/Coupon',
         },
         {
           className: 'iconrenwu',
           name: '任务中心',
           color: '#54AEED',
-          link: '/pagesA/user/TaskCenter'
+          link: '/pagesA/user/TaskCenter',
         },
         {
           className: 'icondizhi',
           name: '地址管理',
           color: '#E8779F',
-          link: '/pagesA/user/AddressList'
+          link: '/pagesA/user/AddressList',
         },
         {
           className: 'icontuikuan',
           name: '退款/售后',
           color: '#FE7602',
-          link: '/pagesA/order/RefundList'
+          link: '/pagesA/order/RefundList',
         },
         {
           className: 'iconfenxiao',
           name: '分销中心',
           color: '#69C276',
-          link: '/pagesA/distributor/Main'
-        }
+          link: '/pagesA/distributor/Main',
+        },
       ],
-      proList: []
+      proList: [],
     }
   },
   computed: {
     userInfo () {
       return this.$store.getters['user/getUserInfo']()
-    }
+    },
   },
   methods: {
     openNext (index) {
@@ -204,8 +201,8 @@ export default {
       })
     },
     ...mapActions({
-      setUserInfo: 'user/setUserInfo'
-    })
+      setUserInfo: 'user/setUserInfo',
+    }),
   },
   onShow () {
     getUserInfo().then(res => {
@@ -215,7 +212,7 @@ export default {
   },
   created () {
     this._init_func()
-  }
+  },
 }
 </script>
 <style lang="scss" scoped>
@@ -223,18 +220,18 @@ export default {
     padding: 30rpx 30rpx 0 30rpx;
     background: #EDF0F5;
   }
-
+  
   .flex {
     display: flex;
   }
-
+  
   .align-items-center {
     align-items: center;
   }
-
+  
   .header {
     position: relative;
-
+    
     .left-icon-box {
       position: absolute;
       left: 0;
@@ -242,16 +239,16 @@ export default {
       display: flex;
       align-items: center;
     }
-
+    
     .user-msg {
       text-align: center;
-
+      
       .avatar {
         width: 96rpx;
         height: 96rpx;
         border-radius: 50%;
       }
-
+      
       .name {
         font-size: 32rpx;
         color: #333;
@@ -259,7 +256,7 @@ export default {
       }
     }
   }
-
+  
   .orders {
     width: 690rpx;
     height: 210rpx;
@@ -267,18 +264,18 @@ export default {
     margin-top: 40rpx;
     border-radius: 10rpx;
     justify-content: space-around;
-
+    
     .order-item {
       text-align: center;
       font-size: 28rpx;
       color: #333;
-
+      
       .order-desc {
         margin-top: 22rpx;
       }
     }
   }
-
+  
   .quanyi {
     position: relative;
     width: 690rpx;
@@ -286,13 +283,13 @@ export default {
     margin-top: 40rpx;
     border-radius: 10rpx;
     background: #000;
-
+    
     .v-icon {
       position: absolute;
       top: 23rpx;
       left: 38rpx;
     }
-
+    
     .quanyi-title {
       position: absolute;
       left: 101rpx;
@@ -300,7 +297,7 @@ export default {
       font-size: 32rpx;
       color: #DA8E4B;
     }
-
+    
     .quanyi-ad {
       position: absolute;
       top: 79rpx;
@@ -308,7 +305,7 @@ export default {
       color: #fff;
       font-size: 22rpx;
     }
-
+    
     .detail {
       position: absolute;
       top: 39rpx;
@@ -324,20 +321,20 @@ export default {
       padding: 0 10rpx;
     }
   }
-
+  
   .functions {
     background-color: #fff;
     flex-wrap: wrap;
     padding: 60rpx 40rpx 0;
     margin-top: 40rpx;
   }
-
+  
   .intro {
     text-align: center;
     margin: 60rpx 0 32rpx;
     font-size: 34rpx;
   }
-
+  
   .product-list {
     flex-wrap: wrap;
     justify-content: space-around;

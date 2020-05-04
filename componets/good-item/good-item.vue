@@ -47,9 +47,7 @@
   </div>
 </template>
 <script>
-import {
-  getDomain
-} from '@/common/helper'
+import { getDomain } from '@/common/helper'
 import { linkToEasy } from '@/common/fun'
 
 export default {

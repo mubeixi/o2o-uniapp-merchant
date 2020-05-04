@@ -1,6 +1,6 @@
 <template>
   <view class="myall">
-
+    
     <view class="center">
       <view class="left">
         提现方式
@@ -13,9 +13,9 @@
         <image class="image" :src="'/static/client/right.png'|domain"></image>
       </view>
     </view>
-
+    
     <form report-submit @submit="addInfo">
-
+      
       <block v-if="data.Method_Type=='bank_card'">
         <view class="centers">
           <view class="left">
@@ -79,10 +79,10 @@ export default {
         Method_Name: '', // 提现方式名称
         Account_Name: '', // 户名
         Account_Val: '', // 账号
-        Bank_Position: ''// 开户行
+        Bank_Position: '',// 开户行
       },
-      withdraw_from: 1
-
+      withdraw_from: 1,
+      
     }
   },
   onLoad (options) {
@@ -93,7 +93,7 @@ export default {
     this.getShopWithdrawMethod()
   },
   computed: {
-    ...mapGetters(['userInfo'])
+    ...mapGetters(['userInfo']),
   },
   methods: {
     ...mapActions(['getInitData', 'setUserInfo']),
@@ -106,18 +106,18 @@ export default {
           // Method_Name:this.data.Method_Name,//提现方式名称
           Account_Name: this.data.Account_Name, // 户名
           Account_Val: this.data.Account_Val, // 账号
-          Bank_Position: this.data.Bank_Position // 开户行
+          Bank_Position: this.data.Bank_Position, // 开户行
         }
       } else if (this.data.Method_Type === 'alipay') {
         data = {
           Method_ID: this.data.Method_ID, // 提现方式类型
           // Method_Name:this.data.Method_Name,//提现方式名称
           Account_Name: this.data.Account_Name, // 户名
-          Account_Val: this.data.Account_Val// 账号
+          Account_Val: this.data.Account_Val,// 账号
         }
       } else {
         data = {
-          Method_ID: this.data.Method_ID// 提现方式类型
+          Method_ID: this.data.Method_ID,// 提现方式类型
           // Method_Name:this.data.Method_Name//提现方式名称
         }
       }
@@ -126,17 +126,17 @@ export default {
         const User_Method_ID = res.data.User_Method_ID
         uni.showToast({
           title: res.msg,
-          icon: 'success'
+          icon: 'success',
         })
         setTimeout(function () {
           that.$vm.$emit('fir', User_Method_ID)
           // 返回上一页
           uni.navigateBack({
-            delta: 1
+            delta: 1,
           })
         }, 1000)
       }).catch(e => {
-
+      
       })
     },
     // 获取商城提现方式
@@ -148,7 +148,7 @@ export default {
         this.data.Method_Name = this.array[0].Method_Name
         this.data.Method_ID = this.array[0].Method_ID
       }).catch(err => {
-
+      
       })
     },
     bindPickerChange (e) {
@@ -156,8 +156,8 @@ export default {
       this.data.Method_Type = this.array[this.index].Method_Type
       this.data.Method_Name = this.array[this.index].Method_Name
       this.data.Method_ID = this.array[this.index].Method_ID
-    }
-  }
+    },
+  },
 }
 </script>
 
@@ -166,74 +166,74 @@ export default {
     background-color: #FFFFFF !important;
     min-height: 100vh;
   }
-
+  
   .center {
-    margin-top: 19rpx;
-    width: 710rpx;
-    height: 88rpx;
+    margin-top: 19 rpx;
+    width: 710 rpx;
+    height: 88 rpx;
     margin: 0 auto;
     display: flex;
     align-items: center;
-    border-bottom: 1rpx solid #E3E3E3;
+    border-bottom: 1 rpx solid #E3E3E3;
     justify-content: space-between;
-
+    
     .left {
-      font-size: 28rpx;
+      font-size: 28 rpx;
       color: #333333;
-      width: 125rpx;
+      width: 125 rpx;
     }
-
+    
     .right {
-      font-size: 26rpx;
+      font-size: 26 rpx;
       color: #888888;
       display: flex;
       align-items: center;
-
+      
       .image {
-        width: 15rpx;
-        height: 23rpx;
-        margin-left: 14rpx;
+        width: 15 rpx;
+        height: 23 rpx;
+        margin-left: 14 rpx;
       }
     }
   }
-
+  
   .centers {
-    margin-top: 19rpx;
-    width: 710rpx;
-    height: 88rpx;
+    margin-top: 19 rpx;
+    width: 710 rpx;
+    height: 88 rpx;
     margin: 0 auto;
     display: flex;
     align-items: center;
-    border-bottom: 1rpx solid #E3E3E3;
+    border-bottom: 1 rpx solid #E3E3E3;
     position: relative;
-
+    
     .left {
-      width: 125rpx;
-      font-size: 28rpx;
+      width: 125 rpx;
+      font-size: 28 rpx;
       color: #333333;
     }
-
+    
     .inputs {
-      width: 570rpx;
+      width: 570 rpx;
       color: #333333;
-      font-size: 24rpx;
+      font-size: 24 rpx;
     }
   }
-
+  
   .places {
     color: #B8B8B8;
-    font-size: 24rpx;
+    font-size: 24 rpx;
   }
-
+  
   .addInfo {
-    width: 580rpx;
-    height: 76rpx;
-    line-height: 76rpx;
+    width: 580 rpx;
+    height: 76 rpx;
+    line-height: 76 rpx;
     margin: 0 auto;
     background: rgba(244, 49, 49, 1);
-    border-radius: 10rpx;
-    margin-top: 124rpx;
-    font-size: 32rpx;
+    border-radius: 10 rpx;
+    margin-top: 124 rpx;
+    font-size: 32 rpx;
     color: #FFFFFF;
     text-align: center;
   }

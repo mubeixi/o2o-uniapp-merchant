@@ -3,7 +3,8 @@
     <form action="/">
       <div class="search-wrap">
         <icon type="search" size="34rpx" class="search_icon" />
-        <input type="text" class="search-input" name="search" v-model="inputValue" @confirm="success" confirm-type='search' focus="focus" autofocus="autofocus">
+        <input type="text" class="search-input" name="search" v-model="inputValue" @confirm="success"
+               confirm-type='search' focus="focus" autofocus="autofocus">
         <span @click="close" class="span">取消</span>
       </div>
     </form>
@@ -30,7 +31,7 @@ export default {
   data () {
     return {
       inputValue: '',
-      searchAll: []
+      searchAll: [],
     }
   },
   components: {},
@@ -45,13 +46,13 @@ export default {
       key: 'searchAll',
       success (res) {
         than.searchAll = res.data
-      }
+      },
     })
   },
   methods: {
     goSearch (item) {
       uni.navigateTo({
-        url: '/pages/search/result?inputValue=' + item
+        url: '/pages/search/result?inputValue=' + item,
       })
     },
     success () {
@@ -62,7 +63,7 @@ export default {
         for (var item of this.searchAll) {
           if (item === this.inputValue) {
             uni.navigateTo({
-              url
+              url,
             })
             return
           }
@@ -70,25 +71,25 @@ export default {
         this.searchAll.push(this.inputValue) // 将输入框的值添加到搜索记录数组中存储
         uni.setStorage({
           key: 'searchAll',
-          data: than.searchAll
+          data: than.searchAll,
         })
       }
       uni.navigateTo({
-        url
+        url,
       })
     },
     clear () {
       this.searchAll = []
       uni.setStorage({
         key: 'searchAll',
-        data: []
+        data: [],
       })
     },
     close () {
       this.inputValue = ''
       this.$back()
-    }
-  }
+    },
+  },
 }
 </script>
 
@@ -101,7 +102,7 @@ export default {
     font-size: 30rpx;
     padding: 30rpx 22rpx 46rpx 20rpx;
     box-sizing: border-box;
-
+    
     .search-input {
       float: left;
       width: 600rpx;
@@ -114,38 +115,38 @@ export default {
       padding-left: 91rpx;
       box-sizing: border-box;
     }
-
+    
     .search_icon {
       position: absolute;
       top: 46rpx;
       left: 61rpx;
     }
-
+    
     .span {
       font-size: 30rpx;
       color: #333333;
     }
   }
-
+  
   .history {
     padding: 0 20rpx;
   }
-
+  
   .title {
     display: flex;
     justify-content: space-between;
     height: 40rpx;
     align-items: center;
   }
-
+  
   .title {
     font-size: 28rpx;
     color: #333;
     font-weight: 500;
     height: 40rpx;
-
+    
     line-height: 40rpx;
-
+    
     .img {
       width: 40rpx;
       height: 40rpx;
@@ -153,11 +154,11 @@ export default {
       /*height: 100%;*/
     }
   }
-
+  
   .dels {
     width: 40rpx;
   }
-
+  
   .h_content .span {
     float: left;
     background: rgba(245, 245, 245, 1);

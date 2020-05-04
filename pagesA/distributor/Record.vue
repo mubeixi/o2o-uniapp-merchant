@@ -45,7 +45,7 @@
         </view>
       </view>
     </view>
-
+    
     <div class="defaults" v-if="data.length<=0">
       <image :src="'/static/client/defaultImg.png'|domain"></image>
     </div>
@@ -65,7 +65,7 @@ export default {
       page: 1,
       pageSize: 10,
       data: [],
-      totalCount: 0
+      totalCount: 0,
     }
   },
   onLoad () {
@@ -73,7 +73,7 @@ export default {
     uni.getSystemInfo({
       success: function (res) {
         that.height = res.screenHeight - 68
-      }
+      },
     })
   },
   onShow () {
@@ -93,7 +93,7 @@ export default {
     getWithdrawRecordList () {
       const data = {
         page: this.page,
-        pageSize: this.pageSize
+        pageSize: this.pageSize,
       }
       getWithdrawRecordList(data).then(res => {
         this.totalCount = res.totalCount
@@ -101,10 +101,10 @@ export default {
           this.data.push(item)
         }
       }).catch(e => {
-
+      
       })
-    }
-  }
+    },
+  },
 }
 </script>
 
@@ -113,45 +113,45 @@ export default {
     background-color: #f8f8f8;
     min-height: 100vh;
   }
-
+  
   .main {
-    width: 710rpx;
+    width: 710 rpx;
     margin: 0 auto;
-    margin-top: 40rpx;
+    margin-top: 40 rpx;
     background-color: #FFFFFF;
     box-sizing: border-box;
-    padding: 28rpx 0rpx 32rpx 27rpx;
-
+    padding: 28 rpx 0 rpx 32 rpx 27 rpx;
+    
     .fir {
-      height: 48rpx;
+      height: 48 rpx;
       display: flex;
-      font-size: 26rpx;
+      font-size: 26 rpx;
       align-items: center;
-
+      
       .left {
         color: #333333;
-        margin-right: 20rpx;
+        margin-right: 20 rpx;
       }
-
+      
       .right {
         color: #888888;
       }
-
+      
       .rightt {
         color: #888888;
-        margin-left: 20rpx;
+        margin-left: 20 rpx;
       }
-
+      
       .rights {
         color: #F43131;
       }
     }
   }
-
+  
   .defaults {
     margin: 0 auto;
-    width: 640rpx;
-    height: 480rpx;
-    margin-top: 100rpx;
+    width: 640 rpx;
+    height: 480 rpx;
+    margin-top: 100 rpx;
   }
 </style>

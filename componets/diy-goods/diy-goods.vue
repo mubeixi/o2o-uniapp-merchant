@@ -11,7 +11,7 @@
                :style="{width:itemw,height:itemH,backgroundSize:goods.config.fill?goods.config.fill:'cover',backgroundImage:'url('+domainFunc(item.ImgPath)+')'}">
             <div v-show="goods.config.attr && goods.config.attr.tag.show"
                  :class="goods.config.attr.tag.style"
-                 v-if="['new','hot'].indexOf(goods.config.attr.tag.style)!=-1" class="tag">
+                 v-if="['new','hot'].indexOf(goods.config.attr.tag.style)!==-1" class="tag">
               {{goods.config.attr.tag.style=='hot'?'hot':'new'}}
             </div>
             <div v-show="goods.config.attr.tag.show" v-else class="tag img"><img
@@ -45,10 +45,7 @@
 </template>
 <script>
 import { getProductList } from '../../common/fetch'
-import {
-  lazyImgUrl
-  , goProductDetail
-} from '../../common'
+import { goProductDetail, lazyImgUrl } from '../../common'
 
 import { getDomain } from '@/common/helper'
 import { linkTo } from '@/common/fun'

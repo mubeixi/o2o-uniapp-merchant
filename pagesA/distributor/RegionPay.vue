@@ -3,7 +3,7 @@
     <!-- #ifdef APP-PLUS -->
     <view class="status_bar" style="background-color: rgb(248, 248, 248);"><!-- 这里是状态栏 --></view>
     <!-- #endif -->
-
+    
     <div class="zhezhao" v-if="password_input">
       <div class="input-wrap">
         <div>请输入余额支付密码</div>
@@ -20,13 +20,13 @@
           <view></view>
         </view>
         <view class="lineQ">
-
+        
         </view>
         <view class="circleQ">
           <view></view>
         </view>
         <view class="lineQ">
-
+        
         </view>
         <view class="circleQ">
           <view></view>
@@ -44,7 +44,7 @@
         </view>
       </view>
     </view>
-
+    
     <block v-if="proData.Applyfor_Name">
       <view class="three">
         <view class="haha">
@@ -77,7 +77,7 @@
         {{proData.Order_TotalPrice}}元
       </view>
     </block>
-
+    
     <view class="four" @click="showPay">
       立即支付
     </view>
@@ -85,7 +85,7 @@
       取消申请
       <image class="image" :src="'/static/client/distributor/chakan.png'|domain"></image>
     </view>
-
+    
     <layout-layer ref="popupLayer" :direction="'top'">
       <div class="iMbx">
         <div class="c_method" v-for="(item,index) in initData.pay_arr" @click="chooseType(index)" :key="index">
@@ -109,8 +109,8 @@ import LayoutLayer from '@/componets/layout-layer/layout-layer'
 export default {
   mixins: [BaseMixin],
   components: {
-    LayoutLayer
-
+    LayoutLayer,
+    
   },
   data () {
     return {
@@ -118,11 +118,11 @@ export default {
       proData: [],
       pay_type: '',
       password_input: false,
-      user_pay_password: ''// 用户输入的密码
+      user_pay_password: '',// 用户输入的密码
     }
   },
   onShow () {
-
+  
   },
   computed: {
     initData () {
@@ -130,7 +130,7 @@ export default {
     },
     userInfo () {
       return this.$store.getters['user/getUserInfo']()
-    }
+    },
   },
   onLoad (options) {
     this.Order_ID = options.id
@@ -142,51 +142,51 @@ export default {
       cancelAgentApply({ Order_ID: this.Order_ID }).then(res => {
         uni.showToast({
           title: res.msg,
-          icon: 'none'
+          icon: 'none',
         })
         setTimeout(function () {
           uni.navigateTo({
-            url: '/pagesA/distributor/Region'
+            url: '/pagesA/distributor/Region',
           })
         }, 1000)
       }).catch(e => {
-
+      
       })
     },
     payFailCall () {
-
+    
     },
     payMoney () {
       const data = {
         Order_ID: this.Order_ID,
-        pay_type: this.pay_type
+        pay_type: this.pay_type,
       }
       agentApplyPay(data, {
         tip: '正在加载中',
-        mask: true
+        mask: true,
       }).then(res => {
         Pay(this, this.pay_type, res)
       }).catch(err => {
         uni.showToast({
           title: res.msg,
-          icon: 'none'
+          icon: 'none',
         })
       })
     },
     // 选择支付方式
     chooseType (index) {
       this.pay_type = index
-
+      
       if (index === 'remainder_pay') {
         if (this.userInfo.hasOwnProperty('User_PayPassword') && !this.userInfo.User_PayPassword) {
           confirm({
             title: '提示',
             content: '该操作需要设置支付密码,是否前往设置?',
             confirmText: '去设置',
-            cancelText: '暂不设置'
+            cancelText: '暂不设置',
           }).then(res => {
             uni.navigateTo({
-              url: '/pagesA/person/updateUserPsw?type=1&is_back=1'
+              url: '/pagesA/person/updateUserPsw?type=1&is_back=1',
             })
           }).catch(err => {
             error('请选择其他支付方式')
@@ -196,7 +196,7 @@ export default {
         this.$refs.popupLayer.close()
         this.password_input = true// 弹出密码输入框
       }
-
+      
       this.payMoney()
     },
     showPay () {
@@ -204,11 +204,11 @@ export default {
     },
     paySuccessCall (res) {
       var _that = this
-
+      
       if (res && res.code && res.code === 2) {
         return
       }
-
+      
       if (res && res.code && res.code === 1) {
         toast('用户取消支付', 'none')
         return
@@ -223,12 +223,12 @@ export default {
             if (res.confirm) {
               toast('支付成功')
               uni.navigateTo({
-                url: '/pages/distributor/Main'
+                url: '/pages/distributor/Main',
               })
             } else if (res.cancel) {
-
+            
             }
-          }
+          },
         })
         return
       }
@@ -237,16 +237,16 @@ export default {
         toast('用户取消支付', 'none')
         return
       }
-
+      
       toast('支付成功')
       uni.navigateTo({
-        url: '/pages/distributor/Main'
+        url: '/pages/distributor/Main',
       })
     },
     payNow () {
       const data = {
         Order_ID: this.Order_ID,
-        pay_type: this.pay_type
+        pay_type: this.pay_type,
       }
       if (this.pay_type === 'remainder_pay') {
         data.user_pay_password = this.user_pay_password
@@ -254,15 +254,15 @@ export default {
       agentApplyPay(data).then(res => {
         uni.showToast({
           title: res.msg,
-          icon: 'none'
+          icon: 'none',
         })
         setTimeout(function () {
           uni.navigateTo({
-            url: '/pages/distributor/Main'
+            url: '/pages/distributor/Main',
           })
         }, 1000)
       }).catch(e => {
-
+      
       })
     },
     getAgentApply () {
@@ -284,9 +284,9 @@ export default {
       this.password_input = false
       // 提交信息
       this.payNow()
-    }
-
-  }
+    },
+    
+  },
 }
 </script>
 
@@ -296,226 +296,226 @@ export default {
     background-color: #FFFFFF !important;
     min-height: 100vh;
   }
-
+  
   .top {
-    width: 750rpx;
-    padding: 50rpx 83rpx;
-
+    width: 750 rpx;
+    padding: 50 rpx 83 rpx;
+    
     .first {
-      padding-left: 33rpx;
-      padding-right: 41rpxd;
-      height: 30rpx;
+      padding-left: 33 rpx;
+      padding-right: 41 rpxd;
+      height: 30 rpx;
       display: flex;
       align-items: center;
-
+      
       .circleQ {
-        width: 30rpx;
-        height: 30rpx;
+        width: 30 rpx;
+        height: 30 rpx;
         border: 1px solid #F43131;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-
+        
         view {
-          width: 15rpx;
-          height: 15rpx;
+          width: 15 rpx;
+          height: 15 rpx;
           background-color: #F43131;
           border-radius: 50%;
         }
       }
-
+      
       .circleW {
         border: 1px solid #999999;
-
+        
         view {
           background-color: #999999;
         }
       }
-
+      
       .lineQ {
-        width: 210rpx;
-        height: 4rpx;
+        width: 210 rpx;
+        height: 4 rpx;
         background-color: #F43131;
       }
     }
-
+    
     .second {
-      margin-top: 21rpx;
-      height: 25rpx;
-      line-height: 25rpx;
-      font-size: 26rpx;
+      margin-top: 21 rpx;
+      height: 25 rpx;
+      line-height: 25 rpx;
+      font-size: 26 rpx;
       color: #999999;
       display: flex;
-
+      
       .secondQ {
         color: #F43131;
       }
-
+      
       .secondW {
-        margin-left: 137rpx;
+        margin-left: 137 rpx;
         color: #F43131;
       }
-
+      
       .secondE {
-        margin-left: 135rpx;
+        margin-left: 135 rpx;
         color: #F43131;
       }
     }
   }
-
+  
   .three {
     //height: 88rpx;
-    line-height: 88rpx;
-    width: 710rpx;
+    line-height: 88 rpx;
+    width: 710 rpx;
     margin: 0 auto;
     border-bottom: 1px solid #E7E7E7;
     display: flex;
     align-items: center;
-
+    
     .haha {
-      font-size: 30rpx;
+      font-size: 30 rpx;
       color: #333333;
-      margin-right: 20rpx;
+      margin-right: 20 rpx;
       width: 100px;
       box-sizing: border-box;
       padding-left: 10px;
     }
-
+    
     .inputs {
-      height: 88rpx;
-      line-height: 88rpx;
-      font-size: 28rpx;
+      height: 88 rpx;
+      line-height: 88 rpx;
+      font-size: 28 rpx;
       color: #333333;
     }
-
+    
     .place {
-      font-size: 28rpx;
+      font-size: 28 rpx;
       color: #CAC8C8;
     }
-
+    
     .myRadio {
-      height: 88rpx;
+      height: 88 rpx;
       display: flex;
-
+      
       .myRadioQ {
-        height: 88rpx;
+        height: 88 rpx;
         display: flex;
-        margin-right: 17rpx;
-
+        margin-right: 17 rpx;
+        
         .radio {
           transform: scale(0.7);
         }
-
+        
         .mbx {
-          font-size: 28rpx;
+          font-size: 28 rpx;
           color: #777777;
-          margin-left: 13rpx;
+          margin-left: 13 rpx;
         }
       }
     }
-
+    
   }
-
+  
   .four {
-    width: 490rpx;
-    height: 75rpx;
-    line-height: 75rpx;
+    width: 490 rpx;
+    height: 75 rpx;
+    line-height: 75 rpx;
     text-align: center;
     background: rgba(244, 49, 49, 1);
-    border-radius: 10rpx;
+    border-radius: 10 rpx;
     margin: 0 auto;
-    margin-top: 110rpx;
-    font-size: 30rpx;
+    margin-top: 110 rpx;
+    font-size: 30 rpx;
     color: #FFFFFF;
   }
-
+  
   .five {
-    height: 23rpx;
-    line-height: 23rpx;
-    width: 174rpx;
+    height: 23 rpx;
+    line-height: 23 rpx;
+    width: 174 rpx;
     margin: 0 auto;
-    margin-top: 21rpx;
-    font-size: 24rpx;
+    margin-top: 21 rpx;
+    font-size: 24 rpx;
     font-weight: 500;
     color: rgba(153, 153, 153, 1);
-
+    
     .image {
-      width: 12rpx;
-      height: 20rpx;
-      margin-left: 10rpx;
+      width: 12 rpx;
+      height: 20 rpx;
+      margin-left: 10 rpx;
     }
   }
-
+  
   .threes {
-    height: 88rpx;
-    line-height: 88rpx;
-    width: 710rpx;
+    height: 88 rpx;
+    line-height: 88 rpx;
+    width: 710 rpx;
     margin: 0 auto;
     border-bottom: 1px solid #E7E7E7;
     display: flex;
     align-items: center;
     justify-content: space-between;
-
+    
     .haha {
-      font-size: 30rpx;
+      font-size: 30 rpx;
       color: #333333;
       //margin-right: 42rpx;
     }
-
+    
     .images {
-      width: 16rpx;
-      height: 88rpx;
-      line-height: 88rpx;
-
+      width: 16 rpx;
+      height: 88 rpx;
+      line-height: 88 rpx;
+      
       .image {
-        width: 16rpx;
-        height: 25rpx;
+        width: 16 rpx;
+        height: 25 rpx;
       }
     }
-
+    
   }
-
+  
   .picker view {
-    width: 180rpx;
-    font-size: 28rpx;
-    line-height: 90rpx;
-    height: 90rpx;
-    margin-right: 10rpx;
+    width: 180 rpx;
+    font-size: 28 rpx;
+    line-height: 90 rpx;
+    height: 90 rpx;
+    margin-right: 10 rpx;
   }
-
+  
   .picker {
     display: flex;
-
+    
     .quyu {
-      width: 120rpx;
+      width: 120 rpx;
     }
   }
-
+  
   .lineW {
     background-color: #F43131 !important;
   }
-
+  
   .iMbx {
     text-align: center;
     padding: 0 20 upx;
     font-size: 28 upx;
     color: #333;
-
+    
     .c_method {
       padding: 37 upx 0;
       border-bottom: 2 upx solid #E6E6E6;
     }
-
+    
     & .c_method:first-child {
       color: #F43131;
     }
-
+    
     & .c_method:nth-last-child(1) {
       border: none;
     }
   }
-
+  
   .zhezhao {
     left: 0;
     top: 0;
@@ -524,32 +524,32 @@ export default {
     height: 100%;
     background: rgba(0, 0, 0, .3);
     z-index: 1000;
-
+    
     .input-wrap {
       background: #fff;
       color: #000;
       text-align: center;
       width: 90%;
-      margin: 400rpx auto;
-      padding: 40rpx 50rpx 30rpx;
+      margin: 400 rpx auto;
+      padding: 40 rpx 50 rpx 30 rpx;
       box-sizing: border-box;
-      font-size: 28rpx;
-      border-radius: 10rpx;
-
+      font-size: 28 rpx;
+      border-radius: 10 rpx;
+      
       .input {
-        margin: 40rpx 0;
+        margin: 40 rpx 0;
         border: 1px solid #efefef;
         height: 20px;
         line-height: 20px;
         padding: 10px 0px;
       }
-
+      
       .btns {
         display: flex;
         justify-content: space-around;
-        height: 60rpx;
-        line-height: 60rpx;
-
+        height: 60 rpx;
+        line-height: 60 rpx;
+        
         .btn {
           flex: 1;
         }

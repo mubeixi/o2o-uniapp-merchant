@@ -102,18 +102,15 @@
 <script>
 // #ifdef APP-VUE|| MP-WEIXIN || H5
 import mpwxs from './mpwxs'
-// #endif
-
 // #ifdef APP-NVUE
 import bindingx from './bindingx.js'
-// #endif
-
 // #ifndef APP-PLUS|| MP-WEIXIN || MP-ALIPAY ||  H5
 import mixins from './mpother'
-// #endif
-
 // #ifdef MP-ALIPAY
 import mpalipay from './mpalipay'
+// #endif
+// #endif
+// #endif
 // #endif
 
 /**

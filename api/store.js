@@ -1,6 +1,4 @@
-import {
-  fetch
-} from '@/common/request'
+import { fetch } from '@/common/request'
 
 // 获取商家信息
 export const getBizInfo = (param, options) => fetch({

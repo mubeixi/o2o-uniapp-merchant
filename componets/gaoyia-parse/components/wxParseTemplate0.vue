@@ -53,18 +53,17 @@
 </template>
 
 <script>
-	// #ifdef APP-PLUS | H5
-	import wxParseTemplate from './wxParseTemplate0';
-	// #endif
-	// #ifdef MP
-	import wxParseTemplate from './wxParseTemplate1';
-	// #endif
-	import wxParseImg from './wxParseImg';
-	import wxParseVideo from './wxParseVideo';
-	import wxParseAudio from './wxParseAudio';
-	import wxParseTable from './wxParseTable';
-	
-	export default {
+// #ifdef APP-PLUS | H5
+// #endif
+// #ifdef MP
+import wxParseTemplate from './wxParseTemplate1'
+// #endif
+import wxParseImg from './wxParseImg'
+import wxParseVideo from './wxParseVideo'
+import wxParseAudio from './wxParseAudio'
+import wxParseTable from './wxParseTable'
+
+export default {
 		// #ifdef APP-PLUS | H5
 		name: 'wxParseTemplate',
 		// #endif

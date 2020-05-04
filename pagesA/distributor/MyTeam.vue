@@ -1,6 +1,6 @@
 <template>
   <view class="team">
-
+    
     <view style="width: 100%;height: 20rpx;"></view>
     <view class="teamName" v-if="pro.disInfo">
       <view class="teamImg">
@@ -29,7 +29,7 @@
           <image class="img" :src="'/static/client/distributor/right.png'|domain"></image>
         </view>
       </view>
-
+    
     </view>
   </view>
 </template>
@@ -43,7 +43,7 @@ export default {
   data () {
     return {
       height: 1000, // 获取手机屏幕高度
-      pro: []
+      pro: [],
     }
   },
   onLoad () {
@@ -51,28 +51,28 @@ export default {
     uni.getSystemInfo({
       success: function (res) {
         that.height = res.screenHeight - 68
-      }
+      },
     })
     this.getDisTeamCount()
   },
   onShow () {
-
+  
   },
   methods: {
     goMyNumber (item) {
       const items = item + 1
       uni.navigateTo({
-        url: '/pagesA/distributor/MyTeamList?index=' + items
+        url: '/pagesA/distributor/MyTeamList?index=' + items,
       })
     },
     getDisTeamCount () {
       getDisTeamCount().then(res => {
         this.pro = res.data
       }).catch(e => {
-
+      
       })
-    }
-  }
+    },
+  },
 }
 </script>
 
@@ -81,97 +81,97 @@ export default {
     background-color: #F8F8F8;
     min-height: 100vh;
     box-sizing: border-box;
-
+    
     .teamName {
-      margin: 30rpx 0rpx 30rpx 20rpx;
-      margin-top: 0rpx;
+      margin: 30 rpx 0 rpx 30 rpx 20 rpx;
+      margin-top: 0 rpx;
       display: flex;
-
+      
       .teamImg {
-        width: 90rpx;
-        height: 90rpx;
+        width: 90 rpx;
+        height: 90 rpx;
         border-radius: 50%;
         overflow: hidden;
-
+        
         .image {
           width: 100%;
           height: 100%;
         }
       }
-
+      
       .teamInfo {
-        margin-left: 18rpx;
-        padding-top: 11rpx;
-        padding-bottom: 18rpx;
-
+        margin-left: 18 rpx;
+        padding-top: 11 rpx;
+        padding-bottom: 18 rpx;
+        
         .nickName {
-          height: 28rpx;
-          font-size: 30rpx;
-          line-height: 28rpx;
+          height: 28 rpx;
+          font-size: 30 rpx;
+          line-height: 28 rpx;
           color: #333333;
         }
-
+        
         .tuijianren {
-          height: 23rpx;
-          line-height: 23rpx;
+          height: 23 rpx;
+          line-height: 23 rpx;
           color: #777777;
-          font-size: 24rpx;
-          margin-top: 15rpx;
+          font-size: 24 rpx;
+          margin-top: 15 rpx;
         }
       }
     }
-
+    
     .teamContent {
-      width: 710rpx;
+      width: 710 rpx;
       margin: 0 auto;
       background-color: #FFFFFF;
-
+      
       .teamNumber {
-        height: 93rpx;
-        padding-left: 23rpx;
+        height: 93 rpx;
+        padding-left: 23 rpx;
         display: flex;
         align-items: center;
-
+        
         .image {
-          width: 35rpx;
-          height: 33rpx;
+          width: 35 rpx;
+          height: 33 rpx;
         }
-
+        
         .viewq {
-          margin-left: 16rpx;
-          font-size: 28rpx;
+          margin-left: 16 rpx;
+          font-size: 28 rpx;
           color: #333333;
           font-weight: bold;
         }
       }
-
+      
       .teamGrade {
-        width: 690rpx;
-        margin-left: 10rpx;
-        margin-right: 10rpx;
-        height: 87rpx;
-        border-bottom: 1rpx solid #ECE8E8;
+        width: 690 rpx;
+        margin-left: 10 rpx;
+        margin-right: 10 rpx;
+        height: 87 rpx;
+        border-bottom: 1 rpx solid #ECE8E8;
         display: flex;
         justify-content: space-between;
         align-items: center;
-
+        
         .img {
-          width: 15rpx;
-          height: 23rpx;
-          margin-right: 8rpx;
-          margin-left: 16rpx;
+          width: 15 rpx;
+          height: 23 rpx;
+          margin-right: 8 rpx;
+          margin-left: 16 rpx;
         }
-
+        
         .views {
-          font-size: 26rpx;
+          font-size: 26 rpx;
           color: #666666;
-          margin-left: 19rpx;
+          margin-left: 19 rpx;
         }
-
+        
       }
-
+      
       & view.teamGrade:last-child {
-        border-bottom: 0rpx;
+        border-bottom: 0 rpx;
       }
     }
   }

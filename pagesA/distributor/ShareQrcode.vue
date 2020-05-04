@@ -1,18 +1,18 @@
 <template>
   <view class="page-wrap">
-
+    
     <image @click="preFn(current_url)" :src="current_url|domain" style="width: 750rpx" mode="widthFix" />
-
+    
     <div class="swiper">
       <div class="swiper-item" @click="setSelect(poster)" v-for="(poster,idx) in poster_list">
         <image class="swiper-itm-img" :src="poster.img|domain" mode="widthFix"></image>
       </div>
     </div>
-
+    
     <!--		<div class="share-btn" @click="shareFn">-->
     <!--			分享-->
     <!--		</div>-->
-
+    
     <!--		<canvas style="width: 404px; height: 718px;" canvas-id="firstCanvas"></canvas>-->
   </view>
 </template>
@@ -42,9 +42,9 @@ export default {
         dis_config: {},
         total_sales: '',
         total_income: '',
-        balance: ''
-      }//
-
+        balance: '',
+      },//
+      
     }
   },
   computed: {
@@ -53,17 +53,17 @@ export default {
     },
     userInfo () {
       return this.$store.getters['user/getUserInfo']()
-    }
+    },
   },
   onReady () {
     var context = uni.createCanvasContext('firstCanvas')
-
+    
     context.arc(120, 80, 5, 0, 2 * Math.PI, true)
     context.stroke()
     context.draw()
   },
   onShow () {
-
+  
   },
   onLoad (options) {
     const { type, again } = options
@@ -78,7 +78,7 @@ export default {
         type: this.type,
         again: this.again,
         owner_id: this.userInfo.User_ID,
-        poster_id: poster.id
+        poster_id: poster.id,
       }, { tip: '生成中' }).then(res => {
         this.current_url = res.data.img_url
       })
@@ -90,7 +90,7 @@ export default {
         return
       }
       uni.previewImage({
-        urls: [this.current_url]
+        urls: [this.current_url],
       })
     },
     async shareFn () {
@@ -108,20 +108,20 @@ export default {
         // 先获取二维码
         // let qrRet = await getDistributeWxQrcode({type,again,owner_id:this.userInfo.User_ID},{tip:'生成中'})
         // this.qrimg = qrRet.data.img_url;
-
+        
         const getPosterListResult = await getPosterList({ pageSize: 999 })
         const lists = getPosterListResult.data
         this.poster_list = lists.map(item => {
           item.img += '-r200'
           return item
         })
-
+        
         if (this.poster_list.length > 0) {
           getDistributeWxQrcode({
             type,
             again,
             owner_id: this.userInfo.User_ID,
-            poster_id: this.poster_list[0].id
+            poster_id: this.poster_list[0].id,
           }, { tip: '生成中' }).then(res => {
             this.current_url = res.data.img_url
           })
@@ -130,18 +130,18 @@ export default {
       } catch (e) {
         error(e.msg || '获取海报模板失败')
       }
-    }
-  }
+    },
+  },
 }
 </script>
 
 <style lang="scss" scoped>
   .page-wrap {
-
+    
     .swiper {
       z-index: 9;
-      width: 750rpx;
-      height: 244rpx;
+      width: 750 rpx;
+      height: 244 rpx;
       background: white;
       position: fixed;
       bottom: 0px;
@@ -150,17 +150,17 @@ export default {
       overflow-x: scroll;
       overflow-y: hidden;
       z-index: 3;
-
+      
       .swiper-item {
         display: inline-block;
-        width: 116rpx;
-        height: 244rpx;
-        margin-left: 30rpx;
+        width: 116 rpx;
+        height: 244 rpx;
+        margin-left: 30 rpx;
         position: relative;
-
+        
         .swiper-itm-img {
-          width: 116rpx;
-          height: 116rpx;
+          width: 116 rpx;
+          height: 116 rpx;
           position: absolute;
           top: 50%;
           left: 0;
@@ -169,11 +169,11 @@ export default {
         }
       }
     }
-
+    
     .share-btn {
       position: absolute;
       bottom: 0;
-      width: 750rpx;
+      width: 750 rpx;
       text-align: center;
       height: 50px;
       line-height: 50px;

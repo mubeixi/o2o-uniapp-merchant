@@ -56,8 +56,8 @@
         </view>
       </div>
     </div>
-
-
+  
+  
   </div>
 </template>
 
@@ -67,8 +67,8 @@
 import { getUserInfo, updateUserInfo } from '@/api/customer'
 import BaseMixin from '@/mixins/BaseMixin'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
-import { chooseImageByPromise, uploadImages, getArrColumn } from '@/common/helper'
-import { showLoading, hideLoading } from '@/common/fun'
+import { chooseImageByPromise, getArrColumn, uploadImages } from '@/common/helper'
+import { hideLoading, showLoading } from '@/common/fun'
 import { mapActions } from 'vuex'
 
 export default {
@@ -82,7 +82,7 @@ export default {
   methods: {
     update (num) {
       if (num === 2) {
-        if (this.userInfo.User_Birthday != 0) {
+        if (this.userInfo.User_Birthday !== 0) {
           uni.showToast({
             title: '生日不允许再次修改',
             icon: 'none',
@@ -108,13 +108,13 @@ export default {
         })
         this.userInfo.User_HeadImg = info.User_HeadImg
         this.setUserInfo(this.userInfo)
-
+        
       } catch (e) {
         console.log(e.message)
       } finally {
         hideLoading()
       }
-
+      
     },
     async init () {
       this.userInfo = await getUserInfo({}, {
@@ -143,44 +143,44 @@ export default {
   .bgColor-white {
     height: 100vh;
   }
-
+  
   .msg {
-    padding: 0 22rpx;
-
+    padding: 0 22 rpx;
+    
     .item {
       display: flex;
       align-items: center;
-      padding: 39rpx 0;
+      padding: 39 rpx 0;
       border-bottom: 1px solid #E3E3E3;
-
+      
       .item-name {
-        font-size: 30rpx;
+        font-size: 30 rpx;
         color: #333;
       }
-
+      
       .info {
         display: flex;
         align-items: center;
         flex: 1;
         text-align: right;
-        margin-right: 20rpx;
+        margin-right: 20 rpx;
         justify-content: flex-end;
-        font-size: 26rpx;
+        font-size: 26 rpx;
         color: #999999;
-
+        
         .image {
-          width: 88rpx;
-          height: 88rpx;
-          border-radius: 44rpx;
+          width: 88 rpx;
+          height: 88 rpx;
+          border-radius: 44 rpx;
         }
       }
-
+      
       .go {
         display: flex;
         align-items: center;
-        width: 15rpx;
-        height: 23rpx;
-
+        width: 15 rpx;
+        height: 23 rpx;
+        
         image {
           width: 100%;
           height: 100%;

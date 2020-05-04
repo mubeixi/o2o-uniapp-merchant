@@ -31,7 +31,7 @@
         </view>
       </view>
       <view class="kong">
-
+      
       </view>
       <view class="tishi">
         <image class="tishi-image" :src="'/static/client/distributor/tishi.png'|domain"></image>
@@ -71,7 +71,7 @@ export default {
       price: '', // 提现金额
       isQing: false, // 是否发起提现
       init: {},
-      withdraw_from: 1
+      withdraw_from: 1,
     }
   },
   onLoad (options) {
@@ -88,14 +88,14 @@ export default {
     uni.getSystemInfo({
       success: function (res) {
         that.height = res.screenHeight - 68
-      }
+      },
     })
     getWithdrawConfig().then(res => {
       this.init = res.data
     })
   },
   computed: {
-    ...mapGetters(['initData'])
+    ...mapGetters(['initData']),
   },
   onShow () {
     // 获取我的提现方式
@@ -105,7 +105,7 @@ export default {
     // 申请记录
     goRecord () {
       uni.navigateTo({
-        url: '/pagesA/distributor/Record'
+        url: '/pagesA/distributor/Record',
       })
     },
     // 申请提现
@@ -118,17 +118,17 @@ export default {
       if (isNaN(this.price)) {
         uni.showToast({
           title: '输入金额有误,请重新输入',
-          icon: 'none'
+          icon: 'none',
         })
         this.price = ''
         that.isQing = false
         return
       }
-
+      
       if (this.price === '') {
         uni.showToast({
           title: '未输入金额',
-          icon: 'none'
+          icon: 'none',
         })
         this.price = ''
         that.isQing = false
@@ -139,7 +139,7 @@ export default {
         this.isQing = false
         setTimeout(function () {
           uni.navigateTo({
-            url: '/pagesA/distributor/AddWithdrawal?form=' + this.withdraw_from
+            url: '/pagesA/distributor/AddWithdrawal?form=' + this.withdraw_from,
           })
         }, 1000)
         return
@@ -147,19 +147,19 @@ export default {
       const data = {
         User_Method_ID: this.User_Method_ID,
         money: this.price,
-        withdraw_from: this.withdraw_from
+        withdraw_from: this.withdraw_from,
       }
       withdrawApply(data).then(res => {
         setTimeout(() => {
           that.isQing = false
         }, 4000)
         this.getUserWithdrawMethod()
-
+        
         // 提现成功清除金额
         that.price = ''
         uni.showToast({
           title: res.msg,
-          icon: 'none'
+          icon: 'none',
         })
       }).catch(e => {
         that.isQing = false
@@ -177,7 +177,7 @@ export default {
         if (this.withdraw_from === 2) {
           this.balance = res.data.user_money
         }
-
+        
         this.User_Method_ID = Storage.get('myMethod')
         Storage.remove('myMethod')
         if (res.data.list.length > 0) {
@@ -197,185 +197,185 @@ export default {
           this.User_Method_ID = res.data.list[0].User_Method_ID
         }
       }).catch(err => {
-
+      
       })
     },
     // 我的提现方式
     goMethod () {
       uni.navigateTo({
-        url: '/pagesA/distributor/WithdrawalMethod?User_Method_ID=' + this.data.User_Method_ID + '&from=' + this.withdraw_from
+        url: '/pagesA/distributor/WithdrawalMethod?User_Method_ID=' + this.data.User_Method_ID + '&from=' + this.withdraw_from,
       })
     },
     // 管理提现方式
     guanWithdrawal () {
       uni.navigateTo({
-        url: '/pagesA/distributor/AddWithdrawal?form=' + this.withdraw_from
+        url: '/pagesA/distributor/AddWithdrawal?form=' + this.withdraw_from,
       })
-    }
-  }
+    },
+  },
 }
 </script>
 
 <style scoped lang="scss">
   .all {
     background-color: #f8f8f8;
-    width: 750rpx;
+    width: 750 rpx;
     min-height: 100vh;
     overflow: hidden;
     box-sizing: border-box;
   }
-
+  
   .content {
     background-color: #FFFFFF;
-    width: 710rpx;
-    margin: 40rpx 20rpx 0rpx 20rpx;
-    padding-bottom: 85rpx;
-    border-radius: 10rpx;
-
+    width: 710 rpx;
+    margin: 40 rpx 20 rpx 0 rpx 20 rpx;
+    padding-bottom: 85 rpx;
+    border-radius: 10 rpx;
+    
     .bank {
-      width: 710rpx;
+      width: 710 rpx;
       background-color: #EEEEEE;
-      height: 100rpx;
-      padding: 0rpx 30rpx;
+      height: 100 rpx;
+      padding: 0 rpx 30 rpx;
       display: flex;
       align-items: center;
       box-sizing: border-box;
-
+      
       .bankCard {
-        width: 50rpx;
-        height: 50rpx;
-        margin-right: 18rpx;
+        width: 50 rpx;
+        height: 50 rpx;
+        margin-right: 18 rpx;
       }
-
+      
       .bankName {
-        font-size: 28rpx;
+        font-size: 28 rpx;
         color: #333333;
       }
-
+      
       .right {
-        width: 18rpx;
-        height: 27rpx;
+        width: 18 rpx;
+        height: 27 rpx;
         margin-left: auto;
       }
     }
-
+    
     .guanli {
-      font-size: 28rpx;
+      font-size: 28 rpx;
       color: #5E9BFF;
-      line-height: 100rpx;
+      line-height: 100 rpx;
       display: block;
       text-align: center;
     }
-
+    
     .tiMoney {
-      width: 710rpx;
-      height: 25rpx;
-      line-height: 25rpx;
-      margin: 68rpx 0rpx 68rpx 30rpx;
-      font-size: 26rpx;
+      width: 710 rpx;
+      height: 25 rpx;
+      line-height: 25 rpx;
+      margin: 68 rpx 0 rpx 68 rpx 30 rpx;
+      font-size: 26 rpx;
       color: #333333;
     }
-
+    
     .inputMoney {
-      width: 650rpx;
-      height: 66rpx;
-      margin-left: 30rpx;
-      margin-right: 30rpx;
-      border-bottom: 1rpx solid #ECE8E8;
+      width: 650 rpx;
+      height: 66 rpx;
+      margin-left: 30 rpx;
+      margin-right: 30 rpx;
+      border-bottom: 1 rpx solid #ECE8E8;
       display: flex;
-      font-size: 48rpx;
+      font-size: 48 rpx;
       color: #333333;
-      padding-bottom: 30rpx;
-
+      padding-bottom: 30 rpx;
+      
       .input-money-inner {
-        height: 35rpx;
-        line-height: 35rpx;
+        height: 35 rpx;
+        line-height: 35 rpx;
         display: flex;
         align-items: center;
-
+        
         .input-money-input {
-          margin-left: 20rpx;
-          height: 35rpx;
-          width: 600rpx;
+          margin-left: 20 rpx;
+          height: 35 rpx;
+          width: 600 rpx;
         }
       }
     }
-
+    
     .canTi {
-      width: 670rpx;
-      height: 76rpx;
+      width: 670 rpx;
+      height: 76 rpx;
       margin: 0 auto;
       display: flex;
       align-items: center;
       justify-content: space-between;
-
+      
       .canTiMoney {
-        font-size: 22rpx;
+        font-size: 22 rpx;
         color: #999999;
       }
-
+      
       .allTi {
-        font-size: 22rpx;
+        font-size: 22 rpx;
         color: #69A1FF;
       }
     }
-
+    
     .kong {
       background-color: #F8F8F8;
-      width: 690rpx;
+      width: 690 rpx;
       margin: 0 auto;
-      height: 20rpx;
+      height: 20 rpx;
     }
-
+    
     .tishi {
-      margin-top: 27rpx;
-      margin-left: 32rpx;
-      margin-right: 33rpx;
-      width: 645rpx;
+      margin-top: 27 rpx;
+      margin-left: 32 rpx;
+      margin-right: 33 rpx;
+      width: 645 rpx;
       display: flex;
-
+      
       .tishi-image {
-        width: 22rpx;
-        height: 22rpx;
-        margin-right: 10rpx;
-        margin-top: 5rpx;
+        width: 22 rpx;
+        height: 22 rpx;
+        margin-right: 10 rpx;
+        margin-top: 5 rpx;
       }
-
+      
       .tishi-view {
-        width: 613rpx;
-        font-size: 20rpx;
+        width: 613 rpx;
+        font-size: 20 rpx;
         color: #999999;
       }
     }
-
+    
     .liji {
-      margin-top: 98rpx;
-      width: 620rpx;
-      height: 80rpx;
-      line-height: 80rpx;
+      margin-top: 98 rpx;
+      width: 620 rpx;
+      height: 80 rpx;
+      line-height: 80 rpx;
       background: #F43131;
-      border-radius: 10rpx;
-      margin-left: 50rpx;
-      margin-right: 40rpx;
+      border-radius: 10 rpx;
+      margin-left: 50 rpx;
+      margin-right: 40 rpx;
       text-align: center;
-      font-size: 34rpx;
+      font-size: 34 rpx;
       color: #FFFFFF;
     }
-
+    
     .lishi {
-      height: 21rpx;
+      height: 21 rpx;
       // width: 106rpx;
-      margin-top: 25rpx;
-      margin-left: 565rpx;
-      font-size: 22rpx;
+      margin-top: 25 rpx;
+      margin-left: 565 rpx;
+      font-size: 22 rpx;
       color: #999999;
       display: flex;
       align-items: center;
-
+      
       .lishi-image {
-        width: 12rpx;
-        height: 20rpx;
-        margin-left: 6rpx;
+        width: 12 rpx;
+        height: 20 rpx;
+        margin-left: 6 rpx;
       }
     }
   }
