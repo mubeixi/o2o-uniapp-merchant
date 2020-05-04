@@ -9,13 +9,13 @@
       </div>
     </div>
     <div class="tabs">
-      <div :class="[active == 0 ? 'checked' : '','tab']" @click="getActive(0)">默认
+      <div :class="[active === 0 ? 'checked' : '','tab']" @click="getActive(0)">默认
         <div class="line"></div>
       </div>
-      <div :class="[active == 1 ? 'checked' : '','tab']" @click="getActive(1)">销量
+      <div :class="[active === 1 ? 'checked' : '','tab']" @click="getActive(1)">销量
         <div class="line"></div>
       </div>
-      <div class="pricebox" :class="[active == 2 ? 'checked' : '','tab']" @click="getActive(2)"><span
+      <div class="pricebox" :class="[active === 2 ? 'checked' : '','tab']" @click="getActive(2)"><span
         class="padding4-c">价格</span>
         <view class="xiangshang">
           <image class="image" :src="'/static/client/result/tops.png'|domain" v-if="isSheng==1"></image>
@@ -29,7 +29,7 @@
         </div>
       </div>
 
-      <div :class="[active == 3 ? 'checked' : '','tab']" class="filterbox">
+      <div :class="[active === 3 ? 'checked' : '','tab']" class="filterbox">
         <div class="filter" :style="{color:showShai?'#F43131':''}" @click.stop="change">筛选</div>
         <template v-show="!showShai">
           <image :src="'/static/client/result/jx1.png'|domain" @click="changeCate" v-if="cate==2"
@@ -107,6 +107,7 @@
 <script>
 import { getProductList } from '@/api/product'
 import BaseMixin from '@/mixins/BaseMixin'
+import Storage from '@/common/Storage'
 
 export default {
   mixins: [BaseMixin],
@@ -258,28 +259,28 @@ export default {
       let data
       if (this.inputValue) {
         data = {
-          Users_ID: 'wkbq6nc2kc',
+
           Products_Name: this.inputValue,
           page: this.page,
           pageSize: this.pageSize
         }
       } else if (this.Cate_ID) {
         data = {
-          Users_ID: 'wkbq6nc2kc',
+
           Cate_ID: this.Cate_ID,
           page: this.page,
           pageSize: this.pageSize
         }
       } else {
         data = {
-          Users_ID: 'wkbq6nc2kc',
+
           page: this.page,
           pageSize: this.pageSize
         }
       }
-      if (item == 'sales') {
+      if (item === 'sales') {
         data.order_by = item
-      } else if (item == 'price') {
+      } else if (item === 'price') {
         data.order_by = item
         if (this.isSheng === 1) {
           data.order_by_direction = 'asc'

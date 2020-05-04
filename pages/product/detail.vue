@@ -1015,7 +1015,7 @@ export default {
         return
       }
       this.hasCart = true
-      if (this.detailData.order_temp_id || this.detailData.Products_IsVirtual == 1) {
+      if (this.detailData.order_temp_id || this.detailData.Products_IsVirtual === 1) {
         this.hasCart = false
       }
       this.$refs.mySku.show()

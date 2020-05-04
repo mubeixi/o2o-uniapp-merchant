@@ -239,8 +239,8 @@ var calendar = {
       return -1
     } // 若参数错误 返回-1
     var ms = m - 1
-    if (ms == 1) { // 2月份的闰平规律测算后确认返回28或29
-      return (((y % 4 == 0) && (y % 100 != 0) || (y % 400 == 0)) ? 29 : 28)
+    if (ms === 1) { // 2月份的闰平规律测算后确认返回28或29
+      return (((y % 4 === 0) && (y % 100 != 0) || (y % 400 === 0)) ? 29 : 28)
     } else {
       return (this.solarMonth[ms])
     }
@@ -254,8 +254,8 @@ var calendar = {
   toGanZhiYear: function (lYear) {
     var ganKey = (lYear - 3) % 10
     var zhiKey = (lYear - 3) % 12
-    if (ganKey == 0) ganKey = 10// 如果余数为0则为最后一个天干
-    if (zhiKey == 0) zhiKey = 12// 如果余数为0则为最后一个地支
+    if (ganKey === 0) ganKey = 10// 如果余数为0则为最后一个天干
+    if (zhiKey === 0) zhiKey = 12// 如果余数为0则为最后一个地支
     return this.Gan[ganKey - 1] + this.Zhi[zhiKey - 1]
   },
 
@@ -402,7 +402,7 @@ var calendar = {
       return -1// undefined转换为数字变为NaN
     }
     // 公历传参最下限
-    if (y == 1900 && m == 1 && d < 31) {
+    if (y === 1900 && m === 1 && d < 31) {
       return -1
     }
     // 未传参  获得当天
@@ -431,14 +431,14 @@ var calendar = {
     // 是否今天
     var isTodayObj = new Date()
     var isToday = false
-    if (isTodayObj.getFullYear() == y && isTodayObj.getMonth() + 1 == m && isTodayObj.getDate() == d) {
+    if (isTodayObj.getFullYear() === y && isTodayObj.getMonth() + 1 === m && isTodayObj.getDate() === d) {
       isToday = true
     }
     // 星期几
     var nWeek = objDate.getDay()
     var cWeek = this.nStr1[nWeek]
     // 数字表示周几顺应天朝周一开始的惯例
-    if (nWeek == 0) {
+    if (nWeek === 0) {
       nWeek = 7
     }
     // 农历年
@@ -449,7 +449,7 @@ var calendar = {
     // 效验闰月
     for (i = 1; i < 13 && offset > 0; i++) {
       // 闰月
-      if (leap > 0 && i == (leap + 1) && isLeap == false) {
+      if (leap > 0 && i === (leap + 1) && isLeap === false) {
         --i
         isLeap = true
         temp = this.leapDays(year) // 计算农历闰月天数
@@ -457,13 +457,13 @@ var calendar = {
         temp = this.monthDays(year, i)// 计算农历普通月天数
       }
       // 解除闰月
-      if (isLeap == true && i == (leap + 1)) {
+      if (isLeap === true && i === (leap + 1)) {
         isLeap = false
       }
       offset -= temp
     }
     // 闰月导致数组下标重叠取反
-    if (offset == 0 && leap > 0 && i == leap + 1) {
+    if (offset === 0 && leap > 0 && i === leap + 1) {
       if (isLeap) {
         isLeap = false
       } else {
@@ -497,11 +497,11 @@ var calendar = {
     // 传入的日期的节气与否
     var isTerm = false
     var Term = null
-    if (firstNode == d) {
+    if (firstNode === d) {
       isTerm = true
       Term = this.solarTerm[m * 2 - 2]
     }
-    if (secondNode == d) {
+    if (secondNode === d) {
       isTerm = true
       Term = this.solarTerm[m * 2 - 1]
     }
@@ -551,7 +551,7 @@ var calendar = {
     if (isLeapMonth && (leapMonth != m)) {
       return -1
     }// 传参要求计算该闰月公历 但该年得出的闰月与传参的月份并不同
-    if (y == 2100 && m == 12 && d > 1 || y == 1900 && m == 1 && d < 31) {
+    if (y === 2100 && m === 12 && d > 1 || y === 1900 && m === 1 && d < 31) {
       return -1
     }// 超出了最大极限值
     var day = this.monthDays(y, m)

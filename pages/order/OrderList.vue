@@ -66,7 +66,7 @@
           <span class="active" @click.stop="confirmOrder(order,index)">确认收货</span>
           <!-- @click="goPay(item)"跳转退款 -->
         </div>
-        <div class="btn-group" v-else-if="order.Order_Status==4 && order.Is_Commit == 0 && order.Is_Backup == 0">
+        <div class="btn-group" v-else-if="order.Order_Status==4 && order.Is_Commit === 0 && order.Is_Backup === 0">
           <span class="active" @click.stop="goPay(order)">立即评价</span>
         </div>
       </div>
@@ -193,7 +193,7 @@ export default {
       })
 
       this.totalCount = orderLsit.totalCount
-      if (item == 'init') {
+      if (item === 'init') {
         this.orderList = orderLsit.data
       } else {
         orderLsit.data.map(item => {

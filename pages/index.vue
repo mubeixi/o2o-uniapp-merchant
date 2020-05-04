@@ -213,7 +213,7 @@
                 <div
                   style="width: 150rpx;box-sizing: border-box;"
                   class="grid-item p-t-10 p-b-10"
-                  @click="go(item)"
+                  @click="bindCateClick(item)"
                   v-for="(item,idx2) in first.child"
                   :key="idx2"
                 >
@@ -276,7 +276,7 @@
                 <div
                   style="width: 150rpx;box-sizing: border-box;"
                   class="grid-item p-t-10 p-b-10"
-                  @click="go(item)"
+                  @click="bindCateClick(item)"
                   v-for="(item,idx) in first.child"
                   :key="idx"
                 >
@@ -462,9 +462,6 @@ export default {
     }
   },
   onLoad () {
-	  
-	  
-	  
     console.log(this.$store.getters['theme/pimaryColor'])
   },
   created () {
@@ -492,14 +489,14 @@ export default {
     //     socketMsgQueue.push(msg);
     //   }
     // }
-		this.systemInfo = uni.getSystemInfoSync()
+    this.systemInfo = uni.getSystemInfoSync()
 	  // #ifdef MP-WEIXIN
 	  this.menuButtonInfo = uni.getMenuButtonBoundingClientRect()
 	  const { height, top, left } = this.menuButtonInfo
 	  this.diyHeadHeight = top + height + (top - this.systemInfo.statusBarHeight) + 10
 	  this.diyHeadRight = this.systemInfo.windowWidth - left
 	  // #endif
-    console.log(this.systemInfo,this.menuButtonInfo)
+    console.log(this.systemInfo, this.menuButtonInfo)
     this._init_func()
   },
   methods: {
@@ -529,6 +526,10 @@ export default {
       } finally {
         hideLoading()
       }
+    },
+    bindCateClick (cate) {
+      console.log(cate)
+      this.$linkTo(`/pages/search/result?Cate_ID=${cate.Category_ID}`)
     },
     async loadMerchantList (idx) {
       // const cateId = this.liveNav[idx].Category_ID
@@ -642,7 +643,7 @@ export default {
   .page-wrap {
     background: #f8f8f8;
   }
-  
+
   .tab-container{
     position: relative;
     width: 750rpx;

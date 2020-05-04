@@ -1,5 +1,6 @@
 {
-	"pages": [{
+	"pages": [
+		{
 			"path": "pages/index",
 			"style": {
 				"navigationBarTextStyle": "light",
@@ -163,7 +164,7 @@
 			}
         },
 		{
-			"path" : "pages/user/person",
+			"path" : "pages/user/index",
 			"style": {
 				"navigationBarTitleText": "个人中心",
 				"navigationStyle": "custom"
@@ -222,87 +223,262 @@
             }
         }
     ],
-	"subPackages":[{
-			"root": "pagesA",
-			"name": "onther",
-			"pages":[{
-                    "path" : "user/EditPersonalMsg",
-                    "style": {
-                    	"navigationBarTitleText": "修改资料"
-                    }
-                }
-                ,{
-                    "path" : "user/PersonalMsg",
-                    "style": {
-                    	"navigationBarTitleText": "修改资料"
-                    }
-                },{
-					"path" : "user/AddressList",
-					"style": {
-						"navigationBarTitleText": "地址管理"
-					}
-				},{
-					"path" : "user/EditAddress",
-					"style": {
-						"navigationBarTitleText": "修改收货地址"
-					}
-				},{
-					"path" : "order/RefundList",
-					"style": {
-						"navigationBarTitleText": "退款售后"
-					}
+	"subPackages":[
+		{
+		"root": "pagesA",
+		"name": "onther",
+		"pages":[
+			{
+				"path" : "user/EditPersonalMsg",
+				"style": {
+					"navigationBarTitleText": "修改资料"
 				}
+			}
+			,{
+				"path" : "user/PersonalMsg",
+				"style": {
+					"navigationBarTitleText": "修改资料"
+				}
+			},{
+				"path" : "user/AddressList",
+				"style": {
+					"navigationBarTitleText": "地址管理"
+				}
+			},{
+				"path" : "user/EditAddress",
+				"style": {
+					"navigationBarTitleText": "修改收货地址"
+				}
+			},{
+				"path" : "order/RefundList",
+				"style": {
+					"navigationBarTitleText": "退款售后"
+				}
+			}
 
-                ,{
-                    "path" : "order/RefundDetail",
-                    "style": {
-                    	"navigationBarTitleText": "退款详情"
-                    }
-                }
-                ,{
-                    "path" : "user/TaskCenter",
-                    "style" : {
-						"navigationBarTitleText": "任务中心",
-						"app-plus": {
-							"titleNView": false
-						}
-					}
-                }
-                ,{
-                    "path" : "order/PublishComment",
-                    "style": {
-                    	"navigationBarTitleText": "发布评价"
-                    }
-                }
-                ,{
-                    "path" : "user/IntegralCenter",
-                    "style": {
-                    	"navigationBarTitleText": "积分",
-						"navigationBarBackgroundColor": "#ff5c33",
-						"navigationBarTextStyle": "white"
-                    }
-                },{
-					"path": "user/MyGift",
-					"style": {
-						"navigationBarTitleText": "赠品中心"
-					}
-				},
-				{
-					"path": "user/BalanceRecharge",
-					"style": {
-						"navigationBarTitleText": "余额充值"
-					}
-				},
-				{
-					"path": "user/BalanceCenter",
-					"style": {
-						"navigationBarTitleText": "余额中心",
-						"navigationBarBackgroundColor": "#ff5c33",
-						"navigationBarTextStyle": "white"
+			,{
+				"path" : "order/RefundDetail",
+				"style": {
+					"navigationBarTitleText": "退款详情"
+				}
+			}
+			,{
+				"path" : "user/TaskCenter",
+				"style" : {
+					"navigationBarTitleText": "任务中心",
+					"app-plus": {
+						"titleNView": false
 					}
 				}
-			]
-	}],
+			}
+			,{
+				"path" : "order/PublishComment",
+				"style": {
+					"navigationBarTitleText": "发布评价"
+				}
+			}
+			,{
+				"path" : "user/IntegralCenter",
+				"style": {
+					"navigationBarTitleText": "积分",
+					"navigationBarBackgroundColor": "#ff5c33",
+					"navigationBarTextStyle": "white"
+				}
+			},{
+				"path": "user/MyGift",
+				"style": {
+					"navigationBarTitleText": "赠品中心"
+				}
+			},
+			{
+				"path": "user/BalanceRecharge",
+				"style": {
+					"navigationBarTitleText": "余额充值"
+				}
+			},
+			{
+				"path": "user/BalanceCenter",
+				"style": {
+					"navigationBarTitleText": "余额中心",
+					"navigationBarBackgroundColor": "#ff5c33",
+					"navigationBarTextStyle": "white"
+				}
+			},
+			{
+				"path": "distributor/Main",
+				"style": {
+					"navigationBarTitleText": "",
+					"navigationBarBackgroundColor": "#f81111",
+					"navigationBarTextStyle": "white"
+				}
+			},
+			{
+				"path": "distributor/DistributorLevel",
+				"style": {
+					"navigationBarTitleText": "分销商等级"
+				}
+			},
+			{
+				"path" : "distributor/ProfitSum",
+				"style": {
+					"navigationBarTitleText": "累计利润"
+				}
+			},{
+				"path" : "distributor/SalesSum",
+				"style": {
+					"navigationBarTitleText": "累计销售"
+				}
+			},
+			{
+				"path": "distributor/Profile",
+				"style": {
+					"navigationBarTitleText": "分销商信息"
+				}
+			},
+			{
+				"path": "distributor/DistributorCenter",
+				"style": {
+					"navigationBarTitleText": "分销商信息"
+				}
+			},
+			{
+				"path": "distributor/DistributeAgreement",
+				"style": {
+					"navigationBarTitleText": "购买须知"
+				}
+			},
+			{
+				"path": "distributor/DisAgreementBefore",
+				"style": {
+					"navigationBarTitleText": "成为分销商"
+				}
+			},
+			{
+				"path": "distributor/Shareholder",
+				"style": {
+					"navigationBarTitleText": "股东"
+				}
+			},
+			{
+				"path": "distributor/MyTeamList",
+				"style": {
+					"navigationBarTitleText": "我的会员"
+				}
+			},
+			{
+				"path": "distributor/AddShareholder",
+				"style": {
+					"navigationBarTitleText": "股东申请"
+				}
+			},
+			{
+				"path": "distributor/RegionRecord",
+				"style": {
+					"navigationBarTitleText": "申请记录"
+				}
+			},
+			{
+				"path": "distributor/MyVip",
+				"style": {
+					"navigationBarTitleText": "我的会员"
+				}
+			},
+			{
+				"path": "distributor/RegionPay",
+				"style": {
+					"navigationBarTitleText": "区域代理支付"
+				}
+			},
+			{
+				"path": "distributor/ShareholderPay",
+				"style": {
+					"navigationBarTitleText": "股东支付"
+				}
+			},
+			{
+				"path": "distributor/PromotionAssist",
+				"style": {
+					"navigationBarTitleText": "推广小助手"
+				}
+			},
+			{
+				"path": "distributor/Withdrawal",
+				"style": {
+					"navigationBarTitleText": "提现"
+				}
+			},
+			{
+				"path": "distributor/WithdrawalMethod",
+				"style": {
+					"navigationBarTitleText": "提现方式",
+					"app-plus": {
+						"titleNView": false
+					}
+				}
+			},
+			{
+				"path": "distributor/AddWithdrawal",
+				"style": {
+					"navigationBarTitleText": "添加提现方式"
+				}
+			},
+			{
+				"path": "distributor/Region",
+				"style": {
+					"navigationBarTitleText": "区域代理"
+				}
+			},
+			{
+				"path": "distributor/Record",
+				"style": {
+					"navigationBarTitleText": "申请记录"
+				}
+			},
+			{
+				"path": "distributor/LeaderBoard",
+				"style": {
+					"navigationBarTitleText": "财富排行榜"
+				}
+			},
+			{
+				"path": "distributor/AddInformation",
+				"style": {
+					"navigationBarTitleText": "填写信息"
+				}
+			},
+			{
+				"path": "distributor/Qrcode",
+				"style": {
+					"navigationBarTitleText": "二维码"
+				}
+			},
+			{
+				"path":"distributor/ShareQrcode",
+				"style": {
+					"navigationBarTitleText": "分享海报"
+				}
+			},
+			{
+				"path": "distributor/MyTeam",
+				"style": {
+					"navigationBarTitleText": "我的团队"
+				}
+			},
+			{
+				"path": "distributor/Finance",
+				"style": {
+					"navigationBarTitleText": "财务明细"
+				}
+			},
+			{
+				"path": "distributor/Promotion",
+				"style": {
+					"navigationBarTitleText": "爵位晋升"
+				}
+			}
+		]
+		}
+	],
 	"preloadRule": {
 		"pages/index": {
 			"network": "all",
@@ -319,7 +495,8 @@
 		"borderStyle": "black",
 		"color": "#999999",
 		"selectedColor": "#26C78D",
-		"list": [{
+		"list": [
+			{
 				"pagePath": "pages/index",
 				"iconPath": "/static/tabbar/find.png",
 				"selectedIconPath": "/static/tabbar/find-a.png",
@@ -344,7 +521,7 @@
 				"text": "购物车"
 			},
 			{
-				"pagePath": "pages/user/person",
+				"pagePath": "pages/user/index",
 				"iconPath": "/static/tabbar/user.png",
 				"selectedIconPath": "/static/tabbar/user-a.png",
 				"text": "我的"

@@ -81,7 +81,7 @@ export default {
   },
   methods: {
     update (num) {
-      if (num == 2) {
+      if (num === 2) {
         if (this.userInfo.User_Birthday != 0) {
           uni.showToast({
             title: '生日不允许再次修改',

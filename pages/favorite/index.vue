@@ -99,7 +99,7 @@ export default {
   },
   computed: {
     selectes(){
-      if(this.activeIndex == 0) {
+      if(this.activeIndex === 0) {
       //  产品
         return this.goodsFavoriteList.filter(item=>item.is_check)
       }else {
@@ -108,10 +108,10 @@ export default {
       }
     },
     allCheck(){
-      if(this.activeIndex == 0) {
-        return this.goodsFavoriteList && this.goodsFavoriteList.filter(item=>item.is_check).length == this.goodsFavoriteList.length || false
+      if(this.activeIndex === 0) {
+        return this.goodsFavoriteList && this.goodsFavoriteList.filter(item=>item.is_check).length === this.goodsFavoriteList.length || false
       }else {
-        return this.storeFavoriteList && this.storeFavoriteList.filter(item=>item.is_check).length == this.storeFavoriteList.length || false
+        return this.storeFavoriteList && this.storeFavoriteList.filter(item=>item.is_check).length === this.storeFavoriteList.length || false
       }
     },
   },
@@ -171,7 +171,7 @@ export default {
     cancel(){
       let arr = []
       let list = []
-      if(this.activeIndex == 0) {
+      if(this.activeIndex === 0) {
         list = this.goodsFavoriteList.filter(item=>item.is_check)
         list.forEach(item=>arr.push(item.prod_id))
       }else {
@@ -179,7 +179,7 @@ export default {
         list.forEach(item=>arr.push(item.id))
       }
       let param = {}
-      if(this.activeIndex == 0) {
+      if(this.activeIndex === 0) {
         param.prod_id = JSON.stringify(arr)
       }else {
         param.biz_id = JSON.stringify(arr)
@@ -195,13 +195,13 @@ export default {
     taggleAllCheck () {
       this.isSelectAll = !this.isSelectAll
       if(this.isSelectAll) {
-        if(this.activeIndex == 0) {
+        if(this.activeIndex === 0) {
           this.goodsFavoriteList.map(item=>item.is_check = true)
         }else {
           this.storeFavoriteList.map(item=>item.is_check = true)
         }
       }else {
-        if(this.activeIndex == 0) {
+        if(this.activeIndex === 0) {
           this.goodsFavoriteList.map(item=>item.is_check = false)
         }else {
           this.storeFavoriteList.map(item=>item.is_check = false)
@@ -279,14 +279,14 @@ export default {
     this._init_func()
   },
   onReachBottom(){
-    if(this.activeIndex == 0 && this.is_pro_more) {
+    if(this.activeIndex === 0 && this.is_pro_more) {
     //  商品
       this.getProList().then(res=>{
         this.goodsFavoriteList = res
       }).catch(e=>{
         throw Error(e.msg || '获取收藏列表失败')
       })
-    }else if(this.activeIndex == 1 && this.is_biz_more) {
+    }else if(this.activeIndex === 1 && this.is_biz_more) {
       this.getStoreList().then(res=>{
         this.storeFavoriteList = res
       }).catch(e=>{

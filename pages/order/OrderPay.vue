@@ -10,12 +10,11 @@
         </div>
       </div>
     </div>
-    <!-- <page-title title="付款" :rightHidden="true" bgcolor="#ffffff"></page-title> -->
     <div class="state bgwhite">
       <layout-icon size="20" color="#F53636" type="icondengdai"></layout-icon>
       <span class="state-desc">等待买家付款</span>
     </div>
-    <div class="address bgwhite" v-if="orderInfo.Order_IsVirtual == 0">
+    <div class="address bgwhite" v-if="orderInfo.Order_IsVirtual === 0">
       <image class="loc_icon" :src="'/static/client/location.png'|domain" alt="" />
       <div class="add_msg">
         <div class="name">收货人：{{orderInfo.Address_Name}} <span>{{orderInfo.Address_Mobile}}</span></div>
@@ -384,7 +383,7 @@ export default {
       this.$refs.payLayer.show()
       return
       // 发票信息
-      if (this.need_invoice && this.invoice_info == '') {
+      if (this.need_invoice && this.invoice_info === '') {
         uni.showToast({
           title: '发票信息不能为空',
           icon: 'none'
@@ -602,18 +601,18 @@ export default {
       Storage.remove('pagefrom')
       Storage.remove('type')
 
-      if (res && res.code && res.code == 2) {
+      if (res && res.code && res.code === 2) {
         _that.payFailCall()
         return
       }
 
-      if (res && res.code && res.code == 1) {
+      if (res && res.code && res.code === 1) {
         toast('用户取消支付', 'none')
         return
       }
 
       // 头条小程序
-      if (res && res.code && res.code == 9) {
+      if (res && res.code && res.code === 9) {
         uni.showModal({
           title: '提示',
           content: '是否完成支付',
@@ -624,11 +623,11 @@ export default {
               if (Order_Type === 'pintuan') {
                 url:'/pages/order/pintuanOrderlist?index=2'
               } else {
-                if (pagefrom == 'check') {
+                if (pagefrom === 'check') {
                   uni.redirectTo({
                     url: '/pages/order/order?index=2'
                   })
-                } else if (pagefrom == 'gift') {
+                } else if (pagefrom === 'gift') {
                   uni.redirectTo({
                     url: '/pagesA/person/myGift?checked=1'
                   })
@@ -638,11 +637,11 @@ export default {
               if (Order_Type === 'pintuan') {
                 url:'/pages/order/pintuanOrderlist?index=1'
               } else {
-                if (pagefrom == 'check') {
+                if (pagefrom === 'check') {
                   uni.redirectTo({
                     url: '/pages/order/order?index=1'
                   })
-                } else if (pagefrom == 'gift') {
+                } else if (pagefrom === 'gift') {
                   uni.redirectTo({
                     url: '/pagesA/person/myGift?checked=0'
                   })
@@ -656,7 +655,7 @@ export default {
 
       // 0：支付成功 1：支付超时 2：支付失败 3：支付关闭 4：支付取消 9：订单状态开发者自行获取
 
-      if (res && res.code && res.code == 4) {
+      if (res && res.code && res.code === 4) {
         toast('用户取消支付', 'none')
         return
       }
@@ -673,7 +672,7 @@ export default {
         // 	url:'/pages/detail/groupSuccess?order_id='+_that.Order_ID
         // })
       } else {
-        if (pagefrom == 'check') {
+        if (pagefrom === 'check') {
           // 合单无法跳转
           if (this.mode === 'single') {
             uni.redirectTo({
@@ -688,7 +687,7 @@ export default {
           // uni.redirectTo({
           // 	url:'/pages/order/order?index=2&Order_Type='+Order_Type
           // })
-        } else if (pagefrom == 'gift') {
+        } else if (pagefrom === 'gift') {
           uni.redirectTo({
             url: '/pagesA/person/myGift?checked=1'
           })

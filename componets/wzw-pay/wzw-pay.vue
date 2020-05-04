@@ -258,7 +258,7 @@ export default {
       this.pay_type = name
       this.close()
 
-      if (name == 'remainder_pay') {
+      if (name === 'remainder_pay') {
         if (this.userInfo.hasOwnProperty('User_PayPassword') && !this.userInfo.User_PayPassword) {
           confirm({
             title: '提示',
@@ -267,7 +267,7 @@ export default {
             cancelText: '暂不设置'
           }).then(res => {
             uni.navigateTo({
-              url: '/pagesA/person/updateUserPsw?type=1&is_back=1'
+              url: '/pagesA/user/updateUserPsw?type=1&is_back=1'
             })
           }).catch(err => {
             error('请选择其他支付方式')
@@ -398,11 +398,11 @@ export default {
         }
 
         // 如果用户支付金额为0，即全部用余额
-        if (this.pay_money == 0) {
+        if (this.pay_money === 0) {
           this.pay_type = 'remainder_pay'
         }
         // 用户选择余额支付
-        if (this.pay_type == 'remainder_pay') {
+        if (this.pay_type === 'remainder_pay') {
           orderPay(payConf, {
             errtip: false,
             mask: true,
