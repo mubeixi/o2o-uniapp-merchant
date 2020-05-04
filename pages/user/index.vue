@@ -158,7 +158,7 @@ export default {
           className: 'iconfenxiao',
           name: '分销中心',
           color: '#69C276',
-          link: ''
+          link: '/pagesA/distributor/Main'
         }
       ],
       proList: []

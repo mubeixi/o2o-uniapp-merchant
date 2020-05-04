@@ -1,5 +1,5 @@
 <template>
-  <view @click="commonClick" class="boxSizing">
+  <view  class="boxSizing">
     <view class="zhezhao" v-if="isShow">
       <view class="zhezhaoView">
         <image :src="'/static/client/check/close.png'|domain" class="closeZ" @click="isShow=false"></image>

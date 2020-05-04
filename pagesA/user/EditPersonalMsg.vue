@@ -1,9 +1,9 @@
 <template>
   <view class="bgColor-white">
 
-    <input class="v_input" placeholder="修改用户名" type="text" v-if="type == 0" v-model="userInfo.User_Name"/>
-    <input class="v_input" placeholder="修改昵称" type="text" v-if="type == 1" v-model="userInfo.User_NickName"/>
-    <block v-if="type == 2">
+    <input class="v_input" placeholder="修改用户名" type="text" v-if="type === 0" v-model="userInfo.User_Name"/>
+    <input class="v_input" placeholder="修改昵称" type="text" v-if="type === 1" v-model="userInfo.User_NickName"/>
+    <block v-if="type === 2">
       <view class="area-item">
         <text class="area-label">请选择生日</text>
         <picker @change="bindDateChange" mode="date">
@@ -12,8 +12,8 @@
         </picker>
       </view>
     </block>
-    <input class="v_input" placeholder="修改邮箱" type="text" v-if="type == 3" v-model="userInfo.User_Email"/>
-    <block v-if="type == 4">
+    <input class="v_input" placeholder="修改邮箱" type="text" v-if="type === 3" v-model="userInfo.User_Email"/>
+    <block v-if="type === 4">
 
 
       <wzw-address :area="selectAreaId[2]" :city="selectAreaId[1]" :province="selectAreaId[0]" :town="selectAreaId[3]"
@@ -102,13 +102,13 @@ export default {
       })
     },
     save () {
-      if (this.type == 4) {
+      if (this.type === 4) {
         this.saveAddress()
         return
       }
 
       if (this.loading) return
-      if (this.type == 0) {
+      if (this.type === 0) {
         if (!this.userInfo.User_Name) {
           uni.showToast({
             title: '请输入用户名',
@@ -117,7 +117,7 @@ export default {
           return
         }
       }
-      if (this.type == 1) {
+      if (this.type === 1) {
         if (!this.userInfo.User_NickName) {
           uni.showToast({
             title: '请输入昵称',
@@ -126,7 +126,7 @@ export default {
           return
         }
       }
-      if (this.type == 3) {
+      if (this.type === 3) {
         if (!this.userInfo.User_Email) {
           uni.showToast({
             title: '请输入邮箱',
@@ -135,7 +135,7 @@ export default {
           return
         }
       }
-      if (this.type == 2) {
+      if (this.type === 2) {
         if (!this.dateValue) {
           uni.showToast({
             title: '请填写生日',

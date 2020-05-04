@@ -55,10 +55,10 @@ export const getLocation = async (vm) => {
     try {
       // #ifdef APP-PLUS
       //判断iOS上是否给予位置权限，有权限返回true，否则返回false
-      // if(plus.os.name == 'Android' && !permission.requestAndroidPermission('android.permission.ACCESS_FINE_LOCATION')){
+      // if(plus.os.name === 'Android' && !permission.requestAndroidPermission('android.permission.ACCESS_FINE_LOCATION')){
       //     reject(failOpt.osNotAllow)
       // }
-      // if(plus.os.name == 'iOS' && !permission.judgeIosPermission('location')){
+      // if(plus.os.name === 'iOS' && !permission.judgeIosPermission('location')){
       //     reject(failOpt.osNotAllow)
       // }
       if (!checkPermission) {

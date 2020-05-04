@@ -42,7 +42,7 @@
       </view>
     </view>
     <view style="height: 60rpx;"></view>
-    <circleTitle title="我的特权"></circleTitle>
+    <circle-title  title="我的特权"></circle-title>
     <view class="myPrivilege">
       <view class="view" v-for="(i,j) of pro.basic" :key="j">
         {{j+1}}、{{i.name}}
@@ -51,7 +51,7 @@
     <view style="height: 20rpx;width: 100%;background-color: #F8F8F8;">
 
     </view>
-    <circleTitle title="如何升级"></circleTitle>
+    <circle-title title="如何升级"></circle-title>
 
     <view class="ruhe">
       <view class="td" v-for="(it,ind) of pro.obtain" :key="ind">
@@ -81,10 +81,10 @@
 
 <script>
 
-import circleTitle from '@/componets/circleTitle/circleTitle'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import BaseMixin from '@/mixins/BaseMixin'
 import { getTaskCenter } from '@/api/customer'
+import CircleTitle from '@/componets/circle-title/circle-title'
 
 export default {
   mixins: [BaseMixin],
@@ -94,7 +94,8 @@ export default {
     }
   },
   components: {
-    circleTitle,
+    CircleTitle,
+
     LayoutIcon,
   },
   computed: {

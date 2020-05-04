@@ -22,7 +22,7 @@
     <div class="list style2" v-if="coupon.config.type== 2 && couponList.length>0">
       <div @click="getCoupon(item)" class="item" v-for="(item,idx) in couponList" :key="idx">
         <div class="c">
-          <p v-if="item.Coupon_UseType == 0">满￥{{item.Coupon_Condition}} {{item.Coupon_Discount+'折'}}</p>
+          <p v-if="item.Coupon_UseType === 0">满￥{{item.Coupon_Condition}} {{item.Coupon_Discount+'折'}}</p>
           <p v-else><span>满￥{{item.Coupon_Condition}} 减 {{item.Coupon_Cash+'元'}}</span></p>
         </div>
       </div>
@@ -30,7 +30,7 @@
     <div class="list style3" v-if="coupon.config.type== 3 && couponList.length>0">
       <div @click="getCoupon(item)" class="item" v-for="(item,idx) in couponList" :key="idx">
         <div class="c">
-          <p v-if="item.Coupon_UseType == 0">满￥{{item.Coupon_Condition}} {{item.Coupon_Discount+'折'}}</p>
+          <p v-if="item.Coupon_UseType === 0">满￥{{item.Coupon_Condition}} {{item.Coupon_Discount+'折'}}</p>
           <p v-else><span>满￥{{item.Coupon_Condition}} 减 {{item.Coupon_Cash+'元'}}</span></p>
         </div>
         <div class="r">
@@ -42,7 +42,7 @@
       <div @click="getCoupon(item)" class="item" v-for="(item,idx) in couponList" :key="idx">
         <div class="c">
           <div class="cwrap">
-            <p v-if="item.Coupon_UseType == 0">满￥{{item.Coupon_Condition}} {{item.Coupon_Discount+'折'}}</p>
+            <p v-if="item.Coupon_UseType === 0">满￥{{item.Coupon_Condition}} {{item.Coupon_Discount+'折'}}</p>
             <p v-else><span>满￥{{item.Coupon_Condition}} 减 {{item.Coupon_Cash+'元'}}</span></p>
           </div>
         </div>

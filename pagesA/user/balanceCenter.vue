@@ -233,7 +233,7 @@ export default {
         }
       }
 
-      if (this.current == 'charge') {
+      if (this.current === 'charge') {
         this.get_user_money_record(1)
       } else {
         this.get_user_money_record(2)
@@ -273,7 +273,7 @@ export default {
     },
     goWithdraw () {
       uni.navigateTo({
-        url: '/pagesA/fenxiao/withdrawal?form=2'
+        url: '/pagesA/distributor/Withdrawal?form=2'
       })
     },
     goFacePay () {
@@ -281,7 +281,7 @@ export default {
       if (this.userInfo.hasOwnProperty('User_PayPassword') && !this.userInfo.User_PayPassword) {
         confirm({ title: '提示', content: '该操作需要设置支付密码,是否前往设置?', confirmText: '去设置', cancelText: '暂不设置' }).then(res => {
           uni.navigateTo({
-            url: '/pagesA/person/updateUserPsw?type=1&is_back=1'
+            url: '/pagesA/user/updateUserPsw?type=1&is_back=1'
           })
         }).catch(err => { error('请选择其他支付方式') })
         return
@@ -364,7 +364,7 @@ export default {
         begin_time: this.beginTime,
         end_time: this.endTime
       }
-      if (item == 1) {
+      if (item === 1) {
         data.money_type = 1
       } else {
         data.money_type = 2

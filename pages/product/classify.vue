@@ -17,7 +17,7 @@
       </scroll-view>
       <scroll-view v-if="is_has_child" class="nav-right" scroll-y :style="'height:'+height+'px'" scroll-with-animation>
         <view v-for="(first,index) in classifyData" :key="index" class="box">
-          <block v-if="categoryActive == index">
+          <block v-if="categoryActive === index">
             <block v-for="(second,j) in first.child" :key="j">
 
               <!--<block v-if="is_has_child(classifyData)">-->
@@ -124,7 +124,7 @@ export default {
     is_has_child () {
       let rt = false
       for (const cate of this.easy_list) {
-        if (cate.level == 2) {
+        if (cate.level === 2) {
           rt = true
           break
         }
@@ -194,7 +194,7 @@ export default {
     categoryClickMain (index) {
       this.categoryActive = index
       // this.scrollTop = 0;
-      this.scrollTop == this.arr[index] ? this.scrollTop = this.scrollTop + 1 : this.scrollTop = this.arr[index]// 防止两次相等造成点击不触发滚动时间
+      this.scrollTop === this.arr[index] ? this.scrollTop = this.scrollTop + 1 : this.scrollTop = this.arr[index]// 防止两次相等造成点击不触发滚动时间
     },
     cart (item) {
       uni.navigateTo({

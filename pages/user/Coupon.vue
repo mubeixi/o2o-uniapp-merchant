@@ -97,7 +97,7 @@ export default {
       })
     },
     goIndex (i) {
-      if (i == '0') {
+      if (i === '0') {
         uni.switchTab({
           url: '/pages/index/index'
         })

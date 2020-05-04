@@ -88,7 +88,7 @@ export default {
       })
       let arr = {}
       activeData.map(item => {
-        if (item.id == this.activeId) {
+        if (item.id === this.activeId) {
           arr = item
         }
       })

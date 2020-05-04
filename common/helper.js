@@ -2,7 +2,7 @@ import {
   staticUrl
 } from './env'
 import {
-  error,confirm
+  error, confirm
 } from './fun'
 import {
   upload, getAccessToken
@@ -139,7 +139,7 @@ export const compareObj = (obj1, obj2) => {
  * @returns {[]}
  */
 export const getArrColumn = (arr, column) => {
-  if(typeof arr !=='object'){
+  if (typeof arr !== 'object') {
     throw new Error('第二个参数为一个数组或者对象')
   }
   // if (!Array.isArray(arr)) {
@@ -174,9 +174,6 @@ export const getArrColumn = (arr, column) => {
   }
   return rt
 }
-
-
-
 
 /**
  * 获取对象的属性个数
@@ -295,7 +292,41 @@ export const getDomain = (url) => {
   return url
 }
 
+/**
+ * 检测是否是分销商
+ * @param redirect
+ * @return {boolean}
+ */
+export const checkIsDistribute = (redirect, tip) => {
+  // 需要先确认是否已经登录了。。。。。
 
+  const userInfo = store.getters['user/userInfo']
+
+  if (userInfo.Is_Distribute !== 1) {
+    if (redirect) {
+      if (!tip) {
+        uni.navigateTo({
+          url: '/pages/distributor/DistributorCenter'
+        })
+        return
+      }
+
+      const initData = store.getters['system/initData']
+      const {commi_rename} = initData
+      const commi = commi_rename.commi
+      confirm({ title: '提示', content: `该操作需要是${commi},请问是否成为${commi}?`, confirmText: '确定', cancelText: '暂不成为' }).then(() => {
+        uni.navigateTo({
+          url: '/pages/distributor/DistributorCenter'
+        })
+      }).catch(() => {
+
+      })
+    }
+    return false
+  }
+
+  return true
+}
 
 /**
  * 检测是否登录
@@ -604,7 +635,7 @@ export const saveImageToDisk = async ({ fileUrl, type = 'local' }) => {
 }
 
 export const numberSort = function (arr, order_by) {
-  if (typeof order_by !== 'undefined' && order_by == 'desc') { // desc
+  if (typeof order_by !== 'undefined' && order_by === 'desc') { // desc
     return arr.sort(function (v1, v2) {
       return v2 - v1
     })
@@ -615,8 +646,25 @@ export const numberSort = function (arr, order_by) {
   }
 }
 
+//------------ 收货地址函数 -------------
+//数组转化
+export const array_change = function (arr) {
+  var array = [];
+  for (var i in arr) {
+    array.push({'id': i, 'name': arr[i]});
+  }
+  return array;
+}
 
-
+//获取数组下标  用于收货地址选择的显示
+export const get_arr_index = function (arr, id) {
+  for (var i in arr) {
+    if (arr[i]['id'] === id) {
+      return parseInt(i);
+    }
+  }
+}
+//--------------
 
 const Helper = {
   Object: {

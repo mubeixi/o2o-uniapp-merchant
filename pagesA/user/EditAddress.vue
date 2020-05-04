@@ -30,7 +30,7 @@
       <view class='xinxi set_default'>
         <checkbox-group name="Address_Is_Default" @change="changeCheck">
           <label class="checkbox label">
-            <checkbox class="checkbox" value="1" :checked="MyAddress.Address_Is_Default == 1"/>
+            <checkbox class="checkbox" value="1" :checked="MyAddress.Address_Is_Default === 1"/>
             设置默认地址
           </label>
         </checkbox-group>
@@ -160,7 +160,7 @@ export default {
       this.selectAreaId.push(Number(this.MyAddress.Address_City))
       this.selectAreaId.push(Number(this.MyAddress.Address_Area))
       this.selectAreaId.push(Number(this.MyAddress.Address_Town))
-      this.MyAddress.Address_Is_Default == 1 ? this.is_first_add = true : ''
+      this.MyAddress.Address_Is_Default === 1 ? this.is_first_add = true : ''
     },
   },
   onLoad: function (options) {

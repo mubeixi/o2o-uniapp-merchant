@@ -3,7 +3,7 @@
   <view class="myall">
     <radio-group @change="radioChange" class="radio-group">
       <label :class="!check_flag ? 'no-redio' : ''" :key="idx" class="radio-item" v-for="(item,idx) in addresslist">
-        <radio style="transform: scale(0.8)" class="radio-ele" :checked="item.Address_ID == check_address_id" :disabled="!check_flag" :value="idx" color="#F43131" v-if="check_flag" />
+        <radio style="transform: scale(0.8)" class="radio-ele" :checked="item.Address_ID === check_address_id" :disabled="!check_flag" :value="idx" color="#F43131" v-if="check_flag" />
         <view class="flex-main fz-12">
           <view class='flex-top'>
             <view class='name'>收货人：{{item.Address_Name}}</view>
@@ -14,7 +14,7 @@
             <block v-if="item.Address_Town_name">{{item.Address_Town_name}}</block>
             {{item.Address_Detailed}}
           </view>
-          <view class='flex-add default' v-if="item.Address_Is_Default == 1">默认地址</view>
+          <view class='flex-add default' v-if="item.Address_Is_Default === 1">默认地址</view>
         </view>
         <view class="flex-action">
           <layout-icon @click="deladdress(item.Address_ID)" class="m-b-6" size="20" color="#999" type="iconshanchu"></layout-icon>
@@ -66,7 +66,7 @@ export default {
         delta: 1
       })
       // return
-      // if (this.from_page == 'checkout') {
+      // if (this.from_page === 'checkout') {
       //   var pages = getCurrentPages() // 获取页面堆栈
       //   var prevPage = pages[pages.length - 2] // 上一页
       //   prevPage.setData({
@@ -76,7 +76,7 @@ export default {
       //   prevPage.$getAppWebview().back_address_id = address_id
       //   // #endif
       // }
-      // if (this.from_page == 'jifen') {
+      // if (this.from_page === 'jifen') {
       //   var pages = getCurrentPages() // 获取页面堆栈
       //   var prevPage = pages[pages.length - 2] // 上一页
       //   prevPage.setData({
@@ -99,7 +99,7 @@ export default {
                 // 更新收货地址列表
                 const addresslist = that.addresslist
                 for (const i in addresslist) {
-                  if (addresslist[i].Address_ID == del_address_id) {
+                  if (addresslist[i].Address_ID === del_address_id) {
                     addresslist.splice(i, 1)
                   }
                 }
@@ -159,7 +159,7 @@ export default {
     // 页面来源
     if (options.from) {
       this.from_page = options.from
-      if (options.from == 'jifen') {
+      if (options.from === 'jifen') {
         this.check_flag = true
       }
     }

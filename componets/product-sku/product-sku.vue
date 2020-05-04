@@ -18,7 +18,7 @@
             <div class="sku">
               {{item.sku=='mobile_prod_attr_name'?'规格':item.sku}}
             </div>
-            <div class="skuValue" v-if="gift == 0">
+            <div class="skuValue" v-if="gift === 0">
               <div class="skuview" :class="check_attr[item.sku]==index?'skuCheck':''" @click="selectAttr(index,item.sku)"  v-for="(mbx,index) of item.val" :key="index">{{mbx}}</div>
             </div>
             <div class="skuValue" v-else>
@@ -26,7 +26,7 @@
             </div>
           </div>
         </div>
-        <div class="numBer" v-if="gift == 0">
+        <div class="numBer" v-if="gift === 0">
           <div class="numBers">
             数量
           </div>

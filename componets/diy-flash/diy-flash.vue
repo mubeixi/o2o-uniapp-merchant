@@ -129,7 +129,7 @@ export default {
     itemw () {
       let full = this.fullWidth
 
-      if (this.goods.config.showmode == 'border-bgwhite') {
+      if (this.goods.config.showmode === 'border-bgwhite') {
         full -= 4// 4个边框
       }
 
@@ -158,7 +158,7 @@ export default {
       const ratio = this.goods.config.ratio ? this.goods.config.ratio : 1
       let num = 0
 
-      if (this.goods.config.showmode == 'border-bgwhite') {
+      if (this.goods.config.showmode === 'border-bgwhite') {
         full -= 4// 4个边框
       }
       if (this.goods.config.style === 2) {
@@ -188,7 +188,7 @@ export default {
     // itemw() {
     //   let full = this.fullWidth;
     //
-    //   if(this.goods.config.showmode == 'border-bgwhite'){
+    //   if(this.goods.config.showmode === 'border-bgwhite'){
     //     full -= 4;//4个边框
     //   }
     //
@@ -313,15 +313,15 @@ export default {
         case 2:
 
           // top = 0;
-          left = idx % 2 == 0 ? 0 : conf / 2
-          right = idx % 2 == 0 ? conf / 2 : 0
+          left = idx % 2 === 0 ? 0 : conf / 2
+          right = idx % 2 === 0 ? conf / 2 : 0
           break
       }
 
       // 6666
       if (idx === 0) top = 0
       // 这个需要是2
-      if (idx === 1 && this.goods.config.style == 2) top = 0
+      if (idx === 1 && this.goods.config.style === 2) top = 0
       return {
         marginTop: top + 'px',
         marginBottom: bottom + 'px',
