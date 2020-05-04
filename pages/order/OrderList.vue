@@ -24,13 +24,13 @@
         <div style="background-color: #F3F3F3;height: 20rpx;width: 100%;position: absolute;left: 0rpx;"></div>
         <div style="height: 20rpx;"></div>
         <div class="bizinfo">
-          <img class="img" :src="order.ShopLogo" alt=""/>
+          <img class="img" :src="order.ShopLogo" alt="" />
           <span class="bizname">{{order.ShopName}}</span>
           <span class="status">{{order.Order_Status_desc}}</span>
         </div>
         <div class="pro" v-for="(pro,ind) of order.prod_list" :key="ind">
           <div class="pro-div">
-            <img class="pro-img" :src="pro.prod_img"/>
+            <img class="pro-img" :src="pro.prod_img" />
           </div>
           <div class="pro-msg">
             <div class="pro-name">{{pro.prod_name}}</div>
@@ -52,7 +52,7 @@
           <span @click.stop="cancelOrder(order.prod_list,index)">取消订单</span>
           <span class="active" @click.stop="goPay(order)">立即付款</span>
         </div>
-        <div class="btn-group" v-else-if="order.Order_Status==2&&order.Order_Type != 'gift'">
+        <div class="btn-group" v-else-if="order.Order_Status==2&&order.Order_Type !== 'gift'">
           <span class="active" @click.stop="goPay(order)">申请退款</span>
         </div>
         <div class="btn-group" v-else-if="order.Order_Status==3">
@@ -60,9 +60,9 @@
             <div class="funicon icon-more1 icon font22 " style="color: #777;"></div>
             <div @click.stop="extendReceiptFn(order)" v-if="item.extend" class="tooltip">确认延迟</div>
           </div>
-          <span @click.stop="goLogistics(order)" v-if="order.Order_Shipping.shipping_id!=2">查看物流</span>
+          <span @click.stop="goLogistics(order)" v-if="order.Order_Shipping.shipping_id!==2">查看物流</span>
           <span @click.stop="goPay(order)" style="margin-left: 15rpx;"
-                v-if="order.Order_Shipping.shipping_id!=2">申请退款退货</span>
+                v-if="order.Order_Shipping.shipping_id!==2">申请退款退货</span>
           <span class="active" @click.stop="confirmOrder(order,index)">确认收货</span>
           <!-- @click="goPay(item)"跳转退款 -->
         </div>
@@ -71,8 +71,8 @@
         </div>
       </div>
     </block>
-
-
+    
+    
     <div class="defaults" v-else>
       <image :src="'/static/client/empty.png'|domain"></image>
     </div>
@@ -80,9 +80,9 @@
 
 </template>
 <script>
-import { getOrderList, cancelOrder, getOrderNum,delOrder } from '@/api/order'
+import { cancelOrder, delOrder, getOrderList, getOrderNum } from '@/api/order'
 import BaseMixin from '@/mixins/BaseMixin'
-import { error, toast } from '@/common/fun'
+import { error } from '@/common/fun'
 
 export default {
   mixins: [BaseMixin],
@@ -99,21 +99,21 @@ export default {
   },
   methods: {
     //跳转申请退款 支付   发表评论
-    goPay(item){
-      if(item.Order_Status==1){
+    goPay (item) {
+      if (item.Order_Status == 1) {
         uni.navigateTo({
-          url:"/pages/order/OrderPay?Order_ID="+item.Order_ID
+          url: '/pages/order/OrderPay?Order_ID=' + item.Order_ID,
         })
-      }else if(item.Order_Status==2||item.Order_Status==3){
+      } else if (item.Order_Status == 2 || item.Order_Status == 3) {
         uni.navigateTo({
-          url:'/pagesA/person/refund?Order_ID='+item.Order_ID
+          url: '/pagesA/person/refund?Order_ID=' + item.Order_ID,
         })
-      }else if(item.Order_Status==4){
+      } else if (item.Order_Status == 4) {
         uni.navigateTo({
-          url:'/pages/order/publishComment?Order_ID='+item.Order_ID
+          url: '/pages/order/publishComment?Order_ID=' + item.Order_ID,
         })
       }
-    
+      
     },
     //取消订单
     cancelOrder (item, index) {
@@ -140,26 +140,26 @@ export default {
         })
       }
     },
-    delOrder(item,index){
-      if(this.isLoading)return
-      this.isLoading=true;
-      let Order_ID;
-      for(let i in item){
-        if(item[i].Order_ID){
-          Order_ID=item[i].Order_ID;
+    delOrder (item, index) {
+      if (this.isLoading) return
+      this.isLoading = true
+      let Order_ID
+      for (let i in item) {
+        if (item[i].Order_ID) {
+          Order_ID = item[i].Order_ID
         }
       }
-      if(Order_ID){
-        delOrder({Order_ID}).then(res=>{
-          this.isLoading=false;
-          this.orderList.splice(index,1);
-          this.getOrderNum();
+      if (Order_ID) {
+        delOrder({ Order_ID }).then(res => {
+          this.isLoading = false
+          this.orderList.splice(index, 1)
+          this.getOrderNum()
           uni.showToast({
-            title:res.msg,
-            icon:"none"
+            title: res.msg,
+            icon: 'none',
           })
-        }).catch(e=>{
-          this.isLoading=false;
+        }).catch(e => {
+          this.isLoading = false
         })
       }
     },
@@ -191,7 +191,7 @@ export default {
       orderLsit.data.map(item => {
         item.Order_Shipping = JSON.parse(item.Order_Shipping)
       })
-
+      
       this.totalCount = orderLsit.totalCount
       if (item === 'init') {
         this.orderList = orderLsit.data
@@ -232,7 +232,7 @@ export default {
     margin-right: 10px;
     /*position:relative;*/
     z-index: 3;
-
+    
     .tooltip {
       position: absolute;
       background: #fff;
@@ -247,9 +247,9 @@ export default {
       border-radius: 5px;
       color: #444;
       font-size: 15px;
-
+      
       &::after {
-
+        
         content: " ";
         position: absolute;
         bottom: 100%; /* 提示工具头部 */
@@ -262,13 +262,13 @@ export default {
       }
     }
   }
-
+  
   .page-wrap {
     background-color: #ffffff !important;
     min-height: 100vh;
     padding-bottom: 50px;
   }
-
+  
   .titless {
     position: fixed;
     top: 0rpx;
@@ -276,7 +276,7 @@ export default {
     width: 100%;
     z-index: 999;
   }
-
+  
   .navs {
     z-index: 999;
     position: fixed;
@@ -294,13 +294,13 @@ export default {
     background: #fff;
     font-size: 28rpx;
     padding: 0 10px;
-
+    
     .nav-item {
       flex: 1;
       box-sizing: border-box;
       text-align: center;
       position: relative;
-
+      
       .jiaobiao {
         position: absolute;
         top: 24rpx;
@@ -317,64 +317,64 @@ export default {
         color: #F43131;
       }
     }
-
+    
     .nav-item.active {
       color: red;
       border-bottom: 2px solid red;
     }
   }
-
+  
   .order {
     padding: 0rpx 20rpx;
     background: #fff;
     position: relative;
-
+    
     .bizinfo {
       margin-top: 20rpx;
       display: flex;
       align-items: center;
       justify-content: space-between;
       width: 100%;
-
+      
       .img {
         width: 70rpx;
         height: 70rpx;
         border-radius: 50%;
         margin-right: 21rpx;
       }
-
+      
       .bizname {
         flex: 1;
         font-size: 28rpx;
       }
-
+      
       .status {
         color: red;
         font-size: 26rpx;
       }
     }
-
+    
     .pro {
       display: flex;
       margin-bottom: 50rpx;
       margin-top: 30rpx;
     }
-
+    
     .pro-msg {
       margin-left: 27rpx;
       width: 476rpx;
     }
-
+    
     .pro-div {
       width: 200rpx;
       height: 200rpx;
     }
-
+    
     .pro-img {
       width: 100%;
       height: 100%;
     }
-
+    
     .pro-name {
       font-size: 26rpx;
       margin-bottom: 20rpx;
@@ -385,7 +385,7 @@ export default {
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
     }
-
+    
     .attr {
       display: inline-block;
       height: 50rpx;
@@ -396,7 +396,7 @@ export default {
       padding: 0 20rpx;
       margin-bottom: 20rpx;
     }
-
+    
     .attrs {
       display: inline-block;
       height: 50rpx;
@@ -406,41 +406,41 @@ export default {
       padding: 0 20rpx;
       margin-bottom: 20rpx;
     }
-
+    
     .pro-price {
       color: #F43131;
       font-size: 36rpx;
     }
-
-
+    
+    
     .amount {
       font-size: 30rpx;
       float: right;
       color: #333;
     }
-
+    
     .total {
       font-size: 24rpx;
       padding: 40rpx 0rpx;
       margin-right: 15rpx;
-
+      
       .price {
         color: red;
         font-size: 30rpx;
-
+        
         span {
           font-size: 24rpx;
         }
       }
     }
-
+    
     .btn-group {
       display: flex;
       /*text-align: right;*/
       justify-content: flex-end;
       align-items: center;
       margin-bottom: 30rpx;
-
+      
       span {
         display: inline-block;
         //width: 150rpx;
@@ -452,11 +452,11 @@ export default {
         border-radius: 10rpx;
         color: #999;
         font-size: 26rpx;
-
+        
         &:last-child {
           margin-left: 14rpx;
         }
-
+        
         &.active {
           color: #fff;
           background: #F43131;
@@ -465,24 +465,24 @@ export default {
       }
     }
   }
-
+  
   .text-right {
     text-align: right;
   }
-
+  
   .defaults {
     margin: 0 auto;
     width: 640rpx;
     height: 480rpx;
     margin-top: 100rpx;
   }
-
+  
   .refuseApplyDialog {
     width: 560rpx;
     box-sizing: border-box;
     padding: 15px;
     font-size: 14px;
-
+    
     .reason {
       font-size: 14px;
       min-height: 200px;
@@ -492,7 +492,7 @@ export default {
       width: auto;
       padding: 10px;
     }
-
+    
     .inputs {
       font-size: 14px;
       border: 1px solid #E3E3E3;
@@ -502,19 +502,19 @@ export default {
       width: auto;
       margin-bottom: 10px;
     }
-
+    
     .reasons {
       min-height: 20px;
     }
-
+    
   }
-
+  
   .control {
     width: 100%;
     margin-top: 15px;
     display: flex;
     border-top: 1px solid #e4e4e4;
-
+    
     .action-btn {
       flex: 1;
       font-size: 16px;
@@ -523,9 +523,9 @@ export default {
       line-height: 40px;
       text-align: center;
     }
-
+    
   }
-
+  
   .my-huo {
     margin-top: 20px;
     margin-bottom: 10px;
@@ -535,14 +535,14 @@ export default {
     width: 100%;
     text-align: center;
   }
-
+  
   .my-content {
     font-size: 14px;
     width: 100%;
     text-align: center;
     color: #a1a1a1;
   }
-
+  
   .page-wrap /deep/ .popup-content {
     padding: 0px;
   }

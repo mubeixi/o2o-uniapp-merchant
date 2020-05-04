@@ -68,12 +68,12 @@ export default {
   mixins: [BaseMixin],
   components: {
     LayoutIcon,
-    LayoutAd
+    LayoutAd,
   },
   data () {
     return {
       goodsList: [],
-      adData: ['https://newo2o.bafangka.com/uploadfiles/wkbq6nc2kc/image/202004191033295234.png', 'https://newo2o.bafangka.com/uploadfiles/wkbq6nc2kc/image/202004191039274962.png', 'https://newo2o.bafangka.com/uploadfiles/wkbq6nc2kc/image/202004191044146586.jpg']
+      adData: ['https://newo2o.bafangka.com/uploadfiles/wkbq6nc2kc/image/202004191033295234.png', 'https://newo2o.bafangka.com/uploadfiles/wkbq6nc2kc/image/202004191039274962.png', 'https://newo2o.bafangka.com/uploadfiles/wkbq6nc2kc/image/202004191044146586.jpg'],
     }
   },
   methods: {
@@ -87,20 +87,20 @@ export default {
       } catch (e) {
         modal(e.message)
       }
-    }
+    },
   },
   created () {
     this._init_func()
-  }
+  },
 }
 </script>
 <style lang="scss" scoped>
-
+  
   .page-wrap {
     background: #f8f8f8;
     min-height: 100vh;
   }
-
+  
   .head {
     width: 750rpx;
     height: 436rpx;
@@ -110,33 +110,33 @@ export default {
     background-size: 100% 100%;
     background-position: center;
   }
-
+  
   .head-bg {
     width: 750rpx;
     height: 436rpx;
   }
-
+  
   .userInfo {
     position: absolute;
     top: 44rpx;
     left: 50%;
     transform: translateX(-50%);
     text-align: center;
-
+    
     .avatar {
       width: 84rpx;
       height: 84rpx;
       border-radius: 50%;
       overflow: hidden;
     }
-
+    
     .nickname {
       /*background: rgba(255,255,255,.3);*/
       color: #fff;
       padding: 6px 9px;
     }
   }
-
+  
   .count {
     z-index: 2;
     position: absolute;
@@ -152,12 +152,12 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-
+    
     .price-selling {
       color: red !important;
     }
   }
-
+  
   .notify {
     position: absolute;
     bottom: 54rpx;
@@ -172,41 +172,41 @@ export default {
     font-size: 12px;
     z-index: 3;
   }
-
+  
   .goods-list {
     padding: 25rpx;
-
+    
     .goods-item {
       display: flex;
       margin-bottom: 30rpx;
       align-items: center;
-
+      
       .goods-item-cover {
         width: 300rpx;
         height: 300rpx;
         background: #f2f2f2;
       }
-
+      
       .goods-item-info {
         flex: 1;
         height: 300rpx;
         padding-left: 20rpx;
         position: relative;
-
+        
         .title {
           line-height: 20px;
           font-size: 14px;
           color: #333;
         }
-
+        
         .sale {
           margin: 40rpx 0 30rpx;
           color: #666;
           font-size: 12px;
         }
-
+        
         .actions {
-
+          
           .share {
             position: absolute;
             right: 0;

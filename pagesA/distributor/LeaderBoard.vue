@@ -1,6 +1,6 @@
 <template>
   <view class="wrap">
-
+    
     <view class="all">
       <view class="hahas" :class="index==0?'checked':''" @click="change(0)">
         总部{{commi_rename.commi}}
@@ -10,7 +10,7 @@
       </view>
     </view>
     <!--		<view style="height: 95rpx;">-->
-
+    
     <!--		</view>-->
     <view class="mains">
       <view class="paiming">
@@ -104,7 +104,7 @@
           <text>{{item.Total_Income}}</text>
         </view>
       </view>
-
+      
       <view class="contents" v-if="rank_config==0&&index==0">总部排行未公开</view>
     </view>
   </view>
@@ -112,7 +112,6 @@
 
 <script>
 import { getBalanceRank } from '@/api/customer'
-import { mapGetters } from 'vuex'
 import BaseMixin from '@/mixins/BaseMixin'
 
 export default {
@@ -126,20 +125,20 @@ export default {
       pro: [],
       myInfo: '',
       totalCount: 0,
-      rank_config: 0
+      rank_config: 0,
     }
   },
   computed: {
     initData () {
       return this.$store.state.system.initData
     },
-    commi_rename(){
-      try{
+    commi_rename () {
+      try {
         return this.initData.commi_rename
-      }catch (e) {
+      } catch (e) {
         return {}
       }
-    }
+    },
   },
   onShow () {
     this.page = 1
@@ -167,7 +166,7 @@ export default {
     getPro () {
       const data = {
         page: this.page,
-        pageSize: this.pageSize
+        pageSize: this.pageSize,
       }
       if (this.isFriend) {
         data.is_my_friend = 1
@@ -180,10 +179,10 @@ export default {
         this.myInfo = res.data.my_rank
         this.rank_config = res.data.rank_config.HIncomelist_Open
       }).catch(e => {
-
+      
       })
-    }
-  }
+    },
+  },
 }
 </script>
 
@@ -191,160 +190,160 @@ export default {
   view, div {
     box-sizing: border-box;
   }
-
+  
   .wrap {
-    padding-top: 95rpx;
+    padding-top: 95 rpx;
     background: white !important;
     min-height: 100vh;
   }
-
+  
   .all {
-    height: 95rpx;
-    width: 750rpx;
-    padding-left: 133rpx;
-    padding-right: 133rpx;
+    height: 95 rpx;
+    width: 750 rpx;
+    padding-left: 133 rpx;
+    padding-right: 133 rpx;
     display: flex;
     justify-content: space-between;
-    border-bottom: 1rpx solid #ECE8E8;
+    border-bottom: 1 rpx solid #ECE8E8;
     position: fixed;
-    top: 0rpx;
-    left: 0rpx;
+    top: 0 rpx;
+    left: 0 rpx;
     background-color: #FFFFFF;
     z-index: 999;
-
+    
     .hahas {
-      width: 202rpx;
-      height: 95rpx;
-      line-height: 95rpx;
+      width: 202 rpx;
+      height: 95 rpx;
+      line-height: 95 rpx;
       position: relative;
       text-align: center;
-      font-size: 30rpx;
+      font-size: 30 rpx;
       color: #333333;
     }
-
+    
     .checked {
       color: #F43131 !important;
     }
-
+    
     .checked:after {
       content: '';
       position: absolute;
-      bottom: 0rpx;
-      left: 0rpx;
-      width: 202rpx;
-      height: 4rpx;
+      bottom: 0 rpx;
+      left: 0 rpx;
+      width: 202 rpx;
+      height: 4 rpx;
       background-color: #F43131;
     }
   }
-
+  
   .mains {
-    width: 710rpx;
+    width: 710 rpx;
     margin: 0 auto;
-    margin-top: 40rpx;
-    box-shadow: 0px 0px 18rpx 0px rgba(0, 0, 0, 0.18);
-    border-radius: 10rpx;
-
+    margin-top: 40 rpx;
+    box-shadow: 0px 0px 18 rpx 0px rgba(0, 0, 0, 0.18);
+    border-radius: 10 rpx;
+    
     .paiming {
-      padding-top: 38rpx;
-      padding-bottom: 38rpx;
-      padding-left: 33rpx;
+      padding-top: 38 rpx;
+      padding-bottom: 38 rpx;
+      padding-left: 33 rpx;
       display: flex;
-
+      
       .pai1, .pai2, .pai3 {
-        font-size: 28rpx;
-        height: 26rpx;
-        line-height: 26rpx;
+        font-size: 28 rpx;
+        height: 26 rpx;
+        line-height: 26 rpx;
         color: #333333;
       }
-
+      
       .pai1 {
-        width: 320rpx;
+        width: 320 rpx;
       }
-
+      
       .pai2 {
-        width: 150rpx;
+        width: 150 rpx;
       }
-
+      
       .pai3 {
-        width: 207rpx;
+        width: 207 rpx;
         text-align: center;
       }
     }
-
+    
     .contents {
       height: 52px;
       line-height: 52px;
       font-size: 16px;
       text-align: center;
     }
-
+    
     .content {
-      width: 690rpx;
-      height: 103rpx;
-      margin-left: 10rpx;
-      margin-right: 10rpx;
-      border-bottom: 1rpx solid #ECE8E8;
+      width: 690 rpx;
+      height: 103 rpx;
+      margin-left: 10 rpx;
+      margin-right: 10 rpx;
+      border-bottom: 1 rpx solid #ECE8E8;
       display: flex;
       align-items: center;
-
+      
       .contentLeft {
-        width: 326rpx;
-        margin-left: 17rpx;
+        width: 326 rpx;
+        margin-left: 17 rpx;
         display: flex;
         align-items: center;
-
+        
         .ming {
-          width: 41rpx;
-          height: 56rpx;
-          line-height: 56rpx;
-          margin-right: 24rpx;
+          width: 41 rpx;
+          height: 56 rpx;
+          line-height: 56 rpx;
+          margin-right: 24 rpx;
           text-align: center;
           color: #777777;
-          font-size: 32rpx;
-
+          font-size: 32 rpx;
+          
           .image {
             width: 100%;
             height: 100%;
           }
         }
-
+        
         .info {
-          width: 53rpx;
-          height: 53rpx;
+          width: 53 rpx;
+          height: 53 rpx;
           border-radius: 50%;
-          margin-right: 14rpx;
+          margin-right: 14 rpx;
           overflow: hidden;
-
+          
           .image {
             width: 100%;
             height: 100%;
           }
         }
-
+        
         .nickName {
-          height: 53rpx;
-          width: 180rpx;
+          height: 53 rpx;
+          width: 180 rpx;
           overflow: hidden;
-          line-height: 53rpx;
-          font-size: 24rpx;
+          line-height: 53 rpx;
+          font-size: 24 rpx;
           color: #777777;
         }
       }
-
+      
       .contentCenter {
-        width: 150rpx;
-        font-size: 24rpx;
+        width: 150 rpx;
+        font-size: 24 rpx;
         color: #777777;
       }
-
+      
       .contentRight {
-        width: 207rpx;
+        width: 207 rpx;
         text-align: center;
-        font-size: 22rpx;
+        font-size: 22 rpx;
         color: #F43131;
-
+        
         text {
-          font-size: 26rpx;
+          font-size: 26 rpx;
         }
       }
     }

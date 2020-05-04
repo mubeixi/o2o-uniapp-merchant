@@ -20,7 +20,7 @@
                :style="{width:itemw,height:itemH,backgroundSize:goods.config.fill?goods.config.fill:'cover',backgroundImage:'url('+domainFunc(item.ImgPath)+')'}">
             <div v-show="goods.config.attr && goods.config.attr.tag.show"
                  :class="goods.config.attr.tag.style"
-                 v-if="['new','hot'].indexOf(goods.config.attr.tag.style)!=-1" class="tag">
+                 v-if="['new','hot'].indexOf(goods.config.attr.tag.style)!==-1" class="tag">
               {{goods.config.attr.tag.style=='hot'?'hot':'new'}}
             </div>
             <div v-show="goods.config.attr.tag.show" v-else class="tag img"><img
@@ -35,7 +35,7 @@
               <div v-show="goods.config.attr.desc.show" class="font12 graytext desc">
                 {{item.Products_BriefDescription||'暂无介绍'}}
               </div>
-              <div v-if="goods.config.style!=1" v-show="goods.config.attr.price.show" class="price"><span
+              <div v-if="goods.config.style!==1" v-show="goods.config.attr.price.show" class="price"><span
                 class="graytext2 font12">抢购价 </span><span class="sign">￥</span><span
                 style="font-weight: 600">{{item.price}}</span><span
                 class="graytext2 market-price font12"> ￥{{item.Products_PriceX}} </span>
@@ -61,18 +61,11 @@
   </div>
 </template>
 <script>
-import {
-  getSpikeProd
-} from '@/api/product'
-import {
-  getDomain,
-  goProductDetail,
-  getCountdownFunc
-} from '@/common/helper'
+import { getSpikeProd } from '@/api/product'
+import { getCountdownFunc, getDomain, goProductDetail } from '@/common/helper'
 
-import {lazyImgUrl} from '@/common'
+import { lazyImgUrl } from '@/common'
 import { linkTo } from '@/common/fun'
-
 
 export default {
   name: 'DiyFlash',

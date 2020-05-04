@@ -19,12 +19,7 @@
 </template>
 
 <script>
-import {
-  toast, error
-} from '@/common/fun'
-import {
-  chooseImageByPromise, uploadImages, getDomain, getArrColumn
-} from '@/common/helper'
+import { chooseImageByPromise, getArrColumn, getDomain, uploadImages } from '@/common/helper'
 import { Exception } from '@/common/Exception'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 

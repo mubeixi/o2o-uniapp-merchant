@@ -4,7 +4,7 @@
       <!-- #ifdef H5||APP-PLUS -->
       <div v-html="formatRichTexts(pro.dis_config.Dis_Agreement)" class="p_detail_des"></div>
       <!-- #endif -->
-
+      
       <!-- #ifdef MP -->
       <rich-text :nodes="pro.dis_config.Dis_Agreement|formatRichText" class="p_detail_des"></rich-text>
       <!-- #endif -->
@@ -28,10 +28,10 @@ export default {
       pro: {
         dis_config: {
           Dis_Agreement_btn: {
-            btn_name: ''
-          }
-        }
-      }
+            btn_name: '',
+          },
+        },
+      },
     }
   },
   onLoad () {
@@ -40,7 +40,7 @@ export default {
   methods: {
     goDis () {
       uni.navigateTo({
-        url: '/pagesA/distributor/DistributorCenter'
+        url: '/pagesA/distributor/DistributorCenter',
       })
     },
     disApplyInit () {
@@ -55,12 +55,12 @@ export default {
         match = match.replace(/style="[^"]+"/gi, '')// .replace(/style='[^']+'/gi, '');
         match = match.replace(/width="[^"]+"/gi, '')// .replace(/width='[^']+'/gi, '');
         match = match.replace(/height="[^"]+"/gi, '')// .replace(/height='[^']+'/gi, '');
-
+        
         // 图片app不支持
         // #ifdef APP-PLUS
         match = match.replace(/!*.webp/gi, '')
         // #endif
-
+        
         return match
       })
       newContent = newContent.replace(/<div[^>]*>/gi, function (match, capture) {
@@ -75,14 +75,16 @@ export default {
         match = match.replace(/width:[^;]+;/gi, 'width:100%;').replace(/width:[^;]+;/gi, 'width:100%;')
         return match
       })
-
+      
       newContent = newContent.replace(/<br[^>]*\/>/gi, '')
       newContent = newContent.replace(/\<img/gi, '<img style="width:100%;float:left;"')
       newContent = newContent.replace(/src="\/\//gi, 'src="http://')
       // newContent = newContent.replace(/>[\s]*</gi, "><");
       return newContent
     },
-    ...mapActions(['getInitData'])
+    ...mapActions({
+      getInitData: 'system/loadInitData',
+    }),
   },
   filters: {
     formatRichText (html) { // 控制小程序中图片大小
@@ -105,51 +107,51 @@ export default {
         match = match.replace(/width:[^;]+;/gi, 'width:100%;').replace(/width:[^;]+;/gi, 'width:100%;')
         return match
       })
-
+      
       newContent = newContent.replace(/<br[^>]*\/>/gi, '')
       newContent = newContent.replace(/\<img/gi, '<img style="width:100%;float:left;"')
       // newContent = newContent.replace(/>[\s]*</gi, "><");
-
+      
       return newContent
-    }
+    },
   },
   async created () {
     const initData = await this.getInitData()
     uni.setNavigationBarTitle({
-      title: '成为' + initData.commi_rename.commi
+      title: '成为' + initData.commi_rename.commi,
     })
-  }
+  },
 }
 </script>
 
 <style lang="scss" scoped>
   .btn {
-    width: 750rpx;
-    height: 90rpx;
-    font-size: 30rpx;
+    width: 750 rpx;
+    height: 90 rpx;
+    font-size: 30 rpx;
     text-align: center;
-    line-height: 90rpx;
-    margin-top: 40rpx;
+    line-height: 90 rpx;
+    margin-top: 40 rpx;
   }
-
+  
   .pro_detail {
     .p_detail_des {
       width: 100%;
-      font-size: 28rpx;
+      font-size: 28 rpx;
       color: #999;
-
+      
       img {
         width: 100% !important;
       }
     }
   }
-
+  
   .p_detail_title {
-    padding: 30rpx 20rpx;
+    padding: 30 rpx 20 rpx;
     color: #333;
-    font-size: 30rpx;
+    font-size: 30 rpx;
   }
-
+  
   /* 商品详情 end */
   /* 遮罩层 */
   .modal {

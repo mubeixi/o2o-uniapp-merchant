@@ -60,7 +60,7 @@
 </template>
 <script>
 import { getFlashSaleList } from '../../common/fetch'
-import { lazyImgUrl, goProductDetail } from '../../common'
+import { goProductDetail, lazyImgUrl } from '../../common'
 
 import { createEmptyArray, getCountdownFunc } from '../../common/tool'
 import { getDomain } from '@/common/helper'

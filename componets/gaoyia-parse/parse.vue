@@ -19,10 +19,10 @@
 </template>
 
 <script>
-	import HtmlToJson from './libs/html2json';
-	import wxParseTemplate from './components/wxParseTemplate0';
+import HtmlToJson from './libs/html2json'
+import wxParseTemplate from './components/wxParseTemplate0'
 
-	export default {
+export default {
 		name: 'uParse',
 		props: {
 			// user-select:none;

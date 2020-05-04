@@ -55,10 +55,7 @@
   </div>
 </template>
 <script>
-import {
-  getCoupon, getUserCoupon
-} from '@/api/customer'
-import { mapGetters } from 'vuex'
+import { getCoupon, getUserCoupon } from '@/api/customer'
 
 /**
  * 某个值是否在指定数组内存在（指定键值)

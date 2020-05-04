@@ -49,13 +49,17 @@ export default {
       Shop_Announce: '', // 自定义分享与
       imgs: [],
       arr: [],
-      tem_Shop_Logo: '' // 临时图片
+      tem_Shop_Logo: '', // 临时图片
     }
   },
   onLoad () {
     this.getUserDisInfo()
   },
-  computed: {},
+  computed: {
+    initData () {
+      return this.$store.state.system.initData
+    },
+  },
   methods: {
     getUserDisInfo () {
       getUserDisInfo({}).then(res => {
@@ -76,10 +80,10 @@ export default {
         const ossUrls = await uploadImages({ imgs }).catch(() => {
           throw Error('文件上传失败')
         })
-
+        
         this.Shop_Logo = ossUrls[0]
         this.tem_Shop_Logo = ossUrls[0]
-
+        
         // 是否可以提交
         this.isSubmit = true
       } catch (e) {
@@ -94,30 +98,30 @@ export default {
       updateUserDisInfo({
         Shop_Name: this.Shop_Name,
         Shop_Logo: this.tem_Shop_Logo,
-        Shop_Announce: this.Shop_Announce
+        Shop_Announce: this.Shop_Announce,
       }).then(res => {
         uni.showToast({
           title: '修改成功',
-          icon: 'success'
+          icon: 'success',
         })
         setTimeout(function () {
           uni.navigateTo({
-            url: '/pages/distributor/Main'
+            url: '/pages/distributor/Main',
           })
         }, 1000)
       })
     },
-    ...mapActions(['getInitData'])
+    ...mapActions(['getInitData']),
   },
   onShow: function () {
-
+  
   },
   async created () {
-    const initData = await this.getInitData()
+    const initData = initData
     uni.setNavigationBarTitle({
-      title: initData.commi_rename.commi + '信息'
+      title: initData.commi_rename.commi + '信息',
     })
-  }
+  },
 }
 </script>
 
@@ -126,19 +130,19 @@ export default {
     background-color: #FFFFFF !important;
     min-height: 100vh;
   }
-
+  
   .user-info {
-    padding-top: 47rpx;
+    padding-top: 47 rpx;
     text-align: center;
-    font-size: 26rpx;
+    font-size: 26 rpx;
     color: #777;
-
+    
     .user-avator {
       position: relative;
-      width: 120rpx;
-      height: 120rpx;
+      width: 120 rpx;
+      height: 120 rpx;
       margin: 0 auto;
-
+      
       .xiangji {
         width: 100%;
         height: 100%;
@@ -146,75 +150,75 @@ export default {
         top: 0;
         left: 0;
         z-index: 10;
-        border-radius: 60rpx;
+        border-radius: 60 rpx;
         background-color: rgba(0, 0, 0, .4);
         background-repeat: no-repeat;
         background-position: center center;
-        background-size: 42rpx 34rpx;
+        background-size: 42 rpx 34 rpx;
       }
     }
-
+    
     .imgs {
       width: 100%;
       height: 100%;
-      border-radius: 60rpx;
-      margin-bottom: 14rpx;
+      border-radius: 60 rpx;
+      margin-bottom: 14 rpx;
     }
-
+    
     .change {
-      margin-top: 14rpx;
+      margin-top: 14 rpx;
     }
   }
-
+  
   .content {
-    font-size: 30rpx;
-    margin-top: 57rpx;
+    font-size: 30 rpx;
+    margin-top: 57 rpx;
     color: #333;
-    padding-left: 19rpx;
-
+    padding-left: 19 rpx;
+    
     .c_1 {
       display: flex;
       align-items: center;
-      margin-bottom: 39rpx;
-
+      margin-bottom: 39 rpx;
+      
       .inputs {
-        width: 600rpx;
-        height: 62rpx;
-        border: 1rpx solid rgba(231, 231, 231, 1);
-        margin-left: 23rpx;
-        padding-left: 20rpx;
+        width: 600 rpx;
+        height: 62 rpx;
+        border: 1 rpx solid rgba(231, 231, 231, 1);
+        margin-left: 23 rpx;
+        padding-left: 20 rpx;
         box-sizing: border-box;
       }
     }
-
+    
     .c_2 {
       display: flex;
       align-items: center;
-
+      
       .text-content {
-        width: 600rpx;
-        height: 170rpx;
-        border: 1rpx solid rgba(231, 231, 231, 1);
-        margin-left: 23rpx;
-        padding-left: 20rpx;
-        padding-top: 20rpx;
+        width: 600 rpx;
+        height: 170 rpx;
+        border: 1 rpx solid rgba(231, 231, 231, 1);
+        margin-left: 23 rpx;
+        padding-left: 20 rpx;
+        padding-top: 20 rpx;
         box-sizing: border-box;
       }
     }
   }
-
+  
   .submit {
-    height: 80rpx;
-    width: 640rpx;
+    height: 80 rpx;
+    width: 640 rpx;
     background: #F43131;
     color: #fff;
-    font-size: 30rpx;
-    margin: 179rpx auto 0;
-    border-radius: 10rpx;
+    font-size: 30 rpx;
+    margin: 179 rpx auto 0;
+    border-radius: 10 rpx;
     text-align: center;
-    line-height: 80rpx;
+    line-height: 80 rpx;
   }
-
+  
   .cannot {
     background: #999;
   }

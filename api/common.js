@@ -1,6 +1,4 @@
-import {
-  fetch
-} from '@/common/request'
+import { fetch } from '@/common/request'
 
 // 优惠券列表
 export const getCouponList = (param, options) => fetch({

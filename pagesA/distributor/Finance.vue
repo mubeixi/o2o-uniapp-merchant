@@ -1,6 +1,6 @@
 <template>
   <view class="team">
-
+    
     <view class="nav">
       <view class="views" :class="index==0?'checked':''" @click="change(0)">
         分销
@@ -69,7 +69,7 @@ export default {
       pageSize: 5,
       pro: [],
       index: -1,
-      totalCount: 0
+      totalCount: 0,
     }
   },
   onShow () {
@@ -85,7 +85,7 @@ export default {
     uni.getSystemInfo({
       success: function (res) {
         that.height = res.screenHeight - 68
-      }
+      },
     })
   },
   onReachBottom () {
@@ -105,7 +105,7 @@ export default {
     geDetail () {
       const data = {
         page: this.page,
-        pageSize: this.pageSize
+        pageSize: this.pageSize,
       }
       if (this.index === 0) {
         getDisRecordList(data).then(res => {
@@ -114,7 +114,7 @@ export default {
           }
           this.totalCount = res.totalCount
         }).catch(e => {
-
+        
         })
       } else if (this.index === 1) {
         getNobiRecordList(data).then(res => {
@@ -123,7 +123,7 @@ export default {
           }
           this.totalCount = res.totalCount
         }).catch(e => {
-
+        
         })
       } else if (this.index === 2) {
         getShaRecordList(data).then(res => {
@@ -132,7 +132,7 @@ export default {
           }
           this.totalCount = res.totalCount
         }).catch(e => {
-
+        
         })
       } else if (this.index === 4) {
         getManageRecordList(data).then(res => {
@@ -148,11 +148,11 @@ export default {
           }
           this.totalCount = res.totalCount
         }).catch(e => {
-
+        
         })
       }
-    }
-  }
+    },
+  },
 }
 </script>
 
@@ -161,83 +161,83 @@ export default {
     background-color: #F8F8F8 !important;
     min-height: 100vh;
     box-sizing: border-box;
-
+    
     .nav {
-      padding: 0rpx 70rpx;
-      padding-left: 0rpx;
-      padding-right: 0rpx;
-      height: 104rpx;
-      line-height: 104rpx;
+      padding: 0 rpx 70 rpx;
+      padding-left: 0 rpx;
+      padding-right: 0 rpx;
+      height: 104 rpx;
+      line-height: 104 rpx;
       align-items: center;
       box-sizing: border-box;
-      width: 750rpx;
+      width: 750 rpx;
       display: flex;
       position: fixed;
       background-color: #F8F8F8;
       justify-content: space-around;
       z-index: 999;
-      top: 0rpx;
-      left: 0rpx;
-
+      top: 0 rpx;
+      left: 0 rpx;
+      
       .views {
-        width: 150rpx;
-        height: 65rpx;
-        line-height: 65rpx;
-        font-size: 30rpx;
+        width: 150 rpx;
+        height: 65 rpx;
+        line-height: 65 rpx;
+        font-size: 30 rpx;
         color: #333333;
         text-align: center;
         position: relative;
       }
-
+      
       .checked {
         &:after {
           content: '';
           position: absolute;
-          bottom: 0rpx;
-          right: 0rpx;
-          height: 4rpx;
-          width: 132rpx;
+          bottom: 0 rpx;
+          right: 0 rpx;
+          height: 4 rpx;
+          width: 132 rpx;
           background-color: #F43131;
         }
       }
-
+      
       .marginLeft {
-        margin-left: 107rpx;
-        margin-right: 107rpx;
+        margin-left: 107 rpx;
+        margin-right: 107 rpx;
       }
     }
-
+    
     .order {
-      width: 710rpx;
+      width: 710 rpx;
       margin: 0 auto;
-      padding: 35rpx 0rpx 40rpx 34rpx;
+      padding: 35 rpx 0 rpx 40 rpx 34 rpx;
       background-color: #FFFFFF;
-      font-size: 26rpx;
+      font-size: 26 rpx;
       color: #333333;
       box-sizing: border-box;
-      border-radius: 20rpx;
-      padding-bottom: 30rpx;
+      border-radius: 20 rpx;
+      padding-bottom: 30 rpx;
       margin-bottom: 10px;
-
+      
       & > view {
         //height: 50rpx;
-        line-height: 50rpx;
-
+        line-height: 50 rpx;
+        
         text {
           color: #666666;
         }
-
+        
         .price {
           color: #F43131;
         }
       }
     }
   }
-
+  
   .defaults {
     margin: 0 auto;
-    width: 640rpx;
-    height: 480rpx;
-    margin-top: 100rpx;
+    width: 640 rpx;
+    height: 480 rpx;
+    margin-top: 100 rpx;
   }
 </style>

@@ -1,12 +1,6 @@
-import {
-  staticUrl
-} from './env'
-import {
-  error, confirm
-} from './fun'
-import {
-  upload, getAccessToken
-} from './request'
+import { staticUrl } from './env'
+import { confirm, error } from './fun'
+import { getAccessToken, upload } from './request'
 import Srotage from '@/common/Storage'
 import store from '@/store'
 
@@ -501,7 +495,7 @@ export const GetQueryByString = (str, name) => {
       var s = tempArr[i]
       var reg1 = new RegExp('(^|&)' + name + '=([^&]*)(&|$)') // 构造一个含有目标参数的正则表达式对象
       var r1 = s.match(reg1) // 匹配目标参数
-      if (r1 != null) {
+      if (r1 !== null) {
         rt = decodeURIComponent(r1[2])// 一直覆盖，要最后的就行了
       }
     }
@@ -513,7 +507,7 @@ export const GetQueryByString = (str, name) => {
   if (!str.split('?')[1]) return null
   var r = str.split('?')[1].match(reg) // 匹配目标参数
 
-  if (r != null) {
+  if (r !== null) {
     return decodeURIComponent(r[2])
   }
   return null // 返回参数值
@@ -567,7 +561,7 @@ export const buildSharePath = (path) => {
   }
 
   let ret = ''
-  if (path.indexOf('?') != -1) {
+  if (path.indexOf('?') !== -1) {
     ret = path + (search ? '&' : '') + search
   } else {
     ret = path + (search ? '?' : '') + search

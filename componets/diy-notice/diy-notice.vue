@@ -9,9 +9,7 @@
   </view>
 </template>
 <script>
-import {
-  deepCopyStrict
-} from '@/common/helper'
+import { deepCopyStrict } from '@/common/helper'
 
 const styleDefault = {}
 export default {

@@ -69,7 +69,6 @@
 <script>
 
 import { getAgentApply, getShaApply } from '@/api/customer'
-import { mapGetters } from 'vuex'
 import BaseMixin from '@/mixins/BaseMixin'
 
 export default {
@@ -81,7 +80,7 @@ export default {
       pageSize: 10,
       data: [],
       totalCount: 0,
-      index: 1
+      index: 1,
     }
   },
   onLoad (options) {
@@ -90,7 +89,7 @@ export default {
     uni.getSystemInfo({
       success: function (res) {
         that.height = res.screenHeight - 68
-      }
+      },
     })
   },
   onShow () {
@@ -106,14 +105,23 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['commi_rename'])
+    initData () {
+      return this.$store.state.system.initData
+    },
+    commi_rename () {
+      try {
+        return this.initData.commi_rename
+      } catch (e) {
+        return {}
+      }
+    },
   },
   methods: {
     // 获取提现记录
     getWithdrawRecordList () {
       const data = {
         page: this.page,
-        pageSize: this.pageSize
+        pageSize: this.pageSize,
       }
       if (this.index === 1) {
         getAgentApply(data).then(res => {
@@ -122,7 +130,7 @@ export default {
             this.data.push(item)
           }
         }).catch(e => {
-
+        
         })
       } else {
         getShaApply(data).then(res => {
@@ -131,11 +139,11 @@ export default {
             this.data.push(item)
           }
         }).catch(e => {
-
+        
         })
       }
-    }
-  }
+    },
+  },
 }
 </script>
 
@@ -144,45 +152,45 @@ export default {
     background-color: #f8f8f8;
     min-height: 100vh;
   }
-
+  
   .main {
-    width: 710rpx;
+    width: 710 rpx;
     margin: 0 auto;
-    margin-top: 40rpx;
+    margin-top: 40 rpx;
     background-color: #FFFFFF;
     box-sizing: border-box;
-    padding: 28rpx 0rpx 32rpx 27rpx;
-
+    padding: 28 rpx 0 rpx 32 rpx 27 rpx;
+    
     .fir {
-      height: 48rpx;
+      height: 48 rpx;
       display: flex;
-      font-size: 26rpx;
+      font-size: 26 rpx;
       align-items: center;
-
+      
       .left {
         color: #333333;
-        margin-right: 20rpx;
+        margin-right: 20 rpx;
       }
-
+      
       .right {
         color: #888888;
       }
-
+      
       .rightt {
         color: #888888;
-        margin-left: 20rpx;
+        margin-left: 20 rpx;
       }
-
+      
       .rights {
         color: #F43131;
       }
     }
   }
-
+  
   .defaults {
     margin: 0 auto;
-    width: 640rpx;
-    height: 480rpx;
-    margin-top: 100rpx;
+    width: 640 rpx;
+    height: 480 rpx;
+    margin-top: 100 rpx;
   }
 </style>

@@ -23,7 +23,7 @@
         搜索
       </view>
     </view>
-
+    
     <view style="height: 90rpx;"></view>
     <view class="order" v-for="(item,i) of resData " :key="i">
       <view class="view">
@@ -67,11 +67,11 @@ export default {
       pageSize: 10,
       resData: [],
       beginTime: '',
-      endTime: ''
+      endTime: '',
     }
   },
   onShow () {
-
+  
   },
   onLoad (options) {
     this.getDetail()
@@ -94,7 +94,7 @@ export default {
         page: this.page,
         pageSzie: this.pageSize,
         begin_time: this.beginTime,
-        end_time: this.endTime
+        end_time: this.endTime,
       }
       if (this.beginTime && this.endTime) {
         var startTmp = this.beginTime.split('-')
@@ -104,7 +104,7 @@ export default {
         if (sd.getTime() > ed.getTime()) {
           uni.showToast({
             title: '开始时间不得大于结束时间',
-            icon: 'none'
+            icon: 'none',
           })
           return
         }
@@ -115,20 +115,20 @@ export default {
         } else {
           this.resData = this.resData.concat(res.data.list)
         }
-
+        
         this.totalCount = res.totalCount
       })
-    }
-  }
+    },
+  },
 }
 </script>
 
 <style lang="scss" scoped>
   .profitSum {
     background-color: #F8F8F8;
-    padding-bottom: 40rpx;
+    padding-bottom: 40 rpx;
   }
-
+  
   .order-status {
     position: fixed;
     top: 0;
@@ -140,37 +140,37 @@ export default {
     align-items: center;
     // justify-content: center;
     text-align: center;
-
+    
     .status {
       display: inline-block;
-      width: 150rpx;
+      width: 150 rpx;
       /*margin-right: 30rpx;*/
-      line-height: 80rpx;
-
+      line-height: 80 rpx;
+      
       &.active {
         color: $fun-red-color;
         border-bottom: 2px solid $fun-red-color;
       }
     }
-
+    
     & .status:nth-last-child(1) {
       margin-right: 0;
     }
   }
-
+  
   .status {
     display: inline-block;
-    width: 138rpx;
+    width: 138 rpx;
     /*margin-right: 30rpx;*/
-    line-height: 80rpx;
+    line-height: 80 rpx;
     text-align: center;
-
+    
     &.active {
       color: $fun-red-color;
       border-bottom: 2px solid $fun-red-color;
     }
   }
-
+  
   .fixed {
     position: fixed;
     top: 0;
@@ -178,108 +178,108 @@ export default {
     z-index: 10;
     background-color: #F6F6F6;
   }
-
+  
   .order {
-    width: 710rpx;
+    width: 710 rpx;
     margin: 0 auto;
-    padding: 35rpx 0rpx 40rpx 34rpx;
+    padding: 35 rpx 0 rpx 40 rpx 34 rpx;
     background-color: #FFFFFF;
-    font-size: 26rpx;
+    font-size: 26 rpx;
     color: #333333;
     box-sizing: border-box;
-    border-radius: 20rpx;
-    padding-bottom: 30rpx;
-    margin-bottom: 20rpx;
-
+    border-radius: 20 rpx;
+    padding-bottom: 30 rpx;
+    margin-bottom: 20 rpx;
+    
     .view {
       //height: 50rpx;
-      line-height: 50rpx;
-
+      line-height: 50 rpx;
+      
       text {
         color: #666666;
       }
-
+      
       .price {
         color: #F43131;
       }
     }
   }
-
+  
   .defaults {
     margin: 0 auto;
-    width: 640rpx;
-    height: 480rpx;
-    margin-top: 100rpx;
+    width: 640 rpx;
+    height: 480 rpx;
+    margin-top: 100 rpx;
   }
-
+  
   /deep/ .uni-scroll-view::-webkit-scrollbar {
     /* 隐藏滚动条，但依旧具备可以滚动的功能 */
     display: none
   }
-
+  
   .titleClass {
-    height: 90rpx;
+    height: 90 rpx;
     font-size: 14px;
     display: flex;
     align-items: center;
     box-sizing: border-box;
-    width: 710rpx;
+    width: 710 rpx;
     margin: 0 auto;
     margin-bottom: 10px;
     position: fixed;
-    width: 750rpx;
+    width: 750 rpx;
     top: 0px;
     left: 0px;
     background-color: #F8F8F8;
     z-index: 99;
-    padding-left: 20rpx;
-    padding-right: 20rpx;
-
+    padding-left: 20 rpx;
+    padding-right: 20 rpx;
+    
     .titleButton {
-      width: 100rpx;
-      height: 60rpx;
-      line-height: 60rpx;
+      width: 100 rpx;
+      height: 60 rpx;
+      line-height: 60 rpx;
       color: #ffffff;
       text-align: center;
       background-color: #F43131;
-      border-radius: 10rpx;
+      border-radius: 10 rpx;
     }
-
+    
     .titleLeft {
-      width: 100rpx;
+      width: 100 rpx;
     }
-
+    
     .titleCenter {
-      width: 550rpx;
-      height: 60rpx;
+      width: 550 rpx;
+      height: 60 rpx;
       display: flex;
       align-items: center;
-
+      
       .centerPicker {
-        margin-left: 20rpx;
-        margin-right: 20rpx;
+        margin-left: 20 rpx;
+        margin-right: 20 rpx;
       }
-
+      
       .picker {
-        width: 200rpx;
-        height: 60rpx;
+        width: 200 rpx;
+        height: 60 rpx;
         background-color: #ffffff;
-        border-radius: 10rpx;
+        border-radius: 10 rpx;
         display: flex;
         align-items: center;
-        padding-left: 10rpx;
+        padding-left: 10 rpx;
         position: relative;
         border: 1px solid #cccccc;
-
+        
         .img {
-          width: 30rpx;
-          height: 30rpx;
+          width: 30 rpx;
+          height: 30 rpx;
           position: absolute;
-          top: 15rpx;
-          right: 10rpx;
+          top: 15 rpx;
+          right: 10 rpx;
         }
       }
     }
-
+    
   }
 </style>

@@ -16,7 +16,7 @@
     <view ref="popRef" class="popup-content" @tap.stop="stopEvent" :style="_location">
 
       <block v-for="(item,index) in initData.pay_arr" :key="index">
-        <div class="iMbx" v-if="index!='remainder_pay'||(is_use_money)" @click="chooseType(index)">
+        <div class="iMbx" v-if="index!=='remainder_pay'||(is_use_money)" @click="chooseType(index)">
           <div class="c_method">
             {{item}}
             <text>￥{{pay_money}}</text>
@@ -35,12 +35,10 @@
 
 <script>
 
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 
-import { error, toast, confirm } from '@/common/fun'
-import {
-  orderPay
-} from '@/api/order'
+import { confirm, error } from '@/common/fun'
+import { orderPay } from '@/api/order'
 import { GetQueryByString, isWeiXin, urlencode } from '@/common/helper'
 import Storage from '@/common/Storage'
 // #ifdef H5
@@ -315,7 +313,7 @@ export default {
       // 而且状态可以灵活控制 state为1
       for (var i in login_methods) {
         // && login_methods[i].state ??状态呢？
-        if (i != 'component_appid' && login_methods[i].state) {
+        if (i !== 'component_appid' && login_methods[i].state) {
           channel = ['wx_mp'].indexOf(login_methods[i].type) === -1 ? {
             ...login_methods[i]
           } : {
@@ -339,7 +337,7 @@ export default {
         hash
       } = window.location
       const strArr = []
-      if (search.indexOf('code') != -1) {
+      if (search.indexOf('code') !== -1) {
         const tempArr = search.split('&')
         for (var i of tempArr) {
           // 过滤多余的参数
@@ -456,7 +454,7 @@ export default {
 
         const isHasCode = this.code || GetQueryByString('code')
         // 已经用过的code不再用
-        if (isHasCode && isHasCode != Storage.get('isUseCode')) {
+        if (isHasCode && isHasCode !== Storage.get('isUseCode')) {
           // 拿到之前的配置
           payConf = {
             ...Storage.get('temp_order_info'),

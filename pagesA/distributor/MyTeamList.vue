@@ -37,7 +37,7 @@ export default {
       page: 1,
       pageSize: 15,
       pro: [],
-      totalCount: 0
+      totalCount: 0,
     }
   },
   onLoad (options) {
@@ -61,22 +61,22 @@ export default {
       const data = {
         level: this.index,
         page: this.page,
-        pageSize: this.pageSize
+        pageSize: this.pageSize,
       }
-
+      
       getDisTeamList(data, {
         errtip: false,
-        tip: '加载中'
+        tip: '加载中',
       }).then(res => {
         this.pro = this.pro.concat(res.data)
         this.totalCount = res.totalCount
       })
         .catch(e => {
-
+        
         })
-    }
-  }
-
+    },
+  },
+  
 }
 </script>
 
@@ -85,75 +85,75 @@ export default {
     background-color: #FFFFFF !important;
     min-height: 100vh;
   }
-
+  
   .centers {
-    width: 710rpx;
+    width: 710 rpx;
     margin: 0 auto;
     box-sizing: border-box;
-    height: 138rpx;
+    height: 138 rpx;
     border-bottom: 1px solid #ECE8E8;
     display: flex;
     align-items: center;
-    padding: 20rpx 0rpx;
-
+    padding: 20 rpx 0 rpx;
+    
     .imgs {
-      width: 98rpx;
-      height: 98rpx;
+      width: 98 rpx;
+      height: 98 rpx;
       border-radius: 50%;
       overflow: hidden;
-
+      
       .image {
         width: 100%;
         height: 100%;
       }
     }
-
+    
     .titles {
-      margin-left: 19rpx;
+      margin-left: 19 rpx;
       width: 100%;
-      height: 98rpx;
-
+      height: 98 rpx;
+      
       .bots {
-        margin-top: 15rpx;
-        height: 23rpx;
-        font-size: 24rpx;
+        margin-top: 15 rpx;
+        height: 23 rpx;
+        font-size: 24 rpx;
         font-weight: 500;
         color: rgba(136, 136, 136, 1);
       }
-
+      
       .msg {
-        margin-top: 12rpx;
-        font-size: 30rpx;
+        margin-top: 12 rpx;
+        font-size: 30 rpx;
         color: #333333;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        height: 29rpx;
-
+        height: 29 rpx;
+        
         .tops {
-          height: 29rpx;
-          line-height: 29rpx;
-          width: 360rpx;
+          height: 29 rpx;
+          line-height: 29 rpx;
+          width: 360 rpx;
           overflow: hidden;
-
+          
           text {
-            font-size: 28rpx;
-            margin-left: 10rpx;
+            font-size: 28 rpx;
+            margin-left: 10 rpx;
           }
         }
-
+        
         .rights {
-          font-size: 24rpx;
+          font-size: 24 rpx;
           color: #888888;
         }
       }
     }
   }
-
+  
   .defaults {
     margin: 0 auto;
-    width: 640rpx;
-    height: 480rpx;
-    padding-top: 100rpx;
+    width: 640 rpx;
+    height: 480 rpx;
+    padding-top: 100 rpx;
   }
 </style>

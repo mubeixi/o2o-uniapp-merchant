@@ -1,11 +1,7 @@
 import * as ENV from './env'
 // import store from '../store'
-import {
-  error, toast,
-} from './fun'
-import {
-  emptyObject,
-} from './helper'
+import { error } from './fun'
+import { emptyObject } from './helper'
 import Storage from '@/common/Storage'
 import { hexMD5 } from './tool/md5'
 import Base64 from './tool/base64.js'

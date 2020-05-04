@@ -1,12 +1,12 @@
 <template>
   <view class="page-wrap">
-
+    
     <image class="preview" @click="preFn(current_url)" :src="current_url|domain" mode="widthFix" />
-
+    
     <div class="handle-box">
       <div class="remind-title fz-13 c3 text-center">选择海报模板</div>
-      <div class="swiper" >
-        <div class="swiper-item" @click="setSelect(poster)"  v-for="(poster,idx) in poster_list">
+      <div class="swiper">
+        <div class="swiper-item" @click="setSelect(poster)" v-for="(poster,idx) in poster_list">
           <image class="swiper-itm-img" :src="poster.img|domain"></image>
         </div>
       </div>
@@ -42,9 +42,9 @@ export default {
         dis_config: {},
         total_sales: '',
         total_income: '',
-        balance: ''
-      }//
-
+        balance: '',
+      },//
+      
     }
   },
   computed: {
@@ -53,7 +53,7 @@ export default {
     },
     userInfo () {
       return this.$store.getters['user/getUserInfo']()
-    }
+    },
   },
   onReady () {
     // var context = uni.createCanvasContext('firstCanvas')
@@ -62,7 +62,7 @@ export default {
     // context.draw()
   },
   onShow () {
-
+  
   },
   onLoad (options) {
     const { type, again } = options
@@ -72,7 +72,10 @@ export default {
   },
   methods: {
     async saveFn () {
-      const handleRT = await saveImageToDisk({ fileUrl: this.current_url, type: 'online' })
+      const handleRT = await saveImageToDisk({
+        fileUrl: this.current_url,
+        type: 'online',
+      })
       if (handleRT === false) {
         error('保存失败')
         return
@@ -81,7 +84,12 @@ export default {
     },
     setSelect (poster) {
       this.current_poster = poster
-      getDistributeWxQrcode({ type: this.type, again: this.again, owner_id: this.userInfo.User_ID, poster_id: poster.id }, { tip: '生成中' }).then(res => {
+      getDistributeWxQrcode({
+        type: this.type,
+        again: this.again,
+        owner_id: this.userInfo.User_ID,
+        poster_id: poster.id,
+      }, { tip: '生成中' }).then(res => {
         this.current_url = res.data.img_url
       })
       // this.current_url = poster.img
@@ -92,7 +100,7 @@ export default {
         return
       }
       uni.previewImage({
-        urls: [this.current_url]
+        urls: [this.current_url],
       })
     },
     // async shareFn () {
@@ -110,16 +118,21 @@ export default {
         // 先获取二维码
         // let qrRet = await getDistributeWxQrcode({type,again,owner_id:this.userInfo.User_ID},{tip:'生成中'})
         // this.qrimg = qrRet.data.img_url;
-
+        
         const getPosterListResult = await getPosterList({ pageSize: 999 })
         const lists = getPosterListResult.data
         this.poster_list = lists.map(item => {
           item.img += '-r200'
           return item
         })
-
+        
         if (this.poster_list.length > 0) {
-          getDistributeWxQrcode({ type, again, owner_id: this.userInfo.User_ID, poster_id: this.poster_list[0].id }, { tip: '生成中' }).then(res => {
+          getDistributeWxQrcode({
+            type,
+            again,
+            owner_id: this.userInfo.User_ID,
+            poster_id: this.poster_list[0].id,
+          }, { tip: '生成中' }).then(res => {
             this.current_url = res.data.img_url
           })
           // = this.poster_list[0].img
@@ -130,14 +143,14 @@ export default {
     },
     goBack () {
       this.$back()
-    }
-  }
+    },
+  },
 }
 </script>
 
 <style lang="scss" scoped>
-
-  .preview{
+  
+  .preview {
     position: absolute;
     top: 20rpx;
     left: 50%;
@@ -146,7 +159,8 @@ export default {
     height: auto;
     max-width: 550rpx;
   }
-  .handle-box{
+  
+  .handle-box {
     z-index: 9;
     bottom: 0px;
     left: 0;
@@ -155,34 +169,36 @@ export default {
     height: 284rpx;
     padding-bottom: 90rpx;
     background: white;
-
-    .remind-title{
+    
+    .remind-title {
       height: 90rpx;
       line-height: 90rpx;
     }
-
-    .swiper{
+    
+    .swiper {
       margin-bottom: 40rpx;
-
+      
       white-space: nowrap;
       overflow-x: scroll;
       overflow-y: hidden;
       z-index: 3;
       height: 150rpx;
-      .swiper-item{
+      
+      .swiper-item {
         display: inline-block;
         width: 110rpx;
         height: 150rpx;
         margin-left: 20rpx;
         position: relative;
-        .swiper-itm-img{
+        
+        .swiper-itm-img {
           width: 110rpx;
           height: 150rpx;
         }
       }
     }
-
-    .share-btn{
+    
+    .share-btn {
       position: absolute;
       bottom: 0;
       width: 750rpx;
@@ -192,9 +208,10 @@ export default {
       background: $fun-primary-color;
       color: white;
     }
-
+    
   }
-  .page-wrap{
-
+  
+  .page-wrap {
+  
   }
 </style>

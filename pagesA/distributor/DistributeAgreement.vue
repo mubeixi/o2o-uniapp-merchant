@@ -4,11 +4,11 @@
       <!-- #ifdef H5||APP-PLUS -->
       <div v-html="formatRichTexts(pro.dis_config.Distribute_Agreement)" class="p_detail_des"></div>
       <!-- #endif -->
-
+      
       <!-- #ifdef MP -->
       <rich-text :nodes="pro.dis_config.Distribute_Agreement|formatRichText" class="p_detail_des"></rich-text>
       <!-- #endif -->
-
+    
     </div>
   </view>
 </template>
@@ -21,7 +21,7 @@ export default {
   mixins: [BaseMixin],
   data () {
     return {
-      pro: []
+      pro: [],
     }
   },
   onLoad () {
@@ -32,7 +32,7 @@ export default {
       disApplyInit().then(res => {
         this.pro = res.data
       }).catch(e => {
-
+      
       })
     },
     formatRichTexts (html) {
@@ -41,12 +41,12 @@ export default {
         match = match.replace(/style="[^"]+"/gi, '')// .replace(/style='[^']+'/gi, '');
         match = match.replace(/width="[^"]+"/gi, '')// .replace(/width='[^']+'/gi, '');
         match = match.replace(/height="[^"]+"/gi, '')// .replace(/height='[^']+'/gi, '');
-
+        
         // 图片app不支持
         // #ifdef APP-PLUS
         match = match.replace(/!*.webp/gi, '')
         // #endif
-
+        
         return match
       })
       newContent = newContent.replace(/<div[^>]*>/gi, function (match, capture) {
@@ -61,14 +61,14 @@ export default {
         match = match.replace(/width:[^;]+;/gi, 'width:100%;').replace(/width:[^;]+;/gi, 'width:100%;')
         return match
       })
-
+      
       newContent = newContent.replace(/<br[^>]*\/>/gi, '')
       newContent = newContent.replace(/\<img/gi, '<img style="width:100%;float:left;"')
       newContent = newContent.replace(/src="\/\//gi, 'src="http://')
       // newContent = newContent.replace(/>[\s]*</gi, "><");
-
+      
       return newContent
-    }
+    },
   },
   filters: {
     formatRichText (html) { // 控制小程序中图片大小
@@ -91,14 +91,14 @@ export default {
         match = match.replace(/width:[^;]+;/gi, 'width:100%;').replace(/width:[^;]+;/gi, 'width:100%;')
         return match
       })
-
+      
       newContent = newContent.replace(/<br[^>]*\/>/gi, '')
       newContent = newContent.replace(/\<img/gi, '<img style="width:100%;float:left;"')
       // newContent = newContent.replace(/>[\s]*</gi, "><");
-
+      
       return newContent
-    }
-  }
+    },
+  },
 }
 </script>
 
@@ -106,21 +106,21 @@ export default {
   .pro_detail {
     .p_detail_des {
       width: 100%;
-      font-size: 28rpx;
+      font-size: 28 rpx;
       color: #999;
-
+      
       img {
         width: 100% !important;
       }
     }
   }
-
+  
   .p_detail_title {
-    padding: 30rpx 20rpx;
+    padding: 30 rpx 20 rpx;
     color: #333;
-    font-size: 30rpx;
+    font-size: 30 rpx;
   }
-
+  
   /* 商品详情 end */
   /* 遮罩层 */
   .modal {
