@@ -116,7 +116,7 @@ export default {
           className: 'iconyue',
           name: '余额',
           color: '#69C276',
-          link: ''
+          link: '/pagesA/user/BalanceCenter'
         },
         {
           className: 'iconjifen',

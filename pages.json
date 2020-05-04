@@ -286,6 +286,20 @@
 					"style": {
 						"navigationBarTitleText": "赠品中心"
 					}
+				},
+				{
+					"path": "user/BalanceRecharge",
+					"style": {
+						"navigationBarTitleText": "余额充值"
+					}
+				},
+				{
+					"path": "user/BalanceCenter",
+					"style": {
+						"navigationBarTitleText": "余额中心",
+						"navigationBarBackgroundColor": "#ff5c33",
+						"navigationBarTextStyle": "white"
+					}
 				}
 			]
 	}],
