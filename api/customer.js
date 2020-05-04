@@ -43,7 +43,6 @@ export const updateUserMobile = (param, options) => fetch({
 
 
 export const userLogin = (data, options) => {
-export const userLogin = (param, options) => {
   // 获取推荐人id
   let owner_id = Storage.get('owner_id')
   if (!owner_id) {

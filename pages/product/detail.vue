@@ -1294,19 +1294,10 @@ export default {
           front_show: 1,
           biz_id: this.detailData.biz_id,
         }
-<<<<<<< HEAD
+
 
         this.couponList = await getCouponList(couponParam,{onlyData:true}).catch(e => { throw Error(e.msg || '获取优惠券失败') })
 
-
-=======
-        
-        this.couponList = await getCouponList(couponParam).catch(e => {
-          throw Error(e.msg || '获取优惠券失败')
-        })
-        this.totalCount = this.couponList.totalCount
-        
->>>>>>> origin/develop
         this.comments = await getCommitList({
           Products_ID: this.detailData.Products_ID,
           pageSize: 999,
