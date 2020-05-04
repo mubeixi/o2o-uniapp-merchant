@@ -12,6 +12,7 @@
             v-if="headTabIndex === 2" class="underline"></span></li>
         </ul>
         <div class="search-box"
+             @click="$linkTo('/pages/search/index')"
              :style="{borderRadius: menuButtonInfo.height/2+'px',height:menuButtonInfo.height+'px',}">
           <layout-icon class="iconsearch" type="iconicon-search" size="16" color="#fff"></layout-icon>
         </div>
