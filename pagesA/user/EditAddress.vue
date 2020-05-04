@@ -190,82 +190,82 @@ export default {
   }
   
   .xinxi {
-    width: 710 rpx;
-    padding: 0 20 rpx;
+    width: 710rpx;
+    padding: 0 20rpx;
     border-bottom: 1px #f4f4f4 solid;
     overflow: hidden;
-    margin-bottom: 20 rpx;
+    margin-bottom: 20rpx;
   }
   
   .xinxi .text {
     float: left;
-    width: 140 rpx;
-    font-size: 28 rpx;
-    line-height: 90 rpx;
+    width: 140rpx;
+    font-size: 28rpx;
+    line-height: 90rpx;
   }
   
   .xinxi .input {
-    width: 570 rpx;
+    width: 570rpx;
     float: left;
-    font-size: 28 rpx;
-    line-height: 90 rpx;
-    height: 90 rpx;
+    font-size: 28rpx;
+    line-height: 90rpx;
+    height: 90rpx;
   }
   
   .tianjia-btn {
-    width: 710 rpx;
-    margin: 50 rpx 20 rpx 20 rpx;
+    width: 710rpx;
+    margin: 50rpx 20rpx 20rpx;
     color: #fff;
     background: #F43131;
-    border-radius: 8 rpx;
+    border-radius: 8rpx;
   }
   
   .dizhi {
-    width: 710 rpx;
-    padding: 0 20 rpx;
+    width: 710rpx;
+    padding: 0 20rpx;
     border-bottom: 1px #f4f4f4 solid;
     overflow: hidden;
-    margin-bottom: 20 rpx;
+    margin-bottom: 20rpx;
   }
   
   .dizhi, .xiangzhen {
-    width: 710 rpx;
-    padding: 0 20 rpx;
+    width: 710rpx;
+    padding: 0 20rpx;
     border-bottom: 1px #f4f4f4 solid;
     overflow: hidden;
-    margin-bottom: 20 rpx;
+    margin-bottom: 20rpx;
   }
   
   .xiangzhen .text {
     float: left;
-    width: 140 rpx;
-    font-size: 28 rpx;
-    line-height: 90 rpx;
+    width: 140rpx;
+    font-size: 28rpx;
+    line-height: 90rpx;
   }
   
   .dizhi .text {
     float: left;
-    width: 140 rpx;
-    font-size: 28 rpx;
-    line-height: 90 rpx;
+    width: 140rpx;
+    font-size: 28rpx;
+    line-height: 90rpx;
   }
   
   .dizhi .input {
-    width: 180 rpx;
+    width: 180rpx;
     float: left;
-    font-size: 28 rpx;
-    line-height: 90 rpx;
-    height: 90 rpx;
-    margin-right: 10 rpx;
+    font-size: 28rpx;
+    line-height: 90rpx;
+    height: 90rpx;
+    margin-right: 10rpx;
   }
   
   .picker .view {
-    width: 180 rpx;
+    width: 180rpx;
     float: left;
-    font-size: 28 rpx;
-    line-height: 90 rpx;
-    height: 90 rpx;
-    margin-right: 10 rpx;
+    font-size: 28rpx;
+    line-height: 90rpx;
+    height: 90rpx;
+    margin-right: 10rpx;
   }
   
   
@@ -274,7 +274,7 @@ export default {
   }
   
   .set_default .label {
-    font-size: 28 rpx;
+    font-size: 28rpx;
   }
   
   .set_default .label .checkbox {
@@ -286,19 +286,19 @@ export default {
   .area-item {
     display: flex;
     align-items: center;
-    padding: 30 rpx 20 rpx;
+    padding: 30rpx 20rpx;
     border-bottom: 1px solid #f4f4f4;
-    font-size: 28 rpx;
+    font-size: 28rpx;
     
     .area-label {
       display: inline-block;
-      width: 140 rpx;
-      margin-right: 10 rpx;
+      width: 140rpx;
+      margin-right: 10rpx;
     }
   }
   
   .area-text {
-    width: 600 rpx;
+    width: 600rpx;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

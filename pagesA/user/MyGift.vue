@@ -127,8 +127,8 @@ export default {
   
   .titless {
     position: fixed;
-    top: 0 rpx;
-    left: 0 rpx;
+    top: 0rpx;
+    left: 0rpx;
     width: 100%;
     z-index: 999;
   }
@@ -136,22 +136,22 @@ export default {
   .nav {
     z-index: 999;
     position: fixed;
-    top: 0 rpx;
-    left: 0 rpx;
-    width: 750 rpx;
+    top: 0rpx;
+    left: 0rpx;
+    width: 750rpx;
     margin: 0 auto;
-    padding: 20 rpx 0 rpx;
-    height: 102 rpx;
+    padding: 20rpx 0rpx;
+    height: 102rpx;
     display: flex;
     align-items: center;
-    font-size: 30 rpx;
+    font-size: 30rpx;
     color: #333333;
     background: #f8f8f8;
     
     .ins {
-      width: 236 rpx;
-      height: 72 rpx;
-      line-height: 72 rpx;
+      width: 236rpx;
+      height: 72rpx;
+      line-height: 72rpx;
       text-align: center;
       position: relative;
       
@@ -161,12 +161,12 @@ export default {
         &:after {
           content: '';
           display: flex;
-          width: 135 rpx;
-          height: 4 rpx;
+          width: 135rpx;
+          height: 4rpx;
           background-color: #F43131;
           position: absolute;
-          bottom: 0 rpx;
-          left: 50 rpx;
+          bottom: 0rpx;
+          left: 50rpx;
         }
       }
     }
@@ -174,30 +174,30 @@ export default {
   
   .center {
     margin: 0 auto;
-    margin-bottom: 25 rpx;
-    width: 710 rpx;
-    height: 288 rpx;
+    margin-bottom: 25rpx;
+    width: 710rpx;
+    height: 288rpx;
     background-color: #FFFFFF;
     
     .tops {
-      width: 710 rpx;
-      height: 64 rpx;
-      line-height: 64 rpx;
-      padding-left: 20 rpx;
-      font-size: 26 rpx;
+      width: 710rpx;
+      height: 64rpx;
+      line-height: 64rpx;
+      padding-left: 20rpx;
+      font-size: 26rpx;
       color: #333333;
-      border-bottom: 1 rpx solid #ECE8E8;
+      border-bottom: 1rpx solid #ECE8E8;
     }
     
     .bottoms {
-      height: 224 rpx;
-      width: 710 rpx;
-      padding: 20 rpx;
+      height: 224rpx;
+      width: 710rpx;
+      padding: 20rpx;
       display: flex;
       
       .tupian {
-        width: 184 rpx;
-        height: 184 rpx;
+        width: 184rpx;
+        height: 184rpx;
         
         .image {
           width: 100%;
@@ -206,19 +206,19 @@ export default {
       }
       
       .neirong {
-        margin-left: 23 rpx;
-        height: 184 rpx;
-        width: 463 rpx;
+        margin-left: 23rpx;
+        height: 184rpx;
+        width: 463rpx;
         position: relative;
         
         .titles {
-          font-size: 26 rpx;
+          font-size: 26rpx;
           color: #333333;
-          width: 451 rpx;
-          height: 71 rpx;
-          line-height: 36 rpx;
-          margin-top: 18 rpx;
-          margin-left: 2 rpx;
+          width: 451rpx;
+          height: 71rpx;
+          line-height: 36rpx;
+          margin-top: 18rpx;
+          margin-left: 2rpx;
           display: -webkit-box;
           -webkit-line-clamp: 2;
           overflow: hidden;
@@ -227,27 +227,27 @@ export default {
         }
         
         .button {
-          width: 463 rpx;
-          margin-top: 15 rpx;
-          height: 55 rpx;
+          width: 463rpx;
+          margin-top: 15rpx;
+          height: 55rpx;
           display: flex;
           
           .sku {
-            font-size: 24 rpx;
+            font-size: 24rpx;
             color: #888888;
-            height: 23 rpx;
-            line-height: 23 rpx;
+            height: 23rpx;
+            line-height: 23rpx;
           }
           
           .chakan {
-            width: 155 rpx;
-            height: 55 rpx;
-            line-height: 55 rpx;
+            width: 155rpx;
+            height: 55rpx;
+            line-height: 55rpx;
             text-align: center;
             background: rgba(244, 49, 49, 1);
-            border-radius: 28 rpx;
+            border-radius: 28rpx;
             margin-left: auto;
-            font-size: 26 rpx;
+            font-size: 26rpx;
             color: #FFFFFF;
           }
         }
@@ -257,15 +257,15 @@ export default {
   
   .defaults {
     margin: 0 auto;
-    width: 640 rpx;
-    height: 480 rpx;
-    margin-top: 100 rpx;
+    width: 640rpx;
+    height: 480rpx;
+    margin-top: 100rpx;
   }
   
   .youxiao {
-    font-size: 20 rpx;
+    font-size: 20rpx;
     color: #888888;
     position: absolute;
-    bottom: 0 rpx;
+    bottom: 0rpx;
   }
 </style>

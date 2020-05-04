@@ -215,8 +215,8 @@ export default {
   }
   
   .top {
-    width: 750 rpx;
-    height: 400 rpx;
+    width: 750rpx;
+    height: 400rpx;
     position: relative;
     
     .image {
@@ -225,29 +225,29 @@ export default {
     }
     
     .title {
-      width: 138 rpx;
-      font-size: 34 rpx;
+      width: 138rpx;
+      font-size: 34rpx;
       font-weight: bold;
       color: #FFFFFF;
       position: absolute;
-      top: 27 rpx;
-      left: 306 rpx;
+      top: 27rpx;
+      left: 306rpx;
     }
     
     .msg {
-      width: 45 rpx;
-      height: 45 rpx;
+      width: 45rpx;
+      height: 45rpx;
       position: absolute;
-      top: 25 rpx;
-      right: 21 rpx;
+      top: 25rpx;
+      right: 21rpx;
     }
     
     .person {
-      width: 92 rpx;
-      height: 92 rpx;
+      width: 92rpx;
+      height: 92rpx;
       position: absolute;
-      top: 109 rpx;
-      left: 329 rpx;
+      top: 109rpx;
+      left: 329rpx;
       border-radius: 50%;
       
       .image {
@@ -257,15 +257,15 @@ export default {
     }
     
     .nickName {
-      font-size: 28 rpx;
-      height: 27 rpx;
-      line-height: 27 rpx;
+      font-size: 28rpx;
+      height: 27rpx;
+      line-height: 27rpx;
       font-weight: bold;
       color: rgba(255, 255, 255, 1);
-      width: 400 rpx;
+      width: 400rpx;
       position: absolute;
-      top: 215 rpx;
-      left: 175 rpx;
+      top: 215rpx;
+      left: 175rpx;
       text-align: center;
     }
     
@@ -281,20 +281,20 @@ export default {
     }
     
     .sales {
-      width: 690 rpx;
-      height: 160 rpx;
+      width: 690rpx;
+      height: 160rpx;
       position: absolute;
-      left: 30 rpx;
-      top: 297 rpx;
+      left: 30rpx;
+      top: 297rpx;
       background: rgba(255, 255, 255, 1);
-      box-shadow: 0px 0px 27 rpx 0px rgba(244, 49, 49, 0.46);
-      border-radius: 10 rpx;
+      box-shadow: 0px 0px 27rpx 0px rgba(244, 49, 49, 0.46);
+      border-radius: 10rpx;
       display: flex;
       
       .left, view.right {
         width: 50%;
-        margin-top: 42 rpx;
-        margin-bottom: 41 rpx;
+        margin-top: 42rpx;
+        margin-bottom: 41rpx;
         text-align: center;
       }
       
@@ -303,72 +303,72 @@ export default {
       }
       
       .salesSum {
-        height: 25 rpx;
-        font-size: 26 rpx;
+        height: 25rpx;
+        font-size: 26rpx;
         font-family: PingFang SC;
         font-weight: 500;
         color: rgba(51, 51, 51, 1);
       }
       
       .salesSumPrice {
-        height: 29 rpx;
-        font-size: 38 rpx;
+        height: 29rpx;
+        font-size: 38rpx;
         font-family: PingFang SC;
         font-weight: bold;
         color: rgba(244, 49, 49, 1);
-        margin-top: 23 rpx;
+        margin-top: 23rpx;
       }
     }
   }
   
   .center {
-    width: 690 rpx;
-    height: 90 rpx;
-    line-height: 90 rpx;
+    width: 690rpx;
+    height: 90rpx;
+    line-height: 90rpx;
     background: rgba(255, 255, 255, 1);
-    border-radius: 10 rpx;
+    border-radius: 10rpx;
     margin: 0 auto;
-    margin-top: 117 rpx;
+    margin-top: 117rpx;
     display: flex;
     align-items: center;
     position: relative;
     
     & view:first-child {
-      margin-left: 48 rpx;
+      margin-left: 48rpx;
       color: #333333;
       font-weight: 500;
-      font-size: 26 rpx;
-      margin-right: 16 rpx;
+      font-size: 26rpx;
+      margin-right: 16rpx;
     }
     
     & view:nth-child(2) {
-      font-size: 34 rpx;
+      font-size: 34rpx;
       font-weight: bold;
       color: #F43131;
     }
     
     & view:nth-child(3) {
-      font-size: 26 rpx;
+      font-size: 26rpx;
       font-weight: 500;
       color: #FFFFFF;
       background-color: #F43131;
-      width: 85 rpx;
-      height: 45 rpx;
-      line-height: 45 rpx;
-      border-radius: 10 rpx;
+      width: 85rpx;
+      height: 45rpx;
+      line-height: 45rpx;
+      border-radius: 10rpx;
       text-align: center;
       position: absolute;
-      right: 49 rpx;
-      top: 23 rpx;
+      right: 49rpx;
+      top: 23rpx;
     }
   }
   
   .last {
-    width: 691 rpx;
-    height: 668 rpx;
+    width: 691rpx;
+    height: 668rpx;
     margin: 0 auto;
     position: relative;
-    margin-top: 30 rpx;
+    margin-top: 30rpx;
     
     image.back {
       width: 100%;
@@ -379,53 +379,53 @@ export default {
       position: absolute;
       top: 0;
       left: 0;
-      width: 691 rpx;
+      width: 691rpx;
       //height: 668rpx;
-      padding-left: 34 rpx;
-      padding-right: 30 rpx;
-      padding-top: 1 rpx;
-      padding-bottom: 1 rpx;
+      padding-left: 34rpx;
+      padding-right: 30rpx;
+      padding-top: 1rpx;
+      padding-bottom: 1rpx;
       box-sizing: border-box;
       display: flex;
       flex-wrap: wrap;
       
       .td {
-        width: 209 rpx;
-        height: 222 rpx;
+        width: 209rpx;
+        height: 222rpx;
         border-right: 1px dotted #D3D3D3;
         border-bottom: 1px dotted #D3D3D3;
         text-align: center;
         box-sizing: border-box;
         
         .imgs {
-          width: 95 rpx;
-          height: 95 rpx;
-          margin-top: 44 rpx;
+          width: 95rpx;
+          height: 95rpx;
+          margin-top: 44rpx;
         }
         
         .views {
-          height: 25 rpx;
-          line-height: 25 rpx;
-          font-size: 26 rpx;
+          height: 25rpx;
+          line-height: 25rpx;
+          font-size: 26rpx;
           font-weight: 500;
           color: #303030;
-          margin-top: 12 rpx;
+          margin-top: 12rpx;
         }
       }
     }
   }
   
   .putong {
-    height: 50 rpx;
-    line-height: 50 rpx;
+    height: 50rpx;
+    line-height: 50rpx;
     text-align: center;
     background-color: #FFFFFF;
-    font-size: 24 rpx;
+    font-size: 24rpx;
     color: #333333;
     position: absolute;
-    top: 124 rpx;
-    right: 0 rpx;
-    border-radius: 152 rpx 0px 0px 152 rpx;
+    top: 124rpx;
+    right: 0rpx;
+    border-radius: 152rpx 0px 0px 152rpx;
     display: flex;
     align-items: center;
     padding-left: 10px;

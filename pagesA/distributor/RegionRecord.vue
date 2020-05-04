@@ -154,22 +154,22 @@ export default {
   }
   
   .main {
-    width: 710 rpx;
+    width: 710rpx;
     margin: 0 auto;
-    margin-top: 40 rpx;
+    margin-top: 40rpx;
     background-color: #FFFFFF;
     box-sizing: border-box;
-    padding: 28 rpx 0 rpx 32 rpx 27 rpx;
+    padding: 28rpx 0rpx 32rpx 27rpx;
     
     .fir {
-      height: 48 rpx;
+      height: 48rpx;
       display: flex;
-      font-size: 26 rpx;
+      font-size: 26rpx;
       align-items: center;
       
       .left {
         color: #333333;
-        margin-right: 20 rpx;
+        margin-right: 20rpx;
       }
       
       .right {
@@ -178,7 +178,7 @@ export default {
       
       .rightt {
         color: #888888;
-        margin-left: 20 rpx;
+        margin-left: 20rpx;
       }
       
       .rights {
@@ -189,8 +189,8 @@ export default {
   
   .defaults {
     margin: 0 auto;
-    width: 640 rpx;
-    height: 480 rpx;
-    margin-top: 100 rpx;
+    width: 640rpx;
+    height: 480rpx;
+    margin-top: 100rpx;
   }
 </style>

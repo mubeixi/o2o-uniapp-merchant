@@ -126,18 +126,18 @@ export default {
 
 <style lang="scss" scoped>
   .btn {
-    width: 750 rpx;
-    height: 90 rpx;
-    font-size: 30 rpx;
+    width: 750rpx;
+    height: 90rpx;
+    font-size: 30rpx;
     text-align: center;
-    line-height: 90 rpx;
-    margin-top: 40 rpx;
+    line-height: 90rpx;
+    margin-top: 40rpx;
   }
   
   .pro_detail {
     .p_detail_des {
       width: 100%;
-      font-size: 28 rpx;
+      font-size: 28rpx;
       color: #999;
       
       img {
@@ -147,9 +147,9 @@ export default {
   }
   
   .p_detail_title {
-    padding: 30 rpx 20 rpx;
+    padding: 30rpx 20rpx;
     color: #333;
-    font-size: 30 rpx;
+    font-size: 30rpx;
   }
   
   /* 商品详情 end */

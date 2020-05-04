@@ -237,15 +237,15 @@ export default {
   
   .boxSizing {
     background-color: #FFFFFF;
-    width: 750 rpx;
+    width: 750rpx;
     overflow: hidden;
     min-height: 100vh;
     background-color: #FFFFFF !important;
   }
   
   .top {
-    width: 750 rpx;
-    height: 537 rpx;
+    width: 750rpx;
+    height: 537rpx;
     position: relative;
     background-color: #FFFFFF;
     
@@ -256,180 +256,180 @@ export default {
     }
     
     .bottoms {
-      width: 690 rpx;
-      height: 133 rpx;
+      width: 690rpx;
+      height: 133rpx;
       background-color: #fff;
       position: absolute;
       box-shadow: 0px 8px 64px 0px rgba(4, 0, 0, 0.14);
       border-radius: 132px;
-      bottom: 68 rpx;
-      left: 30 rpx;
+      bottom: 68rpx;
+      left: 30rpx;
       display: flex;
       align-items: center;
       justify-content: space-around;
-      padding: 38 rpx 97 rpx 37 rpx 41 rpx;
+      padding: 38rpx 97rpx 37rpx 41rpx;
       
       .image {
-        width: 58 rpx;
-        height: 58 rpx;
+        width: 58rpx;
+        height: 58rpx;
       }
       
       .line {
-        width: 2 rpx;
-        height: 50 rpx;
+        width: 2rpx;
+        height: 50rpx;
         background: rgba(240, 239, 240, 1);
       }
       
       .qwe {
         // width: 278rpx;
-        height: 58 rpx;
-        line-height: 58 rpx;
-        font-size: 34 rpx;
+        height: 58rpx;
+        line-height: 58rpx;
+        font-size: 34rpx;
         color: #4C4C4C;
         display: flex;
         align-items: center;
         
         .image {
-          width: 58 rpx;
-          height: 58 rpx;
+          width: 58rpx;
+          height: 58rpx;
         }
         
         text {
-          margin-left: 21 rpx;
+          margin-left: 21rpx;
         }
       }
       
     }
     
     .back {
-      width: 21 rpx;
-      height: 38 rpx;
+      width: 21rpx;
+      height: 38rpx;
       position: absolute;
-      left: 24 rpx;
-      top: 25 rpx;
+      left: 24rpx;
+      top: 25rpx;
       /* #ifdef APP-PLUS */
       margin-top: var(--status-bar-height);
       /* #endif */
     }
     
     .titleq {
-      font-size: 36 rpx;
-      height: 34 rpx;
-      line-height: 34 rpx;
+      font-size: 36rpx;
+      height: 34rpx;
+      line-height: 34rpx;
       color: #FFFFFF;
       position: absolute;
-      left: 70 rpx;
-      top: 25 rpx;
+      left: 70rpx;
+      top: 25rpx;
       /* #ifdef APP-PLUS */
       margin-top: var(--status-bar-height);
       /* #endif */
     }
     
     .dangqian {
-      font-size: 28 rpx;
+      font-size: 28rpx;
       color: #FFFFFF;
-      height: 28 rpx;
-      line-height: 28 rpx;
+      height: 28rpx;
+      line-height: 28rpx;
       position: absolute;
-      left: 39 rpx;
-      top: 162 rpx;
+      left: 39rpx;
+      top: 162rpx;
     }
     
     .momo {
-      width: 27 rpx;
-      height: 28 rpx;
+      width: 27rpx;
+      height: 28rpx;
       position: absolute;
-      left: 53 rpx;
-      top: 130 rpx;
+      left: 53rpx;
+      top: 130rpx;
     }
     
     .prices {
-      font-size: 80 rpx;
+      font-size: 80rpx;
       font-weight: 400;
-      height: 61 rpx;
-      line-height: 61 rpx;
+      height: 61rpx;
+      line-height: 61rpx;
       position: absolute;
-      left: 97 rpx;
-      top: 100 rpx;
+      left: 97rpx;
+      top: 100rpx;
       color: #FFFFFF;
     }
     
     .duihuan {
-      font-size: 24 rpx;
-      height: 24 rpx;
-      line-height: 24 rpx;
+      font-size: 24rpx;
+      height: 24rpx;
+      line-height: 24rpx;
       position: absolute;
-      top: 240 rpx;
-      left: 53 rpx;
+      top: 240rpx;
+      left: 53rpx;
       font-weight: 300;
       color: #FFFFFF;
       opacity: 0.69;
     }
     
     .zhuanchu {
-      width: 170 rpx;
-      height: 74 rpx;
-      line-height: 74 rpx;
+      width: 170rpx;
+      height: 74rpx;
+      line-height: 74rpx;
       text-align: center;
-      font-size: 30 rpx;
+      font-size: 30rpx;
       color: #FFFFFF;
       font-weight: bold;
       background-color: #ff9175;
-      border-radius: 16 rpx;
+      border-radius: 16rpx;
       position: absolute;
-      top: 130 rpx;
-      right: 24 rpx;
+      top: 130rpx;
+      right: 24rpx;
     }
     
     
   }
   
   .selects {
-    height: 30 rpx;
-    width: 750 rpx;
+    height: 30rpx;
+    width: 750rpx;
     display: flex;
     align-items: center;
-    margin-top: 48 rpx;
-    margin-bottom: 40 rpx;
+    margin-top: 48rpx;
+    margin-bottom: 40rpx;
     justify-content: center;
     
     .image {
-      width: 20 rpx;
-      height: 20 rpx;
+      width: 20rpx;
+      height: 20rpx;
     }
     
     .vies {
-      margin-left: 20 rpx;
-      margin-right: 20 rpx;
-      font-size: 32 rpx;
+      margin-left: 20rpx;
+      margin-right: 20rpx;
+      font-size: 32rpx;
       color: #FF5C33;
       font-weight: bold;
-      line-height: 32 rpx;
+      line-height: 32rpx;
     }
     
   }
   
   .contents {
-    width: 750 rpx;
-    padding: 17 rpx 26 rpx 32 rpx 24 rpx;
+    width: 750rpx;
+    padding: 17rpx 26rpx 32rpx 24rpx;
     
     .mingxi {
-      height: 115 rpx;
-      width: 700 rpx;
-      border-bottom: 1 rpx solid #EAEAEA;
+      height: 115rpx;
+      width: 700rpx;
+      border-bottom: 1rpx solid #EAEAEA;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 28 rpx;
+      font-size: 28rpx;
       color: #333333;
       
       .times {
         color: #999999;
-        font-size: 20 rpx;
-        height: 15 rpx;
-        line-height: 15 rpx;
-        margin-top: 15 rpx;
-        margin-left: 3 rpx;
+        font-size: 20rpx;
+        height: 15rpx;
+        line-height: 15rpx;
+        margin-top: 15rpx;
+        margin-left: 3rpx;
       }
     }
   }
@@ -437,32 +437,32 @@ export default {
   .norecord {
     text-align: center;
     color: #999;
-    font-size: 28 rpx;
+    font-size: 28rpx;
   }
   
   .zhezhao {
     width: 100%;
     height: 100%;
     position: fixed;
-    top: 0 rpx;
-    left: 0 rpx;
+    top: 0rpx;
+    left: 0rpx;
     z-index: 9999;
     background-color: rgba($color: #000000, $alpha: .3);
     
     .zhezhaoView {
       background: rgba(255, 255, 255, 1);
       border-radius: 20px;
-      width: 503 rpx;
-      height: 564 rpx;
+      width: 503rpx;
+      height: 564rpx;
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      left: 123 rpx;
+      left: 123rpx;
     }
     
     .closeZ {
-      width: 47 rpx;
-      height: 47 rpx;
+      width: 47rpx;
+      height: 47rpx;
       position: absolute;
       bottom: -100rpx;
       transform: translateX(-50%);
@@ -470,47 +470,47 @@ export default {
     }
     
     .zhezhaoYue {
-      height: 157 rpx;
-      width: 503 rpx;
-      font-size: 32 rpx;
+      height: 157rpx;
+      width: 503rpx;
+      font-size: 32rpx;
       color: #333333;
       text-align: center;
-      line-height: 157 rpx;
+      line-height: 157rpx;
     }
     
     .zhezhaoCenter {
       width: 100%;
-      margin-top: 13 rpx;
-      padding: 0 rpx 52 rpx;
+      margin-top: 13rpx;
+      padding: 0rpx 52rpx;
       
       .views {
-        height: 90 rpx;
+        height: 90rpx;
         display: flex;
         align-items: center;
         
         .inputs {
-          border-bottom: 1 rpx solid #F4F4F4;
-          font-size: 24 rpx;
-          margin-left: 16 rpx;
+          border-bottom: 1rpx solid #F4F4F4;
+          font-size: 24rpx;
+          margin-left: 16rpx;
         }
       }
       
       .imgs {
-        width: 25 rpx;
-        height: 37 rpx;
+        width: 25rpx;
+        height: 37rpx;
       }
     }
     
     .zheButton {
-      width: 400 rpx;
-      height: 76 rpx;
-      line-height: 76 rpx;
+      width: 400rpx;
+      height: 76rpx;
+      line-height: 76rpx;
       background: rgba(255, 92, 51, 1);
-      border-radius: 60 rpx;
+      border-radius: 60rpx;
       text-align: center;
-      margin-top: 40 rpx;
-      margin-left: 52 rpx;
-      font-size: 30 rpx;
+      margin-top: 40rpx;
+      margin-left: 52rpx;
+      font-size: 30rpx;
       color: #FFFFFF;
     }
   }

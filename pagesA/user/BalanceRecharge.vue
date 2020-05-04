@@ -346,10 +346,10 @@ export default {
   }
   
   .yue {
-    width: 650 rpx;
-    height: 300 rpx;
+    width: 650rpx;
+    height: 300rpx;
     margin: 0 auto;
-    padding-top: 44 rpx;
+    padding-top: 44rpx;
     position: relative;
     
     .yue-image {
@@ -359,77 +359,77 @@ export default {
     
     .yueq {
       position: absolute;
-      top: 83 rpx;
-      left: 49 rpx;
-      font-size: 28 rpx;
-      height: 27 rpx;
-      line-height: 27 rpx;
+      top: 83rpx;
+      left: 49rpx;
+      font-size: 28rpx;
+      height: 27rpx;
+      line-height: 27rpx;
       color: #FFFFFF;
     }
     
     .pricsw {
       position: absolute;
-      top: 144 rpx;
-      left: 49 rpx;
-      font-size: 60 rpx;
-      height: 46 rpx;
-      line-height: 46 rpx;
+      top: 144rpx;
+      left: 49rpx;
+      font-size: 60rpx;
+      height: 46rpx;
+      line-height: 46rpx;
       font-weight: 400;
       color: #FFFFFF;
     }
   }
   
   .inputs {
-    margin-top: 40 rpx;
-    height: 101 rpx;
-    margin-left: 52 rpx;
-    margin-right: 52 rpx;
-    width: 646 rpx;
-    font-size: 28 rpx;
+    margin-top: 40rpx;
+    height: 101rpx;
+    margin-left: 52rpx;
+    margin-right: 52rpx;
+    width: 646rpx;
+    font-size: 28rpx;
   }
   
   .line {
-    width: 650 rpx;
-    height: 10 rpx;
+    width: 650rpx;
+    height: 10rpx;
     margin: 0 auto;
     background: rgba(244, 244, 244, 1);
   }
   
   .payMethod {
-    margin: 58 rpx 0 rpx 24 rpx 51 rpx;
-    height: 29 rpx;
-    line-height: 29 rpx;
-    font-size: 30 rpx;
+    margin: 58rpx 0rpx 24rpx 51rpx;
+    height: 29rpx;
+    line-height: 29rpx;
+    font-size: 30rpx;
     color: #333333;
     font-weight: bold;
   }
   
   .selectq {
     margin: 0 auto;
-    width: 650 rpx;
-    height: 91 rpx;
+    width: 650rpx;
+    height: 91rpx;
     display: flex;
     align-items: center;
-    border-bottom: 1 rpx solid #F4F4F4;
-    font-size: 28 rpx;
+    border-bottom: 1rpx solid #F4F4F4;
+    font-size: 28rpx;
     color: #666666;
     font-weight: 400;
     justify-content: space-between;
-    padding-top: 20 rpx;
+    padding-top: 20rpx;
   }
   
   .radio {
     background-color: #EFEFEF;
-    width: 28 rpx;
-    height: 28 rpx;
+    width: 28rpx;
+    height: 28rpx;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     
     .el-radio {
-      width: 12 rpx;
-      height: 12 rpx;
+      width: 12rpx;
+      height: 12rpx;
       background: linear-gradient(107deg, rgba(237, 236, 238, 1), rgba(228, 228, 228, 1));
       border-radius: 50%;
       
@@ -440,25 +440,25 @@ export default {
   }
   
   .queren {
-    width: 648 rpx;
-    height: 84 rpx;
-    line-height: 84 rpx;
+    width: 648rpx;
+    height: 84rpx;
+    line-height: 84rpx;
     text-align: center;
     background: linear-gradient(107deg, rgba(255, 92, 51, 1), rgba(255, 182, 81, 1));
-    box-shadow: 0px 6 rpx 14 rpx 0px rgba(255, 51, 92, 0.35);
-    border-radius: 20 rpx;
+    box-shadow: 0px 6rpx 14rpx 0px rgba(255, 51, 92, 0.35);
+    border-radius: 20rpx;
     margin: 0 auto;
-    margin-top: 147 rpx;
-    font-size: 28 rpx;
+    margin-top: 147rpx;
+    font-size: 28rpx;
     color: #FFFFFF;
     font-weight: 400;
   }
   
   .youhui {
-    width: 650 rpx;
+    width: 650rpx;
     margin: 0 auto;
-    font-size: 25 rpx;
-    line-height: 40 rpx;
+    font-size: 25rpx;
+    line-height: 40rpx;
     color: #999999;
     
     .youhui-text {

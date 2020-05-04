@@ -179,24 +179,24 @@ export default {
   }
   
   .radio-item {
-    width: 750 rpx;
-    padding: 20 rpx 0;
+    width: 750rpx;
+    padding: 20rpx 0;
     overflow: hidden;
     display: flex;
     flex-flow: row;
     align-items: center;
-    border-bottom: 15 rpx #f4f4f4 solid;
+    border-bottom: 15rpx #f4f4f4 solid;
   }
   
   .radio-item .radio-ele {
-    width: 80 rpx;
+    width: 80rpx;
     text-align: center;
   }
   
   .flex-main {
     flex: 1;
     color: #666;
-    line-height: 36 rpx;
+    line-height: 36rpx;
     display: flex;
     flex-flow: column;
   }
@@ -204,7 +204,7 @@ export default {
   .flex-main .flex-top {
     display: flex;
     flex-flow: row;
-    margin-bottom: 10 rpx;
+    margin-bottom: 10rpx;
   }
   
   .flex-main .flex-top .name {
@@ -218,30 +218,30 @@ export default {
   
   .flex-main .flex-add {
     width: 100%;
-    line-height: 36 rpx;
+    line-height: 36rpx;
     overflow: hidden;
   }
   
   .flex-main .flex-add.default {
     color: #ff0000;
-    margin-top: 10 rpx;
+    margin-top: 10rpx;
   }
   
   .flex-action {
-    padding: 0 30 rpx;
+    padding: 0 30rpx;
     display: flex;
     flex-flow: column;
     text-align: center;
   }
   
   .flex-action image {
-    width: 46 rpx;
-    height: 46 rpx;
-    margin-left: 37 rpx;
+    width: 46rpx;
+    height: 46rpx;
+    margin-left: 37rpx;
   }
   
   .flex-action image:nth-child(1) {
-    margin-bottom: 20 rpx;
+    margin-bottom: 20rpx;
   }
   
   /* 没有选择框样式 */
@@ -252,25 +252,25 @@ export default {
   
   .tianjia {
     color: #666;
-    line-height: 40 rpx;
-    font-size: 28 rpx;
-    width: 710 rpx;
+    line-height: 40rpx;
+    font-size: 28rpx;
+    width: 710rpx;
     position: fixed;
     bottom: 0;
     z-index: 5;
-    padding: 20 rpx;
+    padding: 20rpx;
     border-top: 1px #f4f4f4 solid;
     background: #fff;
   }
   
   .tianjia view.jia_img image {
-    width: 40 rpx;
-    height: 40 rpx;
+    width: 40rpx;
+    height: 40rpx;
   }
   
   .tianjia view.go_img image {
-    width: 40 rpx;
-    height: 40 rpx;
+    width: 40rpx;
+    height: 40rpx;
   }
   
   .go_img {
@@ -278,8 +278,8 @@ export default {
   }
   
   .tianjia text {
-    width: 200 rpx;
+    width: 200rpx;
     float: left;
-    margin-left: 10 rpx;
+    margin-left: 10rpx;
   }
 </style>

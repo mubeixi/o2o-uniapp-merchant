@@ -106,7 +106,7 @@ export default {
   .pro_detail {
     .p_detail_des {
       width: 100%;
-      font-size: 28 rpx;
+      font-size: 28rpx;
       color: #999;
       
       img {
@@ -116,9 +116,9 @@ export default {
   }
   
   .p_detail_title {
-    padding: 30 rpx 20 rpx;
+    padding: 30rpx 20rpx;
     color: #333;
-    font-size: 30 rpx;
+    font-size: 30rpx;
   }
   
   /* 商品详情 end */

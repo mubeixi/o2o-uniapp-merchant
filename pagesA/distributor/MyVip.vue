@@ -76,18 +76,18 @@ export default {
   }
   
   .centers {
-    width: 710 rpx;
+    width: 710rpx;
     margin: 0 auto;
     box-sizing: border-box;
-    height: 138 rpx;
+    height: 138rpx;
     border-bottom: 1px solid #ECE8E8;
     display: flex;
     align-items: center;
-    padding: 20 rpx 0 rpx;
+    padding: 20rpx 0rpx;
     
     .imgs {
-      width: 98 rpx;
-      height: 98 rpx;
+      width: 98rpx;
+      height: 98rpx;
       border-radius: 50%;
       overflow: hidden;
       
@@ -98,41 +98,41 @@ export default {
     }
     
     .titles {
-      margin-left: 19 rpx;
+      margin-left: 19rpx;
       width: 100%;
-      height: 98 rpx;
+      height: 98rpx;
       
       .bots {
-        margin-top: 15 rpx;
-        height: 23 rpx;
-        font-size: 24 rpx;
+        margin-top: 15rpx;
+        height: 23rpx;
+        font-size: 24rpx;
         font-weight: 500;
         color: rgba(136, 136, 136, 1);
       }
       
       .msg {
-        margin-top: 12 rpx;
-        font-size: 30 rpx;
+        margin-top: 12rpx;
+        font-size: 30rpx;
         color: #333333;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        height: 29 rpx;
+        height: 29rpx;
         
         .tops {
-          height: 29 rpx;
-          line-height: 29 rpx;
-          width: 360 rpx;
+          height: 29rpx;
+          line-height: 29rpx;
+          width: 360rpx;
           overflow: hidden;
           
           text {
-            font-size: 28 rpx;
-            margin-left: 10 rpx;
+            font-size: 28rpx;
+            margin-left: 10rpx;
           }
         }
         
         .rights {
-          font-size: 24 rpx;
+          font-size: 24rpx;
           color: #888888;
         }
       }
@@ -141,7 +141,7 @@ export default {
   
   .defaults {
     margin: 0 auto;
-    width: 640 rpx;
-    height: 480 rpx;
+    width: 640rpx;
+    height: 480rpx;
   }
 </style>
