@@ -154,8 +154,8 @@ export default {
   }
   
   .top {
-    width: 750 rpx;
-    height: 404 rpx;
+    width: 750rpx;
+    height: 404rpx;
     position: relative;
     
     .widthTen {
@@ -164,140 +164,140 @@ export default {
     }
     
     .goBack {
-      width: 20 rpx;
-      height: 30 rpx;
+      width: 20rpx;
+      height: 30rpx;
       
       position: absolute;
-      top: 30 rpx;
-      left: 20 rpx;
+      top: 30rpx;
+      left: 20rpx;
     }
     
     .titles {
       
       color: #FFFFFF;
-      font-size: 32 rpx;
+      font-size: 32rpx;
       position: absolute;
-      top: 29 rpx;
-      left: 312 rpx;
-      height: 31 rpx;
-      line-height: 31 rpx;
+      top: 29rpx;
+      left: 312rpx;
+      height: 31rpx;
+      line-height: 31rpx;
     }
     
     .center {
-      width: 727 rpx;
-      height: 344 rpx;
+      width: 727rpx;
+      height: 344rpx;
       position: absolute;
-      left: 12 rpx;
-      top: 110 rpx;
+      left: 12rpx;
+      top: 110rpx;
       
       .info {
-        width: 93 rpx;
-        height: 92 rpx;
+        width: 93rpx;
+        height: 92rpx;
         overflow: hidden;
         position: absolute;
-        left: 57 rpx;
-        top: 64 rpx;
+        left: 57rpx;
+        top: 64rpx;
         border-radius: 50%;
       }
       
       .nickName {
-        height: 29 rpx;
-        line-height: 29 rpx;
-        font-size: 30 rpx;
+        height: 29rpx;
+        line-height: 29rpx;
+        font-size: 30rpx;
         font-weight: bold;
         color: #5B412D;
         position: absolute;
-        top: 74 rpx;
-        left: 165 rpx;
+        top: 74rpx;
+        left: 165rpx;
       }
       
       .vip {
-        width: 121 rpx;
-        height: 35 rpx;
-        line-height: 35 rpx;
+        width: 121rpx;
+        height: 35rpx;
+        line-height: 35rpx;
         background: rgba(226, 188, 146, 1);
-        border-radius: 18 rpx;
+        border-radius: 18rpx;
         position: absolute;
-        top: 116 rpx;
-        left: 164 rpx;
-        font-size: 20 rpx;
+        top: 116rpx;
+        left: 164rpx;
+        font-size: 20rpx;
         color: #FFFFFF;
         text-align: center;
         
         .image {
-          width: 10 rpx;
-          height: 17 rpx;
-          margin-left: 6 rpx;
+          width: 10rpx;
+          height: 17rpx;
+          margin-left: 6rpx;
         }
       }
       
       .zhangValue {
-        width: 138 rpx;
-        height: 10 rpx;
+        width: 138rpx;
+        height: 10rpx;
         background: rgba(133, 99, 72, 1);
-        border-radius: 5 rpx;
+        border-radius: 5rpx;
         position: absolute;
-        top: 115 rpx;
-        left: 302 rpx;
+        top: 115rpx;
+        left: 302rpx;
         
         .view {
           background-color: #FFFFFF;
-          height: 10 rpx;
+          height: 10rpx;
         }
       }
       
       .myValue {
-        height: 17 rpx;
-        line-height: 17 rpx;
-        font-size: 18 rpx;
+        height: 17rpx;
+        line-height: 17rpx;
+        font-size: 18rpx;
         font-weight: 500;
         color: rgba(102, 70, 48, 1);
         position: absolute;
-        top: 134 rpx;
-        left: 304 rpx;
+        top: 134rpx;
+        left: 304rpx;
       }
       
       .shengji {
         //width:38rpx;
-        height: 22 rpx;
+        height: 22rpx;
         font-size: 10px;
         color: #FFFFFF;
-        line-height: 22 rpx;
+        line-height: 22rpx;
         background: rgba(133, 99, 72, 1);
-        border-radius: 3 rpx;
+        border-radius: 3rpx;
         position: absolute;
-        top: 132 rpx;
-        left: 399 rpx;
+        top: 132rpx;
+        left: 399rpx;
         text-align: center;
         padding-left: 4px;
         padding-right: 4px;
       }
       
       .numberValue {
-        height: 32 rpx;
-        font-size: 42 rpx;
+        height: 32rpx;
+        font-size: 42rpx;
         font-weight: bold;
         color: rgba(91, 65, 45, 1);
-        line-height: 32 rpx;
+        line-height: 32rpx;
         position: absolute;
-        top: 196 rpx;
-        left: 63 rpx;
+        top: 196rpx;
+        left: 63rpx;
       }
       
       .valueM {
-        height: 20 rpx;
-        font-size: 20 rpx;
+        height: 20rpx;
+        font-size: 20rpx;
         font-weight: 500;
         color: rgba(91, 65, 45, 1);
-        line-height: 20 rpx;
+        line-height: 20rpx;
         position: absolute;
-        top: 240 rpx;
-        left: 61 rpx;
+        top: 240rpx;
+        left: 61rpx;
         
         .image {
-          width: 8 rpx;
-          height: 12 rpx;
-          margin-left: 8 rpx;
+          width: 8rpx;
+          height: 12rpx;
+          margin-left: 8rpx;
         }
       }
     }
@@ -305,75 +305,75 @@ export default {
   
   .myPrivilege {
     margin: 0 auto;
-    width: 710 rpx;
-    margin-bottom: 30 rpx;
+    width: 710rpx;
+    margin-bottom: 30rpx;
     
     .view {
-      font-size: 24 rpx;
+      font-size: 24rpx;
       color: #666666;
-      height: 50 rpx;
-      line-height: 50 rpx;
+      height: 50rpx;
+      line-height: 50rpx;
     }
   }
   
   .ruhe {
-    width: 710 rpx;
+    width: 710rpx;
     background: rgba(255, 255, 255, 1);
-    box-shadow: 0px 0px 12 rpx 0px rgba(0, 0, 0, 0.25);
-    border-radius: 10 rpx;
+    box-shadow: 0px 0px 12rpx 0px rgba(0, 0, 0, 0.25);
+    border-radius: 10rpx;
     margin: 0 auto;
-    margin-top: 10 rpx;
+    margin-top: 10rpx;
     
     .td {
-      width: 690 rpx;
+      width: 690rpx;
       margin: 0 auto;
-      height: 124 rpx;
-      border-bottom: 1 rpx solid #ECE8E8;
+      height: 124rpx;
+      border-bottom: 1rpx solid #ECE8E8;
       display: flex;
       align-items: center;
       
       &:last-child {
-        border-bottom: 0 rpx;
+        border-bottom: 0rpx;
       }
       
       .image {
-        width: 65 rpx;
-        height: 65 rpx;
-        margin-left: 21 rpx;
+        width: 65rpx;
+        height: 65rpx;
+        margin-left: 21rpx;
       }
       
       .mbx {
-        height: 65 rpx;
-        margin-left: 24 rpx;
+        height: 65rpx;
+        margin-left: 24rpx;
         
         .tops {
-          height: 27 rpx;
-          line-height: 27 rpx;
+          height: 27rpx;
+          line-height: 27rpx;
           color: #333333;
           font-weight: bold;
-          font-size: 28 rpx;
+          font-size: 28rpx;
         }
         
         .bottoms {
-          margin-top: 15 rpx;
-          height: 23 rpx;
-          line-height: 23 rpx;
-          font-size: 24 rpx;
+          margin-top: 15rpx;
+          height: 23rpx;
+          line-height: 23rpx;
+          font-size: 24rpx;
           color: #999999;
         }
       }
       
       .submit {
-        width: 110 rpx;
-        height: 45 rpx;
-        line-height: 45 rpx;
+        width: 110rpx;
+        height: 45rpx;
+        line-height: 45rpx;
         background: rgba(244, 49, 49, 1);
-        border-radius: 8 rpx;
-        font-size: 24 rpx;
+        border-radius: 8rpx;
+        font-size: 24rpx;
         color: #FFFFFF;
         text-align: center;
         margin-left: auto;
-        margin-right: 20 rpx;
+        margin-right: 20rpx;
       }
       
       .submitMbx {

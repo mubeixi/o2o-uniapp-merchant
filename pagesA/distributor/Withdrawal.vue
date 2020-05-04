@@ -219,7 +219,7 @@ export default {
 <style scoped lang="scss">
   .all {
     background-color: #f8f8f8;
-    width: 750 rpx;
+    width: 750rpx;
     min-height: 100vh;
     overflow: hidden;
     box-sizing: border-box;
@@ -227,155 +227,155 @@ export default {
   
   .content {
     background-color: #FFFFFF;
-    width: 710 rpx;
-    margin: 40 rpx 20 rpx 0 rpx 20 rpx;
-    padding-bottom: 85 rpx;
-    border-radius: 10 rpx;
+    width: 710rpx;
+    margin: 40rpx 20rpx 0rpx 20rpx;
+    padding-bottom: 85rpx;
+    border-radius: 10rpx;
     
     .bank {
-      width: 710 rpx;
+      width: 710rpx;
       background-color: #EEEEEE;
-      height: 100 rpx;
-      padding: 0 rpx 30 rpx;
+      height: 100rpx;
+      padding: 0rpx 30rpx;
       display: flex;
       align-items: center;
       box-sizing: border-box;
       
       .bankCard {
-        width: 50 rpx;
-        height: 50 rpx;
-        margin-right: 18 rpx;
+        width: 50rpx;
+        height: 50rpx;
+        margin-right: 18rpx;
       }
       
       .bankName {
-        font-size: 28 rpx;
+        font-size: 28rpx;
         color: #333333;
       }
       
       .right {
-        width: 18 rpx;
-        height: 27 rpx;
+        width: 18rpx;
+        height: 27rpx;
         margin-left: auto;
       }
     }
     
     .guanli {
-      font-size: 28 rpx;
+      font-size: 28rpx;
       color: #5E9BFF;
-      line-height: 100 rpx;
+      line-height: 100rpx;
       display: block;
       text-align: center;
     }
     
     .tiMoney {
-      width: 710 rpx;
-      height: 25 rpx;
-      line-height: 25 rpx;
-      margin: 68 rpx 0 rpx 68 rpx 30 rpx;
-      font-size: 26 rpx;
+      width: 710rpx;
+      height: 25rpx;
+      line-height: 25rpx;
+      margin: 68rpx 0rpx 68rpx 30rpx;
+      font-size: 26rpx;
       color: #333333;
     }
     
     .inputMoney {
-      width: 650 rpx;
-      height: 66 rpx;
-      margin-left: 30 rpx;
-      margin-right: 30 rpx;
-      border-bottom: 1 rpx solid #ECE8E8;
+      width: 650rpx;
+      height: 66rpx;
+      margin-left: 30rpx;
+      margin-right: 30rpx;
+      border-bottom: 1rpx solid #ECE8E8;
       display: flex;
-      font-size: 48 rpx;
+      font-size: 48rpx;
       color: #333333;
-      padding-bottom: 30 rpx;
+      padding-bottom: 30rpx;
       
       .input-money-inner {
-        height: 35 rpx;
-        line-height: 35 rpx;
+        height: 35rpx;
+        line-height: 35rpx;
         display: flex;
         align-items: center;
         
         .input-money-input {
-          margin-left: 20 rpx;
-          height: 35 rpx;
-          width: 600 rpx;
+          margin-left: 20rpx;
+          height: 35rpx;
+          width: 600rpx;
         }
       }
     }
     
     .canTi {
-      width: 670 rpx;
-      height: 76 rpx;
+      width: 670rpx;
+      height: 76rpx;
       margin: 0 auto;
       display: flex;
       align-items: center;
       justify-content: space-between;
       
       .canTiMoney {
-        font-size: 22 rpx;
+        font-size: 22rpx;
         color: #999999;
       }
       
       .allTi {
-        font-size: 22 rpx;
+        font-size: 22rpx;
         color: #69A1FF;
       }
     }
     
     .kong {
       background-color: #F8F8F8;
-      width: 690 rpx;
+      width: 690rpx;
       margin: 0 auto;
-      height: 20 rpx;
+      height: 20rpx;
     }
     
     .tishi {
-      margin-top: 27 rpx;
-      margin-left: 32 rpx;
-      margin-right: 33 rpx;
-      width: 645 rpx;
+      margin-top: 27rpx;
+      margin-left: 32rpx;
+      margin-right: 33rpx;
+      width: 645rpx;
       display: flex;
       
       .tishi-image {
-        width: 22 rpx;
-        height: 22 rpx;
-        margin-right: 10 rpx;
-        margin-top: 5 rpx;
+        width: 22rpx;
+        height: 22rpx;
+        margin-right: 10rpx;
+        margin-top: 5rpx;
       }
       
       .tishi-view {
-        width: 613 rpx;
-        font-size: 20 rpx;
+        width: 613rpx;
+        font-size: 20rpx;
         color: #999999;
       }
     }
     
     .liji {
-      margin-top: 98 rpx;
-      width: 620 rpx;
-      height: 80 rpx;
-      line-height: 80 rpx;
+      margin-top: 98rpx;
+      width: 620rpx;
+      height: 80rpx;
+      line-height: 80rpx;
       background: #F43131;
-      border-radius: 10 rpx;
-      margin-left: 50 rpx;
-      margin-right: 40 rpx;
+      border-radius: 10rpx;
+      margin-left: 50rpx;
+      margin-right: 40rpx;
       text-align: center;
-      font-size: 34 rpx;
+      font-size: 34rpx;
       color: #FFFFFF;
     }
     
     .lishi {
-      height: 21 rpx;
+      height: 21rpx;
       // width: 106rpx;
-      margin-top: 25 rpx;
-      margin-left: 565 rpx;
-      font-size: 22 rpx;
+      margin-top: 25rpx;
+      margin-left: 565rpx;
+      font-size: 22rpx;
       color: #999999;
       display: flex;
       align-items: center;
       
       .lishi-image {
-        width: 12 rpx;
-        height: 20 rpx;
-        margin-left: 6 rpx;
+        width: 12rpx;
+        height: 20rpx;
+        margin-left: 6rpx;
       }
     }
   }

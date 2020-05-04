@@ -119,8 +119,8 @@ export default {
   }
   
   .top {
-    width: 750 rpx;
-    height: 233 rpx;
+    width: 750rpx;
+    height: 233rpx;
     overflow: hidden;
     position: relative;
     
@@ -129,38 +129,38 @@ export default {
     }
     
     .msg {
-      width: 45 rpx;
-      height: 45 rpx;
+      width: 45rpx;
+      height: 45rpx;
       position: absolute;
-      top: 25 rpx;
-      right: 21 rpx;
+      top: 25rpx;
+      right: 21rpx;
     }
     
     .go {
       position: absolute;
-      top: 33 rpx;
-      left: 19 rpx;
+      top: 33rpx;
+      left: 19rpx;
     }
     
     .person {
-      width: 550 rpx;
-      height: 92 rpx;
+      width: 550rpx;
+      height: 92rpx;
       overflow: hidden;
       position: absolute;
-      top: 103 rpx;
-      left: 21 rpx;
+      top: 103rpx;
+      left: 21rpx;
       display: flex;
       
       .headimg {
-        height: 92 rpx;
-        width: 92 rpx;
+        height: 92rpx;
+        width: 92rpx;
         border-radius: 50%;
       }
       
       .nickName {
         
-        line-height: 92 rpx;
-        font-size: 30 rpx;
+        line-height: 92rpx;
+        font-size: 30rpx;
         font-weight: bold;
         color: #FFFFFF;
         margin-left: 10px;
@@ -169,90 +169,90 @@ export default {
     }
     
     .ziliao {
-      height: 30 rpx;
-      font-size: 22 rpx;
+      height: 30rpx;
+      font-size: 22rpx;
       font-family: PingFang SC;
       font-weight: 500;
       color: #FFFFFF;
       position: absolute;
-      top: 159 rpx;
-      left: 136 rpx;
+      top: 159rpx;
+      left: 136rpx;
       
       .edit {
-        width: 19 rpx;
-        height: 19 rpx;
-        margin-left: 18 rpx;
+        width: 19rpx;
+        height: 19rpx;
+        margin-left: 18rpx;
       }
     }
     
     .putong {
-      width: 152 rpx;
-      height: 50 rpx;
-      line-height: 50 rpx;
+      width: 152rpx;
+      height: 50rpx;
+      line-height: 50rpx;
       text-align: center;
       background-color: #FFFFFF;
-      font-size: 24 rpx;
+      font-size: 24rpx;
       color: #333333;
       position: absolute;
-      top: 124 rpx;
-      right: 0 rpx;
-      border-radius: 152 rpx 0px 0px 152 rpx;
+      top: 124rpx;
+      right: 0rpx;
+      border-radius: 152rpx 0px 0px 152rpx;
     }
     
   }
   
   .tuiguang {
-    height: 182 rpx;
-    width: 750 rpx;
-    padding: 50 rpx 21 rpx 22 rpx 20 rpx;
+    height: 182rpx;
+    width: 750rpx;
+    padding: 50rpx 21rpx 22rpx 20rpx;
     box-sizing: border-box;
     
     .title {
-      height: 27 rpx;
-      font-size: 28 rpx;
+      height: 27rpx;
+      font-size: 28rpx;
       color: #333333;
       font-weight: 500;
     }
     
     .inputSec {
-      margin-top: 28 rpx;
-      height: 55 rpx;
+      margin-top: 28rpx;
+      height: 55rpx;
       display: flex;
       
       .inputw {
-        width: 580 rpx;
-        height: 55 rpx;
+        width: 580rpx;
+        height: 55rpx;
         border: 1px solid #B3B3B3;
         color: #999999;
-        font-size: 26 rpx;
-        padding-left: 18 rpx;
+        font-size: 26rpx;
+        padding-left: 18rpx;
         box-sizing: border-box;
       }
       
       .textw {
-        width: 100 rpx;
-        height: 55 rpx;
-        line-height: 55 rpx;
-        font-size: 28 rpx;
+        width: 100rpx;
+        height: 55rpx;
+        line-height: 55rpx;
+        font-size: 28rpx;
         color: #FFFFFF;
         background-color: #F43131;
         text-align: center;
-        margin-left: 29 rpx;
+        margin-left: 29rpx;
       }
     }
   }
   
   .last {
-    width: 710 rpx;
+    width: 710rpx;
     /*height: 433rpx;*/
     margin: 0 auto;
-    margin-top: 28 rpx;
+    margin-top: 28rpx;
     background: rgba(255, 255, 255, 1);
-    box-shadow: 0px 0 rpx 15 rpx 0px rgba(0, 0, 0, 0.18);
+    box-shadow: 0px 0rpx 15rpx 0px rgba(0, 0, 0, 0.18);
     
     .first, .second {
-      width: 710 rpx;
-      height: 216 rpx;
+      width: 710rpx;
+      height: 216rpx;
       display: flex;
       position: relative;
       
@@ -262,12 +262,12 @@ export default {
         position: relative;
         
         .image {
-          width: 79 rpx;
-          height: 79 rpx;
+          width: 79rpx;
+          height: 79rpx;
         }
         
         .haha {
-          font-size: 28 rpx;
+          font-size: 28rpx;
           color: #333333;
         }
       }
@@ -275,20 +275,20 @@ export default {
       .left:after {
         content: '';
         position: absolute;
-        top: 68 rpx;
+        top: 68rpx;
         right: 0;
-        height: 81 rpx;
-        width: 1 rpx;
+        height: 81rpx;
+        width: 1rpx;
         background-color: #E8E8E8;
       }
     }
     
     view.first .image {
-      margin-top: 46 rpx;
+      margin-top: 46rpx;
     }
     
     view.second .image {
-      margin-top: 38 rpx;
+      margin-top: 38rpx;
     }
   }
 </style>

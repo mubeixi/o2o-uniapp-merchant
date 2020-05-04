@@ -126,7 +126,7 @@ export default {
 <style lang="scss" scoped>
   .profitSum {
     background-color: #F8F8F8;
-    padding-bottom: 40 rpx;
+    padding-bottom: 40rpx;
   }
   
   .order-status {
@@ -143,9 +143,9 @@ export default {
     
     .status {
       display: inline-block;
-      width: 150 rpx;
+      width: 150rpx;
       /*margin-right: 30rpx;*/
-      line-height: 80 rpx;
+      line-height: 80rpx;
       
       &.active {
         color: $fun-red-color;
@@ -160,9 +160,9 @@ export default {
   
   .status {
     display: inline-block;
-    width: 138 rpx;
+    width: 138rpx;
     /*margin-right: 30rpx;*/
-    line-height: 80 rpx;
+    line-height: 80rpx;
     text-align: center;
     
     &.active {
@@ -180,20 +180,20 @@ export default {
   }
   
   .order {
-    width: 710 rpx;
+    width: 710rpx;
     margin: 0 auto;
-    padding: 35 rpx 0 rpx 40 rpx 34 rpx;
+    padding: 35rpx 0rpx 40rpx 34rpx;
     background-color: #FFFFFF;
-    font-size: 26 rpx;
+    font-size: 26rpx;
     color: #333333;
     box-sizing: border-box;
-    border-radius: 20 rpx;
-    padding-bottom: 30 rpx;
-    margin-bottom: 20 rpx;
+    border-radius: 20rpx;
+    padding-bottom: 30rpx;
+    margin-bottom: 20rpx;
     
     .view {
       //height: 50rpx;
-      line-height: 50 rpx;
+      line-height: 50rpx;
       
       text {
         color: #666666;
@@ -207,9 +207,9 @@ export default {
   
   .defaults {
     margin: 0 auto;
-    width: 640 rpx;
-    height: 480 rpx;
-    margin-top: 100 rpx;
+    width: 640rpx;
+    height: 480rpx;
+    margin-top: 100rpx;
   }
   
   /deep/ .uni-scroll-view::-webkit-scrollbar {
@@ -218,65 +218,65 @@ export default {
   }
   
   .titleClass {
-    height: 90 rpx;
+    height: 90rpx;
     font-size: 14px;
     display: flex;
     align-items: center;
     box-sizing: border-box;
-    width: 710 rpx;
+    width: 710rpx;
     margin: 0 auto;
     margin-bottom: 10px;
     position: fixed;
-    width: 750 rpx;
+    width: 750rpx;
     top: 0px;
     left: 0px;
     background-color: #F8F8F8;
     z-index: 99;
-    padding-left: 20 rpx;
-    padding-right: 20 rpx;
+    padding-left: 20rpx;
+    padding-right: 20rpx;
     
     .titleButton {
-      width: 100 rpx;
-      height: 60 rpx;
-      line-height: 60 rpx;
+      width: 100rpx;
+      height: 60rpx;
+      line-height: 60rpx;
       color: #ffffff;
       text-align: center;
       background-color: #F43131;
-      border-radius: 10 rpx;
+      border-radius: 10rpx;
     }
     
     .titleLeft {
-      width: 100 rpx;
+      width: 100rpx;
     }
     
     .titleCenter {
-      width: 550 rpx;
-      height: 60 rpx;
+      width: 550rpx;
+      height: 60rpx;
       display: flex;
       align-items: center;
       
       .centerPicker {
-        margin-left: 20 rpx;
-        margin-right: 20 rpx;
+        margin-left: 20rpx;
+        margin-right: 20rpx;
       }
       
       .picker {
-        width: 200 rpx;
-        height: 60 rpx;
+        width: 200rpx;
+        height: 60rpx;
         background-color: #ffffff;
-        border-radius: 10 rpx;
+        border-radius: 10rpx;
         display: flex;
         align-items: center;
-        padding-left: 10 rpx;
+        padding-left: 10rpx;
         position: relative;
         border: 1px solid #cccccc;
         
         .img {
-          width: 30 rpx;
-          height: 30 rpx;
+          width: 30rpx;
+          height: 30rpx;
           position: absolute;
-          top: 15 rpx;
-          right: 10 rpx;
+          top: 15rpx;
+          right: 10rpx;
         }
       }
     }

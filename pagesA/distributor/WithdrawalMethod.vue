@@ -131,53 +131,53 @@ export default {
   
   .content {
     margin: 0 auto;
-    margin-top: 40 rpx;
-    width: 710 rpx;
+    margin-top: 40rpx;
+    width: 710rpx;
     
     .cardInfo {
       box-sizing: border-box;
-      width: 710 rpx;
-      height: 75 rpx;
-      line-height: 75 rpx;
-      margin-bottom: 20 rpx;
+      width: 710rpx;
+      height: 75rpx;
+      line-height: 75rpx;
+      margin-bottom: 20rpx;
       background-color: #FFFFFF;
-      border-radius: 5 rpx;
-      padding-left: 30 rpx;
+      border-radius: 5rpx;
+      padding-left: 30rpx;
       position: relative;
-      font-size: 28 rpx;
+      font-size: 28rpx;
       color: #333333;
       
       &:last-child {
-        margin-bottom: 0 rpx;
+        margin-bottom: 0rpx;
       }
       
       .image {
-        width: 32 rpx;
-        height: 23 rpx;
+        width: 32rpx;
+        height: 23rpx;
         position: absolute;
-        top: 26 rpx;
-        right: 35 rpx;
+        top: 26rpx;
+        right: 35rpx;
       }
     }
     
   }
   
   .del {
-    width: 25 rpx !important;
-    height: 30 rpx !important;
+    width: 25rpx !important;
+    height: 30rpx !important;
   }
   
   .addMethod {
-    width: 460 rpx;
-    height: 76 rpx;
-    line-height: 76 rpx;
+    width: 460rpx;
+    height: 76rpx;
+    line-height: 76rpx;
     background: #F43131;
-    border-radius: 10 rpx;
+    border-radius: 10rpx;
     margin: 0 auto;
     text-align: center;
-    font-size: 30 rpx;
+    font-size: 30rpx;
     color: #FFFFFF;
-    margin-top: 128 rpx;
-    margin-bottom: 100 rpx;
+    margin-top: 128rpx;
+    margin-bottom: 100rpx;
   }
 </style>

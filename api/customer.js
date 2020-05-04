@@ -49,7 +49,7 @@ export const userLogin = (data, options) => {
     owner_id = 0
   }
   const params = {
-    ...param,
+    ...data,
     owner_id
   }
   return fetch({

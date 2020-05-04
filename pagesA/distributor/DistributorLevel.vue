@@ -397,40 +397,40 @@ export default {
   }
   
   .top {
-    width: 750 rpx;
-    height: 200 rpx;
+    width: 750rpx;
+    height: 200rpx;
     background: rgba(64, 61, 61, 1);
     position: relative;
     
     .goBack {
-      width: 20 rpx;
-      height: 30 rpx;
+      width: 20rpx;
+      height: 30rpx;
       position: absolute;
-      top: 29 rpx;
-      left: 20 rpx;
+      top: 29rpx;
+      left: 20rpx;
     }
     
     .titles {
       color: #FFFFFF;
-      font-size: 32 rpx;
+      font-size: 32rpx;
       position: absolute;
-      top: 28 rpx;
-      left: 310 rpx;
-      height: 31 rpx;
-      line-height: 31 rpx;
+      top: 28rpx;
+      left: 310rpx;
+      height: 31rpx;
+      line-height: 31rpx;
     }
     
     .center {
       position: absolute;
-      top: 60 rpx;
-      left: 3 rpx;
-      width: 750 rpx;
-      height: 325 rpx;
+      top: 60rpx;
+      left: 3rpx;
+      width: 750rpx;
+      height: 325rpx;
       white-space: nowrap;
       
       .vipFir {
-        width: 665 rpx !important;
-        height: 325 rpx !important;
+        width: 665rpx !important;
+        height: 325rpx !important;
         display: inline-block;
         position: relative;
         
@@ -440,15 +440,15 @@ export default {
         }
         
         .vipGrade {
-          height: 24 rpx;
+          height: 24rpx;
           font-size: 11px;
           color: #4D4D58;
           font-weight: normal;
           color: rgba(77, 77, 88, 1);
-          line-height: 24 rpx;
+          line-height: 24rpx;
           position: absolute;
-          top: 28 rpx;
-          left: 36 rpx;
+          top: 28rpx;
+          left: 36rpx;
         }
         
       }
@@ -458,83 +458,83 @@ export default {
   
   .mmp {
     position: absolute;
-    top: 128 rpx; //84rpx;
-    left: 205 rpx;
-    width: 230 rpx;
-    height: 36 rpx;
+    top: 128rpx; //84rpx;
+    left: 205rpx;
+    width: 230rpx;
+    height: 36rpx;
     text-align: center;
     display: flex;
     align-items: center;
   }
   
   .level-description {
-    font-size: 24 rpx;
+    font-size: 24rpx;
     color: #666666;
-    margin-top: 20 rpx;
-    width: 750 rpx;
+    margin-top: 20rpx;
+    width: 750rpx;
     box-sizing: border-box;
-    padding: 0 rpx 34 rpx 36 rpx 20 rpx;
+    padding: 0rpx 34rpx 36rpx 20rpx;
   }
   
   .ruhe {
-    width: 710 rpx;
+    width: 710rpx;
     background: rgba(255, 255, 255, 1);
-    box-shadow: 0px 0px 12 rpx 0px rgba(0, 0, 0, 0.25);
-    border-radius: 10 rpx;
+    box-shadow: 0px 0px 12rpx 0px rgba(0, 0, 0, 0.25);
+    border-radius: 10rpx;
     margin: 0 auto;
-    margin-top: 10 rpx;
-    margin-bottom: 60 rpx;
+    margin-top: 10rpx;
+    margin-bottom: 60rpx;
     
     .td {
-      width: 690 rpx;
+      width: 690rpx;
       margin: 0 auto;
-      height: 124 rpx;
-      border-bottom: 1 rpx solid #ECE8E8;
+      height: 124rpx;
+      border-bottom: 1rpx solid #ECE8E8;
       display: flex;
       align-items: center;
       
       &:last-child {
-        border-bottom: 0 rpx;
+        border-bottom: 0rpx;
       }
       
       .image {
-        width: 65 rpx;
-        height: 65 rpx;
-        margin-left: 21 rpx;
+        width: 65rpx;
+        height: 65rpx;
+        margin-left: 21rpx;
       }
       
       .mbx {
-        height: 65 rpx;
-        margin-left: 24 rpx;
+        height: 65rpx;
+        margin-left: 24rpx;
         
         .tops {
-          height: 27 rpx;
-          line-height: 27 rpx;
+          height: 27rpx;
+          line-height: 27rpx;
           color: #333333;
           font-weight: bold;
-          font-size: 28 rpx;
+          font-size: 28rpx;
         }
         
         .bottoms {
-          margin-top: 15 rpx;
-          height: 23 rpx;
-          line-height: 23 rpx;
-          font-size: 24 rpx;
+          margin-top: 15rpx;
+          height: 23rpx;
+          line-height: 23rpx;
+          font-size: 24rpx;
           color: #999999;
         }
       }
       
       .submit {
-        width: 110 rpx;
-        height: 45 rpx;
-        line-height: 45 rpx;
+        width: 110rpx;
+        height: 45rpx;
+        line-height: 45rpx;
         background: rgba(244, 49, 49, 1);
-        border-radius: 8 rpx;
-        font-size: 24 rpx;
+        border-radius: 8rpx;
+        font-size: 24rpx;
         color: #FFFFFF;
         text-align: center;
         margin-left: auto;
-        margin-right: 20 rpx;
+        margin-right: 20rpx;
       }
       
       .submitMbx {
@@ -544,62 +544,62 @@ export default {
   }
   
   .productList {
-    width: 710 rpx;
+    width: 710rpx;
     box-sizing: border-box;
-    padding-left: 25 rpx;
-    padding-right: 25 rpx;
+    padding-left: 25rpx;
+    padding-right: 25rpx;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
     
     .myProduct {
-      width: 310 rpx;
+      width: 310rpx;
       
       .imgPro {
-        width: 310 rpx;
-        height: 310 rpx;
-        margin-bottom: 16 rpx;
+        width: 310rpx;
+        height: 310rpx;
+        margin-bottom: 16rpx;
       }
       
       .proText {
-        width: 300 rpx;
-        height: 52 rpx;
-        line-height: 26 rpx;
+        width: 300rpx;
+        height: 52rpx;
+        line-height: 26rpx;
         display: -webkit-box;
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 2;
         overflow: hidden;
         font-size: 12px;
         color: #333333;
-        margin-bottom: 12 rpx;
+        margin-bottom: 12rpx;
       }
       
       .buttonLast {
-        width: 310 rpx;
+        width: 310rpx;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        height: 45 rpx;
-        margin-bottom: 22 rpx;
+        height: 45rpx;
+        margin-bottom: 22rpx;
         
         .priceAll {
           color: #F43131;
-          font-size: 30 rpx;
+          font-size: 30rpx;
           
           .priceText {
-            font-size: 24 rpx;
-            margin-right: 8 rpx;
+            font-size: 24rpx;
+            margin-right: 8rpx;
           }
         }
         
         .proDetail {
-          width: 105 rpx;
-          height: 45 rpx;
-          line-height: 45 rpx;
+          width: 105rpx;
+          height: 45rpx;
+          line-height: 45rpx;
           text-align: center;
           background: rgba(244, 49, 49, 1);
-          border-radius: 8 rpx;
-          font-size: 24 rpx;
+          border-radius: 8rpx;
+          font-size: 24rpx;
           color: #FFFFFF;
         }
       }
@@ -607,18 +607,18 @@ export default {
   }
   
   .myImgs {
-    width: 36 rpx;
-    height: 36 rpx;
-    margin-right: 12 rpx;
+    width: 36rpx;
+    height: 36rpx;
+    margin-right: 12rpx;
   }
   
   .titleMy {
-    padding-left: 20 rpx;
-    padding-right: 35 rpx;
-    margin-bottom: 30 rpx;
+    padding-left: 20rpx;
+    padding-right: 35rpx;
+    margin-bottom: 30rpx;
     font-size: 11px;
     color: #999999;
-    height: 30 rpx;
+    height: 30rpx;
     display: flex;
     align-items: center;
   }

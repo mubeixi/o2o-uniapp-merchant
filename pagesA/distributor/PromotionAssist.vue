@@ -166,7 +166,7 @@ export default {
 <style scoped lang="scss">
   .banner {
     width: 100%;
-    height: 400 rpx;
+    height: 400rpx;
     
     .src {
       width: 100%;
@@ -175,27 +175,27 @@ export default {
   }
   
   .content {
-    font-size: 28 rpx;
-    padding: 0 30 rpx;
+    font-size: 28rpx;
+    padding: 0 30rpx;
     
     .title {
-      line-height: 100 rpx;
-      font-size: 32 rpx;
+      line-height: 100rpx;
+      font-size: 32rpx;
       font-weight: 700;
     }
     
     .item {
       .sub-title {
-        font-size: 30 rpx;
+        font-size: 30rpx;
         font-weight: 700;
-        line-height: 80 rpx;
+        line-height: 80rpx;
       }
       
       .website {
         border: 1px solid #efefef;
-        height: 70 rpx;
-        line-height: 70 rpx;
-        padding-left: 20 rpx;
+        height: 70rpx;
+        line-height: 70rpx;
+        padding-left: 20rpx;
       }
       
     }
@@ -203,10 +203,10 @@ export default {
   
   .msg .input {
     border: 1px solid #efefef;
-    margin: 20 rpx 0;
-    height: 70 rpx;
-    line-height: 70 rpx;
-    padding-left: 60 rpx;
+    margin: 20rpx 0;
+    height: 70rpx;
+    line-height: 70rpx;
+    padding-left: 60rpx;
   }
   
   /*form .msg input[type='text']:nth-of-type(1) {*/
@@ -229,17 +229,17 @@ export default {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    margin-top: 40 rpx;
+    margin-top: 40rpx;
     color: #fff;
     
     .submit, .share {
       background: #F43131;
       color: #fff;
-      width: 200 rpx;
-      height: 80 rpx;
+      width: 200rpx;
+      height: 80rpx;
       text-align: center;
-      line-height: 80 rpx;
-      font-size: 28 rpx;
+      line-height: 80rpx;
+      font-size: 28rpx;
     }
   }
   
@@ -247,17 +247,17 @@ export default {
     position: relative;
     text-align: center;
     border: 1px solid #efefef;
-    margin: 10 rpx 0;
-    height: 70 rpx;
-    line-height: 70 rpx;
+    margin: 10rpx 0;
+    height: 70rpx;
+    line-height: 70rpx;
     
     .down {
       position: absolute;
       right: 0;
-      top: 15 rpx;
-      width: 40 rpx;
-      height: 40 rpx;
-      line-height: 40 rpx;
+      top: 15rpx;
+      width: 40rpx;
+      height: 40rpx;
+      line-height: 40rpx;
       transform: rotate(90deg);
     }
   }

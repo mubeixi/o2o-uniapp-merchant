@@ -277,36 +277,36 @@ export default {
     border: 1px solid #efefef;
     width: 90%;
     margin: 0 auto;
-    height: 80 rpx;
-    line-height: 80 rpx;
-    font-size: 30 rpx;
-    padding-left: 20 rpx;
+    height: 80rpx;
+    line-height: 80rpx;
+    font-size: 30rpx;
+    padding-left: 20rpx;
     box-sizing: border-box;
-    border-radius: 10 rpx;
+    border-radius: 10rpx;
   }
   
   .save {
-    height: 80 rpx;
+    height: 80rpx;
     width: 90%;
-    line-height: 80 rpx;
+    line-height: 80rpx;
     color: #fff;
     background: #F43131;
-    margin: 40 rpx auto;
+    margin: 40rpx auto;
     text-align: center;
-    border-radius: 10 rpx;
+    border-radius: 10rpx;
   }
   
   .area-item {
     display: flex;
     align-items: center;
-    padding: 30 rpx 20 rpx;
+    padding: 30rpx 20rpx;
     border-bottom: 1px solid #e3e3e3;
-    font-size: 28 rpx;
+    font-size: 28rpx;
     
     .area-label {
       display: inline-block;
-      width: 180 rpx;
-      margin-right: 10 rpx;
+      width: 180rpx;
+      margin-right: 10rpx;
     }
   }
   
@@ -320,7 +320,7 @@ export default {
   }
   
   .area-text {
-    width: 600 rpx;
+    width: 600rpx;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

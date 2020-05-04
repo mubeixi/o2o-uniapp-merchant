@@ -132,15 +132,15 @@ export default {
   }
   
   .user-info {
-    padding-top: 47 rpx;
+    padding-top: 47rpx;
     text-align: center;
-    font-size: 26 rpx;
+    font-size: 26rpx;
     color: #777;
     
     .user-avator {
       position: relative;
-      width: 120 rpx;
-      height: 120 rpx;
+      width: 120rpx;
+      height: 120rpx;
       margin: 0 auto;
       
       .xiangji {
@@ -150,43 +150,43 @@ export default {
         top: 0;
         left: 0;
         z-index: 10;
-        border-radius: 60 rpx;
+        border-radius: 60rpx;
         background-color: rgba(0, 0, 0, .4);
         background-repeat: no-repeat;
         background-position: center center;
-        background-size: 42 rpx 34 rpx;
+        background-size: 42rpx 34rpx;
       }
     }
     
     .imgs {
       width: 100%;
       height: 100%;
-      border-radius: 60 rpx;
-      margin-bottom: 14 rpx;
+      border-radius: 60rpx;
+      margin-bottom: 14rpx;
     }
     
     .change {
-      margin-top: 14 rpx;
+      margin-top: 14rpx;
     }
   }
   
   .content {
-    font-size: 30 rpx;
-    margin-top: 57 rpx;
+    font-size: 30rpx;
+    margin-top: 57rpx;
     color: #333;
-    padding-left: 19 rpx;
+    padding-left: 19rpx;
     
     .c_1 {
       display: flex;
       align-items: center;
-      margin-bottom: 39 rpx;
+      margin-bottom: 39rpx;
       
       .inputs {
-        width: 600 rpx;
-        height: 62 rpx;
-        border: 1 rpx solid rgba(231, 231, 231, 1);
-        margin-left: 23 rpx;
-        padding-left: 20 rpx;
+        width: 600rpx;
+        height: 62rpx;
+        border: 1rpx solid rgba(231, 231, 231, 1);
+        margin-left: 23rpx;
+        padding-left: 20rpx;
         box-sizing: border-box;
       }
     }
@@ -196,27 +196,27 @@ export default {
       align-items: center;
       
       .text-content {
-        width: 600 rpx;
-        height: 170 rpx;
-        border: 1 rpx solid rgba(231, 231, 231, 1);
-        margin-left: 23 rpx;
-        padding-left: 20 rpx;
-        padding-top: 20 rpx;
+        width: 600rpx;
+        height: 170rpx;
+        border: 1rpx solid rgba(231, 231, 231, 1);
+        margin-left: 23rpx;
+        padding-left: 20rpx;
+        padding-top: 20rpx;
         box-sizing: border-box;
       }
     }
   }
   
   .submit {
-    height: 80 rpx;
-    width: 640 rpx;
+    height: 80rpx;
+    width: 640rpx;
     background: #F43131;
     color: #fff;
-    font-size: 30 rpx;
-    margin: 179 rpx auto 0;
-    border-radius: 10 rpx;
+    font-size: 30rpx;
+    margin: 179rpx auto 0;
+    border-radius: 10rpx;
     text-align: center;
-    line-height: 80 rpx;
+    line-height: 80rpx;
   }
   
   .cannot {
