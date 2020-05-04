@@ -287,7 +287,28 @@
 						"navigationBarTitleText": "赠品中心"
 					}
 				}
-			]
+			    ,{
+                    "path" : "user/EditAccount",
+                    "style": {
+                    	"navigationBarTitleText": "设置"
+                    }
+                }
+                ,{
+                    "path" : "user/UpdateUserPsw"
+                }
+                ,{
+                    "path" : "user/SystemMsg",
+                    "style": {
+                    	"navigationBarTitleText": "系统消息"
+                    }
+                }
+                ,{
+                    "path" : "order/Refund",
+                    "style": {
+                    	"navigationBarTitleText": "申请退款"
+                    }
+                }
+            ]
 	}],
 	"preloadRule": {
 		"pages/index": {

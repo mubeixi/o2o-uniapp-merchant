@@ -9,8 +9,14 @@
 	</div>
 </template>
 <script>
+import {linkToEasy} from '@/common/fun'
+
 export default {
   props: {
+		prod_id: {
+			type: String,
+			default: ''
+		},
     pro_src: {
       type: String,
 	    default: ''
@@ -27,7 +33,13 @@ export default {
       type: [String, Number],
 		  default: '0.00'
 	  }
-  }
+  },
+	methods:{
+		openNext(){
+			let url='/pages/product/detail?prod_id='+this.prod_id
+			linkToEasy(url)
+		}
+	}
 }
 </script>
 <style lang="scss" scoped>

@@ -638,7 +638,7 @@
       {{detailData.Products_Name}}
     </div>
     <!-- 领券 -->
-    <div class="section2"  @click="$openPop('couponModal')">
+    <div class="section2"  @click="$openPop('couponModal')" v-if="couponList.length>0">
       <div class="btn">领券</div>
       <div class="right" >
         店铺优惠券
@@ -868,12 +868,12 @@
           领券
           <layout-icon type="icondel" size="14" class="delIcon"  color="#999" @click="$closePop('couponModal')" ></layout-icon>
         </div>
-        <scroll-view class="ticks" v-if="type=='ticks'" scroll-y=true  @scrolltolower="goNextPage">
-          <div class="t_content" v-for="(item,i) of couponList" :key="i">
+        <scroll-view class="ticks"  scroll-y=true >
+          <div class="t_content " v-for="(item,i) of couponList" :key="i">
             <div class="t_left">
               <div class="t_left_t"><span>￥</span><span class="money">{{item.Coupon_Cash}}</span><span>店铺优惠券<text v-if="item.Coupon_UseArea==0">(实体店)</text></span></div>
               <div class="t_left_c">{{item.Coupon_Subject}}</div>
-              <div class="t_left_b">有效期{{item.Coupon_StartTime}}-{{item.Coupon_EndTime}}</div>
+              <div class="t_left_b">有效期{{item.Coupon_StartTime.substring(0,10)}}-{{item.Coupon_EndTime.substring(0,10)}}</div>
             </div>
             <div class="t_right" @click="getMyCoupon(item.Coupon_ID,i)">立即领取</div>
           </div>
@@ -888,6 +888,7 @@
 import BaseMixin from '@/mixins/BaseMixin'
 import { getProductDetail, getActiveInfo, getStoreList, getProductSharePic, judgeReceiveGift } from '@/api/product'
 import { getBizInfo } from '@/api/store'
+import  {getUserCoupon} from '@/api/customer'
 import { getCommitList, getCouponList } from '@/api/common'
 import { commentReply } from '@/api/customer'
 import ProductSku from '@/componets/product-sku/product-sku'
@@ -941,10 +942,7 @@ export default {
       storeList: [],
       comments: [],
       commentValue: '',
-      pageSize: 5, // 评论的分页
-      page: 1, // 评论的分页
       couponList: [],
-      totalCount: 0,
       postData: {
         prod_id: '',
         qty: 1 // 购买数量
@@ -957,6 +955,33 @@ export default {
     this.headTabSticky = (scrollTop > this.headTabTop)
   },
   methods: {
+    //领取优惠券
+    getMyCoupon(item,i){
+      if (!checkIsLogin(1, 1)) return
+      if(this.isLoading==true)return;
+      this.isLoading=true;
+      let data={
+        coupon_id:item,
+      }
+      getUserCoupon(data,{tip:'领取中',mask: true}).then(res=>{
+        uni.showToast({
+          title: res.msg,
+          icon: 'none'
+        })
+        this.isLoading=false;
+        this.page=1;
+        this.couponList.splice(i, 1);
+
+        if(this.couponList.length<=0){
+          this.$closePop('couponModal')
+
+
+        }
+      }).catch(e=>{
+        this.isLoading=false;
+      })
+      //this.getCoupon();
+    },
 
     goVipList () {
       const url = '/pages/user/VipList?bid=' + this.detailData.biz_id
@@ -1235,15 +1260,15 @@ export default {
         this.isVirtual = this.detailData.Products_IsVirtual === 1
 
         const couponParam = {
-          pageSize: this.pageSize,
-          page: this.page,
+          pageSize: 999,
+          page: 1,
           status: 3,
           front_show: 1,
           biz_id: this.detailData.biz_id
         }
 
-        this.couponList = await getCouponList(couponParam).catch(e => { throw Error(e.msg || '获取优惠券失败') })
-        this.totalCount = this.couponList.totalCount
+        this.couponList = await getCouponList(couponParam,{onlyData:true}).catch(e => { throw Error(e.msg || '获取优惠券失败') })
+
 
         this.comments = await getCommitList({
           Products_ID: this.detailData.Products_ID,

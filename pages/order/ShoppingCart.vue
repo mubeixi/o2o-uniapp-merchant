@@ -2,6 +2,7 @@
   <div>
     <div class="status-title">
     </div>
+    <div style="width: 750rpx;height: 86rpx"></div>
     <div class="cart-title flex flex-vertical-c flex-justify-c fz-16 c3">
       <div>
         购物车
@@ -72,6 +73,7 @@
       <pro-tag
         v-for="(item,idx) in proList"
         :key="idx"
+        :prod_id="item.Products_ID"
         :pro_src="item.ImgPath"
         :pro_name="item.Products_Name"
         :pro_price="item.Products_PriceX"
@@ -356,14 +358,19 @@ export default {
   }
 
   .cart-title {
+    padding-top: var(--status-bar-height);
     height: 86rpx;
     width: 750rpx;
     background-color: #FFFFFF;
-    position: relative;
+    position: fixed;
+    z-index: 99;
+    top: 0;
+    left: 0;
+
 
     &-right {
       position: absolute;
-      top: 20rpx;
+      bottom:20rpx;
       left: 20rpx;
     }
   }

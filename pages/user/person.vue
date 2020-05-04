@@ -3,9 +3,9 @@
     <div :style="{height:systemInfo.statusBarHeight+'px'}"></div>
     <div class="header">
       <div class="left-icon-box">
-        <LayoutIcon type="iconshezhi" size="24" color="#333"></LayoutIcon>
-        <LayoutIcon class="p-l-10" type="iconicon" size="24" color="#333"
-                    @click="$linkTo('/pages/user/DailyCheck')"></LayoutIcon>
+        <LayoutIcon type="iconshezhi" size="24" color="#333" @click="goSetting"></LayoutIcon>
+        <LayoutIcon class="p-l-10" type="iconicon" size="24" color="#333" @click="goDailyCheck"
+                    ></LayoutIcon>
       </div>
       <div class="user-msg" v-if="userInfo.Users_ID" @click="$linkTo('/pagesA/user/PersonalMsg')">
         <image :src="userInfo.User_HeadImg" class="avatar"></image>
@@ -55,6 +55,7 @@
       <pro-tag
         v-for="(item,idx) in proList"
         :key="idx"
+        :prod_id="item.Products_ID"
         :pro_src="item.ImgPath"
         :pro_name="item.Products_Name"
         :pro_price="item.Products_PriceX"
@@ -70,6 +71,7 @@ import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import LayoutFun from '@/componets/layout-fun/layout-fun'
 import ProTag from '@/componets/pro-tag/pro-tag'
 import BaseMixin from '@/mixins/BaseMixin'
+import { checkIsLogin } from '@/common/helper'
 import {
   getProductList
 } from '@/api/product'
@@ -170,29 +172,18 @@ export default {
     }
   },
   methods: {
+    goDailyCheck(){
+      if (!checkIsLogin(1, 1)) return
+      this.$linkTo('/pages/user/DailyCheck')
+    },
+    goSetting(){
+      if (!checkIsLogin(1, 1)) return
+      this.$linkTo('/pagesA/user/EditAccount')
+    },
     openNext (index) {
+      if (!checkIsLogin(1, 1)) return
       this.$linkTo(this.iconList[index].link)
-      return
-      switch (index) {
-        case 5:
-          this.$linkTo('/pagesA/user/IntegralCenter')
-          break
-        case 6:
-          this.$linkTo('/pages/favorite/index')
-          break
-        case 7:
-          this.$linkTo('/pages/user/Coupon')
-          break
-        case 8:
-          this.$linkTo('/pagesA/user/TaskCenter')
-          break
-        case 9:
-          this.$linkTo('/pagesA/user/AddressList')
-          break
-        case 10:
-          this.$linkTo('/pagesA/order/RefundList')
-          break
-      }
+
     },
     goOrder (index) {
       const url = '/pages/order/OrderList?type=shop&&index=' + index
@@ -236,9 +227,9 @@ export default {
     position: relative;
 
     .left-icon-box {
-      position: absolute;
-      left: 0;
-      top: 0;
+      position: fixed;
+      left: 30rpx;
+      top: var(--status-bar-height);
       display: flex;
       align-items: center;
     }

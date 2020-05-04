@@ -7,6 +7,41 @@ export const getSmsCode = (param, options) => fetch({
   options
 })
 
+//退出登录
+export const bindUserClientId = (param, options) => fetch({
+  act: 'user_uuid_set',
+  param,
+  options
+})
+
+//修改登录密码
+export const updateUserLoginPsw = (param, options) => fetch({
+  act: 'update_user_login_psw',
+  param,
+  options
+})
+//修改支付密码
+export const updateUserPayPsw = (param, options) => fetch({
+  act: 'update_user_pay_psw',
+  param,
+  options
+})
+
+// 更新用户手机号  获取验证码
+export const updateMobileSms = (param, options) => fetch({
+  act: 'update_mobile_sms',
+  param,
+  options
+})
+
+// 更新用户手机号
+export const updateUserMobile = (param, options) => fetch({
+  act: 'update_user_mobile',
+  param,
+  options
+})
+
+
 export const userLogin = (data, options) => {
   // 获取推荐人id
   let owner_id = Storage.get('owner_id')
@@ -53,12 +88,17 @@ export const updateUserInfo = (param, options) => fetch({
   options
 })
 
+//用户获取系统消息
+export const getUserMessage = (param, options) => fetch({ act: 'get_user_message', param, options })
+//用户已读系统消息
+export const readUserMessage = (param, options) => fetch({ act: 'read_user_message', param, options })
+
 export const getAddressList = (param, options) => fetch({ act: 'get_address', param, options })
 export const delAddress = (param, options) => fetch({ act: 'del_address', param, options })
 export const addAddress = (param, options) => fetch({ act: 'add_address', param, options })
 export const editAddress = (param, options) => fetch({ act: 'edit_address', param, options })
 // 用户领取优惠券
-export const getUserCoupon = (param, options) => fetch({ act: 'user_receive_coupon', param, options })
+export const getUserCoupon = (param, options) => fetch({ act: 'receiveCoupon', param, options })
 
 // 获取收藏列表
 export const getFavouriteProdList = (param, options) => fetch({ act: 'get_favourite_prod_list', param, options })

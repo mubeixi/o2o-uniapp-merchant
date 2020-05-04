@@ -34,7 +34,7 @@
           </div>
           <div class="pro-msg">
             <div class="pro-name">{{pro.prod_name}}</div>
-            <div class="attr" v-if="pro.attr_info"><span>{{pro.attr_info.attr_name}}</span></div>
+            <div class="attr" v-if="pro.attr_info.attr_name"><span>{{pro.attr_info.attr_name}}</span></div>
             <div class="attrs" v-else></div>
             <div class="pro-price fz-12"><span>￥</span>{{pro.prod_price}} <span
               class="amount">x{{pro.prod_count}}</span></div>
@@ -106,14 +106,14 @@ export default {
         })
       }else if(item.Order_Status==2||item.Order_Status==3){
         uni.navigateTo({
-          url:'/pagesA/person/refund?Order_ID='+item.Order_ID
+          url:'/pagesA/order/Refund?Order_ID='+item.Order_ID
         })
       }else if(item.Order_Status==4){
         uni.navigateTo({
-          url:'/pages/order/publishComment?Order_ID='+item.Order_ID
+          url:'/pagesA/order/PublishComment?Order_ID='+item.Order_ID
         })
       }
-    
+
     },
     //取消订单
     cancelOrder (item, index) {

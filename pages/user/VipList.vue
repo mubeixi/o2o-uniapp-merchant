@@ -69,9 +69,19 @@
     </div>
 
     <div style="width: 750rpx;height: 100rpx"></div>
-    <div class="fz-12 submit">
+    <div class="fz-12 submit" @click="submit">
       ¥<span class="fz-16">{{vipData[inds].price}}直接购买</span>
     </div>
+
+    <wzw-pay
+      ref="payLayer"
+      :isOpen='false'
+      :is_use_order_pay="false"
+      :pay_money="vipData[inds].price"
+      :paySuccessCall="paySuccessCall"
+      :payFailCall="payFailCall"
+      @payMehtod="payMehtod"
+    />
 
   </div>
 </template>
@@ -79,20 +89,96 @@
 <script>
 
 import { getUserLevel, getShopGiftList, getCouponList } from '@/api/common'
+import  {createBuyLevelOrder,userLevelPay} from '@/api/order'
+import {error,toast} from '@/common/fun'
+import {getUserID} from '@/common/request'
+import WzwPay from '@/componets/wzw-pay/wzw-pay'
 import BaseMixin from '@/mixins/BaseMixin'
+import Pay from '@/common/Pay'
 export default {
   name: 'VipList',
   mixins: [BaseMixin],
+  components:{WzwPay},
   data () {
     return {
       vipData: [{ basic_rights: '' }],
       inds: 0,
       coupon: [],
       pro: [],
-	  biz_id:''
+	    biz_id:'',
+      order_id:'',
     }
   },
   methods: {
+    async payMehtod (item) {
+      let data = {
+        user_id: getUserID(),
+        order_id: this.order_id,
+        pay_method: item.pay_type,
+      }
+      let payCan = await userLevelPay(data, { tip: '加载中' }).catch(e => {
+        error(e.msg || '创建订单失败')
+      })
+      Pay(this, item.pay_type, payCan)
+    },
+    payFailCall (err) {
+      uni.showToast({
+        title: err.msg ? err.msg : '支付失败',
+        icon: 'none',
+        duration: 2000,
+      })
+    },
+    paySuccessCall (res) {
+      let _that = this
+      if (res && res.code && res.code == 2) {
+        _that.payFailCall()
+        return
+      }
+      if (res && res.code && res.code == 1) {
+        toast('用户取消支付', 'none')
+        return
+      }
+
+      // 头条小程序
+      if (res && res.code && res.code == 9) {
+        uni.showModal({
+          title: '提示',
+          content: '是否完成支付',
+          cancelText: '未完成',
+          confirmText: '已支付',
+          success: function (res) {
+            if (res.confirm) {
+
+            } else if (res.cancel) {
+
+            }
+          },
+        })
+        return
+      }
+
+      // 0：支付成功 1：支付超时 2：支付失败 3：支付关闭 4：支付取消 9：订单状态开发者自行获取
+
+      if (res && res.code && res.code == 4) {
+        toast('用户取消支付', 'none')
+        return
+      }
+
+      toast('支付成功')
+
+      this.$back()
+
+    },
+    async submit () {
+      let order = await createBuyLevelOrder({ level: this.vipData[this.inds].level,biz_id:this.biz_id,user_id:getUserID() }, {
+        onlyData: true,
+        tip: '加载中',
+      }).catch(e => {
+        error(e.msg || '创建订单失败')
+      })
+      this.order_id = order.order_id
+      this.$refs.payLayer.show()
+    },
     async change (e) {
       this.inds = e.mp.detail.current
 
