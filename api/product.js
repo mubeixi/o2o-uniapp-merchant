@@ -74,3 +74,17 @@ export const getProductSharePic = (param, options) => fetch({
   param,
   options
 })
+
+// 获取赠品列表
+export const getGiftList = (param, options) => fetch({
+  act: 'get_gift_list',
+  param,
+  options
+})
+
+// 获取赠品详情
+export const judgeReceiveGift = (param, options) => fetch({
+  act: 'judge_receive_gift',
+  param,
+  options
+})

@@ -77,6 +77,7 @@ export default {
     ableClose () {
       if (this.autoClose) {
         this.close()
+        this.$emit('maskClicked')
       }
     },
     stopEvent (event) {

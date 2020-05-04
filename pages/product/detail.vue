@@ -623,7 +623,7 @@
               ¥{{detailData.Products_PriceY}}
             </span>
       </div>
-      <div class="product-price-right" @click="toBooking">
+      <div class="product-price-right" @click="toShare">
         <image :src="'/static/client/product/product_share.png'|domain" class="full-img" style="width: 130% !important;"></image>
         <div class="product-share">
           分享赚
@@ -814,12 +814,16 @@
     </swiper>
     <product-sku ref="mySku" @sureSku="save" :hasCart="hasCart" @submitSure="submitSure" @updaCart="updaCart" @buyNow="buyNow"
                  :proList="detailData"></product-sku>
-    <wzw-goods-action class="wzw-goods-action" @goStore="goStore(detailData.biz_id)" @goShare="toBooking" @myPay="myPay"
-                      @allPay="allPay">
-      <span slot="leftText">单买¥</span>
-      <span slot="leftPrice">100.00</span>
-      <span slot="rightText">拼团购¥</span>
-      <span slot="rightPrice">100.00</span>
+    <wzw-goods-action class="wzw-goods-action" @goStore="goStore(detailData.biz_id)" @goShare="toShare" @myPay="myPay" @allPay="allPay">
+      <block v-if="gift">
+        <span slot="leftText">立即领取</span>
+      </block>
+      <block v-else>
+        <span slot="leftText">单买¥</span>
+        <span slot="leftPrice">100.00</span>
+        <span slot="rightText">拼团购¥</span>
+        <span slot="rightPrice">100.00</span>
+      </block>
     </wzw-goods-action>
 
     <!--    分享 -->
@@ -882,7 +886,7 @@
 
 <script>
 import BaseMixin from '@/mixins/BaseMixin'
-import { getProductDetail, getActiveInfo, getStoreList, getProductSharePic } from '@/api/product'
+import { getProductDetail, getActiveInfo, getStoreList, getProductSharePic, judgeReceiveGift } from '@/api/product'
 import { getBizInfo } from '@/api/store'
 import { getCommitList, getCouponList } from '@/api/common'
 import { commentReply } from '@/api/customer'
@@ -895,12 +899,13 @@ import WzwGoodsAction from '@/componets/wzw-goods-action/wzw-goods-action'
 import LayoutPopup from '@/componets/layout-popup/layout-popup'
 
 import {
-  showLoading, hideLoading, error, toast
+  showLoading, hideLoading, error, toast, modal
 } from '@/common/fun'
 import { checkIsLogin, buildSharePath, getProductThumb } from '@/common/helper'
 import uParse from '@/componets/gaoyia-parse/parse'
 import Storage from '@/common/Storage'
 import LayoutModal from '@/componets/layout-modal/layout-modal'
+import { Exception } from '@/common/Exception'
 export default {
   name: 'ProductDetail',
   mixins: [BaseMixin],
@@ -919,6 +924,10 @@ export default {
       tabIndex: 0,
       headTabSticky: false,
       prod_id: '', // 商品id
+      recieve: false,
+      gift: null, // 赠品id
+      gift_attr_id: null,
+      isVirtual: 0,
       detailData: {
         Products_Name: '',
         Products_PriceX: '0',
@@ -936,6 +945,10 @@ export default {
       page: 1, // 评论的分页
       couponList: [],
       totalCount: 0,
+      postData: {
+        prod_id: '',
+        qty: 1 // 购买数量
+      },
       commentItem: {}// 要评论的对象
     }
   },
@@ -944,22 +957,7 @@ export default {
     this.headTabSticky = (scrollTop > this.headTabTop)
   },
   methods: {
-    getCoupon () {
-      const data = {
-        pageSize: this.pageSize,
-        page: this.page,
-        status: 3,
-        front_show: 1,
-        biz_id: this.detailData.biz_id
-      }
-      getCouponList(data).then(res => {
-        for (const i of res.data) {
-          this.couponList.push(i)
-        }
-        this.totalCount = res.totalCount
-      }).catch(e => {
-      })
-    },
+
     goVipList () {
       const url = '/pages/user/VipList?bid=' + this.detailData.biz_id
       this.$linkTo(url)
@@ -1004,6 +1002,118 @@ export default {
       this.commentItem.groupid = goupId
       this.commentItem.User_ID = userId
       this.$refs.commentModal.show()
+    },
+    toShare () {
+      const url = '/pages/share/go?prod_id=' + this.prod_id
+      this.$linkTo(url)
+    },
+    myPay () {
+      if (!checkIsLogin(1, 1)) return
+      // 赠品
+      if (this.gift) {
+        this.lingqu()
+        return
+      }
+      this.hasCart = true
+      if (this.detailData.order_temp_id || this.detailData.Products_IsVirtual == 1) {
+        this.hasCart = false
+      }
+      this.$refs.mySku.show()
+    },
+    allPay () {
+      if (!checkIsLogin(1, 1)) return
+      this.hasCart = false
+      this.$refs.mySku.show()
+    },
+    async submitSure (sku) {
+      try {
+        console.log('derail')
+        showLoading()
+        const postData = {
+          prod_id: this.prod_id, // 产品ID  在 onLoad中赋值
+          attr_id: sku.id, // 选择属性id
+          // count: sku.count, // 选择属性的库存
+          qty: sku.qty, // 购买数量
+          cart_key: 'DirectBuy' // 购物车类型   CartList（加入购物车）、DirectBuy（立即购买）、PTCartList（不能加入购物车）
+          // productDetail_price: sku.price
+        }
+        await updateCart(postData).catch(e => {
+          throw Error(e.msg || '下单失败')
+        })
+        const url = '/pages/order/OrderBooking?cart_key=DirectBuy&order_temp_id=' + this.detailData.order_temp_id + '&biz_id=' + this.detailData.biz_id
+        this.$linkTo(url)
+      } catch (e) {
+        this.$modal(e.message)
+      } finally {
+        hideLoading()
+      }
+    },
+    updaCart (sku) {
+      // 加入购物车
+      const data = {
+        cart_key: 'CartList',
+        prod_id: this.detailData.Products_ID,
+        qty: sku.qty,
+        attr_id: sku.id
+      }
+      updateCart(data).then(res => {
+        toast('加入购物车成功')
+      }).catch(e => {
+        error(e.msg || '加入购物车失败')
+      })
+    },
+    async buyNow (sku) {
+      // console.log(sku)
+      // 立即购买
+      try {
+        showLoading()
+        // HUAWEI Mate 30 Pro
+
+        // count: 553
+        // id: 990
+        // price: 11790
+        // qty: 1
+        const postData = {
+          prod_id: this.prod_id, // 产品ID  在 onLoad中赋值
+          attr_id: sku.id, // 选择属性id
+          count: sku.count, // 选择属性的库存
+          qty: sku.qty, // 购买数量
+          cart_key: 'DirectBuy', // 购物车类型   CartList（加入购物车）、DirectBuy（立即购买）、PTCartList（不能加入购物车）
+          productDetail_price: sku.price
+        }
+        await updateCart(postData).catch(e => {
+          throw Error(e.msg || '下单失败')
+        })
+        this.$linkTo('/pages/order/OrderBooking?cart_key=DirectBuy')
+      } catch (e) {
+        this.$modal(e.message)
+      } finally {
+        hideLoading()
+      }
+    },
+    changeTabIndex (event) {
+      const { current, source } = event.detail
+      this.tabIndex = current
+    },
+    // 立即领取
+    async lingqu () {
+      if (this.isVirtual) {
+        this.directBuy()
+        return
+      }
+
+      try {
+        showLoading()
+        this.postData.cart_key = 'DirectBuy'
+        // 领取礼物
+        this.postData.attr_id = this.gift_attr_id
+        await updateCart(this.postData).catch((e) => { throw Error(e.msg || '赠品加入购物车失败') })
+        this.$linkTo('/pages/order/OrderBooking?cart_key=DirectBuy&gift=gift')
+      } catch (e) {
+        Exception.handle(e)
+      } finally {
+        hideLoading()
+      }
     },
     async shareFunc (channel) {
       const _self = this
@@ -1095,105 +1205,45 @@ export default {
         current: index
       })
     },
-    toBooking () {
-      const url = '/pages/share/go?prod_id=' + this.prod_id
-      this.$linkTo(url)
-    },
-    myPay () {
-      if (!checkIsLogin(1, 1)) return
-      this.hasCart = true
-      if (this.detailData.order_temp_id || this.detailData.Products_IsVirtual == 1) {
-        this.hasCart = false
-      }
-      this.$refs.mySku.show()
-    },
-    allPay () {
-      if (!checkIsLogin(1, 1)) return
-      this.hasCart = false
-      this.$refs.mySku.show()
-    },
-    async submitSure (sku) {
-      try {
-        console.log('derail')
-        showLoading()
-        const postData = {
-          prod_id: this.prod_id, // 产品ID  在 onLoad中赋值
-          attr_id: sku.id, // 选择属性id
-          // count: sku.count, // 选择属性的库存
-          qty: sku.qty, // 购买数量
-          cart_key: 'DirectBuy' // 购物车类型   CartList（加入购物车）、DirectBuy（立即购买）、PTCartList（不能加入购物车）
-          // productDetail_price: sku.price
-        }
-        await updateCart(postData).catch(e => {
-          throw Error(e.msg || '下单失败')
-        })
-        const url = '/pages/order/OrderBooking?cart_key=DirectBuy&order_temp_id=' + this.detailData.order_temp_id + '&biz_id=' + this.detailData.biz_id
-        this.$linkTo(url)
-      } catch (e) {
-        this.$modal(e.message)
-      } finally {
-        hideLoading()
-      }
-    },
-    updaCart (sku) {
-      // 加入购物车
-      const data = {
-        cart_key: 'CartList',
-        prod_id: this.detailData.Products_ID,
-        qty: sku.qty,
-        attr_id: sku.id
-      }
-      updateCart(data).then(res => {
-        toast('加入购物车成功')
-      }).catch(e => {
-        error(e.msg || '加入购物车失败')
-      })
-    },
-    async buyNow (sku) {
-      // console.log(sku)
-      // 立即购买
+    async _init_func (options) {
       try {
         showLoading()
-        // HUAWEI Mate 30 Pro
 
-        // count: 553
-        // id: 990
-        // price: 11790
-        // qty: 1
-        const postData = {
-          prod_id: this.prod_id, // 产品ID  在 onLoad中赋值
-          attr_id: sku.id, // 选择属性id
-          count: sku.count, // 选择属性的库存
-          qty: sku.qty, // 购买数量
-          cart_key: 'DirectBuy', // 购物车类型   CartList（加入购物车）、DirectBuy（立即购买）、PTCartList（不能加入购物车）
-          productDetail_price: sku.price
+        if (options.gift) {
+          this.gift = options.gift
+          this.postData.active_id = options.gift
+          this.postData.active = 'gift'
+
+          if (!checkIsLogin()) {
+            return
+          }
+          const giftInfo = await judgeReceiveGift({ gift: this.gift }, { onlyData: true }).catch(e => {throw Error(e.msg || '获取赠品详情失败')})
+          this.gift_attr_id = giftInfo.attr_id
+          this.skuval = giftInfo.skuval
+
+          this.recieve = true
         }
-        await updateCart(postData).catch(e => {
-          throw Error(e.msg || '下单失败')
-        })
-        this.$linkTo('/pages/order/OrderBooking?cart_key=DirectBuy')
-      } catch (e) {
-        this.$modal(e.message)
-      } finally {
-        hideLoading()
-      }
-    },
-    async getProductDetail () {
-      try {
-        showLoading()
 
         // 获取优惠券
         this.page = 1
-        this.couponList = []
-        this.getCoupon()
 
         const data = {
           prod_id: this.prod_id
         }
         this.detailData = await getProductDetail(data, { onlyData: true }).catch(e => { throw Error(e.msg || '获取商品详情失败') })
         this.detailData.Products_Description = formatRichTextByUparseFn(this.detailData.Products_Description)
+        this.isVirtual = this.detailData.Products_IsVirtual === 1
 
-        this.store = await getBizInfo({ biz_id: this.detailData.biz_id }, { onlyData: true }).catch(e => { throw Error(e.msg || '获取店铺信息失败') })
+        const couponParam = {
+          pageSize: this.pageSize,
+          page: this.page,
+          status: 3,
+          front_show: 1,
+          biz_id: this.detailData.biz_id
+        }
+
+        this.couponList = await getCouponList(couponParam).catch(e => { throw Error(e.msg || '获取优惠券失败') })
+        this.totalCount = this.couponList.totalCount
 
         this.comments = await getCommitList({
           Products_ID: this.detailData.Products_ID,
@@ -1204,6 +1254,8 @@ export default {
         }).catch((e) => {
           throw Error('获取评论数据失败')
         })
+
+        this.store = await getBizInfo({ biz_id: this.detailData.biz_id }, { onlyData: true }).catch(e => { throw Error(e.msg || '获取店铺信息失败') })
 
         this.storeList = await getStoreList({ biz_id: this.detailData.biz_id }, {
           onlyData: true
@@ -1230,14 +1282,10 @@ export default {
           })
         })
       } catch (e) {
-        this.$modal(e.message)
+        Exception.handle(e)
       } finally {
         hideLoading()
       }
-    },
-    changeTabIndex (event) {
-      const { current, source } = event.detail
-      this.tabIndex = current
     }
   },
   computed: {
@@ -1253,8 +1301,16 @@ export default {
     }
   },
   onLoad (options) {
+    if (!options.prod_id) {
+      modal('产品id必传')
+      setTimeout(() => {
+        this.$back()
+      }, 1000)
+      return
+    }
     this.prod_id = options.prod_id
-    this.getProductDetail()
+    this.postData.prod_id = options.prod_id
+    this._init_func(options)
   },
   // #ifdef MP-WEIXIN || MP-ALIPAY || MP-BAIDU || MP-TOUTIAO
   // 自定义小程序分享
