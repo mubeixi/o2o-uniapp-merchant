@@ -11,6 +11,15 @@ Vue.config.productionTip = false
 
 App.mpType = 'app'
 
+// #ifdef MP-WEIXIN
+var fundebug = require('./common/tool/fundebug.1.3.1.min.js')
+fundebug.init({
+  apikey: 'ab3768ddf58459d44700a70887908eec81a865d913cd9e2d599063a8345fd5ec'
+})
+uni.$fundebug = fundebug
+
+// #endif
+
 // 设置语言
 T.registerLocale(locales)
 T.setLocale()
