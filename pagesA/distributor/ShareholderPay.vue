@@ -295,19 +295,19 @@ export default {
   }
   
   .top {
-    width: 750 rpx;
-    padding: 50 rpx 83 rpx;
+    width: 750rpx;
+    padding: 50rpx 83rpx;
     
     .first {
-      padding-left: 33 rpx;
+      padding-left: 33rpx;
       padding-right: 41 rpxd;
-      height: 30 rpx;
+      height: 30rpx;
       display: flex;
       align-items: center;
       
       .circleQ {
-        width: 30 rpx;
-        height: 30 rpx;
+        width: 30rpx;
+        height: 30rpx;
         border: 1px solid #F43131;
         border-radius: 50%;
         display: flex;
@@ -315,8 +315,8 @@ export default {
         justify-content: center;
         
         view {
-          width: 15 rpx;
-          height: 15 rpx;
+          width: 15rpx;
+          height: 15rpx;
           background-color: #F43131;
           border-radius: 50%;
         }
@@ -331,17 +331,17 @@ export default {
       }
       
       .lineQ {
-        width: 210 rpx;
-        height: 4 rpx;
+        width: 210rpx;
+        height: 4rpx;
         background-color: #F43131;
       }
     }
     
     .second {
-      margin-top: 21 rpx;
-      height: 25 rpx;
-      line-height: 25 rpx;
-      font-size: 26 rpx;
+      margin-top: 21rpx;
+      height: 25rpx;
+      line-height: 25rpx;
+      font-size: 26rpx;
       color: #999999;
       display: flex;
       
@@ -350,62 +350,62 @@ export default {
       }
       
       .secondW {
-        margin-left: 137 rpx;
+        margin-left: 137rpx;
         color: #F43131;
       }
       
       .secondE {
-        margin-left: 135 rpx;
+        margin-left: 135rpx;
         color: #F43131;
       }
     }
   }
   
   .three {
-    height: 88 rpx;
-    line-height: 88 rpx;
-    width: 710 rpx;
+    height: 88rpx;
+    line-height: 88rpx;
+    width: 710rpx;
     margin: 0 auto;
     border-bottom: 1px solid #E7E7E7;
     display: flex;
     align-items: center;
     
     .haha {
-      font-size: 30 rpx;
+      font-size: 30rpx;
       color: #333333;
-      margin-right: 42 rpx;
+      margin-right: 42rpx;
       width: 64px;
     }
     
     .inputs {
-      height: 88 rpx;
-      line-height: 88 rpx;
-      font-size: 28 rpx;
+      height: 88rpx;
+      line-height: 88rpx;
+      font-size: 28rpx;
       color: #333333;
     }
     
     .place {
-      font-size: 28 rpx;
+      font-size: 28rpx;
       color: #CAC8C8;
     }
     
     .myRadio {
-      height: 88 rpx;
+      height: 88rpx;
       display: flex;
       
       .myRadioQ {
-        height: 88 rpx;
+        height: 88rpx;
         display: flex;
-        margin-right: 17 rpx;
+        margin-right: 17rpx;
         
         .radio {
           transform: scale(0.7);
         }
         
         .mbx {
-          font-size: 28 rpx;
+          font-size: 28rpx;
           color: #777777;
-          margin-left: 13 rpx;
+          margin-left: 13rpx;
         }
       }
     }
@@ -413,39 +413,39 @@ export default {
   }
   
   .four {
-    width: 490 rpx;
-    height: 75 rpx;
-    line-height: 75 rpx;
+    width: 490rpx;
+    height: 75rpx;
+    line-height: 75rpx;
     text-align: center;
     background: rgba(244, 49, 49, 1);
-    border-radius: 10 rpx;
+    border-radius: 10rpx;
     margin: 0 auto;
-    margin-top: 110 rpx;
-    font-size: 30 rpx;
+    margin-top: 110rpx;
+    font-size: 30rpx;
     color: #FFFFFF;
   }
   
   .five {
-    height: 23 rpx;
-    line-height: 23 rpx;
-    width: 174 rpx;
+    height: 23rpx;
+    line-height: 23rpx;
+    width: 174rpx;
     margin: 0 auto;
-    margin-top: 21 rpx;
-    font-size: 24 rpx;
+    margin-top: 21rpx;
+    font-size: 24rpx;
     font-weight: 500;
     color: rgba(153, 153, 153, 1);
     
     .image {
-      width: 12 rpx;
-      height: 20 rpx;
-      margin-left: 10 rpx;
+      width: 12rpx;
+      height: 20rpx;
+      margin-left: 10rpx;
     }
   }
   
   .threes {
-    height: 88 rpx;
-    line-height: 88 rpx;
-    width: 710 rpx;
+    height: 88rpx;
+    line-height: 88rpx;
+    width: 710rpx;
     margin: 0 auto;
     border-bottom: 1px solid #E7E7E7;
     display: flex;
@@ -453,37 +453,37 @@ export default {
     justify-content: space-between;
     
     .haha {
-      font-size: 30 rpx;
+      font-size: 30rpx;
       color: #333333;
       //margin-right: 42rpx;
     }
     
     .images {
-      width: 16 rpx;
-      height: 88 rpx;
-      line-height: 88 rpx;
+      width: 16rpx;
+      height: 88rpx;
+      line-height: 88rpx;
       
       .image {
-        width: 16 rpx;
-        height: 25 rpx;
+        width: 16rpx;
+        height: 25rpx;
       }
     }
     
   }
   
   .picker view {
-    width: 180 rpx;
-    font-size: 28 rpx;
-    line-height: 90 rpx;
-    height: 90 rpx;
-    margin-right: 10 rpx;
+    width: 180rpx;
+    font-size: 28rpx;
+    line-height: 90rpx;
+    height: 90rpx;
+    margin-right: 10rpx;
   }
   
   .picker {
     display: flex;
     
     .quyu {
-      width: 120 rpx;
+      width: 120rpx;
     }
   }
   
@@ -525,14 +525,14 @@ export default {
       color: #000;
       text-align: center;
       width: 90%;
-      margin: 400 rpx auto;
-      padding: 40 rpx 50 rpx 30 rpx;
+      margin: 400rpx auto;
+      padding: 40rpx 50rpx 30rpx;
       box-sizing: border-box;
-      font-size: 28 rpx;
-      border-radius: 10 rpx;
+      font-size: 28rpx;
+      border-radius: 10rpx;
       
       .input {
-        margin: 40 rpx 0;
+        margin: 40rpx 0;
         border: 1px solid #efefef;
         height: 20px;
         line-height: 20px;
@@ -542,8 +542,8 @@ export default {
       .btns {
         display: flex;
         justify-content: space-around;
-        height: 60 rpx;
-        line-height: 60 rpx;
+        height: 60rpx;
+        line-height: 60rpx;
         
         .btn {
           flex: 1;

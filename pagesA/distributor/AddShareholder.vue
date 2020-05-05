@@ -94,49 +94,49 @@ export default {
   }
   
   .three {
-    height: 88 rpx;
-    line-height: 88 rpx;
-    width: 710 rpx;
+    height: 88rpx;
+    line-height: 88rpx;
+    width: 710rpx;
     margin: 0 auto;
     border-bottom: 1px solid #E7E7E7;
     display: flex;
     align-items: center;
     
     .haha {
-      font-size: 30 rpx;
+      font-size: 30rpx;
       color: #333333;
-      margin-right: 42 rpx;
+      margin-right: 42rpx;
     }
     
     .inputs {
-      height: 88 rpx;
-      line-height: 88 rpx;
-      font-size: 28 rpx;
+      height: 88rpx;
+      line-height: 88rpx;
+      font-size: 28rpx;
       color: #333333;
     }
     
     .place {
-      font-size: 28 rpx;
+      font-size: 28rpx;
       color: #CAC8C8;
     }
     
     .myRadio {
-      height: 88 rpx;
+      height: 88rpx;
       display: flex;
       
       .myRadioQ {
-        height: 88 rpx;
+        height: 88rpx;
         display: flex;
-        margin-right: 17 rpx;
+        margin-right: 17rpx;
         
         .radio {
           transform: scale(0.7);
         }
         
         .mbx {
-          font-size: 28 rpx;
+          font-size: 28rpx;
           color: #777777;
-          margin-left: 13 rpx;
+          margin-left: 13rpx;
         }
       }
     }
@@ -144,32 +144,32 @@ export default {
   }
   
   .four {
-    width: 490 rpx;
-    height: 75 rpx;
-    line-height: 75 rpx;
+    width: 490rpx;
+    height: 75rpx;
+    line-height: 75rpx;
     text-align: center;
     background: rgba(244, 49, 49, 1);
-    border-radius: 10 rpx;
+    border-radius: 10rpx;
     margin: 0 auto;
-    margin-top: 70 rpx;
-    font-size: 30 rpx;
+    margin-top: 70rpx;
+    font-size: 30rpx;
     color: #FFFFFF;
   }
   
   .five {
-    height: 23 rpx;
-    line-height: 23 rpx;
-    width: 174 rpx;
+    height: 23rpx;
+    line-height: 23rpx;
+    width: 174rpx;
     margin: 0 auto;
-    margin-top: 21 rpx;
-    font-size: 24 rpx;
+    margin-top: 21rpx;
+    font-size: 24rpx;
     font-weight: 500;
     color: rgba(153, 153, 153, 1);
     
     .image {
-      width: 12 rpx;
-      height: 20 rpx;
-      margin-left: 10 rpx;
+      width: 12rpx;
+      height: 20rpx;
+      margin-left: 10rpx;
     }
   }
 

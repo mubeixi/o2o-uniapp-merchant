@@ -49,7 +49,7 @@ export default {
   methods: {
     bindBack () {
       if (this.letfFn) this.$emit('clickLeft')
-      if (!this.letfFn) this.backFunc()
+      if (!this.letfFn) uni.navigateBack()
     }
   },
   mounted () {

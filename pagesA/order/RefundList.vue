@@ -130,8 +130,8 @@ export default {
   
   .titless {
     position: fixed;
-    top: 0 rpx;
-    left: 0 rpx;
+    top: 0rpx;
+    left: 0rpx;
     width: 100%;
     z-index: 999;
   }
@@ -139,20 +139,20 @@ export default {
   .navs {
     z-index: 999;
     position: fixed;
-    top: 0 rpx;
+    top: 0rpx;
     /* #ifdef APP-PLUS */
     top: var(--status-bar-height); //86rpx;
     /* #endif */
     
-    left: 0 rpx;
-    width: 750 rpx;
+    left: 0rpx;
+    width: 750rpx;
     box-sizing: border-box;
     display: flex;
     align-items: center;
-    height: 100 rpx;
-    line-height: 100 rpx;
+    height: 100rpx;
+    line-height: 100rpx;
     background: #fff;
-    font-size: 28 rpx;
+    font-size: 28rpx;
     padding: 0 10px;
     
     .nav-item {
@@ -163,14 +163,14 @@ export default {
       
       .jiaobiao {
         position: absolute;
-        top: 24 rpx;
-        right: 20 rpx;
-        width: 20 rpx;
-        height: 20 rpx;
+        top: 24rpx;
+        right: 20rpx;
+        width: 20rpx;
+        height: 20rpx;
         border-radius: 50%;
         background-color: #FFFFFF;
         border: 1px solid #F43131;
-        font-size: 15 rpx;
+        font-size: 15rpx;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -192,12 +192,12 @@ export default {
   }
   
   .order {
-    padding: 0 rpx 20 rpx;
+    padding: 0rpx 20rpx;
     background: #fff;
     position: relative;
     
     .bizinfo {
-      margin-top: 20 rpx;
+      margin-top: 20rpx;
       display: flex;
       align-items: center;
       // justify-content: space-between;
@@ -210,29 +210,29 @@ export default {
       // }
       .bizname {
         // flex: 1;
-        font-size: 28 rpx;
+        font-size: 28rpx;
       }
       
       .status {
         color: red;
-        font-size: 26 rpx;
+        font-size: 26rpx;
       }
     }
     
     .pro {
       display: flex;
-      margin-bottom: 50 rpx;
-      margin-top: 30 rpx;
+      margin-bottom: 50rpx;
+      margin-top: 30rpx;
     }
     
     .pro-msg {
-      margin-left: 27 rpx;
-      width: 476 rpx;
+      margin-left: 27rpx;
+      width: 476rpx;
     }
     
     .pro-div {
-      width: 200 rpx;
-      height: 200 rpx;
+      width: 200rpx;
+      height: 200rpx;
     }
     
     .pro-img {
@@ -241,8 +241,8 @@ export default {
     }
     
     .pro-name {
-      font-size: 26 rpx;
-      margin-bottom: 20 rpx;
+      font-size: 26rpx;
+      margin-bottom: 20rpx;
       text-overflow: -o-ellipsis-lastline;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -253,64 +253,64 @@ export default {
     
     .attr {
       display: inline-block;
-      height: 50 rpx;
-      line-height: 50 rpx;
+      height: 50rpx;
+      line-height: 50rpx;
       background: #FFF5F5;
       color: #666;
-      font-size: 24 rpx;
-      padding: 0 20 rpx;
-      margin-bottom: 20 rpx;
+      font-size: 24rpx;
+      padding: 0 20rpx;
+      margin-bottom: 20rpx;
     }
     
     .pro-price {
       color: #F43131;
-      font-size: 36 rpx;
+      font-size: 36rpx;
     }
     
     .pro-price span {
-      font-size: 24 rpx;
+      font-size: 24rpx;
       font-style: normal;
     }
     
     .amount {
-      font-size: 30 rpx;
+      font-size: 30rpx;
       float: right;
       color: #333;
     }
     
     .total {
-      font-size: 24 rpx;
-      margin: 40 rpx 0 rpx;
-      margin-right: 15 rpx;
+      font-size: 24rpx;
+      margin: 40rpx 0rpx;
+      margin-right: 15rpx;
       
       .price {
         color: red;
-        font-size: 30 rpx;
+        font-size: 30rpx;
         
         .p-span {
-          font-size: 24 rpx;
+          font-size: 24rpx;
         }
       }
     }
     
     .btn-group {
       text-align: right;
-      padding-bottom: 30 rpx;
+      padding-bottom: 30rpx;
       
       .span {
         display: inline-block;
         //width: 150rpx;
-        padding: 0 rpx 24 rpx;
-        height: 60 rpx;
-        line-height: 60 rpx;
+        padding: 0rpx 24rpx;
+        height: 60rpx;
+        line-height: 60rpx;
         text-align: center;
         border: 1px solid #999;
-        border-radius: 10 rpx;
+        border-radius: 10rpx;
         color: #999;
-        font-size: 26 rpx;
+        font-size: 26rpx;
         
         &:last-child {
-          margin-left: 14 rpx;
+          margin-left: 14rpx;
         }
         
         &.active {
@@ -328,9 +328,9 @@ export default {
   
   .defaults {
     margin: 0 auto;
-    width: 640 rpx;
-    height: 480 rpx;
-    padding-top: 100 rpx;
+    width: 640rpx;
+    height: 480rpx;
+    padding-top: 100rpx;
   }
   
   .danger-color {

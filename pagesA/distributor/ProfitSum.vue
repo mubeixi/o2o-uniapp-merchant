@@ -116,7 +116,7 @@ export default {
 <style lang="scss" scoped>
   .profitSum {
     background-color: #F8F8F8;
-    padding-bottom: 40 rpx;
+    padding-bottom: 40rpx;
   }
   
   .order-status {
@@ -132,9 +132,9 @@ export default {
     
     .status {
       display: inline-block;
-      width: 150 rpx;
+      width: 150rpx;
       /*margin-right: 30rpx;*/
-      line-height: 80 rpx;
+      line-height: 80rpx;
       
       &.active {
         color: $fun-red-color;
@@ -149,9 +149,9 @@ export default {
   
   .status {
     display: inline-block;
-    width: 138 rpx;
+    width: 138rpx;
     /*margin-right: 30rpx;*/
-    line-height: 80 rpx;
+    line-height: 80rpx;
     text-align: center;
     
     &.active {
@@ -169,20 +169,20 @@ export default {
   }
   
   .order {
-    width: 710 rpx;
+    width: 710rpx;
     margin: 0 auto;
-    padding: 35 rpx 0 rpx 40 rpx 34 rpx;
+    padding: 35rpx 0rpx 40rpx 34rpx;
     background-color: #FFFFFF;
-    font-size: 26 rpx;
+    font-size: 26rpx;
     color: #333333;
     box-sizing: border-box;
-    border-radius: 20 rpx;
-    padding-bottom: 30 rpx;
-    margin-bottom: 20 rpx;
+    border-radius: 20rpx;
+    padding-bottom: 30rpx;
+    margin-bottom: 20rpx;
     
     .view {
       //height: 50rpx;
-      line-height: 50 rpx;
+      line-height: 50rpx;
       
       text {
         color: #666666;
@@ -196,9 +196,9 @@ export default {
   
   .defaults {
     margin: 0 auto;
-    width: 640 rpx;
-    height: 480 rpx;
-    margin-top: 100 rpx;
+    width: 640rpx;
+    height: 480rpx;
+    margin-top: 100rpx;
   }
   
   /deep/ .uni-scroll-view::-webkit-scrollbar {

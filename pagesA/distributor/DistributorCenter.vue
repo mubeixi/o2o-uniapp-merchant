@@ -1237,9 +1237,9 @@ export default {
   }
   
   .disHaihong {
-    font-size: 30 rpx;
-    height: 60 rpx;
-    line-height: 60 rpx;
+    font-size: 30rpx;
+    height: 60rpx;
+    line-height: 60rpx;
     margin-left: 10px;
     margin-top: 10px;
     margin-bottom: 10px;
@@ -1424,14 +1424,14 @@ export default {
       color: #000;
       text-align: center;
       width: 90%;
-      margin: 400 rpx auto;
-      padding: 40 rpx 50 rpx 30 rpx;
+      margin: 400rpx auto;
+      padding: 40rpx 50rpx 30rpx;
       box-sizing: border-box;
-      font-size: 28 rpx;
-      border-radius: 10 rpx;
+      font-size: 28rpx;
+      border-radius: 10rpx;
       
       .input {
-        margin: 40 rpx 0;
+        margin: 40rpx 0;
         border: 1px solid #efefef;
         height: 20px;
         line-height: 20px;
@@ -1441,8 +1441,8 @@ export default {
       .btns {
         display: flex;
         justify-content: space-around;
-        height: 60 rpx;
-        line-height: 60 rpx;
+        height: 60rpx;
+        line-height: 60rpx;
         
         .btn {
           flex: 1;

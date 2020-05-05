@@ -168,72 +168,72 @@ export default {
   }
   
   .center {
-    margin-top: 19 rpx;
-    width: 710 rpx;
-    height: 88 rpx;
+    margin-top: 19rpx;
+    width: 710rpx;
+    height: 88rpx;
     margin: 0 auto;
     display: flex;
     align-items: center;
-    border-bottom: 1 rpx solid #E3E3E3;
+    border-bottom: 1rpx solid #E3E3E3;
     justify-content: space-between;
     
     .left {
-      font-size: 28 rpx;
+      font-size: 28rpx;
       color: #333333;
-      width: 125 rpx;
+      width: 125rpx;
     }
     
     .right {
-      font-size: 26 rpx;
+      font-size: 26rpx;
       color: #888888;
       display: flex;
       align-items: center;
       
       .image {
-        width: 15 rpx;
-        height: 23 rpx;
-        margin-left: 14 rpx;
+        width: 15rpx;
+        height: 23rpx;
+        margin-left: 14rpx;
       }
     }
   }
   
   .centers {
-    margin-top: 19 rpx;
-    width: 710 rpx;
-    height: 88 rpx;
+    margin-top: 19rpx;
+    width: 710rpx;
+    height: 88rpx;
     margin: 0 auto;
     display: flex;
     align-items: center;
-    border-bottom: 1 rpx solid #E3E3E3;
+    border-bottom: 1rpx solid #E3E3E3;
     position: relative;
     
     .left {
-      width: 125 rpx;
-      font-size: 28 rpx;
+      width: 125rpx;
+      font-size: 28rpx;
       color: #333333;
     }
     
     .inputs {
-      width: 570 rpx;
+      width: 570rpx;
       color: #333333;
-      font-size: 24 rpx;
+      font-size: 24rpx;
     }
   }
   
   .places {
     color: #B8B8B8;
-    font-size: 24 rpx;
+    font-size: 24rpx;
   }
   
   .addInfo {
-    width: 580 rpx;
-    height: 76 rpx;
-    line-height: 76 rpx;
+    width: 580rpx;
+    height: 76rpx;
+    line-height: 76rpx;
     margin: 0 auto;
     background: rgba(244, 49, 49, 1);
-    border-radius: 10 rpx;
-    margin-top: 124 rpx;
-    font-size: 32 rpx;
+    border-radius: 10rpx;
+    margin-top: 124rpx;
+    font-size: 32rpx;
     color: #FFFFFF;
     text-align: center;
   }

@@ -157,16 +157,16 @@ export default {
     
     .tops {
       box-sizing: border-box;
-      width: 750 rpx;
-      height: 240 rpx;
+      width: 750rpx;
+      height: 240rpx;
       background-color: #FFFFFF;
-      padding: 20 rpx;
+      padding: 20rpx;
       display: flex;
       align-items: center;
       
       .imgs {
-        width: 200 rpx;
-        height: 200 rpx;
+        width: 200rpx;
+        height: 200rpx;
         
         .image {
           width: 100%;
@@ -175,23 +175,23 @@ export default {
       }
       
       .textRight {
-        margin-left: 20 rpx;
-        width: 480 rpx;
-        height: 200 rpx;
+        margin-left: 20rpx;
+        width: 480rpx;
+        height: 200rpx;
         
         .topText {
-          font-size: 30 rpx;
+          font-size: 30rpx;
           color: #333333;
-          line-height: 30 rpx;
-          height: 60 rpx;
+          line-height: 30rpx;
+          height: 60rpx;
           overflow: hidden;
-          padding-top: 20 rpx;
+          padding-top: 20rpx;
         }
         
         .bottomText {
-          margin-top: 40 rpx;
+          margin-top: 40rpx;
           color: red;
-          font-size: 30 rpx;
+          font-size: 30rpx;
           display: flex;
           justify-content: space-between;
         }
@@ -200,103 +200,103 @@ export default {
     }
     
     .centers {
-      width: 710 rpx;
+      width: 710rpx;
       box-sizing: border-box;
-      margin-left: 20 rpx;
-      margin-top: 15 rpx;
+      margin-left: 20rpx;
+      margin-top: 15rpx;
       background-color: #FFFFFF;
       
       .td {
-        font-size: 28 rpx;
+        font-size: 28rpx;
         color: #555555;
         font-weight: 400;
-        height: 80 rpx;
-        line-height: 80 rpx;
-        border-bottom: 1 rpx solid #EEEEEE;
-        padding-left: 20 rpx;
+        height: 80rpx;
+        line-height: 80rpx;
+        border-bottom: 1rpx solid #EEEEEE;
+        padding-left: 20rpx;
       }
       
       .fahuo {
-        height: 80 rpx;
+        height: 80rpx;
         display: flex;
         justify-content: center;
         align-items: center;
-        border-bottom: 1 rpx solid #EEEEEE;
+        border-bottom: 1rpx solid #EEEEEE;
         
         .fahuoSubmit {
-          width: 200 rpx;
-          height: 60 rpx;
-          line-height: 60 rpx;
+          width: 200rpx;
+          height: 60rpx;
+          line-height: 60rpx;
           text-align: center;
           background-color: #FF6600;
-          border-radius: 10 rpx;
+          border-radius: 10rpx;
           color: #FFFFFF;
-          font-size: 28 rpx;
+          font-size: 28rpx;
         }
       }
       
       .address {
-        font-size: 28 rpx;
+        font-size: 28rpx;
         color: #555555;
         font-weight: 400;
-        line-height: 40 rpx;
-        border-bottom: 1 rpx solid #EEEEEE;
-        padding-left: 20 rpx;
-        padding-top: 20 rpx;
-        padding-bottom: 20 rpx;
+        line-height: 40rpx;
+        border-bottom: 1rpx solid #EEEEEE;
+        padding-left: 20rpx;
+        padding-top: 20rpx;
+        padding-bottom: 20rpx;
       }
       
       .lines {
-        border-bottom: 1 rpx solid #EEEEEE;
-        height: 40 rpx;
+        border-bottom: 1rpx solid #EEEEEE;
+        height: 40rpx;
         width: 100%;
-        padding-left: 20 rpx;
+        padding-left: 20rpx;
       }
       
       .reason {
-        font-size: 28 rpx;
+        font-size: 28rpx;
         color: #555555;
         font-weight: 400;
-        border-bottom: 1 rpx solid #EEEEEE;
-        padding: 10 rpx 20 rpx 10 rpx 20 rpx;
-        line-height: 60 rpx;
+        border-bottom: 1rpx solid #EEEEEE;
+        padding: 10rpx 20rpx 10rpx 20rpx;
+        line-height: 60rpx;
       }
       
       
     }
     
     .orderFa {
-      width: 710 rpx;
+      width: 710rpx;
       box-sizing: border-box;
-      margin-left: 20 rpx;
+      margin-left: 20rpx;
       background-color: #FFFFFF;
-      padding-top: 30 rpx;
-      padding-bottom: 20 rpx;
+      padding-top: 30rpx;
+      padding-bottom: 20rpx;
       
       .inputs {
-        width: 500 rpx;
-        height: 60 rpx;
+        width: 500rpx;
+        height: 60rpx;
         box-sizing: border-box;
         margin: 0 auto;
         
         .input {
           width: 100%;
-          height: 40 rpx;
-          border: 1 rpx solid #CCCCCC;
-          font-size: 28 rpx;
+          height: 40rpx;
+          border: 1rpx solid #CCCCCC;
+          font-size: 28rpx;
         }
       }
     }
     
     .submits {
-      width: 550 rpx;
-      height: 60 rpx;
-      line-height: 60 rpx;
-      margin-left: 80 rpx;
-      margin-top: 30 rpx;
+      width: 550rpx;
+      height: 60rpx;
+      line-height: 60rpx;
+      margin-left: 80rpx;
+      margin-top: 30rpx;
       background-color: red;
       text-align: center;
-      line-height: 60 rpx;
+      line-height: 60rpx;
       color: #FFFFFF;
     }
   }

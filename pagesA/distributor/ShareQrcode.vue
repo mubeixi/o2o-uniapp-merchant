@@ -140,8 +140,8 @@ export default {
     
     .swiper {
       z-index: 9;
-      width: 750 rpx;
-      height: 244 rpx;
+      width: 750rpx;
+      height: 244rpx;
       background: white;
       position: fixed;
       bottom: 0px;
@@ -153,14 +153,14 @@ export default {
       
       .swiper-item {
         display: inline-block;
-        width: 116 rpx;
-        height: 244 rpx;
-        margin-left: 30 rpx;
+        width: 116rpx;
+        height: 244rpx;
+        margin-left: 30rpx;
         position: relative;
         
         .swiper-itm-img {
-          width: 116 rpx;
-          height: 116 rpx;
+          width: 116rpx;
+          height: 116rpx;
           position: absolute;
           top: 50%;
           left: 0;
@@ -173,7 +173,7 @@ export default {
     .share-btn {
       position: absolute;
       bottom: 0;
-      width: 750 rpx;
+      width: 750rpx;
       text-align: center;
       height: 50px;
       line-height: 50px;

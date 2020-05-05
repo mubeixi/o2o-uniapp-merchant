@@ -172,16 +172,16 @@ export default {
   }
   
   .top {
-    margin: 30 rpx 0 rpx 30 rpx 20 rpx;
-    margin-top: 0 rpx;
-    padding-top: 30 rpx;
-    height: 75 rpx;
+    margin: 30rpx 0rpx 30rpx 20rpx;
+    margin-top: 0rpx;
+    padding-top: 30rpx;
+    height: 75rpx;
     display: flex;
     position: relative;
     
     .person {
-      width: 75 rpx;
-      height: 75 rpx;
+      width: 75rpx;
+      height: 75rpx;
       border-radius: 50%;
       overflow: hidden;
       
@@ -192,71 +192,71 @@ export default {
     }
     
     .nickName {
-      margin-left: 19 rpx;
-      font-size: 30 rpx;
-      height: 75 rpx;
-      line-height: 75 rpx;
+      margin-left: 19rpx;
+      font-size: 30rpx;
+      height: 75rpx;
+      line-height: 75rpx;
       color: #333333;
     }
     
     .juewei {
-      width: 125 rpx;
-      height: 46 rpx;
-      line-height: 46 rpx;
+      width: 125rpx;
+      height: 46rpx;
+      line-height: 46rpx;
       text-align: center;
-      font-size: 24 rpx;
+      font-size: 24rpx;
       color: #FFFFFF;
       background-color: #F43131;
-      border-top-left-radius: 125 rpx;
-      border-bottom-left-radius: 125 rpx;
+      border-top-left-radius: 125rpx;
+      border-bottom-left-radius: 125rpx;
       position: absolute;
-      bottom: 12 rpx;
-      right: 0 rpx;
+      bottom: 12rpx;
+      right: 0rpx;
       font-weight: 500;
     }
   }
   
   .moneySum {
-    width: 710 rpx;
-    height: 191 rpx;
+    width: 710rpx;
+    height: 191rpx;
     background: rgba(255, 255, 255, 1);
-    box-shadow: 0px 0px 16 rpx 0px rgba(244, 49, 49, 0.32);
-    border-radius: 10 rpx;
+    box-shadow: 0px 0px 16rpx 0px rgba(244, 49, 49, 0.32);
+    border-radius: 10rpx;
     margin: 0 auto;
-    margin-bottom: 34 rpx;
+    margin-bottom: 34rpx;
     
     .money {
-      height: 104 rpx;
-      width: 710 rpx;
+      height: 104rpx;
+      width: 710rpx;
       display: flex;
-      padding-top: 30 rpx;
+      padding-top: 30rpx;
       box-sizing: border-box;
       
       & view:first-child {
-        border-right: 1 rpx solid #E7E7E7;
+        border-right: 1rpx solid #E7E7E7;
       }
       
       view {
-        height: 74 rpx;
-        width: 355 rpx;
+        height: 74rpx;
+        width: 355rpx;
         text-align: center;
         color: #333333;
         
         .moneyTop {
-          height: 25 rpx;
-          line-height: 25 rpx;
-          font-size: 26 rpx;
-          margin-bottom: 21 rpx;
+          height: 25rpx;
+          line-height: 25rpx;
+          font-size: 26rpx;
+          margin-bottom: 21rpx;
         }
         
         .moneyBottom {
-          height: 28 rpx;
-          line-height: 28 rpx;
-          font-size: 24 rpx;
+          height: 28rpx;
+          line-height: 28rpx;
+          font-size: 24rpx;
           color: #F43131;
           
           text {
-            font-size: 36 rpx;
+            font-size: 36rpx;
             font-weight: bold;
           }
         }
@@ -264,45 +264,45 @@ export default {
     }
     
     .chakan {
-      height: 87 rpx;
-      line-height: 87 rpx;
+      height: 87rpx;
+      line-height: 87rpx;
       text-align: center;
-      font-size: 24 rpx;
+      font-size: 24rpx;
       color: #999999;
       
       .image {
-        width: 12 rpx;
-        height: 20 rpx;
-        margin-left: 14 rpx;
+        width: 12rpx;
+        height: 20rpx;
+        margin-left: 14rpx;
       }
     }
   }
   
   .myData {
-    border: 1 rpx solid #E7E7E7;
-    width: 710 rpx;
-    margin-left: 21 rpx;
-    margin-right: 19 rpx;
-    margin-bottom: 20 rpx;
+    border: 1rpx solid #E7E7E7;
+    width: 710rpx;
+    margin-left: 21rpx;
+    margin-right: 19rpx;
+    margin-bottom: 20rpx;
     
     .myDataTop {
-      width: 710 rpx;
-      height: 95 rpx;
+      width: 710rpx;
+      height: 95rpx;
       background-color: #F4F4F4;
       display: flex;
       
       .td {
-        width: 236 rpx;
-        height: 95 rpx;
-        line-height: 95 rpx;
+        width: 236rpx;
+        height: 95rpx;
+        line-height: 95rpx;
         text-align: center;
-        font-size: 26 rpx;
+        font-size: 26rpx;
         color: #333333;
       }
       
       .shu {
         width: 1px;
-        height: 95 rpx;
+        height: 95rpx;
         background-color: #E7E7E7;
       }
     }
@@ -311,52 +311,52 @@ export default {
       background-color: #FFFFFF;
       
       .td {
-        font-size: 24 rpx !important;
+        font-size: 24rpx !important;
         color: #F43131 !important;
         
         text {
-          font-size: 30 rpx !important;
+          font-size: 30rpx !important;
         }
       }
     }
   }
   
   .description {
-    border: 1 rpx solid #E7E7E7;
-    border-bottom: 0 rpx;
-    width: 710 rpx;
-    margin-left: 21 rpx;
-    margin-right: 19 rpx;
-    margin-bottom: 29 rpx;
-    font-size: 24 rpx;
+    border: 1rpx solid #E7E7E7;
+    border-bottom: 0rpx;
+    width: 710rpx;
+    margin-left: 21rpx;
+    margin-right: 19rpx;
+    margin-bottom: 29rpx;
+    font-size: 24rpx;
     color: #333333;
     
     .t1 {
-      height: 80 rpx;
-      width: 710 rpx;
+      height: 80rpx;
+      width: 710rpx;
       background-color: #F4F4F4;
       display: flex;
       
       .names {
-        width: 98 rpx;
-        height: 80 rpx;
-        line-height: 80 rpx;
+        width: 98rpx;
+        height: 80rpx;
+        line-height: 80rpx;
         text-align: center;
         border-right: 1px solid #E7E7E7;
         border-bottom: 1px solid #E7E7E7;
       }
       
       .zishen {
-        width: 153 rpx;
-        height: 80 rpx;
-        line-height: 80 rpx;
+        width: 153rpx;
+        height: 80rpx;
+        line-height: 80rpx;
         text-align: center;
         border-right: 1px solid #E7E7E7;
         border-bottom: 1px solid #E7E7E7;
       }
       
       .rightZ {
-        border-right: 0 rpx;
+        border-right: 0rpx;
       }
     }
     
@@ -370,15 +370,15 @@ export default {
   }
   
   .noun {
-    width: 710 rpx;
-    margin-left: 21 rpx;
-    margin-right: 19 rpx;
-    padding-bottom: 50 rpx;
+    width: 710rpx;
+    margin-left: 21rpx;
+    margin-right: 19rpx;
+    padding-bottom: 50rpx;
     
     .vivi {
-      font-size: 26 rpx;
+      font-size: 26rpx;
       color: #666666;
-      line-height: 50 rpx;
+      line-height: 50rpx;
     }
   }
 </style>

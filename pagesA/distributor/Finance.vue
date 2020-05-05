@@ -163,27 +163,27 @@ export default {
     box-sizing: border-box;
     
     .nav {
-      padding: 0 rpx 70 rpx;
-      padding-left: 0 rpx;
-      padding-right: 0 rpx;
-      height: 104 rpx;
-      line-height: 104 rpx;
+      padding: 0rpx 70rpx;
+      padding-left: 0rpx;
+      padding-right: 0rpx;
+      height: 104rpx;
+      line-height: 104rpx;
       align-items: center;
       box-sizing: border-box;
-      width: 750 rpx;
+      width: 750rpx;
       display: flex;
       position: fixed;
       background-color: #F8F8F8;
       justify-content: space-around;
       z-index: 999;
-      top: 0 rpx;
-      left: 0 rpx;
+      top: 0rpx;
+      left: 0rpx;
       
       .views {
-        width: 150 rpx;
-        height: 65 rpx;
-        line-height: 65 rpx;
-        font-size: 30 rpx;
+        width: 150rpx;
+        height: 65rpx;
+        line-height: 65rpx;
+        font-size: 30rpx;
         color: #333333;
         text-align: center;
         position: relative;
@@ -193,35 +193,35 @@ export default {
         &:after {
           content: '';
           position: absolute;
-          bottom: 0 rpx;
-          right: 0 rpx;
-          height: 4 rpx;
-          width: 132 rpx;
+          bottom: 0rpx;
+          right: 0rpx;
+          height: 4rpx;
+          width: 132rpx;
           background-color: #F43131;
         }
       }
       
       .marginLeft {
-        margin-left: 107 rpx;
-        margin-right: 107 rpx;
+        margin-left: 107rpx;
+        margin-right: 107rpx;
       }
     }
     
     .order {
-      width: 710 rpx;
+      width: 710rpx;
       margin: 0 auto;
-      padding: 35 rpx 0 rpx 40 rpx 34 rpx;
+      padding: 35rpx 0rpx 40rpx 34rpx;
       background-color: #FFFFFF;
-      font-size: 26 rpx;
+      font-size: 26rpx;
       color: #333333;
       box-sizing: border-box;
-      border-radius: 20 rpx;
-      padding-bottom: 30 rpx;
+      border-radius: 20rpx;
+      padding-bottom: 30rpx;
       margin-bottom: 10px;
       
       & > view {
         //height: 50rpx;
-        line-height: 50 rpx;
+        line-height: 50rpx;
         
         text {
           color: #666666;
@@ -236,8 +236,8 @@ export default {
   
   .defaults {
     margin: 0 auto;
-    width: 640 rpx;
-    height: 480 rpx;
-    margin-top: 100 rpx;
+    width: 640rpx;
+    height: 480rpx;
+    margin-top: 100rpx;
   }
 </style>

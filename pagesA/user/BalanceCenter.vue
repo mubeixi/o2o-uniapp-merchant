@@ -449,14 +449,14 @@ export default {
   .boxSizing {
     /*background-color: #FFFFFF;*/
     background: #F8F8F8;
-    width: 750 rpx;
+    width: 750rpx;
     overflow-x: hidden;
     height: 100vh;
   }
   
   .top {
-    width: 750 rpx;
-    height: 537 rpx;
+    width: 750rpx;
+    height: 537rpx;
     position: relative;
     background-color: #FFFFFF;
     
@@ -467,28 +467,28 @@ export default {
     }
     
     .bottoms {
-      width: 690 rpx;
-      height: 133 rpx;
+      width: 690rpx;
+      height: 133rpx;
       background-color: #fff;
       position: absolute;
       box-shadow: 0px 8px 64px 0px rgba(4, 0, 0, 0.14);
       border-radius: 132px;
-      bottom: 68 rpx;
-      left: 30 rpx;
+      bottom: 68rpx;
+      left: 30rpx;
       display: flex;
       align-items: center;
-      padding: 38 rpx 40 rpx 37 rpx 40 rpx;
+      padding: 38rpx 40rpx 37rpx 40rpx;
       
       .image {
-        width: 58 rpx;
-        height: 58 rpx;
+        width: 58rpx;
+        height: 58rpx;
       }
       
       .line {
-        width: 2 rpx;
-        height: 50 rpx;
+        width: 2rpx;
+        height: 50rpx;
         /*background: red;*/
-        margin: 0 20 rpx;
+        margin: 0 20rpx;
         /*flex: 1;*/
         background: rgba(240, 239, 240, 1);
       }
@@ -497,16 +497,16 @@ export default {
         
         flex: 1;
         text-align: left;
-        height: 58 rpx;
-        line-height: 58 rpx;
-        font-size: 34 rpx;
+        height: 58rpx;
+        line-height: 58rpx;
+        font-size: 34rpx;
         color: #4C4C4C;
         display: flex;
         align-items: center;
         
         .image {
-          width: 58 rpx;
-          height: 58 rpx;
+          width: 58rpx;
+          height: 58rpx;
         }
         
         &.lefts {
@@ -514,44 +514,44 @@ export default {
         }
         
         text {
-          margin-left: 20 rpx;
+          margin-left: 20rpx;
         }
       }
       
     }
     
     .back {
-      width: 21 rpx;
-      height: 38 rpx;
+      width: 21rpx;
+      height: 38rpx;
       position: absolute;
-      left: 24 rpx;
-      top: 25 rpx;
+      left: 24rpx;
+      top: 25rpx;
       /* #ifdef APP-PLUS */
       margin-top: var(--status-bar-height);
       /* #endif */
     }
     
     .titleq {
-      font-size: 36 rpx;
-      height: 34 rpx;
-      line-height: 34 rpx;
+      font-size: 36rpx;
+      height: 34rpx;
+      line-height: 34rpx;
       color: #FFFFFF;
       position: absolute;
-      left: 70 rpx;
-      top: 25 rpx;
+      left: 70rpx;
+      top: 25rpx;
       /* #ifdef APP-PLUS */
       margin-top: var(--status-bar-height);
       /* #endif */
     }
     
     .dangqian {
-      font-size: 28 rpx;
+      font-size: 28rpx;
       color: #FFFFFF;
-      height: 28 rpx;
-      line-height: 28 rpx;
+      height: 28rpx;
+      line-height: 28rpx;
       position: absolute;
-      left: 39 rpx;
-      top: 110 rpx;
+      left: 39rpx;
+      top: 110rpx;
       /* #ifdef APP-PLUS */
       // margin-top: var(--status-bar-height);
       /* #endif */
@@ -559,12 +559,12 @@ export default {
     
     .prices {
       font-family: Arial;
-      font-size: 80 rpx;
-      height: 61 rpx;
-      line-height: 61 rpx;
+      font-size: 80rpx;
+      height: 61rpx;
+      line-height: 61rpx;
       position: absolute;
-      left: 39 rpx;
-      top: 175 rpx;
+      left: 39rpx;
+      top: 175rpx;
       color: #FFFFFF;
       font-weight: 200;
       /* #ifdef APP-PLUS */
@@ -573,35 +573,35 @@ export default {
     }
     
     .zhuanchu {
-      width: 170 rpx;
-      height: 74 rpx;
-      line-height: 74 rpx;
+      width: 170rpx;
+      height: 74rpx;
+      line-height: 74rpx;
       text-align: center;
-      font-size: 30 rpx;
+      font-size: 30rpx;
       color: #FFFFFF;
       font-weight: bold;
       background-color: #ff9175;
-      border-radius: 16 rpx;
+      border-radius: 16rpx;
       position: absolute;
-      top: 130 rpx;
-      right: 24 rpx;
+      top: 130rpx;
+      right: 24rpx;
     }
     
   }
   
   .selects {
-    height: 110 rpx;
-    width: 750 rpx;
+    height: 110rpx;
+    width: 750rpx;
     background-color: #FFFFFF;
     display: flex;
     position: relative;
     
     .qwes {
-      width: 375 rpx;
-      height: 110 rpx;
-      line-height: 110 rpx;
+      width: 375rpx;
+      height: 110rpx;
+      line-height: 110rpx;
       text-align: center;
-      font-size: 32 rpx;
+      font-size: 32rpx;
       color: #666666;
       position: relative;
       
@@ -622,11 +622,11 @@ export default {
       &:after {
         content: '';
         display: block;
-        width: 145 rpx;
-        height: 4 rpx;
+        width: 145rpx;
+        height: 4rpx;
         background-color: #FF5C33;
         position: absolute;
-        bottom: 0 rpx;
+        bottom: 0rpx;
         left: 50%;
         margin-left: -73rpx;
       }
@@ -634,22 +634,22 @@ export default {
   }
   
   .contents {
-    width: 750 rpx;
-    padding: 17 rpx 0 rpx 32 rpx 0 rpx;
+    width: 750rpx;
+    padding: 17rpx 0rpx 32rpx 0rpx;
     background-color: #F8F8F8;
     
     .mingxi {
       /*height: 115rpx;*/
-      width: 700 rpx;
-      padding: 20 rpx 0;
-      border-bottom: 1 rpx solid #EAEAEA;
+      width: 700rpx;
+      padding: 20rpx 0;
+      border-bottom: 1rpx solid #EAEAEA;
       /*display: flex;*/
       /*justify-content: space-between;*/
       align-items: center;
-      font-size: 28 rpx;
+      font-size: 28rpx;
       color: #333333;
-      margin-left: 24 rpx;
-      margin-right: 26 rpx;
+      margin-left: 24rpx;
+      margin-right: 26rpx;
       box-sizing: border-box;
       
       &:first-child {
@@ -662,22 +662,22 @@ export default {
         justify-content: space-between;
         
         .rightNote {
-          width: 200 rpx;
+          width: 200rpx;
           text-align: right;
         }
         
         .leftNote {
-          width: 500 rpx;
+          width: 500rpx;
         }
       }
       
       .times {
         color: #999999;
-        font-size: 20 rpx;
-        height: 20 rpx;
-        line-height: 24 rpx;
-        margin-top: 8 rpx;
-        margin-left: 4 rpx;
+        font-size: 20rpx;
+        height: 20rpx;
+        line-height: 24rpx;
+        margin-top: 8rpx;
+        margin-left: 4rpx;
       }
     }
   }
@@ -686,26 +686,26 @@ export default {
     width: 100%;
     height: 100%;
     position: fixed;
-    top: 0 rpx;
-    left: 0 rpx;
+    top: 0rpx;
+    left: 0rpx;
     z-index: 9999;
     background-color: rgba($color: #000000, $alpha: .3);
     
     .zhezhaoView {
       background: rgba(255, 255, 255, 1);
       border-radius: 20px;
-      width: 503 rpx;
+      width: 503rpx;
       /*height: 564rpx;*/
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      left: 123 rpx;
+      left: 123rpx;
       padding-bottom: 15px;
     }
     
     .closeZ {
-      width: 47 rpx;
-      height: 47 rpx;
+      width: 47rpx;
+      height: 47rpx;
       position: absolute;
       bottom: -100rpx;
       transform: translateX(-50%);
@@ -713,69 +713,69 @@ export default {
     }
     
     .zhezhaoYue {
-      height: 157 rpx;
-      width: 503 rpx;
-      font-size: 32 rpx;
+      height: 157rpx;
+      width: 503rpx;
+      font-size: 32rpx;
       color: #333333;
       text-align: center;
-      line-height: 157 rpx;
+      line-height: 157rpx;
     }
     
     .zhezhaoCenter {
       width: 100%;
-      margin-top: 13 rpx;
-      padding: 0 rpx 52 rpx;
+      margin-top: 13rpx;
+      padding: 0rpx 52rpx;
       
       .views {
-        height: 90 rpx;
+        height: 90rpx;
         display: flex;
         align-items: center;
         
         .inputs {
-          border-bottom: 1 rpx solid #F4F4F4;
-          font-size: 24 rpx;
-          margin-left: 16 rpx;
+          border-bottom: 1rpx solid #F4F4F4;
+          font-size: 24rpx;
+          margin-left: 16rpx;
         }
       }
       
       .imgs {
-        width: 26 rpx;
-        height: 38 rpx;
+        width: 26rpx;
+        height: 38rpx;
         
       }
     }
     
     .zheButton {
-      width: 400 rpx;
-      height: 76 rpx;
-      line-height: 76 rpx;
+      width: 400rpx;
+      height: 76rpx;
+      line-height: 76rpx;
       background: rgba(255, 92, 51, 1);
-      border-radius: 60 rpx;
+      border-radius: 60rpx;
       text-align: center;
-      margin-top: 40 rpx;
-      margin-left: 52 rpx;
-      font-size: 30 rpx;
+      margin-top: 40rpx;
+      margin-left: 52rpx;
+      font-size: 30rpx;
       color: #FFFFFF;
     }
   }
   
   .mingxiPlus {
     display: flex;
-    width: 750 rpx !important;
+    width: 750rpx !important;
     box-sizing: border-box;
     align-items: center;
     justify-content: space-between;
     height: 40px;
     line-height: 40px;
     margin: 0px !important;
-    padding-left: 26 rpx !important;
+    padding-left: 26rpx !important;
     padding-right: 40px !important;
   }
   
   .showCeng {
     background-color: #FFFFFF;
     position: absolute;
-    width: 750 rpx;
+    width: 750rpx;
     z-index: 999;
     top: 60px;
     box-sizing: border-box;
@@ -804,18 +804,18 @@ export default {
     .submit {
       display: flex;
       width: 100%;
-      height: 80 rpx;
-      padding-left: 0 rpx;
-      padding-right: 0 rpx;
+      height: 80rpx;
+      padding-left: 0rpx;
+      padding-right: 0rpx;
       margin-top: 30px;
       
       .view {
         width: 50%;
-        height: 80 rpx;
-        line-height: 80 rpx;
+        height: 80rpx;
+        line-height: 80rpx;
         text-align: center;
         color: #FFFFFF;
-        font-size: 30 rpx;
+        font-size: 30rpx;
       }
       
       .reset {
@@ -830,8 +830,8 @@ export default {
     .zhao {
       height: 230px;
       width: 100%;
-      padding-left: 0 rpx;
-      padding-right: 0 rpx;
+      padding-left: 0rpx;
+      padding-right: 0rpx;
       //background: rgba(0, 0, 0, .3);
       //position: fixed;
       z-index: 998;
@@ -841,11 +841,11 @@ export default {
     }
     
     .priceInterval {
-      font-size: 26 rpx;
+      font-size: 26rpx;
       color: #999999;
       margin-bottom: 20px;
-      height: 27 rpx;
-      line-height: 27 rpx;
+      height: 27rpx;
+      line-height: 27rpx;
       padding-left: 10px;
     }
   }

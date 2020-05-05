@@ -192,32 +192,32 @@ export default {
   }
   
   .wrap {
-    padding-top: 95 rpx;
+    padding-top: 95rpx;
     background: white !important;
     min-height: 100vh;
   }
   
   .all {
-    height: 95 rpx;
-    width: 750 rpx;
-    padding-left: 133 rpx;
-    padding-right: 133 rpx;
+    height: 95rpx;
+    width: 750rpx;
+    padding-left: 133rpx;
+    padding-right: 133rpx;
     display: flex;
     justify-content: space-between;
-    border-bottom: 1 rpx solid #ECE8E8;
+    border-bottom: 1rpx solid #ECE8E8;
     position: fixed;
-    top: 0 rpx;
-    left: 0 rpx;
+    top: 0rpx;
+    left: 0rpx;
     background-color: #FFFFFF;
     z-index: 999;
     
     .hahas {
-      width: 202 rpx;
-      height: 95 rpx;
-      line-height: 95 rpx;
+      width: 202rpx;
+      height: 95rpx;
+      line-height: 95rpx;
       position: relative;
       text-align: center;
-      font-size: 30 rpx;
+      font-size: 30rpx;
       color: #333333;
     }
     
@@ -228,44 +228,44 @@ export default {
     .checked:after {
       content: '';
       position: absolute;
-      bottom: 0 rpx;
-      left: 0 rpx;
-      width: 202 rpx;
-      height: 4 rpx;
+      bottom: 0rpx;
+      left: 0rpx;
+      width: 202rpx;
+      height: 4rpx;
       background-color: #F43131;
     }
   }
   
   .mains {
-    width: 710 rpx;
+    width: 710rpx;
     margin: 0 auto;
-    margin-top: 40 rpx;
-    box-shadow: 0px 0px 18 rpx 0px rgba(0, 0, 0, 0.18);
-    border-radius: 10 rpx;
+    margin-top: 40rpx;
+    box-shadow: 0px 0px 18rpx 0px rgba(0, 0, 0, 0.18);
+    border-radius: 10rpx;
     
     .paiming {
-      padding-top: 38 rpx;
-      padding-bottom: 38 rpx;
-      padding-left: 33 rpx;
+      padding-top: 38rpx;
+      padding-bottom: 38rpx;
+      padding-left: 33rpx;
       display: flex;
       
       .pai1, .pai2, .pai3 {
-        font-size: 28 rpx;
-        height: 26 rpx;
-        line-height: 26 rpx;
+        font-size: 28rpx;
+        height: 26rpx;
+        line-height: 26rpx;
         color: #333333;
       }
       
       .pai1 {
-        width: 320 rpx;
+        width: 320rpx;
       }
       
       .pai2 {
-        width: 150 rpx;
+        width: 150rpx;
       }
       
       .pai3 {
-        width: 207 rpx;
+        width: 207rpx;
         text-align: center;
       }
     }
@@ -278,28 +278,28 @@ export default {
     }
     
     .content {
-      width: 690 rpx;
-      height: 103 rpx;
-      margin-left: 10 rpx;
-      margin-right: 10 rpx;
-      border-bottom: 1 rpx solid #ECE8E8;
+      width: 690rpx;
+      height: 103rpx;
+      margin-left: 10rpx;
+      margin-right: 10rpx;
+      border-bottom: 1rpx solid #ECE8E8;
       display: flex;
       align-items: center;
       
       .contentLeft {
-        width: 326 rpx;
-        margin-left: 17 rpx;
+        width: 326rpx;
+        margin-left: 17rpx;
         display: flex;
         align-items: center;
         
         .ming {
-          width: 41 rpx;
-          height: 56 rpx;
-          line-height: 56 rpx;
-          margin-right: 24 rpx;
+          width: 41rpx;
+          height: 56rpx;
+          line-height: 56rpx;
+          margin-right: 24rpx;
           text-align: center;
           color: #777777;
-          font-size: 32 rpx;
+          font-size: 32rpx;
           
           .image {
             width: 100%;
@@ -308,10 +308,10 @@ export default {
         }
         
         .info {
-          width: 53 rpx;
-          height: 53 rpx;
+          width: 53rpx;
+          height: 53rpx;
           border-radius: 50%;
-          margin-right: 14 rpx;
+          margin-right: 14rpx;
           overflow: hidden;
           
           .image {
@@ -321,29 +321,29 @@ export default {
         }
         
         .nickName {
-          height: 53 rpx;
-          width: 180 rpx;
+          height: 53rpx;
+          width: 180rpx;
           overflow: hidden;
-          line-height: 53 rpx;
-          font-size: 24 rpx;
+          line-height: 53rpx;
+          font-size: 24rpx;
           color: #777777;
         }
       }
       
       .contentCenter {
-        width: 150 rpx;
-        font-size: 24 rpx;
+        width: 150rpx;
+        font-size: 24rpx;
         color: #777777;
       }
       
       .contentRight {
-        width: 207 rpx;
+        width: 207rpx;
         text-align: center;
-        font-size: 22 rpx;
+        font-size: 22rpx;
         color: #F43131;
         
         text {
-          font-size: 26 rpx;
+          font-size: 26rpx;
         }
       }
     }

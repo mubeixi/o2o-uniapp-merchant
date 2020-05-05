@@ -145,16 +145,16 @@ export default {
   }
   
   .msg {
-    padding: 0 22 rpx;
+    padding: 0 22rpx;
     
     .item {
       display: flex;
       align-items: center;
-      padding: 39 rpx 0;
+      padding: 39rpx 0;
       border-bottom: 1px solid #E3E3E3;
       
       .item-name {
-        font-size: 30 rpx;
+        font-size: 30rpx;
         color: #333;
       }
       
@@ -163,23 +163,23 @@ export default {
         align-items: center;
         flex: 1;
         text-align: right;
-        margin-right: 20 rpx;
+        margin-right: 20rpx;
         justify-content: flex-end;
-        font-size: 26 rpx;
+        font-size: 26rpx;
         color: #999999;
         
         .image {
-          width: 88 rpx;
-          height: 88 rpx;
-          border-radius: 44 rpx;
+          width: 88rpx;
+          height: 88rpx;
+          border-radius: 44rpx;
         }
       }
       
       .go {
         display: flex;
         align-items: center;
-        width: 15 rpx;
-        height: 23 rpx;
+        width: 15rpx;
+        height: 23rpx;
         
         image {
           width: 100%;
