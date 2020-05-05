@@ -209,6 +209,7 @@
         <swiper
           :current="quickFirstCateIdx"
           @change="quickCateIndexChange"
+          duration="100"
           :style="{top:diyHeadHeight+firstCateHeight+'px',height:(cateViewHeight+'px')}"
           class="quick-cate-swiper"
         >

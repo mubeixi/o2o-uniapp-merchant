@@ -4,12 +4,12 @@
     <view class="status_bar" style="background: #f81111;"><!-- 这里是状态栏 --></view>
     <!-- #endif -->
     <view class="top">
-      <image class="image" :src="'/static/client/distributor/top.png'|domain"></image>
+      <image class="image" :src="'/static/client/fenxiao/top.png'|domain"></image>
       <!-- #ifdef APP-PLUS -->
       <view class="title">分销中心</view>
       <!-- #endif -->
       <div v-if="userInfo.User_ID&&userInfo.Is_Distribute==1">
-        <image v-if="userInfo.User_ID" class="msg" :src="'/static/client/distributor/msg.png'|domain"
+        <image v-if="userInfo.User_ID" class="msg" :src="'/static/client/fenxiao/msg.png'|domain"
                @click="goMsg"></image>
         <view class="person">
           <image class="image" style="border-radius: 50%;overflow: hidden"
@@ -20,8 +20,8 @@
         </view>
         <view class="putong" v-if="userInfo.User_ID&&userInfo.Is_Distribute==1" @click="goDistributor">
           {{data.disInfo.Level_Name}}
-          <image v-if="data.disInfo.Level_Name" class="rightMy"
-                 :src="'/static/client/person/right.png' | domain"></image>
+          <layout-icon display="inline" size="14" v-if="data.disInfo.Level_Name" class="rightMy" type="iconicon-arrow-right" color="#000"></layout-icon>
+         
         </view>
       </div>
       
@@ -33,7 +33,8 @@
         <view class="left" @click="goSales">
           <view class="salesSum">
             累计业绩（元）
-            <image class="rightMys" :src="'/static/client/person/right.png' | domain"></image>
+            <layout-icon size="14" display="inline" class="rightMys" type="iconicon-arrow-right" color="#000"></layout-icon>
+           
           </view>
           <view class="salesSumPrice" v-if="userInfo.User_ID&&userInfo.Is_Distribute">
             {{data.total_sales}}
@@ -45,7 +46,7 @@
         <view class="right" @click="goProfit">
           <view class="salesSum">
             累计利润（元）
-            <image class="rightMys" :src="'/static/client/person/right.png' | domain"></image>
+            <layout-icon size="14" display="inline" type="iconicon-arrow-right" color="#000"></layout-icon>
           </view>
           <view class="salesSumPrice" v-if="userInfo.User_ID&&userInfo.Is_Distribute">
             {{data.total_income}}
@@ -68,7 +69,7 @@
     </view>
     <view v-else style="height: 25px;"></view>
     <view class="last">
-      <image :src="'/static/client/distributor/background.png'|domain" class="back"></image>
+      <image :src="'/static/client/fenxiao/background.png'|domain" class="back"></image>
       <view class="zhezhao">
         <view class="td" v-for="(item,index) in funcModules" @click="goOther(item)" :key="index">
           <image class="imgs" :src="item.img"></image>
@@ -89,6 +90,7 @@ import { getDisInit, getFuncModule, getUserInfo } from '@/api/customer'
 
 import { mapActions } from 'vuex'
 import { checkIsDistribute, checkIsLogin } from '@/common/helper'
+import LayoutIcon from '@/componets/layout-icon/layout-icon'
 
 const routerList = {
   '/pagesA/fenxiao/erweima': '/pagesA/distributor/Qrcode',
@@ -103,6 +105,7 @@ const routerList = {
 export default {
   mixins: [BaseMixin],
   components: {
+    LayoutIcon,
     // TabbarComponents
   },
   data () {
@@ -429,18 +432,8 @@ export default {
     display: flex;
     align-items: center;
     padding-left: 10px;
-    
-    .rightMy {
-      width: 9px !important;
-      height: 14px !important;
-      margin-left: 2px;
-    }
+
   }
   
-  .rightMys {
-    width: 9px !important;
-    height: 14px !important;
-    margin-left: 2px;
-    margin-bottom: -2px;
-  }
+
 </style>
