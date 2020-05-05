@@ -306,7 +306,7 @@ export const checkIsDistribute = (redirect, tip) => {
       }
 
       const initData = store.getters['system/initData']
-      const {commi_rename} = initData
+      const { commi_rename } = initData
       const commi = commi_rename.commi
       confirm({ title: '提示', content: `该操作需要是${commi},请问是否成为${commi}?`, confirmText: '确定', cancelText: '暂不成为' }).then(() => {
         uni.navigateTo({
@@ -640,25 +640,31 @@ export const numberSort = function (arr, order_by) {
   }
 }
 
-//------------ 收货地址函数 -------------
-//数组转化
+// ------------ 收货地址函数 -------------
+// 数组转化
 export const array_change = function (arr) {
-  var array = [];
+  var array = []
   for (var i in arr) {
-    array.push({'id': i, 'name': arr[i]});
+    array.push({ id: i, name: arr[i] })
   }
-  return array;
+  return array
 }
 
-//获取数组下标  用于收货地址选择的显示
+// 获取数组下标  用于收货地址选择的显示
 export const get_arr_index = function (arr, id) {
   for (var i in arr) {
-    if (arr[i]['id'] === id) {
-      return parseInt(i);
+    if (arr[i].id === id) {
+      return parseInt(i)
     }
   }
 }
-//--------------
+// --------------
+
+export const cutstrFun = (str, len, tip = '..') => {
+  if (!str) return ''
+  if (str.length < len) return str
+  return str.substring(0, len) + tip
+}
 
 const Helper = {
   Object: {

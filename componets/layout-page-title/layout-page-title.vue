@@ -28,7 +28,7 @@ export default {
       },
       title: {
         type: String,
-        default: '标题'
+        default: ''
       },
       // 代表是否emit左侧被点击事件
       letfFn: {

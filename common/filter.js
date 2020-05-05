@@ -34,6 +34,18 @@ export const formatNumber = n => {
   n = n.toString()
   return n[1] ? n : '0' + n
 }
+export const formatPirce = (priceStr, idx) => {
+  if(isNaN(priceStr))return '';
+  if (typeof priceStr === 'number')priceStr += ''
+  const arr = priceStr.split('.')
+  if (idx === 0) return arr[0]
+  if (idx === 1 && arr.length > 1) return ('.' + arr[1])
+  return ''
+}
+
+Vue.filter('formatPirce', (val, idx) => {
+  return formatPirce(val, idx)
+})
 
 export const formatTimeFun = function (date) {
   const year = new Date(date * 1000).getFullYear()
