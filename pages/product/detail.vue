@@ -5,7 +5,7 @@
     overflow-x: hidden;
     overflow-y: hidden;
   }
-  
+
   .end-time {
     width: 750rpx;
     height: 58rpx;
@@ -15,7 +15,7 @@
     font-size: 22rpx;
     background-color: #F2FFFA;
   }
-  
+
   .end-time-block {
     width: 36rpx;
     height: 36rpx;
@@ -28,11 +28,11 @@
     color: #ffffff;
     margin: 0px 4rpx;
   }
-  
+
   .end-time-day {
     margin: 0px 4rpx;
   }
-  
+
   .product-price {
     background-color: #ffffff;
     display: flex;
@@ -44,18 +44,18 @@
     justify-content: space-between;
     color: #ABABAB;
   }
-  
+
   .product-price-red {
     font-size: 20px;
     color: #F53636;
   }
-  
+
   .product-price-right {
     width: 168rpx;
     height: 70rpx;
     position: relative;
   }
-  
+
   .product-share {
     height: 20rpx;
     font-size: 11px;
@@ -66,7 +66,7 @@
     top: 12rpx;
     left: 84rpx;
   }
-  
+
   .product-title {
     width: 698rpx;
     line-height: 40rpx;
@@ -82,18 +82,18 @@
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
   }
-  
+
   .line-f8 {
     width: 750rpx;
     height: 20rpx;
     background: rgba(248, 248, 248, 1);
   }
-  
+
   .full-img {
     width: 100% !important;
     height: 100% !important;
   }
-  
+
   .product-price-share {
     font-size: 13px;
     height: 20rpx;
@@ -103,18 +103,18 @@
     position: absolute;
     bottom: 12rpx;
     left: 74rpx;
-    
+
     .price-q {
       font-size: 10px;
     }
   }
-  
+
   .product-activity {
     width: 750rpx;
     padding: 30rpx 20rpx 0rpx 20rpx;
     box-sizing: border-box;
   }
-  
+
   .product-activity-title {
     width: 134rpx;
     height: 34rpx;
@@ -123,7 +123,7 @@
     color: rgba(51, 51, 51, 1);
     line-height: 30rpx;
   }
-  
+
   .activity-item {
     width: 104rpx;
     height: 34rpx;
@@ -134,7 +134,7 @@
     margin-right: 20rpx;
     position: relative;
   }
-  
+
   .activity-img {
     position: absolute;
     top: 0;
@@ -142,10 +142,10 @@
     width: 104rpx;
     height: 34rpx
   }
-  
+
   .activity-second {
     margin-top: 20rpx;
-    
+
     .color-first {
       color: #1CA272;
       height: 32rpx;
@@ -157,7 +157,7 @@
       margin-right: 16rpx;
       font-size: 10px;
     }
-    
+
     .color-second {
       color: #333333;
       height: 22rpx;
@@ -167,20 +167,20 @@
       line-height: 22rpx;
     }
   }
-  
+
   .vip-img {
     width: 710rpx;
     margin: 0 auto;
     height: 96rpx;
   }
-  
+
   .shouhou {
     width: 750rpx;
     box-sizing: border-box;
     height: 86rpx;
     padding: 30rpx 20rpx;
   }
-  
+
   .shouhou-item {
     display: flex;
     height: 28rpx;
@@ -190,16 +190,16 @@
     line-height: 28rpx;
     margin-right: 36rpx;
   }
-  
+
   .shouhou-img {
     width: 28rpx;
     height: 28rpx;
     margin-right: 10rpx
   }
-  
+
   .store {
     position: sticky;
-    z-index: 8;
+    z-index: 999;
     top: 0;
     width: 750rpx;
     background-color: #ffffff;
@@ -207,7 +207,7 @@
     box-sizing: border-box;
     padding: 0rpx 72rpx;
     justify-content: space-between;
-    
+
     .li-item {
       width: 60rpx;
       height: 84rpx;
@@ -219,11 +219,11 @@
       font-weight: bold;
       position: relative;
     }
-    
+
     .color-store {
       color: #26C78D;
     }
-    
+
     .active {
       width: 36rpx;
       height: 6rpx;
@@ -235,17 +235,17 @@
       bottom: 0rpx;
     }
   }
-  
+
   .tab-containers {
     border-top: 1px solid #f1f1f1;
   }
-  
+
   .store-info {
     width: 750rpx;
     box-sizing: border-box;
     padding: 52rpx 20rpx 20rpx 30rpx;
   }
-  
+
   .store-info-title {
     width: 540rpx;
     height: 30rpx;
@@ -257,7 +257,7 @@
     line-height: 30rpx;
     margin-bottom: 24rpx;
   }
-  
+
   .store-info-call {
     height: 28rpx;
     line-height: 28rpx;
@@ -265,14 +265,14 @@
     font-size: 13px;
     color: #999999;
   }
-  
+
   .store-list {
     width: 710rpx;
     margin: 0 auto;
     padding-top: 30rpx;
     padding-bottom: 10rpx;
   }
-  
+
   .store-list-top {
     height: 32rpx;
     display: flex;
@@ -280,7 +280,7 @@
     font-size: 13px;
     color: #999999;
   }
-  
+
   .block-div {
     background-color: #26C78D;
     width: 8rpx;
@@ -288,14 +288,14 @@
     margin-right: 16rpx;
     display: inline-block;
   }
-  
+
   .store-list-item {
     width: 710rpx;
     padding: 30rpx 24rpx;
     box-sizing: border-box;
     border-bottom: 1px solid #EBEBEB;
   }
-  
+
   .store-list-title {
     width: 600rpx;
     height: 28px;
@@ -304,11 +304,11 @@
     line-height: 28px;
     margin-bottom: 10rpx;
   }
-  
+
   .isStickly {
     border-bottom: 1px solid #eee;
   }
-  
+
   .store-list-address {
     width: 100%;
     box-sizing: border-box;
@@ -317,14 +317,14 @@
     line-height: 34rpx;
     align-items: center;
   }
-  
+
   .store-list-font {
     color: #999999;
     font-size: 12px;
     height: 12px;
     line-height: 12px;
   }
-  
+
   .store-su {
     width: 1px;
     height: 34rpx;
@@ -332,58 +332,58 @@
     margin: 0px 24rpx;
     display: inline-block;
   }
-  
+
   .over {
     overflow-x: hidden;
     overflow-y: scroll;
   }
-  
+
   ul li {
     list-style: none;
   }
-  
+
   .comment-box {
     border-top: 1px solid #f2f2f2;
     border-bottom: 1px solid #f2f2f2;
     padding: 30rpx 25rpx;
     background: white;
-    
+
     .block-title {
       padding: 20px 0;
-      
+
       .block-title-text {
         font-weight: bold;
       }
     }
-    
+
     .comment-list {
-    
+
     }
   }
-  
+
   .commtent-add {
     margin: 50rpx 25rpx;
     background: #F7F7F7;
     min-height: 150rpx;
     padding: 20rpx;
-    
+
     .textarea {
       font-size: 14px;
       line-height: 1.4;
-      
+
       &::placeholder {
         color: #999;
       }
     }
   }
-  
+
   .wzw-goods-action {
     position: fixed;
     left: 0px;
     bottom: 0px;
     z-index: 10;
   }
-  
+
   .back-icon {
     position: fixed;
     top: 60rpx;
@@ -391,7 +391,7 @@
     //opacity: 0.5;
     z-index: 9;
   }
-  
+
   /*分享开始*/
   .shareinfo {
     background: #fff;
@@ -402,34 +402,34 @@
     border-top-left-radius: 10rpx;
     border-top-right-radius: 10rpx;
   }
-  
+
   .shareinfo {
     padding-bottom: 0;
     color: #333;
     font-size: 24rpx;
   }
-  
+
   .shareinfo > div {
     text-align: center;
   }
-  
+
   .s_top {
     display: flex;
     justify-content: center;
     align-items: center;
   }
-  
+
   .s_top .img {
     width: 76rpx;
     height: 76rpx;
     display: block;
     margin: 0 auto 10rpx;
   }
-  
+
   .s_top > div:nth-child(1) {
     /*margin-right: 120rpx;*/
   }
-  
+
   .s_bottom {
     position: relative;
     bottom: 0;
@@ -441,14 +441,14 @@
     line-height: 60rpx;
     margin-top: 16rpx;
   }
-  
+
   /*分享结束*/
   .refuseApplyDialog {
     width: 560rpx;
     box-sizing: border-box;
     padding: 15px;
     font-size: 14px;
-    
+
     .reason {
       font-size: 14px;
       min-height: 200px;
@@ -458,12 +458,12 @@
       width: auto;
       padding: 10px;
     }
-    
+
     .control {
       margin-top: 15px;
       display: flex;
       justify-content: center;
-      
+
       .action-btn {
         width: 70px;
         height: 36px;
@@ -472,7 +472,7 @@
         text-align: center;
         color: #666;
         background: #e9e9e9;
-        
+
         &.btn-sub {
           background: #f43131;
           color: white;
@@ -481,7 +481,7 @@
       }
     }
   }
-  
+
   .comment-send {
     width: 700rpx;
     box-sizing: border-box;
@@ -489,22 +489,22 @@
     background-color: #F6F6F6;
     border-radius: 6rpx;
     margin-top: 10px;
-    
+
     &-item {
       width: 600rpx;
       line-height: 40rpx;
     }
   }
-  
+
   .color-comment {
     color: #476DB9;
   }
-  
+
   .comment-item {
     border-bottom: 1px solid #E8E8E8;
     padding-bottom: 30rpx;
   }
-  
+
   /* 领券start */
   .section2 {
     padding: 30rpx 20rpx;
@@ -515,13 +515,13 @@
     background: white;
     border-bottom: 20rpx solid #f8f8f8;
   }
-  
+
   .section2 .btn {
     padding: 0 10rpx;
     color: #26C78D;
     border: 1px solid #26C78D;
   }
-  
+
   .right {
     display: flex;
     align-items: center;
@@ -529,13 +529,13 @@
     color: #666666;
     font-weight: 500;
   }
-  
+
   .right .img {
     width: 20rpx;
     height: 26rpx;
     margin-left: 20rpx;
   }
-  
+
   /* 领券 end */
   .ticks {
     max-height: 1050rpx;
@@ -543,7 +543,7 @@
     padding-top: 0rpx !important;
     // overflow: scroll;
   }
-  
+
   .t_title {
     font-size: 30rpx;
     color: #333;
@@ -555,14 +555,14 @@
     line-height: 90rpx;
     background-color: #FFFFFF;
   }
-  
+
   .t_title .delIcon {
-    
+
     position: absolute;
     top: 0rpx;
     right: 20rpx;
   }
-  
+
   .t_content {
     position: relative;
     width: 720rpx;
@@ -575,34 +575,34 @@
     font-size: 22rpx;
     color: #F43131;
   }
-  
+
   .t_left {
     float: left;
   }
-  
+
   .t_left .t_left_t .money {
     font-size: 42rpx;
     margin-right: 10rpx;
   }
-  
+
   .t_left .t_left_t {
     font-size: 24rpx;
     margin-bottom: 10rpx;
   }
-  
+
   .t_left .t_left_b {
     margin-top: 6rpx;
   }
-  
+
   .t_left .t_left_t i {
     font-size: 22rpx;
     font-style: normal;
   }
-  
+
   .t_left .t_left_c, .t_left .t_left_b {
     font-size: 22rpx;
   }
-  
+
   .t_right {
     float: right;
     height: 116rpx;
@@ -692,20 +692,20 @@
           <!--          </div>-->
         </div>
       </div>
-      
+
       <div class="vip-img" @click="goVipList">
         <image :src="'/static/client/product/vip.png'|domain" class="full-img"></image>
       </div>
-    
+
     </div>
-    
+
     <!-- 服务保障   -->
     <div class="shouhou flex flex-vertical-center" v-if="detailData.Products_Promise.length>0">
       <div class="shouhou-item" v-for="(item,index) in detailData.Products_Promise" v-if="item.name" :key="index">
         <image :src="'/static/client/product/checked.png'|domain" class="shouhou-img"></image>
         {{item.name}}
       </div>
-    
+
     </div>
     <div class="line-f8"></div>
     <!--  店铺信息  -->
@@ -735,10 +735,10 @@
         </div>
       </swiper-item>
       <swiper-item class="tab-pages">
-        
+
         <!--评论列表-->
         <div class="block comment-box over" v-if="comments.length>0" :style="{height:(systemInfo.windowHeight+'px')}">
-          
+
           <div class="block-title">
             <div class="block-title-text">留言评论</div>
             <div class="block-title-more flex flex-vertical-center c9 fz-12">
@@ -764,11 +764,11 @@
                         </block>
                       </div>
                     </block>
-                  
+
                   </block>
                 </div>
               </div>
-            
+
             </div>
           </div>
         </div>
@@ -843,7 +843,7 @@
         <span slot="rightPrice">100.00</span>
       </block>
     </wzw-goods-action>
-    
+
     <!--    分享 -->
     <!--    <layout-popup  ref="share">-->
     <!--      <div class="shareinfo" >-->
@@ -868,7 +868,7 @@
     <!--        <div class="s_bottom" @click="cancel">取消</div>-->
     <!--      </div>-->
     <!--    </layout-popup>-->
-    
+
     <layout-modal ref="commentModal">
       <div class="refuseApplyDialog">
         <textarea class="reason" @input="bingReasonInput" :value="commentValue" placeholder-style="color:#999"
@@ -879,7 +879,7 @@
         </div>
       </div>
     </layout-modal>
-    
+
     <layout-popup ref="couponModal">
       <view style="max-height: 1050rpx;">
         <div class="t_title ">
@@ -900,7 +900,7 @@
         </scroll-view>
       </view>
     </layout-popup>
-  
+
   </div>
 </template>
 
@@ -940,6 +940,8 @@ export default {
   },
   data () {
     return {
+      headTabTop:0,
+      pageScrollTop:0,
       hasCart: false, // 是否有购物车
       tabIndex: 0,
       headTabSticky: false,
@@ -971,7 +973,8 @@ export default {
   },
   onPageScroll (e) {
     const { scrollTop } = e
-    this.headTabSticky = (scrollTop > this.headTabTop)
+    this.pageScrollTop = scrollTop
+    this.headTabSticky = this.pageScrollTop  > this.headTabTop
   },
   methods: {
     //领取优惠券
@@ -1112,7 +1115,7 @@ export default {
       try {
         showLoading()
         // HUAWEI Mate 30 Pro
-        
+
         // count: 553
         // id: 990
         // price: 11790
@@ -1145,7 +1148,7 @@ export default {
         this.directBuy()
         return
       }
-      
+
       try {
         showLoading()
         this.postData.cart_key = 'DirectBuy'
@@ -1171,7 +1174,7 @@ export default {
         imageUrl: getProductThumb(this.detailData.ImgPath),
         path: buildSharePath(path),
       }
-      
+
       switch (channel) {
         case 'wx':
           uni.share({
@@ -1257,12 +1260,12 @@ export default {
     async _init_func (options) {
       try {
         showLoading()
-        
+
         if (options.gift) {
           this.gift = options.gift
           this.postData.active_id = options.gift
           this.postData.active = 'gift'
-          
+
           if (!checkIsLogin()) {
             return
           }
@@ -1271,13 +1274,13 @@ export default {
           })
           this.gift_attr_id = giftInfo.attr_id
           this.skuval = giftInfo.skuval
-          
+
           this.recieve = true
         }
-        
+
         // 获取优惠券
         this.page = 1
-        
+
         const data = {
           prod_id: this.prod_id,
         }
@@ -1286,7 +1289,7 @@ export default {
         })
         this.detailData.Products_Description = formatRichTextByUparseFn(this.detailData.Products_Description)
         this.isVirtual = this.detailData.Products_IsVirtual === 1
-        
+
         const couponParam = {
           pageSize: 999,
           page: 1,
@@ -1307,17 +1310,17 @@ export default {
         }).catch((e) => {
           throw Error('获取评论数据失败')
         })
-        
+
         this.store = await getBizInfo({ biz_id: this.detailData.biz_id }, { onlyData: true }).catch(e => {
           throw Error(e.msg || '获取店铺信息失败')
         })
-        
+
         this.storeList = await getStoreList({ biz_id: this.detailData.biz_id }, {
           onlyData: true,
         }).catch(e => {
           throw Error(e.msg || '获取店铺列表失败')
         })
-        
+
         const res = await getActiveInfo({
           biz_id: this.detailData.biz_id,
           type: 'manjian',
@@ -1326,7 +1329,7 @@ export default {
         if (res !== null && res.active_info) {
           this.active = res.active_info
         }
-        
+
         this.$nextTick().then(() => {
           const query = uni.createSelectorQuery()
           query.select('#tabs').boundingClientRect()
