@@ -8,7 +8,7 @@ import Storage from '@/common/Storage'
 
 export default {
   globalData: {
-    videoInstance:[]
+    videoInstance: []
   },
   onLaunch: function () {
     console.log('App Launch')
@@ -16,11 +16,17 @@ export default {
     this.$store.dispatch('theme/refreshTheme')
   },
   onShow: function () {
-    Storage.set('users_id',users_id)
+    Storage.set('users_id', users_id)
     console.log('App Show')
   },
   onHide: function () {
     console.log('App Hide')
+  },
+  onError: function (e) {
+    console.log(e)
+    // #ifdef MP-WEIXIN
+    uni.$fundebug.notify('onAppError', JSON.stringify(e))
+    // #endif
   }
 }
 </script>
