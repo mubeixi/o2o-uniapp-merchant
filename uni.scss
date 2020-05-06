@@ -118,6 +118,7 @@ page {
   height: constant(safe-area-inset-bottom);
   height: env(safe-area-inset-bottom);
   width: 100%;
+  background: #fff;
 
   &.fixed {
     position: fixed;

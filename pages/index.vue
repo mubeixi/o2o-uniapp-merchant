@@ -1,15 +1,12 @@
 <template>
   <div class="page-wrap">
     <div class="head-box" :style="{height:diyHeadHeight+'px',backgroundColor:primaryColor}">
-      <div class="head"
-           :style="{height:menuButtonInfo.height+'px',paddingRight:diyHeadRight+'px',marginTop:menuButtonInfo.top+'px'}">
+      <div class="head" :style="{height:menuButtonInfo.height+'px',paddingRight:diyHeadRight+'px',marginTop:menuButtonInfo.top+'px'}">
         <ul class="tab-box">
-          <li @click="headTabIndex=0" class="tab-item" :class="[headTabIndex === 0?'active':'']">特价<span
-            v-if="headTabIndex === 0" class="underline"></span></li>
-          <li @click="headTabIndex=1" class="tab-item" :class="[headTabIndex === 1?'active':'']">同城闪送<span
-            v-if="headTabIndex === 1" class="underline"></span></li>
-          <li @click="headTabIndex=2" class="tab-item" :class="[headTabIndex === 2?'active':'']">好店<span
-            v-if="headTabIndex === 2" class="underline"></span></li>
+          <li @click="headTabIndex=0" id="headTabItem0" :animation="tabAnimationData[0]" class="tab-item" :class="[headTabIndex === 0?'active':'']">特价</li>
+          <li @click="headTabIndex=1" id="headTabItem1" :animation="tabAnimationData[1]" class="tab-item" :class="[headTabIndex === 1?'active':'']">同城闪送</li>
+          <li @click="headTabIndex=2" id="headTabItem2" :animation="tabAnimationData[2]" class="tab-item" :class="[headTabIndex === 2?'active':'']">好店</li>
+          <span class="page-tab-underline" :animation="tabUnderlineAnimationData"></span>
         </ul>
         <div class="search-box"
              @click="$linkTo('/pages/search/index')"
@@ -20,7 +17,7 @@
     </div>
     <!--  占位-->
     <div :style="{height:diyHeadHeight+'px'}"></div>
-    
+
     <div class="main tab-container" :style="{height:(systemInfo.windowHeight-diyHeadHeight+'px')}">
       <scroll-view :style="{height:(systemInfo.windowHeight-diyHeadHeight+'px')}" class="tab-page-wrap" scroll-y
                    v-show="headTabIndex===0">
@@ -107,17 +104,17 @@
           <div class="block-title flex-ver-c">
             <div class="block-title-text">今日秒杀</div>
             <div class="block-title-more flex flex-ver-c c9 fz-12">
-              <span>查看全部</span>
-              <layout-icon type="iconicon-arrow-right" size="14" color="#999"></layout-icon>
+              <!--<span>查看全部</span>
+              <layout-icon type="iconicon-arrow-right" size="14" color="#999"></layout-icon>-->
             </div>
           </div>
           <div class="block-content">
             <div class="goods-list">
-              <div class="goods-item" v-for="(item,idx) in goodsList" :key="idx"
+              <div class="goods-item" v-for="(item,idx) in killList" :key="idx"
                    @click="$toGoodsDetail(item.Products_ID)">
                 <block v-if="idx<6">
                   <div class="cover" :style="{backgroundImage:'url('+item.ImgPath+')'}">
-                    <!--                    <div class="tip" style="background: #185e44;">同城配送</div>-->
+                    <!--<div class="tip" style="background: #185e44;">同城配送</div>-->
                   </div>
                   <h5 class="title">{{item.Products_Name}}</h5>
                   <div class="price-box">
@@ -134,7 +131,6 @@
           </div>
         </div>
         <div class="block live">
-          
           <div class="block-title">
             <div class="block-title-text">钜惠推荐</div>
             <div class="block-title-more flex flex-vertical-center c9 fz-12">
@@ -157,7 +153,7 @@
             <div class="live-list">
               <block v-for="(item,idx) in liveGoodsList" :key="idx">
                 <div class="live-item" v-if="idx<3" @click="$toGoodsDetail(item.Products_ID)">
-                  
+
                   <div class="left">
                     <div class="cover" :style="{backgroundImage:'url('+item.ImgPath+')'}"></div>
                   </div>
@@ -185,7 +181,7 @@
                     <!--                      <div class="btn">抢</div>-->
                     <!--                    </div>-->
                   </div>
-                
+
                 </div>
               </block>
             </div>
@@ -196,7 +192,7 @@
       </scroll-view>
       <scroll-view :style="{height:(systemInfo.windowHeight-diyHeadHeight+'px')}" class="tab-page-wrap" scroll-y
                    v-show="headTabIndex===1">
-        
+
         <div class="section scroll-box first-cate-list  bg-white" :style="{top:diyHeadHeight+'px'}"
              @touchmove.stop.prevent="$noop">
           <li class="scroll-item fz-15 c3" @click="changeQuickCateNav(idx)" v-for="(cate,idx) in firstCateList"
@@ -205,7 +201,7 @@
             <span class="underline" v-show="quickFirstCateIdx === idx"></span>
           </li>
         </div>
-        
+
         <swiper
           :current="quickFirstCateIdx"
           @change="quickCateIndexChange"
@@ -214,9 +210,8 @@
           class="quick-cate-swiper"
         >
           <swiper-item class="quick-cate-swiper-item" v-for="(first,idx1) in firstCateList" :key="idx1">
-            
             <scroll-view class="bg-white scroll-view-wrap" scroll-y>
-              
+
               <div class="grid-box">
                 <div
                   style="width: 150rpx;box-sizing: border-box;"
@@ -232,18 +227,18 @@
                 </div>
               </div>
               <div class="hr h10"></div>
-              
+
               <div class="bg-white">
                 <layout-ad :lazy-load="true" :ready="quickFirstCateIdx===idx1" paddingStr="20px 0 20px 0" code="hotcity"
                            :cate-id="first.Category_ID" position="city"></layout-ad>
               </div>
-              
+
               <div class="page-section-title">
                 <span class="before" :style="{backgroundColor: primaryColor}"></span>
                 <span class="text">钜惠推荐</span>
                 <span class="after" :style="{backgroundColor: primaryColor}"></span>
               </div>
-              
+
               <div class="fun-goods-list bg-white b-radius-5 m-t-10" style="width: 710rpx;margin-left: 20rpx;">
                 <div class="fun-goods-col" style="padding: 0 15rpx 0 30rpx">
                   <block v-for="(goods,idx) in quickGoodsList" :key="idx">
@@ -258,17 +253,17 @@
                   </block>
                 </div>
               </div>
-              
+
               <div class="h20"></div>
-            
+
             </scroll-view>
           </swiper-item>
         </swiper>
-      
+
       </scroll-view>
       <scroll-view :style="{height:(systemInfo.windowHeight-diyHeadHeight+'px')}" class="tab-page-wrap" scroll-y
                    v-show="headTabIndex===2">
-        
+
         <div class="section scroll-box first-cate-list  bg-white" :style="{top:diyHeadHeight+'px'}"
              @touchmove.stop.prevent="$noop">
           <li class="scroll-item fz-15 c3" @click="changeStoreCateNav(idx)" v-for="(cate,idx) in firstCateList"
@@ -277,7 +272,7 @@
             <span class="underline" v-show="storeFirstCateIdx === idx"></span>
           </li>
         </div>
-        
+
         <swiper
           :current="storeFirstCateIdx"
           @change="storeCateIndexChange"
@@ -285,9 +280,9 @@
           class="quick-cate-swiper"
         >
           <swiper-item class="quick-cate-swiper-item" v-for="(first,idx1) in firstCateList" :key="idx1">
-            
+
             <scroll-view class="bg-white scroll-view-wrap" scroll-y>
-              
+
               <div class="grid-box">
                 <div
                   style="width: 150rpx;box-sizing: border-box;"
@@ -307,14 +302,14 @@
                 <layout-ad :lazy-load="true" :ready="storeFirstCateIdx===idx1" paddingStr="20px 0 20px 0" code="hotcity"
                            :cate-id="first.Category_ID" position="hot"></layout-ad>
               </div>
-              
+
               <div style="background: #f8f8f8" class="p-b-15 p-t-15">
                 <div class="page-section-title">
                   <span class="before" :style="{backgroundColor: primaryColor}"></span>
                   <span class="text">人气商家</span>
                   <span class="after" :style="{backgroundColor: primaryColor}"></span>
                 </div>
-                
+
                 <div class="store-top-item" v-for="(merchant,idx) in merchantList" :key="idx"
                      @click="$linkTo('/pages/store/index?bid='+merchant.id)">
                   <div class="store-info flex flex-vertical-c flex-justify-between">
@@ -335,7 +330,7 @@
                   <div class="store-goods-list">
                     <block v-for="(goods,idx2) in merchant.prod" :key="idx2">
                       <div class="store-goods-item" v-if="idx2<3" @click.stop="$toGoodsDetail(goods.Products_ID)">
-                        
+
                         <image :style="{backgroundImage:'url('+goods.ImgPath+')'}" class="cover" />
                         <div class="title fz-12 c3 p-t-7 p-b-7">{{goods.Products_Name}}</div>
                         <div class="fz-10 c9 flex flex-vertical-b">
@@ -343,21 +338,26 @@
                           <span class="text-through m-l-4">￥</span><span
                           class="text-through">{{goods.Products_PriceY}}</span>
                         </div>
-                      
+
                       </div>
                     </block>
                   </div>
                 </div>
-              
+
               </div>
-            
+
             </scroll-view>
           </swiper-item>
         </swiper>
-      
+
       </scroll-view>
     </div>
-  
+
+    <div class="publish-btn">
+      <layout-icon size="18" display="inline" color="#fff" type="iconfabu"></layout-icon>
+      <div class="fz-10 color-white">发布活动</div>
+    </div>
+
   </div>
 </template>
 
@@ -407,7 +407,7 @@ export default {
     DiyBase,
     LayoutAd,
     LayoutCopyright,
-    LayoutIcon,
+    LayoutIcon
   },
   computed: {
     cateViewHeight () {
@@ -418,8 +418,8 @@ export default {
       }
     },
     ...mapGetters({
-      primaryColor: 'theme/pimaryColor',
-    }),
+      primaryColor: 'theme/pimaryColor'
+    })
     // quickNavs () {
     //   try {
     //     return this.firstCateList[this.quickFirstCateIdx].child
@@ -430,6 +430,9 @@ export default {
   },
   data () {
     return {
+      tabDom: [{}, {}, {}],
+      tabUnderlineAnimationData: {},
+      tabAnimationData: [{}, {}, {}],
       firstCateHeight: 44,
       tagIndex: 0,
       firstCateList: [], // 一级菜单
@@ -444,71 +447,101 @@ export default {
       killList: [],
       goodsList: [],
       templateList: [],
-      templateData: [],
-      
+      templateData: []
+
     }
   },
   watch: {
     headTabIndex: {
+      immediate: true,
       handler (idx, oldIdx) {
         if (idx !== oldIdx) {
           if (idx === 1) {
             if (this.quickGoodsList.length < 1) this.loadQuickGoodsList(0)
           }
-          if (idx === 2) {
-          
+
+          var animation = uni.createAnimation({
+            duration: 300,
+            timingFunction: 'ease'
+          })
+
+          animation.scale(1.3).step()
+          this.tabAnimationData[idx] = animation.export()
+
+          var underlineAnimation = uni.createAnimation({
+            duration: 300,
+            timingFunction: 'ease'
+          })
+
+          const eleDom = this.tabDom[idx]
+          // 正下方
+          this.tabUnderlineAnimationData = underlineAnimation.width('18px').left(eleDom.left + eleDom.width / 2 - 9).step()
+
+          var animation2 = uni.createAnimation({
+            duration: 300,
+            timingFunction: 'ease'
+          })
+
+          const rest = animation2.scale(1).step()
+          if (idx === 0) {
+            this.tabAnimationData[1] = rest
+            this.tabAnimationData[2] = rest
           }
+
+          if (idx === 1) {
+            this.tabAnimationData[0] = rest
+            this.tabAnimationData[2] = rest
+          }
+
+          if (idx === 2) {
+            this.tabAnimationData[0] = rest
+            this.tabAnimationData[1] = rest
+          }
+
+          setTimeout(() => {
+            var underlineAnimation2 = uni.createAnimation({
+              duration: 300,
+              timingFunction: 'ease'
+            })
+
+            const query = uni.createSelectorQuery()
+            query.select(`#headTabItem${idx}`).boundingClientRect(data => {
+              this.tabDom[idx] = data
+              this.tabUnderlineAnimationData = underlineAnimation2.width('8px').left(data.left + data.width / 2 - 4).step()
+            }).exec()
+          }, 300)
         }
-      },
+      }
     },
     quickFirstCateIdx: {
       handler (idx, oldIdx) {
         if (idx !== oldIdx) {
           this.loadQuickGoodsList(idx)
         }
-      },
+      }
     },
     liveNavIndex: {
       handler (idx, oldIdx) {
         if (idx !== oldIdx) this.loadLiveGoodsList(idx)
-      },
-    },
+      }
+    }
   },
   onLoad () {
     console.log(this.$store.getters['theme/pimaryColor'])
   },
+  onReady () {
+    const query = uni.createSelectorQuery()
+    query.select('#headTabItem0').boundingClientRect(data => {
+      this.tabDom[0] = data
+    }).exec()
+    query.select('#headTabItem1').boundingClientRect(data => {
+      this.tabDom[1] = data
+    }).exec()
+    query.select('#headTabItem2').boundingClientRect(data => {
+      this.tabDom[2] = data
+    }).exec()
+  },
   created () {
-    // var socketOpen = false;
-    // var socketMsgQueue = [];
-    //
-    // uni.connectSocket({
-    //   url: 'wss://newjdtravel.bafangka.com/cus/'
-    // });
-    //
-    // uni.onSocketOpen(function (res) {
-    //   socketOpen = true;
-    //   for (var i = 0; i < socketMsgQueue.length; i++) {
-    //     sendSocketMessage(socketMsgQueue[i]);
-    //   }
-    //   socketMsgQueue = [];
-    // });
-    //
-    // function sendSocketMessage(msg) {
-    //   if (socketOpen) {
-    //     uni.sendSocketMessage({
-    //       data: msg
-    //     });
-    //   } else {
-    //     socketMsgQueue.push(msg);
-    //   }
-    // }
-    this.systemInfo = uni.getSystemInfoSync()
-    // #ifdef MP-WEIXIN
-    this.menuButtonInfo = uni.getMenuButtonBoundingClientRect()
-    const { height, top, left } = this.menuButtonInfo
-    this.diyHeadHeight = top + height + (top - this.systemInfo.statusBarHeight) + 10
-    this.diyHeadRight = this.systemInfo.windowWidth - left
-    // #endif
     console.log(this.systemInfo, this.menuButtonInfo)
     this._init_func()
   },
@@ -518,21 +551,21 @@ export default {
       try {
         const handleRT = await this.get_tmpl_data()
         if (handleRT !== true) throw handleRT // hanldeRT不是true就是一个Error实例，直接抛出
-        
+
         this.killList = await getFlashsaleList({}, { onlyData: true }).catch(err => {
           throw Error(err.msg || '初始化秒杀商品失败')
         })
-        
+
         this.firstCateList = await getProductCategory({}, { onlyData: true }).catch(() => {
           throw Error('获取商品分类失败')
         })
-        
+
         this.liveNav = this.firstCateList.concat([]) // 也是一级分类
-        
+
         this.loadLiveGoodsList(0) // 加载第一个分类的商品
-        
+
         this.loadMerchantList()
-        
+
         // this.$toast('加载成功','none')
       } catch (e) {
         Exception.handle(e)
@@ -546,12 +579,12 @@ export default {
     },
     async loadMerchantList (idx) {
       // const cateId = this.liveNav[idx].Category_ID
-      
+
       // 商家无法利用一级分类获取到
       this.merchantList = await getBizInfo({
         get_prod: 3,
         with_prod: 1,
-        get_active: 1,
+        get_active: 1
       }, { onlyData: true }).catch((e) => {
         throw Error('获取人气商家列表失败')
       })
@@ -583,10 +616,10 @@ export default {
     },
     async loadLiveGoodsList (idx) {
       const cateId = this.liveNav[idx].Category_ID
-      
+
       this.liveGoodsList = await getProductList({
         Cate_ID: cateId,
-        pageSize: 3,
+        pageSize: 3
       }, { onlyData: true }).catch(e => {
         throw Error(e.msg || '刷新直播商品列表失败')
       })
@@ -596,11 +629,11 @@ export default {
         const { Home_Json: resultData } = await getSkinConfig({}, { onlyData: true }).catch(e => {
           throw Error(e.msg || '获取首页模板失败')
         })
-        
+
         const mixinData = typeof resultData === 'string' ? JSON.parse(resultData) : resultData
-        
+
         const { plugin: templateData, system } = mixinData
-        
+
         // 存储页面数据
         this.templateData = [] // 页面数据的二维数组。
         this.templateList = [] // 页面组件的二维数组。
@@ -657,24 +690,39 @@ export default {
     },
     changeLiveNav (idx) {
       this.liveNavIndex = idx
-    },
-  },
+    }
+  }
 }
 </script>
 <style lang="scss" scoped>
   .page-wrap {
     background: #f8f8f8;
   }
-  
+
+  .publish-btn{
+    position: fixed;
+    bottom: 30rpx;
+    right: 30rpx;
+    z-index: 99;
+    box-sizing: border-box;
+    padding-top: 8rpx;
+    width:88rpx;
+    height:88rpx;
+    background:rgba(38,199,141,1);
+    box-shadow:0rpx 2rpx 12rpx 0rpx rgba(35,183,130,0.4);
+    border-radius:50%;
+    text-align: center;
+  }
+
   .tab-container {
     position: relative;
     width: 750rpx;
-    
+
     .tab-page-wrap {
       width: 750rpx;
     }
   }
-  
+
   .first-cate-list {
     position: fixed;
     width: 750rpx;
@@ -682,12 +730,12 @@ export default {
     padding: 2px 8px;
     box-sizing: border-box;
     border-bottom: 1px solid #eee;
-    
+
     .scroll-item {
       position: relative;
       line-height: 40px;
       padding: 0 8px;
-      
+
       .underline {
         position: absolute;
         bottom: 0px;
@@ -699,12 +747,12 @@ export default {
       }
     }
   }
-  
+
   .quick-cate-swiper {
     position: fixed;
     width: 750rpx;
     overflow: hidden;
-    
+
     .quick-cate-swiper-item {
       .scroll-view-wrap {
         position: absolute;
@@ -713,38 +761,37 @@ export default {
       }
     }
   }
-  
+
   .live {
     padding: 0 25rpx;
-    background: white;
-    
+
     .block-title {
       padding: 20px 0 10px 0;
-      
+
       .block-title-text {
         font-weight: bold;
       }
     }
-    
+
     .nav-box {
       color: #666666;
       margin-bottom: 10px;
-      
+
       .nav-list {
         overflow-y: hidden;
         overflow-x: scroll;
-        
+
         &::-webkit-scrollbar {
           display: none;
         }
-        
+
         .nav-item {
           padding: 0;
           margin-right: 30rpx;
           height: 30px;
           line-height: 30px;
           display: inline-block;
-          
+
           &.active {
             color: $fun-green-color;
             border-bottom: 2px solid $fun-green-color;
@@ -752,43 +799,42 @@ export default {
         }
       }
     }
-    
+
     .live-list {
-      display: flex;
-      flex-wrap: wrap;
-      
+
       .live-item {
+        background: white;
         width: 700rpx;
-        padding: 0 0 10px 0;
-        margin-bottom: 20rpx;
+        margin: 0 0 30rpx;
         font-size: 14px;
-        border-bottom: 1px dashed #eee;
         display: flex;
-        
+        border-radius: 20rpx;
+        overflow: hidden;
+
         &:last-child {
           margin-bottom: 0;
           border-bottom: none;
         }
-        
+
         .left {
           width: 300rpx;
-          
+
           .cover {
             width: 300rpx;
             height: 300rpx;
-            @include cover-img(contain);
+            @include cover-img(cover);
             border-top-left-radius: 10rpx;
             border-bottom-left-radius: 10rpx;
             overflow: hidden;
           }
-          
+
         }
-        
+
         .right {
           margin-left: 10px;
           padding-top: 10px;
           font-size: 12px;
-          
+
           .title {
             font-size: 13px;
             max-height: 36px;
@@ -796,14 +842,14 @@ export default {
             margin-top: 10px;
             color: #333;
             overflow: hidden;
-            
+
             .text {
               white-space: normal;
               overflow: hidden;
               text-overflow: ellipsis;
               margin-right: 3px;
             }
-            
+
             .live-status {
               display: inline-block;
               margin-right: 4px;
@@ -817,36 +863,36 @@ export default {
               border-bottom-right-radius: 8px;
             }
           }
-          
+
           .price-box {
             display: flex;
             margin-bottom: 6px;
-            
+
             .selling-price {
               color: $fun-red-color;
-              
+
               .num {
                 font-size: 14px;
               }
             }
-            
+
             .market-price {
               display: flex;
               align-items: flex-end;
               text-decoration: line-through;
               color: #999;
-              
+
             }
           }
-          
+
           .sale-count {
             margin-bottom: 6px;
             color: #999;
           }
-          
+
           .tags {
             margin-bottom: 6px;
-            
+
             .tag {
               display: inline-block;
               margin-right: 4px;
@@ -857,16 +903,16 @@ export default {
               font-size: 10px;
               height: 16px;
               line-height: 16px;
-              
+
             }
           }
-          
+
           .action {
             margin-top: 44rpx;
             position: relative;
             width: 370rpx;
             height: 68rpx;
-            
+
             .bgimg {
               position: absolute;
               width: 370rpx;
@@ -875,7 +921,7 @@ export default {
               top: 0;
               z-index: 1;
             }
-            
+
             .price-box {
               height: 68rpx;
               padding: 0 10rpx 0 16rpx;
@@ -885,45 +931,45 @@ export default {
               align-items: center;
               justify-content: space-between;
             }
-            
+
           }
         }
       }
     }
   }
-  
+
   .kill {
     padding: 0 25rpx;
     background: white;
-    
+
     .block-title {
       padding: 20px 0 10px 0;
-      
+
       .block-title-text {
         font-weight: bold;
       }
     }
-    
+
     .goods-list {
       display: flex;
       flex-wrap: wrap;
-      
+
       .goods-item {
         width: 220rpx;
         margin-right: 20rpx;
         margin-bottom: 20rpx;
         font-size: 12px;
-        
+
         &:nth-child(3n+0) {
           margin-right: 0;
         }
-        
+
         .cover {
           width: 220rpx;
           height: 220rpx;
           @include cover-img();
           position: relative;
-          
+
           .tip {
             position: absolute;
             left: 0;
@@ -937,7 +983,7 @@ export default {
             background: rgba(30, 146, 104, .6);
           }
         }
-        
+
         .title {
           margin: 4px 0;
           color: #333;
@@ -946,20 +992,20 @@ export default {
           overflow: hidden;
           text-overflow: ellipsis;
         }
-        
+
         .price-box {
           display: flex;
-          
+
           .sign {
             color: $fun-red-color;
           }
-          
+
           .num {
             color: $fun-red-color;
             font-size: 14px;
           }
         }
-        
+
         .tags {
           .tag {
             display: inline-block;
@@ -978,20 +1024,20 @@ export default {
       }
     }
   }
-  
+
   .nav {
     background: white;
-    
+
     &-item {
       padding: 25px 0 10px;
       text-align: center;
-      
+
       .icon-img {
         height: 60rpx;
         width: 60rpx;
         vertical-align: top;
       }
-      
+
       .title {
         margin-top: 4px;
         font-size: 14px;
@@ -999,7 +1045,7 @@ export default {
       }
     }
   }
-  
+
   .head-box {
     position: fixed;
     top: 0;
@@ -1008,55 +1054,47 @@ export default {
     z-index: 22;
     //background: $fun-green-color;
   }
-  
+
   .head {
     padding-left: 20rpx;
     display: flex;
     align-items: center;
     color: white;
-    
+    justify-content: space-between;
     .tab-box {
-      flex: 1;
+      position: relative;
       display: flex;
       align-items: flex-end;
-      
+      padding-bottom: 8px;
+      .page-tab-underline {
+        position: absolute;
+        bottom: 0;
+        height: 2px;
+        width: 8px;
+        background: #fff;
+        left: 0;
+      }
       .tab-item {
-        margin-right: 40rpx;
-        padding-bottom: 8px;
-        position: relative;
-        
+        padding: 0 10px;
+        //position: relative;
+        //animation: all 0.4s ease;
         &:last-child {
           margin-right: 0;
         }
-        
-        .underline {
-          visibility: hidden;
-          position: absolute;
-          bottom: 0;
-          height: 2px;
-          width: 18px;
-          background: #fff;
-          left: 50%;
-          transform: translateX(-50%);
-        }
-        
+
         &.active {
-          font-size: 40rpx;
-          
-          .underline {
-            visibility: visible;
-          }
+          //font-size: 40rpx;
         }
       }
     }
-    
+
     .search-box {
       position: relative;
       margin-right: 20rpx;
       width: 120rpx;
       text-align: right;
       background: rgba(255, 255, 255, .5);
-      
+
       .iconsearch {
         color: white;
         position: absolute;
@@ -1066,7 +1104,7 @@ export default {
       }
     }
   }
-  
+
   .store-top-item {
     width: 710rpx;
     overflow: hidden;
@@ -1074,7 +1112,7 @@ export default {
     background: white;
     border-radius: 20rpx;
     padding: 20rpx 0;
-    
+
     .store-info {
       .logo {
         width: 86rpx;
@@ -1082,11 +1120,11 @@ export default {
         border-radius: 50%;
         background: #f2f2f2;
       }
-      
+
       .name {
-      
+
       }
-      
+
       .activity {
         padding: 2px 6px;
         font-size: 10px;
@@ -1095,34 +1133,34 @@ export default {
         border-radius: 5rpx;
       }
     }
-    
+
     .store-goods-list {
       display: flex;
       padding: 30rpx 10rpx;
     }
-    
+
     .store-goods-item {
       width: 215rpx;
       overflow: hidden;
       margin-right: 14rpx;
-      
+
       &:last-child {
         margin-right: 0;
       }
-      
+
       .title {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
       }
-      
+
       .cover {
         width: 215rpx;
         height: 215rpx;
         @include cover-img();
       }
     }
-    
+
   }
 
 </style>

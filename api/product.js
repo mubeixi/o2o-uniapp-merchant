@@ -6,6 +6,7 @@ export const getProductList = (param, options) => {
   return fetch({ act: 'get_prod', param, options })
 }
 
+// 秒杀活动（产品）列表
 export const getFlashsaleList = (param, options) => fetch({
   act: 'get_flashsale',
   param,
