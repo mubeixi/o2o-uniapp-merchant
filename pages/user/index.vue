@@ -1,11 +1,11 @@
 <template>
   <div class="wrap">
     <div :style="{height:systemInfo.statusBarHeight+'px'}"></div>
+<!--    <div :style="{top:systemInfo.statusBarHeight+'px'}"></div>-->
     <div class="header">
       <div class="left-icon-box">
         <LayoutIcon type="iconshezhi" size="24" color="#333" @click="goSetting"></LayoutIcon>
-        <LayoutIcon class="p-l-10" type="iconicon" size="24" color="#333" @click="goDailyCheck"
-                    ></LayoutIcon>
+        <LayoutIcon class="p-l-10" type="iconicon" size="24" color="#333" @click="goDailyCheck"></LayoutIcon>
       </div>
       <div class="user-msg" v-if="userInfo.Users_ID" @click="$linkTo('/pagesA/user/PersonalMsg')">
         <image :src="userInfo.User_HeadImg" class="avatar"></image>
@@ -15,7 +15,6 @@
         <image :src="'/static/client/home/xianshi.png'|domain" class="avatar"></image>
         <div class="name">点击登录</div>
       </div>
-    
     </div>
     <div class="orders flex align-items-center">
       <div class="order-item" @click="goOrder(1)">
@@ -210,7 +209,7 @@ export default {
 </script>
 <style lang="scss" scoped>
   .wrap {
-    padding: 30rpx 30rpx 0 30rpx;
+    padding: 0rpx 30rpx 0 30rpx;
     background: #EDF0F5;
   }
   

@@ -6,6 +6,64 @@
     overflow-y: hidden;
   }
 
+  .container-wrap{
+    position: fixed;
+    width: 750rpx;
+    top: 0;
+    bottom: 60px;
+    z-index: 1;
+  }
+
+  .head-box-default{
+    position: fixed;
+    z-index: 3;
+    top: 0;
+    width: 750rpx;
+    background: none;
+  }
+
+  .head-box-active{
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    width: 750rpx;
+    background: #f2f2f2;
+    .head-search{
+      width: 200rpx;
+      height: 32px;
+      padding: 0 16px;
+      border-radius: 16px;
+      background: #fff;
+    }
+  }
+
+  .head-tab-active{
+    position: fixed;
+    z-index: 9;
+    background: #F2F2F2;
+    width: 750rpx;
+    height: 40px;
+    box-sizing: border-box;
+    padding: 10px 0;
+    display: flex;
+    .head-tab-item{
+      flex: 1;
+      text-align: center;
+      &.active{
+        color: $fun-primary-color;
+      }
+    }
+    .head-tab-underline{
+      position: absolute;
+      bottom: 0;
+      margin: 5px 0;
+      height: 1px;
+      width: 20px;
+      background: $fun-primary-color;
+    }
+
+  }
+
   .end-time {
     width: 750rpx;
     height: 58rpx;
@@ -113,6 +171,7 @@
     width: 750rpx;
     padding: 30rpx 20rpx 0rpx 20rpx;
     box-sizing: border-box;
+    background: #fff;
   }
 
   .product-activity-title {
@@ -177,6 +236,7 @@
   .shouhou {
     width: 750rpx;
     box-sizing: border-box;
+    background: #fff;
     height: 86rpx;
     padding: 30rpx 20rpx;
   }
@@ -241,9 +301,8 @@
   }
 
   .store-info {
-    width: 750rpx;
-    box-sizing: border-box;
-    padding: 52rpx 20rpx 20rpx 30rpx;
+    width: 710rpx;
+    padding: 0 20rpx;
   }
 
   .store-info-title {
@@ -266,11 +325,13 @@
     color: #999999;
   }
 
+  .section-store{
+    background: white;
+    padding-bottom: 30rpx;
+  }
   .store-list {
     width: 710rpx;
-    margin: 0 auto;
-    padding-top: 30rpx;
-    padding-bottom: 10rpx;
+    padding: 0 20rpx;
   }
 
   .store-list-top {
@@ -294,6 +355,8 @@
     padding: 30rpx 24rpx;
     box-sizing: border-box;
     border-bottom: 1px solid #EBEBEB;
+    &:last-child{}
+    border-bottom: none;
   }
 
   .store-list-title {
@@ -342,22 +405,13 @@
     list-style: none;
   }
 
-  .comment-box {
-    border-top: 1px solid #f2f2f2;
-    border-bottom: 1px solid #f2f2f2;
-    padding: 30rpx 25rpx;
+  .section-comment {
     background: white;
-
     .block-title {
-      padding: 20px 0;
-
-      .block-title-text {
-        font-weight: bold;
-      }
     }
 
     .comment-list {
-
+      padding: 0 25rpx;
     }
   }
 
@@ -506,7 +560,7 @@
   }
 
   /* 领券start */
-  .section2 {
+  .coupon-box {
     padding: 30rpx 20rpx;
     font-size: 24rpx;
     display: flex;
@@ -516,7 +570,7 @@
     border-bottom: 20rpx solid #f8f8f8;
   }
 
-  .section2 .btn {
+  .coupon-box .btn {
     padding: 0 10rpx;
     color: #26C78D;
     border: 1px solid #26C78D;
@@ -618,216 +672,251 @@
 
 <template>
   <div class="page-wrap">
-    <layout-icon type="iconback" size="24" color="#999" class="back-icon" @click="$back()"></layout-icon>
-    <swiper style="height:750rpx;width: 750rpx;" indicator-dots="true" indicator-active-color="#26C78D"
-            indicator-color="#ffffff" autoplay="true" interval="3000" duration="500" circular="true">
-      <swiper-item v-for="(item,index) of imgs" :key="index">
-        <image v-if="item" :src="item" class="full-img" @click="previewImg(index)" />
-      </swiper-item>
-    </swiper>
-    <!--    <div class="end-time">-->
-    <!--      距结束还有：<span class="end-time-day">1天</span><span class="end-time-block">01</span>：<span-->
-    <!--      class="end-time-block">01</span>：<span class="end-time-block">01</span>-->
-    <!--    </div>-->
-    <div class="product-price fz-14">
-      <div class="product-price-left">
+    <div class="head-box-default"  v-show="1-activeHeadOpacity" :style="{height:diyHeadHeight+'px',opacity:1-activeHeadOpacity}">
+      <div :style="{height:menuButtonInfo.top+'px'}"></div>
+      <div class="flex flex-vertical-c flex-justify-between" :style="{height:menuButtonInfo.height+'px',paddingRight:diyHeadRight+'px'}">
+        <layout-icon class="m-l-10" :plain="false" type="iconback1" size="18" wrap-padding="6px" color="#fff" @click="$back()"></layout-icon>
+        <div class="flex flex-vertical-c">
+          <layout-icon :plain="false" type="iconshare" size="18" wrap-padding="6px" color="#fff"  @click="$back()"></layout-icon>
+          <layout-icon class="m-l-10 m-r-10" :plain="false" type="iconcart" size="18" wrap-padding="6px" color="#fff"  @click="$back()"></layout-icon>
+        </div>
+      </div>
+    </div>
+
+    <div class="head-box-active" v-show="activeHeadOpacity" :style="{height:diyHeadHeight+'px',opacity:activeHeadOpacity}">
+      <div :style="{height:menuButtonInfo.top+'px'}"></div>
+      <div class="flex flex-vertical-c flex-justify-between" :style="{height:menuButtonInfo.height+'px',paddingRight:diyHeadRight+'px'}">
+        <div class="flex flex-vertical-c">
+          <layout-icon class="m-l-10" :plain="false" type="iconback1" size="18" wrap-padding="6px" wrap-bg="none" color="#606060" @click="$back()"></layout-icon>
+          <div @click="$linkTo('/pages/search/index')" class="head-search flex flex-vertical-c">
+            <layout-icon color="#606060" type="iconicon-search"></layout-icon>
+            <span class="fz-12 c9 p-l-6">搜索商品</span>
+          </div>
+        </div>
+        <div class="flex flex-vertical-c">
+          <layout-icon :plain="false" type="iconshare" size="18" wrap-padding="6px" wrap-bg="none"  color="#606060"  @click="$back()"></layout-icon>
+          <layout-icon class="m-l-10 m-r-10" :plain="false" type="iconcart" size="18" wrap-bg="none" wrap-padding="6px"  color="#606060"  @click="$back()"></layout-icon>
+        </div>
+      </div>
+    </div>
+    <div class="head-tab-active fz-14 c3" v-show="activeHeadOpacity" :style="{top:diyHeadHeight+'px',opacity:activeHeadOpacity}">
+      <div class="head-tab-item" @click="setAcitveTabIndx(0)" :class="{active:headTabIndex===0}">宝贝</div>
+      <div class="head-tab-item" @click="setAcitveTabIndx(1)" :class="{active:headTabIndex===1}">详情</div>
+      <div class="head-tab-item" @click="setAcitveTabIndx(2)" :class="{active:headTabIndex===2}">评价</div>
+      <div class="head-tab-item" @click="setAcitveTabIndx(3)" :class="{active:headTabIndex===3}">门店</div>
+      <span class="head-tab-underline" :animation="tabUnderlineAnimationData"></span>
+    </div>
+
+    <scroll-view
+      @scrolltoupper="bindScrollToupperEvent"
+      @scrolltolower="bindScrollLowerEvent"
+      @scroll="bindScrollEvent"
+      @touchmove.stop.prevent="bindScrollTouchEvent"
+      :style="{top:scrollViewTop+'px'}"
+      class="container-wrap" scroll-y :scroll-into-view="currentEleId" :scroll-with-animation="true">
+
+      <div id="section0">
+        <swiper style="height:750rpx;width: 750rpx;" indicator-dots="true" indicator-active-color="#26C78D" indicator-color="rgba(255,255,255,0)" autoplay="true" interval="3000" duration="500" circular="true">
+          <swiper-item v-for="(item,index) of imgs" :key="index">
+            <image v-if="item" :src="item" class="full-img" @click="previewImg(index)" />
+          </swiper-item>
+        </swiper>
+        <!--    <div class="end-time">-->
+        <!--      距结束还有：<span class="end-time-day">1天</span><span class="end-time-block">01</span>：<span-->
+        <!--      class="end-time-block">01</span>：<span class="end-time-block">01</span>-->
+        <!--    </div>-->
+        <div class="product-price fz-14">
+          <div class="product-price-left">
             <span class="product-price-red">
               <span class="fz-13">¥</span>{{detailData.Products_PriceX}}
             </span>
-        <span style="text-decoration:line-through;" class="m-l-5">
+            <span style="text-decoration:line-through;" class="m-l-5">
               ¥{{detailData.Products_PriceY}}
             </span>
-      </div>
-      <div class="product-price-right" @click="toShare">
-        <image :src="'/static/client/product/product_share.png'|domain" class="full-img"
-               style="width: 130% !important;"></image>
-        <div class="product-share">
-          分享赚
-        </div>
-        <div class="product-price-share">
-          <span class="price-q">¥</span>
-          28.90
-        </div>
-      </div>
-    </div>
-    <div class="product-title">
-      {{detailData.Products_Name}}
-    </div>
-    <!-- 领券 -->
-    <div class="section2"  @click="$openPop('couponModal')" v-if="couponList.length>0">
-      <div class="btn">领券</div>
-      <div class="right">
-        店铺优惠券
-        <layout-icon type="iconicon-arrow-right" size="20"></layout-icon>
-      </div>
-    </div>
-    <div class="line-f8" style="margin-top: 30rpx" v-if="active.length>0"></div>
-    <div class="product-activity">
-      <div class="flex" style="padding-bottom: 30rpx" v-if="active.length>0">
-        <div class="product-activity-title">
-          优惠活动
-        </div>
-        <div class="flex1">
-          <div class="flex">
-            <div class="activity-item" v-for="(item,index) of active" :key="index">
-              <image :src="'/static/client/product/activity.png'|domain" class="activity-img"></image>
-              满{{item.reach}}减{{item.award}}
+          </div>
+          <div class="product-price-right" @click="toShare">
+            <image :src="'/static/client/product/product_share.png'|domain" class="full-img"
+                   style="width: 130% !important;"></image>
+            <div class="product-share">
+              分享赚
+            </div>
+            <div class="product-price-share">
+              <span class="price-q">¥</span>
+              28.90
             </div>
           </div>
-          <!--          <div class="flex flex-vertical-center  activity-second">-->
-          <!--            <div class="color-first">-->
-          <!--              多买优惠-->
-          <!--            </div>-->
-          <!--            <div class="color-second">-->
-          <!--              满2件打8.8折-->
-          <!--            </div>-->
-          <!--          </div>-->
-          <!--          <div class="flex flex-vertical-center  activity-second">-->
-          <!--            <div class="color-first">-->
-          <!--              多买优惠-->
-          <!--            </div>-->
-          <!--            <div class="color-second">-->
-          <!--              满2件打8.8折-->
-          <!--            </div>-->
-          <!--          </div>-->
+        </div>
+        <div class="product-title">
+          {{detailData.Products_Name}}
+        </div>
+        <!-- 领券 -->
+        <div class="coupon-box"  @click="$openPop('couponModal')" v-if="couponList.length>0">
+          <div class="btn">领券</div>
+          <div class="right">
+            店铺优惠券
+            <layout-icon type="iconicon-arrow-right" size="20"></layout-icon>
+          </div>
+        </div>
+
+        <div class="product-activity m-t-10">
+          <div class="flex" style="padding-bottom: 30rpx" v-if="active.length>0">
+            <div class="product-activity-title">
+              优惠活动
+            </div>
+            <div class="flex1">
+              <div class="flex">
+                <div class="activity-item" v-for="(item,index) of active" :key="index">
+                  <image :src="'/static/client/product/activity.png'|domain" class="activity-img"></image>
+                  满{{item.reach}}减{{item.award}}
+                </div>
+              </div>
+              <!--          <div class="flex flex-vertical-center  activity-second">-->
+              <!--            <div class="color-first">-->
+              <!--              多买优惠-->
+              <!--            </div>-->
+              <!--            <div class="color-second">-->
+              <!--              满2件打8.8折-->
+              <!--            </div>-->
+              <!--          </div>-->
+              <!--          <div class="flex flex-vertical-center  activity-second">-->
+              <!--            <div class="color-first">-->
+              <!--              多买优惠-->
+              <!--            </div>-->
+              <!--            <div class="color-second">-->
+              <!--              满2件打8.8折-->
+              <!--            </div>-->
+              <!--          </div>-->
+            </div>
+          </div>
+          <div class="vip-img" @click="goVipList">
+            <image :src="'/static/client/product/vip.png'|domain" class="full-img"></image>
+          </div>
+        </div>
+        <!-- 服务保障   -->
+        <div class="shouhou flex flex-vertical-center" v-if="detailData.Products_Promise.length>0">
+          <block v-for="(item,index) in detailData.Products_Promise" :key="index">
+            <div class="shouhou-item"  v-if="item.name">
+              <layout-icon class="p-r-4" type="iconradio-check" display="inline" color="#26C78D"></layout-icon>
+              {{item.name}}
+            </div>
+          </block>
         </div>
       </div>
 
-      <div class="vip-img" @click="goVipList">
-        <image :src="'/static/client/product/vip.png'|domain" class="full-img"></image>
-      </div>
-
-    </div>
-
-    <!-- 服务保障   -->
-    <div class="shouhou flex flex-vertical-center" v-if="detailData.Products_Promise.length>0">
-      <div class="shouhou-item" v-for="(item,index) in detailData.Products_Promise" v-if="item.name" :key="index">
-        <image :src="'/static/client/product/checked.png'|domain" class="shouhou-img"></image>
-        {{item.name}}
-      </div>
-
-    </div>
-    <div class="line-f8"></div>
-    <!--  店铺信息  -->
-    <ul class="store flex flex-vertical-center " id="tabs" :class="{isStickly:headTabSticky}">
-      <li class="li-item" :class="{'color-store':tabIndex===0}" @click="tabIndex=0">
-        介绍
-        <span class="active" v-if="tabIndex==0"></span>
-      </li>
-      <li class="li-item" :class="{'color-store':tabIndex===1}" @click="tabIndex=1">
-        评价
-        <span class="active" v-if="tabIndex==1"></span>
-      </li>
-      <li class="li-item" :class="{'color-store':tabIndex===2}" @click="tabIndex=2">
-        门店
-        <span class="active" v-if="tabIndex==2"></span>
-      </li>
-    </ul>
-    <swiper
-      :current="tabIndex"
-      :style="{height:(systemInfo.windowHeight+'px')}"
-      @change="changeTabIndex"
-      class="tab-containers"
-    >
-      <swiper-item class="tab-pages">
-        <div :style="{height:(systemInfo.windowHeight+'px')}" class="over">
-          <u-parse :content="detailData.Products_Description"></u-parse>
-        </div>
-      </swiper-item>
-      <swiper-item class="tab-pages">
-
-        <!--评论列表-->
-        <div class="block comment-box over" v-if="comments.length>0" :style="{height:(systemInfo.windowHeight+'px')}">
-
+      <div id="section1" class="section-content">
+        <div class="block" style="padding:40rpx 25rpx">
           <div class="block-title">
-            <div class="block-title-text">留言评论</div>
-            <div class="block-title-more flex flex-vertical-center c9 fz-12">
-              <span>查看全部</span>
-              <icon class="iconright" type="iconright" size="14" color="#999"></icon>
-            </div>
+            <div class="block-title-text fz-b">商品详情</div>
+            <div class="block-title-more flex flex-vertical-center c9 fz-12"></div>
           </div>
-          <div class="block-content">
-            <div class="comment-list">
-              <div v-for="(item,idx) in comments" :key="idx" class="comment-item">
-                <layout-comment :isLast="comments.length-1===idx" :comment="item"
-                                @comment="clickComment"></layout-comment>
-                <div class="comment-send" v-if="item.child.length>0">
-                  <block v-for="(com,ind) of item.child" :key="ind">
-                    <block v-for="(co,indx) of com" :key="indx">
-                      <div class="fz-12 c3 comment-send-item" @click.stop="clickCommentSend(item,co.groupid,co.userid)">
-                        <block v-if="co.touserid==item.User_ID">
-                          <span class="color-comment p-r-5">{{co.user_nickname}}:</span> {{co.content}}
-                        </block>
-                        <block v-else>
-                          <span class="color-comment p-r-2">{{co.user_nickname}}</span>回复<span
-                          class="color-comment p-r-5">{{co.to_user_nickname}}</span>{{co.content}}
-                        </block>
-                      </div>
-                    </block>
+        </div>
+        <u-parse :content="detailData.Products_Description"></u-parse>
+      </div>
 
+      <!--评论列表-->
+      <div id="section2" class="block section-comment">
+
+        <div class="block-title" style="padding:40rpx 25rpx">
+          <div class="block-title-text fz-b">留言评论</div>
+          <div class="block-title-more flex flex-vertical-center c9 fz-12">
+            <span>查看全部</span>
+            <icon class="iconright" type="iconright" size="14" color="#999"></icon>
+          </div>
+        </div>
+        <div class="block-content">
+          <div class="comment-list"  v-if="comments.length>0">
+            <div v-for="(item,idx) in comments" :key="idx" class="comment-item">
+              <layout-comment :isLast="comments.length-1===idx" :comment="item"
+                              @comment="clickComment"></layout-comment>
+              <div class="comment-send" v-if="item.child.length>0">
+                <block v-for="(com,ind) of item.child" :key="ind">
+                  <block v-for="(co,indx) of com" :key="indx">
+                    <div class="fz-12 c3 comment-send-item" @click.stop="clickCommentSend(item,co.groupid,co.userid)">
+                      <block v-if="co.touserid==item.User_ID">
+                        <span class="color-comment p-r-5">{{co.user_nickname}}:</span> {{co.content}}
+                      </block>
+                      <block v-else>
+                        <span class="color-comment p-r-2">{{co.user_nickname}}</span>回复<span
+                        class="color-comment p-r-5">{{co.to_user_nickname}}</span>{{co.content}}
+                      </block>
+                    </div>
                   </block>
-                </div>
-              </div>
 
+                </block>
+              </div>
+            </div>
+
+          </div>
+          <div v-else class="fz-14 c9 text-center p-10">
+            暂未评论
+          </div>
+        </div>
+      </div>
+
+      <div id="section3" class="section-store">
+        <div class="block" style="padding:40rpx 25rpx">
+          <div class="block-title">
+            <div class="block-title-text fz-b">店铺信息</div>
+            <div class="block-title-more flex flex-vertical-center c9 fz-12"></div>
+          </div>
+        </div>
+
+        <div class="store-info flex">
+          <div style="width: 96rpx;height: 96rpx;margin-right: 28rpx">
+            <image :src="store[0].biz_logo" class="full-img" v-if="store[0].biz_logo"></image>
+          </div>
+          <div v-if="store[0].biz_shop_name">
+            <div class="store-info-title">
+              {{store[0].biz_shop_name}}
+            </div>
+            <div class="store-info-call m-b-10" @click="$cellPhone(store[0].biz_account)">
+              <layout-icon type="icontime" size="14" color="#999"></layout-icon>
+              <span style="margin: 0rpx 26rpx 0rpx 16rpx"> {{store[0].biz_account}}</span>
+              <layout-icon type="iconicon-phone" size="14" color="#26C78D"></layout-icon>
+            </div>
+            <div class="store-info-call">
+              <layout-icon type="iconicon-address" size="14" color="#999"></layout-icon>
+              <span style="margin: 0rpx 20rpx 0rpx 16rpx">{{store[0].area_address}}</span>
+              <layout-icon type="iconicon-address" size="14" color="#26C78D"></layout-icon>
             </div>
           </div>
         </div>
-      </swiper-item>
-      <swiper-item class="tab-pages">
-        <div :style="{height:(systemInfo.windowHeight+'px')}" class="over">
-          <div class="store-info flex">
-            <div style="width: 96rpx;height: 96rpx;margin-right: 28rpx">
-              <image :src="store[0].biz_logo" class="full-img" v-if="store[0].biz_logo"></image>
+        <div class="hr h1 m-b-15 m-t-15"></div>
+        <div class="store-list">
+          <div class="flex flex-justify-between">
+            <div class="store-list-top fz-15" style="color: #333333;font-weight: bold">
+              <span class="block-div"></span>
+              其他门店
             </div>
-            <div v-if="store[0].biz_shop_name">
-              <div class="store-info-title">
-                {{store[0].biz_shop_name}}
-              </div>
-              <div class="store-info-call m-b-10" @click="$cellPhone(store[0].biz_account)">
-                <layout-icon type="icontime" size="14" color="#999"></layout-icon>
-                <span style="margin: 0rpx 26rpx 0rpx 16rpx"> {{store[0].biz_account}}</span>
-                <layout-icon type="iconicon-phone" size="14" color="#26C78D"></layout-icon>
-              </div>
-              <div class="store-info-call">
-                <layout-icon type="iconicon-address" size="14" color="#999"></layout-icon>
-                <span style="margin: 0rpx 20rpx 0rpx 16rpx">{{store[0].area_address}}</span>
-                <layout-icon type="iconicon-address" size="14" color="#26C78D"></layout-icon>
-              </div>
+            <div class="store-list-top">
+              {{storeList.length}}家
+              <layout-icon type="iconicon-arrow-right" size="15" color="#999"></layout-icon>
             </div>
           </div>
-          <div class="line-f8" style="height: 10rpx !important;"></div>
-          <div class="store-list">
-            <div class="flex flex-justify-between">
-              <div class="store-list-top fz-15" style="color: #333333;font-weight: bold">
-                <span class="block-div"></span>
-                其他门店
-              </div>
-              <div class="store-list-top">
-                {{storeList.length}}家
-                <layout-icon type="iconicon-arrow-right" size="15" color="#999"></layout-icon>
-              </div>
+          <div class="store-list-item" v-for="(st,ind) of storeList" :key="ind">
+            <div class="store-list-title" @click.stop="goStore(st.biz_id)">
+              {{st.store_name}}
             </div>
-            <div class="store-list-item" v-for="(st,ind) of storeList" :key="ind">
-              <div class="store-list-title" @click.stop="goStore(st.biz_id)">
-                {{st.store_name}}
+            <div class="flex flex-justify-between store-list-address">
+              <div class="store-list-font" @click="$openLocation(st.store_lat,st.store_lon,st.store_name)">
+                {{st.area_address}}
               </div>
-              <div class="flex flex-justify-between store-list-address">
-                <div class="store-list-font" @click="$openLocation(st.store_lat,st.store_lon,st.store_name)">
-                  {{st.area_address}}
-                </div>
-                <div class="flex flex-vertical-center">
-                  <layout-icon type="iconicon-address" size="17" color="#26C78D"
-                               @click="$openLocation(st.store_lat,st.store_lon,st.store_name)"></layout-icon>
-                  <span class="store-su"></span>
-                  <layout-icon type="iconicon-phone" size="17" color="#26C78D"
-                               @click.stop="$cellPhone(st.store_mobile)"></layout-icon>
-                </div>
+              <div class="flex flex-vertical-center">
+                <layout-icon type="iconicon-address" size="17" color="#26C78D"
+                             @click="$openLocation(st.store_lat,st.store_lon,st.store_name)"></layout-icon>
+                <span class="store-su"></span>
+                <layout-icon type="iconicon-phone" size="17" color="#26C78D"
+                             @click.stop="$cellPhone(st.store_mobile)"></layout-icon>
               </div>
             </div>
           </div>
         </div>
-      </swiper-item>
-    </swiper>
+      </div>
+
+      <div :style="{height:diyHeadHeight+40+'px'}"></div>
+
+    </scroll-view>
+
     <product-sku ref="mySku" @sureSku="save" :hasCart="hasCart" @submitSure="submitSure" @updaCart="updaCart"
                  @buyNow="buyNow"
                  :proList="detailData"></product-sku>
@@ -908,9 +997,9 @@
 import BaseMixin from '@/mixins/BaseMixin'
 import { getActiveInfo, getProductDetail, getProductSharePic, getStoreList, judgeReceiveGift } from '@/api/product'
 import { getBizInfo } from '@/api/store'
-import  {getUserCoupon} from '@/api/customer'
+import { getUserCoupon, commentReply } from '@/api/customer'
 import { getCommitList, getCouponList } from '@/api/common'
-import { commentReply } from '@/api/customer'
+
 import ProductSku from '@/componets/product-sku/product-sku'
 import { updateCart } from '@/api/order'
 import { formatRichTextByUparseFn } from '@/common/filter'
@@ -936,12 +1025,17 @@ export default {
     ProductSku,
     WzwGoodsAction,
     uParse,
-    LayoutPopup,
+    LayoutPopup
   },
   data () {
     return {
-      headTabTop:0,
-      pageScrollTop:0,
+      tabClick: false,
+      scrollViewTop: 0,
+      sectionTops: [0, 0, 0, 0], // 记录四个section的top
+      currentEleId: '',
+      activeHeadOpacity: 0, // 第二套head的透明度
+      tabUnderlineAnimationData: {},
+      headTabIndex: 0,
       hasCart: false, // 是否有购物车
       tabIndex: 0,
       headTabSticky: false,
@@ -956,7 +1050,7 @@ export default {
         Products_PriceY: '0',
         Products_JSON: {},
         Products_Description: '',
-        Products_Promise: [],
+        Products_Promise: []
       }, // 商品数据
       active: [], // 满减活动列表
       store: [{ biz_go: '' }], // 门店
@@ -966,43 +1060,164 @@ export default {
       couponList: [],
       postData: {
         prod_id: '',
-        qty: 1, // 购买数量
+        qty: 1 // 购买数量
       },
-      commentItem: {},// 要评论的对象
+      commentItem: {}// 要评论的对象
     }
   },
-  onPageScroll (e) {
-    const { scrollTop } = e
-    this.pageScrollTop = scrollTop
-    this.headTabSticky = this.pageScrollTop  > this.headTabTop
-  },
-  methods: {
-    //领取优惠券
-    getMyCoupon(item,i){
-      if (!checkIsLogin(1, 1)) return
-      if(this.isLoading==true)return;
-      this.isLoading=true;
-      let data={
-        coupon_id:item,
+  computed: {
+    imgs () {
+      try {
+        return this.detailData.Products_JSON.ImgPath
+      } catch (e) {
+        return []
       }
-      getUserCoupon(data,{tip:'领取中',mask: true}).then(res=>{
+    },
+    initData () {
+      return this.$store.state.system.initData
+    }
+  },
+  onReady () {
+    this.setAcitveTabIndx(0)
+
+    // sectionTops
+  },
+  onPageScroll (e) {
+    // console.log(e)
+
+  },
+  mounted () {
+
+  },
+  onLoad (options) {
+    if (!options.prod_id) {
+      modal('产品id必传')
+      setTimeout(() => {
+        this.$back()
+      }, 1000)
+      return
+    }
+    this.prod_id = options.prod_id
+    this.postData.prod_id = options.prod_id
+    this._init_func(options)
+  },
+  // #ifdef MP-WEIXIN || MP-ALIPAY || MP-BAIDU || MP-TOUTIAO
+  // 自定义小程序分享
+  onShareAppMessage () {
+    const path = '/pages/product/detail?prod_id=' + this.prod_id
+    const shareObj = {
+      title: this.detailData.Products_Name,
+      desc: this.detailData.Products_BriefDescription,
+      imageUrl: this.detailData.ImgPath,
+      path: buildSharePath(path)
+    }
+    return shareObj
+  },
+  // #endif
+  methods: {
+    // 滚动到顶部
+    bindScrollToupperEvent () {
+      // this.setAcitveTabIndx(0, true)
+    },
+    // 滚动到底部
+    // hack底部内容区域小，不够搞事
+    bindScrollLowerEvent () {
+      console.log('滚动到底部')
+      // this.setAcitveTabIndx(3, true)
+    },
+    bindScrollTouchEvent (e) {
+      // console.log('触发Touch')
+      // this.tabClick = false // 手动滑动
+    },
+    bindScrollEvent (e) {
+      const { scrollTop } = e.detail
+      console.log(e.detail)
+      const h = this.diyHeadHeight + 40 // 滑到这里的时候,就透明度为1
+
+      // this.scrollViewTop = scrollTop > h ? h : scrollTop
+
+      const opacity = scrollTop / h
+      this.activeHeadOpacity = opacity > 1 ? 1 : opacity
+
+      // 生效一次，就取消掉
+      if (this.tabClick) {
+        this.tabClick = false
+        return// 手动点击的别就别自作多情了
+      }
+      /** 根据滑动的位置切换tab start **/
+      const currentScrollTop = scrollTop + 10// 顶部有部分是看不到的，所以要加上他 //额外给10算是精度吧
+
+      if (currentScrollTop > this.sectionTops[3]) {
+        this.setAcitveTabIndx(3, true)
+        return
+      }
+
+      if (currentScrollTop > this.sectionTops[2]) {
+        this.setAcitveTabIndx(2, true)
+        return
+      }
+
+      if (currentScrollTop > this.sectionTops[1]) {
+        this.setAcitveTabIndx(1, true)
+        return
+      }
+
+      if (currentScrollTop > this.sectionTops[0]) {
+        this.setAcitveTabIndx(0, true)
+      }
+
+      /** 根据滑动的位置切换tab end **/
+    },
+    /**
+     * 切换tab
+     * @param idx
+     * @param stop 人为控制，则无需切换current-ele
+     */
+    setAcitveTabIndx (idx, stop = false) {
+      this.tabClick = true// 标记为改动
+      this.headTabIndex = idx
+
+      var underlineAnimation = uni.createAnimation({
+        duration: 200,
+        timingFunction: 'ease'
+      })
+
+      const left = this.systemInfo.windowWidth / 4 * idx + this.systemInfo.windowWidth / 4 / 2 - 10 + 'px'
+
+      // 正下方
+      underlineAnimation.width('40px').left(left).step()
+      underlineAnimation.width('20px').step()
+
+      this.tabUnderlineAnimationData = underlineAnimation.export()
+      this.scrollViewTop = idx > 0 ? 110 : 0
+      if (!stop) {
+        this.currentEleId = `section${idx}`
+      }
+    },
+    // 领取优惠券
+    getMyCoupon (item, i) {
+      if (!checkIsLogin(1, 1)) return
+      if (this.isLoading == true) return
+      this.isLoading = true
+      const data = {
+        coupon_id: item
+      }
+      getUserCoupon(data, { tip: '领取中', mask: true }).then(res => {
         uni.showToast({
           title: res.msg,
           icon: 'none'
         })
-        this.isLoading=false;
-        this.page=1;
-        this.couponList.splice(i, 1);
+        this.isLoading = false
+        this.page = 1
+        this.couponList.splice(i, 1)
 
-        if(this.couponList.length<=0){
+        if (this.couponList.length <= 0) {
           this.$closePop('couponModal')
-
-
         }
-      }).catch(e=>{
-        this.isLoading=false;
+      }).catch(e => {
+        this.isLoading = false
       })
-      //this.getCoupon();
+      // this.getCoupon();
     },
 
     goVipList () {
@@ -1025,7 +1240,7 @@ export default {
       const data = {
         touserid: this.commentItem.User_ID,
         commit_id: this.commentItem.Item_ID,
-        content: this.commentValue,
+        content: this.commentValue
       }
       if (this.commentItem.groupid) {
         data.groupid = this.commentItem.groupid
@@ -1081,7 +1296,7 @@ export default {
           attr_id: sku.id, // 选择属性id
           // count: sku.count, // 选择属性的库存
           qty: sku.qty, // 购买数量
-          cart_key: 'DirectBuy', // 购物车类型   CartList（加入购物车）、DirectBuy（立即购买）、PTCartList（不能加入购物车）
+          cart_key: 'DirectBuy' // 购物车类型   CartList（加入购物车）、DirectBuy（立即购买）、PTCartList（不能加入购物车）
           // productDetail_price: sku.price
         }
         await updateCart(postData).catch(e => {
@@ -1101,7 +1316,7 @@ export default {
         cart_key: 'CartList',
         prod_id: this.detailData.Products_ID,
         qty: sku.qty,
-        attr_id: sku.id,
+        attr_id: sku.id
       }
       updateCart(data).then(res => {
         toast('加入购物车成功')
@@ -1126,7 +1341,7 @@ export default {
           count: sku.count, // 选择属性的库存
           qty: sku.qty, // 购买数量
           cart_key: 'DirectBuy', // 购物车类型   CartList（加入购物车）、DirectBuy（立即购买）、PTCartList（不能加入购物车）
-          productDetail_price: sku.price,
+          productDetail_price: sku.price
         }
         await updateCart(postData).catch(e => {
           throw Error(e.msg || '下单失败')
@@ -1172,7 +1387,7 @@ export default {
         title: this.detailData.Products_Name,
         desc: this.detailData.Products_BriefDescription,
         imageUrl: getProductThumb(this.detailData.ImgPath),
-        path: buildSharePath(path),
+        path: buildSharePath(path)
       }
 
       switch (channel) {
@@ -1188,7 +1403,7 @@ export default {
             success: function (res) {
             },
             fail: function (err) {
-            },
+            }
           })
           break
         case 'wxtimeline':
@@ -1203,7 +1418,7 @@ export default {
             success: function (res) {
             },
             fail: function (err) {
-            },
+            }
           })
           break
         case 'wxmini':
@@ -1217,17 +1432,17 @@ export default {
               id: _self.wxMiniOriginId,
               path: '/' + shareObj.path,
               type: 0,
-              webUrl: 'http://uniapp.dcloud.io',
+              webUrl: 'http://uniapp.dcloud.io'
             },
             success: ret => {
-            },
+            }
           })
           break
         case 'pic':
           // this.$toast('comming soon')
           const res = await getProductSharePic({ product_id: this.prod_id }, {
             tip: '努力加载中',
-            mask: true,
+            mask: true
           })
           Storage.set('temp_sharepic_info', res.data)
           const sharePic = res.data.img_url
@@ -1237,7 +1452,7 @@ export default {
           }
           setTimeout(function () {
             uni.navigateTo({
-              url: '/pages/product/SharePic/SharePic',
+              url: '/pages/product/SharePic/SharePic'
             })
           }, 200)
           // uni.previewImage({
@@ -1254,7 +1469,7 @@ export default {
       uni.previewImage({
         urls: imgs,
         indicator: 'default',
-        current: index,
+        current: index
       })
     },
     async _init_func (options) {
@@ -1282,11 +1497,13 @@ export default {
         this.page = 1
 
         const data = {
-          prod_id: this.prod_id,
+          prod_id: this.prod_id
         }
         this.detailData = await getProductDetail(data, { onlyData: true }).catch(e => {
           throw Error(e.msg || '获取商品详情失败')
         })
+
+        this.detailData.Products_Promise = [{ name: '随时退款' }, { name: '随时退款' }, { name: '随时退款' }, { name: '随时退款' }]
         this.detailData.Products_Description = formatRichTextByUparseFn(this.detailData.Products_Description)
         this.isVirtual = this.detailData.Products_IsVirtual === 1
 
@@ -1295,18 +1512,17 @@ export default {
           page: 1,
           status: 3,
           front_show: 1,
-          biz_id: this.detailData.biz_id,
+          biz_id: this.detailData.biz_id
         }
 
-
-        this.couponList = await getCouponList(couponParam,{onlyData:true}).catch(e => { throw Error(e.msg || '获取优惠券失败') })
+        this.couponList = await getCouponList(couponParam, { onlyData: true }).catch(e => { throw Error(e.msg || '获取优惠券失败') })
 
         this.comments = await getCommitList({
           Products_ID: this.detailData.Products_ID,
           pageSize: 999,
-          page: 1,
+          page: 1
         }, {
-          onlyData: true,
+          onlyData: true
         }).catch((e) => {
           throw Error('获取评论数据失败')
         })
@@ -1316,27 +1532,60 @@ export default {
         })
 
         this.storeList = await getStoreList({ biz_id: this.detailData.biz_id }, {
-          onlyData: true,
+          onlyData: true
         }).catch(e => {
           throw Error(e.msg || '获取店铺列表失败')
         })
 
         const res = await getActiveInfo({
           biz_id: this.detailData.biz_id,
-          type: 'manjian',
+          type: 'manjian'
         }, { onlyData: true }).catch(e => {
         })
         if (res !== null && res.active_info) {
           this.active = res.active_info
         }
 
+        hideLoading()
+
+        await new Promise(resolve => {
+          setTimeout(() => {
+            resolve(true)
+          }, 1000)
+        })
+
+        const query = uni.createSelectorQuery()
         this.$nextTick().then(() => {
-          const query = uni.createSelectorQuery()
-          query.select('#tabs').boundingClientRect()
-          query.selectViewport().scrollOffset()
-          query.exec((res) => {
-            console.log(res, 'ss')
-            this.headTabTop = res[0].top
+          const task0 = new Promise(resolve => {
+            query.select('#section0').boundingClientRect(data => {
+              this.$set(this.sectionTops, 0, data.top)
+              resolve()
+            }).exec()
+          })
+
+          const task1 = new Promise(resolve => {
+            query.select('#section1').boundingClientRect(data => {
+              this.$set(this.sectionTops, 1, data.top)
+              resolve()
+            }).exec()
+          })
+
+          const task2 = new Promise(resolve => {
+            query.select('#section2').boundingClientRect(data => {
+              this.$set(this.sectionTops, 2, data.top)
+              resolve()
+            }).exec()
+          })
+
+          const task3 = new Promise(resolve => {
+            query.select('#section3').boundingClientRect(data => {
+              this.$set(this.sectionTops, 3, data.top)
+              resolve()
+            }).exec()
+          })
+
+          Promise.all([task0, task1, task2, task3]).then(res => {
+            console.log('获取尺寸完毕')
           })
         })
       } catch (e) {
@@ -1344,44 +1593,7 @@ export default {
       } finally {
         hideLoading()
       }
-    },
-  },
-  computed: {
-    imgs () {
-      try {
-        return this.detailData.Products_JSON.ImgPath
-      } catch (e) {
-        return []
-      }
-    },
-    initData () {
-      return this.$store.state.system.initData
-    },
-  },
-  onLoad (options) {
-    if (!options.prod_id) {
-      modal('产品id必传')
-      setTimeout(() => {
-        this.$back()
-      }, 1000)
-      return
     }
-    this.prod_id = options.prod_id
-    this.postData.prod_id = options.prod_id
-    this._init_func(options)
-  },
-  // #ifdef MP-WEIXIN || MP-ALIPAY || MP-BAIDU || MP-TOUTIAO
-  // 自定义小程序分享
-  onShareAppMessage () {
-    const path = '/pages/product/detail?prod_id=' + this.prod_id
-    const shareObj = {
-      title: this.detailData.Products_Name,
-      desc: this.detailData.Products_BriefDescription,
-      imageUrl: this.detailData.ImgPath,
-      path: buildSharePath(path),
-    }
-    return shareObj
-  },
-  // #endif
+  }
 }
 </script>

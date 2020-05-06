@@ -65,6 +65,10 @@ export default {
     // #endif
   },
   onLoad () {
+  
+  },
+  created () {
+    
     this.systemInfo = uni.getSystemInfoSync()
     // #ifdef MP-WEIXIN
     this.menuButtonInfo = uni.getMenuButtonBoundingClientRect()
@@ -72,8 +76,7 @@ export default {
     this.diyHeadHeight = top + height + (top - this.systemInfo.statusBarHeight) + 10
     this.diyHeadRight = this.systemInfo.windowWidth - left
     // #endif
-  },
-  created () {
+    
     // 可以自己根据配置，来注册语言包
     if (this.langues && Array.isArray(this.langues) && this.langues.length > 0) {
       console.log(this.langues)

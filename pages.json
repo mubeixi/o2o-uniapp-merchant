@@ -52,6 +52,7 @@
     {
       "path": "pages/share/index",
       "style": {
+        "navigationStyle": "custom",
         "navigationBarTitleText": "分享赚"
       }
     },
@@ -418,7 +419,7 @@
               "titleNView": false
             }
 		  }
-		}, 
+		},
         {
           "path": "user/EditAccount",
           "style": {

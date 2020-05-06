@@ -269,3 +269,7 @@ export const addPromotionArticle = (param, options) => fetch({ act: 'add_promoti
 
 // 获取团队业绩来源
 export const getTeamSalesList = (param, options) => fetch({ act: 'getTeamSalesList', param, options })
+
+
+//获取分享赚和浏览量
+export const getShareView = (param, options) => fetch({ act: 'getShareView', param, options })
