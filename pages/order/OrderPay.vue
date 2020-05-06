@@ -112,8 +112,9 @@
         </div>
       </div>
     </div>
-    
-    <div style="height:100px;background:#f8f8f8;"></div>
+
+    <div class="space-box"></div>
+    <div class="safearea-box fixed"></div>
     
     <div class="order_total" :style="{'z-index': zIndex}">
       <div class="totalinfo">
@@ -127,9 +128,7 @@
       </view>
       <div class="submit" @click="submitPayFn">去支付</div>
     </div>
-    
-    <div class="safearea-box"></div>
-    
+
     <wzw-pay
       v-if="ready"
       ref="payLayer"
@@ -963,11 +962,17 @@ export default {
 
 <style scoped lang="scss">
   .wrap {
-    background: #fff;
+    background: #f8f8f8;
+    min-height: 100vh;
     /* #ifdef MP */
     padding-bottom: constant(safe-area-inset-bottom);
     padding-bottom: env(safe-area-inset-bottom);
     /* #endif */
+  }
+  
+  .space-box{
+    height:50px;
+    background:#f8f8f8;
   }
   
   .mxdetail {
