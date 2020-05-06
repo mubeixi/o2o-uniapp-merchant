@@ -3,10 +3,31 @@
     <div class="head-box" :style="{height:diyHeadHeight+'px',backgroundColor:primaryColor}">
       <div class="head" :style="{height:menuButtonInfo.height+'px',paddingRight:diyHeadRight+'px',marginTop:menuButtonInfo.top+'px'}">
         <ul class="tab-box">
-          <li @click="headTabIndex=0" id="headTabItem0" :animation="tabAnimationData[0]" class="tab-item" :class="[headTabIndex === 0?'active':'']">特价</li>
-          <li @click="headTabIndex=1" id="headTabItem1" :animation="tabAnimationData[1]" class="tab-item" :class="[headTabIndex === 1?'active':'']">同城闪送</li>
-          <li @click="headTabIndex=2" id="headTabItem2" :animation="tabAnimationData[2]" class="tab-item" :class="[headTabIndex === 2?'active':'']">好店</li>
-          <span class="page-tab-underline" :animation="tabUnderlineAnimationData"></span>
+          <li
+            @click="setHeadTabIndex(0)"
+            id="headTabItem0"
+            class="tab-item"
+            :class="[headTabIndex === 0?'active':'']">
+            <div :animation="tabAnimationData[0]">特价</div>
+            <div id="tabItemTip0" class="tab-item-tip"></div>
+          </li>
+          <li
+            @click="setHeadTabIndex(1)"
+            id="headTabItem1"
+            class="tab-item"
+            :class="[headTabIndex === 1?'active':'']">
+            <div :animation="tabAnimationData[1]">同城闪送</div>
+            <div id="tabItemTip1" class="tab-item-tip"></div>
+          </li>
+          <li
+            @click="setHeadTabIndex(2)"
+            id="headTabItem2"
+            class="tab-item"
+            :class="[headTabIndex === 2?'active':'']">
+            <div :animation="tabAnimationData[2]">好店</div>
+            <div id="tabItemTip2" class="tab-item-tip"></div>
+          </li>
+          <span v-show="showUnderLine" class="page-tab-underline" :style="{marginLeft:defaultUnderlineLeft+'px'}" :animation="tabUnderlineAnimationData"></span>
         </ul>
         <div class="search-box"
              @click="$linkTo('/pages/search/index')"
@@ -430,9 +451,13 @@ export default {
   },
   data () {
     return {
+      /** 疯狂hack **/
+      showUnderLine: false,
+      defaultUnderlineLeft: 0,
       tabDom: [{}, {}, {}],
       tabUnderlineAnimationData: {},
       tabAnimationData: [{}, {}, {}],
+      /** 疯狂hack **/
       firstCateHeight: 44,
       tagIndex: 0,
       firstCateList: [], // 一级菜单
@@ -455,61 +480,28 @@ export default {
     headTabIndex: {
       immediate: true,
       handler (idx, oldIdx) {
+        console.log(oldIdx)
         if (idx !== oldIdx) {
           if (idx === 1) {
             if (this.quickGoodsList.length < 1) this.loadQuickGoodsList(0)
           }
-
-          var animation = uni.createAnimation({
-            duration: 300,
-            timingFunction: 'ease'
-          })
-
-          animation.scale(1.3).step()
-          this.tabAnimationData[idx] = animation.export()
-
+          if (oldIdx === undefined) return
           var underlineAnimation = uni.createAnimation({
             duration: 300,
             timingFunction: 'ease'
           })
-
-          const eleDom = this.tabDom[idx]
-          // 正下方
-          this.tabUnderlineAnimationData = underlineAnimation.width('18px').left(eleDom.left + eleDom.width / 2 - 9).step()
-
-          var animation2 = uni.createAnimation({
-            duration: 300,
-            timingFunction: 'ease'
-          })
-
-          const rest = animation2.scale(1).step()
-          if (idx === 0) {
-            this.tabAnimationData[1] = rest
-            this.tabAnimationData[2] = rest
-          }
-
-          if (idx === 1) {
-            this.tabAnimationData[0] = rest
-            this.tabAnimationData[2] = rest
-          }
-
-          if (idx === 2) {
-            this.tabAnimationData[0] = rest
-            this.tabAnimationData[1] = rest
-          }
-
-          setTimeout(() => {
-            var underlineAnimation2 = uni.createAnimation({
-              duration: 300,
-              timingFunction: 'ease'
-            })
-
+  
+          setTimeout(()=>{
             const query = uni.createSelectorQuery()
-            query.select(`#headTabItem${idx}`).boundingClientRect(data => {
-              this.tabDom[idx] = data
-              this.tabUnderlineAnimationData = underlineAnimation2.width('8px').left(data.left + data.width / 2 - 4).step()
+            query.select(`#tabItemTip${idx}`).boundingClientRect(data => {
+              // this.tabDom[idx] = data
+              console.log(data)
+              // 正下方
+              underlineAnimation.width('18px').left(data.left - 10-4).step()
+              underlineAnimation.width('8px').step()
+              this.tabUnderlineAnimationData = underlineAnimation.export()
             }).exec()
-          }, 300)
+          },0)
         }
       }
     },
@@ -531,13 +523,15 @@ export default {
   },
   onReady () {
     const query = uni.createSelectorQuery()
-    query.select('#headTabItem0').boundingClientRect(data => {
+    query.select('#tabItemTip0').boundingClientRect(data => {
       this.tabDom[0] = data
+      this.defaultUnderlineLeft = data.left-10-4
+      this.showUnderLine = true
     }).exec()
-    query.select('#headTabItem1').boundingClientRect(data => {
+    query.select('#tabItemTip1').boundingClientRect(data => {
       this.tabDom[1] = data
     }).exec()
-    query.select('#headTabItem2').boundingClientRect(data => {
+    query.select('#tabItemTip2').boundingClientRect(data => {
       this.tabDom[2] = data
     }).exec()
   },
@@ -546,6 +540,10 @@ export default {
     this._init_func()
   },
   methods: {
+    setHeadTabIndex (idx) {
+      this.defaultUnderlineLeft = 0 // 没有左边距了
+      this.headTabIndex = idx
+    },
     async _init_func () {
       showLoading('初始化数据')
       try {
@@ -1056,7 +1054,7 @@ export default {
   }
 
   .head {
-    padding-left: 20rpx;
+    padding-left: 10px;
     display: flex;
     align-items: center;
     color: white;
@@ -1066,6 +1064,7 @@ export default {
       display: flex;
       align-items: flex-end;
       padding-bottom: 8px;
+
       .page-tab-underline {
         position: absolute;
         bottom: 0;
@@ -1074,16 +1073,35 @@ export default {
         background: #fff;
         left: 0;
       }
+
+      #headTabItem1{
+
+      }
+      #headTabItem2{
+
+      }
+      #headTabItem3{
+
+      }
       .tab-item {
-        padding: 0 10px;
-        //position: relative;
+        margin-right: 15px;
+        position: relative;
         //animation: all 0.4s ease;
         &:last-child {
           margin-right: 0;
         }
 
+        .tab-item-tip{
+          position: absolute;
+          width: 1px;
+          height: 1px;
+          visibility: hidden;
+          left: 50%;
+          transform: translateX(-50%);
+        }
+
         &.active {
-          //font-size: 40rpx;
+          font-size: 40rpx;
         }
       }
     }
