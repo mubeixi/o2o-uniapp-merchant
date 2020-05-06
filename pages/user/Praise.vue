@@ -8,7 +8,7 @@
         </div>
       </div>
       <div class="user-content fz-12 c3 m-b-14">
-        环境不错，上楼的楼梯下有个小水池牛排味道很棒，5分熟的口感果然还是我最中意的套餐还有鱼排、南瓜汤盛赞鱼排，还会再来的。
+        {{item.Note}}
       </div>
       <div class="flex flex-wrap">
         <block v-for="(it,ind) of item.ImgPath" :key="ind">

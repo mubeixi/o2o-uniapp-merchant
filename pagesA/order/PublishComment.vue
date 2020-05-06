@@ -4,16 +4,45 @@
 		<view style="height: 40rpx;width: 100%;">
 
 		</view>
-		<view class="rate">
-			<view class="rates">整体评价</view>
-			<uni-rate value="5" active-color="#F43131" size='20' @change="show" margin="2"></uni-rate>
-			<view class="score">
-				{{Score}}
+		<block v-for="(item,index) of productList" :key="index">
+			<div class="pro-comment flex flex-vertical-c" @click="goPro(item.prod_id)">
+				<image :src="item.prod_img" class="m-r-8 pro-img"></image>
+				<div>
+					<div class="pro-title">
+						{{item.prod_name}}
+					</div>
+					<div class="pro-price">
+						<span class="fz-10 color-r m-r-2">¥</span>
+						<span class="fz-12 color-r m-r-7">{{item.prod_price}}</span>
+					</div>
+				</div>
+				<layout-icon type="iconicon-arrow-right" color="#777777" size="20" style="margin-left: auto"></layout-icon>
+
+			</div>
+			<view class="rate">
+				<view class="rates">整体评价</view>
+				<uni-rate value="5" active-color="#F43131" size='20' @change="show($event,index)" margin="2"></uni-rate>
+				<view class="score">
+					{{commitList[index].Score}}
+				</view>
 			</view>
-		</view>
-		<textarea style="border: 0rpx;" class="edit"  contenteditable="true" placeholder="宝贝是否满足了你的期待？说说你的使用心得，分享给其他想购买的朋友吧。" placeholder-style="place" v-model="Note">
+			<textarea style="border: 0rpx;" class="edit"  contenteditable="true" placeholder="宝贝是否满足了你的期待？说说你的使用心得，分享给其他想购买的朋友吧。" placeholder-style="place" v-model="commitList[index].Note">
 
 		</textarea>
+			<view class="shangH">
+				<div class="item noborder">上传照片(最多9张)</div>
+				<div class="imgs">
+					<view class="shangchuans" v-for="(item,ind) of imgList[index].img" :key="index"  >
+						<image class="image" :src="item"  @click="yulan(index,ind)"></image>
+						<layout-icon class="image del" type="iconicon-test" size="20"  @click="delImg(index,ind)"></layout-icon>
+					</view>
+					<view class="shangchuan" @click="addImg(index)"  v-if="imgList[index].img.length<9">
+						<view class="heng"></view>
+						<view class="shu"></view>
+					</view>
+				</div>
+			</view>
+		</block>
 
 		<view class="niming">
 			<view>
@@ -22,19 +51,6 @@
 			<view>
 				<switch checked @change="switchChange"  />
 			</view>
-		</view>
-		<view class="shangH">
-			<div class="item noborder">上传照片(最多9张)</div>
-			<div class="imgs">
-				<view class="shangchuans" v-for="(item,index) of imgs" :key="index"  >
-					<image class="image" :src="item.path"  @click="yulan(index)"></image>
-					<image :src="'/static/client/delimg.png'|domain" class="del image" @click="delImg(index)"></image>
-				</view>
-				<view class="shangchuan" @click="addImg"  v-if="arr.length<9">
-					<view class="heng"></view>
-					<view class="shu"></view>
-				</view>
-			</div>
 		</view>
 		<view class="submit" @click="submit">
 			提交
@@ -46,19 +62,19 @@
 import BaseMixin from '@/mixins/BaseMixin'
 
 import uniRate from "@/componets/uni-rate/uni-rate"
-
+import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import {comment,getOrderDetail} from '@/api/order'
 import { chooseImageByPromise, uploadImages, getArrColumn } from '@/common/helper'
-
+import { showLoading, hideLoading } from '@/common/fun'
 export default {
 	mixins:[BaseMixin],
-	components: {uniRate},
+	components: {uniRate,LayoutIcon},
 	data() {
 		return {
 			productList:[],
+			commitList:[],
+			imgList:[],
 			Note:'',
-			imgs:[],//上传图片预览
-			arr:[],//评价上传图片
 			isSubmit:true,//是否可以提交
 			Order_ID:0,//订单id
 			Score:5,//评价分数
@@ -68,8 +84,13 @@ export default {
 	},
 	onLoad(options) {
 		this.Order_ID=options.Order_ID;
+		this.init()
 	},
 	methods:{
+		goPro (id) {
+			let url = '/pages/product/detail?prod_id=' + id
+			this.$linkTo(url)
+		},
 		//是否匿名评价
 		switchChange(e){
 			if(e.target.value){
@@ -79,39 +100,31 @@ export default {
 			}
 		},
 		//评价分数
-		show(value){
-			this.Score=value.value;
+		show(value,index){
+			this.commitList[index].Score=value.value;
 		},
 		//图片预览
-		yulan(index){
+		yulan(index,ind){
 			let arr=[]
-			for(let item of this.imgs){
-				arr.push(item.path)
+			for(let item of this.imgList[index].img){
+				arr.push(item)
 			}
 			uni.previewImage({
 				urls: arr,
 				indicator:'default',
-				current:index
+				current:ind
 			});
 		},
 		//提交
 		submit(){
 			if(this.isLoadong)return
 			this.isLoadong=true
-			let arr=[];
-			for(let item of this.arr){
-				arr.push(item);
-			}
-			arr=JSON.stringify(arr);
 			if(this.isSubmit){
-				if(this.Note){
-					//提交评论
+
 					let data={
 						Order_ID:this.Order_ID,
-						Score:this.Score,
-						Note:this.Note,
 						is_anonymous:this.isAnonymous,
-						image_path:arr
+						comment_context:JSON.stringify(this.commitList)
 					}
 					comment(data).then(res=>{
 						uni.showToast({
@@ -120,19 +133,14 @@ export default {
 						})
 						setTimeout(function(){
 							uni.redirectTo({
-								url:"/pages/order/order?index=4"
+								url:"/pages/order/OrderList?index=4&type=shop"
 							})
 						},2000)
 						this.isLoadong=false
 					}).catch(e=>{
 						this.isLoadong=false
 					})
-				}else{
-					uni.showToast({
-						title:'您还未填写评价哦',
-						icon:'none'
-					})
-				}
+
 			}else{
 				uni.showToast({
 					title:'图片还没上传完成',
@@ -142,20 +150,44 @@ export default {
 			this.isLoadong=false
 		},
 		//删除某张预览图片
-		delImg(index){
-			this.imgs.splice(index, 1);
-			this.arr.splice(index, 1);
+		delImg(index,ind){
+			this.commitList[index].image_path.splice(ind, 1);
+			this.imgList[index].img.splice(ind, 1);
 		},
-		async addImg(){
+		async addImg(index){
+			try {
+				showLoading('loading')
+				const files = await chooseImageByPromise({ count: 9-this.commitList[index].image_path.length }).catch(e => {
+					throw Error(e.msg)
+				})
+				const imgs = getArrColumn(files, 'path')
+				const ossUrls = await uploadImages({ imgs }).catch(() => {
+					throw Error('文件批量上传失败')
+				})
+
+				imgs.map(item=>{
+					this.imgList[index].img.push(item)
+				})
+				ossUrls.map(item=>{
+					this.commitList[index].image_path.push(item)
+				})
+
+
+			} catch (e) {
+				console.log(e.message)
+			} finally {
+				hideLoading()
+			}
 
 		},
 		async init(){
 			let arr=await getOrderDetail({Order_ID:this.Order_ID},{onlyData:true}).catch(e=>{error(e.msg||'获取订单失败')})
 			this.productList=arr.prod_list
+			this.productList.map(item=>{
+				this.commitList.push({Product_ID:item.prod_id,Score:5,Note:'',image_path:[]})
+				this.imgList.push({img:[]})
+			})
 		}
-	},
-	onShow(){
-		this.init()
 	}
 }
 </script>
@@ -383,6 +415,46 @@ export default {
 			font-weight:500;
 			color: #F43131;
 			margin-left: 15rpx;
+		}
+	}
+	.pro-comment {
+		margin: 0 auto 10px;
+		width: 710rpx;
+		height: 124rpx;
+		background-color: #FFFFFF;
+		padding: 20rpx;
+		box-sizing: border-box;
+	}
+
+	.pro-img {
+		width: 84rpx;
+		height: 84rpx;
+	}
+
+	.pro-title {
+		height: 24rpx;
+		line-height: 24rpx;
+		font-size: 24rpx;
+		width: 480rpx;
+		color: #777777;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		margin-top: 10px;
+		margin-bottom: 9px;
+	}
+
+	.pro-price {
+		height: 20rpx;
+		line-height: 20rpx;
+		color: #B1B1B1;
+
+		.color-r {
+			color: #F53636;
+		}
+
+		.linethrow {
+			text-decoration: line-through;
 		}
 	}
 </style>

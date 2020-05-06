@@ -251,9 +251,15 @@
     margin-right: 36rpx;
   }
 
+  .shouhou-img {
+    width: 28rpx;
+    height: 28rpx;
+    margin-right: 10rpx
+  }
+
   .store {
     position: sticky;
-    z-index: 8;
+    z-index: 999;
     top: 0;
     width: 750rpx;
     background-color: #ffffff;
