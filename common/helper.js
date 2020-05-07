@@ -6,6 +6,7 @@ import store from '@/store'
 
 import Schema from 'validate'
 import Promisify from '@/common/Promisify'
+import { formatNumber } from '@/common/filter'
 
 /**
  * 两个对象的骚操作，并返回一个新对象。这个操作应该避免影响原来的对象.
@@ -462,9 +463,9 @@ export const getCountdownFunc = ({ start_timeStamp, end_timeStamp, current = (ne
 
   return {
     d,
-    h,
-    m,
-    s,
+    h: formatNumber(h),
+    m: formatNumber(m),
+    s: formatNumber(s),
     is_start,
     is_end
   }
@@ -681,7 +682,7 @@ export const toGoodsDetail = (productInfo) => {
     url += `&mode=spike&spike_good_id=${spike_good_id}`
   }
   // 秒杀
-  if (price) {
+  if (!spike_good_id && price) {
     url += '&mode=seckill'
   }
   console.log('产品跳转url:' + url)

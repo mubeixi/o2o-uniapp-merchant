@@ -692,7 +692,6 @@
   }
 
 </style>
-
 <template>
   <div class="page-wrap">
     <div class="head-box-default"  v-show="1-activeHeadOpacity" :style="{height:diyHeadHeight+'px',opacity:1-activeHeadOpacity}">
@@ -744,17 +743,41 @@
             <image v-if="item" :src="item" class="full-img" @click="previewImg(index)" />
           </swiper-item>
         </swiper>
-        <!--    <div class="end-time">-->
-        <!--      距结束还有：<span class="end-time-day">1天</span><span class="end-time-block">01</span>：<span-->
-        <!--      class="end-time-block">01</span>：<span class="end-time-block">01</span>-->
-        <!--    </div>-->
+
+        <div class="end-time" v-if="mode==='spike' || mode==='seckill'">
+          <block v-if="!countdown.is_end">
+            <span>距{{countdown.is_start?'结束':'开始'}}还有：</span>
+            <span class="end-time-day">{{countdown.d}}天</span>
+            <span class="end-time-block">{{countdown.h}}</span>
+            <span class="delimiter">：</span>
+            <span class="end-time-block">{{countdown.m}}</span>
+            <span class="delimiter">：</span>
+            <span class="end-time-block">{{countdown.s}}</span>
+          </block>
+        </div>
         <div class="product-price fz-14">
           <div class="product-price-left">
             <span class="product-price-red">
-              <span class="fz-13">¥</span>{{productInfo.Products_PriceX}}
+              <span class="fz-13">¥</span>
+              <span>
+                <block v-if="mode==='spike' || mode==='seckill'">
+                  {{productInfo.price}}
+                </block>
+                <block v-else>
+                  {{productInfo.Products_PriceX}}
+                </block>
+
+              </span>
             </span>
             <span style="text-decoration:line-through;" class="m-l-5">
-              ¥{{productInfo.Products_PriceY}}
+              ¥
+              <block v-if="mode==='spike' || mode==='seckill'">
+                  {{productInfo.Products_PriceX}}
+                </block>
+                <block v-else>
+                  {{productInfo.Products_PriceY}}
+                </block>
+
             </span>
           </div>
           <div class="product-price-right" @click="toShare">
@@ -1040,7 +1063,7 @@
 
 <script>
 import BaseMixin from '@/mixins/BaseMixin'
-import { getActiveInfo, getFlashsaleDetail, getProductDetail, getProductSharePic, getStoreList, judgeReceiveGift, spikeProdDetail, } from '@/api/product'
+import { getActiveInfo, getFlashsaleDetail, getProductDetail, getProductSharePic, getStoreList, judgeReceiveGift, spikeProdDetail } from '@/api/product'
 import { getBizInfo } from '@/api/store'
 import { commentReply, getUserCoupon } from '@/api/customer'
 import { getCommitList, getCouponList } from '@/api/common'
@@ -1054,11 +1077,13 @@ import WzwGoodsAction from '@/componets/wzw-goods-action/wzw-goods-action'
 import LayoutPopup from '@/componets/layout-popup/layout-popup'
 
 import { error, hideLoading, modal, showLoading, toast } from '@/common/fun'
-import { buildSharePath, checkIsLogin, getProductThumb } from '@/common/helper'
+import { buildSharePath, checkIsLogin, getCountdownFunc, getProductThumb } from '@/common/helper'
 import uParse from '@/componets/gaoyia-parse/parse'
 import Storage from '@/common/Storage'
 import LayoutModal from '@/componets/layout-modal/layout-modal'
 import { Exception } from '@/common/Exception'
+
+let countdownInstance = null
 
 export default {
   name: 'ProductDetail',
@@ -1074,6 +1099,18 @@ export default {
   },
   data () {
     return {
+      // 倒计时
+      activeInfo: {
+        start_time: '',
+        end_time: ''
+      },
+      countdown: {
+        h: 0,
+        s: 0,
+        m: 0,
+        d: 0,
+        is_end: true
+      },
       mode: 'default',
       spike_good_id: '', // 限时抢购专用
       tabClick: false,
@@ -1322,33 +1359,30 @@ export default {
     },
     onePay () {
       if (!checkIsLogin(1, 1)) return
-      
+
       // 赠品
       if (this.mode === 'gift') {
         this.lingqu()
         return
       }
-  
-  
+
       if (this.mode === 'default') {
         this.hasCart = true
       }
-  
+
       if (this.mode === 'spike') {
         this.hasCart = false
       }
-      
+
       if (this.mode === 'seckill') {
         this.hasCart = false
       }
-      
-      
-      
-      //如果是有下单模板的商品,或者是虚拟商品，都不能加入购物车
+
+      // 如果是有下单模板的商品,或者是虚拟商品，都不能加入购物车
       if (this.productInfo.order_temp_id || this.productInfo.Products_IsVirtual === 1) {
         this.hasCart = false
       }
-      
+
       this.$refs.mySku.show()
     },
     allPay () {
@@ -1541,6 +1575,17 @@ export default {
         current: index
       })
     },
+    stampFunc () {
+      const data = getCountdownFunc({
+        start_timeStamp: this.activeInfo.start_time,
+        end_timeStamp: this.activeInfo.end_time
+      })
+      if (data) {
+        this.countdown = data
+      } else {
+        clearInterval(countdownInstance)
+      }
+    },
     async _init_func (options) {
       try {
         showLoading()
@@ -1550,7 +1595,10 @@ export default {
           const seckillInfo = await getFlashsaleDetail({ flashsale_id: this.flashsale_id }).then(res => {
             return res.data
           }).catch(e => { throw Error(e.msg || '获取拼团信息错误') })
-          console.log(seckillInfo)
+
+          Object.assign(this.productInfo, seckillInfo)
+          this.activeInfo.start_time = seckillInfo.start_time
+          this.activeInfo.end_time = seckillInfo.end_time
         }
 
         // 限时抢购
@@ -1559,6 +1607,11 @@ export default {
             return res.data
           }).catch(e => { throw Error(e.msg || '获取限时抢购详情错误') })
           console.log(spikeInfo)
+          Object.assign(this.productInfo, spikeInfo)
+
+          this.activeInfo.start_time = spikeInfo.start_time
+          this.activeInfo.end_time = spikeInfo.end_time
+          countdownInstance = setInterval(this.stampFunc, 1000)
         }
 
         if (options.gift) {
@@ -1574,7 +1627,6 @@ export default {
           })
           this.gift_attr_id = giftInfo.attr_id
           this.skuval = giftInfo.skuval
-
           this.recieve = true
         }
 
@@ -1584,9 +1636,10 @@ export default {
           prod_id: this.prod_id
         }
 
-        this.productInfo = await getProductDetail(data, { onlyData: true }).catch(e => {
+        const productInfo = await getProductDetail(data, { onlyData: true }).catch(e => {
           throw Error(e.msg || '获取商品详情失败')
         })
+        Object.assign(this.productInfo, productInfo)
 
         // this.productInfo.Products_Promise = [{ name: '随时退款' }, { name: '随时退款' }, { name: '随时退款' }, { name: '随时退款' }]
         this.productInfo.Products_Description = formatRichTextByUparseFn(this.productInfo.Products_Description)

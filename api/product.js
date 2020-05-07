@@ -65,6 +65,12 @@ export const getSpikeProd = (param, options) => fetch({
   options
 })
 
+export const getBizSpikeDetail = (param, options) => fetch({
+  act: 'bizSpikeDetail',
+  param,
+  options
+})
+
 // 获取限时抢购列表
 export const bizSpikeList = (param, options) => fetch({
   act: 'bizSpikeList',
