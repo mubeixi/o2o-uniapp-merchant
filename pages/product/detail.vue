@@ -434,7 +434,8 @@
   .wzw-goods-action {
     position: fixed;
     left: 0px;
-    bottom: 0px;
+    bottom: constant(safe-area-inset-bottom);
+    bottom: env(safe-area-inset-bottom);
     z-index: 10;
   }
 
@@ -665,7 +666,29 @@
     font-size: 30rpx;
     border-left: 2rpx dotted #999;
     //width: 124rpx;
+
     text-align: center;
+  }
+
+  .left-btn {
+    width: 198rpx;
+    height: 86rpx;
+    line-height: 86rpx;
+    text-align: center;
+    color: #fff;
+    border-radius: 42rpx;
+    background: #85D4B8;//行内可以覆盖
+  }
+
+  .right-btn {
+    margin-left: 10rpx;
+    width: 240rpx;
+    height: 86rpx;
+    line-height: 86rpx;
+    text-align: center;
+    color: #fff;
+    border-radius: 42rpx;
+    background: #26C78D;//行内可以覆盖
   }
 
 </style>
@@ -728,10 +751,10 @@
         <div class="product-price fz-14">
           <div class="product-price-left">
             <span class="product-price-red">
-              <span class="fz-13">¥</span>{{detailData.Products_PriceX}}
+              <span class="fz-13">¥</span>{{productInfo.Products_PriceX}}
             </span>
             <span style="text-decoration:line-through;" class="m-l-5">
-              ¥{{detailData.Products_PriceY}}
+              ¥{{productInfo.Products_PriceY}}
             </span>
           </div>
           <div class="product-price-right" @click="toShare">
@@ -747,7 +770,7 @@
           </div>
         </div>
         <div class="product-title">
-          {{detailData.Products_Name}}
+          {{productInfo.Products_Name}}
         </div>
         <!-- 领券 -->
         <div class="coupon-box"  @click="$openPop('couponModal')" v-if="couponList.length>0">
@@ -793,8 +816,8 @@
           </div>
         </div>
         <!-- 服务保障   -->
-        <div class="shouhou flex flex-vertical-center" v-if="detailData.Products_Promise.length>0">
-          <block v-for="(item,index) in detailData.Products_Promise" :key="index">
+        <div class="shouhou flex flex-vertical-center" v-if="productInfo.Products_Promise.length>0">
+          <block v-for="(item,index) in productInfo.Products_Promise" :key="index">
             <div class="shouhou-item"  v-if="item.name">
               <layout-icon class="p-r-4" type="iconradio-check" display="inline" color="#26C78D"></layout-icon>
               {{item.name}}
@@ -810,7 +833,7 @@
             <div class="block-title-more flex flex-vertical-center c9 fz-12"></div>
           </div>
         </div>
-        <u-parse :content="detailData.Products_Description"></u-parse>
+        <u-parse :content="productInfo.Products_Description"></u-parse>
       </div>
 
       <!--评论列表-->
@@ -917,20 +940,43 @@
 
     </scroll-view>
 
-    <product-sku ref="mySku" @sureSku="save" :hasCart="hasCart" @submitSure="submitSure" @updaCart="updaCart"
-                 @buyNow="buyNow"
-                 :proList="detailData"></product-sku>
-    <wzw-goods-action class="wzw-goods-action" @goStore="goStore(detailData.biz_id)" @goShare="toShare" @myPay="myPay"
-                      @allPay="allPay">
-      <block v-if="gift">
-        <span slot="leftText">立即领取</span>
+    <div class="safearea-box fixed"></div>
+    <product-sku
+      ref="mySku"
+      @sureSku="save"
+      :hasCart="hasCart"
+      @submitSure="submitSure"
+      @updaCart="updaCart"
+      @buyNow="buyNow"
+      :proList="productInfo"
+    ></product-sku>
+
+    <wzw-goods-action
+      class="wzw-goods-action"
+      @goStore="goStore(productInfo.biz_id)"
+      @goShare="toShare"
+    >
+      <block v-if="mode==='default'" v-slot:action>
+        <div class="left-btn" @click="onePay">
+          <span>单买¥</span><span>{{productInfo.Products_PriceX}}</span>
+        </div>
+        <div class="right-btn" @click="allPay">
+          <span>拼团购¥</span><span>{{productInfo.pintuan_pricex}}</span>
+        </div>
       </block>
-      <block v-else>
-        <span slot="leftText">单买¥</span>
-        <span slot="leftPrice">100.00</span>
-        <span slot="rightText">拼团购¥</span>
-        <span slot="rightPrice">100.00</span>
+
+      <block v-if="mode==='gift'" v-slot:action>
+        <div class="right-btn">立即领取</div>
       </block>
+
+      <block v-if="mode==='seckill'" v-slot:action>
+        <div class="right-btn">立即秒杀</div>
+      </block>
+
+      <block v-if="mode==='spike'" v-slot:action>
+        <div @click="onePay" class="right-btn">立即抢购</div>
+      </block>
+
     </wzw-goods-action>
 
     <!--    分享 -->
@@ -973,8 +1019,7 @@
       <view style="max-height: 1050rpx;">
         <div class="t_title ">
           领券
-          <layout-icon type="icondel" size="14" class="delIcon" color="#999"
-                       @click="$closePop('couponModal')"></layout-icon>
+          <layout-icon type="icondel" size="14" class="delIcon" color="#999" @click="$closePop('couponModal')"></layout-icon>
         </div>
         <scroll-view class="ticks"  scroll-y=true >
           <div class="t_content " v-for="(item,i) of couponList" :key="i">
@@ -995,9 +1040,9 @@
 
 <script>
 import BaseMixin from '@/mixins/BaseMixin'
-import { getActiveInfo, getProductDetail, getProductSharePic, getStoreList, judgeReceiveGift } from '@/api/product'
+import { getActiveInfo, getFlashsaleDetail, getProductDetail, getProductSharePic, getStoreList, judgeReceiveGift, spikeProdDetail, } from '@/api/product'
 import { getBizInfo } from '@/api/store'
-import { getUserCoupon, commentReply } from '@/api/customer'
+import { commentReply, getUserCoupon } from '@/api/customer'
 import { getCommitList, getCouponList } from '@/api/common'
 
 import ProductSku from '@/componets/product-sku/product-sku'
@@ -1029,6 +1074,8 @@ export default {
   },
   data () {
     return {
+      mode: 'default',
+      spike_good_id: '', // 限时抢购专用
       tabClick: false,
       scrollViewTop: 0,
       sectionTops: [0, 0, 0, 0], // 记录四个section的top
@@ -1044,7 +1091,7 @@ export default {
       gift: null, // 赠品id
       gift_attr_id: null,
       isVirtual: 0,
-      detailData: {
+      productInfo: {
         Products_Name: '',
         Products_PriceX: '0',
         Products_PriceY: '0',
@@ -1068,7 +1115,7 @@ export default {
   computed: {
     imgs () {
       try {
-        return this.detailData.Products_JSON.ImgPath
+        return this.productInfo.Products_JSON.ImgPath
       } catch (e) {
         return []
       }
@@ -1090,15 +1137,19 @@ export default {
 
   },
   onLoad (options) {
-    if (!options.prod_id) {
+    const { mode, spike_good_id, prod_id } = options
+    if (!prod_id) {
       modal('产品id必传')
       setTimeout(() => {
         this.$back()
       }, 1000)
-      return
     }
-    this.prod_id = options.prod_id
-    this.postData.prod_id = options.prod_id
+    this.prod_id = prod_id
+    if (mode) this.mode = mode
+    if (spike_good_id) this.spike_good_id = spike_good_id
+
+    // 秒杀
+
     this._init_func(options)
   },
   // #ifdef MP-WEIXIN || MP-ALIPAY || MP-BAIDU || MP-TOUTIAO
@@ -1106,9 +1157,9 @@ export default {
   onShareAppMessage () {
     const path = '/pages/product/detail?prod_id=' + this.prod_id
     const shareObj = {
-      title: this.detailData.Products_Name,
-      desc: this.detailData.Products_BriefDescription,
-      imageUrl: this.detailData.ImgPath,
+      title: this.productInfo.Products_Name,
+      desc: this.productInfo.Products_BriefDescription,
+      imageUrl: this.productInfo.ImgPath,
       path: buildSharePath(path)
     }
     return shareObj
@@ -1117,6 +1168,7 @@ export default {
   methods: {
     // 滚动到顶部
     bindScrollToupperEvent () {
+      this.scrollViewTop = 0
       // this.setAcitveTabIndx(0, true)
     },
     // 滚动到底部
@@ -1131,7 +1183,6 @@ export default {
     },
     bindScrollEvent (e) {
       const { scrollTop } = e.detail
-      console.log(e.detail)
       const h = this.diyHeadHeight + 40 // 滑到这里的时候,就透明度为1
 
       // this.scrollViewTop = scrollTop > h ? h : scrollTop
@@ -1221,7 +1272,7 @@ export default {
     },
 
     goVipList () {
-      const url = '/pages/user/VipList?bid=' + this.detailData.biz_id
+      const url = '/pages/user/VipList?bid=' + this.productInfo.biz_id
       this.$linkTo(url)
     },
     goStore (bid) {
@@ -1269,17 +1320,35 @@ export default {
       const url = '/pages/share/go?prod_id=' + this.prod_id
       this.$linkTo(url)
     },
-    myPay () {
+    onePay () {
       if (!checkIsLogin(1, 1)) return
+      
       // 赠品
-      if (this.gift) {
+      if (this.mode === 'gift') {
         this.lingqu()
         return
       }
-      this.hasCart = true
-      if (this.detailData.order_temp_id || this.detailData.Products_IsVirtual === 1) {
+  
+  
+      if (this.mode === 'default') {
+        this.hasCart = true
+      }
+  
+      if (this.mode === 'spike') {
         this.hasCart = false
       }
+      
+      if (this.mode === 'seckill') {
+        this.hasCart = false
+      }
+      
+      
+      
+      //如果是有下单模板的商品,或者是虚拟商品，都不能加入购物车
+      if (this.productInfo.order_temp_id || this.productInfo.Products_IsVirtual === 1) {
+        this.hasCart = false
+      }
+      
       this.$refs.mySku.show()
     },
     allPay () {
@@ -1302,7 +1371,7 @@ export default {
         await updateCart(postData).catch(e => {
           throw Error(e.msg || '下单失败')
         })
-        const url = '/pages/order/OrderBooking?cart_key=DirectBuy&order_temp_id=' + this.detailData.order_temp_id + '&biz_id=' + this.detailData.biz_id
+        const url = '/pages/order/OrderBooking?cart_key=DirectBuy&order_temp_id=' + this.productInfo.order_temp_id + '&biz_id=' + this.productInfo.biz_id
         this.$linkTo(url)
       } catch (e) {
         this.$modal(e.message)
@@ -1314,7 +1383,7 @@ export default {
       // 加入购物车
       const data = {
         cart_key: 'CartList',
-        prod_id: this.detailData.Products_ID,
+        prod_id: this.productInfo.Products_ID,
         qty: sku.qty,
         attr_id: sku.id
       }
@@ -1384,9 +1453,9 @@ export default {
       const path = 'pages/product/detail?prod_id=' + this.prod_id
       const front_url = this.initData.front_url
       const shareObj = {
-        title: this.detailData.Products_Name,
-        desc: this.detailData.Products_BriefDescription,
-        imageUrl: getProductThumb(this.detailData.ImgPath),
+        title: this.productInfo.Products_Name,
+        desc: this.productInfo.Products_BriefDescription,
+        imageUrl: getProductThumb(this.productInfo.ImgPath),
         path: buildSharePath(path)
       }
 
@@ -1476,6 +1545,22 @@ export default {
       try {
         showLoading()
 
+        // 秒杀
+        if (this.mode === 'seckill') {
+          const seckillInfo = await getFlashsaleDetail({ flashsale_id: this.flashsale_id }).then(res => {
+            return res.data
+          }).catch(e => { throw Error(e.msg || '获取拼团信息错误') })
+          console.log(seckillInfo)
+        }
+
+        // 限时抢购
+        if (this.mode === 'spike') {
+          const spikeInfo = await spikeProdDetail({ spike_good_id: this.spike_good_id }).then(res => {
+            return res.data
+          }).catch(e => { throw Error(e.msg || '获取限时抢购详情错误') })
+          console.log(spikeInfo)
+        }
+
         if (options.gift) {
           this.gift = options.gift
           this.postData.active_id = options.gift
@@ -1495,30 +1580,30 @@ export default {
 
         // 获取优惠券
         this.page = 1
-
         const data = {
           prod_id: this.prod_id
         }
-        this.detailData = await getProductDetail(data, { onlyData: true }).catch(e => {
+
+        this.productInfo = await getProductDetail(data, { onlyData: true }).catch(e => {
           throw Error(e.msg || '获取商品详情失败')
         })
 
-        this.detailData.Products_Promise = [{ name: '随时退款' }, { name: '随时退款' }, { name: '随时退款' }, { name: '随时退款' }]
-        this.detailData.Products_Description = formatRichTextByUparseFn(this.detailData.Products_Description)
-        this.isVirtual = this.detailData.Products_IsVirtual === 1
+        // this.productInfo.Products_Promise = [{ name: '随时退款' }, { name: '随时退款' }, { name: '随时退款' }, { name: '随时退款' }]
+        this.productInfo.Products_Description = formatRichTextByUparseFn(this.productInfo.Products_Description)
+        this.isVirtual = this.productInfo.Products_IsVirtual === 1
 
         const couponParam = {
           pageSize: 999,
           page: 1,
           status: 3,
           front_show: 1,
-          biz_id: this.detailData.biz_id
+          biz_id: this.productInfo.biz_id
         }
 
         this.couponList = await getCouponList(couponParam, { onlyData: true }).catch(e => { throw Error(e.msg || '获取优惠券失败') })
 
         this.comments = await getCommitList({
-          Products_ID: this.detailData.Products_ID,
+          Products_ID: this.productInfo.Products_ID,
           pageSize: 999,
           page: 1
         }, {
@@ -1527,18 +1612,18 @@ export default {
           throw Error('获取评论数据失败')
         })
 
-        this.store = await getBizInfo({ biz_id: this.detailData.biz_id }, { onlyData: true }).catch(e => {
+        this.store = await getBizInfo({ biz_id: this.productInfo.biz_id }, { onlyData: true }).catch(e => {
           throw Error(e.msg || '获取店铺信息失败')
         })
 
-        this.storeList = await getStoreList({ biz_id: this.detailData.biz_id }, {
+        this.storeList = await getStoreList({ biz_id: this.productInfo.biz_id }, {
           onlyData: true
         }).catch(e => {
           throw Error(e.msg || '获取店铺列表失败')
         })
 
         const res = await getActiveInfo({
-          biz_id: this.detailData.biz_id,
+          biz_id: this.productInfo.biz_id,
           type: 'manjian'
         }, { onlyData: true }).catch(e => {
         })

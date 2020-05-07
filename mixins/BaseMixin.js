@@ -1,7 +1,7 @@
-import { backFunc, cellPhone, error, linkToEasy, modal, openLocation, toast } from '@/common/fun'
+import { backFunc, cellPhone, error, linkToEasy, modal, openLocation, toast} from '@/common/fun'
 import T from '../common/langue/i18n'
 
-import { checkIsLogin, getDomain } from '@/common/helper'
+import { checkIsLogin, getDomain,toGoodsDetail } from '@/common/helper'
 // #ifdef H5
 import { WX_JSSDK_INIT } from '@/common/env'
 // #endif
@@ -31,7 +31,7 @@ export default {
     $error: error,
     $modal: modal,
     $linkTo: linkToEasy,
-    $toGoodsDetail: (id) => linkToEasy(`/pages/product/detail?prod_id=${id}`),
+    $toGoodsDetail: toGoodsDetail,
     $checkIsLogin: checkIsLogin,
     $openPop (name) {
       this.$refs[name].show()
@@ -65,10 +65,9 @@ export default {
     // #endif
   },
   onLoad () {
-  
+
   },
   created () {
-    
     this.systemInfo = uni.getSystemInfoSync()
     // #ifdef MP-WEIXIN
     this.menuButtonInfo = uni.getMenuButtonBoundingClientRect()
@@ -76,7 +75,7 @@ export default {
     this.diyHeadHeight = top + height + (top - this.systemInfo.statusBarHeight) + 10
     this.diyHeadRight = this.systemInfo.windowWidth - left
     // #endif
-    
+
     // 可以自己根据配置，来注册语言包
     if (this.langues && Array.isArray(this.langues) && this.langues.length > 0) {
       console.log(this.langues)
@@ -87,9 +86,9 @@ export default {
     this.TT = locales[locale]
   },
   // #ifdef MP-WEIXIN || MP-ALIPAY || MP-BAIDU || MP-TOUTIAO
-  //自定义小程序分享
+  // 自定义小程序分享
   onShareAppMessage () {
-  
-  },
+
+  }
   // #endif
 }

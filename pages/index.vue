@@ -57,6 +57,7 @@
               v-if="item.indexOf('swiper') !== -1"
               :confData="templateData[tagIndex][index]"
               :index="index"></diy-swiper>
+
             <diy-nav
               v-if="item.indexOf('nav') !== -1"
               :confData="templateData[tagIndex][index]"
@@ -132,7 +133,7 @@
           <div class="block-content">
             <div class="goods-list">
               <div class="goods-item" v-for="(item,idx) in killList" :key="idx"
-                   @click="$toGoodsDetail(item.Products_ID)">
+                   @click="$toGoodsDetail(item)">
                 <block v-if="idx<6">
                   <div class="cover" :style="{backgroundImage:'url('+item.ImgPath+')'}">
                     <!--<div class="tip" style="background: #185e44;">同城配送</div>-->
@@ -173,7 +174,7 @@
           <div class="block-content">
             <div class="live-list">
               <block v-for="(item,idx) in liveGoodsList" :key="idx">
-                <div class="live-item" v-if="idx<3" @click="$toGoodsDetail(item.Products_ID)">
+                <div class="live-item" v-if="idx<3" @click="$toGoodsDetail(item)">
 
                   <div class="left">
                     <div class="cover" :style="{backgroundImage:'url('+item.ImgPath+')'}"></div>
@@ -350,7 +351,7 @@
                   </div>
                   <div class="store-goods-list">
                     <block v-for="(goods,idx2) in merchant.prod" :key="idx2">
-                      <div class="store-goods-item" v-if="idx2<3" @click.stop="$toGoodsDetail(goods.Products_ID)">
+                      <div class="store-goods-item" v-if="idx2<3" @click.stop="$toGoodsDetail(goods)">
 
                         <image :style="{backgroundImage:'url('+goods.ImgPath+')'}" class="cover" />
                         <div class="title fz-12 c3 p-t-7 p-b-7">{{goods.Products_Name}}</div>
@@ -408,11 +409,14 @@ import DiyTab from '@/componets/diy-tab/diy-tab'
 import DiyGroup from '@/componets/diy-group/diy-group'
 import DiyFlash from '@/componets/diy-flash/diy-flash'
 import GoodsItem from '@/componets/good-item/good-item'
+import DiyNav from '@/componets/diy-nav/diy-nav'
 import { hideLoading, showLoading } from '@/common/fun'
+
 
 export default {
   mixins: [BaseMixin],
   components: {
+    DiyNav,
     GoodsItem,
     DiyFlash,
     DiyGroup,

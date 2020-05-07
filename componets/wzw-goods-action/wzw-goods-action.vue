@@ -2,9 +2,9 @@
   <div>
     <div class="bottom-last flex flex-justify-between">
       <div class="left-bottom">
-        <div class="bottom-q" style="margin-right: 60rpx" @click="goStore">
+        <div class="bottom-q" @click="goStore">
           <div style="display: flex;justify-content: center;margin-bottom: 6rpx">
-            <layout-icon type="iconicon-home" size="17" color="#666666"></layout-icon>
+            <layout-icon type="iconicon-home" size="22" color="#666666"></layout-icon>
           </div>
           <div>
             进店
@@ -12,7 +12,7 @@
         </div>
         <div class="bottom-q" @click="goShare">
           <div style="display: flex;justify-content: center;margin-bottom: 6rpx">
-            <layout-icon type="iconicon-share" size="17" color="#666666"></layout-icon>
+            <layout-icon type="iconicon-share" size="20" color="#666666"></layout-icon>
           </div>
           <div>
             分享
@@ -20,14 +20,7 @@
         </div>
       </div>
       <div class="bottom-btn">
-        <div class="dandu" @click="myPay" :style="{backgroundColor:leftColor}">
-          <span class="price-q"><slot name="leftText"></slot></span>
-          <span class="price-w"><slot name="leftPrice"></slot></span>
-        </div>
-        <div class="pin" @click="allPay" :style="{backgroundColor:rightColor}">
-          <span class="price-e"><slot name="rightText"></slot></span>
-          <span class="price-r"><slot name="rightPrice"></slot></span>
-        </div>
+        <slot name="action"></slot>
       </div>
     </div>
   </div>
@@ -39,24 +32,17 @@ import LayoutIcon from '@/componets/layout-icon/layout-icon.vue'
 export default {
   components: { LayoutIcon },
   props: {
-    leftColor: {
-      type: String,
-      default: '#85D4B8'
-    },
-    rightColor: {
-      type: String,
-      default: '#26C78D'
-    }
+
   },
   data () {
     return {}
   },
   methods: {
-    myPay () {
-      this.$emit('myPay')
+    bindLeftClick () {
+      this.$emit('bindLeftClick')
     },
-    allPay () {
-      this.$emit('allPay')
+    bindRightClick () {
+      this.$emit('bindRightClick')
     },
     goStore () {
       this.$emit('goStore')
@@ -81,33 +67,39 @@ export default {
   }
 
   .left-bottom {
+    flex:1;
     height: 86rpx;
     display: flex;
     align-items: center;
-    padding-left: 54rpx;
+    //padding-left: 54rpx;
   }
 
   .bottom-q {
-    width: 50rpx;
-    font-size: 13px;
-    color: #666666
+    //width: 50rpx;
+    font-size: 12px;
+    color: #666666;
+    margin-left: 60rpx;
   }
 
-  .dandu {
+  .left-btn {
     width: 198rpx;
     height: 86rpx;
     line-height: 86rpx;
     text-align: center;
     border-radius: 42rpx;
+    color: #fff;
+    background: #85D4B8;//行内可以覆盖
   }
 
-  .pin {
+  .right-btn {
     margin-left: 10rpx;
     width: 240rpx;
     height: 86rpx;
     line-height: 86rpx;
     text-align: center;
+    color: #fff;
     border-radius: 42rpx;
+    background: #26C78D;//行内可以覆盖
   }
 
   .bottom-btn {

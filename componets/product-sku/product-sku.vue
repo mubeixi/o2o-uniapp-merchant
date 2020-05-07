@@ -106,7 +106,7 @@ export default {
         price: '', // 价格
         count: 0// 库存
       },
-      check_attr:{},
+      check_attr: {}
     }
   },
   methods: {
@@ -129,7 +129,7 @@ export default {
       })
     },
     updaCart () {
-      if(this.proList.skuvaljosn){
+      if (this.proList.skuvaljosn) {
         if (!this.submitFlag) {
           uni.showToast({
             title: '请选择正确的规格和数量',
@@ -142,8 +142,8 @@ export default {
       this.close()
       this.$emit('updaCart', this.postData)
     },
-    submit(){
-      if(this.proList.skuvaljosn){
+    submit () {
+      if (this.proList.skuvaljosn) {
         if (!this.submitFlag) {
           uni.showToast({
             title: '请选择正确的规格和数量',
@@ -153,11 +153,11 @@ export default {
         }
       }
       this.close()
-      console.log("pro")
+      console.log('pro')
       this.$emit('submitSure', this.postData)
     },
     buyNow () {
-      if(this.proList.skuvaljosn){
+      if (this.proList.skuvaljosn) {
         if (!this.submitFlag) {
           uni.showToast({
             title: '请选择正确的规格和数量',
@@ -174,66 +174,64 @@ export default {
       this.close()
       this.$emit('sureSku', this.postData)
     },
-    selectAttr (index,i) {
-
-      let value_index = index; //选择的属性值索引
-      let attr_index = i;   //选择的属性索引
-      //记录选择的属性
-      let check_attr = Object.assign(this.check_attr, { [attr_index]: value_index }); //记录选择的属性  attr_index外的[]必须
-      //属性处理
-      let check_attrid = [];
-      let check_attrname = [];
-      let check_attrnames = [];
-      for (let i in check_attr) {
-        var attr_id = check_attr[i];
-        check_attrid.push(attr_id);
-        check_attrname[attr_id] = i;
+    selectAttr (index, i) {
+      const value_index = index // 选择的属性值索引
+      const attr_index = i // 选择的属性索引
+      // 记录选择的属性
+      const check_attr = Object.assign(this.check_attr, { [attr_index]: value_index }) // 记录选择的属性  attr_index外的[]必须
+      // 属性处理
+      let check_attrid = []
+      const check_attrname = []
+      let check_attrnames = []
+      for (const i in check_attr) {
+        var attr_id = check_attr[i]
+        check_attrid.push(attr_id)
+        check_attrname[attr_id] = i
       }
-      //数组排序  按从小到大排
-      let check_attrid_arr = check_attrid;
-      check_attrid = numberSort(check_attrid);
-      //获取对应的属性名称
+      // 数组排序  按从小到大排
+      const check_attrid_arr = check_attrid
+      check_attrid = numberSort(check_attrid)
+      // 获取对应的属性名称
       for (let i = 0; i < check_attrid.length; i++) {
-        let attr_id = check_attrid[i];
-        let attr_name = check_attrname[attr_id];
-        check_attrnames.push(attr_name + ':' + this.list.skujosn[attr_name][attr_id]);
+        const attr_id = check_attrid[i]
+        const attr_name = check_attrname[attr_id]
+        check_attrnames.push(attr_name + ':' + this.list.skujosn[attr_name][attr_id])
       }
-      check_attrid = check_attrid.join(';');
-      let attr_val = this.list.skuvaljosn[check_attrid];   //选择属性对应的属性值
-      //数组转化为字符串
-      check_attrnames = check_attrnames.join(';');
-      //更改第一个规格显示图片
-      for(let mbx in this.list.skuvaljosn){
-        let arr=mbx.split(';')
-        if(arr[0]==index){
-          //this.imgIndex=index
-          this.skuImg=this.list.skuvaljosn[mbx].Attr_Image
+      check_attrid = check_attrid.join(';')
+      const attr_val = this.list.skuvaljosn[check_attrid] // 选择属性对应的属性值
+      // 数组转化为字符串
+      check_attrnames = check_attrnames.join(';')
+      // 更改第一个规格显示图片
+      for (const mbx in this.list.skuvaljosn) {
+        const arr = mbx.split(';')
+        if (arr[0] == index) {
+          // this.imgIndex=index
+          this.skuImg = this.list.skuvaljosn[mbx].Attr_Image
           break
         }
       }
 
-      //属性判断
+      // 属性判断
       if (attr_val) {
-        this.postData.id = attr_val.Product_Attr_ID;   //选择属性的id
-        this.postData.count = attr_val.Property_count;   //选择属性的库存
-        this.postData.price = attr_val.Attr_Price?attr_val.Attr_Price:this.list.Products_PriceX; // 选择属性的价格
-        this.submitFlag = (!this.check_attr ) ? false : true;
-        //this.submitFlag = (!this.check_attr || Object.getOwnPropertyNames(this.check_attr).length !== Object.getOwnPropertyNames(this.list.skujosn).length) ? false : true;
+        this.postData.id = attr_val.Product_Attr_ID // 选择属性的id
+        this.postData.count = attr_val.Property_count // 选择属性的库存
+        this.postData.price = attr_val.Attr_Price ? attr_val.Attr_Price : this.list.Products_PriceX // 选择属性的价格
+        this.submitFlag = !(!this.check_attr)
+        // this.submitFlag = (!this.check_attr || Object.getOwnPropertyNames(this.check_attr).length !== Object.getOwnPropertyNames(this.list.skujosn).length) ? false : true;
       }
-      //判断属性库存
+      // 判断属性库存
       if (attr_val && attr_val.Property_count <= 0) {
-        this.submitFlag =  false;
-        return false;
+        this.submitFlag = false
+        return false
       }
-      this.check_attr = {};
-      this.check_attr = check_attr;
-      this.check_attrid_arr = check_attrid_arr;
-      this.submit_flag = (!this.check_attr || Object.getOwnPropertyNames(this.check_attr).length !== Object.getOwnPropertyNames(this.list.skujosn).length) ? false : true;
-      //购买数量处理  大于最高时赋值最高值
+      this.check_attr = {}
+      this.check_attr = check_attr
+      this.check_attrid_arr = check_attrid_arr
+      this.submit_flag = !((!this.check_attr || Object.getOwnPropertyNames(this.check_attr).length !== Object.getOwnPropertyNames(this.list.skujosn).length))
+      // 购买数量处理  大于最高时赋值最高值
       if (this.postData.qty > this.postData.count) {
-        this.postData.qty = this.postData.count;
+        this.postData.qty = this.postData.count
       }
-
     },
     addNum () {
       if (this.postData.qty < this.postData.count) {
@@ -281,20 +279,22 @@ export default {
             val: this.list.skujosn[i]
           })
         }
-        //新增如果有手机的规格
+        // 新增如果有手机的规格
         for (const i in this.list.skujosn) {
-          if(i=='mobile_prod_attr_name'){
-            skujosn_new=[{
-              sku:i,
+          if (i == 'mobile_prod_attr_name') {
+            skujosn_new = [{
+              sku: i,
               val: this.list.skujosn[i]
             }]
           }
         }
-        //结束
+        // 结束
 
         this.list.skujosn_new = skujosn_new
         this.list.skuvaljosn = this.list.skuvaljosn
-        console.log(this.list,"ss")
+      } else {
+        // 没有规格就随意了
+        this.submitFlag = true
       }
     },
     show () {

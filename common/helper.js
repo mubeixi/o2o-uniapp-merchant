@@ -1,5 +1,5 @@
 import { staticUrl } from './env'
-import { confirm, error } from './fun'
+import { confirm, error, linkToEasy } from './fun'
 import { getAccessToken, upload } from './request'
 import Srotage from '@/common/Storage'
 import store from '@/store'
@@ -664,6 +664,29 @@ export const cutstrFun = (str, len, tip = '..') => {
   if (!str) return ''
   if (str.length < len) return str
   return str.substring(0, len) + tip
+}
+
+/**
+ * 跳转商品详情页面
+ * @param productInfo
+ */
+export const toGoodsDetail = (productInfo) => {
+  const { Products_ID, spike_good_id, price } = productInfo
+  let url = ''
+  if (!Products_ID) throw Error('产品id必传')
+  url = `/pages/product/detail?prod_id=${Products_ID}`
+
+  // 限时抢购
+  if (spike_good_id) {
+    url += `&mode=spike&spike_good_id=${spike_good_id}`
+  }
+  // 秒杀
+  if (price) {
+    url += '&mode=seckill'
+  }
+  console.log('产品跳转url:' + url)
+
+  linkToEasy(url)
 }
 
 const Helper = {

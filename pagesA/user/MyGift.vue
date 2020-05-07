@@ -83,7 +83,7 @@ export default {
   methods: {
     handleClick (item) {
       if (this.checked === 0) {
-        this.$linkTo('/pages/product/detail?gift=' + item.id + '&prod_id=' + item.product_id)
+        this.$linkTo('/pages/product/detail?mode=gift&gift=' + item.id + '&prod_id=' + item.product_id)
       }
       if (this.checked === 1) {
         this.$linkTo('/pagesA/order/OrderDetail?Order_ID=' + item.order_id)

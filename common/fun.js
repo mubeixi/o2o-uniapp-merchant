@@ -56,6 +56,8 @@ export const linkToEasy = (url, type = 'default') => {
     })
   }
 }
+
+
 export const openLocation = (latitude, longitude, name, address) => {
   uni.openLocation({
     latitude: parseFloat(latitude),
