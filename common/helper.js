@@ -672,7 +672,8 @@ export const cutstrFun = (str, len, tip = '..') => {
  * @param productInfo
  */
 export const toGoodsDetail = (productInfo) => {
-  const { Products_ID, spike_good_id, price } = productInfo
+  console.log(productInfo)
+  const { Products_ID, spike_good_id, price} = productInfo
   let url = ''
   if (!Products_ID) throw Error('产品id必传')
   url = `/pages/product/detail?prod_id=${Products_ID}`
@@ -683,7 +684,7 @@ export const toGoodsDetail = (productInfo) => {
   }
   // 秒杀
   if (!spike_good_id && price) {
-    url += '&mode=seckill'
+    url += `&mode=seckill&flashsale_id=${productInfo.id}`
   }
   console.log('产品跳转url:' + url)
 

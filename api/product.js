@@ -80,7 +80,7 @@ export const spikeProdDetail = (param, options) => fetch({
 })
 
 export const bizFlashsaleList = (param, options) => fetch({
-  act: 'bizFlashsaleList',
+  act: 'get_flashsale',
   param,
   options
 })

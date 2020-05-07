@@ -1115,6 +1115,7 @@ export default {
         is_end: true
       },
       mode: 'default',
+      flashsale_id:'',
       spike_good_id: '', // 限时抢购专用
       tabClick: false,
       scrollViewTop: 0,
@@ -1177,7 +1178,7 @@ export default {
 
   },
   onLoad (options) {
-    const { mode, spike_good_id, prod_id } = options
+    const { mode, spike_good_id,flashsale_id, prod_id } = options
     if (!prod_id) {
       modal('产品id必传')
       setTimeout(() => {
@@ -1187,6 +1188,7 @@ export default {
     this.prod_id = prod_id
     if (mode) this.mode = mode
     if (spike_good_id) this.spike_good_id = spike_good_id
+    if(flashsale_id)this.flashsale_id = flashsale_id
 
     // 秒杀
 
@@ -1597,11 +1599,12 @@ export default {
         if (this.mode === 'seckill') {
           const seckillInfo = await getFlashsaleDetail({ flashsale_id: this.flashsale_id }).then(res => {
             return res.data
-          }).catch(e => { throw Error(e.msg || '获取拼团信息错误') })
+          }).catch(e => { throw Error(e.msg || '获取秒杀信息错误') })
 
           Object.assign(this.productInfo, seckillInfo)
           this.activeInfo.start_time = seckillInfo.start_time
           this.activeInfo.end_time = seckillInfo.end_time
+          countdownInstance = setInterval(this.stampFunc, 1000)
         }
 
         // 限时抢购
