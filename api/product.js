@@ -2,8 +2,12 @@ import { fetch } from '@/common/request'
 
 // 获取产品列表
 export const getProductList = (param, options) => {
-  if (param.hasOwnProperty('biz_id'))param.biz_ids = param.biz_id // hack biz_id参数变更
-  return fetch({ act: 'get_prod', param, options })
+  if (param.hasOwnProperty('biz_id')) param.biz_ids = param.biz_id // hack biz_id参数变更
+  return fetch({
+    act: 'get_prod',
+    param,
+    options
+  })
 }
 
 // 秒杀活动（产品）列表
@@ -34,6 +38,13 @@ export const getProductDetail = (param, options) => fetch({
   options
 })
 
+// 获取秒杀详情
+export const getFlashsaleDetail = (param, options) => fetch({
+  act: 'flashsale_detail',
+  param,
+  options
+})
+
 // 获取活动详情
 export const getActiveInfo = (param, options) => fetch({
   act: 'getActiveInfo',
@@ -57,6 +68,13 @@ export const getSpikeProd = (param, options) => fetch({
 // 获取限时抢购列表
 export const bizSpikeList = (param, options) => fetch({
   act: 'bizSpikeList',
+  param,
+  options
+})
+
+// 获取限时抢购详情
+export const spikeProdDetail = (param, options) => fetch({
+  act: 'spike_prod_detail',
   param,
   options
 })

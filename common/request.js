@@ -161,6 +161,7 @@ export const ajax = ({ url, method = 'post', data = {}, options = {} }) => {
         } else {
           // 配置决定是否显示错误提示
           if (errtip) error(msg)
+          if(ENV.isDev) error(msg)
           reject(res)
         }
       },

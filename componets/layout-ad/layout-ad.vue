@@ -96,9 +96,9 @@ export default {
       type: String,
       default: '0px'
     },
-    width: {
-      default: '750rpx',
-      type: String
+    boxDidth: {
+      default: 750,
+      type: Number
     },
     height: {
       default: '250rpx',
@@ -191,10 +191,10 @@ export default {
   methods: {
     async _init_func () {
       if (this.imgs.length < 1) {
-        if (!this.code && !this.cateId && !this.position) throw Error('广告位的imgs长度为0是，请传入code或者（cateId+position的搭配）')
-        const postData = { ad_code: this.code, cate_id: this.cateId, position: this.position }
-
         try {
+          if (!this.code && !this.cateId && !this.position) throw Error('广告位的imgs长度为0是，请传入code或者（cateId+position的搭配）')
+          const postData = { ad_code: this.code, cate_id: this.cateId, position: this.position }
+
           const imgs = await getAdvertList({ ...postData }, { onlyData: true }).catch(err => { throw Error(err.msg || '初始化广告组件失败') })
           const tempimgs = getArrColumn(imgs, 'image')
           this.imgList = tempimgs.map(imgsrc => getDomain(imgsrc))
@@ -218,23 +218,14 @@ export default {
 
       const idx = e.target.id.replace('img', '')
 
-      this.$set(this.boxw, idx, 750 + 'rpx')
-      this.$set(this.boxh, idx, 750 * height / width + 'rpx')
+      this.$set(this.boxw, idx, this.boxDidth + 'rpx')
+      this.$set(this.boxh, idx, this.boxDidth * height / width + 'rpx')
 
       // console.log(this.boxh, this.boxw)
     },
     indexChangeEvent (event) {
       const { current } = event.detail
-
       this.current = current
-      // const query = uni.createSelectorQuery().in(this)
-      // query.select('#img' + current).boundingClientRect(data => {
-      //   const { width, height } = data
-      //   this.boxw[current] = width + 'px'
-      //   this.boxh[current] = height + 'px'
-      //
-      //   console.log(this.boxw,this.boxh)
-      // }).exec()
     }
   }
 }

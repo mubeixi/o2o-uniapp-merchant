@@ -77,7 +77,7 @@
           <!--限时抢购-->
           <scroll-view scroll-x class="activity-list" @touchmove.stop v-if="activityList.length>0">
             <div class="activity-item" v-for="(item,idx) in activityList" :key="idx"
-                 @click="$linkTo('/pages/active/FlashSaleBiz?biz_id='+bid+'&spike_id='+item.id)">{{item.name}}
+                 @click="$linkTo('/pages/active/FlashSaleByBiz?biz_id='+bid+'&spike_id='+item.id)">{{item.name}}
             </div>
           </scroll-view>
           

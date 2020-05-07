@@ -191,7 +191,7 @@
       }
     },
     {
-      "path": "pages/active/FlashSaleBiz",
+      "path": "pages/active/FlashSaleByBiz",
       "style": {
         "navigationBarTitleText": "限时抢购",
         "navigationStyle": "custom"

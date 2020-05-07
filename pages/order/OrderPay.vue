@@ -15,7 +15,8 @@
       <span class="state-desc">等待买家付款</span>
     </div>
     <div class="address bgwhite" v-if="orderInfo.Order_IsVirtual === 0">
-      <image class="loc_icon" :src="'/static/client/location.png'|domain" alt="" />
+<!--      <image class="loc_icon" :src="'/static/client/location.png'|domain" alt="" />-->
+      <layout-icon class="m-r-15" color="#F53636" type="iconicon-address" size="26"></layout-icon>
       <div class="add_msg">
         <div class="name">收货人：{{orderInfo.Address_Name}} <span>{{orderInfo.Address_Mobile}}</span></div>
         <div class="location">

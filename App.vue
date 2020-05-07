@@ -25,7 +25,7 @@ export default {
   onError: function (e) {
     console.log(e)
     // #ifdef MP-WEIXIN
-    uni.$fundebug.notify('onAppError', JSON.stringify(e))
+    // uni.$fundebug.notify('onAppError', JSON.stringify(e))
     // #endif
   }
 }
