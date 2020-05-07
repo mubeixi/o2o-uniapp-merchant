@@ -184,9 +184,9 @@
       }
     },
     {
-      "path": "pages/active/Seckill",
+      "path": "pages/active/SeckillByBiz",
       "style": {
-        "navigationBarTitleText": "限时秒杀",
+        "navigationBarTitleText": "秒杀",
         "navigationStyle": "custom"
       }
     },

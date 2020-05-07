@@ -43,18 +43,27 @@ import { bizFlashsaleList } from '@/api/product'
 import { getBizInfo } from '@/api/store'
 import { getCountdownFunc } from '@/common/helper'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
+import { hideLoading, modal, showLoading } from '@/common/fun'
 
 export default {
   mixins: [BaseMixin],
   components: { LayoutIcon },
   data () {
     return {
+      biz_id: null,
+      bizInfo: {},
+      postData: {
+        page: 1,
+        pageSize: 999
+      },
+      activeId: null,
+      start_time: '',
+      end_time: '',
+      activeInfo: {},
       page: 1,
       pageSize: 5,
-      biz_id: 7,
       totalCount: 0,
       seckillData: [],
-      bizInfo: [],
     }
   },
   methods: {
@@ -82,24 +91,28 @@ export default {
       }
     },
     async init ({ isInit = false }) {
-      const data = {
-        page: this.page,
-        pageSize: this.pageSize,
-        biz_id: this.biz_id,
-      }
-      const arr = await bizFlashsaleList(data, { tip: '加载中' }).catch(e => {
-        throw Error(e.msg || '获取秒杀列表失败')
-      })
-      this.totalCount = arr.totalCount
-      if (isInit) {
-        this.seckillData = arr.data
-      } else {
-        arr.data.map(item => {
-          this.seckillData.push(item)
-        })
-      }
       
-      setInterval(this.stampFunc, 1000)
+      try{
+        showLoading()
+        this.bizInfo = await getBizInfo({ biz_id: this.biz_id }, { onlyData: true }).catch(e => {
+          throw Error(e.msg || '获取商家信息错误')
+        })
+  
+        const data = {
+          page: this.page,
+          pageSize: this.pageSize,
+          biz_id: this.biz_id,
+        }
+        this.seckillData = await bizFlashsaleList(data, { onlyData: true }).catch(e => {
+          throw Error(e.msg || '获取秒杀列表失败')
+        })
+       
+        //setInterval(this.stampFunc, 1000)
+      }catch (e) {
+      
+      }finally {
+        hideLoading()
+      }
     },
     async getBiz () {
       this.bizInfo = await getBizInfo({ biz_id: this.biz_id }, { onlyData: true }).catch(e => {
@@ -108,17 +121,28 @@ export default {
     },
   },
   onLoad (options) {
-    // this.biz_id=options.biz_id
-    this.getBiz()
+    const { activeId, biz_id } = options
+    if (!activeId) {
+      modal('活动id缺失')
+      return
+    }
+    if (!biz_id) {
+      modal('商家id缺失')
+      return
+    }
+    this.activeId = activeId
+    this.biz_id = biz_id
+    this.postData.biz_id = biz_id
+
   },
   onShow () {
-    this.page = 1
-    this.init({ isInit: true })
+    //this.page = 1
+    //this.init({ isInit: true })
   },
   onReachBottom () {
-    if (this.totalCount <= this.seckillData.length) return
-    this.page++
-    this.init({ isInit: false })
+    // if (this.totalCount <= this.seckillData.length) return
+    // this.page++
+    // this.init({ isInit: false })
   },
 }
 </script>
