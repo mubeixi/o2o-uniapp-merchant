@@ -28,7 +28,7 @@
       <!--<div class="notify">恭喜小苹果分享***商品赚30.00元</div>-->
     </div>
     <!--code="indexTop" :imgs="adData"-->
-    <layout-ad code="indexTop"></layout-ad>
+    <layout-ad code="share_commi_top_goods"></layout-ad>
     <div class="goods-list">
       <div class="goods-item" v-for="(item,idx) in goodsList" :key="idx"
            @click="$linkTo('/pages/share/go?prod_id='+item.Products_ID)">

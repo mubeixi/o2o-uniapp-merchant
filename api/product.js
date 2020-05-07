@@ -45,12 +45,6 @@ export const getFlashsaleDetail = (param, options) => fetch({
   options
 })
 
-// 获取活动详情
-export const getActiveInfo = (param, options) => fetch({
-  act: 'getActiveInfo',
-  param,
-  options
-})
 
 // 获取商家列表
 export const getStoreList = (param, options) => fetch({

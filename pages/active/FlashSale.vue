@@ -2,7 +2,7 @@
   <div class="page-wrap">
     <div style="background: none" :style="{height:menuButtonInfo.top+'px'}"></div>
     <div class="top flex flex-vertical-c" :style="{height:menuButtonInfo.height+'px'}">
-       <layoutIcon class="m-l-15" color="#fff" type="iconicon-arrow-left"></layoutIcon>
+       <layoutIcon style="position: relative;z-index: 3" @click="$back" class="m-l-15" color="#fff" type="iconicon-arrow-left"></layoutIcon>
       <div class="title">限时抢购</div>
     </div>
     <div class="background-img">
@@ -22,7 +22,7 @@
           
         </div>
         <div class="content-ad">
-          <layout-ad :boxDidth="670" code="flashsale_index"></layout-ad>
+          <layout-ad :boxDidth="670" code="spike_under_recommend"></layout-ad>
 <!--          <image class="ad-image" src="https://newo2o.bafangka.com/uploadfiles/wkbq6nc2kc/image/202005041732322108.png"></image>-->
         </div>
         <div class="content-list">

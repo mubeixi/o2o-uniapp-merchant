@@ -762,7 +762,8 @@
 
 <script>
 import BaseMixin from '@/mixins/BaseMixin'
-import { getActiveInfo, getProductDetail, getProductSharePic, getStoreList } from '@/api/product'
+import {  getProductDetail, getProductSharePic, getStoreList } from '@/api/product'
+import {getActiveInfo} from '@/api/common'
 import { getBizInfo } from '@/api/store'
 import { getCommitList } from '@/api/common'
 import { commentReply } from '@/api/customer'

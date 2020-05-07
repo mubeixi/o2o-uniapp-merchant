@@ -193,7 +193,7 @@ export default {
       if (this.imgs.length < 1) {
         try {
           if (!this.code && !this.cateId && !this.position) throw Error('广告位的imgs长度为0是，请传入code或者（cateId+position的搭配）')
-          const postData = { ad_code: this.code, cate_id: this.cateId, position: this.position }
+          const postData = { tag: this.code, cate_id: this.cateId, position: this.position }
 
           const imgs = await getAdvertList({ ...postData }, { onlyData: true }).catch(err => { throw Error(err.msg || '初始化广告组件失败') })
           const tempimgs = getArrColumn(imgs, 'image')

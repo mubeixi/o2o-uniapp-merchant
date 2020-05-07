@@ -980,11 +980,13 @@
       @goShare="toShare"
     >
       <block v-if="mode==='default'" v-slot:action>
-        <div class="left-btn" @click="onePay">
-          <span>单买¥</span><span>{{productInfo.Products_PriceX}}</span>
-        </div>
-        <div class="right-btn" @click="allPay">
-          <span>拼团购¥</span><span>{{productInfo.pintuan_pricex}}</span>
+        <div class="flex flex-vertical-c">
+          <div class="left-btn" @click="onePay">
+            <span>单买¥</span><span>{{productInfo.Products_PriceX}}</span>
+          </div>
+          <div class="right-btn" @click="allPay">
+            <span>拼团购¥</span><span>{{productInfo.pintuan_pricex}}</span>
+          </div>
         </div>
       </block>
 
@@ -1063,7 +1065,8 @@
 
 <script>
 import BaseMixin from '@/mixins/BaseMixin'
-import { getActiveInfo, getFlashsaleDetail, getProductDetail, getProductSharePic, getStoreList, judgeReceiveGift, spikeProdDetail } from '@/api/product'
+import { getFlashsaleDetail, getProductDetail, getProductSharePic, getStoreList, judgeReceiveGift, spikeProdDetail } from '@/api/product'
+import {getActiveInfo} from '@/api/common'
 import { getBizInfo } from '@/api/store'
 import { commentReply, getUserCoupon } from '@/api/customer'
 import { getCommitList, getCouponList } from '@/api/common'

@@ -37,6 +37,7 @@ export const modal = function () {
 }
 
 export function backFunc () {
+  console.log('back')
   uni.navigateBack()
 }
 
