@@ -40,8 +40,7 @@
     <div :style="{height:diyHeadHeight+'px'}"></div>
 
     <div class="main tab-container" :style="{height:(systemInfo.windowHeight-diyHeadHeight+'px')}">
-      <scroll-view :style="{height:(systemInfo.windowHeight-diyHeadHeight+'px')}" class="tab-page-wrap" scroll-y
-                   v-show="headTabIndex===0">
+      <scroll-view :style="{height:(systemInfo.windowHeight-diyHeadHeight+'px')}" class="tab-page-wrap" scroll-y v-show="headTabIndex===0">
         <view class="home-diy-wrap">
           <section
             v-for="(item, index) in templateList[tagIndex]"
@@ -212,8 +211,7 @@
         <layout-copyright></layout-copyright>
         <div class="h20"></div>
       </scroll-view>
-      <scroll-view :style="{height:(systemInfo.windowHeight-diyHeadHeight+'px')}" class="tab-page-wrap" scroll-y
-                   v-show="headTabIndex===1">
+      <scroll-view :style="{height:(systemInfo.windowHeight-diyHeadHeight+'px')}" class="tab-page-wrap" scroll-y v-show="headTabIndex===1">
 
         <div class="section scroll-box first-cate-list  bg-white" :style="{top:diyHeadHeight+'px'}"
              @touchmove.stop.prevent="$noop">
@@ -251,7 +249,7 @@
               <div class="hr h10"></div>
 
               <div class="bg-white">
-                <layout-ad :lazy-load="true" :ready="quickFirstCateIdx===idx1" paddingStr="20px 0 20px 0" code="hotcity"
+                <layout-ad :lazy-load="true" :ready="quickFirstCateIdx===idx1" paddingStr="20px 0 20px 0" code="city_under_nav"
                            :cate-id="first.Category_ID" position="city"></layout-ad>
               </div>
 
@@ -321,7 +319,7 @@
               </div>
               <div class="hr h10"></div>
               <div class="bg-white">
-                <layout-ad :lazy-load="true" :ready="storeFirstCateIdx===idx1" paddingStr="20px 0 20px 0" code="hotcity"
+                <layout-ad :lazy-load="true" :ready="storeFirstCateIdx===idx1" paddingStr="20px 0 20px 0" code="good_shop_under_nav"
                            :cate-id="first.Category_ID" position="hot"></layout-ad>
               </div>
 

@@ -6,7 +6,7 @@
       <div class="status-bar" :style="{height:menuButtonInfo.top+'px',backgroundColor:statusBgColor}"></div>
       <!--导航栏-->
       <div class="navigation-bar" :style="{height:menuButtonInfo.height+'px',backgroundColor:menuButtonBgColor}">
-        <layout-icon color="#fff" @click="bindBack" class="left-icon" size="18"
+        <layout-icon color="#fff" @click="$back" class="left-icon" size="18"
                      type="iconicon-arrow-left"></layout-icon>
         <div class="title color-white" :style="{lineHeight:menuButtonInfo.height+'px'}">外卖</div>
       </div>
