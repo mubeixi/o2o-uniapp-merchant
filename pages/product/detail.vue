@@ -5,7 +5,7 @@
     overflow-x: hidden;
     overflow-y: hidden;
   }
-  
+
   .lazy-box{
     bottom: constant(safe-area-inset-bottom);
     bottom: env(safe-area-inset-bottom);
@@ -879,7 +879,10 @@
             <div class="block-title-more flex flex-vertical-center c9 fz-12"></div>
           </div>
         </div>
-        <u-parse :content="productInfo.Products_Description"></u-parse>
+        <block v-if="richTextReady">
+          <u-parse :content="productInfo.Products_Description"></u-parse>
+        </block>
+
       </div>
 
       <!--评论列表-->
@@ -1146,6 +1149,7 @@ export default {
     return {
       thumbTempFilePath: '', // 图片本地地址
       isReady: false,
+      richTextReady: false,
       // 倒计时
       activeInfo: {
         start_time: '',
@@ -1624,7 +1628,7 @@ export default {
     },
     async _init_func (options) {
       try {
-        // showLoading()
+        showLoading()
 
         // 秒杀
         if (this.mode === 'seckill') {
@@ -1684,7 +1688,10 @@ export default {
 
         // this.productInfo.Products_Promise = [{ name: '随时退款' }, { name: '随时退款' }, { name: '随时退款' }, { name: '随时退款' }]
         this.productInfo.Products_Description = formatRichTextByUparseFn(this.productInfo.Products_Description)
+        this.richTextReady = true
         this.isVirtual = this.productInfo.Products_IsVirtual === 1
+
+        this.isReady = true
 
         const couponParam = {
           pageSize: 999,
@@ -1727,9 +1734,7 @@ export default {
           this.active = res.active_info
         }
 
-        // hideLoading()
-
-        this.isReady = true
+        hideLoading()
 
         await new Promise(resolve => {
           setTimeout(() => {

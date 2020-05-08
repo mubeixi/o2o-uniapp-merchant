@@ -681,9 +681,9 @@ export const toGoodsDetail = async (productInfo) => {
     return
   }
 
-  const { path: thumbTempFilePath } = await Promisify('getImageInfo', { src: thumb }).catch(e => { linkToEasy(url) })
+  //const { path: thumbTempFilePath } = await Promisify('getImageInfo', { src: thumb }).catch(e => { linkToEasy(url) })
 
-  Storage.set('thumbTempFilePath', thumbTempFilePath)
+  Storage.set('thumbTempFilePath', productInfo.Products_JSON.ImgPath[0])
 
   linkToEasy(url)
 }
