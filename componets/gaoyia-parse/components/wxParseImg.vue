@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<image style="width: 750rpx"
+		<image style="width: 750rpx;vertical-align: top;"
 		       :mode="node.attr.mode"
 		       :lazy-load="node.attr.lazyLoad"
 		       :class="node.classStr"

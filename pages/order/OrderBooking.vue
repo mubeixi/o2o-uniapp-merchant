@@ -190,8 +190,7 @@
         <div class="tips" v-if="orderInfo.obtain_desc">{{orderInfo.obtain_desc}}</div>
       </div>
       <div @click="seeDetail" class="mx">明细
-        <layout-icon :type="isSlide?'iconicon-arrow-down':'iconicon-arrow-top'" color="#999"
-                     display="inline"></layout-icon>
+        <layout-icon class="p-l-4" :type="isSlide?'iconicon-arrow-down':'iconicon-arrow-top'" color="#999" display="inline"></layout-icon>
       </div>
       <button @click="submitFn" class="submit">提交订单</button>
     </div>
@@ -199,7 +198,7 @@
     <div class="space-box"></div>
     <div class="safearea-box fixed"></div>
 
-    <layout-layer :bottomHeight="bottomHeight" @maskClicked="handClicked" ref="popupMX" title="明细">
+    <layout-layer bottomStr="50px" :bottomHeight="bottomHeight" @maskClicked="handClicked" ref="popupMX" title="明细">
       <div class="mxdetail">
         <div class="mxitem">产品原价
           <text class="num">{{allTotalAmount-allOrderShipping}}</text>
@@ -971,7 +970,27 @@ export default {
     }
     if (options.checkfrom) {
       this.checkfrom = options.checkfrom
+
+      switch (this.checkfrom) {
+        case 'seckill' :
+          uni.setNavigationBarTitle({
+            title: '秒杀订单确认'
+          })
+          break
+        case 'spike' :
+          uni.setNavigationBarTitle({
+            title: '限时抢购订单确认'
+          })
+          break
+        case 'group' :
+          uni.setNavigationBarTitle({
+            title: '拼团订单确认'
+          })
+        default:
+          break
+      }
     }
+
     if (options.gift) {
       this.gift = true
       uni.setNavigationBarTitle({

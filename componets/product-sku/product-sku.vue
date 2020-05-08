@@ -76,9 +76,11 @@ export default {
       type: Boolean,
       default: false
     },
-    proList: {
+    productInfo: {
       type: Object,
-      default: {}
+      default: () => {
+        return {}
+      }
     },
     gift: {
       type: Number,
@@ -86,7 +88,8 @@ export default {
     }
   },
   watch: {
-    proList: {
+    productInfo: {
+      deep: true,
       handler (newVal, oldVal) {
         this.list = newVal
         this.init()
@@ -129,7 +132,7 @@ export default {
       })
     },
     updaCart () {
-      if (this.proList.skuvaljosn) {
+      if (this.productInfo.skuvaljosn) {
         if (!this.submitFlag) {
           uni.showToast({
             title: '请选择正确的规格和数量',
@@ -143,7 +146,7 @@ export default {
       this.$emit('updaCart', this.postData)
     },
     submit () {
-      if (this.proList.skuvaljosn) {
+      if (this.productInfo.skuvaljosn) {
         if (!this.submitFlag) {
           uni.showToast({
             title: '请选择正确的规格和数量',
@@ -157,7 +160,7 @@ export default {
       this.$emit('submitSure', this.postData)
     },
     buyNow () {
-      if (this.proList.skuvaljosn) {
+      if (this.productInfo.skuvaljosn) {
         if (!this.submitFlag) {
           uni.showToast({
             title: '请选择正确的规格和数量',
@@ -269,7 +272,7 @@ export default {
       }
     },
     init () {
-      this.postData.price = this.list.Products_PriceX
+      this.postData.price = this.list.minPrice
       this.postData.count = this.list.Products_Count
       if (this.list.skujosn) {
         let skujosn_new = []

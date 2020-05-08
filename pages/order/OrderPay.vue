@@ -124,8 +124,7 @@
         <view class="tips" v-if="orderInfo.obtain_desc">{{orderInfo.obtain_desc}}</view>
       </div>
       <view class="mx" @click="seeDetail">明细
-        <layout-icon display="inline" :type="isSlide?'iconicon-arrow-down':'iconicon-arrow-top'"
-                     color="#999"></layout-icon>
+        <layout-icon class="p-l-4" display="inline" :type="isSlide?'iconicon-arrow-down':'iconicon-arrow-top'" color="#999"></layout-icon>
       </view>
       <div class="submit" @click="submitPayFn">去支付</div>
     </div>
@@ -145,7 +144,7 @@
       :payFailCall="payFailCall"
     />
     
-    <layout-layer ref="pupupDetail" :direction="'top'" @maskClicked="handClicked" :bottomHeight="50">
+    <layout-layer ref="pupupDetail" :direction="'top'" @maskClicked="handClicked"  bottomStr="50px">
       <view class="mxdetail">
         <view class="mxtitle">明细</view>
         <view class="mxitem">产品
