@@ -1,17 +1,18 @@
 <template>
   <div class="seckill-all" :style="{backgroundImage:'url('+$getDomain('/static/client/seckill-bg.png')+')'}">
-    
-    <div class="flex flex-vertical-c   seckill-title">
+
+    <div class="flex flex-vertical-c seckill-title" :style="{marginTop:menuButtonInfo.top+'px'}">
       <layout-icon type="iconicon-arrow-left" size="20" color="#fff" class="back-icon m-r-2"
                    @click="$back()"></layout-icon>
-      <image class="seckill-title-img m-r-10" :src="bizInfo[0].biz_logo"></image>
-      <span class="seckill-title-text" :style="{width:(menuButtonInfo.left-80)+'px'}">{{bizInfo[0].biz_shop_name}}（{{bizInfo[0].biz_address}}）</span>
+      <image class="seckill-title-img m-r-10" :src="bizInfo.biz_logo"></image>
+      <span class="seckill-title-text" :style="{width:(menuButtonInfo.left-80)+'px'}">{{bizInfo.biz_shop_name}}（{{bizInfo.biz_address}}）</span>
     </div>
-    
-    <div class="seckill-list">
-      <div class="seckill-list-item  flex m-b-20" v-for="(item,index) of seckillData" :key="index">
+
+    <scroll-view scroll-y class="seckill-list" :style="{top:menuButtonInfo.bottom+120+'px'}">
+      <div class="seckill-list-item  flex m-b-20" v-for="(item,index) of seckillList" :key="index" @click="$toGoodsDetail(item)">
         <div class="seckill-item-left">
-          <image class="img-full" :src="item.ImgPath"></image>
+
+          <div class="item-cover" :style="{backgroundImage: 'url('+item.ImgPath+')'}"></div>
         </div>
         <div class="seckill-item-right">
           <div class="seckill-item-title m-t-4 c3">
@@ -32,14 +33,14 @@
           </block>
         </div>
       </div>
-    </div>
-  
+    </scroll-view>
+
   </div>
 </template>
 
 <script>
 import BaseMixin from '@/mixins/BaseMixin.js'
-import { bizFlashsaleList } from '@/api/product'
+import { bizFlashsaleList, getFlashsaleList } from '@/api/product'
 import { getBizInfo } from '@/api/store'
 import { getCountdownFunc } from '@/common/helper'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
@@ -63,62 +64,58 @@ export default {
       page: 1,
       pageSize: 5,
       totalCount: 0,
-      seckillData: [],
+      seckillList: []
     }
   },
   methods: {
     // 倒计时
     stampFunc () {
-      for (const item of this.seckillData) {
+      for (const item of this.seckillList) {
         let start_time = item.start_time
         let end_time = item.end_time
-        
+
         start_time = start_time.replace(/-/g, '/')
         start_time = new Date(start_time)
         start_time = start_time.getTime()
         start_time = start_time / 1000
-        
+
         end_time = end_time.replace(/-/g, '/')
         end_time = new Date(end_time)
         end_time = end_time.getTime()
         end_time = end_time / 1000
-        
+
         const data = getCountdownFunc({
           start_timeStamp: start_time,
-          end_timeStamp: end_time,
+          end_timeStamp: end_time
         })
         this.$set(item, 'countdown', data)
       }
     },
-    async init ({ isInit = false }) {
-      
-      try{
+    async init () {
+      try {
         showLoading()
-        this.bizInfo = await getBizInfo({ biz_id: this.biz_id }, { onlyData: true }).catch(e => {
+        this.bizInfo = await getBizInfo({ biz_id: this.biz_id }).then(res => {
+          return res.data[0]
+        }).catch(e => {
           throw Error(e.msg || '获取商家信息错误')
         })
-  
+
         const data = {
           page: this.page,
           pageSize: this.pageSize,
-          biz_id: this.biz_id,
+          biz_id: this.biz_id
         }
-        this.seckillData = await bizFlashsaleList(data, { onlyData: true }).catch(e => {
+        this.seckillList = await getFlashsaleList(data, { onlyData: true }).catch(e => {
           throw Error(e.msg || '获取秒杀列表失败')
         })
-       
-        //setInterval(this.stampFunc, 1000)
-      }catch (e) {
-      
-      }finally {
+
+        // setInterval(this.stampFunc, 1000)
+      } catch (e) {
+
+      } finally {
         hideLoading()
       }
-    },
-    async getBiz () {
-      this.bizInfo = await getBizInfo({ biz_id: this.biz_id }, { onlyData: true }).catch(e => {
-        throw Error(e.msg || '获取商家信息错误')
-      })
-    },
+    }
   },
   onLoad (options) {
     const { activeId, biz_id } = options
@@ -134,16 +131,17 @@ export default {
     this.biz_id = biz_id
     this.postData.biz_id = biz_id
 
+    this.init()
   },
   onShow () {
-    //this.page = 1
-    //this.init({ isInit: true })
+    // this.page = 1
+    // this.init({ isInit: true })
   },
   onReachBottom () {
-    // if (this.totalCount <= this.seckillData.length) return
+    // if (this.totalCount <= this.seckillList.length) return
     // this.page++
     // this.init({ isInit: false })
-  },
+  }
 }
 </script>
 
@@ -156,7 +154,7 @@ export default {
     background-size: 100%;
 
   }
-  
+
   .seckill-title {
     padding-left: 5px;
     height: 80rpx;
@@ -164,8 +162,7 @@ export default {
     box-sizing: border-box;
     color: #FFFFFF;
     font-weight: bold;
-    margin-top: 80rpx;
-    
+
     &-text {
       display: inline-block;
       height: 80rpx;
@@ -174,34 +171,40 @@ export default {
       text-overflow: ellipsis;
       white-space: nowrap;
     }
-    
+
     &-img {
       width: 80rpx;
       height: 80rpx;
       border-radius: 50%;
     }
   }
-  
+
   .seckill-list {
+    position: fixed;
+    bottom: 0;
     width: 750rpx;
-    margin-top: 222rpx;
-    border-radius: 40rpx 40rpx 0px 0px;
+    border-top-right-radius: 40rpx;
+    border-top-left-radius: 40rpx;
     box-sizing: border-box;
-    padding: 40rpx 0rpx 40rpx 20rpx;
+    padding: 40rpx;
     background-color: #FFFFFF;
-    min-height: 600px;
   }
-  
+
   .seckill-list-item {
     height: 230rpx;
   }
-  
+
   .seckill-item-left {
     width: 230rpx;
     height: 230rpx;
     margin-right: 26rpx;
+    .item-cover{
+      width: 230rpx;
+      height: 230rpx;
+      @include cover-img();
+    }
   }
-  
+
   .seckill-item-title {
     height: 70rpx;
     width: 446rpx;
@@ -213,23 +216,23 @@ export default {
     overflow: hidden;
     margin-bottom: 38rpx;
   }
-  
+
   .seckill-item-price {
     color: #FF0000;
     height: 26rpx;
     margin-bottom: 34rpx;
-    
+
     .priceY {
       text-decoration: line-through;
       color: #bfbfbf;
       margin-left: 20rpx;
     }
   }
-  
+
   .seckill-item-time {
     height: 38rpx;
     line-height: 38rpx;
-    
+
     .span-time {
       display: inline-block;
       height: 38rpx;

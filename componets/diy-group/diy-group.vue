@@ -5,7 +5,7 @@
     <image class="bgimg" :src="'/static/client/group_bg.png'|domain"></image>
     <div :class="className" class="listbox">
       <ul class="list">
-        <li @click="goProductDetail(item.Products_ID,item.is_pintuan)" v-for="(item,idx) in goodsList"
+        <li @click="goDetail(item)" v-for="(item,idx) in goodsList"
             :key="idx" class="item"
             :class="[idx%2==0?'even':'odd',goods.config.radius=='round'?'round':'',goods.config.showmode]"
             :style="[itemMarginObj(idx)]">
@@ -64,7 +64,8 @@
 <script>
 
 import { getProductList } from '@/api/product'
-import { createEmptyArray, getCountdownFunc, getDomain, goProductDetail } from '@/common/helper'
+import { createEmptyArray, getCountdownFunc, getDomain } from '@/common/helper'
+import {toGoodsDetail} from '@/common/helper'
 import { lazyImgUrl } from '../../common'
 import { linkTo } from '@/common/fun'
 
@@ -260,15 +261,16 @@ export default {
 
       // return rt;
     },
-    goProductDetail,
     goDetail (goods) {
+      
+      toGoodsDetail(goods)
       // Products_ID=243
-      const linkObj = {
-        link: '/pages/product/detail?Products_ID=' + goods.Products_ID,
-        linkType: 'default'
-      }
-
-      linkTo(linkObj)
+      // const linkObj = {
+      //   link: '/pages/product/detail?Products_ID=' + goods.Products_ID,
+      //   linkType: 'default'
+      // }
+      //
+      // linkTo(linkObj)
     },
     itemMarginObj (idx) {
       const conf = this.goods.style.margin

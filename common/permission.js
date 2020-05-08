@@ -8,7 +8,7 @@ function album() {
   var authStatus = PHPhotoLibrary.authorizationStatus();
   if (authStatus === 0) {
     result = null;
-  } else if (authStatus == 3) {
+  } else if (authStatus === 3) {
     result = 1;
   } else {
     result = 0;
@@ -23,7 +23,7 @@ function camera() {
   var authStatus = AVCaptureDevice.authorizationStatusForMediaType('vide');
   if (authStatus === 0) {
     result = null;
-  } else if (authStatus == 3) {
+  } else if (authStatus === 3) {
     result = 1;
   } else {
     result = 0;
@@ -58,7 +58,7 @@ function push() {
   if (app.currentUserNotificationSettings) {
     var settings = app.currentUserNotificationSettings();
     enabledTypes = settings.plusGetAttribute("types");
-    if (enabledTypes == 0) {
+    if (enabledTypes === 0) {
       result = 0;
       
     } else {
@@ -68,7 +68,7 @@ function push() {
     plus.ios.deleteObject(settings);
   } else {
     enabledTypes = app.enabledRemoteNotificationTypes();
-    if (enabledTypes == 0) {
+    if (enabledTypes === 0) {
       result = 3;
       
     } else {
@@ -86,7 +86,7 @@ function contact() {
   var cnAuthStatus = CNContactStore.authorizationStatusForEntityType(0);
   if (cnAuthStatus === 0) {
     result = null;
-  } else if (cnAuthStatus == 3) {
+  } else if (cnAuthStatus === 3) {
     result = 1;
   } else {
     result = 0;
@@ -115,7 +115,7 @@ function calendar() {
   var result = null;
   var EKEventStore = plus.ios.import("EKEventStore");
   var ekAuthStatus = EKEventStore.authorizationStatusForEntityType(0);
-  if (ekAuthStatus == 3) {
+  if (ekAuthStatus === 3) {
     result = 1;
   } else {
   }
@@ -127,7 +127,7 @@ function memo() {
   var result = null;
   var EKEventStore = plus.ios.import("EKEventStore");
   var ekAuthStatus = EKEventStore.authorizationStatusForEntityType(1);
-  if (ekAuthStatus == 3) {
+  if (ekAuthStatus === 3) {
     result = 1;
   } else {
   }

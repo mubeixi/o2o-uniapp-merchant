@@ -651,7 +651,6 @@ export default {
   created () {
   
   },
-  // #ifdef MP-WEIXIN || MP-ALIPAY || MP-BAIDU || MP-TOUTIAO
   // 自定义小程序分享
   onShareAppMessage () {
     const path = '/pages/store/index?bid=' + this.bid
@@ -663,7 +662,6 @@ export default {
     }
     return shareObj
   },
-  // #endif
   onReady () {
     const query = uni.createSelectorQuery()
     query.select('#stickyTab').boundingClientRect()

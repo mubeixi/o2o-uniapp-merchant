@@ -1090,7 +1090,6 @@ export default {
     this.prod_id = options.prod_id
     this.getProductDetail()
   },
-  // #ifdef MP-WEIXIN || MP-ALIPAY || MP-BAIDU || MP-TOUTIAO
   // 自定义小程序分享
   onShareAppMessage () {
     const path = '/pages/product/detail?prod_id=' + this.prod_id
@@ -1101,7 +1100,6 @@ export default {
       path: buildSharePath(path),
     }
     return shareObj
-  },
-  // #endif
+  }
 }
 </script>

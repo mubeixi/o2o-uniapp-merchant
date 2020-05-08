@@ -19,7 +19,7 @@
             </div>
 
           </block>
-          
+
         </div>
         <div class="content-ad">
           <layout-ad :boxDidth="670" code="spike_under_recommend"></layout-ad>
@@ -29,7 +29,7 @@
           <block v-for="(goods,idx) in productList" :key="idx">
           <div v-if="idx>=0" class="flex pro-item" @click="$toGoodsDetail(goods)">
             <div :style="{backgroundImage:'url('+goods.ImgPath+')'}" class="p-item-image"></div>
-            
+
             <div class="p-msg">
               <div class="p-item-name">{{goods.Products_Name}}</div>
 <!--              <div class="tags flex">-->
@@ -75,18 +75,18 @@ export default {
   },
   data () {
     return {
-      productList:[],
+      productList: [],
       spikeList: []
     }
   },
   methods: {
-  
+
   },
   async created () {
-    this.productList = await getProductList({spike_goods:1,pageSize:999}).then(res=>{
+    this.productList = await getProductList({ spike_goods: 1, pageSize: 999 }).then(res => {
       return res.data
-    }).catch(e=>{throw Error(e.msg||'获取参与显示抢购的商品列表错误')})
-    //this.spikeList = await bizSpikeList({ pageSize: 999}, { onlyData: true }).catch(e => error(e.msg))
+    }).catch(e => { throw Error(e.msg || '获取参与显示抢购的商品列表错误') })
+    // this.spikeList = await bizSpikeList({ pageSize: 999}, { onlyData: true }).catch(e => error(e.msg))
   }
 }
 </script>
@@ -148,7 +148,7 @@ export default {
       text-align: center;
 
       .pro-img {
-        width: 96rpx;
+        width: 134rpx;
         height: 134rpx;
         @include cover-img();
         margin: 0 auto;
@@ -178,7 +178,7 @@ export default {
 
   .content-list {
     width: 670rpx;
-    
+
     padding-bottom: 30rpx;
   }
 

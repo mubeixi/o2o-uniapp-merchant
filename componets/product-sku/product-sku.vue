@@ -76,9 +76,11 @@ export default {
       type: Boolean,
       default: false
     },
-    proList: {
+    productInfo: {
       type: Object,
-      default: {}
+      default: () => {
+        return {}
+      }
     },
     gift: {
       type: Number,
@@ -86,8 +88,10 @@ export default {
     }
   },
   watch: {
-    proList: {
+    productInfo: {
+      deep: true,
       handler (newVal, oldVal) {
+        console.log(newVal)
         this.list = newVal
         this.init()
       }
@@ -129,7 +133,7 @@ export default {
       })
     },
     updaCart () {
-      if (this.proList.skuvaljosn) {
+      if (this.productInfo.skuvaljosn) {
         if (!this.submitFlag) {
           uni.showToast({
             title: '请选择正确的规格和数量',
@@ -143,7 +147,7 @@ export default {
       this.$emit('updaCart', this.postData)
     },
     submit () {
-      if (this.proList.skuvaljosn) {
+      if (this.productInfo.skuvaljosn) {
         if (!this.submitFlag) {
           uni.showToast({
             title: '请选择正确的规格和数量',
@@ -157,7 +161,7 @@ export default {
       this.$emit('submitSure', this.postData)
     },
     buyNow () {
-      if (this.proList.skuvaljosn) {
+      if (this.productInfo.skuvaljosn) {
         if (!this.submitFlag) {
           uni.showToast({
             title: '请选择正确的规格和数量',
@@ -204,7 +208,7 @@ export default {
       // 更改第一个规格显示图片
       for (const mbx in this.list.skuvaljosn) {
         const arr = mbx.split(';')
-        if (arr[0] == index) {
+        if (arr[0] === index) {
           // this.imgIndex=index
           this.skuImg = this.list.skuvaljosn[mbx].Attr_Image
           break
@@ -269,7 +273,7 @@ export default {
       }
     },
     init () {
-      this.postData.price = this.list.Products_PriceX
+      this.postData.price = this.list.minPrice
       this.postData.count = this.list.Products_Count
       if (this.list.skujosn) {
         let skujosn_new = []
@@ -281,7 +285,7 @@ export default {
         }
         // 新增如果有手机的规格
         for (const i in this.list.skujosn) {
-          if (i == 'mobile_prod_attr_name') {
+          if (i === 'mobile_prod_attr_name') {
             skujosn_new = [{
               sku: i,
               val: this.list.skujosn[i]

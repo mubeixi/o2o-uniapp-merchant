@@ -4,12 +4,12 @@
 
 		<block v-if="type != 3">
 			<form report-submit @submit="save">
-				<view v-if="type == 0" class="content">
+				<view v-if="type === 0" class="content">
 					<input type="password" class="item" v-model="curr_psw" placeholder="请输入原始登录密码,如未设置请留空">
 					<input type="password" class="item" v-model="new_psw" placeholder="请输入新的登录密码">
 					<input type="password" class="item" v-model="check_psw" placeholder="请再次输入新密码">
 				</view>
-				<view v-if="type == 1" class="content">
+				<view v-if="type === 1" class="content">
 					<input type="password" class="item" v-model="curr_psw" placeholder="请输入原始支付密码,如未设置请留空">
 					<input type="password" class="item" v-model="new_psw" placeholder="请输入新的支付密码">
 					<input type="password" class="item" v-model="check_psw" placeholder="请再次输入新密码">
@@ -179,7 +179,7 @@
 						this.toast('密码最少6位');
 						return;
 					}
-					// if(arg.curr_psw == '') {
+					// if(arg.curr_psw === '') {
 					// 	this.toast('原始密码不能为空')
 					// 	return;
 					// }
@@ -188,17 +188,17 @@
 						this.toast('密码最少6位');
 						return;
 					}
-					// if(arg.curr_psw == '') {
+					// if(arg.curr_psw === '') {
 					// 	this.toast('原始密码不能为空')
 					// 	return;
 					// }
 				}
 
-				if(arg.new_psw == '') {
+				if(arg.new_psw === '') {
 					this.toast('新密码不能为空');
 					return;
 				}
-				if(arg.check_psw == '') {
+				if(arg.check_psw === '') {
 					this.toast('确认密码不能为空');
 					return;
 				}
@@ -213,7 +213,7 @@
 						},err => {
 							this.toast(err.msg)
 						})
-				}else if(this.type == 1) {
+				}else if(this.type === 1) {
 					updateUserPayPsw(arg).then(res=>{
 						this.toast('修改成功','success')
 						//如果成功就返回
@@ -237,16 +237,16 @@
 			}
 		},
 		onLoad(options) {
-			if(options.type == 0) {
+			if(options.type === 0) {
 				this.title = '修改登录密码';
 				this.type = 0;
-			}else if(options.type == 1) {
+			}else if(options.type === 1) {
 				this.title = '修改支付密码';
 				this.type = 1;
 				if(options.hasOwnProperty('is_back') && options.is_back){
 					this.is_back = true
 				}
-			}else if(options.type == 3) {
+			}else if(options.type === 3) {
 				this.title = '修改手机号码';
 				this.type = 3;
 				this.bgcolor = '#fff'

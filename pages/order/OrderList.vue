@@ -41,8 +41,13 @@
               class="amount">x{{pro.prod_count}}</span></div>
           </div>
         </div>
-        <div class="text-right total">共{{order.prod_list.length}}件商品 实付：<span class="price"><span>￥</span> {{order.Order_TotalPrice}} <block
-          v-if="item.Order_Shipping.Price>0">(含运费{{item.Order_Shipping.Price}}元)</block></span></div>
+        <div class="total flex flex-justify-between">
+          <view class="ptdesc" @click="goPintuan(order)" v-if="order.teamstatus_desc">{{order.teamstatus_desc}}</view>
+          <div>
+            共{{order.prod_list.length}}件商品 实付：<span class="price"><span>￥</span> {{order.Order_TotalPrice}} <block
+            v-if="item.Order_Shipping.Price>0">(含运费{{item.Order_Shipping.Price}}元)</block></span>
+          </div>
+        </div>
         <div class="btn-group" v-if="order.Order_Status==-1">
           <span @click.stop="delOrder(order.prod_list,index)">删除订单</span>
         </div>
@@ -73,7 +78,6 @@
       </div>
     </block>
 
-
     <div class="defaults" v-else>
       <image :src="'/static/client/empty.png'|domain"></image>
     </div>
@@ -95,33 +99,39 @@ export default {
       pageSize: 5,
       totalCount: 0,
       orderList: [],
-      orderNum: {},
+      orderNum: {}
     }
   },
   methods: {
-    //跳转申请退款 支付   发表评论
-    goPay (item) {
-      if (item.Order_Status == 1) {
+    goPintuan (item) {
+      if (item.teamstatus === 0) {
         uni.navigateTo({
-          url: '/pages/order/OrderPay?Order_ID=' + item.Order_ID,
-        })
-      } else if (item.Order_Status == 2 || item.Order_Status == 3) {
-        uni.navigateTo({
-          url:'/pagesA/order/Refund?Order_ID='+item.Order_ID
-        })
-      } else if (item.Order_Status == 4) {
-        uni.navigateTo({
-          url:'/pagesA/order/PublishComment?Order_ID='+item.Order_ID
+          url: '/pages/active/GroupJoin?Team_ID=' + item.teamid + '&Products_ID=' + item.prod_list[0].prod_id
         })
       }
-
     },
-    //取消订单
+    // 跳转申请退款 支付   发表评论
+    goPay (item) {
+      if (item.Order_Status === 1) {
+        uni.navigateTo({
+          url: '/pages/order/OrderPay?Order_ID=' + item.Order_ID
+        })
+      } else if (item.Order_Status === 2 || item.Order_Status === 3) {
+        uni.navigateTo({
+          url: '/pagesA/order/Refund?Order_ID=' + item.Order_ID
+        })
+      } else if (item.Order_Status === 4) {
+        uni.navigateTo({
+          url: '/pagesA/order/PublishComment?Order_ID=' + item.Order_ID
+        })
+      }
+    },
+    // 取消订单
     cancelOrder (item, index) {
       if (this.isLoading) return
       this.isLoading = true
       let Order_ID
-      for (let i in item) {
+      for (const i in item) {
         if (item[i].Order_ID) {
           Order_ID = item[i].Order_ID
         }
@@ -134,7 +144,7 @@ export default {
           this.getOrderNum()
           uni.showToast({
             title: res.msg,
-            icon: 'none',
+            icon: 'none'
           })
         }).catch(e => {
           this.isLoading = false
@@ -145,7 +155,7 @@ export default {
       if (this.isLoading) return
       this.isLoading = true
       let Order_ID
-      for (let i in item) {
+      for (const i in item) {
         if (item[i].Order_ID) {
           Order_ID = item[i].Order_ID
         }
@@ -157,16 +167,16 @@ export default {
           this.getOrderNum()
           uni.showToast({
             title: res.msg,
-            icon: 'none',
+            icon: 'none'
           })
         }).catch(e => {
           this.isLoading = false
         })
       }
     },
-    //获取订单角标数
+    // 获取订单角标数
     getOrderNum () {
-      getOrderNum({ Order_Type: this.Order_Type }).then(res => {
+      getOrderNum({ Order_Type: this.type }).then(res => {
         this.orderNum = res.data
       }).catch(e => {
       })
@@ -178,15 +188,15 @@ export default {
       this.getOrder()
     },
     async getOrder (item) {
-      let data = {
+      const data = {
         page: this.page,
         pageSize: this.pageSize,
-        Order_Type: this.type,
+        Order_Type: this.type
       }
       if (this.index > 0) {
         data.Order_Status = this.index
       }
-      let orderLsit = await getOrderList(data).catch(e => {
+      const orderLsit = await getOrderList(data).catch(e => {
         error(e.msg || '获取订单列表失败')
       })
       orderLsit.data.map(item => {
@@ -204,7 +214,7 @@ export default {
     },
     goDetail (id) {
       this.$linkTo('/pages/order/OrderDetail')
-    },
+    }
   },
   onShow () {
     this.page = 1
@@ -212,15 +222,31 @@ export default {
     this.getOrderNum()
   },
   onLoad (options) {
-    this.type = options.type
-    this.index = options.index
+    const { type, index } = options
+    this.type = type
+    this.index = index
+    let pageTitle = '订单列表'
+    switch (type) {
+      case 'spike':
+        pageTitle = '限时抢购订单'
+        break
+      case 'flashsale':
+        pageTitle = '秒杀订单'
+        break
+      case 'pintuan':
+        pageTitle = '拼团订单'
+        break
+    }
+    uni.setNavigationBarTitle({
+      title: pageTitle
+    })
   },
   onReachBottom () {
     if (this.orderList.length < this.totalCount) {
       this.page++
       this.getOrder()
     }
-  },
+  }
 }
 </script>
 <style scoped lang="scss">
@@ -413,7 +439,6 @@ export default {
       font-size: 36rpx;
     }
 
-
     .amount {
       font-size: 30rpx;
       float: right;
@@ -424,7 +449,15 @@ export default {
       font-size: 24rpx;
       padding: 40rpx 0rpx;
       margin-right: 15rpx;
-
+      .ptdesc {
+        background: #F43131;
+        padding: 10rpx;
+        color: #fff;
+        border-top-right-radius: 20rpx;
+        border-bottom-right-radius: 20rpx;
+        padding-left: 20rpx;
+        padding-right: 20rpx;
+      }
       .price {
         color: red;
         font-size: 30rpx;

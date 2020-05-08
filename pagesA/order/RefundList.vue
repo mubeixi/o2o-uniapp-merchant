@@ -102,15 +102,15 @@ export default {
     },
     //跳转申请退款 支付   发表评论
     goPay (item) {
-      if (item.Order_Status == 1) {
+      if (item.Order_Status === 1) {
         uni.navigateTo({
           url: '/pages/pay/pay?Order_ID=' + item.Order_ID,
         })
-      } else if (item.Order_Status == 2 || item.Order_Status == 3) {
+      } else if (item.Order_Status === 2 || item.Order_Status === 3) {
         uni.navigateTo({
           url: '/pagesA/person/refund?Order_ID=' + item.Order_ID,
         })
-      } else if (item.Order_Status == 4) {
+      } else if (item.Order_Status === 4) {
         uni.navigateTo({
           url: '/pages/order/publishComment?Order_ID=' + item.Order_ID,
         })

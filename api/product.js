@@ -79,11 +79,7 @@ export const spikeProdDetail = (param, options) => fetch({
   options
 })
 
-export const bizFlashsaleList = (param, options) => fetch({
-  act: 'get_flashsale',
-  param,
-  options
-})
+
 
 // 获取商品海报
 export const getProductSharePic = (param, options) => fetch({
@@ -105,3 +101,6 @@ export const judgeReceiveGift = (param, options) => fetch({
   param,
   options
 })
+
+//获取商品的海报
+export const getProductSharePicByWap = (param, options) => fetch({act:'get_product_tgqrcode', param, options});
