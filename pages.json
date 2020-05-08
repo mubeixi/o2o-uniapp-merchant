@@ -97,6 +97,25 @@
       }
     },
     {
+      "path": "pages/order/OrderFreeSuccess",
+      "style": {
+        "navigationBarTitleText": "享免单成功",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/order/GroupSuccess",
+      "style": {
+        "navigationBarTitleText": "参与拼团成功"
+      }
+    },
+    {
+      "path": "pages/active/GroupJoin",
+      "style": {
+        "navigationBarTitleText": "拼团详情"
+      }
+    },
+    {
       "path": "pages/user/login",
       "style": {
         "navigationBarTitleText": "用户登录",

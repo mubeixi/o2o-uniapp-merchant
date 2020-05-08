@@ -1275,7 +1275,7 @@ export default {
     // 领取优惠券
     getMyCoupon (item, i) {
       if (!checkIsLogin(1, 1)) return
-      if (this.isLoading == true) return
+      if (this.isLoading === true) return
       this.isLoading = true
       const data = {
         coupon_id: item
@@ -1375,7 +1375,7 @@ export default {
 
       if (this.mode === 'seckill') {
         this.hasCart = false
-
+        this.postData.active_id = this.productInfo.id // 秒杀id
         this.checkfrom = 'seckill'
         this.postData.active = 'flashsale' // 标记为是秒杀
         this.productInfo.minPrice = this.productInfo.price
@@ -1410,6 +1410,13 @@ export default {
         }
         if (this.postData.active) {
           postData.active = this.postData.active
+        }
+        if (this.mode === 'seckill') {
+          if (!this.postData.active_id) {
+            modal('秒杀活动id错误')
+            return
+          }
+          postData.active_id = this.postData.active_id
         }
         await updateCart(postData).catch(e => {
           throw Error(e.msg || '下单失败')
@@ -1778,7 +1785,6 @@ export default {
 
     this._init_func(options)
   },
-  // #ifdef MP-WEIXIN || MP-ALIPAY || MP-BAIDU || MP-TOUTIAO
   // 自定义小程序分享
   onShareAppMessage () {
     const path = '/pages/product/detail?prod_id=' + this.prod_id
@@ -1790,6 +1796,5 @@ export default {
     }
     return shareObj
   }
-  // #endif
 }
 </script>

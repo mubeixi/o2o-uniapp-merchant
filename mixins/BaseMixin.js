@@ -85,10 +85,8 @@ export default {
     const locales = T.locales
     this.TT = locales[locale]
   },
-  // #ifdef MP-WEIXIN || MP-ALIPAY || MP-BAIDU || MP-TOUTIAO
   // 自定义小程序分享
   onShareAppMessage () {
 
   }
-  // #endif
 }

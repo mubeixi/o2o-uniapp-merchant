@@ -198,7 +198,7 @@
     <div class="space-box"></div>
     <div class="safearea-box fixed"></div>
 
-    <layout-layer bottomStr="50px" :bottomHeight="bottomHeight" @maskClicked="handClicked" ref="popupMX" title="明细">
+    <layout-layer bottomStr="50px" @maskClicked="handClicked" ref="popupMX" title="明细">
       <div class="mxdetail">
         <div class="mxitem">产品原价
           <text class="num">{{allTotalAmount-allOrderShipping}}</text>
@@ -442,10 +442,10 @@ export default {
     active_name () {
       let rt = ''
       switch (this.checkfrom) {
-        case 'spike' :
+        case 'seckill' :
           rt = '秒杀价'
           break
-        case 'limit' :
+        case 'spike' :
           rt = '限时抢购价'
           break
         case 'group' :
@@ -549,7 +549,7 @@ export default {
       this.checkOrderParam()
       // }
 
-      this.zIndex = 999999
+      this.zIndex = 88
     },
     multipleSelectStore () {
       this.zIndex = 9
@@ -596,7 +596,7 @@ export default {
     handClicked () {
       this.isSlide = false
       setTimeout(() => {
-        this.zIndex = 99999
+        this.zIndex = 88
         this.bottomHeight = 0
       }, 500)
     },

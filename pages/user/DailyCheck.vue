@@ -53,13 +53,13 @@ export default {
   methods: {
     //签到
     signinMethod () {
-      if (this.pro.signin == 1) {
+      if (this.pro.signin === 1) {
         uni.showToast({
           title: '今日已经签到',
           icon: 'none',
         })
       }
-      if (this.pro.show == 2 && this.pro.signin !== 1) {
+      if (this.pro.show === 2 && this.pro.signin !== 1) {
         userSignin().then(res => {
           this.pro.signin = 1
           this.getSignin()

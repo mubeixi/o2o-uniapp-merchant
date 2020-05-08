@@ -2,8 +2,8 @@
   <div class="flashSale-all" :style="{backgroundImage:'url('+$getDomain('/static/client/flash-sale-bg.jpg')+')'}">
     <div class="flex flex-vertical-c seckill-title" :style="{marginTop:menuButtonInfo.top+'px'}">
       <layout-icon type="iconicon-arrow-left" size="20" color="#fff" class="back-icon m-r-2" @click="$back"></layout-icon>
-      <image class="seckill-title-img m-r-10" :src="bizInfo[0].biz_logo"></image>
-      <span class="seckill-title-text" :style="{width:(menuButtonInfo.left-80)+'px'}">{{bizInfo[0].biz_shop_name}}（{{bizInfo[0].biz_address}}）</span>
+      <image class="seckill-title-img m-r-10" :src="bizInfo.biz_logo"></image>
+      <span class="seckill-title-text" :style="{width:(menuButtonInfo.left-80)+'px'}">{{bizInfo.biz_shop_name}}（{{bizInfo.biz_address}}）</span>
     </div>
 
     <div class="flashSale-time flex flex-justify-c flex-vertical-c m-b-44">
@@ -71,22 +71,24 @@ export default {
   },
   methods: {
     async getBiz () {
-      this.bizInfo = await getBizInfo({ biz_id: this.biz_id }, { onlyData: true }).catch(e => {
+      this.bizInfo = await getBizInfo({ biz_id: this.biz_id }).then(res => {
+        return res.data[0]
+      }).catch(e => {
         throw Error(e.msg || '获取商家信息错误')
       })
     },
     async init () {
       this.postData.biz_id = this.biz_id
-  
+
       this.activeInfo = await getBizSpikeDetail({
         ...this.postData,
         spike_id: this.activeId
       }, { onlyData: true }).catch(e => {
         throw Error(e.msg || '获取抢购活动信息失败')
       })
-  
+
       countdownInstance = setInterval(this.stampFunc, 1000)
-      
+
       this.produtList = await getSpikeProd({
         ...this.postData,
         spike_id: this.activeId
@@ -96,8 +98,6 @@ export default {
       }).catch(e => {
         throw Error(e.msg || '获取抢购商品列表失败')
       })
-
-      
     },
     stampFunc () {
       const data = getCountdownFunc({

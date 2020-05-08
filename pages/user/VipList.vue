@@ -133,17 +133,17 @@ export default {
     },
     paySuccessCall (res) {
       let _that = this
-      if (res && res.code && res.code == 2) {
+      if (res && res.code && res.code === 2) {
         _that.payFailCall()
         return
       }
-      if (res && res.code && res.code == 1) {
+      if (res && res.code && res.code === 1) {
         toast('用户取消支付', 'none')
         return
       }
 
       // 头条小程序
-      if (res && res.code && res.code == 9) {
+      if (res && res.code && res.code === 9) {
         uni.showModal({
           title: '提示',
           content: '是否完成支付',
@@ -162,7 +162,7 @@ export default {
 
       // 0：支付成功 1：支付超时 2：支付失败 3：支付关闭 4：支付取消 9：订单状态开发者自行获取
 
-      if (res && res.code && res.code == 4) {
+      if (res && res.code && res.code === 4) {
         toast('用户取消支付', 'none')
         return
       }

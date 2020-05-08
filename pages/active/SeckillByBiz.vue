@@ -1,11 +1,11 @@
 <template>
   <div class="seckill-all" :style="{backgroundImage:'url('+$getDomain('/static/client/seckill-bg.png')+')'}">
 
-    <div class="flex flex-vertical-c seckill-title" v-if="bizInfo[0]" :style="{marginTop:menuButtonInfo.top+'px'}">
+    <div class="flex flex-vertical-c seckill-title" :style="{marginTop:menuButtonInfo.top+'px'}">
       <layout-icon type="iconicon-arrow-left" size="20" color="#fff" class="back-icon m-r-2"
                    @click="$back()"></layout-icon>
-      <image class="seckill-title-img m-r-10" :src="bizInfo[0].biz_logo"></image>
-      <span class="seckill-title-text" :style="{width:(menuButtonInfo.left-80)+'px'}">{{bizInfo[0].biz_shop_name}}（{{bizInfo[0].biz_address}}）</span>
+      <image class="seckill-title-img m-r-10" :src="bizInfo.biz_logo"></image>
+      <span class="seckill-title-text" :style="{width:(menuButtonInfo.left-80)+'px'}">{{bizInfo.biz_shop_name}}（{{bizInfo.biz_address}}）</span>
     </div>
 
     <scroll-view scroll-y class="seckill-list" :style="{top:menuButtonInfo.bottom+120+'px'}">
@@ -94,7 +94,9 @@ export default {
     async init () {
       try {
         showLoading()
-        this.bizInfo = await getBizInfo({ biz_id: this.biz_id }, { onlyData: true }).catch(e => {
+        this.bizInfo = await getBizInfo({ biz_id: this.biz_id }).then(res => {
+          return res.data[0]
+        }).catch(e => {
           throw Error(e.msg || '获取商家信息错误')
         })
 
@@ -113,11 +115,6 @@ export default {
       } finally {
         hideLoading()
       }
-    },
-    async getBiz () {
-      this.bizInfo = await getBizInfo({ biz_id: this.biz_id }, { onlyData: true }).catch(e => {
-        throw Error(e.msg || '获取商家信息错误')
-      })
     }
   },
   onLoad (options) {
@@ -165,7 +162,7 @@ export default {
     box-sizing: border-box;
     color: #FFFFFF;
     font-weight: bold;
-    
+
     &-text {
       display: inline-block;
       height: 80rpx;

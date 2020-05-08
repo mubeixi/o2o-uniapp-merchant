@@ -91,6 +91,7 @@ export default {
     productInfo: {
       deep: true,
       handler (newVal, oldVal) {
+        console.log(newVal)
         this.list = newVal
         this.init()
       }
@@ -207,7 +208,7 @@ export default {
       // 更改第一个规格显示图片
       for (const mbx in this.list.skuvaljosn) {
         const arr = mbx.split(';')
-        if (arr[0] == index) {
+        if (arr[0] === index) {
           // this.imgIndex=index
           this.skuImg = this.list.skuvaljosn[mbx].Attr_Image
           break
@@ -284,7 +285,7 @@ export default {
         }
         // 新增如果有手机的规格
         for (const i in this.list.skujosn) {
-          if (i == 'mobile_prod_attr_name') {
+          if (i === 'mobile_prod_attr_name') {
             skujosn_new = [{
               sku: i,
               val: this.list.skujosn[i]

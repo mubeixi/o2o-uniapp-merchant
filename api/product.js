@@ -101,3 +101,6 @@ export const judgeReceiveGift = (param, options) => fetch({
   param,
   options
 })
+
+//获取商品的海报
+export const getProductSharePicByWap = (param, options) => fetch({act:'get_product_tgqrcode', param, options});

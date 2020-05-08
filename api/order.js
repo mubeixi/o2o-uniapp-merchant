@@ -1,7 +1,6 @@
 import { fetch } from '@/common/request'
 import Storage from '@/common/Storage'
 
-
 // 评论
 export const comment = (param, options) => fetch({
   act: 'comment',
@@ -159,3 +158,6 @@ export const refundSend = (param, options) => fetch({
   param,
   options
 })
+
+// 获取拼团的团队
+export const getPintuanTeam = (param, options) => fetch({ act: 'get_pintuan_team', param, options })
