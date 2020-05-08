@@ -68,7 +68,7 @@
     </view>
     <div v-if="cate==1">
       <div class="cate1">
-        <div class="pro" @click="gotoDetail(item.Products_ID)" v-for="(item,i) of pro" :key="i">
+        <div class="pro" @click="$toGoodsDetail(item.Products_ID)" v-for="(item,i) of pro" :key="i">
           <image :src="item.ImgPath" class="pro-img"></image>
           <div class="pro_desc">
             <div class="title">{{item.Products_Name}}</div>
@@ -86,7 +86,7 @@
     </div>
     <div v-else>
       <div class="cate2">
-        <div class="pro" @click="gotoDetail(item.Products_ID)" v-for="(item,i) of pro" :key="i">
+        <div class="pro" @click="$toGoodsDetail(item.Products_ID)" v-for="(item,i) of pro" :key="i">
           <image :src="item.ImgPath" alt="" class="pro-img"></image>
           <div class="pro_desc">
             <div class="title">{{item.Products_Name}}</div>
@@ -321,9 +321,6 @@ export default {
       this.active = 0
       this.orderby = ''
       this.getProd()
-    },
-    gotoDetail (item) {
-      this.$linkTo('/pages/product/detail?prod_id=' + item)
     },
     changeCate () {
       this.cate = this.cate === 1 ? 2 : 1

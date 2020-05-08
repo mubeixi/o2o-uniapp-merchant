@@ -81,7 +81,7 @@
 <script>
 
 import { getProductList } from '@/api/product'
-import { getDomain, goProductDetail } from '@/common/helper'
+import { getDomain, toGoodsDetail } from '@/common/helper'
 import { lazyImgUrl } from '../../common'
 import { linkTo } from '@/common/fun'
 
@@ -238,14 +238,10 @@ export default {
   },
   components: {},
   methods: {
-    goProductDetail,
     goDetail (goods) {
-      const linkObj = {
-        link: '/pages/product/detail?Products_ID=' + goods.Products_ID,
-        linkType: 'default'
-      }
+      
+      toGoodsDetail(goods)
 
-      linkTo(linkObj)
     },
     clickTab (item, idx) {
       this.$set(this, 'tabActive', idx)

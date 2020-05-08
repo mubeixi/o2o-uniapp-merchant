@@ -28,7 +28,7 @@
             <div class="bottom">
               <div class="price-selling"><span class="fz-12">￥</span><span
                 class="fz-14">{{goods.Products_PriceX}}</span></div>
-              <div class="gobuy" @click="goBuy(goods.prod_id)">立即购买</div>
+              <div class="gobuy" @click="$toGoodsDetail(goods)">立即购买</div>
             </div>
           </div>
         </label>
@@ -142,9 +142,7 @@ export default {
     goStore (bid) {
       linkToEasy('/pages/store/index?bid=' + bid)
     },
-    goBuy (id) {
-      linkToEasy('/pages/product/detail?prod_id=' + id)
-    },
+
     changeActive (index) {
       this.activeIndex = index
       this.multiStore = false

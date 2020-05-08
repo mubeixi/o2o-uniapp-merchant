@@ -264,13 +264,7 @@ export default {
     goDetail (goods) {
       
       toGoodsDetail(goods)
-      // Products_ID=243
-      // const linkObj = {
-      //   link: '/pages/product/detail?Products_ID=' + goods.Products_ID,
-      //   linkType: 'default'
-      // }
-      //
-      // linkTo(linkObj)
+      
     },
     itemMarginObj (idx) {
       const conf = this.goods.style.margin

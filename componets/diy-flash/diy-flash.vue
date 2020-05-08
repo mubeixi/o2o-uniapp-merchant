@@ -62,7 +62,7 @@
 </template>
 <script>
 import { getSpikeProd } from '@/api/product'
-import { getCountdownFunc, getDomain, goProductDetail } from '@/common/helper'
+import { getCountdownFunc, getDomain, toGoodsDetail } from '@/common/helper'
 
 import { lazyImgUrl } from '@/common'
 import { linkTo } from '@/common/fun'
@@ -272,16 +272,9 @@ export default {
       //
       // return rt;
     },
-    goProductDetail,
     goDetail (item) {
-      // error('common soon','none');return;
-      // Products_ID=243
-      const linkObj = {
-        link: '/pages/detail/limitDetail?spikeGoodId=' + item.spike_good_id,
-        linkType: 'default'
-      }
-
-      linkTo(linkObj)
+      toGoodsDetail(item)
+      
     },
     itemMarginObj (idx) {
       const conf = this.goods.style.margin
