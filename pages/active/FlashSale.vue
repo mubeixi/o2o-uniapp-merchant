@@ -148,7 +148,7 @@ export default {
       text-align: center;
 
       .pro-img {
-        width: 96rpx;
+        width: 134rpx;
         height: 134rpx;
         @include cover-img();
         margin: 0 auto;

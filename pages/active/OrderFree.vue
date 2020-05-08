@@ -1,11 +1,15 @@
 <template>
   <div class="free">
-    <div class="free-top">
-      <image class="top-img-full" mode="widthFix" :src="'/static/client/active/bg.png'|domain"></image>
-      <div class="top flex flex-vertical-c" :style="{height:menuButtonInfo.height+'px',top:menuButtonInfo.top+'px'}">
+    <div class="top-box" :style="{height:menuButtonInfo.height+menuButtonInfo.top+'px',backgroundImage:'url('+$getDomain('/static/client/active/bg.png')+')'}">
+      <div :style="{paddingTop:menuButtonInfo.top+'px'}"></div>
+      <div class="flex flex-vertical-c" :style="{height:menuButtonInfo.height+'px'}" style="position: relative">
         <layoutIcon style="position: relative;z-index: 3" @click="$back" class="m-l-15" color="#fff" type="iconicon-arrow-left"></layoutIcon>
         <div class="title fz-b">免单专区</div>
       </div>
+    </div>
+    <scroll-view scroll-y class="container-wrap" :style="{top:0+'px'}">
+      <image class="free-top-bg" mode="widthFix" :src="'/static/client/active/bg.png'|domain"></image>
+      <div :style="{height:menuButtonInfo.height+menuButtonInfo.top+10+30+'px'}"></div>
       <div class="free-top-time fz-12">
         活动时间：{{start_time}}-{{end_time}}
       </div>
@@ -14,67 +18,64 @@
           <layout-icon type="iconshuji" size="17" color="#ff2f32" class="m-r-8"></layout-icon>
           活动须知
         </div>
-        <div class="free-top-active-content fz-11 c8">
-          <div>
-            {{activeInfo.descr}}
-          </div>
-          
+        <div class="free-top-active-content fz-12 c8">
+          {{activeInfo.descr||'暂无填写'}}
         </div>
       </div>
-    </div>
-
-    <div class="free-title m-b-18">
-      <div class="free-line"></div>
-      <span class="fz-16 c3 m-l-10 m-r-10">推荐商品</span>
-      <div class="free-line"></div>
-    </div>
-
-    <scroll-view class="scroll-view_H  " scroll-x="true" scroll-left="120">
-      <div class=" uni-bg-red m-r-10" v-for="(pro,ind) of recommendProdList" :key="ind"  @click="$toGoodsDetail(pro)">
-        <div class="img-div">
-          <image :src="pro.ImgPath" class="img-full"></image>
-        </div>
-        <div class="pro-title c3 m-t-10 m-b-8">
-          {{pro.Products_Name}}
-        </div>
-        <div class="price flex flex-vertical-c">
-          <div class="fz-12">
-            ¥ <span class="fz-14 m-l-2">{{pro.Products_PriceX}}</span>
+  
+      <div class="free-title m-b-18">
+        <div class="free-line"></div>
+        <span class="fz-16 c3 m-l-10 m-r-10">推荐商品</span>
+        <div class="free-line"></div>
+      </div>
+  
+      <scroll-view class="scroll-view_H  " scroll-x="true" scroll-left="120">
+        <div class=" uni-bg-red m-r-10" v-for="(pro,ind) of recommendProdList" :key="ind"  @click="$toGoodsDetail(pro)">
+          <div class="img-div">
+            <image :src="pro.ImgPath" class="img-full"></image>
           </div>
-          <div class="fz-11 c9 m-l-10">
-            ¥{{pro.Products_PriceY}}
+          <div class="pro-title c3 m-t-10 m-b-8">
+            {{pro.Products_Name}}
+          </div>
+          <div class="price flex flex-vertical-c">
+            <div class="fz-12">
+              ¥ <span class="fz-14 m-l-2">{{pro.Products_PriceX}}</span>
+            </div>
+            <div class="fz-11 c9 m-l-10">
+              ¥{{pro.Products_PriceY}}
+            </div>
           </div>
         </div>
+  
+      </scroll-view>
+  
+      <div class="free-title m-b-18">
+        <div class="free-line"></div>
+        <span class="fz-16 c3 m-l-10 m-r-10">全部商品</span>
+        <div class="free-line"></div>
+      </div>
+  
+      <div class="free-list flex ">
+        <div class="free-list-item " v-for="(item,index) of prodList" :key="index" @click="$toGoodsDetail(item)">
+          <div class="free-list-item-img m-b-9">
+            <image :src="item.ImgPath" class="img-full"></image>
+          </div>
+          <div class="fz-13 c3 free-list-item-title m-b-10">
+            {{item.Products_Name}}
+          </div>
+          <div class="free-list-item-price flex flex-vertical-c">
+            <div class="fz-11">
+              ¥ <span class="fz-15 m-l-2">{{item.Products_PriceX}}</span>
+            </div>
+            <div class="fz-12 c9 m-l-10">
+              ¥{{item.Products_PriceY}}
+            </div>
+          </div>
+        </div>
+        
       </div>
 
     </scroll-view>
-
-    <div class="free-title m-b-18">
-      <div class="free-line"></div>
-      <span class="fz-16 c3 m-l-10 m-r-10">全部商品</span>
-      <div class="free-line"></div>
-    </div>
-
-    <div class="free-list flex ">
-      <div class="free-list-item " v-for="(item,index) of prodList" :key="index" @click="$toGoodsDetail(item)">
-        <div class="free-list-item-img m-b-9">
-          <image :src="item.ImgPath" class="img-full"></image>
-        </div>
-        <div class="fz-13 c3 free-list-item-title m-b-10">
-          {{item.Products_Name}}
-        </div>
-        <div class="free-list-item-price flex flex-vertical-c">
-          <div class="fz-11">
-            ¥ <span class="fz-15 m-l-2">{{item.Products_PriceX}}</span>
-          </div>
-          <div class="fz-12 c9 m-l-10">
-            ¥{{item.Products_PriceY}}
-          </div>
-        </div>
-      </div>
-
-    </div>
-
   </div>
 </template>
 
@@ -203,11 +204,16 @@ export default {
     overflow-x: hidden;
   }
 
-  .top {
-    z-index: 2;
-    position: absolute;
-    background: none;
+  .top-box {
+    z-index: 1;
+    width: 750rpx;
+    position: fixed;
+    top: 0;
     color: #fff;
+    background-position: center top;
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+    padding-bottom: 10px;
     .title{
       font-size: 40rpx;
       width: 750rpx;
@@ -219,12 +225,11 @@ export default {
   }
 
   .free-top {
-    width: 750rpx;
-    min-height: 370rpx;
-    position: relative;
-    margin-bottom: 70rpx;
-    
-    .top-img-full{
+
+    &-bg{
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 750rpx;
     }
 
@@ -244,9 +249,7 @@ export default {
       border: 1px solid rgba(255, 255, 255, 1);
       opacity: 0.9;
       text-align: center;
-      position: absolute;
-      top: 120rpx;
-      left: 146rpx;
+      margin: 0 auto;
       color: #FFFFFF;
     }
 
@@ -259,13 +262,19 @@ export default {
       border-radius: 14rpx;
       padding: 30rpx;
       box-sizing: border-box;
-      margin-top: -120rpx;
-      margin-left: 20rpx;
+      margin: 40rpx 20rpx;
 
       &-content {
         line-height: 40rpx;
+        word-break: break-all;
       }
     }
+  }
+  
+  .container-wrap{
+    position: fixed;
+    width: 750rpx;
+    bottom: 0;
   }
 
   .free-title {
