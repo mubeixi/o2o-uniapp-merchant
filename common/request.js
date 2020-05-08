@@ -1,11 +1,7 @@
 import * as ENV from './env'
 // import store from '../store'
-import {
-  error, toast,
-} from './fun'
-import {
-  emptyObject,
-} from './helper'
+import { error } from './fun'
+import { emptyObject } from './helper'
 import Storage from '@/common/Storage'
 import { hexMD5 } from './tool/md5'
 import Base64 from './tool/base64.js'
@@ -94,7 +90,6 @@ class XHR {
     let _param = {
       access_token: getAccessToken(),
       biz_id: getBizId(),
-      User_ID:getUserID(),
       env: getEnv(), ...param,
     }
     
@@ -166,6 +161,7 @@ export const ajax = ({ url, method = 'post', data = {}, options = {} }) => {
         } else {
           // 配置决定是否显示错误提示
           if (errtip) error(msg)
+          if(ENV.isDev) error(msg)
           reject(res)
         }
       },
@@ -195,6 +191,7 @@ export const fetch = function ({ act, param = {}, options = false, url = '/api/l
     }
     
     param.Users_ID = getUsersID()
+    param.User_ID = getUserID()
     // 如果某接口指定不要User_ID的
     if (options && options.noUid) delete param.User_ID
     // 检查是否同一个接口请求过快

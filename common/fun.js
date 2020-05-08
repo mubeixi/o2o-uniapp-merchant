@@ -36,9 +36,12 @@ export const modal = function () {
   uni.showModal(opt)
 }
 
-export const back = () => uni.navigateBack()
+export function backFunc () {
+  console.log('back')
+  uni.navigateBack()
+}
 
-export const linkTo = (url, type = 'default') => {
+export const linkToEasy = (url, type = 'default') => {
   if (type === 'default') {
     uni.navigateTo({
       url,
@@ -55,6 +58,156 @@ export const linkTo = (url, type = 'default') => {
   }
 }
 
+
+export const openLocation = (latitude, longitude, name, address) => {
+  uni.openLocation({
+    latitude: parseFloat(latitude),
+    longitude: parseFloat(longitude),
+    name,
+    address,
+    fail (res) {
+      console.log(res)
+    }
+  })
+}
+export const cellPhone = (phone) => {
+  uni.makePhoneCall({
+    phoneNumber: phone
+  })
+}
+
+export const linkTo = (linkObj) => {
+  console.log(linkObj)
+  let { link, linkType, ext = {} } = linkObj
+  if (!link) {
+    // error('跳转地址为空')
+    return
+  }
+
+  // 跳转到小程序
+  if (linkType === 'mini') {
+    const { url, appid, origin_id } = ext
+
+    // #ifdef APP-PLUS
+    if (!origin_id) {
+      error('origin_id_缺失')
+      return
+    }
+    plus.share.getServices(function (s) {
+      var shares = null
+      var sweixin = null
+
+      shares = {}
+      for (var i in s) {
+        var t = s[i]
+        shares[t.id] = t
+      }
+      sweixin = shares.weixin
+
+      sweixin ? sweixin.launchMiniProgram({
+        id: origin_id,
+        path: link,
+        webUrl: ext.url
+      }) : toast('跳转小程序参数错误')
+    }, function (e) {
+      if (ext.url) {
+
+      }
+    })
+    return
+    // #endif
+
+    // #ifdef MP
+    if (appid && link) {
+      uni.navigateToMiniProgram({
+        appId: appid,
+        path: link,
+        success (res) {
+          console.log(res)
+          // 打开成功
+        },
+        fail (err) {
+          const { errMsg = '请联系客服' } = err
+          uni.showModal({
+            title: '跳转小程序错误',
+            content: errMsg
+          })
+          console.log(err)
+        }
+      })
+      return
+    } else {
+      error('小程序跳转参数错误')
+    }
+    return
+    // #endif
+
+    // #ifdef H5
+    if (url) {
+      location.href = ext.url
+    } else {
+      error('小程序备用地址为空')
+    }
+    return
+
+    // #endif
+
+    return
+  }
+
+  // 第三方链接
+  if (linkType === 'third' || link.indexOf('http') !== -1) {
+    // #ifndef H5
+
+    uni.navigateTo({
+      url: '/pages/common/webview?encode=1&url=' + encodeURIComponent(link)
+    })
+    // #endif
+
+    // #ifdef H5
+    location.href = link
+    // #endif
+
+    return
+  }
+
+  if (link[0] !== '/') {
+    link = '/' + link
+  }
+
+  uni.navigateTo({
+    url: link
+  })
+  // 除了这些页面之外，其他都走普通跳转
+  // if (isHasTabbarRouter(link)) {
+  //   uni.switchTab({
+  //     url: link
+  //   })
+  // } else {
+  //   uni.navigateTo({
+  //     url: link
+  //   })
+  // }
+}
+
+export const confirm = (options) => {
+  return new Promise(function (resolve, reject) {
+    uni.showModal({
+      ...options,
+      success: function (res) {
+        if (res.confirm) {
+          resolve(res)
+        } else if (res.cancel) {
+          reject(res)
+        }
+      },
+      fail: function (res) {
+        reject(res)
+      }
+    })
+  })
+}
+
 export const showLoading = (title = 'loading', mask = true) => {
   uni.showLoading({
     title,
@@ -64,4 +217,3 @@ export const showLoading = (title = 'loading', mask = true) => {
 export const hideLoading = () => {
   uni.hideLoading()
 }
-

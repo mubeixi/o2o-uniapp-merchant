@@ -1,8 +1,10 @@
-import {
-  toast, linkTo, error, modal, back
-} from '@/common/fun'
+import { backFunc, cellPhone, error, linkToEasy, modal, openLocation, toast} from '@/common/fun'
 import T from '../common/langue/i18n'
-import { checkIsLogin } from '@/common/helper'
+
+import { checkIsLogin, getDomain,toGoodsDetail } from '@/common/helper'
+// #ifdef H5
+import { WX_JSSDK_INIT } from '@/common/env'
+// #endif
 
 export default {
   data () {
@@ -17,14 +19,19 @@ export default {
       TT: {}
     }
   },
+  computed: {
+  },
   methods: {
-    $back: back,
+    $getDomain: getDomain,
+    $openLocation: openLocation,
+    $cellPhone: cellPhone,
+    $back: backFunc,
     $noop: () => {},
     $toast: toast,
     $error: error,
     $modal: modal,
-    $linkTo: linkTo,
-    $toGoodsDetail: (id) => linkTo(`/pages/product/detail?prod_id=${id}`),
+    $linkTo: linkToEasy,
+    $toGoodsDetail: toGoodsDetail,
     $checkIsLogin: checkIsLogin,
     $openPop (name) {
       this.$refs[name].show()
@@ -52,9 +59,15 @@ export default {
     },
     tap () {
       // console.log('tap in mixin')
-    }
+    },
+    // #ifdef H5
+    WX_JSSDK_INIT
+    // #endif
   },
   onLoad () {
+
+  },
+  created () {
     this.systemInfo = uni.getSystemInfoSync()
     // #ifdef MP-WEIXIN
     this.menuButtonInfo = uni.getMenuButtonBoundingClientRect()
@@ -62,25 +75,18 @@ export default {
     this.diyHeadHeight = top + height + (top - this.systemInfo.statusBarHeight) + 10
     this.diyHeadRight = this.systemInfo.windowWidth - left
     // #endif
-  },
-  created () {
+
     // 可以自己根据配置，来注册语言包
     if (this.langues && Array.isArray(this.langues) && this.langues.length > 0) {
       console.log(this.langues)
       this.$restLangueAssign(this.langues)
     }
-
     const locale = T.locale
     const locales = T.locales
     this.TT = locales[locale]
-  }
-}
+  },
+  // 自定义小程序分享
+  onShareAppMessage () {
 
-export const ColorMixin = {
-  methods: {
-    getPrimaryColor () {
-    },
-    setPrimaryColor () {
-    }
   }
 }

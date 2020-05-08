@@ -19,9 +19,9 @@
             <div v-if="goods.config.style!=3" class="stamp">距{{item.countdown.is_start?'结束':'开始'}}<span
               class="countdown_tag2">{{item.countdown.d|zero}}</span>天<span class="countdown_tag">{{item.countdown.h|zero}}</span>时<span
               class="countdown_tag">{{item.countdown.m|zero}}</span>分<span class="countdown_tag">{{item.countdown.s|zero}}</span>秒<span
-              class="count" v-if="goods.config.style==1">秒杀库存{{item.attr_json.count}}</span></div>
+              class="count" v-if="goods.config.style==1">秒杀库存{{item.stock}}</span></div>
 
-            <span class="count" v-if="goods.config.style==3">库存{{item.attr_json.count}}</span>
+            <span class="count" v-if="goods.config.style==3">库存{{item.stock}}</span>
 
           </div>
           <div class="info" :style="{width:goods.config.style==2?itemw:''}" :class="{empyInfo:isEmpeyInfo}">
@@ -31,7 +31,7 @@
                 {{item.Products_BriefDescription||'暂无介绍'}}
               </div>
               <div v-if="goods.config.style!=1" v-show="goods.config.attr.price.show" class="price"><span
-                class="graytext2 font12">秒杀价 </span><span class="sign">￥</span><span style="font-weight: 600">{{item.attr_json.price}}</span><span
+                class="graytext2 font12">秒杀价 </span><span class="sign">￥</span><span style="font-weight: 600">{{item.price}}</span><span
                 class="graytext2 market-price font12"> ￥{{item.Products_PriceX}} </span>
               </div>
             </div>
@@ -42,10 +42,10 @@
             <div class="bottom-box">
               <div v-if="goods.config.style==1" v-show="goods.config.attr.price.show" class="price"><span
                 class="graytext2 font12">秒杀价 </span><span class="sign">￥</span><span
-                style="font-weight: 600">{{item.attr_json.price}}</span><span
+                style="font-weight: 600">{{item.price}}</span><span
                 class="graytext2 market-price font12"> ￥{{item.Products_PriceX}} </span></div>
 
-              <span class="count" v-if="goods.config.style==2">库存{{item.attr_json.count}}</span>
+              <span class="count" v-if="goods.config.style==2">库存{{item.stock}}</span>
               <div v-show="goods.config.attr.buybtn.show" class="buybtn"
                    :class="'theme'+goods.config.attr.buybtn.style">
                 {{item.countdown.is_start?'立即购买':'立即预订'}}
@@ -60,10 +60,11 @@
 </template>
 <script>
 import { getFlashSaleList } from '../../common/fetch'
-import { lazyImgUrl, goProductDetail } from '../../common'
+import { goProductDetail, lazyImgUrl } from '../../common'
 
 import { createEmptyArray, getCountdownFunc } from '../../common/tool'
 import { getDomain } from '@/common/helper'
+import { linkTo } from '@/common/fun'
 
 export default {
   name: 'DiyKill',
@@ -120,7 +121,7 @@ export default {
     itemw () {
       let full = this.fullWidth
 
-      if (this.goods.config.showmode == 'border-bgwhite') {
+      if (this.goods.config.showmode === 'border-bgwhite') {
         full -= 4// 4个边框
       }
 
@@ -149,7 +150,7 @@ export default {
       const ratio = this.goods.config.ratio ? this.goods.config.ratio : 1
       let num = 0
 
-      if (this.goods.config.showmode == 'border-bgwhite') {
+      if (this.goods.config.showmode === 'border-bgwhite') {
         full -= 4// 4个边框
       }
       if (this.goods.config.style === 2) {
@@ -269,7 +270,7 @@ export default {
         linkType: 'default'
       }
 
-      this.$fun.linkTo(linkObj)
+      linkTo(linkObj)
     },
     itemMarginObj (idx) {
       const conf = this.goods.style.margin
@@ -294,14 +295,14 @@ export default {
         case 2:
 
           // top = 0;
-          left = idx % 2 == 0 ? 0 : conf / 2
-          right = idx % 2 == 0 ? conf / 2 : 0
+          left = idx % 2 === 0 ? 0 : conf / 2
+          right = idx % 2 === 0 ? conf / 2 : 0
           break
       }
 
       if (idx === 0) top = 0
       // 这个需要是2
-      if (idx === 1 && this.goods.config.style == 2) top = 0
+      if (idx === 1 && this.goods.config.style === 2) top = 0
       return {
         marginTop: top + 'px',
         marginBottom: bottom + 'px',

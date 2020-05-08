@@ -1,8 +1,9 @@
 import Vue from 'vue'
 import store from '@/store'
+// require('./filter')
+import './filter'
 
 require('./Promisify')
-require('./filter')
 
 // 所有的页面和组件都可用了
 Vue.prototype.getPimaryColor = () => {

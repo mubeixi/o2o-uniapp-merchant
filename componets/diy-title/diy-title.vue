@@ -18,9 +18,8 @@
 <script>
 import { mixinStyle } from '../../common/tool'
 
-import {
-  getDomain
-} from '@/common/helper'
+import { getDomain } from '@/common/helper'
+import { linkTo } from '@/common/fun'
 
 const styleDefault = {
   color: '#333',
@@ -70,7 +69,8 @@ export default {
       return getDomain(url)
     },
     go (item) {
-      this.$fun.linkTo(item)
+
+      linkTo(item)
     }
   },
   created () {

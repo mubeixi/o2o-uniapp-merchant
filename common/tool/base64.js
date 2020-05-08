@@ -69,7 +69,7 @@ var encode = function (u, urisafe) {
   return !urisafe
     ? _encode(String(u))
     : _encode(String(u)).replace(/[+\/]/g, function (m0) {
-      return m0 == '+' ? '-' : '_'
+      return m0 === '+' ? '-' : '_'
     }).replace(/=/g, '')
 }
 var encodeURI = function (u) {
@@ -137,7 +137,7 @@ var _decode = buffer ? function (a) {
 var decode = function (a) {
   return _decode(
     String(a).replace(/[-_]/g, function (m0) {
-      return m0 == '-' ? '+' : '/'
+      return m0 === '-' ? '+' : '/'
     })
       .replace(/[^A-Za-z0-9\+\/]/g, '')
   )

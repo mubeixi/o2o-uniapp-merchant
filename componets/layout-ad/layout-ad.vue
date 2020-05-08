@@ -47,7 +47,8 @@
 <template>
   <div class="wrap">
     <swiper
-      :style="{width:w,height:h}"
+      v-if="imgList.length>0"
+      :style="{width:w,height:h,padding:paddingStr}"
       class="swiper"
       @change="indexChangeEvent"
       :indicator-dots="indicatorDots==='circle'"
@@ -73,7 +74,8 @@
 <script>
 import { getAdvertList } from '@/api/common'
 import { getArrColumn, getDomain } from '@/common/helper'
-import { linkTo } from '@/common/fun'
+import { linkToEasy } from '@/common/fun'
+import { Exception } from '@/common/Exception'
 
 export default {
   name: 'LayoutAd',
@@ -82,9 +84,21 @@ export default {
       type: Array,
       default: () => []
     },
-    width: {
-      default: '750rpx',
-      type: String
+    lazyLoad: {
+      type: Boolean,
+      default: false
+    },
+    ready: {
+      type: Boolean,
+      default: false
+    },
+    paddingStr: {
+      type: String,
+      default: '0px'
+    },
+    boxDidth: {
+      default: 750,
+      type: Number
     },
     height: {
       default: '250rpx',
@@ -124,7 +138,16 @@ export default {
     duration: {
       default: 500
     },
+    position: {
+      default: '',
+      type: String
+    },
+    cateId: {
+      default: '',
+      type: String
+    },
     code: {
+      default: '',
       type: String
     }
   },
@@ -153,24 +176,41 @@ export default {
       current: 0
     }
   },
-  async created () {
-    if (this.code) {
-      const imgs = await getAdvertList({ ad_code: this.code }, { onlyData: true }).catch(err => {
-        throw Error(err.msg || '初始化广告组件失败')
-      })
-      const tempimgs = getArrColumn(imgs, 'image')
-      this.imgList = tempimgs.map(imgsrc => getDomain(imgsrc))
-      this.urls = getArrColumn(imgs, 'link')
-    } else {
-      this.imgList = this.imgs
+  watch: {
+    ready: {
+      handler (val, oldVal) {
+        if (val && !oldVal) this._init_func()
+      }
+    }
+  },
+  created () {
+    if (!this.lazyLoad) {
+      this._init_func()
     }
   },
   methods: {
+    async _init_func () {
+      if (this.imgs.length < 1) {
+        try {
+          if (!this.code && !this.cateId && !this.position) throw Error('广告位的imgs长度为0是，请传入code或者（cateId+position的搭配）')
+          const postData = { tag: this.code, cate_id: this.cateId, position: this.position }
+
+          const imgs = await getAdvertList({ ...postData }, { onlyData: true }).catch(err => { throw Error(err.msg || '初始化广告组件失败') })
+          const tempimgs = getArrColumn(imgs, 'image')
+          this.imgList = tempimgs.map(imgsrc => getDomain(imgsrc))
+          this.urls = getArrColumn(imgs, 'link')
+        } catch (e) {
+          Exception.handle(e)
+        }
+      } else {
+        this.imgList = this.imgs
+      }
+    },
     bindClick (idx) {
       if (!this.code) return
       if (this.urls[idx]) {
         const { link } = this.urls[idx]
-        if (link) linkTo(link)
+        if (link) linkToEasy(link)
       }
     },
     handleImgLoad (e) {
@@ -178,23 +218,14 @@ export default {
 
       const idx = e.target.id.replace('img', '')
 
-      this.$set(this.boxw, idx, 750 + 'rpx')
-      this.$set(this.boxh, idx, 750 * height / width + 'rpx')
+      this.$set(this.boxw, idx, this.boxDidth + 'rpx')
+      this.$set(this.boxh, idx, this.boxDidth * height / width + 'rpx')
 
-      console.log(this.boxh, this.boxw)
+      // console.log(this.boxh, this.boxw)
     },
     indexChangeEvent (event) {
       const { current } = event.detail
-
       this.current = current
-      // const query = uni.createSelectorQuery().in(this)
-      // query.select('#img' + current).boundingClientRect(data => {
-      //   const { width, height } = data
-      //   this.boxw[current] = width + 'px'
-      //   this.boxh[current] = height + 'px'
-      //
-      //   console.log(this.boxw,this.boxh)
-      // }).exec()
     }
   }
 }

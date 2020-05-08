@@ -1,9 +1,10 @@
 <template>
   <div class="wrap">
     <layout-page-title :letfFn="true" @clickLeft="bindBackFn" :title="pageTitle"></layout-page-title>
-    <fun-err-msg :topStr="menuButtonInfo.height+menuButtonInfo.top+10+'px'" :errs="formCheckResult"></fun-err-msg>
-    <image class="img m-t-25" mode="widthFix" src="/static/copyright.png"></image>
-
+    <fun-err-msg ref="refMsg" :topStr="menuButtonInfo.height+menuButtonInfo.top+10+'px'"
+                 :errs="formCheckResult"></fun-err-msg>
+    <image class="img m-t-25" mode="widthFix" :src="'/static/client/copyright.png'|domain"></image>
+    
     <div class="form">
       <form style="display: block" @submit="formSubmit" @reset="formReset">
         <div class="form-item uni-column">
@@ -23,7 +24,7 @@
             <button form-type="submit" class="sub-btn m-b-15" type="primary">立即登录</button>
           </div>
           <!--<div><button @click="cancel" class="sub-btn m-b-20" >暂不登录</button></div>-->
-
+          
           <div class="flex flex-vertical-center flex-justify-between p-t-10">
             <div class="fz-12 text-right">登录及表示您已阅读并接受<span class="color-primary">《用户服务协议》</span></div>
             <!--            <span class="c6 fz-12" style="text-decoration: underline" @click="cancel">暂不登录</span>-->
@@ -31,7 +32,7 @@
         </div>
       </form>
     </div>
-
+    
     <div class="channel-list">
       <div class="channel-item">
         <button class="btn" open-type="getUserInfo" @getuserinfo="weixinlogin">
@@ -47,7 +48,7 @@
         <span class="text fz-14">密码登录</span>
       </div>
     </div>
-
+    
     <layout-popup ref="phone" :autoClose="false" :topStr="menuButtonInfo.height+menuButtonInfo.top+10+'px'"
                   :showMask="false">
       <div class="form pwd-wrap" :style="{top:menuButtonInfo.height+menuButtonInfo.top+10+'px'}">
@@ -67,7 +68,7 @@
         </div>
       </div>
     </layout-popup>
-
+    
     <layout-popup ref="pwd" :autoClose="false" :topStr="menuButtonInfo.height+menuButtonInfo.top+10+'px'"
                   :showMask="false">
       <div class="form pwd-wrap" :style="{top:menuButtonInfo.height+menuButtonInfo.top+10+'px'}">
@@ -83,7 +84,7 @@
         </view>
       </div>
     </layout-popup>
-
+  
   </div>
 </template>
 
@@ -94,12 +95,8 @@ import FunErrMsg from '@/componets/fun-err-msg/fun-err-msg'
 import LayoutPopup from '@/componets/layout-popup/layout-popup'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 
-import {
-  error
-} from '@/common/fun'
-import {
-  getSmsCode, userLogin
-} from '@/api/customer'
+import { error } from '@/common/fun'
+import { getSmsCode, userLogin } from '@/api/customer'
 import { regPhone } from '@/common/Regs'
 import { validateFun } from '@/common/helper'
 import Promisify from '@/common/Promisify'
@@ -112,7 +109,7 @@ export default {
     LayoutIcon,
     LayoutPopup,
     FunErrMsg,
-    LayoutPageTitle
+    LayoutPageTitle,
   },
   data () {
     return {
@@ -130,7 +127,7 @@ export default {
       pwd: '',
       pwdConfirm: '',
       captchaSend: false,
-      bindPhoneTempData: null// 如果需要绑定手机，需要临时储存服务端给的信息
+      bindPhoneTempData: null,// 如果需要绑定手机，需要临时储存服务端给的信息
     }
   },
   methods: {
@@ -148,7 +145,7 @@ export default {
           content: '是否跳过设置密码？',
           success: (res) => {
             if (res.confirm) uni.navigateBack()
-          }
+          },
         })
         return
       }
@@ -158,7 +155,7 @@ export default {
       uni.navigateBack()
     },
     formReset () {
-
+    
     },
     minusFn () {
       console.log(this)
@@ -174,7 +171,7 @@ export default {
         error('发送验证码失败')
         return
       }
-
+      
       getSmsCode({ mobile: this.phone }, { tip: '发送验证码' }).then(res => {
         this.captchaSend = true
         this.s = 120
@@ -203,21 +200,21 @@ export default {
           throw Error('微信login错误')
         })
         const { code: lp_code } = wxLoginRt
-
+        
         const postData = {
           login_method: 'wx_lp',
-          lp_code,
+          code: lp_code,
           lp_raw_data,
-          account: this.phone,
-          code: this.captcha
+          mobile: this.phone,
+          captcha: this.captcha,
         }
         const rule = {
           login_method: {
             required: true,
             type: String,
             message: {
-              required: '登录方式必填'
-            }
+              required: '登录方式必填',
+            },
           },
           account: {
             type: String,
@@ -227,8 +224,8 @@ export default {
             message: {
               length: '手机号码必须为11位',
               required: '登录方式必填',
-              match: '手机号格式不符'
-            }
+              match: '手机号格式不符',
+            },
           },
           code: {
             type: String,
@@ -236,16 +233,17 @@ export default {
             length: 4,
             message: {
               length: '验证码为4位数字',
-              required: '数字必填'
-            }
-          }
+              required: '数字必填',
+            },
+          },
         }
         const checkRt = validateFun(postData, rule)
         if (checkRt !== true) {
           this.formCheckResult = checkRt
+          this.$refs.refMsg.show()
           return
         }
-
+        
         const { errorCode, data } = await userLogin(postData).catch(() => {
           throw Error('第三方登录请求错误')
         })
@@ -266,7 +264,7 @@ export default {
         postData.captcha = this.captcha
         postData.login_method = 'sms_login'
       }
-
+      
       const rule = {
         login_method: {
           required: true,
@@ -274,8 +272,8 @@ export default {
           enum: ['mobile_login', 'sms_login', 'wx_lp'],
           message: {
             required: '登录方式必选',
-            enum: '登录方式仅允许是mobile_login、sms_login、wx_lp中的一个'
-          }
+            enum: '登录方式仅允许是mobile_login、sms_login、wx_lp中的一个',
+          },
         },
         mobile: {
           type: String,
@@ -285,8 +283,8 @@ export default {
           message: {
             required: '手机号必填',
             length: '手机号为长11位的字符',
-            match: '手机号格式不符'
-          }
+            match: '手机号格式不符',
+          },
         },
         captcha: mode === 'password' ? { required: false } : {
           type: String,
@@ -294,33 +292,34 @@ export default {
           length: 4,
           message: {
             required: '验证码必填',
-            length: '验证码长度为4'
-          }
+            length: '验证码长度为4',
+          },
         },
         passwd: mode === 'code' ? { required: false } : {
           type: String,
           required: true,
           message: {
-            required: '密码必填'
-          }
-        }
+            required: '密码必填',
+          },
+        },
       }
-
+      
       console.log(postData, rule)
-
+      
       // {mobile:this.mobile, captcha:this.verificationCode,login_method:'sms_login'}
       // {mobile:this.mobile,passwd:this.phone.password,login_method:'mobile_login'}
-
+      
       try {
         const checkRt = validateFun(postData, rule)
         if (checkRt !== true) {
           this.formCheckResult = checkRt
+          this.$refs.refMsg.show()
           throw Error('请正确填写资料')
         }
-
+        
         const userData = await userLogin(postData, {
           reqHeader: true,
-          onlyData: true
+          onlyData: true,
         }).catch((e) => {
           throw Error(e.msg || '登录失败')
         })
@@ -338,7 +337,7 @@ export default {
             this.$refs.pwd.close()
             uni.navigateBack()
           }
-        }
+        },
       })
     },
     async setPwd () {
@@ -373,9 +372,9 @@ export default {
       const { access_token, User_ID: user_id } = userData
       Storage.set('access_token', access_token)
       Storage.set('user_id', user_id)
-
-      // this.$store.dispatch('setUserInfo', userData)
-
+      
+      this.$store.commit('user/SET_USER_INFO', userData)
+      
       // 需要设置密码
       // if (userData.hasOwnProperty('biz_passwd')) {
       //   this.pageTitle = '设置密码'
@@ -383,7 +382,7 @@ export default {
       //   this.$refs.pwd.show()
       //   return
       // }
-
+      
       setTimeout(function () {
         uni.navigateBack()
       }, 200)
@@ -410,33 +409,33 @@ export default {
           rawData: JSON.parse(rawData),
           signature,
           userInfo,
-          iv
+          iv,
         })
-
+        
         // 获取code
         const wxLoginRt = await Promisify('login').catch(() => {
           throw Error('微信login错误')
         })
         const { code: lp_code } = wxLoginRt
-
+        
         // 请求接口
         console.log('snslogin data is', {
           login_method: 'wx_lp',
           lp_code,
-          lp_raw_data
+          lp_raw_data,
         })
         const { errorCode, data } = await userLogin({
           login_method: 'wx_lp',
-          lp_code,
-          lp_raw_data
+          code: lp_code,
+          lp_raw_data,
         }, { tip: '登录中' }).catch((err) => {
           throw Error(err.msg || '第三方登录请求错误')
         })
-
+        
         if (errorCode === 0) {
           this.loginCall(data)
         }
-
+        
         // 需要绑定手机号
         if (errorCode === 88001) {
           this.bindPhoneTempData = data
@@ -448,15 +447,15 @@ export default {
         console.log(e)
         error(e.message)
       }
-    }
-  }
+    },
+  },
 }
 </script>
 <style lang="scss" scoped>
   button {
     line-height: 2.3;
   }
-
+  
   .form {
     .form-item {
       margin: 0 50rpx 30rpx;
@@ -464,19 +463,19 @@ export default {
       height: 80rpx;
       display: flex;
       align-items: center;
-
+      
       .sendCaptcha {
-
+        
         .text {
           color: #999;
           opacity: 1;
-
+          
           &.active {
             color: $fun-primary-color;
           }
         }
       }
-
+      
       .fun-input {
         flex: 1;
         height: 80rpx;
@@ -484,26 +483,26 @@ export default {
         font-size: 14px;
         color: #444;
         text-align: left;
-
+        
       }
-
+      
     }
-
+    
     .action {
       margin: 50rpx 50rpx 30rpx;
       display: block;
     }
-
+    
   }
-
+  
   .placeholder {
     color: #fff;
   }
-
+  
   .joinForm {
     width: 500rpx;
     text-align: center;
-
+    
     .input {
       border: 1px solid #e7e7e7;
       line-height: 36px;
@@ -512,13 +511,13 @@ export default {
       text-align: left;
       padding: 0 10px;
     }
-
+    
     .numbox {
       display: flex;
       justify-content: center; //x轴排列
     }
   }
-
+  
   .pwd-wrap {
     width: 750rpx;
     bottom: 0;
@@ -528,7 +527,7 @@ export default {
     background: white;
     z-index: 10;
   }
-
+  
   .wrap {
     text-align: center;
     height: 100vh;
@@ -536,25 +535,25 @@ export default {
     box-sizing: border-box;
     background: #fff;
   }
-
+  
   .img {
-
+    
     width: 70px;
     margin: 50rpx 0 100rpx;
-
+    
   }
-
+  
   .snslogin {
     position: absolute;
     bottom: 60rpx;
     width: 750rpx;
-
+    
     .tip {
       position: relative;
       margin: 0 auto;
       width: 60px;
       text-align: center;
-
+      
       .after, .before {
         position: absolute;
         height: 1px;
@@ -562,26 +561,26 @@ export default {
         width: 40px;
         top: 50%;
       }
-
+      
       .after {
         left: 0;
         transform: translateX(-100%);
       }
-
+      
       .before {
         right: 0;
         transform: translateX(100%);
       }
-
+      
     }
-
+    
     .list {
       margin: 15px auto;
       width: 300px;
       text-align: center;
     }
   }
-
+  
   .channel {
     &-list {
       position: absolute;
@@ -590,16 +589,16 @@ export default {
       display: flex;
       justify-content: center;
       align-items: center;
-
+      
     }
-
+    
     &-item {
       background: none;
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 0 6px;
-
+      
       .btn {
         width: 100%;
         height: 100%;
@@ -608,22 +607,22 @@ export default {
         align-items: center;
         justify-content: center;
       }
-
+      
       .btn::after {
         width: 0px !important;
         height: 0px !important;
         display: none;
         content: ''
       }
-
+      
       .icon {
-
+      
       }
-
+      
       .text {
         padding-left: 6px;
       }
     }
-
+    
   }
 </style>

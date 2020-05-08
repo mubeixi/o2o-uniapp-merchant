@@ -1,6 +1,6 @@
 <template>
-  <div class="err-msg" :style="{top:topStr}" v-if="show && errs && errs.length>0" @click="hide">
-    <div v-for="(row,idx) in errs" class="item" :key="idx">
+  <div class="err-msg" :style="{top:topStr}" v-if="isShow && errsList && errsList.length>0" @click="hide">
+    <div v-for="(row,idx) in errsList" class="item" :key="idx">
       <div class="row"><span class="p-r-4">*</span><span>{{row.message || row}}</span></div>
     </div>
   </div>
@@ -15,29 +15,37 @@ export default {
       default: '0px'
     },
     errs: {
-      default: false,
+      default: [],
       require: true
     }
   },
   data () {
     return {
-      show: false
+      isShow: false,
+      errsList: []
     }
   },
   watch: {
-    errs (newVal) {
-      // console.log(JSON.stringify(newVal))
-      if (this.errs && Array.isArray(newVal) && newVal.length > 0) {
-        this.show = true
-        setTimeout(() => {
-          this.show = false
-        }, 4000)
-      }
+    errs: {
+      handler (newVal) {
+        console.log(newVal, newVal && Array.isArray(newVal) && newVal.length > 0)
+        if (newVal && Array.isArray(newVal) && newVal.length > 0) {
+          this.errsList = newVal.concat([])
+          this.isShow = true
+          setTimeout(() => {
+            this.isShow = false
+          }, 2000)
+        }
+      },
+      deep: true
     }
   },
   methods: {
+    show () {
+      this.isShow = true
+    },
     hide () {
-      this.show = false
+      this.isShow = false
     }
   }
 }

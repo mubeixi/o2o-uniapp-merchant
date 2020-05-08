@@ -11,7 +11,7 @@
                :style="{width:itemw,height:itemH,backgroundSize:goods.config.fill?goods.config.fill:'cover',backgroundImage:'url('+domainFunc(item.ImgPath)+')'}">
             <div v-show="goods.config.attr && goods.config.attr.tag.show"
                  :class="goods.config.attr.tag.style"
-                 v-if="['new','hot'].indexOf(goods.config.attr.tag.style)!=-1" class="tag">
+                 v-if="['new','hot'].indexOf(goods.config.attr.tag.style)!==-1" class="tag">
               {{goods.config.attr.tag.style=='hot'?'hot':'new'}}
             </div>
             <div v-show="goods.config.attr.tag.show" v-else class="tag img"><img
@@ -45,12 +45,10 @@
 </template>
 <script>
 import { getProductList } from '../../common/fetch'
-import {
-  lazyImgUrl
-  , goProductDetail
-} from '../../common'
+import { goProductDetail, lazyImgUrl } from '../../common'
 
 import { getDomain } from '@/common/helper'
+import { linkTo } from '@/common/fun'
 
 export default {
   name: 'DiyGoods',
@@ -106,7 +104,7 @@ export default {
     itemw () {
       let full = this.fullWidth
 
-      if (this.goods.config.showmode == 'border-bgwhite') {
+      if (this.goods.config.showmode === 'border-bgwhite') {
         full -= 4// 4个边框
       }
 
@@ -136,7 +134,7 @@ export default {
       const ratio = this.goods.config.ratio ? this.goods.config.ratio : 1
       let num = 0
 
-      if (this.goods.config.showmode == 'border-bgwhite') {
+      if (this.goods.config.showmode === 'border-bgwhite') {
         full -= 4// 4个边框
       }
       if (this.goods.config.style === 2) {
@@ -218,7 +216,7 @@ export default {
         linkType: 'default'
       }
 
-      this.$fun.linkTo(linkObj)
+     linkTo(linkObj)
     },
     itemMarginObj (idx) {
       const conf = this.goods.style.margin
@@ -242,14 +240,14 @@ export default {
           break
         case 2:
 
-          left = idx % 2 == 0 ? 0 : conf / 2
-          right = idx % 2 == 0 ? conf / 2 : 0
+          left = idx % 2 === 0 ? 0 : conf / 2
+          right = idx % 2 === 0 ? conf / 2 : 0
           break
       }
 
       if (idx === 0) top = 0
       // 这个需要是2
-      if (idx === 1 && this.goods.config.style == 2) top = 0
+      if (idx === 1 && this.goods.config.style === 2) top = 0
       return {
         marginTop: top + 'px',
         marginBottom: bottom + 'px',

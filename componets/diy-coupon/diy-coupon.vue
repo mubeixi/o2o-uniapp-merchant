@@ -22,7 +22,7 @@
     <div class="list style2" v-if="coupon.config.type== 2 && couponList.length>0">
       <div @click="getCoupon(item)" class="item" v-for="(item,idx) in couponList" :key="idx">
         <div class="c">
-          <p v-if="item.Coupon_UseType == 0">满￥{{item.Coupon_Condition}} {{item.Coupon_Discount+'折'}}</p>
+          <p v-if="item.Coupon_UseType === 0">满￥{{item.Coupon_Condition}} {{item.Coupon_Discount+'折'}}</p>
           <p v-else><span>满￥{{item.Coupon_Condition}} 减 {{item.Coupon_Cash+'元'}}</span></p>
         </div>
       </div>
@@ -30,7 +30,7 @@
     <div class="list style3" v-if="coupon.config.type== 3 && couponList.length>0">
       <div @click="getCoupon(item)" class="item" v-for="(item,idx) in couponList" :key="idx">
         <div class="c">
-          <p v-if="item.Coupon_UseType == 0">满￥{{item.Coupon_Condition}} {{item.Coupon_Discount+'折'}}</p>
+          <p v-if="item.Coupon_UseType === 0">满￥{{item.Coupon_Condition}} {{item.Coupon_Discount+'折'}}</p>
           <p v-else><span>满￥{{item.Coupon_Condition}} 减 {{item.Coupon_Cash+'元'}}</span></p>
         </div>
         <div class="r">
@@ -42,7 +42,7 @@
       <div @click="getCoupon(item)" class="item" v-for="(item,idx) in couponList" :key="idx">
         <div class="c">
           <div class="cwrap">
-            <p v-if="item.Coupon_UseType == 0">满￥{{item.Coupon_Condition}} {{item.Coupon_Discount+'折'}}</p>
+            <p v-if="item.Coupon_UseType === 0">满￥{{item.Coupon_Condition}} {{item.Coupon_Discount+'折'}}</p>
             <p v-else><span>满￥{{item.Coupon_Condition}} 减 {{item.Coupon_Cash+'元'}}</span></p>
           </div>
         </div>
@@ -55,10 +55,7 @@
   </div>
 </template>
 <script>
-import {
-  getCoupon, getUserCoupon
-} from '@/api/customer'
-import { mapGetters } from 'vuex'
+import { getCoupon, getUserCoupon } from '@/api/customer'
 
 /**
  * 某个值是否在指定数组内存在（指定键值)
@@ -98,7 +95,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['userInfo']),
+    //...mapGetters(['userInfo']),
     couponList () {
       if (this.coupon.value.list.length < 1) {
         return []
@@ -184,7 +181,7 @@ export default {
       margin-right: 10px;
 
       &:before, &:after {
-        background-image: url("/static/coupon-left.png");
+        background-image: url("/static/diy/coupon-left.png");
         content: "";
         position: absolute;
         top: 0;
@@ -270,7 +267,7 @@ export default {
       background: white;
 
       &:before {
-        background-image: url("/static/coupon-left.png");
+        background-image: url("/static/diy/coupon-left.png");
         content: "";
         position: absolute;
         top: 0;
@@ -315,7 +312,7 @@ export default {
         background-size: 100% 100%;
         background-repeat: no-repeat;
         background-position: left center;
-        background-image: url('/static/coupon-right.png');
+        background-image: url('/static/diy/coupon-right.png');
 
         .go {
           position: absolute;
@@ -349,7 +346,7 @@ export default {
       background: white;
 
       &:before, &:after {
-        background-image: url("/static/coupon-left.png");
+        background-image: url("/static/diy/coupon-left.png");
         content: "";
         position: absolute;
         top: 0;

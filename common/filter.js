@@ -2,7 +2,7 @@ import Vue from 'vue'
 import { staticUrl } from './env'
 import moment from 'moment'
 
-Vue.filter('domain', (url) => {
+Vue.filter('domain', function (url) {
   if (!url) return ''
   if (url.indexOf('http') === -1) return staticUrl + url
   return url
@@ -12,12 +12,12 @@ Vue.filter('formatTime', (str, fromatStr = 'YYYY.MM.DD') => {
   return moment(str).format(fromatStr)
 })
 
-Vue.filter('formatphone',(value) =>{
-  if(value) {
-    var len= value.length;
-    var xx= value.substring(3,len-4);
-    var values = value.replace(xx,"****");
-    return values;
+Vue.filter('formatphone', (value) => {
+  if (value) {
+    var len = value.length
+    var xx = value.substring(3, len - 4)
+    var values = value.replace(xx, '****')
+    return values
   }
   return ''
 })
@@ -29,6 +29,33 @@ Vue.filter('formatTimeFromNow', (str) => {
 Vue.filter('zero', (val) => {
   return val || 0
 })
+
+export const formatNumber = n => {
+  n = n.toString()
+  return n[1] ? n : '0' + n
+}
+export const formatPirce = (priceStr, idx) => {
+  if(isNaN(priceStr))return '';
+  if (typeof priceStr === 'number')priceStr += ''
+  const arr = priceStr.split('.')
+  if (idx === 0) return arr[0]
+  if (idx === 1 && arr.length > 1) return ('.' + arr[1])
+  return ''
+}
+
+Vue.filter('formatPirce', (val, idx) => {
+  return formatPirce(val, idx)
+})
+
+export const formatTimeFun = function (date) {
+  const year = new Date(date * 1000).getFullYear()
+  const month = new Date(date * 1000).getMonth() + 1
+  const day = new Date(date * 1000).getDate()
+  const hour = new Date(date * 1000).getHours()
+  const minute = new Date(date * 1000).getMinutes()
+  const second = new Date(date * 1000).getSeconds()
+  return [year, month, day].map(formatNumber).join('/') + ' ' + [hour, minute, second].map(formatNumber).join(':')
+}
 
 export const formatRichTextByUparseFn = (html) => {
   if (!html) return

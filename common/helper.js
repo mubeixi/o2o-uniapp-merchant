@@ -1,14 +1,39 @@
-import {
-  staticUrl
-} from './env'
-import {
-  error
-} from './fun'
-import {
-  upload, getAccessToken
-} from './request'
+import { staticUrl } from './env'
+import { confirm, error, linkToEasy } from './fun'
+import { getAccessToken, upload } from './request'
+import Srotage from '@/common/Storage'
+import store from '@/store'
 
 import Schema from 'validate'
+import Promisify from '@/common/Promisify'
+import { formatNumber } from '@/common/filter'
+
+/**
+ * 两个对象的骚操作，并返回一个新对象。这个操作应该避免影响原来的对象.
+ * 提示:这个方法只适用于简单值组成的对象
+ * @param left
+ * @param right
+ * @param cover
+ * @param insert
+ * @returns {*}
+ */
+export const mergeObject = (left, right, cover = false, insert = false) => {
+  const result = {}
+  if (!cover && !insert) return Object.assign(result, left, right)
+
+  for (var i in left) {
+    result[i] = cover && right.hasOwnProperty(i) ? right[i] : left[i] // 如果tmpl有对应的属性，就覆盖掉
+  }
+
+  // 插入只有right中有的属性
+  if (insert) {
+    for (var j in right) {
+      if (!left.hasOwnProperty(j))result[j] = right[j]
+    }
+  }
+
+  return result
+}
 
 export const objTranslate = (obj) => JSON.parse(JSON.stringify(obj))
 
@@ -102,15 +127,19 @@ export const compareObj = (obj1, obj2) => {
 }
 
 /**
- * 从元素是对象的一维数组中，获取指定的键名对应的值组成的简单值一维数组
+ * 从元素是对象的一维数组中，获取指定的键名对应的值组成的简单值一维数组.
+ * 支持两级（也就是可以获取数组对象中的指定属性的子属性
  * @param arr
  * @param column
  * @returns {[]}
  */
 export const getArrColumn = (arr, column) => {
-  if (!Array.isArray(arr)) {
-    throw new Error('第二个参数为一个数组')
+  if (typeof arr !== 'object') {
+    throw new Error('第二个参数为一个数组或者对象')
   }
+  // if (!Array.isArray(arr)) {
+  //   throw new Error('第二个参数为一个数组')
+  // }
   if (typeof column !== 'string') {
     throw new Error('键名为字符串')
   }
@@ -118,11 +147,25 @@ export const getArrColumn = (arr, column) => {
     throw new Error('键名必传')
   }
   const rt = []
-  for (var k in arr) {
-    if (typeof arr[k] !== 'object') {
-      throw new Error('获取的数值为简单值')
+  // 这就约束column中没有...号，如果有代表着子属性
+  if (column.indexOf('...') !== -1) {
+    // 两级
+    const key1 = column.split('...')[0]
+    const key2 = column.split('...')[1]
+
+    for (var k in arr) {
+      if (typeof arr[k] !== 'object') {
+        throw new Error('获取的数值为简单值')
+      }
+      rt.push(arr[k][key1][key2])
     }
-    rt.push(arr[k][column])
+  } else {
+    for (var k in arr) {
+      if (typeof arr[k] !== 'object') {
+        throw new Error('获取的数值为简单值')
+      }
+      rt.push(arr[k][column])
+    }
   }
   return rt
 }
@@ -138,7 +181,7 @@ export const getObjectAttrNum = (obj, stict = true) => {
   if (!stict) return Object.keys(obj).length // 不区分是否继承而来
   let count = 0
   for (var i in obj) {
-    if (obj.hasOwnProperty(i))count++
+    if (obj.hasOwnProperty(i)) count++
   }
   return count
 }
@@ -244,22 +287,40 @@ export const getDomain = (url) => {
   return url
 }
 
-export const confirm = (options) => {
-  return new Promise(function (resolve, reject) {
-    uni.showModal({
-      ...options,
-      success: function (res) {
-        if (res.confirm) {
-          resolve(res)
-        } else if (res.cancel) {
-          reject(res)
-        }
-      },
-      fail: function (res) {
-        reject(res)
+/**
+ * 检测是否是分销商
+ * @param redirect
+ * @return {boolean}
+ */
+export const checkIsDistribute = (redirect, tip) => {
+  // 需要先确认是否已经登录了。。。。。
+
+  const userInfo = store.getters['user/userInfo']
+
+  if (userInfo.Is_Distribute !== 1) {
+    if (redirect) {
+      if (!tip) {
+        uni.navigateTo({
+          url: '/pages/distributor/DistributorCenter'
+        })
+        return
       }
-    })
-  })
+
+      const initData = store.getters['system/initData']
+      const { commi_rename } = initData
+      const commi = commi_rename.commi
+      confirm({ title: '提示', content: `该操作需要是${commi},请问是否成为${commi}?`, confirmText: '确定', cancelText: '暂不成为' }).then(() => {
+        uni.navigateTo({
+          url: '/pages/distributor/DistributorCenter'
+        })
+      }).catch(() => {
+
+      })
+    }
+    return false
+  }
+
+  return true
 }
 
 /**
@@ -377,7 +438,9 @@ export const getCountdownFunc = ({ start_timeStamp, end_timeStamp, current = (ne
   // 时间戳格式转换
   current = parseInt(current / 1000)
 
-  let countTime = 0; let is_start = false; let is_end = false
+  let countTime = 0
+  let is_start = false
+  let is_end = false
 
   // 还没开始
   if (start_timeStamp > current && end_timeStamp > current) {
@@ -398,7 +461,14 @@ export const getCountdownFunc = ({ start_timeStamp, end_timeStamp, current = (ne
   m = parseInt((countTime - d * 60 * 60 * 24 - h * 60 * 60) / 60)
   s = countTime - d * 60 * 60 * 24 - h * 60 * 60 - m * 60
 
-  return { d, h, m, s, is_start, is_end }
+  return {
+    d,
+    h: formatNumber(h),
+    m: formatNumber(m),
+    s: formatNumber(s),
+    is_start,
+    is_end
+  }
 }
 
 // 输入金额时时验证
@@ -408,6 +478,217 @@ export function check_money_in (money) {
   } else {
     return true
   }
+}
+
+/**
+ *
+ * @param {*} str
+ * @param {*} name
+ */
+export const GetQueryByString = (str, name) => {
+  // 获取？号出现几次
+  var tempArr = str.split('?')
+
+  // //如果大于1
+  if (tempArr.length - 1 > 1) {
+    var rt = null
+    for (var i in tempArr) {
+      var s = tempArr[i]
+      var reg1 = new RegExp('(^|&)' + name + '=([^&]*)(&|$)') // 构造一个含有目标参数的正则表达式对象
+      var r1 = s.match(reg1) // 匹配目标参数
+      if (r1 !== null) {
+        rt = decodeURIComponent(r1[2])// 一直覆盖，要最后的就行了
+      }
+    }
+
+    return rt
+  }
+
+  var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)') // 构造一个含有目标参数的正则表达式对象
+  if (!str.split('?')[1]) return null
+  var r = str.split('?')[1].match(reg) // 匹配目标参数
+
+  if (r !== null) {
+    return decodeURIComponent(r[2])
+  }
+  return null // 返回参数值
+}
+
+export function isWeiXin () {
+  // #ifdef H5
+  var ua = window.navigator.userAgent.toLowerCase()
+  if (
+    ua.match(/MicroMessenger/i) === 'micromessenger' &&
+    ua.match(/miniProgram/i) &&
+    ua.match(/miniProgram/i)[0] === 'miniprogram'
+  ) {
+    return 'xcx'
+  }
+  if (ua.match(/MicroMessenger/i) === 'micromessenger') {
+    return true
+  } else {
+    return false
+  }
+  // #endif
+
+  // #ifndef H5
+  return false
+  // #endif
+}
+
+// 构造分享事件
+/**
+ *
+ * @param path 这个里面无需传owenr_id和users_id
+ * @return {string}
+ */
+export const buildSharePath = (path) => {
+  const users_ID = Srotage.get('users_id')
+  const userInfo = store.state.userInfo || Srotage.get('userInfo')
+  const User_ID = Srotage.get('user_id')
+
+  let search = ''
+
+  if (path.indexOf('users_id') === -1) {
+    search += (users_ID ? ('users_id=' + users_ID) : '')
+  }
+
+  if (path.indexOf('owner_id') === -1) {
+    let owner_id = 0
+    if (userInfo.User_ID && userInfo.Is_Distribute === 1) {
+      owner_id = userInfo.User_ID
+    }
+    search += ('&owner_id=' + owner_id)
+  }
+
+  let ret = ''
+  if (path.indexOf('?') !== -1) {
+    ret = path + (search ? '&' : '') + search
+  } else {
+    ret = path + (search ? '?' : '') + search
+  }
+
+  if (ret.indexOf('users_id') === -1) {
+    error('组建分享参数失败')
+    throw '必须有users_id'
+  }
+
+  console.log(`share path is ${ret}`)
+
+  return ret
+}
+
+/**
+ *获取商品缩略图
+ * @param img
+ * @param size n3最小
+ */
+export const getProductThumb = (img, size) => {
+  if (!size) size = 'n3'
+
+  const tempArr = img.split('/')
+  let name = tempArr.pop()
+  name = size + '/' + name
+
+  return [...tempArr, name].join('/')
+}
+
+export const urlencode = (str) => {
+  return encodeURIComponent(str).replace(/!/g, '%21').replace(/'/g, '%27').replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\*/g, '%2A').replace(/%20/g, '+')
+}
+
+/**
+ * 下载文件
+ * @param url
+ * @returns {Promise<boolean>}
+ */
+const downLoadFile = async (url) => {
+  try {
+    const downRT = await Promisify('downloadFile', { url }).catch(e => { throw Error(e.errMsg) })
+    const { tempFilePath } = downRT
+    if (!tempFilePath) throw Error('图片下载失败')
+    return tempFilePath
+  } catch (e) {
+    return false
+  }
+}
+
+/**
+ * 保存图片到本地
+ * @param fileUrl
+ * @param type
+ * @returns {Promise<boolean|*>}
+ */
+export const saveImageToDisk = async ({ fileUrl, type = 'local' }) => {
+  try {
+    const fileTempPath = type === 'local' ? fileUrl : await downLoadFile(fileUrl)
+    await Promisify('saveImageToPhotosAlbum', { filePath: fileTempPath }).catch(e => { throw Error(e.errMsg) })
+    return fileTempPath
+  } catch (e) {
+    return false
+  }
+}
+
+export const numberSort = function (arr, order_by) {
+  if (typeof order_by !== 'undefined' && order_by === 'desc') { // desc
+    return arr.sort(function (v1, v2) {
+      return v2 - v1
+    })
+  } else { // asc
+    return arr.sort(function (v1, v2) {
+      return v1 - v2
+    })
+  }
+}
+
+// ------------ 收货地址函数 -------------
+// 数组转化
+export const array_change = function (arr) {
+  var array = []
+  for (var i in arr) {
+    array.push({ id: i, name: arr[i] })
+  }
+  return array
+}
+
+// 获取数组下标  用于收货地址选择的显示
+export const get_arr_index = function (arr, id) {
+  for (var i in arr) {
+    if (arr[i].id === id) {
+      return parseInt(i)
+    }
+  }
+}
+// --------------
+
+export const cutstrFun = (str, len, tip = '..') => {
+  if (!str) return ''
+  if (str.length < len) return str
+  return str.substring(0, len) + tip
+}
+
+/**
+ * 跳转商品详情页面
+ * @param productInfo
+ */
+export const toGoodsDetail = (productInfo) => {
+  console.log(productInfo)
+  const { Products_ID, spike_good_id, price} = productInfo
+  let url = ''
+  if (!Products_ID) throw Error('产品id必传')
+  url = `/pages/product/detail?prod_id=${Products_ID}`
+
+  // 限时抢购
+  if (spike_good_id) {
+    url += `&mode=spike&spike_good_id=${spike_good_id}`
+  }
+  // 秒杀
+  if (!spike_good_id && price) {
+    url += `&mode=seckill&flashsale_id=${productInfo.id}`
+  }
+  console.log('产品跳转url:' + url)
+
+  linkToEasy(url)
 }
 
 const Helper = {

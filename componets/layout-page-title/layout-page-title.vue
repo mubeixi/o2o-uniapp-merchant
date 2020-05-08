@@ -28,7 +28,7 @@ export default {
       },
       title: {
         type: String,
-        default: '标题'
+        default: ''
       },
       // 代表是否emit左侧被点击事件
       letfFn: {
@@ -49,7 +49,7 @@ export default {
   methods: {
     bindBack () {
       if (this.letfFn) this.$emit('clickLeft')
-      if (!this.letfFn) this.$back()
+      if (!this.letfFn) uni.navigateBack()
     }
   },
   mounted () {

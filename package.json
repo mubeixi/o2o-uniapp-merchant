@@ -1,6 +1,6 @@
 {
   "name": "o2o-client",
-  "version": "0.0.2",
+  "version": "0.0.6",
   "description": "",
   "main": "main.js",
   "scripts": {
@@ -19,7 +19,9 @@
   "dependencies": {
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
-    "validate": "^5.1.0"
+    "validate": "^5.1.0",
+    "vuex": "^3.3.0",
+    "weixin-js-sdk": "^1.4.0-test"
   },
   "devDependencies": {
     "@types/html5plus": "^1.0.0",
