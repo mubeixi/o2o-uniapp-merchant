@@ -42,8 +42,8 @@
           </div>
         </div>
         <div class="total flex flex-justify-between">
-          <view class="ptdesc" @click="goPintuan(order)" v-if="order.teamstatus_desc">{{order.teamstatus_desc}}</view>
-          <div>
+          <view class="ptdesc" @click="goPintuan(order)" v-if="order.Order_Type ==='pintuan' && order.teamstatus_desc">{{order.teamstatus_desc}}</view>
+          <div class="text-right flex1">
             共{{order.prod_list.length}}件商品 实付：<span class="price"><span>￥</span> {{order.Order_TotalPrice}} <block
             v-if="item.Order_Shipping.Price>0">(含运费{{item.Order_Shipping.Price}}元)</block></span>
           </div>

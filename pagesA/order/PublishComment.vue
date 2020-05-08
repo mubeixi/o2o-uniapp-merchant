@@ -5,7 +5,7 @@
 
 		</view>
 		<block v-for="(item,index) of productList" :key="index">
-			<div class="pro-comment flex flex-vertical-c" @click="goPro(item.prod_id)">
+			<div class="pro-comment flex flex-vertical-c" @click="$toGoodsDetail(item)">
 				<image :src="item.prod_img" class="m-r-8 pro-img"></image>
 				<div>
 					<div class="pro-title">
@@ -87,10 +87,6 @@ export default {
 		this.init()
 	},
 	methods:{
-		goPro (id) {
-			let url = '/pages/product/detail?prod_id=' + id
-			this.$linkTo(url)
-		},
 		//是否匿名评价
 		switchChange(e){
 			if(e.target.value){

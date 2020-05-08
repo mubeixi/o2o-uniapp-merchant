@@ -27,7 +27,7 @@
 }
 </style>
 <template>
-  <div class="product-panel" :class="[mode]" :style="{marginBottom}" @click="clickFn(vo.Products_ID)">
+  <div class="product-panel" :class="[mode]" :style="{marginBottom}" @click="clickFn(vo)">
     <slot name="cover">
       <div class="product-cover" :style="{backgroundImage:'url('+getDomainUrl(vo.ImgPath)+')',borderRadius:coverRadius}" ></div>
     </slot>
@@ -47,8 +47,7 @@
   </div>
 </template>
 <script>
-import { getDomain } from '@/common/helper'
-import { linkToEasy } from '@/common/fun'
+import { getDomain, toGoodsDetail } from '@/common/helper'
 
 export default {
   name: 'GoodsItem',
@@ -99,14 +98,14 @@ export default {
   computed: {
     titleBoxHeight () {
       const fontSize = parseInt(this.titleFontSize)
-      return isNaN(fontSize) ? 'auto' : (fontSize * this.titleRowNum+ 'px')
+      return isNaN(fontSize) ? 'auto' : (fontSize * this.titleRowNum + 'px')
     }
   },
   methods: {
-    clickFn(id){
-      linkToEasy(`/pages/product/detail?prod_id=${id}`)
+    clickFn (goods) {
+      toGoodsDetail(goods)
     },
-    getDomainUrl:(url)=>getDomain(url)
+    getDomainUrl: (url) => getDomain(url)
   }
 }
 </script>

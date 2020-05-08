@@ -58,7 +58,7 @@ export default {
   .bottom-last {
     width: 750rpx;
     height: 106rpx;
-    padding: 10rpx;
+    padding: 10rpx 10rpx 10rpx 0;
     display: flex;
     justify-content: space-between;
     background-color: #ffffff;

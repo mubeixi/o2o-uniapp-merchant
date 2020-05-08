@@ -5,6 +5,11 @@
     overflow-x: hidden;
     overflow-y: hidden;
   }
+  
+  .lazy-box{
+    bottom: constant(safe-area-inset-bottom);
+    bottom: env(safe-area-inset-bottom);
+  }
 
   .container-wrap {
     position: fixed;
@@ -680,6 +685,7 @@
   }
 
   .left-btn {
+    font-size: 14px;
     padding: 0 20rpx;
     height: 86rpx;
     line-height: 86rpx;
@@ -690,6 +696,7 @@
   }
 
   .right-btn {
+    font-size: 14px;
     margin-left: 10rpx;
     padding: 0 20rpx;
     height: 86rpx;
@@ -756,115 +763,116 @@
       class="container-wrap" scroll-y :scroll-into-view="currentEleId" :scroll-with-animation="true">
 
       <div id="section0">
-        <swiper style="height:750rpx;width: 750rpx;" indicator-dots="true" indicator-active-color="#26C78D"
-                indicator-color="rgba(0,0,0,.16)" autoplay="true" interval="3000" duration="500" circular="true">
+        <swiper style="height:750rpx;width: 750rpx;" indicator-dots="true" indicator-active-color="#26C78D" indicator-color="rgba(0,0,0,.16)" autoplay="true" interval="3000" duration="500" circular="true">
           <swiper-item v-for="(item,index) of imgs" :key="index">
             <image v-if="item" :src="item" class="full-img" @click="previewImg(index)" />
           </swiper-item>
         </swiper>
 
-        <div class="end-time" v-if="mode==='spike' || mode==='seckill'">
-          <block v-if="!countdown.is_end">
-            <span>距{{countdown.is_start?'结束':'开始'}}还有：</span>
-            <span class="end-time-day">{{countdown.d}}天</span>
-            <span class="end-time-block">{{countdown.h}}</span>
-            <span class="delimiter">：</span>
-            <span class="end-time-block">{{countdown.m}}</span>
-            <span class="delimiter">：</span>
-            <span class="end-time-block">{{countdown.s}}</span>
-          </block>
-        </div>
-        <div class="product-price fz-14">
-          <div class="product-price-left">
-            <span class="product-price-red">
-              <span class="fz-13">¥</span>
-              <span>
-                <block v-if="mode==='spike' || mode==='seckill'">{{productInfo.price}}</block>
-                <block v-else-if="productInfo.is_pintuan">{{productInfo.pintuan_pricex}}</block>
-                <block v-else>{{productInfo.Products_PriceX}}</block>
+        <block  v-show="isReady">
+          <div class="end-time" v-if="mode==='spike' || mode==='seckill'">
+            <block v-if="!countdown.is_end">
+              <span>距{{countdown.is_start?'结束':'开始'}}还有：</span>
+              <span class="end-time-day">{{countdown.d}}天</span>
+              <span class="end-time-block">{{countdown.h}}</span>
+              <span class="delimiter">：</span>
+              <span class="end-time-block">{{countdown.m}}</span>
+              <span class="delimiter">：</span>
+              <span class="end-time-block">{{countdown.s}}</span>
+            </block>
+          </div>
+          <div class="product-price fz-14">
+            <div class="product-price-left">
+              <span class="product-price-red">
+                <span class="fz-13">¥</span>
+                <span>
+                  <block v-if="mode==='spike' || mode==='seckill'">{{productInfo.price}}</block>
+                  <block v-else-if="productInfo.is_pintuan">{{productInfo.pintuan_pricex}}</block>
+                  <block v-else>{{productInfo.Products_PriceX}}</block>
+                </span>
               </span>
-            </span>
-            <span class="m-l-5 text-through">
-              <span>
-                ¥
-              </span>
-              <span>
-                <block v-if="mode==='spike' || mode==='seckill' || productInfo.is_pintuan">{{productInfo.Products_PriceX}}</block>
-                <block v-else>{{productInfo.Products_PriceY}}</block>
-              </span>
+              <span class="m-l-5 text-through">
+                <span>
+                  ¥
+                </span>
+                <span>
+                  <block v-if="mode==='spike' || mode==='seckill' || productInfo.is_pintuan">{{productInfo.Products_PriceX}}</block>
+                  <block v-else>{{productInfo.Products_PriceY}}</block>
+                </span>
 
-            </span>
-          </div>
-          <div class="product-price-right" @click="toShare">
-            <image :src="'/static/client/product/product_share.png'|domain" class="full-img"
-                   style="width: 130% !important;"></image>
-            <div class="product-share">
-              分享赚
+              </span>
             </div>
-            <div class="product-price-share">
-              <span class="price-q">¥</span>
-              28.90
-            </div>
-          </div>
-        </div>
-        <div class="product-title">
-          {{productInfo.Products_Name}}
-        </div>
-        <!-- 领券 -->
-        <div class="coupon-box" @click="$openPop('couponModal')" v-if="couponList.length>0">
-          <div class="btn">领券</div>
-          <div class="right">
-            店铺优惠券
-            <layout-icon type="iconicon-arrow-right" size="20"></layout-icon>
-          </div>
-        </div>
-
-        <div class="product-activity m-t-10">
-          <div class="flex" style="padding-bottom: 30rpx" v-if="active.length>0">
-            <div class="product-activity-title">
-              优惠活动
-            </div>
-            <div class="flex1">
-              <div class="flex">
-                <div class="activity-item" v-for="(item,index) of active" :key="index">
-                  <image :src="'/static/client/product/activity.png'|domain" class="activity-img"></image>
-                  满{{item.reach}}减{{item.award}}
-                </div>
+            <div class="product-price-right" @click="toShare">
+              <image :src="'/static/client/product/product_share.png'|domain" class="full-img"
+                     style="width: 130% !important;"></image>
+              <div class="product-share">
+                分享赚
               </div>
-              <!--          <div class="flex flex-vertical-center  activity-second">-->
-              <!--            <div class="color-first">-->
-              <!--              多买优惠-->
-              <!--            </div>-->
-              <!--            <div class="color-second">-->
-              <!--              满2件打8.8折-->
-              <!--            </div>-->
-              <!--          </div>-->
-              <!--          <div class="flex flex-vertical-center  activity-second">-->
-              <!--            <div class="color-first">-->
-              <!--              多买优惠-->
-              <!--            </div>-->
-              <!--            <div class="color-second">-->
-              <!--              满2件打8.8折-->
-              <!--            </div>-->
-              <!--          </div>-->
+              <div class="product-price-share">
+                <span class="price-q">¥</span>
+                28.90
+              </div>
             </div>
           </div>
-          <div class="vip-img" @click="goVipList">
-            <image :src="'/static/client/product/vip.png'|domain" class="full-img"></image>
+          <div class="product-title">
+            {{productInfo.Products_Name}}
           </div>
-        </div>
-        <!-- 服务保障   -->
-        <div class="shouhou flex flex-vertical-center" v-if="productInfo.Products_Promise.length>0">
-          <block v-for="(item,index) in productInfo.Products_Promise" :key="index">
-            <div class="shouhou-item" v-if="item.name">
-              <layout-icon class="p-r-4" type="iconradio-check" display="inline" color="#26C78D"></layout-icon>
-              {{item.name}}
+          <!-- 领券 -->
+          <div class="coupon-box" @click="$openPop('couponModal')" v-if="couponList.length>0">
+            <div class="btn">领券</div>
+            <div class="right">
+              店铺优惠券
+              <layout-icon type="iconicon-arrow-right" size="20"></layout-icon>
             </div>
-          </block>
-        </div>
+          </div>
+
+          <div class="product-activity m-t-10">
+            <div class="flex" style="padding-bottom: 30rpx" v-if="active.length>0">
+              <div class="product-activity-title">
+                优惠活动
+              </div>
+              <div class="flex1">
+                <div class="flex">
+                  <div class="activity-item" v-for="(item,index) of active" :key="index">
+                    <image :src="'/static/client/product/activity.png'|domain" class="activity-img"></image>
+                    满{{item.reach}}减{{item.award}}
+                  </div>
+                </div>
+                <!--          <div class="flex flex-vertical-center  activity-second">-->
+                <!--            <div class="color-first">-->
+                <!--              多买优惠-->
+                <!--            </div>-->
+                <!--            <div class="color-second">-->
+                <!--              满2件打8.8折-->
+                <!--            </div>-->
+                <!--          </div>-->
+                <!--          <div class="flex flex-vertical-center  activity-second">-->
+                <!--            <div class="color-first">-->
+                <!--              多买优惠-->
+                <!--            </div>-->
+                <!--            <div class="color-second">-->
+                <!--              满2件打8.8折-->
+                <!--            </div>-->
+                <!--          </div>-->
+              </div>
+            </div>
+            <div class="vip-img" @click="goVipList">
+              <image :src="'/static/client/product/vip.png'|domain" class="full-img"></image>
+            </div>
+          </div>
+          <!-- 服务保障   -->
+          <div class="shouhou flex flex-vertical-center" v-if="productInfo.Products_Promise.length>0">
+            <block v-for="(item,index) in productInfo.Products_Promise" :key="index">
+              <div class="shouhou-item" v-if="item.name">
+                <layout-icon class="p-r-4" type="iconradio-check" display="inline" color="#26C78D"></layout-icon>
+                {{item.name}}
+              </div>
+            </block>
+          </div>
+        </block>
       </div>
 
-      <div id="section1" class="section-content">
+      <div id="section1" class="section-content" v-show="isReady">
         <div class="block" style="padding:40rpx 25rpx">
           <div class="block-title">
             <div class="block-title-text fz-b">商品详情</div>
@@ -875,7 +883,7 @@
       </div>
 
       <!--评论列表-->
-      <div id="section2" class="block section-comment">
+      <div id="section2" class="block section-comment"  v-show="isReady">
 
         <div class="block-title" style="padding:40rpx 25rpx">
           <div class="block-title-text fz-b">留言评论</div>
@@ -914,7 +922,7 @@
         </div>
       </div>
 
-      <div id="section3" class="section-store">
+      <div id="section3" class="section-store"  v-show="isReady">
         <div class="block" style="padding:40rpx 25rpx">
           <div class="block-title">
             <div class="block-title-text fz-b">店铺信息</div>
@@ -978,6 +986,15 @@
 
     </scroll-view>
 
+    <div v-if="!isReady" class="lazy-box" style="position: fixed;top: 0rpx;width: 750rpx;z-index: 102;background: #f8f8f8;" @touchmove.stop.prevent>
+      <div
+        style="width: 750rpx;height: 750rpx;background: #f2f2f2;background-size: cover;background-repeat: no-repeat;background-position: center;"
+        :style="{backgroundImage:'url('+thumbTempFilePath+')'}"></div>
+      <image mode="widthFix" src="/static/goods/detail-lazy-1.png" style="width: 750rpx;"></image>
+<!--      <image mode="widthFix" src="/static/goods/detail-lazy-2.png" style="width: 750rpx;"></image>-->
+      <image mode="widthFix" src="/static/goods/detail-lazy-3.png" style="width: 750rpx;position: fixed;bottom: 0;left: 0;z-index: 102" class=""></image>
+    </div>
+
     <div class="safearea-box fixed"></div>
     <product-sku
       v-if="productInfo.Products_ID"
@@ -998,10 +1015,10 @@
       <block v-if="mode==='default'" v-slot:action>
         <div class="flex flex-vertical-c">
           <div class="left-btn" @click="onePay">
-            <span>单买</span><span class="p-l-4">¥{{productInfo.Products_PriceX}}</span>
+            <span class="fz-12">单买</span><span class="p-l-4">¥{{productInfo.Products_PriceX}}</span>
           </div>
           <div class="right-btn" @click="allPay" v-if="productInfo.is_pintuan">
-            <span>拼团购</span><span class="p-l-4">¥{{productInfo.pintuan_pricex}}</span>
+            <span class="fz-12">拼团购</span><span class="p-l-4">¥{{productInfo.pintuan_pricex}}</span>
           </div>
         </div>
       </block>
@@ -1127,6 +1144,8 @@ export default {
   },
   data () {
     return {
+      thumbTempFilePath: '', // 图片本地地址
+      isReady: false,
       // 倒计时
       activeInfo: {
         start_time: '',
@@ -1605,7 +1624,7 @@ export default {
     },
     async _init_func (options) {
       try {
-        showLoading()
+        // showLoading()
 
         // 秒杀
         if (this.mode === 'seckill') {
@@ -1708,7 +1727,9 @@ export default {
           this.active = res.active_info
         }
 
-        hideLoading()
+        // hideLoading()
+
+        this.isReady = true
 
         await new Promise(resolve => {
           setTimeout(() => {
@@ -1782,6 +1803,10 @@ export default {
     if (flashsale_id) this.flashsale_id = flashsale_id
 
     // 秒杀
+
+    if (Storage.get('thumbTempFilePath')) {
+      this.thumbTempFilePath = Storage.get('thumbTempFilePath')
+    }
 
     this._init_func(options)
   },

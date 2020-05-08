@@ -103,8 +103,7 @@
             </div>
             <div class="block-content">
               <div class="goods-list">
-                <div class="goods-item" v-for="(item,idx) in virtuaGoodsLsit" :key="idx"
-                     @click="$linkTo('/pages/product/detail?prod_id='+item.Products_ID)">
+                <div class="goods-item" v-for="(item,idx) in virtuaGoodsLsit" :key="idx" @click="$toGoodsDetail(item)">
                   <div class="left">
                     <div class="cover" :style="{backgroundImage:'url('+item.ImgPath+')'}"></div>
                   </div>
@@ -165,7 +164,7 @@
               :current="goodsNavIndex">
               <swiper-item style="overflow-y: scroll">
                 <div class="goods-list">
-                  <div class="goods-item" @click="$linkTo('/pages/product/detail?prod_id='+item.Products_ID)"
+                  <div class="goods-item" @click="$toGoodsDetail(item)"
                        style="height: 220rpx;margin-bottom: 18rpx;" v-for="(item,idx) in recommends" :key="idx">
                     <image class="goods-item-cover" :style="{backgroundImage:'url('+item.ImgPath+')'}"></image>
                     <div class="goods-item-right">

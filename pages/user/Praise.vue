@@ -16,7 +16,7 @@
         </block>
       
       </div>
-      <div class="pro-comment flex flex-vertical-c" @click="goPro(item.Product_ID)">
+      <div class="pro-comment flex flex-vertical-c" @click="$toGoodsDetail(item)">
         <image :src="item.Prod_ImgPath" class="m-r-8 pro-img"></image>
         <div>
           <div class="pro-title">
@@ -59,10 +59,7 @@ export default {
     }
   },
   methods: {
-    goPro (id) {
-      let url = '/pages/product/detail?prod_id=' + id
-      this.$linkTo(url)
-    },
+
     async init (item) {
       let list = await getCommitList(this.postData, { tip: '加载中' }).catch(e => {
         error(e.msg || '获取评论列表失败')
