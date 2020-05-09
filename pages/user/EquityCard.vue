@@ -105,14 +105,6 @@ export default {
         duration: 2000,
       })
       
-      // uni.redirectTo({
-      // 	url: '/pages/order/order?index=1'
-      // })
-      // setTimeout(function(){
-      // 	uni.redirectTo({
-      // 		url: '/pages/order/order?index=1'
-      // 	})
-      // },1000)
     },
     paySuccessCall (res) {
       var _that = this
