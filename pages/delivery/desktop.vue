@@ -48,8 +48,7 @@
                              type="iconicon-minus"></layout-icon>
                 <input :value="goods.num" @input="changeGoodsNum" class="input-num text-center fz-12" />
               </block>
-              <layout-icon @click.stop="goodsNumPlus(goods)" size="24" color="#26C78D"
-                           type="iconicon-plus"></layout-icon>
+              <layout-icon @click.stop="goodsNumPlus(goods)" size="24" color="#26C78D" type="iconicon-plus"></layout-icon>
             </div>
           </div>
         </div>
@@ -181,12 +180,6 @@ export default {
     return {
       activeAttrIdx: 0,
       activeGoodsIdx: 0,
-      bid: null,
-      product: {},
-      bizInfo: {},
-      cateActiveIdx: 0,
-      showList: [],
-      pageSize: 999,
       skujosn_new: null,
       skuvaljosn: null,
       check_attr: {},
@@ -198,6 +191,12 @@ export default {
         price: '', // 价格
         count: 0// 库存
       },
+      product: {},
+      bid: null,
+      bizInfo: {},
+      cateActiveIdx: 0,
+      showList: [],
+      pageSize: 999,
       cateList: [
         {
           cate_name: '热销',

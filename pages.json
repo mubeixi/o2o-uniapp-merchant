@@ -254,6 +254,12 @@
           }
         },
         {
+          "path": "support/Im",
+          "style": {
+            "navigationBarTitleText": "客服"
+          }
+        },
+        {
           "path": "user/PersonalMsg",
           "style": {
             "navigationBarTitleText": "修改资料"
