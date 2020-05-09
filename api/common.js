@@ -21,12 +21,6 @@ export const getActiveInfo = (param, options) => fetch({
   options
 })
 
-// 获取商品列表
-export const getProd = (param, options) => fetch({
-  act: 'get_prod',
-  param,
-  options
-})
 
 // 获取赠品列表
 export const getShopGiftList = (param, options) => fetch({

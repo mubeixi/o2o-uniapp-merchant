@@ -222,7 +222,8 @@ export default {
     this.getOrderNum()
   },
   onLoad (options) {
-    const { type, index } = options
+    // 默认普通订单
+    const { type = 'shop', index } = options
     this.type = type
     this.index = index
     let pageTitle = '订单列表'

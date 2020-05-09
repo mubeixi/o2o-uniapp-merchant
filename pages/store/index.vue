@@ -540,7 +540,7 @@ export default {
         this.goodsList = await getProductList({ pageSize: 4, ...base }, { onlyData: true }).catch(e => {
           throw Error(e.msg || '获取商品列表错误')
         })
-        
+        //虚拟商品
         this.virtuaGoodsLsit = await getProductList({
           pageSize: 3,
           prod_order_type: 1,
