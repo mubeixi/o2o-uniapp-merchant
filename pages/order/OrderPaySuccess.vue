@@ -15,30 +15,30 @@
         <view class="pay-succ-last">
           本次购物可享权益
         </view>
-        <view class="youhuijuan">
+        <view class="youhuijuan" v-for="(item,idx) in couponList">
           <image class="allImg" :src="'/static/client/free/mbxcoupon.png'|domain"></image>
           <view class="infoImg">
-            <image class="image" :src="'/static/client/free/mbxcoupon.png'|domain"></image>
+            <image class="image" :src="item.Coupon_PhotoPath"></image>
           </view>
           <view class="storeTitle">
-            11
+            {{item.Coupon_Subject}}
           </view>
           <view class="times">
-            有效期：3213
+            有效期：{{item.Coupon_StartTime}}-{{item.Coupon_EndTime}}
           </view>
           <view class="limit">
-            232
+            {{item.limit_txt}}
           </view>
-          <!--          <view class="prices" v-if="item.Coupon_Discount<=0">-->
-          <!--            ¥<text>3213</text>-->
-          <!--          </view>-->
-          <!--          <view class="prices" v-else>-->
-          <!--            {{item.Coupon_Discount*10}}折优惠-->
-          <!--          </view>-->
-          <!--          <view class="man" v-if="item.Coupon_Subject">-->
-          <!--            满{{item.Coupon_Condition}}可用-->
-          <!--          </view>-->
-          <view class="button">
+          <view class="prices" v-if="item.Coupon_Discount<=0">
+            ¥<text>{{item.Coupon_Cash}}</text>
+          </view>
+          <view class="prices" v-else>
+            {{item.Coupon_Discount*10}}折优惠
+          </view>
+          <view class="man" v-if="item.Coupon_Subject">
+            满{{item.Coupon_Condition}}可用
+          </view>
+          <view class="button" @click="goIndex(item.coupon_prod)">
             去使用
           </view>
         </view>
@@ -132,6 +132,15 @@ export default {
     }
   },
   methods: {
+    goIndex (i) {
+      if (parseInt(i) === 0) {
+        uni.switchTab({
+          url: '/pages/index'
+        })
+      } else {
+        this.$linkTo('/pages/search/result?pid=' + i)
+      }
+    },
     getProd () {
       this.prod_arg.Users_ID = this.Users_ID
       const oldlist = this.prodList
@@ -156,6 +165,7 @@ export default {
         // for (const item of res.data) {
         //   this.couponList.push(item)
         // }
+        // this.couponList = res.data.prod_giving_coupon.concat(res.data.free_order_giving_coupon)
         this.free_money = res.data.free_money
         this.showMain = true
       }).catch(e => {
