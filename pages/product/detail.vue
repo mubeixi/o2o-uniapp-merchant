@@ -6,6 +6,14 @@
     overflow-y: hidden;
   }
 
+  .share-btn {
+    background: none;
+  
+    &::after {
+      border: none;
+    }
+  }
+
   .lazy-box{
     bottom: constant(safe-area-inset-bottom);
     bottom: env(safe-area-inset-bottom);
@@ -715,13 +723,12 @@
       <div :style="{height:menuButtonInfo.top+'px'}"></div>
       <div class="flex flex-vertical-c flex-justify-between"
            :style="{height:menuButtonInfo.height+'px',paddingRight:diyHeadRight+'px'}">
-        <layout-icon class="m-l-10" :plain="false" type="iconback1" size="18" wrap-padding="6px" color="#fff"
-                     @click="$back()"></layout-icon>
+        <layout-icon class="m-l-10" :plain="false" type="iconback1" size="18" wrap-padding="6px" color="#fff" @click="$back()"></layout-icon>
         <div class="flex flex-vertical-c">
-          <layout-icon :plain="false" type="iconshare" size="18" wrap-padding="6px" color="#fff"
-                       @click="$back()"></layout-icon>
-          <layout-icon class="m-l-10 m-r-10" :plain="false" type="iconcart" size="18" wrap-padding="6px" color="#fff"
-                       @click="$back()"></layout-icon>
+          <button open-type="share" class="action-item share-btn">
+            <layout-icon :plain="false" type="iconshare" size="18" wrap-padding="6px" color="#fff"></layout-icon>
+          </button>
+          <layout-icon class="m-l-10 m-r-10" :plain="false" type="iconcart" size="18" wrap-padding="6px" color="#fff" @click="$linkTo('/pages/order/ShoppingCart')"></layout-icon>
         </div>
       </div>
     </div>
@@ -732,16 +739,17 @@
       <div class="flex flex-vertical-c flex-justify-between"
            :style="{height:menuButtonInfo.height+'px',paddingRight:diyHeadRight+'px'}">
         <div class="flex flex-vertical-c">
-          <layout-icon class="m-l-10" :plain="false" type="iconback1" size="18" wrap-padding="6px" wrap-bg="none"
-                       color="#606060" @click="$back()"></layout-icon>
+          <layout-icon class="m-l-10" :plain="false" type="iconback1" size="18" wrap-padding="6px" wrap-bg="none" color="#606060" @click="$back()"></layout-icon>
           <div @click="$linkTo('/pages/search/index')" class="head-search flex flex-vertical-c">
             <layout-icon color="#606060" type="iconicon-search"></layout-icon>
             <span class="fz-12 c9 p-l-6">搜索商品</span>
           </div>
         </div>
         <div class="flex flex-vertical-c">
-          <layout-icon :plain="false" type="iconshare" size="18" wrap-padding="6px" wrap-bg="none" color="#606060" @click="$back()"></layout-icon>
-          <layout-icon class="m-l-10 m-r-10" :plain="false" type="iconcart" size="18" wrap-bg="none" wrap-padding="6px" color="#606060" @click="$back()"></layout-icon>
+          <button open-type="share" class="share-btn">
+            <layout-icon :plain="false" type="iconshare" size="18" wrap-padding="6px" wrap-bg="none" color="#606060"></layout-icon>
+          </button>
+          <layout-icon class="m-l-10 m-r-10" :plain="false" type="iconcart" size="18" wrap-bg="none" wrap-padding="6px" color="#606060" @click="$linkTo('/pages/order/ShoppingCart')"></layout-icon>
         </div>
       </div>
     </div>
@@ -810,7 +818,7 @@
               </div>
               <div class="product-price-share">
                 <span class="price-q">¥</span>
-                28.90
+                {{productInfo.share_commission}}
               </div>
             </div>
           </div>
@@ -880,7 +888,7 @@
           </div>
         </div>
         <block v-if="richTextReady">
-          <u-parse :content="productInfo.Products_Description"></u-parse>
+          <u-parse :content="richContent"></u-parse>
         </block>
 
       </div>
@@ -1150,6 +1158,7 @@ export default {
       thumbTempFilePath: '', // 图片本地地址
       isReady: false,
       richTextReady: false,
+      richContent:'',
       // 倒计时
       activeInfo: {
         start_time: '',
@@ -1687,7 +1696,9 @@ export default {
         Object.assign(this.productInfo, productInfo)
 
         // this.productInfo.Products_Promise = [{ name: '随时退款' }, { name: '随时退款' }, { name: '随时退款' }, { name: '随时退款' }]
-        this.productInfo.Products_Description = formatRichTextByUparseFn(this.productInfo.Products_Description)
+        //this.productInfo.Products_Description = formatRichTextByUparseFn(this.productInfo.Products_Description)
+       
+        this.richContent = formatRichTextByUparseFn(this.productInfo.Products_Description)
         this.richTextReady = true
         this.isVirtual = this.productInfo.Products_IsVirtual === 1
 
