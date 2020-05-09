@@ -8,7 +8,8 @@ export const Fetch = function ({ url, param = {}, options = false, method = 'pos
       url: IM_API_URL + url,
       method,
       data,
-      options
+      options,
+      isAddHost: false // 不需要加host
     })
   } catch (e) {
     console.log('request error :' + JSON.stringify(e))

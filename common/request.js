@@ -102,7 +102,16 @@ class XHR {
 }
 
 const hookErrorCode = [0, 66001, 88001]
-export const ajax = ({ url, method = 'post', data = {}, options = {} }) => {
+/**
+ *
+ * @param url
+ * @param method
+ * @param data
+ * @param options
+ * @param isAddHost 如果为true,则不需要加host
+ * @returns {Promise<unknown>}
+ */
+export const ajax = ({ url, method = 'post', data = {}, options = {},isAddHost=true }) => {
   let {
     tip = '', // loading text
     mask = false,
@@ -126,7 +135,7 @@ export const ajax = ({ url, method = 'post', data = {}, options = {} }) => {
     'content-type': 'application/x-www-form-urlencoded',
   }
   
-  const _url = ENV.apiBaseUrl + url
+  const _url = !isAddHost ? url:ENV.apiBaseUrl + url
   
   return new Promise((resolve, reject) => {
     uni.request({
