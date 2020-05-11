@@ -954,7 +954,7 @@
               <span style="margin: 0rpx 26rpx 0rpx 16rpx"> {{store[0].biz_account}}</span>
               <layout-icon type="iconicon-phone" size="14" color="#26C78D"></layout-icon>
             </div>
-            <div class="store-info-call">
+            <div class="store-info-call"  @click="$openLocation(store[0].biz_lat,store[0].biz_lon,store[0].biz_shop_name)">
               <layout-icon type="iconicon-address" size="14" color="#999"></layout-icon>
               <span style="margin: 0rpx 20rpx 0rpx 16rpx">{{store[0].area_address}}</span>
               <layout-icon type="iconicon-address" size="14" color="#26C78D"></layout-icon>

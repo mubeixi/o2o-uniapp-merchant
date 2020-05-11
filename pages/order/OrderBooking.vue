@@ -608,9 +608,7 @@ export default {
     },
     // 跳转新增地址页面
     goEditAdd () {
-      uni.navigateTo({
-        url: '/pagesA/editAddress/editAddress?from=checkout'
-      })
+		this.$linkTo('/pagesA/user/EditAddress?from=checkout')
     },
 
     // 积分抵扣开关
@@ -941,7 +939,12 @@ export default {
           return
         }
 
-        this.$linkTo('/pages/order/OrderPay?Order_ID=' + createOrderResult.Order_ID + '&pagefrom=check')
+			const url='/pages/order/OrderPay?Order_ID=' + createOrderResult.Order_ID + '&pagefrom=check'
+			uni.redirectTo({
+				url: url
+			});
+			
+       
       } catch (e) {
         console.log(e)
         this.formCheckResult = [e.message]

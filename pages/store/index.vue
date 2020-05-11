@@ -450,7 +450,9 @@ export default {
     taggleFavorite () {
       this.isFavourite = !this.isFavourite
       const Action = this.isFavourite ? addFavourite : cancelFavourite
-      Action({ biz_id: this.bid }).catch((e) => {
+      Action({ biz_id: this.bid }).then(res=>{
+		  toast(res.msg)
+	  }).catch((e) => {
         Exception.handle(e)
       })
     },
