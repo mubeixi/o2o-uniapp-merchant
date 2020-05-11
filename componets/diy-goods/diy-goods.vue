@@ -45,9 +45,9 @@
 </template>
 <script>
 import { getProductList } from '../../common/fetch'
-import { goProductDetail, lazyImgUrl } from '../../common'
+import { lazyImgUrl } from '../../common'
 
-import { getDomain } from '@/common/helper'
+import { getDomain, toGoodsDetail } from '@/common/helper'
 import { linkTo } from '@/common/fun'
 
 export default {
@@ -209,14 +209,8 @@ export default {
   },
   components: {},
   methods: {
-    goProductDetail,
     goDetail (goods) {
-      const linkObj = {
-        link: '/pages/product/detail?Products_ID=' + goods.Products_ID,
-        linkType: 'default'
-      }
-
-     linkTo(linkObj)
+      toGoodsDetail(goods)
     },
     itemMarginObj (idx) {
       const conf = this.goods.style.margin

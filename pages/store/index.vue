@@ -103,8 +103,7 @@
             </div>
             <div class="block-content">
               <div class="goods-list">
-                <div class="goods-item" v-for="(item,idx) in virtuaGoodsLsit" :key="idx"
-                     @click="$linkTo('/pages/product/detail?prod_id='+item.Products_ID)">
+                <div class="goods-item" v-for="(item,idx) in virtuaGoodsLsit" :key="idx" @click="$toGoodsDetail(item)">
                   <div class="left">
                     <div class="cover" :style="{backgroundImage:'url('+item.ImgPath+')'}"></div>
                   </div>
@@ -165,7 +164,7 @@
               :current="goodsNavIndex">
               <swiper-item style="overflow-y: scroll">
                 <div class="goods-list">
-                  <div class="goods-item" @click="$linkTo('/pages/product/detail?prod_id='+item.Products_ID)"
+                  <div class="goods-item" @click="$toGoodsDetail(item)"
                        style="height: 220rpx;margin-bottom: 18rpx;" v-for="(item,idx) in recommends" :key="idx">
                     <image class="goods-item-cover" :style="{backgroundImage:'url('+item.ImgPath+')'}"></image>
                     <div class="goods-item-right">
@@ -451,7 +450,9 @@ export default {
     taggleFavorite () {
       this.isFavourite = !this.isFavourite
       const Action = this.isFavourite ? addFavourite : cancelFavourite
-      Action({ biz_id: this.bid }).catch((e) => {
+      Action({ biz_id: this.bid }).then(res=>{
+		  toast(res.msg)
+	  }).catch((e) => {
         Exception.handle(e)
       })
     },
@@ -541,7 +542,7 @@ export default {
         this.goodsList = await getProductList({ pageSize: 4, ...base }, { onlyData: true }).catch(e => {
           throw Error(e.msg || '获取商品列表错误')
         })
-        
+        //虚拟商品
         this.virtuaGoodsLsit = await getProductList({
           pageSize: 3,
           prod_order_type: 1,

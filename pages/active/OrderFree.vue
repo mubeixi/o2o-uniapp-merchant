@@ -83,7 +83,10 @@
 
 import BaseMixin from '@/mixins/BaseMixin'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
-import { getActiveInfo, getProd } from '@/api/common'
+import { getActiveInfo } from '@/api/common'
+import {
+  getProductList
+} from '@/api/product'
 import { getBizInfo } from '@/api/store'
 import { hideLoading, modal, showLoading } from '@/common/fun'
 import { Exception } from '@/common/Exception'
@@ -97,7 +100,7 @@ export default {
   data () {
     return {
       biz_id: null,
-      bizInfo: [],
+      // bizInfo: {},
       postData: {
         page: 1,
         pageSize: 999
@@ -120,7 +123,7 @@ export default {
         page: this.page,
         pageSize: this.pageSize
       }
-      const arr = await getProd(data, { tip: '加载中' }).catch(e => {
+      const arr = await getProductList(data, { tip: '加载中' }).catch(e => {
         throw Error(e.msg || '获取推荐商品失败')
       })
       this.totalCount = arr.totalCount
@@ -135,9 +138,11 @@ export default {
     async init () {
       try {
         showLoading()
-        this.bizInfo = await getBizInfo({ biz_id: this.biz_id }, { onlyData: true }).catch(e => {
-          throw Error(e.msg || '获取商家信息错误')
-        })
+        // this.bizInfo = await getBizInfo({ biz_id: this.biz_id }).then(res=>{
+        //   return res.data[0]
+        // }).catch(e => {
+        //   throw Error(e.msg || '获取商家信息错误')
+        // })
 
         this.activeInfo = await getActiveInfo({ type: 'freeorder', ...this.postData }, {
           onlyData: true
@@ -149,7 +154,7 @@ export default {
         this.start_time = moment(this.activeInfo.start_time * 1000).format('YYYY.MM.DD')
         this.end_time = moment(this.activeInfo.end_time * 1000).format('YYYY.MM.DD')
 
-        this.recommendProdList = await getProd({
+        this.recommendProdList = await getProductList({
           Products_ID: this.activeInfo.active_info.recommend_prod_id
         }, {
           onlyData: true
@@ -157,7 +162,7 @@ export default {
           throw Error(e.msg || '获取推荐商品失败')
         })
 
-        this.prodList = await getProd({
+        this.prodList = await getProductList({
           Products_ID: this.activeInfo.active_info.prod_id
         }, {
           onlyData: true

@@ -189,8 +189,13 @@ export default {
     }
   },
   watch: {
-    content: function (newVal, oldVal) {
-      newVal && this.setHtml()
+    content:{
+      deep:true,
+      immediate:true,
+      handler(newVal, oldVal) {
+        console.log(newVal)
+        newVal && this.setHtml()
+      }
     }
   }
 }

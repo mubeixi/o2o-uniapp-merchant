@@ -439,6 +439,9 @@ export default {
           })
           order_list = [orderInfo]
           this.orderInfo = orderInfo
+
+          this.Order_Type = orderInfo.Order_Type
+          Storage.set('temp_order_type', this.Order_Type)
         } else if (this.mode === 'multi') {
           const orderListInfo = await getPreOrderDetail({ pre_sn: this.Order_ID }, { onlyData: 1 }).catch(() => {
             throw Error('获取合单信息错误')
@@ -605,22 +608,17 @@ export default {
       }
 
       error(msg || '支付失败')
-
-      // uni.redirectTo({
-      // 	url: '/pages/order/order?index=1'
-      // })
-      // setTimeout(function(){
-      // 	uni.redirectTo({
-      // 		url: '/pages/order/order?index=1'
-      // 	})
-      // },1000)
     },
     paySuccessCall (res) {
       var _that = this
-      const Order_Type = Storage.get('type')
-      const pagefrom = Storage.get('pagefrom')
-      Storage.remove('pagefrom')
-      Storage.remove('type')
+
+      // 用来解决子组件中无法调用父组件变量，而又不想一直props的问题
+      const Order_Type = Storage.get('temp_order_type')
+      const pagefrom = Storage.get('temp_order_pagefrom')
+      const Order_ID = Storage.get('temp_order_id')
+      Storage.remove('temp_order_type')
+      Storage.remove('temp_order_pagefrom')
+      Storage.remove('temp_order_id')
 
       if (res && res.code && res.code === 2) {
         _that.payFailCall()
@@ -633,46 +631,48 @@ export default {
       }
 
       // 头条小程序
-      if (res && res.code && res.code === 9) {
-        uni.showModal({
-          title: '提示',
-          content: '是否完成支付',
-          cancelText: '未完成',
-          confirmText: '已支付',
-          success: function (res) {
-            if (res.confirm) {
-              if (Order_Type === 'pintuan') {
-                this.$linkTo('/pages/order/pintuanOrderlist?index=2')
-              } else {
-                if (pagefrom === 'check') {
-                  uni.redirectTo({
-                    url: '/pages/order/order?index=2'
-                  })
-                } else if (pagefrom === 'gift') {
-                  uni.redirectTo({
-                    url: '/pagesA/person/myGift?checked=1'
-                  })
-                }
-              }
-            } else if (res.cancel) {
-              if (Order_Type === 'pintuan') {
-                this.$linkTo('/pages/order/pintuanOrderlist?index=1')
-              } else {
-                if (pagefrom === 'check') {
-                  uni.redirectTo({
-                    url: '/pages/order/order?index=1'
-                  })
-                } else if (pagefrom === 'gift') {
-                  uni.redirectTo({
-                    url: '/pagesA/person/myGift?checked=0'
-                  })
-                }
-              }
-            }
-          }
-        })
-        return
-      }
+      // if (res && res.code && res.code === 9) {
+      //   uni.showModal({
+      //     title: '提示',
+      //     content: '是否完成支付',
+      //     cancelText: '未完成',
+      //     confirmText: '已支付',
+      //     success: function (res) {
+      //       if (res.confirm) {
+      //         if (Order_Type === 'pintuan') {
+      //           uni.redirectTo({
+      //             url: '/pages/order/GroupSuccess?Order_Type=' + Order_Type + '&OrderId=' + _that.Order_ID
+      //           })
+      //         } else {
+      //           if (pagefrom === 'check') {
+      //             uni.redirectTo({
+      //               url: '/pages/order/OrderPaySuccess?Order_Type=' + Order_Type + '&OrderId=' + _that.Order_ID
+      //             })
+      //           } else if (pagefrom === 'gift') {
+      //             uni.redirectTo({
+      //               url: '/pagesA/person/myGift?checked=1'
+      //             })
+      //           }
+      //         }
+      //       } else if (res.cancel) {
+      //         if (Order_Type === 'pintuan') {
+      //           this.$linkTo('/pages/order/order?index=1')
+      //         } else {
+      //           if (pagefrom === 'check') {
+      //             uni.redirectTo({
+      //               url: '/pages/order/order?index=1'
+      //             })
+      //           } else if (pagefrom === 'gift') {
+      //             uni.redirectTo({
+      //               url: '/pagesA/person/myGift?checked=0'
+      //             })
+      //           }
+      //         }
+      //       }
+      //     }
+      //   })
+      //   return
+      // }
 
       // 0：支付成功 1：支付超时 2：支付失败 3：支付关闭 4：支付取消 9：订单状态开发者自行获取
 
@@ -685,26 +685,18 @@ export default {
 
       // 拼团订单则跳转到开团成功
 
+      console.log(Order_Type, Order_ID)
       if (Order_Type === 'pintuan') {
-        
         uni.redirectTo({
-          url: '/pages/order/GroupSuccess?Order_Type=' + Order_Type + '&OrderId=' + _that.Order_ID
+          url: '/pages/order/GroupSuccess?Order_Type=' + Order_Type + '&OrderId=' + Order_ID
         })
-
       } else {
         if (pagefrom === 'check') {
-          
           // 合单无法跳转
-          if (this.mode === 'single') {
-            uni.redirectTo({
-              url: '/pages/order/paySuccess?Order_Type=' + Order_Type + '&OrderId=' + _that.Order_ID
-            })
-          } else {
-            uni.redirectTo({
-              url: '/pages/order/order?index=2'
-            })
-          }
-
+          // 合单也可以跳转到这个页面了
+          uni.redirectTo({
+            url: '/pages/order/OrderPaySuccess?Order_Type=' + Order_Type + '&OrderId=' + Order_ID
+          })
         } else if (pagefrom === 'gift') {
           uni.redirectTo({
             url: '/pagesA/person/myGift?checked=1'
@@ -926,11 +918,14 @@ export default {
       this.Order_ID = options.Order_ID
       // 标记为多个或者单个
       this.mode = options.Order_ID.indexOf('PRE') === -1 ? 'single' : 'multi'
+
+      Storage.set('temp_order_id', options.Order_ID)
     } else {
       modal('Order_ID参数必填')
     }
     if (options.pagefrom) {
       this.pagefrom = options.pagefrom
+      Storage.set('temp_order_pagefrom', options.pagefrom)
     }
 
     // 获取支付方式

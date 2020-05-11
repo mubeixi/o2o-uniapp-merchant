@@ -1,7 +1,7 @@
 import { staticUrl } from './env'
 import { confirm, error, linkToEasy } from './fun'
 import { getAccessToken, upload } from './request'
-import Srotage from '@/common/Storage'
+import Storage from '@/common/Storage'
 import store from '@/store'
 
 import Schema from 'validate'
@@ -374,20 +374,6 @@ export function sleep (fn, par, time = 3000) {
   })
 }
 
-/**
- * 根据拼团跳转不同的页面
- * @param id
- * @param is_group
- */
-export const goProductDetail = (id, is_group) => {
-  if (!id) return
-
-  // let path = '/pages/product/detail';
-  const path = is_group ? '/pages/detail/groupDetail' : '/pages/product/detail'// 根据不同路径跳转
-  uni.navigateTo({
-    url: path + '?Products_ID=' + id
-  })
-}
 
 // 会修改模板对象，将他没有的属性加上
 function addFun (object, newobj) {
@@ -543,9 +529,9 @@ export function isWeiXin () {
  * @return {string}
  */
 export const buildSharePath = (path) => {
-  const users_ID = Srotage.get('users_id')
-  const userInfo = store.state.userInfo || Srotage.get('userInfo')
-  const User_ID = Srotage.get('user_id')
+  const users_ID = Storage.get('users_id')
+  const userInfo = store.state.userInfo || Storage.get('userInfo')
+  const User_ID = Storage.get('user_id')
 
   let search = ''
 
@@ -671,9 +657,9 @@ export const cutstrFun = (str, len, tip = '..') => {
  * 跳转商品详情页面
  * @param productInfo
  */
-export const toGoodsDetail = (productInfo) => {
+export const toGoodsDetail = async (productInfo) => {
   console.log(productInfo)
-  const { Products_ID, spike_good_id, price} = productInfo
+  const { Products_ID, spike_good_id, price } = productInfo
   let url = ''
   if (!Products_ID) throw Error('产品id必传')
   url = `/pages/product/detail?prod_id=${Products_ID}`
@@ -688,8 +674,21 @@ export const toGoodsDetail = (productInfo) => {
   }
   console.log('产品跳转url:' + url)
 
+  const thumb = productInfo.Products_JSON.ImgPath[0]
+
+  if (!thumb) {
+    linkToEasy(url)
+    return
+  }
+
+  //const { path: thumbTempFilePath } = await Promisify('getImageInfo', { src: thumb }).catch(e => { linkToEasy(url) })
+
+  Storage.set('thumbTempFilePath', productInfo.Products_JSON.ImgPath[0])
+
   linkToEasy(url)
 }
+
+export const setNavigationBarTitle = (title)=> uni.setNavigationBarTitle({title})
 
 const Helper = {
   Object: {

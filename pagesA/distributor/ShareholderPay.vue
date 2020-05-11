@@ -300,7 +300,7 @@ export default {
     
     .first {
       padding-left: 33rpx;
-      padding-right: 41 rpxd;
+      padding-right: 41rpx;
       height: 30rpx;
       display: flex;
       align-items: center;

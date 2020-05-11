@@ -18,6 +18,14 @@
             分享
           </div>
         </div>
+        <div class="bottom-q" @click="toIm">
+          <div style="display: flex;justify-content: center;margin-bottom: 6rpx">
+            <layout-icon weight="bold" type="iconicon-test1" size="20" color="#666666"></layout-icon>
+          </div>
+          <div>
+            客服
+          </div>
+        </div>
       </div>
       <div class="bottom-btn">
         <slot name="action"></slot>
@@ -28,6 +36,7 @@
 
 <script>
 import LayoutIcon from '@/componets/layout-icon/layout-icon.vue'
+import { linkToEasy } from '@/common/fun'
 
 export default {
   components: { LayoutIcon },
@@ -44,6 +53,9 @@ export default {
     bindRightClick () {
       this.$emit('bindRightClick')
     },
+    toIm () {
+      linkToEasy('/pagesA/support/Im')
+    },
     goStore () {
       this.$emit('goStore')
     },
@@ -58,7 +70,7 @@ export default {
   .bottom-last {
     width: 750rpx;
     height: 106rpx;
-    padding: 10rpx;
+    padding: 10rpx 10rpx 10rpx 0;
     display: flex;
     justify-content: space-between;
     background-color: #ffffff;
@@ -78,7 +90,9 @@ export default {
     //width: 50rpx;
     font-size: 12px;
     color: #666666;
-    margin-left: 60rpx;
+    //margin-left: 60rpx;
+	flex: 1;
+	text-align: center;
   }
 
   .left-btn {

@@ -11,6 +11,12 @@ export const apiBaseUrl = 'https://newo2o.bafangka.com'
 export const staticUrl = 'https://newo2o.bafangka.com'
 export const users_id = 'wkbq6nc2kc'
 
+// Im相关配置
+export const IM_WSS_URL = 'wss://newjdtravel.bafangka.com/cus/'
+export const IM_API_URL = 'https://chat.bafangka.com'
+export const IM_APPID = 'uLwqowvvkHAUmq5'
+export const IM_APPSECRET = '4MJB9wQDO3EpxSdIPzLn6kejsqnv5d6e'
+
 // #ifdef H5
 function setWxConfig (config) {
   wx.config(config)

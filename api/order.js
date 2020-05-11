@@ -161,3 +161,6 @@ export const refundSend = (param, options) => fetch({
 
 // 获取拼团的团队
 export const getPintuanTeam = (param, options) => fetch({ act: 'get_pintuan_team', param, options })
+
+// 获取订单权益
+export const getPayCoupons = (param, options) => fetch({ act: 'getPayCoupons', param, options })
