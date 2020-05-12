@@ -145,19 +145,6 @@
       }
     },
     {
-      "path": "pages/user/VipList",
-      "style": {
-        "navigationBarTitleText": "会员等级",
-        "navigationStyle": "custom"
-      }
-    },
-    {
-      "path": "pages/user/Coupon",
-      "style": {
-        "navigationBarTitleText": "优惠券"
-      }
-    },
-    {
       "path": "pages/order/OrderBooking",
       "style": {
         "navigationBarTitleText": "订单确认"
@@ -190,12 +177,6 @@
       }
     },
     {
-      "path": "pages/shareQrcode",
-      "style": {
-        "navigationBarTitleText": "分享海报"
-      }
-    },
-    {
       "path": "pages/active/FlashSale",
       "style": {
         "navigationBarTitleText": "限时抢购",
@@ -223,19 +204,6 @@
       }
     },
     {
-      "path": "pages/user/DailyCheck",
-      "style": {
-        "navigationBarTitleText": "签到"
-      }
-    },
-    {
-      "path": "pages/user/EquityCard",
-      "style": {
-        "navigationBarTitleText": "权益",
-        "navigationBarBackgroundColor": "#3A3731"
-      }
-    },
-    {
       "path": "pages/user/Praise",
       "style": {
         "navigationBarTitleText": "好评"
@@ -247,6 +215,32 @@
       "root": "pagesA",
       "name": "onther",
       "pages": [
+        {
+          "path": "user/Coupon",
+          "style": {
+            "navigationBarTitleText": "优惠券"
+          }
+        },
+        {
+          "path": "user/EquityCard",
+          "style": {
+            "navigationBarTitleText": "权益",
+            "navigationBarBackgroundColor": "#3A3731"
+          }
+        },
+        {
+          "path": "user/DailyCheck",
+          "style": {
+            "navigationBarTitleText": "签到"
+          }
+        },
+        {
+          "path": "user/VipList",
+          "style": {
+            "navigationBarTitleText": "会员等级",
+            "navigationStyle": "custom"
+          }
+        },
         {
           "path": "user/EditPersonalMsg",
           "style": {

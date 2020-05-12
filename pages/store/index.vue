@@ -88,7 +88,7 @@
             <image mode="scaleToFill" class="feature-item" :src="'/static/client/store/pay.png'|domain"></image>
             <image @click="$linkTo('/pages/product/apply?bid='+bid)" mode="scaleToFill" class="feature-item"
                    :src="'/static/client/store/join.png'|domain"></image>
-            <image @click="$linkTo('/pages/user/VipList?bid='+bid)" mode="scaleToFill" class="feature-item"
+            <image @click="$linkTo('/pagesA/user/VipList?bid='+bid)" mode="scaleToFill" class="feature-item"
                    :src="'/static/client/store/member.png'|domain"></image>
           </div>
           

@@ -1,5 +1,6 @@
 import { ajax } from '@/common/request'
 import { IM_API_URL } from '@/common/env'
+import Storage from '@/common/Storage'
 
 export const Fetch = function ({ url, param = {}, options = false, method = 'post' }) {
   try {
@@ -9,6 +10,7 @@ export const Fetch = function ({ url, param = {}, options = false, method = 'pos
       method,
       data,
       options,
+      headerExt: { token: Storage.get('IM_ACCESS_TOKEN') || '' },
       isAddHost: false // 不需要加host
     })
   } catch (e) {
@@ -18,3 +20,9 @@ export const Fetch = function ({ url, param = {}, options = false, method = 'pos
 
 // 生成、查询token
 export const getAccessToken = (param, options) => Fetch({ url: '/token/getAccessToken', param, options })
+
+// 绑定用户
+export const bindUid = (param, options) => Fetch({ url: '/chat/bindUid', param, options })
+
+// 发送消息
+export const sendMsg = (param, options) => Fetch({ url: '/chat/sendMsg', param, options })
