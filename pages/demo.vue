@@ -10,7 +10,7 @@
     <div class="im-bottom-action">
       <div class="text">
         <div class="input-box">
-          <input @focus="mode='text'" @blur="inputBlur" class="input-ele"  v-model="tempText" />
+          <input type="text" confirm-type="发送" @confirm="sendMsg" @focus="mode='text'" @blur="inputBlur" class="input-ele"  v-model="tempText" />
         </div>
         <div class="submit-btn">
           <image class="img-btn" @click="taggleMore" src="/static/im/im-action-more.png"></image>
@@ -106,7 +106,7 @@ export default {
         Exception.handle(e)
       }
     },
-    sendCamera () {
+    async sendCamera () {
       try{
         const files = await chooseImageByPromise({ sizeType: 1, sourceType: ['camera'] }).catch(err => { throw Error('选择照片失败') })
         const imgs = getArrColumn(files, 'path')
