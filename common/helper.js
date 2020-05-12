@@ -190,9 +190,10 @@ export const getObjectAttrNum = (obj, stict = true) => {
  * 获取图片
  * @param count
  * @param sizeType
+ * @sourceType
  * @returns {Promise<unknown>}
  */
-export const chooseImageByPromise = ({ count = 1, sizeType = ['original', 'compressed'] } = {}) => {
+export const chooseImageByPromise = ({ count = 1, sourceType = ['camera', 'album'], sizeType = ['original', 'compressed'] } = {}) => {
   return new Promise((resolve, reject) => {
     uni.chooseImage({
       count,
@@ -373,7 +374,6 @@ export function sleep (fn, par, time = 3000) {
     setTimeout(() => resolve(fn(par)), time)
   })
 }
-
 
 // 会修改模板对象，将他没有的属性加上
 function addFun (object, newobj) {
@@ -681,14 +681,14 @@ export const toGoodsDetail = async (productInfo) => {
     return
   }
 
-  //const { path: thumbTempFilePath } = await Promisify('getImageInfo', { src: thumb }).catch(e => { linkToEasy(url) })
+  // const { path: thumbTempFilePath } = await Promisify('getImageInfo', { src: thumb }).catch(e => { linkToEasy(url) })
 
   Storage.set('thumbTempFilePath', productInfo.Products_JSON.ImgPath[0])
 
   linkToEasy(url)
 }
 
-export const setNavigationBarTitle = (title)=> uni.setNavigationBarTitle({title})
+export const setNavigationBarTitle = (title) => uni.setNavigationBarTitle({ title })
 
 const Helper = {
   Object: {

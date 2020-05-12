@@ -6,6 +6,7 @@ import moment from 'moment'
 import Promisify from '@/common/Promisify'
 import { Exception } from '@/common/Exception'
 import Storage from '@/common/Storage'
+import { modal } from '@/common/fun'
 
 // 消息类,就先不用继承了吧
 /**
@@ -64,10 +65,12 @@ class IM {
 
     // 注意销毁
     this.task = null
+
+    this.intervalInstance = null
+    this.heartBeatFailNum = 0 // 心跳丢失次数
+    this.connectFailNum = 0// 连接失败次数
     // console.log(extConf)
-    // if (extConf.hasOwnProperty('identityType') && extConf.hasOwnProperty('identityId')) {
-    //   this.setIdentity({ type: extConf.identityType, id: extConf.identityId })
-    // }
+
   }
 
   /**
@@ -77,6 +80,7 @@ class IM {
    * @param ext
    */
   setSendInfo ({ type, id, ...ext }) {
+    // 获取发送人的信息要用的
     this.setIdentity({ type, id })
   }
 
@@ -87,7 +91,8 @@ class IM {
    * @param ext
    */
   setReceiveInfo ({ type, id, ...ext }) {
-
+    this.receiveIdentity = type
+    this.receiveId = id
   }
 
   /**
@@ -96,8 +101,8 @@ class IM {
    * @param id 身份id
    */
   setIdentity ({ type = 'user', id }) {
-    this.identity = type
-    this.identityId = id
+    this.sendIdentity = type
+    this.sendId = id
   }
 
   setClientId (val) {
@@ -115,23 +120,28 @@ class IM {
    * system 平台，直接使用平台的appid值
    * @returns {string}
    */
-  getOutUidByBind () {
-    if (this.identity === 'system') {
+  getOutUid () {
+    if (this.sendIdentity === 'system') {
       return this.appid
     } else {
-      if (!this.identity || !this.identityId) throw Error('获取out_uid失败')
-      return this.identity + '_' + this.identityId
+      if (!this.sendIdentity || !this.sendId) throw Error('获取out_uid失败')
+      return this.sendIdentity + '_' + this.sendId
     }
   }
 
-  getOutUid () {
-    if (this.identity === 'system') {
+  /**
+   * 获取接收人
+   * @returns {string}
+   */
+  getToUid () {
+    if (this.receiveIdentity === 'system') {
       return this.appid
     } else {
-      if (!this.identity || !this.identityId) throw Error('获取out_uid失败')
-      return this.identityId
+      if (!this.receiveIdentity || !this.receiveId) throw Error('获取out_uid失败')
+      return this.receiveIdentity + '_' + this.receiveId
     }
   }
+
 
   get token () {
     const { expires_at, token } = this.accessToken
@@ -156,6 +166,9 @@ class IM {
 
     // 对于发消息就不要阻塞了
     await this._craeteSocket()
+
+    // 心跳
+    this.intervalInstance = setInterval(this._holdHeartBeat.bind(this), this.heartBeatTimout)
   }
 
   close () {
@@ -173,7 +186,7 @@ class IM {
     if (this.socketOpen) {
       this.chatList.push({ ...message, direction: 'to', sendStatus: 0 })
       const chatIdx = this.chatList.length - 1
-      sendMsg({ type, content: message.getContent(), out_uid: this.getOutUid() }).then(res => {
+      sendMsg({ type, content: message.getContent(), out_uid: this.getOutUid(), to: this.getToUid() }).then(res => {
         console.log('发送成功', res)
         this.chatList[chatIdx].sendStatus = 1 // 标记成功
         return res.data
@@ -187,6 +200,32 @@ class IM {
     }
   }
 
+  /**
+   * 维持心跳
+   * @private
+   */
+  _holdHeartBeat () {
+    const message = JSON.stringify({ type: 'heartbeat' })
+    this.task.send({
+      data: message,
+      success: () => {
+        this.heartBeatFailNum = 0// 重置心跳错误次数
+        console.log('心跳保持成功')
+      },
+      fail: () => {
+        console.log('心跳请求错误')
+        this.heartBeatFailNum++
+        // 丢失心跳达到最大次数之后需要重连
+        if (this.heartBeatFailNum > this.heartBeatFailMax) {
+          console.log('心跳请求超过三次错误')
+          clearInterval(this.intervalInstance)
+          // 重连吧
+          this.start()
+        }
+      }
+    })
+  }
+
   _takeMessage (messageObj) {
     const { type, content, from } = messageObj
 
@@ -195,7 +234,7 @@ class IM {
       this.setClientId(from)
       bindUid({
         client_id: this.getClientId(),
-        out_uid: this.getOutUidByBind()
+        out_uid: this.getOutUid()
       }).catch(res => {}).catch(e => { throw Error('绑定用户失败') })
       return
     }
@@ -230,10 +269,15 @@ class IM {
       this.msgQueue = []
     })
     SocketTask.onMessage((res) => {
+      this.connectFailNum = 0 // 重置错误次数
       console.log('WebSocket收到消息', res)
       this._takeMessage(JSON.parse(res.data))
     })
     SocketTask.onError((error) => {
+      this.connectFailNum++ // 累计错误次数
+      if (this.connectFailNum > this.tryRequestMax) {
+        modal('建立通讯失败')
+      }
       console.log('WebSocket错误')
       console.log(error)
     })
@@ -264,6 +308,9 @@ class IM {
 // 还是放到类上面，这样就每个项目用工程文件就好了
 IM.prototype.appid = IM_APPID
 IM.prototype.appsecret = IM_APPSECRET
+IM.prototype.heartBeatTimout = 30 * 1000 // 心跳保持时间，默认三十秒
+IM.prototype.heartBeatFailMax = 3 // 最大心跳丢失次数，错误3次重新建立socket请求
+IM.prototype.tryRequestMax = 5 // 最大重连次数，重连超过5次不成功，就直接报错提醒用户洗洗睡
 
 // 1.创建实例
 // 2.拿到token(阻塞操作，带mask的全屏loading)

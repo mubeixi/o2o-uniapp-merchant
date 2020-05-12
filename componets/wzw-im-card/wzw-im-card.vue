@@ -1,12 +1,21 @@
 <template>
   <div class="card-item">
     <div class="time"></div>
-    <div class="content-wrap">
+    <div class="content-wrap" :class="{reverse:message.direction==='to'}">
       <div class="content-label">
+        <div v-if="message.direction==='to'" class="content-arrow">
+          <layout-icon class="arrow-icon" size="16"  color="#9de94d" display="inline" type="iconright"></layout-icon>
+        </div>
         <div class="headimg" :style="{backgroundImage:'url('+headimg+')'}"></div>
-        <layout-icon color="content-arrow" type="iconright"></layout-icon>
+        <div v-if="message.direction!=='to'" class="content-arrow">
+          <layout-icon class="arrow-icon" size="16" color="#ffffff" display="inline" type="iconleft-copy"></layout-icon>
+        </div>
+
       </div>
-      <div class="content-text">{{message.content}}</div>
+      <div class="content-box">
+        <div class="content-text" v-if="message.type==='text'">{{message.content}}</div>
+        <image @click="previewImg" v-if="message.type==='image'" class="content-img" :src="message.content" mode="widthFix"></image>
+      </div>
     </div>
   </div>
 </template>
@@ -29,21 +38,25 @@ export default {
   },
   data () {
     return {}
+  },
+  methods: {
+    previewImg () {
+      const urls = [this.message.content]
+      uni.previewImage({
+        urls: urls
+      })
+    }
   }
 }
 </script>
 <style lang="scss" scoped>
-.from{
-  background:rgba(255,255,255,1);
-  border:1px solid rgba(224, 224, 224, 1);
-}
-.to{
-  background:rgba(157,233,77,1);
-  border:1px solid rgba(224, 224, 224, 1);
-}
+
 .card-item{
+  padding: 20rpx;
   .content-wrap{
     display: flex;
+    flex-direction: row;
+
     .content-label{
       display: flex;
       align-items: center;
@@ -53,16 +66,56 @@ export default {
         border-radius: 4rpx;
       }
       .content-arrow{
-      
+        position: relative;
+        width: 16px;
+        height: 16px;
+        .arrow-icon{
+          width: 16px;
+          height: 16px;
+          position: absolute;
+          left: 0;
+          top: 0;
+          transform: translateY(-50%);
+        }
+
       }
     }
 
-    .content-text{
-      color: #333333;
-      font-size: 14px;
-      padding: 14px 18px;
+    .content-box{
+      max-width: 440rpx;
+      overflow: hidden;
+      .content-text{
+        border-radius: 10rpx;
+        word-break: break-all;
+        color: #333333;
+        font-size: 14px;
+        padding: 10px 15px;
+        background: #fff;
+        border:1px solid rgba(224, 224, 224, 1);
+      }
+      .content-img{
+        max-width: 200rpx;
+        max-height: 500rpx;
+      }
     }
 
   }
+
+  .content-wrap.reverse{
+    flex-direction: row-reverse;
+    .content-text{
+      background: #9de94d;
+    }
+    .content-label{
+
+      .content-arrow{
+
+        .arrow-icon{
+
+        }
+      }
+    }
+  }
+
 }
 </style>
