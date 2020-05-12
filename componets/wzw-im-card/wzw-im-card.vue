@@ -4,11 +4,13 @@
     <div class="content-wrap" :class="{reverse:message.direction==='to'}">
       <div class="content-label">
         <div v-if="message.direction==='to'" class="content-arrow">
-          <layout-icon class="arrow-icon" size="16"  color="#9de94d" display="inline" type="iconright"></layout-icon>
+<!--          <layout-icon class="arrow-icon" size="16"  color="#9de94d" display="inline" type="iconright"></layout-icon>-->
+          <image mode="heightFix" class="arrow-icon" src="/static/im/chat-arrow-left.png"></image>
         </div>
         <div class="headimg" :style="{backgroundImage:'url('+headimg+')'}"></div>
         <div v-if="message.direction!=='to'" class="content-arrow">
-          <layout-icon class="arrow-icon" size="16" color="#ffffff" display="inline" type="iconleft-copy"></layout-icon>
+          <image mode="heightFix" class="arrow-icon" src="/static/im/chat-arrow-right.png"></image>
+<!--          <layout-icon class="arrow-icon" size="16" color="#ffffff" display="inline" type="iconleft-copy"></layout-icon>-->
         </div>
 
       </div>
@@ -70,7 +72,6 @@ export default {
         width: 16px;
         height: 16px;
         .arrow-icon{
-          width: 16px;
           height: 16px;
           position: absolute;
           left: 0;
