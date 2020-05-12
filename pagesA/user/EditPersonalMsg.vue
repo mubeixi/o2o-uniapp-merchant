@@ -251,7 +251,7 @@ export default {
   },
   onLoad (option) {
     if (option.type) {
-      this.type = option.type
+      this.type = parseInt(option.type)
       this.getTitle()
     } else {
       uni.navigateBack({

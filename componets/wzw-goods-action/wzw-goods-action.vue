@@ -90,7 +90,9 @@ export default {
     //width: 50rpx;
     font-size: 12px;
     color: #666666;
-    margin-left: 60rpx;
+    //margin-left: 60rpx;
+	flex: 1;
+	text-align: center;
   }
 
   .left-btn {
