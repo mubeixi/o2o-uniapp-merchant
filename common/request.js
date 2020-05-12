@@ -111,7 +111,7 @@ const hookErrorCode = [0, 66001, 88001]
  * @param isAddHost 如果为true,则不需要加host
  * @returns {Promise<unknown>}
  */
-export const ajax = ({ url, method = 'post', data = {}, options = {},isAddHost=true }) => {
+export const ajax = ({ url, method = 'post', data = {}, options = {},isAddHost=true,headerExt={} }) => {
   let {
     tip = '', // loading text
     mask = false,
@@ -133,6 +133,7 @@ export const ajax = ({ url, method = 'post', data = {}, options = {},isAddHost=t
   var header = {
     // 'Authorization': 'Bearer ' + token,
     'content-type': 'application/x-www-form-urlencoded',
+    ...headerExt
   }
   
   const _url = !isAddHost ? url:ENV.apiBaseUrl + url

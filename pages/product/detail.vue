@@ -1334,7 +1334,7 @@ export default {
     },
 
     goVipList () {
-      const url = '/pages/user/VipList?bid=' + this.productInfo.biz_id
+      const url = '/pagesA/user/VipList?bid=' + this.productInfo.biz_id
       this.$linkTo(url)
     },
     goStore (bid) {
