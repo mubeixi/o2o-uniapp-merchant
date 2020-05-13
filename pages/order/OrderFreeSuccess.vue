@@ -22,13 +22,13 @@
           {{activeInfo.descr||'暂无填写'}}
         </div>
       </div>
-  
+
       <div class="free-title m-b-18">
         <div class="free-line"></div>
         <span class="fz-16 c3 m-l-10 m-r-10">推荐商品</span>
         <div class="free-line"></div>
       </div>
-  
+
       <scroll-view class="scroll-view_H  " scroll-x="true" scroll-left="120">
         <div class=" uni-bg-red m-r-10" v-for="(pro,ind) of recommendProdList" :key="ind"  @click="$toGoodsDetail(pro)">
           <div class="img-div">
@@ -46,15 +46,15 @@
             </div>
           </div>
         </div>
-  
+
       </scroll-view>
-  
+
       <div class="free-title m-b-18">
         <div class="free-line"></div>
         <span class="fz-16 c3 m-l-10 m-r-10">全部商品</span>
         <div class="free-line"></div>
       </div>
-  
+
       <div class="free-list flex ">
         <div class="free-list-item " v-for="(item,index) of prodList" :key="index" @click="$toGoodsDetail(item)">
           <div class="free-list-item-img m-b-9">
@@ -72,7 +72,7 @@
             </div>
           </div>
         </div>
-        
+
       </div>
 
     </scroll-view>
@@ -84,14 +84,11 @@
 import BaseMixin from '@/mixins/BaseMixin'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import { getActiveInfo } from '@/api/common'
-import {
-  getProductList
-} from '@/api/product'
+import { getProductList } from '@/api/product'
 import { getBizInfo } from '@/api/store'
 import { hideLoading, modal, showLoading } from '@/common/fun'
 import { Exception } from '@/common/Exception'
 
-const moment = require('moment')
 
 export default {
   name: 'OrderFree',
@@ -149,8 +146,8 @@ export default {
         })
 
         // php时间戳
-        this.start_time = moment(this.activeInfo.start_time * 1000).format('YYYY.MM.DD')
-        this.end_time = moment(this.activeInfo.end_time * 1000).format('YYYY.MM.DD')
+        this.start_time = uni.$moment(this.activeInfo.start_time * 1000).format('YYYY.MM.DD')
+        this.end_time = uni.$moment(this.activeInfo.end_time * 1000).format('YYYY.MM.DD')
 
         this.recommendProdList = await getProductList({
           Products_ID: this.activeInfo.active_info.recommend_prod_id
@@ -273,7 +270,7 @@ export default {
       }
     }
   }
-  
+
   .container-wrap{
     position: fixed;
     width: 750rpx;

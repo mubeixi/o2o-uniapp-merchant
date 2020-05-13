@@ -1,12 +1,29 @@
 <template>
   <div class="">
-    <div class="im-card-box">
-    <wzw-im-card
-      v-for="(chat,idx) in chatList"
-      :key="idx"
-      :message="chat"
-    />
-    </div>
+<!--   :scroll-top="toViewPosition"   :scroll-into-view='toViewIdx'-->
+    <scroll-view
+      scroll-y
+      class="im-card-box"
+      :scroll-into-view='toViewIdx'
+      :style="{paddingBottom:'110rpx'}"
+      refresher-enabled="true"
+      :refresher-triggered="triggered"
+      :refresher-threshold="100"
+      @refresherrestore="onRestore"
+      @refresherrefresh="onRefresh"
+    >
+      <block v-for="(chat,idx) in chatList" :key="idx">
+        <div class="im-item-box">
+          <wzw-im-card
+            :msg-id="'msg-'+idx"
+            :message="chat"
+          />
+          <!--用来搞事的-->
+          <div class="div-line h10" :id="'msg-'+idx"></div>
+        </div>
+      </block>
+      <div :style="{height:'426rpx'}" v-if="showOnther"></div>
+    </scroll-view>
     <div class="im-bottom-action">
       <div class="text">
         <div class="input-box">
@@ -14,8 +31,6 @@
         </div>
         <div class="submit-btn">
           <image class="img-btn" @click="taggleMore" src="/static/im/im-action-more.png"></image>
-<!--          <div class="btn" v-if="mode==='text'" @click="sendMsg">发送</div>-->
-<!--          <image class="img-btn" v-if="mode!='text'" @click="taggleMore" src="/static/im/im-action-more.png"></image>-->
         </div>
       </div>
       <div class="onther" v-if="showOnther">
@@ -37,7 +52,7 @@
 import BaseMixin from '@/mixins/BaseMixin'
 import {
   checkIsLogin,
-  chooseImageByPromise,
+  chooseImageByPromise, createUpTaskArr,
   getArrColumn,
   getDomain,
   setNavigationBarTitle,
@@ -50,6 +65,7 @@ import WzwImCard from '@/componets/wzw-im-card/wzw-im-card'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import { Exception } from '@/common/Exception'
 let imInstance = null
+const progressList = []
 export default {
   mixins: [BaseMixin],
   components: {
@@ -59,6 +75,8 @@ export default {
   },
   data () {
     return {
+      isFreshing: false,
+      triggered: false,
       mode: '',
       showOnther: false,
       imInstance: null,
@@ -69,6 +87,22 @@ export default {
   computed: {
     userInfo () {
       return this.$store.getters['user/getUserInfo']()
+    },
+    toViewPosition () {
+      try {
+        // - 1指向最后一个占位的就好了
+        return this.imInstance.chatList.length * 1000
+      } catch (e) {
+        return 0
+      }
+    },
+    toViewIdx () {
+      try {
+        // - 1指向最后一个占位的就好了
+        return 'msg-' + (this.imInstance.chatList.length - 1)
+      } catch (e) {
+        return ''
+      }
     },
     chatList () {
       try {
@@ -89,36 +123,41 @@ export default {
   onShow () {
 
   },
+  /**
+   * 下拉加载更多
+   */
+  onPullDownRefresh () {
+
+  },
   methods: {
+    onRefresh () {
+      if (this.isFreshing) return
+      this.isFreshing = true
+      // 不论成功还是失败
+      this.imInstance.getHistory().finally(() => {
+        this.triggered = false
+        this.isFreshing = false
+      })
+    },
+    onRestore () {
+      this.triggered = 'restore' // 需要重置
+    },
     async sendImg () {
-      try{
-        const files = await chooseImageByPromise({ sizeType: 1, sourceType: ['album'] }).catch(err => { throw Error('选择照片失败') })
+      try {
+        const files = await chooseImageByPromise({ sizeType: 1, sourceType: ['album'] }).catch(err => { throw Error(err.errMsg || '选择照片失败') })
         const imgs = getArrColumn(files, 'path')
-        const ossUrls = await uploadImages({ imgs }).catch(msg => { throw Error(msg) })
-  
-        for (var i = 0; i < ossUrls.length; i++) {
-          ossUrls[i] = getDomain(ossUrls[i])
-        }
-        const imgurl = ossUrls[0]
-  
-        imInstance.sendMessage(imgurl, 'image')
-      }catch (e) {
+
+        imInstance.sendImMessage({ content: '', type: 'image', tempPath: imgs[0] })
+      } catch (e) {
         Exception.handle(e)
       }
     },
     async sendCamera () {
-      try{
-        const files = await chooseImageByPromise({ sizeType: 1, sourceType: ['camera'] }).catch(err => { throw Error('选择照片失败') })
+      try {
+        const files = await chooseImageByPromise({ sizeType: 1, sourceType: ['camera'] }).catch(err => { throw Error(err.errMsg || '选择照片失败') })
         const imgs = getArrColumn(files, 'path')
-        const ossUrls = await uploadImages({ imgs }).catch(msg => { throw Error(msg) })
-    
-        for (var i = 0; i < ossUrls.length; i++) {
-          ossUrls[i] = getDomain(ossUrls[i])
-        }
-        const imgurl = ossUrls[0]
-    
-        imInstance.sendMessage(imgurl, 'image')
-      }catch (e) {
+        imInstance.sendImMessage({ content: '', type: 'image', tempPath: imgs[0] })
+      } catch (e) {
         Exception.handle(e)
       }
     },
@@ -148,7 +187,7 @@ export default {
         error('请输入内容')
         return
       }
-      imInstance.sendMessage(this.tempText)
+      imInstance.sendImMessage({ content: this.tempText })
       this.tempText = ''
     },
     bindInputChange (e) {
@@ -163,7 +202,6 @@ export default {
     top: 0;
     bottom: constant(safe-area-inset-bottom);
     bottom: env(safe-area-inset-bottom);
-    margin-bottom: 55px;
     overflow-y: scroll;
     width: 750rpx;
     background: #e5e5e5;
@@ -174,22 +212,23 @@ export default {
     left: 0;
     bottom: 0;
     background: #f2f2f2;
-
     .safearea-space{
       height: constant(safe-area-inset-bottom);
       height: env(safe-area-inset-bottom);
     }
     .onther{
-      padding: 40rpx 0 20rpx;
+      padding: 40rpx 0;
       display: flex;
       .onther-item{
         width: 96rpx;
+        height: 126rpx;
         margin-left: 70rpx;
         text-align: center;
         .label{
-          font-size: 14px;
+          font-size: 28rpx;
+          height: 30rpx;
+          line-height: 30rpx;
           color: #666;
-          margin-top: 18rpx;
         }
         .icon-box{
           width: 96rpx;
@@ -202,7 +241,7 @@ export default {
       display: flex;
       align-items: center;
       width: 750rpx;
-      height: 55px;
+      height: 110rpx;
       border-bottom: 1px solid #E2E2E2;
       .input-box{
         margin-left: 20rpx;
@@ -211,14 +250,14 @@ export default {
         align-items: center;
         .input-ele{
           flex: 1;
-          margin-right: 10px;
-          padding: 0 10px;
+          margin-right: 20rpx;
+          padding: 0 20rpx;
           background: #fff;
           border: 1px solid #eee;
-          height: 35px;
-          line-height: 35px;
-          border-radius: 35px;
-          font-size: 14px;
+          height: 70rpx;
+          line-height: 70rpx;
+          border-radius: 70rpx;
+          font-size: 28rpx;
         }
       }
       .submit-btn{
@@ -230,12 +269,12 @@ export default {
        .btn{
          width: 120rpx;
          text-align: center;
-         line-height: 35px;
-         height: 35px;
-         border-radius: 35px;
+         line-height: 70rpx;
+         height: 70rpx;
+         border-radius: 70rpx;
          background: $fun-primary-color;
          color: #fff;
-         font-size: 14px;
+         font-size: 28rpx;
        }
       }
     }

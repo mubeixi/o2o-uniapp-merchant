@@ -54,7 +54,8 @@ export default {
       this.$emit('bindRightClick')
     },
     toIm () {
-      linkToEasy('/pagesA/support/Im')
+      //linkToEasy('/pagesA/support/Im')
+      linkToEasy('/pages/demo')
     },
     goStore () {
       this.$emit('goStore')
