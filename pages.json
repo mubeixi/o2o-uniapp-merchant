@@ -17,7 +17,10 @@
       }
     },
     {
-      "path": "pages/demo"
+      "path": "pages/demo",
+      "style": {
+        "enablePullDownRefresh": true
+      }
     },
     {
       "path": "pages/store/index",
@@ -250,7 +253,8 @@
         {
           "path": "support/Im",
           "style": {
-            "navigationBarTitleText": "客服"
+            "navigationBarTitleText": "客服",
+            "enablePullDownRefresh": true
           }
         },
         {

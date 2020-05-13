@@ -144,7 +144,7 @@
 
 <script>
 
-import '@/common/tool/TweenMax.min'
+//import '@/common/tool/TweenMax.min'
 import BaseMixin from '@/mixins/BaseMixin'
 import { getUserChargeRecord, getUserInfo, getUserMoneyRecord, transferBalance } from '@/api/customer'
 
@@ -194,8 +194,10 @@ export default {
   watch: {
     s_money: function (newVal, oldVal) {
       var newValue = parseFloat(newVal)
+      
+      this.Umoney = newValue
       // eslint-disable-next-line no-undef
-      TweenLite.to(this.$data, 0.5, { Umoney: newValue })
+      //TweenLite.to(this.$data, 0.5, { Umoney: newValue })
     },
   },
   onReachBottom () {

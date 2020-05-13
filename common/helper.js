@@ -212,6 +212,19 @@ export const chooseImageByPromise = ({ count = 1, sourceType = ['camera', 'album
 }
 
 /**
+ * 创建配套的task数组
+ * @param len
+ * @returns {*[]}
+ */
+export const createUpTaskArr = (len=1) => {
+  const arr = []
+  for (var i = 0; i < len; i++) {
+    arr[i] = {  }
+  }
+  return arr.concat([])
+}
+
+/**
  * 批量上传照片
  * @param imgs string:[]
  * @param name 标识

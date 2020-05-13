@@ -91,8 +91,6 @@ import { getBizInfo } from '@/api/store'
 import { hideLoading, modal, showLoading } from '@/common/fun'
 import { Exception } from '@/common/Exception'
 
-const moment = require('moment')
-
 export default {
   name: 'OrderFree',
   components: { LayoutIcon },
@@ -151,8 +149,8 @@ export default {
         })
 
         // php时间戳
-        this.start_time = moment(this.activeInfo.start_time * 1000).format('YYYY.MM.DD')
-        this.end_time = moment(this.activeInfo.end_time * 1000).format('YYYY.MM.DD')
+        this.start_time = uni.$moment(this.activeInfo.start_time * 1000).format('YYYY.MM.DD')
+        this.end_time = uni.$moment(this.activeInfo.end_time * 1000).format('YYYY.MM.DD')
 
         this.recommendProdList = await getProductList({
           Products_ID: this.activeInfo.active_info.recommend_prod_id

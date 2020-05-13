@@ -1,12 +1,12 @@
 import {
   IM_APPID, IM_APPSECRET, IM_WSS_URL
 } from '@/common/env'
-import { bindUid, getAccessToken, sendMsg } from '@/common/Im/Fetch'
-import moment from 'moment'
+import { bindUid, getAccessToken, getMsgList, sendMsg } from '@/common/Im/Fetch'
 import Promisify from '@/common/Promisify'
 import { Exception } from '@/common/Exception'
 import Storage from '@/common/Storage'
 import { modal } from '@/common/fun'
+import { createUpTaskArr, getDomain, uploadImages } from '@/common/helper'
 
 // 消息类,就先不用继承了吧
 /**
@@ -14,13 +14,15 @@ import { modal } from '@/common/fun'
  *
  */
 class Message {
-  constructor ({ content = '', type }) {
+  constructor (type, content = '', ext) {
     if (!type) throw Error('type必须指定')
     this.content = content
     this.type = type
+
+    this.ext = ext
   }
 
-  getContent () {
+  async getContent () {
     let rt = null
     switch (this.type) {
       case 'text':
@@ -40,6 +42,71 @@ class Message {
   }
 }
 
+Message.prototype.imgWidthMax = 120 // px
+Message.prototype.imgHeightMax = 160 // px
+
+/**
+ * 图片类，会额外用到加载进度、以及本地临时路径（加快显示，然后方便显示进度)
+ */
+class Image extends Message {
+  constructor (type = 'image', content = '', ext) {
+    super(type, content)
+    const { tempPath } = ext
+    this.tempPath = tempPath
+    this.taskList = createUpTaskArr()
+    this.styleObj = { width: 0, height: 0, mode: 'widthFix' }
+    // 本地图片，所以获取图片信息非常快
+    Promisify('getImageInfo', { src: tempPath }).then(res => {
+      const { height, width } = res
+
+      this.styleObj.mode = height > width ? 'heightFix' : 'widthFix'// 横还是竖直
+
+      const widthScale = width / this.imgWidthMax
+      const heightScale = height / this.imgHeightMax
+
+      var imgScale = 1
+
+      if (height >= width) {
+        if (widthScale > 1) {
+          imgScale = widthScale
+        }
+        // 长边优先，覆盖掉
+        if (heightScale > 1) {
+          imgScale = heightScale
+        }
+      } else {
+        if (heightScale > 1) {
+          imgScale = heightScale
+        }
+        // 长边优先，覆盖掉
+        if (widthScale > 1) {
+          imgScale = widthScale
+        }
+      }
+
+      this.styleObj.width = width / imgScale
+      this.styleObj.height = height / imgScale
+    })
+  }
+
+  async getContent (chatIdx, chatList) {
+    const ossUrls = await uploadImages({ imgs: [this.tempPath], progressList: this.taskList }).catch(msg => { throw Error(msg) })
+
+    for (var i = 0; i < ossUrls.length; i++) {
+      ossUrls[i] = getDomain(ossUrls[i])
+    }
+    const imgurl = ossUrls[0]
+
+    // 这是真实的content
+    this.content = imgurl
+    // 设置到list中
+    chatList[chatIdx].content = imgurl
+    return imgurl
+  }
+}
+
+// const voiceInstance = new Voice()
+
 class IM {
   /**
    * 初始化Im类
@@ -56,6 +123,7 @@ class IM {
     this.orderId = orderId
     this.origin = origin
     this.extConf = extConf
+    this.page = 1 // 初始化页码
 
     this.chatList = []
 
@@ -70,7 +138,28 @@ class IM {
     this.heartBeatFailNum = 0 // 心跳丢失次数
     this.connectFailNum = 0// 连接失败次数
     // console.log(extConf)
+  }
 
+  /**
+   * 获取以往信息
+   */
+  async getHistory () {
+    const pageSize = this.historyPageSize
+    const page = this.page
+
+    const out_uid = this.getOutUid()
+    const historyList = await getMsgList({ page_size: pageSize, page, out_uid, to: this.getToUid() }).then(res => {
+      return res.data.map(row => {
+        row.direction = row.from_uid === out_uid ? 'to' : 'accept' // 标记哪些是自己的
+        return row
+      })
+    }).catch(err => { throw Error(err.msg || '获取历史消息失败') })
+
+    if (historyList.length > 0) {
+      this.chatList = historyList.concat(this.chatList)
+      this.page++
+    }
+    return true
   }
 
   /**
@@ -142,11 +231,10 @@ class IM {
     }
   }
 
-
   get token () {
     const { expires_at, token } = this.accessToken
     // 看是否过期
-    if (expires_at && moment(expires_at * 1000).isAfter()) {
+    if (expires_at && uni.$moment(expires_at * 1000).isAfter()) {
       return token
     }
 
@@ -180,13 +268,25 @@ class IM {
    * @param content
    * @param type
    */
-  async sendMessage (content, type = 'text') {
-    const message = new Message({ content, type })
+  async sendImMessage ({ content, type = 'text', ...ext }) {
+    var message = null
+    switch (type) {
+      case 'image':
+        message = new Image(type, content, ext)
+        break
+      default:
+        message = new Message(type, content, ext)
+        break
+    }
 
     if (this.socketOpen) {
       this.chatList.push({ ...message, direction: 'to', sendStatus: 0 })
       const chatIdx = this.chatList.length - 1
-      sendMsg({ type, content: message.getContent(), out_uid: this.getOutUid(), to: this.getToUid() }).then(res => {
+
+      // 为了预防有需要异步上传的情况
+      const content = await message.getContent(chatIdx, this.chatList)
+
+      sendMsg({ type, content, out_uid: this.getOutUid(), to: this.getToUid() }).then(res => {
         console.log('发送成功', res)
         this.chatList[chatIdx].sendStatus = 1 // 标记成功
         return res.data
@@ -311,7 +411,7 @@ IM.prototype.appsecret = IM_APPSECRET
 IM.prototype.heartBeatTimout = 30 * 1000 // 心跳保持时间，默认三十秒
 IM.prototype.heartBeatFailMax = 3 // 最大心跳丢失次数，错误3次重新建立socket请求
 IM.prototype.tryRequestMax = 5 // 最大重连次数，重连超过5次不成功，就直接报错提醒用户洗洗睡
-
+IM.prototype.historyPageSize = 20 // 一次加载以往消息20条
 // 1.创建实例
 // 2.拿到token(阻塞操作，带mask的全屏loading)
 // 3.获取最近的20条信息

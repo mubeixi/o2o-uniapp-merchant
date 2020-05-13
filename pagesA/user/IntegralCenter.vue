@@ -87,7 +87,7 @@
 import { getUserInfo, transferIntegral, userIntegralRecord } from '@/api/customer'
 import BaseMixin from '@/mixins/BaseMixin'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
-
+//import '@/common/tool/TweenMax.min'
 export default {
   mixins: [BaseMixin],
   components: { LayoutIcon },
@@ -113,7 +113,8 @@ export default {
   },
   watch: {
     user_intergatal: function (newVal, oldVal) {
-      TweenLite.to(this.$data, 0.5, { U_intergatal: newVal })
+      this.U_intergatal = newVal
+      //TweenLite.to(this.$data, 0.5, { U_intergatal: newVal })
     },
   },
   onShow () {

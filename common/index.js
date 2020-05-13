@@ -3,6 +3,7 @@ import store from '@/store'
 // require('./filter')
 import './filter'
 
+
 require('./Promisify')
 
 // 所有的页面和组件都可用了
@@ -11,3 +12,5 @@ Vue.prototype.getPimaryColor = () => {
 }
 
 export const lazyImgUrl = 'https://new401.bafangka.com/uploadfiles/wkbq6nc2kc/image/20191112154310111.jpg'
+
+
