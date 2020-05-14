@@ -8,7 +8,7 @@
 
   .share-btn {
     background: none;
-  
+
     &::after {
       border: none;
     }
@@ -1020,6 +1020,7 @@
 
     <wzw-goods-action
       class="wzw-goods-action"
+      @goIM="goIM"
       @goStore="goStore(productInfo.biz_id)"
       @goShare="toShare"
     >
@@ -1158,7 +1159,7 @@ export default {
       thumbTempFilePath: '', // 图片本地地址
       isReady: false,
       richTextReady: false,
-      richContent:'',
+      richContent: '',
       // 倒计时
       activeInfo: {
         start_time: '',
@@ -1336,6 +1337,9 @@ export default {
     goVipList () {
       const url = '/pagesA/user/VipList?bid=' + this.productInfo.biz_id
       this.$linkTo(url)
+    },
+    goIM () {
+      this.$linkTo('/pages/demo?productId=' + this.prod_id)
     },
     goStore (bid) {
       const url = '/pages/store/index?bid=' + bid
@@ -1696,8 +1700,8 @@ export default {
         Object.assign(this.productInfo, productInfo)
 
         // this.productInfo.Products_Promise = [{ name: '随时退款' }, { name: '随时退款' }, { name: '随时退款' }, { name: '随时退款' }]
-        //this.productInfo.Products_Description = formatRichTextByUparseFn(this.productInfo.Products_Description)
-       
+        // this.productInfo.Products_Description = formatRichTextByUparseFn(this.productInfo.Products_Description)
+
         this.richContent = formatRichTextByUparseFn(this.productInfo.Products_Description)
         this.richTextReady = true
         this.isVirtual = this.productInfo.Products_IsVirtual === 1
