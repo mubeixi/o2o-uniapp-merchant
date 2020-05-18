@@ -14,21 +14,21 @@
 
     <div class="content">
       <div class="cartbox" v-if="total_count>0">
-        <div :key="index" class="order_msg" v-for="(pro,index) in CartList">
+        <div :key="index" class="order_msg" v-for="(biz,index) in CartList">
           <div class="biz_msg">
             <div @click="selectBiz(index)" class="item-cart">
-              <layout-icon color="#F43131" size="18" type="iconicon-check" v-if="bizCheck[index]"></layout-icon>
-              <layout-icon color="#ccc" size="18" type="iconradio" v-else></layout-icon>
+              <layout-icon color="#F43131" size="20" type="iconicon-check" v-if="bizCheck[index]"></layout-icon>
+              <layout-icon color="#ccc" size="20" type="iconradio" v-else></layout-icon>
             </div>
             <img :src="bizList[index].biz_logo" class="biz_logo" />
             <text class="biz_name">{{bizList[index].biz_name}}</text>
           </div>
-          <block :key="ind" v-for="(proList,ind) in pro">
+          <block :key="ind" v-for="(proList,ind) in biz">
             <block>
               <div :key="indx" class="pro" v-for="(item,indx) in proList">
                 <div @click="selectItem(index,ind,indx)" class="item-cart">
-                  <layout-icon color="#F43131" size="18" type="iconicon-check" v-if="item.checked"></layout-icon>
-                  <layout-icon color="#ccc" size="18" type="iconradio" v-else></layout-icon>
+                  <layout-icon color="#F43131" size="20" type="iconicon-check" v-if="item.checked"></layout-icon>
+                  <layout-icon color="#ccc" size="20" type="iconradio" v-else></layout-icon>
                 </div>
                 <img :src="item.ImgPath" class="pro-img" />
                 <div class="pro-msg">
@@ -36,12 +36,13 @@
                   <div class="attr" v-if="item.Productsattrstrval">
                     <span>{{item.Productsattrstrval}}</span>
                   </div>
-                  <div class="pro-price"><span class="span">￥</span>{{item.ProductsPriceX}}<span class="amount"><span
-                    :class="item.Qty===1?'disabled':''" @click="updateCart(ind,indx,-1,index)"
-                    class="plus">-</span><input @blur="inputQty(ind,indx,$event,index,item.Qty)"
-                                                @focus="getQty(item.Qty)" class="attr_num" min="1" type="number"
-                                                v-model="item.Qty" /><span @click="updateCart(ind,indx,1,index)"
-                                                                           class="plus">+</span></span>
+                  <div class="pro-price">
+                    <span class="span">￥</span>{{item.ProductsPriceX}}
+                    <span class="amount">
+                      <span :class="item.Qty===1?'disabled':''" @click="updateCart(ind,indx,-1,index)" class="plus">-</span>
+                      <input @blur="inputQty(ind,indx,$event,index,item.Qty)" @focus="getQty(item.Qty)" class="attr_num" min="1" type="number" v-model="item.Qty" />
+                      <span @click="updateCart(ind,indx,1,index)" class="plus">+</span>
+                    </span>
                   </div>
                 </div>
               </div>
@@ -58,8 +59,8 @@
 
     <div class="checkout" v-if="!manage">
       <div @click="selectAll" class="item-cart ">
-        <layout-icon class="m-r-5" color="#F43131" size="18" type="iconicon-check" v-if="allCheck"></layout-icon>
-        <layout-icon class="m-r-5" color="#ccc" size="18" type="iconradio" v-else></layout-icon>
+        <layout-icon class="m-r-5" color="#F43131" size="20" type="iconicon-check" v-if="allCheck"></layout-icon>
+        <layout-icon class="m-r-5" color="#ccc" size="20" type="iconradio" v-else></layout-icon>
         <span>全选</span>
       </div>
       <block v-if="!isDel">
@@ -225,7 +226,14 @@ export default {
       this.fan = !this.fan
     },
     selectBiz (bizId) {
-
+      console.log(bizId)
+      for (var goods_idx in this.CartList[bizId]) {
+        console.log(goods_idx)
+        for (var sku_idx in this.CartList[bizId][goods_idx]) {
+          console.log(bizId, goods_idx, sku_idx)
+          this.selectItem(bizId, goods_idx, sku_idx)
+        }
+      }
     },
     async updateCart (pid, attrId, skuQty, bizId) {
       if (this.CartList[bizId][pid][attrId].Qty === 1 && skuQty <= 0) {
@@ -379,7 +387,7 @@ export default {
 
     &-right {
       position: absolute;
-      bottom:20rpx;
+      bottom: 20rpx;
       left: 20rpx;
     }
   }
