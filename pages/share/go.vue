@@ -56,7 +56,7 @@ import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import BaseMixin from '@/mixins/BaseMixin'
 import { getEnv } from '@/common/request'
 import Promisify from '@/common/Promisify'
-import { cutstrFun } from '@/common/helper'
+import { buildSharePath, cutstrFun } from '@/common/helper'
 import { Exception } from '@/common/Exception'
 let canvasInstance = null
 export default {
@@ -226,6 +226,17 @@ export default {
         modal(e.message)
       }
     }
+  },
+  // 自定义小程序分享
+  onShareAppMessage () {
+    const path = '/pages/product/detail?prod_id=' + this.prod_id
+    const shareObj = {
+      title: this.detailData.Products_Name,
+      desc: this.detailData.Products_BriefDescription,
+      imageUrl: this.detailData.ImgPath,
+      path: buildSharePath(path)
+    }
+    return shareObj
   }
 }
 </script>
