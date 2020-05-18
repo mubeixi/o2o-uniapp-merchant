@@ -997,14 +997,11 @@
 
     </scroll-view>
 
-    <div v-if="!isReady" class="lazy-box" style="position: fixed;top: 0rpx;width: 750rpx;z-index: 102;background: #f8f8f8;" @touchmove.stop.prevent>
-      <div
-        style="width: 750rpx;height: 750rpx;background: #f2f2f2;background-size: cover;background-repeat: no-repeat;background-position: center;"
-        :style="{backgroundImage:'url('+thumbTempFilePath+')'}"></div>
-      <image mode="widthFix" src="/static/goods/detail-lazy-1.png" style="width: 750rpx;"></image>
-<!--      <image mode="widthFix" src="/static/goods/detail-lazy-2.png" style="width: 750rpx;"></image>-->
-      <image mode="widthFix" src="/static/goods/detail-lazy-3.png" style="width: 750rpx;position: fixed;bottom: 0;left: 0;z-index: 102" class=""></image>
-    </div>
+<!--    <div v-if="!isReady" class="lazy-box" style="position: fixed;top: 0rpx;width: 750rpx;z-index: 102;background: #f8f8f8;" @touchmove.stop.prevent>-->
+<!--      <div style="width: 750rpx;height: 750rpx;background: #f2f2f2;background-size: cover;background-repeat: no-repeat;background-position: center;" :style="{backgroundImage:'url('+thumbTempFilePath+')'}"></div>-->
+<!--      <image mode="widthFix" src="/static/goods/detail-lazy-1.png" style="width: 750rpx;"></image>-->
+<!--      <image mode="widthFix" src="/static/goods/detail-lazy-3.png" style="width: 750rpx;position: fixed;bottom: 0;left: 0;z-index: 102" class=""></image>-->
+<!--    </div>-->
 
     <div class="safearea-box fixed"></div>
     <product-sku
@@ -1824,9 +1821,9 @@ export default {
 
     // 秒杀
 
-    if (Storage.get('thumbTempFilePath')) {
-      this.thumbTempFilePath = Storage.get('thumbTempFilePath')
-    }
+    // if (Storage.get('thumbTempFilePath')) {
+    //   this.thumbTempFilePath = Storage.get('thumbTempFilePath')
+    // }
 
     this._init_func(options)
   },

@@ -687,16 +687,16 @@ export const toGoodsDetail = async (productInfo) => {
   }
   console.log('产品跳转url:' + url)
 
-  const thumb = productInfo.Products_JSON.ImgPath[0]
-
-  if (!thumb) {
-    linkToEasy(url)
-    return
-  }
+  // const thumb = productInfo.Products_JSON.ImgPath[0]
+  //
+  // if (!thumb) {
+  //   linkToEasy(url)
+  //   return
+  // }
 
   // const { path: thumbTempFilePath } = await Promisify('getImageInfo', { src: thumb }).catch(e => { linkToEasy(url) })
 
-  Storage.set('thumbTempFilePath', productInfo.Products_JSON.ImgPath[0])
+  // Storage.set('thumbTempFilePath', productInfo.Products_JSON.ImgPath[0])
 
   linkToEasy(url)
 }
