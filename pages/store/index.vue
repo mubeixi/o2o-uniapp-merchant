@@ -297,8 +297,7 @@
           <div class="block-content">
             <div class="comment-list">
               <div v-for="(item,idx) in comments" :key="idx" class="comment-item">
-                <layout-comment :isLast="comments.length-1===idx" :comment="item"
-                                @comment="clickComment"></layout-comment>
+                <layout-comment :isLast="comments.length-1===idx" :comment="item" @comment="clickComment"></layout-comment>
                 <div class="comment-send" v-if="item.child.length>0">
                   <block v-for="(com,ind) of item.child" :key="ind">
                     <block v-for="(co,indx) of com" :key="indx">
@@ -325,10 +324,9 @@
     
     <layout-modal ref="commentModal">
       <div class="refuseApplyModal">
-        <textarea class="reason" @input="bingReasonInput" :value="commentValue" placeholder-style="color:#999"
-                  placeholder="请输入评价" auto-height />
+        <textarea class="reason" @input="bingReasonInput" :value="commentValue" placeholder-style="color:#999" placeholder="请输入评价" auto-height />
         <div class="control">
-          <div @click="$closePop('commentModal')" class="action-btn btn-cancel">取消</div>
+          <div @click="cancelComent" class="action-btn btn-cancel">取消</div>
           <div @click="sureComment" class="btn-sub action-btn">确定</div>
         </div>
       
@@ -364,6 +362,7 @@ export default {
   computed: {},
   data () {
     return {
+      commentValue:'',
       childSwiperHeight: 'auto',
       isFavourite: false,
       bid: null,
@@ -458,6 +457,10 @@ export default {
     },
     bingReasonInput (e) {
       this.commentValue = e.detail.value
+    },
+    cancelComent () {
+      this.commentValue = ''
+      this.$closePop('commentModal')
     },
     sureComment () {
       if (!this.commentValue) {
@@ -1327,7 +1330,7 @@ export default {
   
   .head {
     position: sticky;
-    z-index: 999;
+    z-index: 3;
     top: 0;
     height: 50px;
     width: 750rpx;
