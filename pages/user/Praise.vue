@@ -14,9 +14,9 @@
         <block v-for="(it,ind) of item.ImgPath" :key="ind">
           <image :src="it" class="coment-img"></image>
         </block>
-      
+
       </div>
-      <div class="pro-comment flex flex-vertical-c" @click="$toGoodsDetail(item)">
+      <div class="pro-comment flex flex-vertical-c" @click="toDetail(item)">
         <image :src="item.Prod_ImgPath" class="m-r-8 pro-img"></image>
         <div>
           <div class="pro-title">
@@ -28,12 +28,12 @@
             <span class="fz-10 linethrow m-r-2">¥</span>
             <span class="fz-11 linethrow">{{item.Products_PriceY}}</span>
           </div>
-        
+
         </div>
         <layout-icon type="iconicon-arrow-right" color="#777777" size="20" style="margin-left: auto"></layout-icon>
-      
+
       </div>
-    
+
     </div>
   </div>
 </template>
@@ -53,15 +53,17 @@ export default {
       postData: {
         page: 1,
         pageSize: 6,
-        has_img: 1,
+        has_img: 1
       },
-      totalCount: 0,
+      totalCount: 0
     }
   },
   methods: {
-
+    toDetail (item) {
+      this.$linkTo('/pages/product/detail?prod_id=' + item.Product_ID)
+    },
     async init (item) {
-      let list = await getCommitList(this.postData, { tip: '加载中' }).catch(e => {
+      const list = await getCommitList(this.postData, { tip: '加载中' }).catch(e => {
         error(e.msg || '获取评论列表失败')
       })
       if (item === 'isInit') {
@@ -72,8 +74,7 @@ export default {
         })
       }
       this.totalCount = list.totalCount
-      
-    },
+    }
   },
   onReachBottom () {
     if (this.totalCount > this.praise.length) {
@@ -83,7 +84,7 @@ export default {
   },
   onLoad () {
     this.init('isInit')
-  },
+  }
 }
 </script>
 
@@ -91,7 +92,7 @@ export default {
   .praise {
     padding-top: 30rpx;
   }
-  
+
   .praise-item {
     margin: 0 auto 20rpx;
     width: 710rpx;
@@ -99,24 +100,24 @@ export default {
     background-color: #FFFFFF;
     padding: 20rpx;
   }
-  
+
   .praise-item-title {
     height: 64rpx;
     margin-bottom: 18rpx;
     width: 100%;
     line-height: 64rpx;
     overflow: hidden;
-    
+
     .user-img {
       width: 64rpx;
       height: 64rpx;
     }
-    
+
     .user-name {
       height: 64rpx;
       line-height: 64rpx;
     }
-    
+
     .user-content {
       width: 670rpx;
       padding-left: 6rpx;
@@ -124,25 +125,25 @@ export default {
       line-height: 36rpx;
     }
   }
-  
+
   .coment-img {
     width: 220rpx;
     height: 220rpx;
     margin-right: 4rpx;
     margin-bottom: 8rpx;
   }
-  
+
   .pro-comment {
     margin-left: 4rpx;
     width: 672rpx;
     height: 84rpx;
   }
-  
+
   .pro-img {
     width: 84rpx;
     height: 84rpx;
   }
-  
+
   .pro-title {
     height: 24rpx;
     line-height: 24rpx;
@@ -155,16 +156,16 @@ export default {
     margin-top: 10px;
     margin-bottom: 9px;
   }
-  
+
   .pro-price {
     height: 20rpx;
     line-height: 20rpx;
     color: #B1B1B1;
-    
+
     .color-r {
       color: #F53636;
     }
-    
+
     .linethrow {
       text-decoration: line-through;
     }
