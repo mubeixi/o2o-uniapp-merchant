@@ -6,6 +6,18 @@
     overflow-y: hidden;
   }
 
+  .comment-list-drawer{
+    transform: translateX(100%);
+    position: fixed;
+    left: 0;
+    bottom: 110rpx;
+    width: 100%;
+    overflow: hidden;
+    text-align: center;
+    background: white;
+    z-index: 11;
+  }
+
   .share-btn {
     background: none;
 
@@ -723,7 +735,7 @@
       <div :style="{height:menuButtonInfo.top+'px'}"></div>
       <div class="flex flex-vertical-c flex-justify-between"
            :style="{height:menuButtonInfo.height+'px',paddingRight:diyHeadRight+'px'}">
-        <layout-icon class="m-l-10" :plain="false" type="iconback1" size="18" wrap-padding="6px" color="#fff" @click="$back()"></layout-icon>
+        <layout-icon class="m-l-10" :plain="false" type="iconback1" size="18" wrap-padding="6px" color="#fff" @click="bindLeftBtnClick"></layout-icon>
         <div class="flex flex-vertical-c">
           <button open-type="share" class="action-item share-btn">
             <layout-icon :plain="false" type="iconshare" size="18" wrap-padding="6px" color="#fff"></layout-icon>
@@ -739,7 +751,7 @@
       <div class="flex flex-vertical-c flex-justify-between"
            :style="{height:menuButtonInfo.height+'px',paddingRight:diyHeadRight+'px'}">
         <div class="flex flex-vertical-c">
-          <layout-icon class="m-l-10" :plain="false" type="iconback1" size="18" wrap-padding="6px" wrap-bg="none" color="#606060" @click="$back()"></layout-icon>
+          <layout-icon class="m-l-10" :plain="false" type="iconback1" size="18" wrap-padding="6px" wrap-bg="none" color="#606060" @click="bindLeftBtnClick"></layout-icon>
           <div @click="$linkTo('/pages/search/index')" class="head-search flex flex-vertical-c">
             <layout-icon color="#606060" type="iconicon-search"></layout-icon>
             <span class="fz-12 c9 p-l-6">搜索商品</span>
@@ -898,7 +910,7 @@
 
         <div class="block-title" style="padding:40rpx 25rpx">
           <div class="block-title-text fz-b">留言评论</div>
-          <div class="block-title-more flex flex-vertical-center c9 fz-12">
+          <div class="block-title-more flex flex-vertical-center c9 fz-12" @click="openCommentDrawer">
             <span>查看全部</span>
             <icon class="iconright" type="iconright" size="14" color="#999"></icon>
           </div>
@@ -1071,12 +1083,16 @@
     <!--      </div>-->
     <!--    </layout-popup>-->
 
+    <div :animation="commentAnimationData" :style="{top:diyHeadHeight+'px'}" id="commentList" class="comment-list-drawer">
+      <product-comment></product-comment>
+    </div>
+
     <layout-modal ref="commentModal">
       <div class="refuseApplyDialog">
         <textarea class="reason" @input="bingReasonInput" :value="commentValue" placeholder-style="color:#999"
                   placeholder="请输入评论" auto-height />
         <div class="control">
-          <div @click="$closePop('commentModal')" class="action-btn btn-cancel">取消</div>
+          <div @click="cancelComent" class="action-btn btn-cancel">取消</div>
           <div @click="sureComment" class="btn-sub action-btn">确定</div>
         </div>
       </div>
@@ -1136,6 +1152,7 @@ import uParse from '@/componets/gaoyia-parse/parse'
 import Storage from '@/common/Storage'
 import LayoutModal from '@/componets/layout-modal/layout-modal'
 import { Exception } from '@/common/Exception'
+import ProductComment from '@/pages/product/components/product-comment'
 
 let countdownInstance = null
 
@@ -1143,6 +1160,7 @@ export default {
   name: 'ProductDetail',
   mixins: [BaseMixin],
   components: {
+    ProductComment,
     LayoutModal,
     LayoutIcon,
     LayoutComment,
@@ -1153,6 +1171,8 @@ export default {
   },
   data () {
     return {
+      commentDrawerOpen: false,
+      commentAnimationData: {},
       thumbTempFilePath: '', // 图片本地地址
       isReady: false,
       richTextReady: false,
@@ -1223,6 +1243,29 @@ export default {
     }
   },
   methods: {
+    bindLeftBtnClick () {
+      if (this.commentDrawerOpen) {
+        this.closeCommentDrawer()
+      }
+    },
+    openCommentDrawer () {
+      this.commentDrawerOpen = true
+      var animation = uni.createAnimation({
+        duration: 400,
+        timingFunction: 'ease'
+      })
+      animation.translateX(0).step()
+      this.commentAnimationData = animation.export()
+    },
+    closeCommentDrawer () {
+      this.commentDrawerOpen = false
+      var animation = uni.createAnimation({
+        duration: 400,
+        timingFunction: 'ease'
+      })
+      animation.translateX(this.systemInfo.windowWidth).step()
+      this.commentAnimationData = animation.export()
+    },
     // 滚动到顶部
     bindScrollToupperEvent () {
       this.scrollViewTop = 0
@@ -1344,6 +1387,15 @@ export default {
     },
     bingReasonInput (e) {
       this.commentValue = e.detail.value
+    },
+    gotoComments () {
+      uni.navigateTo({
+        url: '/pages/order/comments?pro_id=' + this.productInfo.Products_ID
+      })
+    },
+    cancelComent () {
+      this.commentValue = ''
+      this.$closePop('commentModal')
     },
     sureComment () {
       if (!checkIsLogin(1, 1)) return
