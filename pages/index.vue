@@ -39,8 +39,8 @@
     <!--  占位-->
     <div :style="{height:diyHeadHeight+'px'}"></div>
 
-    <div class="main tab-container" :style="{height:(systemInfo.windowHeight-diyHeadHeight+'px')}">
-      <scroll-view :style="{height:(systemInfo.windowHeight-diyHeadHeight+'px')}" class="tab-page-wrap" scroll-y v-show="headTabIndex===0">
+    <div class="main tab-container" :style="{top:diyHeadHeight+'px'}">
+      <scroll-view class="tab-page-wrap" scroll-y v-show="headTabIndex===0">
         <view class="home-diy-wrap">
           <section
             v-for="(item, index) in templateList[tagIndex]"
@@ -211,7 +211,7 @@
         <layout-copyright></layout-copyright>
         <div class="h20"></div>
       </scroll-view>
-      <scroll-view :style="{height:(systemInfo.windowHeight-diyHeadHeight+'px')}" class="tab-page-wrap" scroll-y v-show="headTabIndex===1">
+      <scroll-view class="tab-page-wrap" scroll-y v-show="headTabIndex===1">
 
         <div class="section scroll-box first-cate-list  bg-white" :style="{top:diyHeadHeight+'px'}"
              @touchmove.stop.prevent="$noop">
@@ -281,8 +281,7 @@
         </swiper>
 
       </scroll-view>
-      <scroll-view :style="{height:(systemInfo.windowHeight-diyHeadHeight+'px')}" class="tab-page-wrap" scroll-y
-                   v-show="headTabIndex===2">
+      <scroll-view class="tab-page-wrap" scroll-y v-show="headTabIndex===2">
 
         <div class="section scroll-box first-cate-list  bg-white" :style="{top:diyHeadHeight+'px'}"
              @touchmove.stop.prevent="$noop">
@@ -410,7 +409,6 @@ import GoodsItem from '@/componets/good-item/good-item'
 import DiyNav from '@/componets/diy-nav/diy-nav'
 import { hideLoading, showLoading } from '@/common/fun'
 
-
 export default {
   mixins: [BaseMixin],
   components: {
@@ -492,18 +490,18 @@ export default {
             duration: 300,
             timingFunction: 'ease'
           })
-  
-          setTimeout(()=>{
+
+          setTimeout(() => {
             const query = uni.createSelectorQuery()
             query.select(`#tabItemTip${idx}`).boundingClientRect(data => {
               // this.tabDom[idx] = data
               console.log(data)
               // 正下方
-              underlineAnimation.width('18px').left(data.left - 10-4).step()
+              underlineAnimation.width('18px').left(data.left - 10 - 4).step()
               underlineAnimation.width('8px').step()
               this.tabUnderlineAnimationData = underlineAnimation.export()
             }).exec()
-          },0)
+          }, 0)
         }
       }
     },
@@ -527,7 +525,7 @@ export default {
     const query = uni.createSelectorQuery()
     query.select('#tabItemTip0').boundingClientRect(data => {
       this.tabDom[0] = data
-      this.defaultUnderlineLeft = data.left-10-4
+      this.defaultUnderlineLeft = data.left - 10 - 4
       this.showUnderLine = true
     }).exec()
     query.select('#tabItemTip1').boundingClientRect(data => {
@@ -705,7 +703,7 @@ export default {
     right: 30rpx;
     z-index: 99;
     box-sizing: border-box;
-    padding-top: 12rpx;
+    padding-top: 8rpx;
     width:98rpx;
     height:98rpx;
     background:rgba(38,199,141,1);
@@ -715,11 +713,15 @@ export default {
   }
 
   .tab-container {
-    position: relative;
+    position: absolute;
+    bottom: 0;
     width: 750rpx;
-
     .tab-page-wrap {
-      width: 750rpx;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
     }
   }
 
