@@ -1,11 +1,16 @@
 <template>
   <div class="wrap">
     <div :style="{height:systemInfo.statusBarHeight+'px'}"></div>
+    <div :style="{height:diyHeadHeight+'px',opacity:activeHeadOpacity}" class="bg-white" style="position: fixed;z-index: 2;width: 750rpx;left:0;top:0">
+      <div :style="{height:systemInfo.statusBarHeight+'px'}"></div>
+      <div :style="{height:menuButtonInfo.height+'px',lineHeight:menuButtonInfo.height+'px'}" class="c3 text-center">个人中心</div>
+    </div>
 
     <div class="header">
-      <div class="left-icon-box">
-        <LayoutIcon type="iconshezhi" size="24" color="#333" @click="goSetting"></LayoutIcon>
-        <LayoutIcon class="p-l-10" type="iconicon" size="24" color="#333" @click="goDailyCheck"></LayoutIcon>
+      <div class="left-icon-box" :style="{top:menuButtonInfo.top+'px',height:menuButtonInfo.height+'px'}" >
+        <!--:plain="false" :wrap-bg="activeHeadOpacity===1?'#f2f2f2':'none'" wrap-padding="6px"-->
+        <layout-icon type="iconshezhi" size="24" color="#333" @click="goSetting"></layout-icon>
+        <layout-icon class="p-l-10" type="iconicon" size="24" color="#333" @click="goDailyCheck"></layout-icon>
       </div>
       <div class="user-msg" v-if="userInfo.Users_ID" @click="$linkTo('/pagesA/user/PersonalMsg')">
         <image :src="userInfo.User_HeadImg" class="avatar"></image>
@@ -86,6 +91,7 @@ export default {
   },
   data () {
     return {
+      activeHeadOpacity:0,
       iconList: [
         {
           className: 'iconpintuan',
@@ -194,6 +200,13 @@ export default {
       setUserInfo: 'user/setUserInfo'
     })
   },
+  onPageScroll (e) {
+    
+    const { scrollTop } = e
+    const h = this.diyHeadHeight + 20 // 滑到这里的时候,就透明度为1
+    const opacity = scrollTop / h
+    this.activeHeadOpacity = opacity > 1 ? 1 : opacity
+  },
   onShow () {
     getUserInfo().then(res => {
       this.setUserInfo(res.data)
@@ -225,9 +238,9 @@ export default {
     .left-icon-box {
       position: fixed;
       left: 30rpx;
-      top: var(--status-bar-height);
       display: flex;
       align-items: center;
+      z-index: 3;
     }
 
     .user-msg {

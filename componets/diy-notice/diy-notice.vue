@@ -166,8 +166,8 @@ export default {
   }
 
   .content {
-    padding: 6px 10px;
-    height: 16px;
+    
+    padding:6px 10px;height:28px;width:750rpx;overflow: hidden;box-sizing: border-box;
   }
 
   .icon {
