@@ -1246,7 +1246,9 @@ export default {
     bindLeftBtnClick () {
       if (this.commentDrawerOpen) {
         this.closeCommentDrawer()
+        return
       }
+      this.$back()
     },
     openCommentDrawer () {
       this.commentDrawerOpen = true
@@ -1387,11 +1389,6 @@ export default {
     },
     bingReasonInput (e) {
       this.commentValue = e.detail.value
-    },
-    gotoComments () {
-      uni.navigateTo({
-        url: '/pages/order/comments?pro_id=' + this.productInfo.Products_ID
-      })
     },
     cancelComent () {
       this.commentValue = ''

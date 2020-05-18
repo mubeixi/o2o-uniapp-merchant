@@ -456,7 +456,10 @@
           }
         },
         {
-          "path": "user/UpdateUserPsw"
+          "path": "user/UpdateUserPsw",
+          "style": {
+            "navigationBarTitleText": "密码设置"
+          }
         },
         {
           "path": "user/SystemMsg",

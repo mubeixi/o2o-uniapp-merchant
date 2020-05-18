@@ -311,7 +311,7 @@ export default {
             cancelText: '暂不设置',
           }).then(res => {
             uni.navigateTo({
-              url: '/pagesA/person/updateUserPsw?type=1&is_back=1',
+              url: '/pagesA/user/UpdateUserPsw?type=1&is_back=1',
             })
           }).catch(err => {
             error('请选择其他支付方式')
