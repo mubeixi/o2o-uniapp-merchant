@@ -159,6 +159,12 @@
         "navigationBarTitleText": "订单列表"
       }
     },
+//    {
+//      "path": "pages/order/comments",
+//      "style": {
+//        "navigationBarTitleText": "评论列表"
+//      }
+//    },
     {
       "path": "pages/order/OrderDetail",
       "style": {
@@ -450,7 +456,10 @@
           }
         },
         {
-          "path": "user/UpdateUserPsw"
+          "path": "user/UpdateUserPsw",
+          "style": {
+            "navigationBarTitleText": "密码设置"
+          }
         },
         {
           "path": "user/SystemMsg",

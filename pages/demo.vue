@@ -17,6 +17,7 @@
           <wzw-im-card
             :msg-id="'msg-'+idx"
             :message="chat"
+            @bindProductSend="handleProductSend"
           />
           <!--用来搞事的-->
           <div class="div-line h10" :id="'msg-'+idx"></div>
@@ -64,6 +65,7 @@ import Storage from '@/common/Storage'
 import WzwImCard from '@/componets/wzw-im-card/wzw-im-card'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import { Exception } from '@/common/Exception'
+import { getProductDetail } from '@/api/product'
 let imInstance = null
 const progressList = []
 export default {
@@ -130,6 +132,10 @@ export default {
 
   },
   methods: {
+    handleProductSend (productInfo) {
+      // 发送产品消息
+      imInstance.sendImMessage({ content: productInfo, type: 'prod', isTip: 0 })
+    },
     onRefresh () {
       if (this.isFreshing) return
       this.isFreshing = true
@@ -173,13 +179,30 @@ export default {
       const { productId, orderId, origin } = options
 
       setNavigationBarTitle('Im')
-      this.imInstance = imInstance = new IM({ productId, orderId, origin })
+      this.imInstance = imInstance = new IM({ origin })
       // 设置本地用户信息
       imInstance.setSendInfo({ type: 'user', id: Storage.get('user_id') })
       // 设置接收人的信息
       imInstance.setReceiveInfo({ type: 'biz', id: 3 })
-
       await imInstance.start() // 等拿token
+
+      // 先加载一下最近消息
+      await imInstance.getHistory()
+
+      // productId, orderId,
+
+      // 如果有商品的话，需要加一个商品提示信息
+      if (productId) {
+        console.log(`有商品${productId}`)
+        const productInfo = await getProductDetail({ prod_id: productId }).then(res => {
+          // const { Products_Name, ImgPath, Products_ID, Products_Sales,Products_PriceX,pintuan_pricex,price } = res.data
+          delete res.data.Products_Description
+          return res.data // { Products_Name, ImgPath, Products_ID, Products_Sales,Products_PriceX,pintuan_pricex,price }
+        }).catch(err => { throw Error(err.msg || '获取商品信息错误') })
+        // isTip为1代表，是显示产品信息，提醒用户发送而已
+        imInstance.sendImMessage({ content: productInfo, type: 'prod', isTip: 1 })
+      }
+
       this.imReady = true
     },
     sendMsg () {

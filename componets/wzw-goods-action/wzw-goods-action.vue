@@ -55,7 +55,8 @@ export default {
     },
     toIm () {
       //linkToEasy('/pagesA/support/Im')
-      linkToEasy('/pages/demo')
+      // linkToEasy('/pages/demo')
+      this.$emit('goIM')
     },
     goStore () {
       this.$emit('goStore')

@@ -105,6 +105,26 @@ class Image extends Message {
   }
 }
 
+class Product extends Message {
+  constructor (type = 'prod', content = {}, ext) {
+    super(type, content)
+    const { isTip = 0 } = ext
+    this.isTip = isTip // 如果为1则不需要发送，代表仅仅是显示产品信息
+  }
+
+  async getContent () {
+    // {"prod_name":"商品一","img":"图片路径","price":"100","url":"商品卡片点击跳转的URL"}
+
+    const content = {
+      prod_name: this.content.Products_Name,
+      price: this.content.Products_PriceX,
+      img: this.content.ImgPath,
+      url: `/pages/product/detail?prod_id=${this.content.Products_ID}`
+    }
+    return JSON.stringify(content)
+  }
+}
+
 // const voiceInstance = new Voice()
 
 class IM {
@@ -119,8 +139,8 @@ class IM {
    */
   constructor ({ productId, orderId, origin, ...extConf } = {}) {
     // this.createInstance = false
-    this.productId = productId
-    this.orderId = orderId
+    // this.productId = productId
+    // this.orderId = orderId
     this.origin = origin
     this.extConf = extConf
     this.page = 1 // 初始化页码
@@ -274,6 +294,9 @@ class IM {
       case 'image':
         message = new Image(type, content, ext)
         break
+      case 'prod':
+        message = new Product(type, content, ext)
+        break
       default:
         message = new Message(type, content, ext)
         break
@@ -281,6 +304,9 @@ class IM {
 
     if (this.socketOpen) {
       this.chatList.push({ ...message, direction: 'to', sendStatus: 0 })
+      // 不需要发送
+      if (message.type === 'prod' && message.isTip) return
+
       const chatIdx = this.chatList.length - 1
 
       // 为了预防有需要异步上传的情况

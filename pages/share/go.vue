@@ -7,10 +7,11 @@
         <span class="text-share-btn" @click="copy">复制文案</span>
       </div>
       <div class="container p-15 fz-12 c3">
-        <div class="m-t-10">{{detailData.Products_Name}}</div>
-        <div class="m-t-10">已售{{detailData.Products_Sales}}件</div>
-        <div class="m-t-10">拼购价:{{detailData.Products_PriceX}}</div>
-        <div class="m-t-10">原价:{{detailData.Products_PriceY}}</div>
+        <textarea :value="shareText" style="line-height: 1.6" @input="bindShareTextChange"></textarea>
+<!--        <div class="m-t-10">{{detailData.Products_Name}}</div>-->
+<!--        <div class="m-t-10">已售{{detailData.Products_Sales}}件</div>-->
+<!--        <div class="m-t-10">拼购价:{{detailData.Products_PriceX}}</div>-->
+<!--        <div class="m-t-10">原价:{{detailData.Products_PriceY}}</div>-->
       </div>
     </div>
 
@@ -56,7 +57,7 @@ import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import BaseMixin from '@/mixins/BaseMixin'
 import { getEnv } from '@/common/request'
 import Promisify from '@/common/Promisify'
-import { cutstrFun } from '@/common/helper'
+import { buildSharePath, cutstrFun } from '@/common/helper'
 import { Exception } from '@/common/Exception'
 let canvasInstance = null
 export default {
@@ -69,6 +70,7 @@ export default {
     return {
       wrapPath: 'https://newo2o.bafangka.com/uploadfiles/wkbq6nc2kc/image/202005051145245485.png',
       prod_id: '',
+      shareText: '',
       shareInfo: {},
       detailData: {}
     }
@@ -94,9 +96,11 @@ export default {
     // this.wrapPath = this.$getDomain('/static/client/share/cover-wrap.png')
   },
   methods: {
+    bindShareTextChange (e) {
+      this.shareText = e.detail.value
+    },
     async createCanvas () {
       try {
-       
         showLoading('生成中')
         const wrapHeight = 1038
         const ctx = canvasInstance
@@ -196,7 +200,7 @@ export default {
     },
     async copy () {
       try {
-        const str = `${this.detailData.Products_Name},已售${this.detailData.Products_Sales},拼购价只要${this.detailData.Products_PriceX},原价${this.detailData.Products_PriceY}`
+        const str = this.shareText
         console.log(str)
         await Promisify('setClipboardData', { data: str }).catch(e => {
           throw Error(e.errMsg)
@@ -211,9 +215,13 @@ export default {
         const data = {
           prod_id: this.prod_id
         }
-        this.detailData = await getProductDetail(data, { onlyData: true }).catch(e => {
+        const detailData = await getProductDetail(data, { onlyData: true }).catch(e => {
           throw Error(e.msg || '获取商品信息失败')
         })
+
+        this.detailData = detailData
+        this.shareText = `${detailData.Products_Name},已售${detailData.Products_Sales}件,拼购价:${detailData.Products_PriceX},原价:${detailData.Products_PriceY}`
+
         this.shareInfo = await getBizShare({
           ...data,
           biz_id: 3,
@@ -226,6 +234,17 @@ export default {
         modal(e.message)
       }
     }
+  },
+  // 自定义小程序分享
+  onShareAppMessage () {
+    const path = '/pages/product/detail?prod_id=' + this.prod_id
+    const shareObj = {
+      title: this.detailData.Products_Name,
+      desc: this.detailData.Products_BriefDescription,
+      imageUrl: this.detailData.ImgPath,
+      path: buildSharePath(path)
+    }
+    return shareObj
   }
 }
 </script>

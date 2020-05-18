@@ -126,11 +126,13 @@
         </div>
         <div class="actions">
           <div>
-            <span class="price-selling fz-12">￥</span>
-            <span class="price-selling fz-14 c3">{{attrInfo.price}}</span>
-            <span class="c9 fz-12 p-l-4">
+            <block v-if="attrInfo.price">
+              <span class="price-selling fz-12">￥</span>
+              <span class="price-selling fz-14 c3">{{attrInfo.price}}</span>
+              <span class="c9 fz-12 p-l-4">
               {{attrInfo.attr_text}}
-            </span>
+              </span>
+            </block>
           </div>
           <div>
             <div v-if="attrInfo.num<1" @click="confirmAdd" class="confirm-btn" :class="{disabled:!submitFlag}">加入购物车
@@ -665,14 +667,15 @@ export default {
 
         .tag {
           position: absolute;
-          right: -7px;
-          top: -7px;
+          right: -10px;
+          top: -10px;
           background: $fun-red-color;
           border-radius: 50%;
           overflow: hidden;
-          height: 14px;
-          font-size: 12px;
-          line-height: 14px;
+          height: 20px;
+          width: 20px;
+          font-size: 10px;
+          line-height: 20px;
           text-align: center;
         }
       }

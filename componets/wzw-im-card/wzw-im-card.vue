@@ -1,7 +1,19 @@
 <template>
   <div class="card-item" :id="msgId">
     <div class="time"></div>
-    <div class="content-wrap" :class="{reverse:message.direction==='to'}">
+
+    <div class="goods-tip-box flex" v-if="message.type==='prod' && message.isTip">
+      <div class="cover" :style="{backgroundImage: 'url('+message.content.ImgPath+')'}"></div>
+      <div class="info flex flex-column flex-justify-between">
+        <div class="goods-title fz-14 c4">{{message.content.Products_Name}}</div>
+        <div class="flex flex-justify-between flex-vertical-c">
+          <div class="fz-14 price-selling"><span class="fz-12">￥</span>{{message.content.Products_PriceX}}</div>
+          <div @click="bindProductSend" class="action-btn fz-14">发给商家</div>
+        </div>
+
+      </div>
+    </div>
+    <div v-else class="content-wrap" :class="{reverse:message.direction==='to'}">
       <div class="content-label">
         <div class="flex flex-vertical-c">
 
@@ -25,7 +37,9 @@
         </div>
       </div>
       <div class="content-box">
+
         <div class="content-text" v-if="message.type==='text'">{{message.content}}</div>
+
         <div v-if="message.type==='image'" class="content-img-wrap">
           <block v-if="message.tempPath">
             <image @click="previewImg" :style="{width:message.styleObj.width+'px',height:message.styleObj.height+'px'}"  class="content-img" :src="message.tempPath||message.content" ></image>
@@ -42,6 +56,14 @@
             <div class="fz-12 color-white text-center">{{message.taskList[0].progress||0}}%</div>
           </div>
         </div>
+  
+        <div v-if="message.type==='prod' && !message.isTip" class="goods-info-box" @click="toGoodsDetail(message.content)">
+          <div class="cover" :style="{backgroundImage: 'url('+message.content.ImgPath+')'}"></div>
+          <div class="info">
+            <div class="fz-16 price-selling"><span class="fz-14">￥</span>{{message.content.Products_PriceX}}</div>
+            <div class="goods-title fz-14 c4 m-t-10">{{message.content.Products_Name}}</div>
+          </div>
+        </div>
 
       </div>
     </div>
@@ -51,6 +73,9 @@
 <script>
 // 消息卡片组件
 import LayoutLoading from '@/componets/layout-loading/layout-loading'
+import { objTranslate } from '@/common/helper'
+import {toGoodsDetail} from '@/common/helper'
+
 export default {
   name: 'wzw-im-card',
   components: { LayoutLoading },
@@ -71,6 +96,11 @@ export default {
     return {}
   },
   methods: {
+    toGoodsDetail,
+    bindProductSend () {
+      // 还是不要有任何关联的好
+      this.$emit('bindProductSend', objTranslate(this.message.content))
+    },
     previewImg () {
       const urls = [this.message.content]
       uni.previewImage({
@@ -84,6 +114,35 @@ export default {
 
 .card-item{
   padding: 20rpx;
+  .goods-tip-box{
+    width: 710rpx;
+    height: 200rpx;
+    border-radius:20rpx;
+    padding: 20rpx;
+    box-sizing: border-box;
+    overflow: hidden;
+    background: #fff;
+    .cover{
+      width: 160rpx;
+      height: 160rpx;
+      margin-right: 20rpx;
+      @include cover-img();
+    }
+    .info{
+      .goods-price{
+
+      }
+      .action-btn{
+        width:160rpx;
+        height:56rpx;
+        background:linear-gradient(270deg,rgba(255,0,6,1),rgba(255,132,23,1));
+        border-radius:28rpx;
+        text-align: center;
+        line-height: 56rpx;
+        color: #fff;
+      }
+    }
+  }
   .content-wrap{
     display: flex;
     flex-direction: row;
@@ -111,8 +170,28 @@ export default {
     }
 
     .content-box{
-      max-width: 440rpx;
+      max-width: 490rpx;
       overflow: hidden;
+  
+      .goods-info-box{
+        width: 486rpx;
+        border-radius:20rpx;
+        box-sizing: border-box;
+        overflow: hidden;
+        background: #fff;
+        .cover{
+          width: 486rpx;
+          height: 486rpx;
+          @include cover-img();
+        }
+        .info{
+          padding: 20rpx;
+          .goods-price{
+        
+          }
+          
+        }
+      }
 
       .content-text{
         border-radius: 10rpx;
@@ -137,7 +216,7 @@ export default {
           top: 50%;
           transform: translate(-50%,-50%);
         }
-        
+
         .progress-box{
           position: absolute;
           right: 0;
@@ -149,7 +228,7 @@ export default {
           display: flex;
           flex-direction: column;
           justify-content: center;
-          
+
           .loading-img{
             width: 14px;
             height: 14px;
