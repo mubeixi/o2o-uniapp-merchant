@@ -705,9 +705,9 @@ export default {
     right: 30rpx;
     z-index: 99;
     box-sizing: border-box;
-    padding-top: 8rpx;
-    width:88rpx;
-    height:88rpx;
+    padding-top: 12rpx;
+    width:98rpx;
+    height:98rpx;
     background:rgba(38,199,141,1);
     box-shadow:0rpx 2rpx 12rpx 0rpx rgba(35,183,130,0.4);
     border-radius:50%;
