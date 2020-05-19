@@ -3,7 +3,7 @@
   <view class="myall">
     <radio-group @change="radioChange" class="radio-group">
       <label :class="!check_flag ? 'no-redio' : ''" :key="idx" class="radio-item" v-for="(item,idx) in addresslist">
-        <radio style="transform: scale(0.8)" class="radio-ele" :checked="item.Address_ID === check_address_id"
+        <radio style="transform: scale(0.8)" class="radio-ele" :checked="Number(item.Address_ID) === Number(check_address_id)"
                :disabled="!check_flag" :value="idx" color="#F43131" v-if="check_flag" />
         <view class="flex-main fz-12">
           <view class='flex-top'>

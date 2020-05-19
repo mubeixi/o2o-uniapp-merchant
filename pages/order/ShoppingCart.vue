@@ -332,7 +332,6 @@ export default {
           }
         }
       }
-      console.log(total, 'ss')
       this.totalPrice = Number(total).toFixed(2)
     },
     async init () {
