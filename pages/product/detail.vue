@@ -1099,7 +1099,7 @@
     </layout-modal>
 
     <layout-popup ref="couponModal">
-      <view style="max-height: 1050rpx;">
+      <view >
         <div class="t_title ">
           领券
           <layout-icon type="icondel" size="14" class="delIcon" color="#999"
@@ -1394,7 +1394,7 @@ export default {
       this.commentValue = ''
       this.$closePop('commentModal')
     },
-    sureComment () {
+    async sureComment () {
       if (!checkIsLogin(1, 1)) return
       if (!this.commentValue) {
         error('评论内容不能为空')
@@ -1408,13 +1408,26 @@ export default {
       if (this.commentItem.groupid) {
         data.groupid = this.commentItem.groupid
       }
-      commentReply(data).then(res => {
+      await commentReply(data).then(res => {
         toast('评论成功')
         this.commentValue = ''
         this.$closePop('commentModal')
+        this.getCommit()
+
       }).catch(e => {
         error(e.msg || '评论失败')
         this.$closePop('commentModal')
+      })
+    },
+    async getCommit(){
+      this.comments = await getCommitList({
+        Products_ID: this.productInfo.Products_ID,
+        pageSize: 999,
+        page: 1
+      }, {
+        onlyData: true
+      }).catch((e) => {
+        throw Error('获取评论数据失败')
       })
     },
     clickComment (item) {
