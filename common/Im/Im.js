@@ -107,21 +107,30 @@ class Image extends Message {
 
 class Product extends Message {
   constructor (type = 'prod', content = {}, ext) {
+    console.log(content, ext)
     super(type, content)
+
     const { isTip = 0 } = ext
     this.isTip = isTip // 如果为1则不需要发送，代表仅仅是显示产品信息
+
+    // 如果不是消息提示，那么就要格式化了
+    if (!isTip) {
+      const _content = {
+        prod_name: content.Products_Name,
+        price: content.Products_PriceX,
+        img: content.ImgPath,
+        url: `/pages/product/detail?prod_id=${this.content.Products_ID}`
+      }
+      // 走到这里就代表已经发送了
+      this.content = _content
+    }
   }
 
   async getContent () {
     // {"prod_name":"商品一","img":"图片路径","price":"100","url":"商品卡片点击跳转的URL"}
 
-    const content = {
-      prod_name: this.content.Products_Name,
-      price: this.content.Products_PriceX,
-      img: this.content.ImgPath,
-      url: `/pages/product/detail?prod_id=${this.content.Products_ID}`
-    }
-    return JSON.stringify(content)
+    // 走到这里就代表已经发送了
+    return JSON.stringify(this.content)
   }
 }
 
@@ -390,7 +399,7 @@ class IM {
       console.log('WebSocket连接已打开！')
       this.socketOpen = true
       for (var i = 0; i < this.msgQueue.length; i++) {
-        this.sendMessage(this.msgQueue[i])
+        this.sendImMessage(this.msgQueue[i])
       }
       this.msgQueue = []
     })

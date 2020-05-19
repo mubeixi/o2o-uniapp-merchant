@@ -264,6 +264,13 @@
           }
         },
         {
+          "path": "support/ImList",
+          "style": {
+            "navigationBarTitleText": "消息",
+            "enablePullDownRefresh": true
+          }
+        },
+        {
           "path": "user/PersonalMsg",
           "style": {
             "navigationBarTitleText": "修改资料"

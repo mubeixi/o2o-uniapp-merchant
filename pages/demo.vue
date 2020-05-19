@@ -6,9 +6,9 @@
       class="im-card-box"
       :scroll-into-view='toViewIdx'
       :style="{paddingBottom:'110rpx'}"
-      refresher-enabled="true"
-      :refresher-triggered="triggered"
+      :refresher-enabled="true"
       :refresher-threshold="100"
+      :refresher-triggered="triggered"
       @refresherrestore="onRestore"
       @refresherrefresh="onRefresh"
     >
@@ -30,8 +30,8 @@
         <div class="input-box">
           <input type="text" confirm-type="发送" @confirm="sendMsg" @focus="mode='text'" @blur="inputBlur" class="input-ele"  v-model="tempText" />
         </div>
-        <div class="submit-btn">
-          <image class="img-btn" @click="taggleMore" src="/static/im/im-action-more.png"></image>
+        <div class="submit-btn" @click="taggleMore">
+          <image class="img-btn"  src="/static/im/im-action-more.png"></image>
         </div>
       </div>
       <div class="onther" v-if="showOnther">
@@ -51,35 +51,29 @@
 
 <script>
 import BaseMixin from '@/mixins/BaseMixin'
-import {
-  checkIsLogin,
-  chooseImageByPromise, createUpTaskArr,
-  getArrColumn,
-  getDomain,
-  setNavigationBarTitle,
-  uploadImages
-} from '@/common/helper'
+import { checkIsLogin, chooseImageByPromise, getArrColumn, setNavigationBarTitle } from '@/common/helper'
 import IM from '@/common/Im/Im'
 import { error } from '@/common/fun'
 import Storage from '@/common/Storage'
 import WzwImCard from '@/componets/wzw-im-card/wzw-im-card'
-import LayoutIcon from '@/componets/layout-icon/layout-icon'
+// import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import { Exception } from '@/common/Exception'
 import { getProductDetail } from '@/api/product'
+
 let imInstance = null
 const progressList = []
 export default {
   mixins: [BaseMixin],
   components: {
-    LayoutIcon,
+    // LayoutIcon,
     WzwImCard
-
   },
   data () {
     return {
       isFreshing: false,
       triggered: false,
       mode: '',
+      toViewIdx: '',
       showOnther: false,
       imInstance: null,
       imReady: false,
@@ -98,14 +92,14 @@ export default {
         return 0
       }
     },
-    toViewIdx () {
-      try {
-        // - 1指向最后一个占位的就好了
-        return 'msg-' + (this.imInstance.chatList.length - 1)
-      } catch (e) {
-        return ''
-      }
-    },
+    // toViewIdx () {
+    //   try {
+    //     // - 1指向最后一个占位的就好了
+    //     return 'msg-' + (this.imInstance.chatList.length - 1)
+    //   } catch (e) {
+    //     return ''
+    //   }
+    // },
     chatList () {
       try {
         const list = this.imInstance.chatList
@@ -132,13 +126,26 @@ export default {
 
   },
   methods: {
-    handleProductSend (productInfo) {
+    // 更新记录用，用于添加的时候
+    setViewIdx (val) {
+      this.toViewIdx = val || ('msg-' + (this.imInstance.chatList.length - 1))
+    },
+    async handleProductSend (productInfo) {
       // 发送产品消息
-      imInstance.sendImMessage({ content: productInfo, type: 'prod', isTip: 0 })
+      await imInstance.sendImMessage({ content: productInfo, type: 'prod', isTip: 0 })
+      this.setViewIdx()
+    },
+    onPulling () {
+      console.log('onPulling')
     },
     onRefresh () {
+      // 无意义，随便的，不让滚动栏滚动到底部而已
+      this.setViewIdx('xxx')
       if (this.isFreshing) return
       this.isFreshing = true
+      // 界面下拉触发，triggered可能不是true，要设为true
+      if (!this.triggered) this.triggered = true
+
       // 不论成功还是失败
       this.imInstance.getHistory().finally(() => {
         this.triggered = false
@@ -146,14 +153,15 @@ export default {
       })
     },
     onRestore () {
-      this.triggered = 'restore' // 需要重置
+
     },
     async sendImg () {
       try {
         const files = await chooseImageByPromise({ sizeType: 1, sourceType: ['album'] }).catch(err => { throw Error(err.errMsg || '选择照片失败') })
         const imgs = getArrColumn(files, 'path')
 
-        imInstance.sendImMessage({ content: '', type: 'image', tempPath: imgs[0] })
+        await imInstance.sendImMessage({ content: '', type: 'image', tempPath: imgs[0] })
+        this.setViewIdx()
       } catch (e) {
         Exception.handle(e)
       }
@@ -162,7 +170,8 @@ export default {
       try {
         const files = await chooseImageByPromise({ sizeType: 1, sourceType: ['camera'] }).catch(err => { throw Error(err.errMsg || '选择照片失败') })
         const imgs = getArrColumn(files, 'path')
-        imInstance.sendImMessage({ content: '', type: 'image', tempPath: imgs[0] })
+        await imInstance.sendImMessage({ content: '', type: 'image', tempPath: imgs[0] })
+        this.setViewIdx()
       } catch (e) {
         Exception.handle(e)
       }
@@ -203,6 +212,7 @@ export default {
         imInstance.sendImMessage({ content: productInfo, type: 'prod', isTip: 1 })
       }
 
+      this.setViewIdx()
       this.imReady = true
     },
     sendMsg () {
@@ -211,6 +221,7 @@ export default {
         return
       }
       imInstance.sendImMessage({ content: this.tempText })
+      this.setViewIdx()
       this.tempText = ''
     },
     bindInputChange (e) {
@@ -284,7 +295,8 @@ export default {
         }
       }
       .submit-btn{
-        margin-right: 20rpx;
+        padding-right: 20rpx;
+        height: 110rpx;
         .img-btn{
           width: 48rpx;
           height: 48rpx;

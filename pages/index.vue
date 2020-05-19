@@ -554,6 +554,9 @@ export default {
           throw Error(err.msg || '初始化秒杀商品失败')
         })
 
+        console.log('秒杀列表')
+        console.log(this.killList)
+
         this.firstCateList = await getProductCategory({}, { onlyData: true }).catch(() => {
           throw Error('获取商品分类失败')
         })
