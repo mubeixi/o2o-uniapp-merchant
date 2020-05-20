@@ -372,7 +372,7 @@
       </scroll-view>
     </div>
 
-    <div class="publish-btn">
+    <div class="publish-btn" @click="$linkTo('/pagesA/support/ImList')">
       <layout-icon size="18" display="inline" color="#fff" type="iconfabu"></layout-icon>
       <div class="fz-10 color-white">发布活动</div>
     </div>
@@ -554,8 +554,6 @@ export default {
           throw Error(err.msg || '初始化秒杀商品失败')
         })
 
-        console.log('秒杀列表')
-        console.log(this.killList)
 
         this.firstCateList = await getProductCategory({}, { onlyData: true }).catch(() => {
           throw Error('获取商品分类失败')

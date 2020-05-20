@@ -55,8 +55,16 @@ class Image extends Message {
     this.tempPath = tempPath
     this.taskList = createUpTaskArr()
     this.styleObj = { width: 0, height: 0, mode: 'widthFix' }
-    // 本地图片，所以获取图片信息非常快
-    Promisify('getImageInfo', { src: tempPath }).then(res => {
+    
+  }
+
+  async getImgInfo() {
+    try {
+      // 本地图片，所以获取图片信息非常快
+      const res = await Promisify('getImageInfo', { src: this.tempPath }).catch(err => {
+        throw Error(err.errMsg)
+      })
+      console.log(res)
       const { height, width } = res
 
       this.styleObj.mode = height > width ? 'heightFix' : 'widthFix'// 横还是竖直
@@ -86,7 +94,12 @@ class Image extends Message {
 
       this.styleObj.width = width / imgScale
       this.styleObj.height = height / imgScale
-    })
+      console.log(this.styleObj)
+    } catch (e) {
+      modal(e.message)
+    }
+
+    return true
   }
 
   async getContent (chatIdx, chatList) {
@@ -150,6 +163,12 @@ class IM {
     // this.createInstance = false
     // this.productId = productId
     // this.orderId = orderId
+    // 发送人的消息
+    this.sendName = ''
+    this.sendAvatar = ''
+    this.sendIdentity = ''
+    this.sendId = ''
+
     this.origin = origin
     this.extConf = extConf
     this.page = 1 // 初始化页码
@@ -200,6 +219,14 @@ class IM {
   setSendInfo ({ type, id, ...ext }) {
     // 获取发送人的信息要用的
     this.setIdentity({ type, id })
+
+    const { name = '', avatar = '' } = ext
+    this.sendName = name
+    this.sendAvatar = avatar
+  }
+
+  getSendInfo () {
+    return { name: this.sendName, avatar: this.sendAvatar }
   }
 
   /**
@@ -311,6 +338,10 @@ class IM {
         break
     }
 
+    if (type === 'image') {
+      await message.getImgInfo()
+    }
+
     if (this.socketOpen) {
       this.chatList.push({ ...message, direction: 'to', sendStatus: 0 })
       // 不需要发送
@@ -367,9 +398,12 @@ class IM {
     // 需要绑定
     if (type === 'login') {
       this.setClientId(from)
+      const sendUserInfo = this.getSendInfo()
       bindUid({
         client_id: this.getClientId(),
-        out_uid: this.getOutUid()
+        out_uid: this.getOutUid(),
+        name: sendUserInfo.name,
+        avatar: sendUserInfo.avatar
       }).catch(res => {}).catch(e => { throw Error('绑定用户失败') })
       return
     }

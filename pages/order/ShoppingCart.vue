@@ -1,16 +1,19 @@
 <template>
   <div>
-    <div class="status-title">
-    </div>
-    <div style="width: 750rpx;height: 86rpx"></div>
-    <div class="cart-title flex flex-vertical-c flex-justify-c fz-16 c3">
-      <div>
-        购物车
+    <div class="bg-white" :style="{height:diyHeadHeight+'px'}"></div>
+  
+    <div class="top-box bg-white" :style="{height:diyHeadHeight+'px'}">
+      <div :style="{height:menuButtonInfo.top+'px'}" class="bg-white" style="position: fixed;top: 0;width: 750rpx;z-index: 99;"></div>
+      <div class="cart-title flex flex-vertical-c flex-justify-c fz-16 c3" :style="{height:menuButtonInfo.height+'px'}">
+        <div>
+          购物车
+        </div>
+        <div @click="isDel=!isDel" class="cart-title-right" v-if="!manage">
+          {{isDel?'取消':'管理'}}
+        </div>
       </div>
-      <div @click="isDel=!isDel" class="cart-title-right" v-if="!manage">
-        {{isDel?'取消':'管理'}}
-      </div>
     </div>
+    
 
     <div class="content">
       <div class="cartbox" v-if="total_count>0">
@@ -381,25 +384,24 @@ export default {
     /* #endif */
   }
 
-  .status-title {
-    height: var(--status-bar-height);
-    width: 750rpx;
-    background-color: #FFFFFF;
-  }
 
+
+  .top-box{
+    position: fixed;
+    top: 0;
+    width: 750rpx;
+  }
   .cart-title {
-    padding-top: var(--status-bar-height);
-    height: 86rpx;
     width: 750rpx;
     background-color: #FFFFFF;
     position: fixed;
     z-index: 99;
     top: 0;
     left: 0;
-
     &-right {
       position: absolute;
-      bottom: 20rpx;
+      top: 50%;
+      transform: translateY(-50%);
       left: 20rpx;
     }
   }

@@ -139,8 +139,8 @@ export const ajax = ({ url, method = 'post', data = {}, options = {},isAddHost=t
   
   const _url = !isAddHost ? url:ENV.apiBaseUrl + url
   
-  console.log(`请求链接${_url}`)
-  console.log('请求参数:',data)
+  // console.log(`请求链接${_url}`)
+  // console.log('请求参数:',data)
   return new Promise((resolve, reject) => {
     uni.request({
       header,
@@ -155,7 +155,7 @@ export const ajax = ({ url, method = 'post', data = {}, options = {},isAddHost=t
         }
         const { data: res } = ret
         
-        console.log('响应',res)
+        // console.log('响应',res)
         const { errorCode = 1, msg = '请求未成功' } = res
         
         if (hookErrorCode.includes(errorCode)) {

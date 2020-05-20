@@ -19,7 +19,7 @@
     {
       "path": "pages/demo",
       "style": {
-        "enablePullDownRefresh": true
+
       }
     },
     {

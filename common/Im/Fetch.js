@@ -29,3 +29,6 @@ export const sendMsg = (param, options) => Fetch({ url: '/chat/sendMsg', param, 
 
 // 获取更多消息
 export const getMsgList = (param, options) => Fetch({ url: '/chat/getMsgList', param, options })
+
+//查询会话列表
+export const getChatList = (param, options) => Fetch({ url: '/chat/getChatList', param, options })
