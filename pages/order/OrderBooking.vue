@@ -473,7 +473,14 @@ export default {
       const addressList = await getAddressList({}, { onlyData: true }).catch(() => {
       })
       if (Array.isArray(addressList) && addressList.length > 0) {
-        this.addressinfo = addressList[0]
+		  if(this.back_address_id>0){
+			  for(let item of addressList){
+				  Number(item.Address_ID)==Number(this.back_address_id)?this.addressinfo =item:''
+			  }
+		  }else{
+			  this.addressinfo = addressList[0]
+		  }
+        
       }
       this.postData.address_id = this.addressinfo.Address_ID
 
@@ -855,6 +862,7 @@ export default {
           ...params
         } = objTranslate(this.postData)
 
+		
         if (this.orderInfo.is_virtual === 0 && Object.values(shipping_id).filter(val => val === 0 || val === '0').length > 0) {
           throw Error('实体商品物流必须设置')
         }
