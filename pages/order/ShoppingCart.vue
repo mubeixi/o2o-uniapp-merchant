@@ -99,6 +99,7 @@ import Storage from '@/common/Storage'
 import { getProductList } from '@/api/product'
 import { error } from '@/common/fun'
 import ProTag from '@/componets/pro-tag/pro-tag'
+import { objTranslate } from '@/common/helper'
 
 export default {
   mixins: [BaseMixin],
@@ -127,12 +128,12 @@ export default {
     }
   },
   watch: {
-    CartList: {
-      handler (newValue, oldValue) {
-        console.log(oldValue, newValue, 'ss')
-      },
-      deep: true
-    }
+    // CartList: {
+    //   handler (newValue, oldValue) {
+    //     console.log(oldValue, newValue, 'ss')
+    //   },
+    //   deep: true
+    // }
   },
   methods: {
     gotoBuy () {
@@ -226,12 +227,22 @@ export default {
       this.fan = !this.fan
     },
     selectBiz (bizId) {
-      console.log(bizId)
+      const rt = !this.bizCheck[bizId]
+
+      this.$set(this.bizCheck, bizId, rt)
+      // this.bizCheck[bizId] = rt
+      console.log(objTranslate(this.bizCheck))
+
+      for (const it in this.bizCheck) {
+        Storage.set(it, this.bizCheck[it])
+      }
+
       for (var goods_idx in this.CartList[bizId]) {
-        console.log(goods_idx)
         for (var sku_idx in this.CartList[bizId][goods_idx]) {
           console.log(bizId, goods_idx, sku_idx)
-          this.selectItem(bizId, goods_idx, sku_idx)
+          // 把所有产品checked都为true
+          Storage.set((goods_idx + ';' + sku_idx), rt)
+          this.CartList[bizId][goods_idx][sku_idx].checked = rt
         }
       }
     },
@@ -301,7 +312,8 @@ export default {
       this.allCheck = true
       for (const i in this.CartList) {
         const biz_check = Storage.get(i)
-        this.bizCheck[i] = biz_check || false
+        const itemCheck = biz_check || false
+        this.$set(this.bizCheck, i, itemCheck)
         for (const j in this.CartList[i]) {
           for (const k in this.CartList[i][j]) {
             const attr_id = Storage.get((j + ';' + k))
