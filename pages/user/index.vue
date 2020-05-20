@@ -25,18 +25,22 @@
       <div class="order-item" @click="goOrder(1)">
         <LayoutIcon type="icondaifukuan" color="#9CA2F9" size="26"></LayoutIcon>
         <div class="order-desc">待付款</div>
+		 <div class="jiaobiao" v-if="orderNum.waitpay">{{orderNum.waitpay}}</div>
       </div>
       <div class="order-item" @click="goOrder(2)">
         <LayoutIcon type="iconfahuotixing" color="#88C79A" size="26"></LayoutIcon>
         <div class="order-desc">待发货</div>
+		<div class="jiaobiao" v-if="orderNum.waitsend">{{orderNum.waitsend}}</div>
       </div>
       <div class="order-item" @click="goOrder(3)">
         <LayoutIcon type="icondaishouhuo" color="#FDBB59" size="26"></LayoutIcon>
         <div class="order-desc">待收货</div>
+		<div class="jiaobiao" v-if="orderNum.waitconfirm">{{orderNum.waitconfirm}}</div>
       </div>
       <div class="order-item" @click="goOrder(4)">
         <LayoutIcon type="iconpingjia" color="#7DCAF7" size="26"></LayoutIcon>
         <div class="order-desc">待评价</div>
+		<div class="jiaobiao" v-if="orderNum.waitcomment">{{orderNum.waitcomment}}</div>
       </div>
     </div>
     <div class="quanyi" @click="$linkTo('/pagesA/user/EquityCard')">
@@ -79,6 +83,7 @@ import { checkIsLogin } from '@/common/helper'
 import {
   getProductList
 } from '@/api/product'
+import { getOrderNum } from '@/api/order'
 import { getUserInfo } from '@/api/customer'
 import { mapActions } from 'vuex'
 
@@ -92,6 +97,7 @@ export default {
   data () {
     return {
       activeHeadOpacity:0,
+	  orderNum:{},
       iconList: [
         {
           className: 'iconpintuan',
@@ -196,6 +202,13 @@ export default {
         throw Error(e.msg || '获取推荐商品信息失败')
       })
     },
+	// 获取订单角标数
+	getOrderNum () {
+	  getOrderNum({ Order_Type: 'shop' }).then(res => {
+	    this.orderNum = res.data
+	  }).catch(e => {
+	  })
+	},
     ...mapActions({
       setUserInfo: 'user/setUserInfo'
     })
@@ -208,10 +221,17 @@ export default {
     this.activeHeadOpacity = opacity > 1 ? 1 : opacity
   },
   onShow () {
-    getUserInfo().then(res => {
-      this.setUserInfo(res.data)
-    }).catch(err => {
-    })
+    
+	if(this.userInfo.Users_ID){
+		getUserInfo().then(res => {
+		  this.setUserInfo(res.data)
+		}).catch(err => {
+		})
+		this.getOrderNum()
+	}
+	
+	
+	
   },
   created () {
     this._init_func()
@@ -272,6 +292,7 @@ export default {
       text-align: center;
       font-size: 28rpx;
       color: #333;
+	  position: relative;
 
       .order-desc {
         margin-top: 22rpx;
@@ -341,5 +362,20 @@ export default {
   .product-list {
     flex-wrap: wrap;
     justify-content: space-around;
+  }
+  .jiaobiao {
+    position: absolute;
+    top: 0rpx;
+    right: 10rpx;
+    width: 20rpx;
+    height: 20rpx;
+    border-radius: 50%;
+    background-color: #FFFFFF;
+    border: 1px solid #F43131;
+    font-size: 15rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #F43131;
   }
 </style>

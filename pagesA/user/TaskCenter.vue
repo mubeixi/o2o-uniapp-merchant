@@ -10,7 +10,7 @@
       <view class="titles">任务中心</view>
       <view class="center">
         <!-- <image class="widthTen" :src="'/static/client/task/center.png" ></image> -->
-        <image class="widthTen" :src="pro.img_url"></image>
+        <!-- <image class="widthTen" :src="pro.img_url"></image>
         <view class="info">
           <image :src="pro.avatar" class="widthTen"></image>
         </view>
@@ -38,7 +38,7 @@
         <view class="valueM">
           成长值
           <image class="image" :src="'/static/client/task/sanjiao.png'|domain"></image>
-        </view>
+        </view> -->
       </view>
     </view>
     <view style="height: 60rpx;"></view>
