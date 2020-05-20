@@ -90,7 +90,7 @@ class XHR {
   static formData = (param) => {
     let _param = {
       access_token: getAccessToken(),
-      biz_id: getBizId(),
+      //biz_id: getBizId(),客户端不需要自动传biz_id的
       env: getEnv(), ...param,
     }
     
@@ -139,6 +139,8 @@ export const ajax = ({ url, method = 'post', data = {}, options = {},isAddHost=t
   
   const _url = !isAddHost ? url:ENV.apiBaseUrl + url
   
+  // console.log(`请求链接${_url}`)
+  // console.log('请求参数:',data)
   return new Promise((resolve, reject) => {
     uni.request({
       header,
@@ -152,6 +154,8 @@ export const ajax = ({ url, method = 'post', data = {}, options = {},isAddHost=t
           reject(new Error('服务器去旅行了'))
         }
         const { data: res } = ret
+        
+        // console.log('响应',res)
         const { errorCode = 1, msg = '请求未成功' } = res
         
         if (hookErrorCode.includes(errorCode)) {

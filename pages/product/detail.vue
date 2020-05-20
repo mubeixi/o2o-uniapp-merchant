@@ -1381,7 +1381,7 @@ export default {
       this.$linkTo(url)
     },
     goIM () {
-      this.$linkTo('/pages/demo?productId=' + this.prod_id)
+      this.$linkTo(`/pagesA/support/Im?type=biz&tid=${this.productInfo.biz_id}&productId=${this.prod_id}`)
     },
     goStore (bid) {
       const url = '/pages/store/index?bid=' + bid

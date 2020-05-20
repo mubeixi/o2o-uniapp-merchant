@@ -1,16 +1,19 @@
 <template>
   <div>
-    <div class="status-title">
-    </div>
-    <div style="width: 750rpx;height: 86rpx"></div>
-    <div class="cart-title flex flex-vertical-c flex-justify-c fz-16 c3">
-      <div>
-        购物车
+    <div class="bg-white" :style="{height:diyHeadHeight+'px'}"></div>
+  
+    <div class="top-box bg-white" :style="{height:diyHeadHeight+'px'}">
+      <div :style="{height:menuButtonInfo.top+'px'}" class="bg-white" style="position: fixed;top: 0;width: 750rpx;z-index: 99;"></div>
+      <div class="cart-title flex flex-vertical-c flex-justify-c fz-16 c3" :style="{height:menuButtonInfo.height+'px'}">
+        <div>
+          购物车
+        </div>
+        <div @click="isDel=!isDel" class="cart-title-right" v-if="!manage">
+          {{isDel?'取消':'管理'}}
+        </div>
       </div>
-      <div @click="isDel=!isDel" class="cart-title-right" v-if="!manage">
-        {{isDel?'取消':'管理'}}
-      </div>
     </div>
+    
 
     <div class="content">
       <div class="cartbox" v-if="total_count>0">
@@ -99,6 +102,7 @@ import Storage from '@/common/Storage'
 import { getProductList } from '@/api/product'
 import { error } from '@/common/fun'
 import ProTag from '@/componets/pro-tag/pro-tag'
+import { objTranslate } from '@/common/helper'
 
 export default {
   mixins: [BaseMixin],
@@ -127,12 +131,12 @@ export default {
     }
   },
   watch: {
-    CartList: {
-      handler (newValue, oldValue) {
-        console.log(oldValue, newValue, 'ss')
-      },
-      deep: true
-    }
+    // CartList: {
+    //   handler (newValue, oldValue) {
+    //     console.log(oldValue, newValue, 'ss')
+    //   },
+    //   deep: true
+    // }
   },
   methods: {
     gotoBuy () {
@@ -226,12 +230,22 @@ export default {
       this.fan = !this.fan
     },
     selectBiz (bizId) {
-      console.log(bizId)
+      const rt = !this.bizCheck[bizId]
+
+      this.$set(this.bizCheck, bizId, rt)
+      // this.bizCheck[bizId] = rt
+      console.log(objTranslate(this.bizCheck))
+
+      for (const it in this.bizCheck) {
+        Storage.set(it, this.bizCheck[it])
+      }
+
       for (var goods_idx in this.CartList[bizId]) {
-        console.log(goods_idx)
         for (var sku_idx in this.CartList[bizId][goods_idx]) {
           console.log(bizId, goods_idx, sku_idx)
-          this.selectItem(bizId, goods_idx, sku_idx)
+          // 把所有产品checked都为true
+          Storage.set((goods_idx + ';' + sku_idx), rt)
+          this.CartList[bizId][goods_idx][sku_idx].checked = rt
         }
       }
     },
@@ -301,7 +315,8 @@ export default {
       this.allCheck = true
       for (const i in this.CartList) {
         const biz_check = Storage.get(i)
-        this.bizCheck[i] = biz_check || false
+        const itemCheck = biz_check || false
+        this.$set(this.bizCheck, i, itemCheck)
         for (const j in this.CartList[i]) {
           for (const k in this.CartList[i][j]) {
             const attr_id = Storage.get((j + ';' + k))
@@ -368,25 +383,24 @@ export default {
     /* #endif */
   }
 
-  .status-title {
-    height: var(--status-bar-height);
-    width: 750rpx;
-    background-color: #FFFFFF;
-  }
 
+
+  .top-box{
+    position: fixed;
+    top: 0;
+    width: 750rpx;
+  }
   .cart-title {
-    padding-top: var(--status-bar-height);
-    height: 86rpx;
     width: 750rpx;
     background-color: #FFFFFF;
     position: fixed;
     z-index: 99;
     top: 0;
     left: 0;
-
     &-right {
       position: absolute;
-      bottom: 20rpx;
+      top: 50%;
+      transform: translateY(-50%);
       left: 20rpx;
     }
   }

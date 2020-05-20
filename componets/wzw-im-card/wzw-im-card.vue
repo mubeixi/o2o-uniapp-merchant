@@ -4,7 +4,7 @@
 
     <div class="goods-tip-box flex" v-if="message.type==='prod' && message.isTip">
       <div class="cover" :style="{backgroundImage: 'url('+message.content.ImgPath+')'}"></div>
-      <div class="info flex flex-column flex-justify-between">
+      <div class="info flex1 flex flex-column flex-justify-between">
         <div class="goods-title fz-14 c4">{{message.content.Products_Name}}</div>
         <div class="flex flex-justify-between flex-vertical-c">
           <div class="fz-14 price-selling"><span class="fz-12">￥</span>{{message.content.Products_PriceX}}</div>
@@ -56,12 +56,12 @@
             <div class="fz-12 color-white text-center">{{message.taskList[0].progress||0}}%</div>
           </div>
         </div>
-  
-        <div v-if="message.type==='prod' && !message.isTip" class="goods-info-box" @click="toGoodsDetail(message.content)">
-          <div class="cover" :style="{backgroundImage: 'url('+message.content.ImgPath+')'}"></div>
+
+        <div v-if="message.type==='prod' && !message.isTip" class="goods-info-box" @click="toGoods(message.content)">
+          <div class="cover" :style="{backgroundImage: 'url('+message.content.img+')'}"></div>
           <div class="info">
-            <div class="fz-16 price-selling"><span class="fz-14">￥</span>{{message.content.Products_PriceX}}</div>
-            <div class="goods-title fz-14 c4 m-t-10">{{message.content.Products_Name}}</div>
+            <div class="fz-16 price-selling"><span class="fz-14">￥</span>{{message.content.price}}</div>
+            <div class="goods-title fz-14 c4 m-t-10">{{message.content.prod_name}}</div>
           </div>
         </div>
 
@@ -74,7 +74,7 @@
 // 消息卡片组件
 import LayoutLoading from '@/componets/layout-loading/layout-loading'
 import { objTranslate } from '@/common/helper'
-import {toGoodsDetail} from '@/common/helper'
+import { linkToEasy } from '@/common/fun'
 
 export default {
   name: 'wzw-im-card',
@@ -96,7 +96,9 @@ export default {
     return {}
   },
   methods: {
-    toGoodsDetail,
+    toGoods (content) {
+      if (content.hasOwnProperty('url'))linkToEasy(content.url)
+    },
     bindProductSend () {
       // 还是不要有任何关联的好
       this.$emit('bindProductSend', objTranslate(this.message.content))
@@ -172,7 +174,7 @@ export default {
     .content-box{
       max-width: 490rpx;
       overflow: hidden;
-  
+
       .goods-info-box{
         width: 486rpx;
         border-radius:20rpx;
@@ -187,9 +189,9 @@ export default {
         .info{
           padding: 20rpx;
           .goods-price{
-        
+
           }
-          
+
         }
       }
 

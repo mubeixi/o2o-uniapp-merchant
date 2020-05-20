@@ -54,7 +54,7 @@ export default {
       this.$emit('bindRightClick')
     },
     toIm () {
-      //linkToEasy('/pagesA/support/Im')
+      // linkToEasy('/pagesA/support/Im')
       // linkToEasy('/pages/demo')
       this.$emit('goIM')
     },
@@ -81,20 +81,18 @@ export default {
   }
 
   .left-bottom {
-    flex:1;
     height: 86rpx;
     display: flex;
     align-items: center;
+    flex:1;
     //padding-left: 54rpx;
   }
 
   .bottom-q {
-    //width: 50rpx;
     font-size: 12px;
     color: #666666;
-    //margin-left: 60rpx;
-	flex: 1;
-	text-align: center;
+    width: 80rpx;
+    text-align: center;
   }
 
   .left-btn {
