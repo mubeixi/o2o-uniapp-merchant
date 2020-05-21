@@ -1,6 +1,6 @@
 import { backFunc, cellPhone, error, linkToEasy, modal, openLocation, toast} from '@/common/fun'
 import T from '../common/langue/i18n'
-
+import Storage from '@/common/Storage'
 import { checkIsLogin, getDomain,toGoodsDetail } from '@/common/helper'
 // #ifdef H5
 import { WX_JSSDK_INIT } from '@/common/env'
@@ -60,12 +60,39 @@ export default {
     tap () {
       // console.log('tap in mixin')
     },
+    async default_init_func(options){
+
+      let owner_id = null; let users_id = null
+      owner_id = options.owner_id
+      if (owner_id >= 0) {
+        Storage.set('owner_id', owner_id)
+      }
+
+      users_id = options.users_id || Storage.get('users_id')
+
+      if (!users_id) {
+        uni.showModal({
+          title: '提示',
+          content: '缺少商户id'
+        })
+        return
+      }
+
+      // 如果连接里面已经有了，就不需要搞事
+      if (users_id) {
+        // 不管ls有没有，都存一次
+        Storage.set('users_id', users_id)
+      }
+
+    },
     // #ifdef H5
     WX_JSSDK_INIT
     // #endif
   },
   onLoad () {
-
+    const opt = { ...options }
+    // 这样简洁多了
+    this.default_init_func(opt)
   },
   created () {
     this.systemInfo = uni.getSystemInfoSync()
