@@ -1,7 +1,7 @@
 <template>
   <div class="wrap">
     <div :style="{height:systemInfo.statusBarHeight+'px'}"></div>
-    <div :style="{height:diyHeadHeight+'px',opacity:activeHeadOpacity}" class="bg-white" style="position: fixed;z-index: 2;width: 750rpx;left:0;top:0">
+    <div :style="{height:diyHeadHeight+'px',opacity:activeHeadOpacity}" v-if="activeHeadOpacity" class="bg-white" style="position: fixed;z-index: 2;width: 750rpx;left:0;top:0">
       <div :style="{height:systemInfo.statusBarHeight+'px'}"></div>
       <div :style="{height:menuButtonInfo.height+'px',lineHeight:menuButtonInfo.height+'px'}" class="c3 text-center">个人中心</div>
     </div>
@@ -221,7 +221,7 @@ export default {
     this.activeHeadOpacity = opacity > 1 ? 1 : opacity
   },
   onShow () {
-    
+  
 	if(this.userInfo.Users_ID){
 		getUserInfo().then(res => {
 		  this.setUserInfo(res.data)
@@ -254,6 +254,7 @@ export default {
 
   .header {
     position: relative;
+    
 
     .left-icon-box {
       position: fixed;

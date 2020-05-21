@@ -148,6 +148,13 @@
       }
     },
     {
+      "path": "pages/support/ImList",
+      "style": {
+        "navigationBarTitleText": "消息",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
       "path": "pages/order/OrderBooking",
       "style": {
         "navigationBarTitleText": "订单确认"
@@ -260,13 +267,6 @@
           "path": "support/Im",
           "style": {
             "navigationBarTitleText": "客服",
-            "enablePullDownRefresh": true
-          }
-        },
-        {
-          "path": "support/ImList",
-          "style": {
-            "navigationBarTitleText": "消息",
             "enablePullDownRefresh": true
           }
         },
@@ -569,10 +569,10 @@
         "text": "发现"
       },
       {
-        "pagePath": "pages/index",
-        "iconPath": "/static/tabbar/live.png",
-        "selectedIconPath": "/static/tabbar/live-a.png",
-        "text": "直播"
+        "pagePath": "pages/support/ImList",
+        "iconPath": "/static/tabbar/notify.png",
+        "selectedIconPath": "/static/tabbar/notify-a.png",
+        "text": "消息"
       },
       {
         "pagePath": "pages/user/Praise",

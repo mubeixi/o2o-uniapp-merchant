@@ -180,9 +180,9 @@ export const ajax = ({ url, method = 'post', data = {}, options = {},isAddHost=t
           reject(res)
         }
       },
-      fail: (e) => {
+      fail: (err) => {
         // 标记为http请求出错，而不是业务逻辑返回的错误
-        reject(new Error(false))
+        reject(new Error(err.errMsg))
       },
       complete: () => {
         if (tip) {

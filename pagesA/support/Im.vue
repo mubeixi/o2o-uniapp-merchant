@@ -130,7 +130,7 @@ export default {
       this.isFreshing = true
       // 界面下拉触发，triggered可能不是true，要设为true
       if (!this.triggered) this.triggered = true
-      
+
       // 不论成功还是失败
       this.imInstance.getHistory().finally(() => {
         this.triggered = false
@@ -142,7 +142,7 @@ export default {
       try {
         const files = await chooseImageByPromise({ sizeType: 1, sourceType: ['album'] }).catch(err => { throw Error(err.errMsg || '选择照片失败') })
         const imgs = getArrColumn(files, 'path')
-        
+
         await imInstance.sendImMessage({ content: '', type: 'image', tempPath: imgs[0] })
         this.setViewIdx()
       } catch (e) {
@@ -169,22 +169,22 @@ export default {
     },
     async _init_func (options) {
       const { productId, orderId, origin } = options
-      
+
       setNavigationBarTitle('Im')
       this.imInstance = imInstance = new IM({ origin })
-      
+
       // 设置本地用户信息
       imInstance.setSendInfo({ type: 'user', id: Storage.get('user_id'), name: this.userInfo.User_NickName, avatar: this.userInfo.User_HeadImg })
       // 设置接收人的信息
       imInstance.setReceiveInfo({ type: this.totype, id: this.toid })
-      
+
       await imInstance.start() // 等拿token
-      
+
       // 先加载一下最近消息
       await imInstance.getHistory()
-      
+
       // productId, orderId,
-      
+
       // 如果有商品的话，需要加一个商品提示信息
       if (productId) {
         console.log(`有商品${productId}`)
@@ -196,7 +196,7 @@ export default {
         // isTip为1代表，是显示产品信息，提醒用户发送而已
         imInstance.sendImMessage({ content: productInfo, type: 'prod', isTip: 1 })
       }
-      
+
       this.setViewIdx()
       this.imReady = true
     },
@@ -215,7 +215,7 @@ export default {
   },
   onLoad (options) {
     if (!checkIsLogin(1, 0)) return
-    
+
     const { tid, type } = options
     if (!tid || !type) {
       modal('参数错误')
@@ -226,10 +226,10 @@ export default {
     this._init_func(options)
   },
   created () {
-  
+
   },
   onShow () {
-  
+
   }
 }
 </script>
@@ -271,7 +271,7 @@ export default {
           width: 96rpx;
           height: 96rpx;
         }
-        
+
       }
     }
     .text{
@@ -317,6 +317,6 @@ export default {
         }
       }
     }
-    
+
   }
 </style>

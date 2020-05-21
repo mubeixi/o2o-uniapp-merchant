@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="bg-white" :style="{height:diyHeadHeight+'px'}"></div>
-  
+
     <div class="top-box bg-white" :style="{height:diyHeadHeight+'px'}">
       <div :style="{height:menuButtonInfo.top+'px'}" class="bg-white" style="position: fixed;top: 0;width: 750rpx;z-index: 99;"></div>
       <div class="cart-title flex flex-vertical-c flex-justify-c fz-16 c3" :style="{height:menuButtonInfo.height+'px'}">
@@ -13,7 +13,6 @@
         </div>
       </div>
     </div>
-    
 
     <div class="content">
       <div class="cartbox" v-if="total_count>0">
@@ -102,7 +101,7 @@ import Storage from '@/common/Storage'
 import { getProductList } from '@/api/product'
 import { error } from '@/common/fun'
 import ProTag from '@/componets/pro-tag/pro-tag'
-import { objTranslate } from '@/common/helper'
+import { checkIsLogin, objTranslate } from '@/common/helper'
 
 export default {
   mixins: [BaseMixin],
@@ -126,6 +125,9 @@ export default {
     }
   },
   computed: {
+    userInfo () {
+      return this.$store.getters['user/getUserInfo']()
+    },
     manage () {
       return this.CartList.length === 0
     }
@@ -350,17 +352,19 @@ export default {
       this.totalPrice = Number(total).toFixed(2)
     },
     async init () {
-      const cart = await CartList({ cart_key: 'CartList' }, {
-        onlyData: true,
-        tip: '加载中'
-      }).catch(e => {
-        throw Error(e.msg || '获取购物车产品失败')
-      })
-      this.total_count = cart.total_count
-      this.total_price = cart.total_price
-      this.CartList = cart.CartList
-      this.bizList = cart.biz_list
-      this.initCheck()
+      if (checkIsLogin(0, 0)) {
+        const cart = await CartList({ cart_key: 'CartList' }, {
+          onlyData: true,
+          tip: '加载中'
+        }).catch(e => {
+          throw Error(e.msg || '获取购物车产品失败')
+        })
+        this.total_count = cart.total_count
+        this.total_price = cart.total_price
+        this.CartList = cart.CartList
+        this.bizList = cart.biz_list
+        this.initCheck()
+      }
 
       this.proList = await getProductList({}, { onlyData: true }).catch(e => {
         throw Error(e.msg || '获取推荐商品信息失败')
@@ -382,8 +386,6 @@ export default {
     //padding-top: var(--status-bar-height);
     /* #endif */
   }
-
-
 
   .top-box{
     position: fixed;

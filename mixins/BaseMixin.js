@@ -1,7 +1,7 @@
-import { backFunc, cellPhone, error, linkToEasy, modal, openLocation, toast} from '@/common/fun'
+import { backFunc, cellPhone, error, linkToEasy, modal, openLocation, toast } from '@/common/fun'
 import T from '../common/langue/i18n'
 import Storage from '@/common/Storage'
-import { checkIsLogin, getDomain,toGoodsDetail } from '@/common/helper'
+import { checkIsLogin, getDomain, toGoodsDetail } from '@/common/helper'
 // #ifdef H5
 import { WX_JSSDK_INIT } from '@/common/env'
 // #endif
@@ -60,8 +60,7 @@ export default {
     tap () {
       // console.log('tap in mixin')
     },
-    async default_init_func(options){
-
+    async default_init_func (options) {
       let owner_id = null; let users_id = null
       owner_id = options.owner_id
       if (owner_id >= 0) {
@@ -83,13 +82,12 @@ export default {
         // 不管ls有没有，都存一次
         Storage.set('users_id', users_id)
       }
-
     },
     // #ifdef H5
     WX_JSSDK_INIT
     // #endif
   },
-  onLoad () {
+  onLoad (options) {
     const opt = { ...options }
     // 这样简洁多了
     this.default_init_func(opt)
