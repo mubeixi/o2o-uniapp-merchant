@@ -81,7 +81,6 @@
     <div class="defaults" v-else>
       <image :src="'/static/client/empty.png'|domain"></image>
     </div>
-    
 
     <layout-modal ref="sureReason">
       <div class="refuseApplyDialog">
@@ -107,7 +106,7 @@
 
 </template>
 <script>
-import { cancelOrder, delOrder, getOrderList, getOrderNum,confirmOrder } from '@/api/order'
+import { cancelOrder, delOrder, getOrderList, getOrderNum, confirmOrder } from '@/api/order'
 import BaseMixin from '@/mixins/BaseMixin'
 import { error } from '@/common/fun'
 import LayoutModal from '@/componets/layout-modal/layout-modal'
@@ -119,7 +118,7 @@ export default {
     return {
       index: 0,
       type: '',
-      prod_img:'',
+      prod_img: '',
       page: 1,
       pageSize: 5,
       totalCount: 0,

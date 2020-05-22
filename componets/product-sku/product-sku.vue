@@ -72,6 +72,10 @@ import { numberSort } from '@/common/helper'
 export default {
   components: { layoutPopup },
   props: {
+    mode: {
+      type: String,
+      default: 'default'
+    },
     hasCart: {
       type: Boolean,
       default: false
@@ -217,6 +221,7 @@ export default {
 
       // 属性判断
       if (attr_val) {
+        console.log(attr_val)
         this.postData.id = attr_val.Product_Attr_ID // 选择属性的id
         this.postData.count = attr_val.Property_count // 选择属性的库存
         this.postData.price = attr_val.Attr_Price ? attr_val.Attr_Price : this.list.Products_PriceX // 选择属性的价格
