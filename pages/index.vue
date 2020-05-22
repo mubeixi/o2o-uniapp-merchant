@@ -131,8 +131,7 @@
           </div>
           <div class="block-content">
             <div class="goods-list">
-              <div class="goods-item" v-for="(item,idx) in killList" :key="idx"
-                   @click="$toGoodsDetail(item)">
+              <div class="goods-item" v-for="(item,idx) in killList" :key="idx" @click="$toGoodsDetail(item)">
                 <block v-if="idx<6">
                   <div class="cover" :style="{backgroundImage:'url('+item.ImgPath+')'}">
                     <!--<div class="tip" style="background: #185e44;">同城配送</div>-->
@@ -140,7 +139,7 @@
                   <h5 class="title">{{item.Products_Name}}</h5>
                   <div class="price-box">
                     <div>
-                      <span class="sign">￥</span><span class="num">{{item.Products_PriceX}}</span>
+                      <span class="sign">￥</span><span class="num">{{item.price}}</span>
                     </div>
                     <div class="tags">
                       <span class="tag" v-if="item.discount">{{item.discount}}折</span>

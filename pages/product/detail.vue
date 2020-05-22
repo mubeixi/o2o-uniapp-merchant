@@ -822,7 +822,7 @@
 
               </span>
             </div>
-            <div class="product-price-right" @click="toShare">
+            <div class="product-price-right" @click="toShare" v-if="mode!='gift' && productInfo.share_commission>0">
               <image :src="'/static/client/product/product_share.png'|domain" class="full-img"
                      style="width: 130% !important;"></image>
               <div class="product-share">
@@ -1208,6 +1208,7 @@ export default {
       gift_attr_id: null,
       isVirtual: 0,
       productInfo: {
+        share_commission: 0,
         minPrice: '0', // sku选择框专用
         Products_Name: '',
         Products_PriceX: '0',
@@ -1413,13 +1414,12 @@ export default {
         this.commentValue = ''
         this.$closePop('commentModal')
         this.getCommit()
-
       }).catch(e => {
         error(e.msg || '评论失败')
         this.$closePop('commentModal')
       })
     },
-    async getCommit(){
+    async getCommit () {
       this.comments = await getCommitList({
         Products_ID: this.productInfo.Products_ID,
         pageSize: 999,
@@ -1442,7 +1442,10 @@ export default {
       this.$refs.commentModal.show()
     },
     toShare () {
-      const url = '/pages/share/go?prod_id=' + this.prod_id
+      let url = '/pages/share/go?prod_id=' + this.prod_id
+      if (this.mode) {
+        url += `&mode=${this.mode}`
+      }
       this.$linkTo(url)
     },
     onePay () {
@@ -1891,7 +1894,11 @@ export default {
   },
   // 自定义小程序分享
   onShareAppMessage () {
-    const path = '/pages/product/detail?prod_id=' + this.prod_id
+    let path = '/pages/product/detail?prod_id=' + this.prod_id
+
+    if (this.mode) {
+      path += `&mode=${this.mode}`
+    }
     const shareObj = {
       title: this.productInfo.Products_Name,
       desc: this.productInfo.Products_BriefDescription,

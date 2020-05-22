@@ -238,6 +238,12 @@
           }
         },
         {
+          "path": "store/offlinePay",
+          "style": {
+            "navigationBarTitleText": "线下支付"
+          }
+        },
+        {
           "path": "user/Coupon",
           "style": {
             "navigationBarTitleText": "优惠券"
