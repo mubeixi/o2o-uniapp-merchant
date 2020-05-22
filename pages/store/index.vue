@@ -18,7 +18,7 @@
         <div class="action-item" @click="taggleFavorite">
           <layout-icon size="26" type="iconicon-favorite" :color="isFavourite?'#26C78D':'#999'"></layout-icon>
         </div>
-        <div class="action-item">
+        <div class="action-item" @click="toShare">
           <layout-icon size="26" type="iconicon-timeline" color="#26C78D"></layout-icon>
         </div>
         <button open-type="share" class="action-item share-btn">
@@ -446,6 +446,11 @@ export default {
     }
   },
   methods: {
+    toShare () {
+      if (checkIsLogin(1, 1)) {
+        this.$linkTo(`/pagesA/store/shareQrcode?biz_id=${this.bid}`)
+      }
+    },
     taggleFavorite () {
       if (!checkIsLogin(1, 1)) return
       this.isFavourite = !this.isFavourite

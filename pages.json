@@ -232,6 +232,12 @@
       "name": "onther",
       "pages": [
         {
+          "path": "store/shareQrcode",
+          "style": {
+            "navigationBarTitleText": "商家分享"
+          }
+        },
+        {
           "path": "user/Coupon",
           "style": {
             "navigationBarTitleText": "优惠券"
