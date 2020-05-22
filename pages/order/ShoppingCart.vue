@@ -101,7 +101,8 @@ import Storage from '@/common/Storage'
 import { getProductList } from '@/api/product'
 import { error } from '@/common/fun'
 import ProTag from '@/componets/pro-tag/pro-tag'
-import { checkIsLogin, objTranslate } from '@/common/helper'
+import { objTranslate } from '@/common/helper'
+import { mapActions } from 'vuex'
 
 export default {
   mixins: [BaseMixin],
@@ -130,7 +131,10 @@ export default {
     },
     manage () {
       return this.CartList.length === 0
-    }
+    },
+	userInfo () {
+	  return this.$store.getters['user/getUserInfo']()
+	}
   },
   watch: {
     // CartList: {
@@ -352,23 +356,27 @@ export default {
       this.totalPrice = Number(total).toFixed(2)
     },
     async init () {
-      if (checkIsLogin(0, 0)) {
-        const cart = await CartList({ cart_key: 'CartList' }, {
-          onlyData: true,
-          tip: '加载中'
-        }).catch(e => {
-          throw Error(e.msg || '获取购物车产品失败')
-        })
-        this.total_count = cart.total_count
-        this.total_price = cart.total_price
-        this.CartList = cart.CartList
-        this.bizList = cart.biz_list
-        this.initCheck()
-      }
+		
+		this.proList = await getProductList({}, { onlyData: true }).catch(e => {
+		  throw Error(e.msg || '获取推荐商品信息失败')
+		})
+		
+		if(this.$checkIsLogin(0)){
+			const cart = await CartList({ cart_key: 'CartList' }, {
+			  onlyData: true,
+			  tip: '加载中'
+			}).catch(e => {
+			  throw Error(e.msg || '获取购物车产品失败')
+			})
+			this.total_count = cart.total_count
+			this.total_price = cart.total_price
+			this.CartList = cart.CartList
+			this.bizList = cart.biz_list
+			this.initCheck()
+		}
+      
 
-      this.proList = await getProductList({}, { onlyData: true }).catch(e => {
-        throw Error(e.msg || '获取推荐商品信息失败')
-      })
+      
     }
   },
   onShow () {

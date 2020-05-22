@@ -365,7 +365,9 @@ export const checkIsLogin = (redirect = 1, tip = 0) => {
         })
       }).catch(() => {
       })
-    }
+    }else{
+		return false
+	}
     return false
   }
 
