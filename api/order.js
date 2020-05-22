@@ -167,3 +167,6 @@ export const getPayCoupons = (param, options) => fetch({ act: 'getPayCoupons', p
 
 // 线下支付
 export const offlinePay = (param, options) => fetch({ act: 'offlinePay', param, options })
+
+// 获取订单物流追踪
+export const getOrderExpress = (param, options) => fetch({ act: 'get_order_express', param, options })

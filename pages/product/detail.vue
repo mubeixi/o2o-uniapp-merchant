@@ -1443,9 +1443,16 @@ export default {
     },
     toShare () {
       let url = '/pages/share/go?prod_id=' + this.prod_id
-      if (this.mode) {
-        url += `&mode=${this.mode}`
+
+      // 限时抢购
+      if (this.mode === 'spike' && this.spike_good_id) {
+        url += `&mode=spike&spike_good_id=${this.spike_good_id}`
       }
+      // 秒杀
+      if (this.mode === 'seckill' && this.flashsale_id) {
+        url += `&mode=seckill&flashsale_id=${this.flashsale_id}`
+      }
+      
       this.$linkTo(url)
     },
     onePay () {
@@ -1896,9 +1903,15 @@ export default {
   onShareAppMessage () {
     let path = '/pages/product/detail?prod_id=' + this.prod_id
 
-    if (this.mode) {
-      path += `&mode=${this.mode}`
+    // 限时抢购
+    if (this.mode === 'spike' && this.spike_good_id) {
+      path += `&mode=spike&spike_good_id=${this.spike_good_id}`
     }
+    // 秒杀
+    if (this.mode === 'seckill' && this.flashsale_id) {
+      path += `&mode=seckill&flashsale_id=${this.flashsale_id}`
+    }
+    
     const shareObj = {
       title: this.productInfo.Products_Name,
       desc: this.productInfo.Products_BriefDescription,

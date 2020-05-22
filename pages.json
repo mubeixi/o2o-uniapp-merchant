@@ -232,6 +232,12 @@
       "name": "onther",
       "pages": [
         {
+          "path": "order/logistics",
+          "style": {
+            "navigationBarTitleText": "物流追踪"
+          }
+        },
+        {
           "path": "store/shareQrcode",
           "style": {
             "navigationBarTitleText": "商家分享"
