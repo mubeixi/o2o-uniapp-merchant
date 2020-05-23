@@ -164,3 +164,9 @@ export const getPintuanTeam = (param, options) => fetch({ act: 'get_pintuan_team
 
 // 获取订单权益
 export const getPayCoupons = (param, options) => fetch({ act: 'getPayCoupons', param, options })
+
+// 线下支付
+export const offlinePay = (param, options) => fetch({ act: 'offlinePay', param, options })
+
+// 获取订单物流追踪
+export const getOrderExpress = (param, options) => fetch({ act: 'get_order_express', param, options })

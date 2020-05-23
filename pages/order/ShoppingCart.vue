@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="bg-white" :style="{height:diyHeadHeight+'px'}"></div>
-  
+
     <div class="top-box bg-white" :style="{height:diyHeadHeight+'px'}">
       <div :style="{height:menuButtonInfo.top+'px'}" class="bg-white" style="position: fixed;top: 0;width: 750rpx;z-index: 99;"></div>
       <div class="cart-title flex flex-vertical-c flex-justify-c fz-16 c3" :style="{height:menuButtonInfo.height+'px'}">
@@ -13,7 +13,6 @@
         </div>
       </div>
     </div>
-    
 
     <div class="content">
       <div class="cartbox" v-if="total_count>0">
@@ -127,6 +126,9 @@ export default {
     }
   },
   computed: {
+    userInfo () {
+      return this.$store.getters['user/getUserInfo']()
+    },
     manage () {
       return this.CartList.length === 0
     },
@@ -392,8 +394,6 @@ export default {
     //padding-top: var(--status-bar-height);
     /* #endif */
   }
-
-
 
   .top-box{
     position: fixed;

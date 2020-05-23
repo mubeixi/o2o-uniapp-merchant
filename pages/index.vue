@@ -131,8 +131,7 @@
           </div>
           <div class="block-content">
             <div class="goods-list">
-              <div class="goods-item" v-for="(item,idx) in killList" :key="idx"
-                   @click="$toGoodsDetail(item)">
+              <div class="goods-item" v-for="(item,idx) in killList" :key="idx" @click="$toGoodsDetail(item)">
                 <block v-if="idx<6">
                   <div class="cover" :style="{backgroundImage:'url('+item.ImgPath+')'}">
                     <!--<div class="tip" style="background: #185e44;">同城配送</div>-->
@@ -140,7 +139,7 @@
                   <h5 class="title">{{item.Products_Name}}</h5>
                   <div class="price-box">
                     <div>
-                      <span class="sign">￥</span><span class="num">{{item.Products_PriceX}}</span>
+                      <span class="sign">￥</span><span class="num">{{item.price}}</span>
                     </div>
                     <div class="tags">
                       <span class="tag" v-if="item.discount">{{item.discount}}折</span>
@@ -372,7 +371,7 @@
       </scroll-view>
     </div>
 
-    <div class="publish-btn" @click="$linkTo('/pagesA/support/ImList')">
+    <div class="publish-btn" @click="toMerchant">
       <layout-icon size="18" display="inline" color="#fff" type="iconfabu"></layout-icon>
       <div class="fz-10 color-white">发布活动</div>
     </div>
@@ -407,7 +406,7 @@ import DiyGroup from '@/componets/diy-group/diy-group'
 import DiyFlash from '@/componets/diy-flash/diy-flash'
 import GoodsItem from '@/componets/good-item/good-item'
 import DiyNav from '@/componets/diy-nav/diy-nav'
-import { hideLoading, showLoading } from '@/common/fun'
+import { hideLoading, modal, showLoading } from '@/common/fun'
 
 export default {
   mixins: [BaseMixin],
@@ -480,7 +479,6 @@ export default {
     headTabIndex: {
       immediate: true,
       handler (idx, oldIdx) {
-        console.log(oldIdx)
         if (idx !== oldIdx) {
           if (idx === 1) {
             if (this.quickGoodsList.length < 1) this.loadQuickGoodsList(0)
@@ -540,6 +538,22 @@ export default {
     this._init_func()
   },
   methods: {
+    toMerchant () {
+      uni.navigateToMiniProgram({
+        appId: 'wx3d24c565489e305b',
+        path: 'pages/product/form?origin_type=client',
+        extraData: {
+          origin: 'client'
+        },
+        envVersion: 'release',
+        fail (err) {
+          modal(`跳转失败${err.errMsg}`)
+        },
+        success (res) {
+          // 打开成功
+        }
+      })
+    },
     setHeadTabIndex (idx) {
       this.defaultUnderlineLeft = 0 // 没有左边距了
       this.headTabIndex = idx
@@ -553,7 +567,6 @@ export default {
         this.killList = await getFlashsaleList({}, { onlyData: true }).catch(err => {
           throw Error(err.msg || '初始化秒杀商品失败')
         })
-
 
         this.firstCateList = await getProductCategory({}, { onlyData: true }).catch(() => {
           throw Error('获取商品分类失败')

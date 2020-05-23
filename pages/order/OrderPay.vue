@@ -148,7 +148,7 @@
       <view class="mxdetail">
         <view class="mxtitle">明细</view>
         <view class="mxitem">产品
-          <text class="num">+{{allTotalAmount}}</text>
+          <text class="num">+{{allGoodsPrice}}</text>
         </view>
         <view class="mxitem" v-if="allUserCuragioMoney > 0">会员折扣
           <text class="num">-{{allUserCuragioMoney}}</text>
@@ -199,6 +199,20 @@ export default {
   computed: {
     allTotalAmount () {
       return computeArrayColumnSum(this.orderList, 'Order_TotalAmount')
+    },
+    allGoodsPrice () {
+      try {
+        let count = 0
+        for (var idx in this.orderList) {
+          for (var purchase_idx in this.orderList[idx].prod_list) {
+            count += this.orderList[idx].prod_list[purchase_idx].prod_price * this.orderList[idx].prod_list[purchase_idx].prod_count
+          }
+        }
+        return parseInt(count * 100) / 100
+      } catch (e) {
+        console.log(e)
+        return 0
+      }
     },
     allUserCuragioMoney () {
       return computeArrayColumnSum(this.orderList, 'user_curagio_money')

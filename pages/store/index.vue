@@ -18,7 +18,7 @@
         <div class="action-item" @click="taggleFavorite">
           <layout-icon size="26" type="iconicon-favorite" :color="isFavourite?'#26C78D':'#999'"></layout-icon>
         </div>
-        <div class="action-item">
+        <div class="action-item" @click="toShare">
           <layout-icon size="26" type="iconicon-timeline" color="#26C78D"></layout-icon>
         </div>
         <button open-type="share" class="action-item share-btn">
@@ -85,7 +85,7 @@
           <div class="feature-list">
             <image @click="$linkTo('/pages/delivery/desktop?bid='+bid)" mode="scaleToFill" class="feature-item"
                    :src="'/static/client/store/send.png'|domain"></image>
-            <image mode="scaleToFill" class="feature-item" :src="'/static/client/store/pay.png'|domain"></image>
+            <image @click="toOffinePay" mode="scaleToFill" class="feature-item" :src="'/static/client/store/pay.png'|domain"></image>
             <image @click="$linkTo('/pages/product/apply?bid='+bid)" mode="scaleToFill" class="feature-item"
                    :src="'/static/client/store/join.png'|domain"></image>
             <image @click="$linkTo('/pagesA/user/VipList?bid='+bid)" mode="scaleToFill" class="feature-item"
@@ -345,7 +345,7 @@ import { getBizProdCateList, getProductList } from '@/api/product'
 import { getCommitList, getCouponList } from '@/api/common'
 import LayoutComment from '@/componets/layout-comment/layout-comment'
 import LayoutCopyright from '@/componets/layout-copyright/layout-copyright'
-import { buildSharePath, getArrColumn } from '@/common/helper'
+import { buildSharePath, checkIsLogin, getArrColumn } from '@/common/helper'
 import LayoutModal from '@/componets/layout-modal/layout-modal'
 import { addFavourite, cancelFavourite, checkFavourite, commentReply } from '@/api/customer'
 import { Exception } from '@/common/Exception'
@@ -446,12 +446,23 @@ export default {
     }
   },
   methods: {
+    toShare () {
+      if (checkIsLogin(1, 1)) {
+        this.$linkTo(`/pagesA/store/shareQrcode?biz_id=${this.bid}`)
+      }
+    },
+    toOffinePay () {
+      if (checkIsLogin(1, 1)) {
+        this.$linkTo(`/pagesA/store/offlinePay?biz_id=${this.bid}`)
+      }
+    },
     taggleFavorite () {
+      if (!checkIsLogin(1, 1)) return
       this.isFavourite = !this.isFavourite
       const Action = this.isFavourite ? addFavourite : cancelFavourite
       Action({ biz_id: this.bid }).then(res => {
-		  toast(res.msg)
-	  }).catch((e) => {
+        toast(res.msg)
+      }).catch((e) => {
         Exception.handle(e)
       })
     },
@@ -485,11 +496,13 @@ export default {
       })
     },
     clickComment (item) {
+      if (!checkIsLogin(1, 1)) return
       this.commentItem = item
       this.$refs.commentModal.show()
       this.commentItem.groupid = ''
     },
     clickCommentSend (item, goupId, userId) {
+      if (!checkIsLogin(1, 1)) return
       this.commentItem = item
       this.commentItem.groupid = goupId
       this.commentItem.User_ID = userId
@@ -587,9 +600,11 @@ export default {
           throw Error('获取限时抢购数据失败')
         })
 
-        const { is_favourite = 0 } = await checkFavourite({ biz_id: this.bid }, { onlyData: true }).catch(() => {
-        })
-        this.isFavourite = is_favourite
+        if (checkIsLogin(0, 0)) {
+          const { is_favourite = 0 } = await checkFavourite({ biz_id: this.bid }, { onlyData: true }).catch(() => {
+          })
+          this.isFavourite = is_favourite
+        }
 
         this.$nextTick().then(() => {
           const query = uni.createSelectorQuery()

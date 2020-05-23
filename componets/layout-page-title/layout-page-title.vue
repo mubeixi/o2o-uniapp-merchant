@@ -5,7 +5,7 @@
     <!--导航栏-->
     <div class="navigation-bar" :style="{height:menuButtonInfo.height+'px',backgroundColor:menuButtonBgColor}">
       <layout-icon @click="bindBack" class="left-icon" size="22" type="iconicon-arrow-left"></layout-icon>
-      <div class="title" :style="{lineHeight:menuButtonInfo.height+'px'}">{{title}}</div>
+      <div class="title" :style="{lineHeight:menuButtonInfo.height+'px'}">{{pageTitle}}</div>
     </div>
   </div>
 </template>
@@ -26,7 +26,7 @@ export default {
         type: String,
         default: '#fff'
       },
-      title: {
+      pageTitle: {
         type: String,
         default: ''
       },
@@ -60,6 +60,7 @@ export default {
     this.diyHeadHeight = top + height + (top - this.systemInfo.statusBarHeight) + 10
     this.diyHeadRight = this.systemInfo.windowWidth - left
     // #endif
+    console.log(this.pageTitle)
   }
 }
 </script>

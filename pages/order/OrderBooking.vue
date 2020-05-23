@@ -201,7 +201,7 @@
     <layout-layer bottomStr="50px" @maskClicked="handClicked" ref="popupMX" title="明细">
       <div class="mxdetail">
         <div class="mxitem">产品原价
-          <text class="num">{{allTotalAmount-allOrderShipping}}</text>
+          <text class="num">{{allGoodsPrice}}</text>
         </div>
         <div class="mxitem" v-if="checkfrom">{{active_name}}
           <text class="num">{{Order_Fyepay}}</text>
@@ -359,6 +359,22 @@ export default {
     allTotalAmount () {
       return computeArrayColumnSum(this.bizList, 'Order_TotalAmount')
     },
+    allGoodsPrice () {
+      try {
+        let count = 0
+        for (var biz_id in this.CartList) {
+          for (var pro_id in this.CartList[biz_id]) {
+            for (var attr_id in this.CartList[biz_id][pro_id]) {
+              count += this.CartList[biz_id][pro_id][attr_id].ProductsPriceX * this.CartList[biz_id][pro_id][attr_id].Qty
+            }
+          }
+        }
+        return parseInt(count * 100) / 100
+      } catch (e) {
+        console.log(e)
+        return 0
+      }
+    },
     allUserCuragioMoney () {
       return computeArrayColumnSum(this.bizList, 'user_curagio_money')
     },
@@ -473,14 +489,13 @@ export default {
       const addressList = await getAddressList({}, { onlyData: true }).catch(() => {
       })
       if (Array.isArray(addressList) && addressList.length > 0) {
-		  if(this.back_address_id>0){
-			  for(let item of addressList){
-				  Number(item.Address_ID)==Number(this.back_address_id)?this.addressinfo =item:''
+		  if (this.back_address_id > 0) {
+			  for (const item of addressList) {
+				  Number(item.Address_ID) == Number(this.back_address_id) ? this.addressinfo = item : ''
 			  }
-		  }else{
+		  } else {
 			  this.addressinfo = addressList[0]
 		  }
-        
       }
       this.postData.address_id = this.addressinfo.Address_ID
 
@@ -615,7 +630,7 @@ export default {
     },
     // 跳转新增地址页面
     goEditAdd () {
-		this.$linkTo('/pagesA/user/EditAddress?from=checkout')
+      this.$linkTo('/pagesA/user/EditAddress?from=checkout')
     },
 
     // 积分抵扣开关
@@ -862,7 +877,6 @@ export default {
           ...params
         } = objTranslate(this.postData)
 
-		
         if (this.orderInfo.is_virtual === 0 && Object.values(shipping_id).filter(val => val === 0 || val === '0').length > 0) {
           throw Error('实体商品物流必须设置')
         }
@@ -947,12 +961,10 @@ export default {
           return
         }
 
-			const url='/pages/order/OrderPay?Order_ID=' + createOrderResult.Order_ID + '&pagefrom=check'
-			uni.redirectTo({
-				url: url
-			});
-			
-       
+        const url = '/pages/order/OrderPay?Order_ID=' + createOrderResult.Order_ID + '&pagefrom=check'
+        uni.redirectTo({
+          url: url
+        })
       } catch (e) {
         console.log(e)
         this.formCheckResult = [e.message]

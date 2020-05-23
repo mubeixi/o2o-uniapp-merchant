@@ -81,20 +81,44 @@
     <div class="defaults" v-else>
       <image :src="'/static/client/empty.png'|domain"></image>
     </div>
+
+    <layout-modal ref="sureReason">
+      <div class="refuseApplyDialog">
+        <div style="width: 110px;height: 110px;margin: 0 auto;">
+          <image :src="prod_img" style="width: 100%;height: 100%;"></image>
+        </div>
+        <div class="my-huo">
+          确认收到货了吗?
+        </div>
+        <div class="my-content">
+          为保障您的售后权益,请收到货确认无误后,再确认收货哦!
+        </div>
+      </div>
+      <div class="control">
+        <div @click="cancelReason" class="action-btn" style="border-right: 1px solid #e4e4e4; box-sizing: border-box;">
+          取消
+        </div>
+        <div @click="sureReason" class="action-btn" style="color: #F43131;">确定</div>
+      </div>
+    </layout-modal>
+
   </div>
 
 </template>
 <script>
-import { cancelOrder, delOrder, getOrderList, getOrderNum } from '@/api/order'
+import { cancelOrder, delOrder, getOrderList, getOrderNum, confirmOrder } from '@/api/order'
 import BaseMixin from '@/mixins/BaseMixin'
 import { error } from '@/common/fun'
+import LayoutModal from '@/componets/layout-modal/layout-modal'
 
 export default {
+  components: { LayoutModal },
   mixins: [BaseMixin],
   data () {
     return {
       index: 0,
       type: '',
+      prod_img: '',
       page: 1,
       pageSize: 5,
       totalCount: 0,
@@ -103,6 +127,47 @@ export default {
     }
   },
   methods: {
+    goLogistics (item) {
+      // 处理物流名称
+      let express = {}
+      if (typeof item.Order_Shipping === 'object') {
+        express = item.Order_Shipping.Express
+      } else {
+        express = JSON.parse(item.Order_Shipping).Express
+      }
+      console.log(item)
+      // 跳转物流追踪
+      uni.navigateTo({
+        url: '/pagesA/order/logistics?shipping_id=' + item.Order_ShippingID + '&express=' + express + '&prod_img=' + item.prod_list[0].prod_img + '&order_id=' + item.Order_ID
+      })
+    },
+    sureReason () {
+      const data = {
+        Order_ID: this.Order_ID
+      }
+      const that = this
+      confirmOrder(data).then(res => {
+        this.orderList.splice(this.orderIndex, 1)
+        this.$refs.sureReason.close()
+        that.getOrderNum()
+        uni.showToast({
+          title: res.msg,
+          icon: 'none'
+        })
+      }).catch(e => {
+        this.$refs.sureReason.close()
+      })
+    },
+    cancelReason () {
+      this.$refs.sureReason.close()
+    },
+    // 确认收货
+    confirmOrder (item, index) {
+      this.orderIndex = index
+      this.prod_img = item.prod_list[0].prod_img
+      this.Order_ID = item.Order_ID
+      this.$refs.sureReason.show()
+    },
     goPintuan (item) {
       if (item.teamstatus === 0) {
         uni.navigateTo({

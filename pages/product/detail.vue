@@ -822,7 +822,7 @@
 
               </span>
             </div>
-            <div class="product-price-right" @click="toShare">
+            <div class="product-price-right" @click="toShare" v-if="mode!='gift' && productInfo.share_commission>0">
               <image :src="'/static/client/product/product_share.png'|domain" class="full-img"
                      style="width: 130% !important;"></image>
               <div class="product-share">
@@ -1019,6 +1019,7 @@
     <product-sku
       v-if="productInfo.Products_ID"
       ref="mySku"
+      :mode="mode"
       @sureSku="save"
       :hasCart="hasCart"
       @submitSure="submitSure"
@@ -1208,6 +1209,8 @@ export default {
       gift_attr_id: null,
       isVirtual: 0,
       productInfo: {
+        skuvaljosn: {},
+        share_commission: 0,
         minPrice: '0', // sku选择框专用
         Products_Name: '',
         Products_PriceX: '0',
@@ -1413,13 +1416,12 @@ export default {
         this.commentValue = ''
         this.$closePop('commentModal')
         this.getCommit()
-
       }).catch(e => {
         error(e.msg || '评论失败')
         this.$closePop('commentModal')
       })
     },
-    async getCommit(){
+    async getCommit () {
       this.comments = await getCommitList({
         Products_ID: this.productInfo.Products_ID,
         pageSize: 999,
@@ -1442,7 +1444,17 @@ export default {
       this.$refs.commentModal.show()
     },
     toShare () {
-      const url = '/pages/share/go?prod_id=' + this.prod_id
+      let url = '/pages/share/go?prod_id=' + this.prod_id
+
+      // 限时抢购
+      if (this.mode === 'spike' && this.spike_good_id) {
+        url += `&mode=spike&spike_good_id=${this.spike_good_id}`
+      }
+      // 秒杀
+      if (this.mode === 'seckill' && this.flashsale_id) {
+        url += `&mode=seckill&flashsale_id=${this.flashsale_id}`
+      }
+
       this.$linkTo(url)
     },
     onePay () {
@@ -1496,7 +1508,7 @@ export default {
         console.log('derail')
         showLoading()
         const postData = {
-          prod_id: this.prod_id, // 产品ID  在 onLoad中赋值
+          prod_id: this.prod_id, // 产品ID
           attr_id: sku.id, // 选择属性id
           // count: sku.count, // 选择属性的库存
           qty: sku.qty, // 购买数量
@@ -1551,7 +1563,7 @@ export default {
         // price: 11790
         // qty: 1
         const postData = {
-          prod_id: this.prod_id, // 产品ID  在 onLoad中赋值
+          prod_id: this.prod_id, // 产品ID
           attr_id: sku.id, // 选择属性id
           count: sku.count, // 选择属性的库存
           qty: sku.qty, // 购买数量
@@ -1702,35 +1714,6 @@ export default {
       try {
         showLoading()
 
-        // 秒杀
-        if (this.mode === 'seckill') {
-          const seckillInfo = await getFlashsaleDetail({ flashsale_id: this.flashsale_id }).then(res => {
-            return res.data
-          }).catch(e => {
-            throw Error(e.msg || '获取秒杀信息错误')
-          })
-
-          Object.assign(this.productInfo, seckillInfo)
-          this.activeInfo.start_time = seckillInfo.start_time
-          this.activeInfo.end_time = seckillInfo.end_time
-          countdownInstance = setInterval(this.stampFunc, 1000)
-        }
-
-        // 限时抢购
-        if (this.mode === 'spike') {
-          const spikeInfo = await spikeProdDetail({ spike_good_id: this.spike_good_id }).then(res => {
-            return res.data
-          }).catch(e => {
-            throw Error(e.msg || '获取限时抢购详情错误')
-          })
-          console.log(spikeInfo)
-          Object.assign(this.productInfo, spikeInfo)
-
-          this.activeInfo.start_time = spikeInfo.start_time
-          this.activeInfo.end_time = spikeInfo.end_time
-          countdownInstance = setInterval(this.stampFunc, 1000)
-        }
-
         if (options.gift) {
           this.gift = options.gift
           this.postData.active_id = options.gift
@@ -1757,6 +1740,49 @@ export default {
           throw Error(e.msg || '获取商品详情失败')
         })
         Object.assign(this.productInfo, productInfo)
+
+        // 秒杀
+        if (this.mode === 'seckill') {
+          const seckillInfo = await getFlashsaleDetail({ flashsale_id: this.flashsale_id }).then(res => {
+            return res.data
+          }).catch(e => {
+            throw Error(e.msg || '获取秒杀信息错误')
+          })
+
+          Object.assign(this.productInfo, seckillInfo)
+          this.activeInfo.start_time = seckillInfo.start_time
+          this.activeInfo.end_time = seckillInfo.end_time
+
+          for (var i in this.productInfo.skuvaljosn) {
+            for (var k in seckillInfo.attr_json) {
+              if (this.productInfo.skuvaljosn[i].Attr_Value_text === seckillInfo.attr_json[k].name) {
+                this.productInfo.skuvaljosn[i].Attr_Price = seckillInfo.attr_json[k].price
+                this.productInfo.skuvaljosn[i].Property_count = seckillInfo.attr_json[k].count
+              }
+            }
+          }
+          countdownInstance = setInterval(this.stampFunc, 1000)
+        }
+
+        // 限时抢购
+        if (this.mode === 'spike') {
+          const spikeInfo = await spikeProdDetail({ spike_good_id: this.spike_good_id }).then(res => {
+            return res.data
+          }).catch(e => {
+            throw Error(e.msg || '获取限时抢购详情错误')
+          })
+          console.log(spikeInfo)
+          Object.assign(this.productInfo, spikeInfo)
+
+          this.activeInfo.start_time = spikeInfo.start_time
+          this.activeInfo.end_time = spikeInfo.end_time
+
+          // 替换显示抢购的价格
+          for (var j in this.productInfo.skuvaljosn) {
+            this.productInfo.skuvaljosn[j].Attr_Price = this.productInfo.skuvaljosn[j].xs_pricex
+          }
+          countdownInstance = setInterval(this.stampFunc, 1000)
+        }
 
         // this.productInfo.Products_Promise = [{ name: '随时退款' }, { name: '随时退款' }, { name: '随时退款' }, { name: '随时退款' }]
         // this.productInfo.Products_Description = formatRichTextByUparseFn(this.productInfo.Products_Description)
@@ -1891,7 +1917,17 @@ export default {
   },
   // 自定义小程序分享
   onShareAppMessage () {
-    const path = '/pages/product/detail?prod_id=' + this.prod_id
+    let path = '/pages/product/detail?prod_id=' + this.prod_id
+
+    // 限时抢购
+    if (this.mode === 'spike' && this.spike_good_id) {
+      path += `&mode=spike&spike_good_id=${this.spike_good_id}`
+    }
+    // 秒杀
+    if (this.mode === 'seckill' && this.flashsale_id) {
+      path += `&mode=seckill&flashsale_id=${this.flashsale_id}`
+    }
+
     const shareObj = {
       title: this.productInfo.Products_Name,
       desc: this.productInfo.Products_BriefDescription,

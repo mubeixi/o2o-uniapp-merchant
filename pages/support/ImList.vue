@@ -1,6 +1,6 @@
 <template>
   <div class="page-wrap">
-    <div class="chat-list">
+    <div class="chat-list" v-if="chatList.length>0">
       <div class="chat-item flex" @click="toRoom(idx)" v-for="(chat,idx) in chatList" :key="idx">
         <div class="left">
           <div class="cover" :style="{backgroundImage:'url('+chat.avatar+')'}"></div>
@@ -24,6 +24,10 @@
         </div>
       </div>
     </div>
+    <div class="none" v-else>
+      <image :src="'/static/client/box.png'|domain" class="img" />
+      <div class="m-t-15"><span>信箱是空的</span></div>
+    </div>
   </div>
 </template>
 
@@ -33,6 +37,7 @@ import { getChatList } from '@/common/Im/Fetch'
 import { modal } from '@/common/fun'
 import IM from '@/common/Im/Im'
 import Storage from '@/common/Storage'
+import { checkIsLogin } from '@/common/helper'
 let imInstance = null
 export default {
   mixins: [BaseMixin],
@@ -99,13 +104,16 @@ export default {
     }
   },
   onLoad () {
+    if (!checkIsLogin(0, 0)) return
     this.imInstance = imInstance = new IM()
     // 设置本地用户信息
     imInstance.setSendInfo({ type: 'user', id: Storage.get('user_id') })
     this.out_uid = imInstance.getOutUid()
+
+    this._init_func()
   },
   onShow () {
-    this._init_func()
+
   }
 }
 </script>
@@ -143,5 +151,17 @@ export default {
       text-overflow: ellipsis;
     }
   }
+}
+
+.none {
+  text-align: center;
+  padding: 60rpx 0;
+  color: #B0B0B0;
+  font-size: 26rpx;
+}
+
+.none .img {
+  height: 220rpx;
+  width: 200rpx;
 }
 </style>

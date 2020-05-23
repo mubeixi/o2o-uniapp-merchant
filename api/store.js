@@ -34,3 +34,6 @@ export const getPhotoList = (param, options) => fetch({
   param,
   options
 })
+
+// 获取商家的分享码
+export const getBizShare = (param, options) => fetch({ act: 'getBizShare', param, options })

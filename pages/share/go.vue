@@ -1,5 +1,5 @@
 <template>
-  <div class="page-wrap">
+  <div class="page-wrap" v-if="isReady">
     <canvas class="myCanvas" id="myCanvas" canvas-id="myCanvas"/>
     <div class="text-box">
       <div class="flex flex-vertical-c flex-justify-between">
@@ -20,7 +20,17 @@
       <div class="preivew-title c3 fz-14">{{detailData.Products_Name}}</div>
       <div class="preivew-pricebox flex flex-justify-between flex-vertical-c">
         <div class="price fz-12 flex flex-vertical-b">
-          <span class="c6">拼购价：</span><span class="fz-12 price-selling">￥</span><span class="fz-14 price-selling">{{detailData.Products_PriceX}}</span><span class="price-market text-through p-l-10">¥{{detailData.Products_PriceY}}</span>
+          <span class="c6">拼购价：</span>
+          <span class="fz-12 price-selling">￥</span>
+          <span class="fz-14 price-selling">
+            <block v-if="mode==='spike' || mode==='seckill'">{{detailData.price}}</block>
+            <block v-else-if="detailData.is_pintuan">{{detailData.pintuan_pricex}}</block>
+            <block v-else>{{detailData.Products_PriceX}}</block>
+          </span>shareProduct
+          <span class="price-market text-through p-l-10">¥
+          <block v-if="mode==='spike' || mode==='seckill' || detailData.is_pintuan">{{detailData.Products_PriceX}}</block>
+          <block v-else>{{detailData.Products_PriceY}}</block>
+          </span>
         </div>
         <div class="count fz-12 color-white">
           <div class="text">{{detailData.click_count}}人正在抢购</div>
@@ -50,7 +60,7 @@
 </template>
 
 <script>
-import { getProductDetail } from '@/api/product'
+import { getFlashsaleDetail, getProductDetail, spikeProdDetail, getProductSharePic } from '@/api/product'
 import { getBizShare } from '@/api/common'
 import { hideLoading, modal, showLoading } from '@/common/fun'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
@@ -68,11 +78,27 @@ export default {
   },
   data () {
     return {
+      isReady: false,
+      mode: 'default',
+      flashsale_id: '',
+      spike_good_id: '', // 限时抢购专用
       wrapPath: 'https://newo2o.bafangka.com/uploadfiles/wkbq6nc2kc/image/202005051145245485.png',
       prod_id: '',
       shareText: '',
       shareInfo: {},
-      detailData: {}
+      // 倒计时
+      activeInfo: {
+        start_time: '',
+        end_time: ''
+      },
+      detailData: {
+        price: '',
+        Products_Name: '',
+        Products_PriceX: '0',
+        Products_PriceY: '0',
+        Products_JSON: {},
+        Products_Description: ''
+      }
     }
   },
   computed: {
@@ -84,8 +110,19 @@ export default {
     }
   },
   onLoad (options) {
-    this.prod_id = options.prod_id
-    this._init_func()
+    const { mode, spike_good_id, flashsale_id, prod_id } = options
+    if (!prod_id) {
+      modal('产品id必传')
+      setTimeout(() => {
+        this.$back()
+      }, 1000)
+    }
+    this.prod_id = prod_id
+    if (mode) this.mode = mode
+    if (spike_good_id) this.spike_good_id = spike_good_id
+    if (flashsale_id) this.flashsale_id = flashsale_id
+
+    this._init_func(options)
   },
   mounted () {
     canvasInstance = uni.createCanvasContext('myCanvas')
@@ -209,9 +246,10 @@ export default {
         modal(e.message)
       }
     },
-    async _init_func () {
+    async _init_func (options) {
       try {
         showLoading()
+
         const data = {
           prod_id: this.prod_id
         }
@@ -222,6 +260,44 @@ export default {
         this.detailData = detailData
         this.shareText = `${detailData.Products_Name},已售${detailData.Products_Sales}件,拼购价:${detailData.Products_PriceX},原价:${detailData.Products_PriceY}`
 
+        // 秒杀
+        if (this.mode === 'seckill') {
+          const seckillInfo = await getFlashsaleDetail({ flashsale_id: this.flashsale_id }).then(res => {
+            return res.data
+          }).catch(e => {
+            throw Error(e.msg || '获取秒杀信息错误')
+          })
+
+          Object.assign(this.detailData, seckillInfo)
+          this.activeInfo.start_time = seckillInfo.start_time
+          this.activeInfo.end_time = seckillInfo.end_time
+        }
+
+        // 限时抢购
+        if (this.mode === 'spike') {
+          const spikeInfo = await spikeProdDetail({ spike_good_id: this.spike_good_id }).then(res => {
+            return res.data
+          }).catch(e => {
+            throw Error(e.msg || '获取限时抢购详情错误')
+          })
+
+          Object.assign(this.detailData, spikeInfo)
+          this.activeInfo.start_time = spikeInfo.start_time
+          this.activeInfo.end_time = spikeInfo.end_time
+        }
+
+        // 秒杀
+        if (this.mode === 'seckill') {
+          this.shareText = `${detailData.Products_Name},已售${detailData.Products_Sales}件,秒杀价:${detailData.price},原价:${detailData.Products_PriceX}`
+        }
+
+        // 限时抢购
+        if (this.mode === 'spike') {
+          this.shareText = `${detailData.Products_Name},已售${detailData.Products_Sales}件,拼购价:${detailData.price},原价:${detailData.Products_PriceX}`
+        }
+
+        const productShareInfo = await getProductSharePic({ product_id: this.prod_id }, { noUid: 1 }).then(res => res.data).catch(err => { throw Error(err.msg || '获取商品分享信息错误') })
+        console.log(productShareInfo)
         this.shareInfo = await getBizShare({
           ...data,
           biz_id: 3,
@@ -229,8 +305,11 @@ export default {
         }, { onlyData: true }).catch(e => {
           throw Error(e.msg || '获取商品信息失败')
         })
+
+        this.isReady = true
         hideLoading()
       } catch (e) {
+        console.log(e)
         modal(e.message)
       }
     }

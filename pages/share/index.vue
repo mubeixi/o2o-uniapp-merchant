@@ -47,7 +47,7 @@
               <layout-icon color="#fff" type="iconicon-share"></layout-icon>
               <div class="flex1 p-l-6">
                 <div class="fz-12">分享赚</div>
-                <div class="fz-10 m-t-2">￥95.0</div>
+                <div class="fz-10 m-t-2">￥{{item.share_commission}}</div>
               </div>
             </div>
           </div>
