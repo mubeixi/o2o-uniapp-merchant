@@ -39,6 +39,9 @@
             <div class="attrs" v-else></div>
             <div class="pro-price fz-12"><span>￥</span>{{pro.prod_price}} <span
               class="amount">x{{pro.prod_count}}</span></div>
+            <div class="fz-14 c7" v-if="(Number(pro.prod_count)-Number(pro.is_back_num))*Number(pro.single_free_money)>0">
+              免单金额({{(Number(pro.prod_count)-Number(pro.is_back_num))*Number(pro.single_free_money)}}元)
+            </div>
           </div>
         </div>
         <div class="total flex flex-justify-between">

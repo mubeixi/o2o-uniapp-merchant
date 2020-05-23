@@ -22,13 +22,13 @@
           {{activeInfo.descr||'暂无填写'}}
         </div>
       </div>
-  
+
       <div class="free-title m-b-18">
         <div class="free-line"></div>
         <span class="fz-16 c3 m-l-10 m-r-10">推荐商品</span>
         <div class="free-line"></div>
       </div>
-  
+
       <scroll-view class="scroll-view_H  " scroll-x="true" scroll-left="120">
         <div class=" uni-bg-red m-r-10" v-for="(pro,ind) of recommendProdList" :key="ind"  @click="$toGoodsDetail(pro)">
           <div class="img-div">
@@ -46,15 +46,15 @@
             </div>
           </div>
         </div>
-  
+
       </scroll-view>
-  
+
       <div class="free-title m-b-18">
         <div class="free-line"></div>
         <span class="fz-16 c3 m-l-10 m-r-10">全部商品</span>
         <div class="free-line"></div>
       </div>
-  
+
       <div class="free-list flex ">
         <div class="free-list-item " v-for="(item,index) of prodList" :key="index" @click="$toGoodsDetail(item)">
           <div class="free-list-item-img m-b-9">
@@ -72,7 +72,7 @@
             </div>
           </div>
         </div>
-        
+
       </div>
 
     </scroll-view>
@@ -176,14 +176,15 @@ export default {
   },
   onLoad (options) {
     const { activeId, biz_id } = options
-    if (!activeId) {
-      modal('活动id缺失')
-      return
-    }
-    if (!biz_id) {
-      modal('商家id缺失')
-      return
-    }
+    //免单专区不分商家  商家所有的免单产品都在这里面
+    // if (!activeId) {
+    //   modal('活动id缺失')
+    //   return
+    // }
+    // if (!biz_id) {
+    //   modal('商家id缺失')
+    //   return
+    // }
     this.activeId = activeId
     this.biz_id = biz_id
     this.postData.biz_id = biz_id
@@ -273,7 +274,7 @@ export default {
       }
     }
   }
-  
+
   .container-wrap{
     position: fixed;
     width: 750rpx;
