@@ -95,7 +95,9 @@ export default {
     })
   },
   computed: {
-    ...mapGetters(['initData']),
+    initData () {
+      return this.$store.state.system.initData
+    }
   },
   onShow () {
     // 获取我的提现方式
