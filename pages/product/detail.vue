@@ -785,7 +785,7 @@
       <div id="section0">
         <swiper style="height:750rpx;width: 750rpx;" indicator-dots="true" indicator-active-color="#26C78D" indicator-color="rgba(0,0,0,.16)" autoplay="true" interval="3000" duration="500" circular="true">
           <swiper-item v-for="(item,index) of imgs" :key="index">
-            <image v-if="item" :src="item" class="full-img" @click="previewImg(index)" />
+            <image v-if="item" :src="item+'-r640'" class="full-img" @click="previewImg(index)" />
           </swiper-item>
         </swiper>
 

@@ -181,10 +181,10 @@ export default {
     //   modal('活动id缺失')
     //   return
     // }
-    // if (!biz_id) {
-    //   modal('商家id缺失')
-    //   return
-    // }
+    if (!biz_id) {
+      modal('商家id缺失')
+      return
+    }
     this.activeId = activeId
     this.biz_id = biz_id
     this.postData.biz_id = biz_id

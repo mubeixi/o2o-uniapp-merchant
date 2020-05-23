@@ -43,11 +43,11 @@
               <div class="p-item-price flex">
                 <div class="p-item-new-price">
                   <div class="icon">￥</div>
-                  {{goods.Products_PriceX}}
+                  {{goods.spike_price}}
                 </div>
                 <div class="p-item-old-price">
                   <div class="icon">￥</div>
-                  {{goods.Products_PriceY}}
+                  {{goods.Products_PriceX}}
                 </div>
               </div>
               <div class="flash">
