@@ -1,7 +1,7 @@
 <template>
   <view class="myall">
     <view class="top">
-      <image class="back" :src="'/static/client/distributor/top.png'|domain"></image>
+      <image class="back" :src="'/static/client/fenxiao/top.png'|domain"></image>
       <!-- #ifdef H5 -->
       <layout-icon class="go" color="#fff" size="18" type="iconicon-arrow-left"></layout-icon>
       <!-- #endif -->

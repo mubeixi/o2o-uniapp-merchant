@@ -150,7 +150,7 @@ export default {
     goDistributor () {
       // 跳转成为
       uni.navigateTo({
-        url: '/pages/distributor/DistributorLevel'
+        url: '/pagesA/distributor/DistributorLevel'
       })
     },
     goLogin () {
@@ -159,7 +159,7 @@ export default {
     },
     goMsg () {
       uni.navigateTo({
-        url: '/pagesA/systemMsg/systemMsg'
+        url: '/pagesA/user/SystemMsg'
       })
     },
     // 去分销商页面

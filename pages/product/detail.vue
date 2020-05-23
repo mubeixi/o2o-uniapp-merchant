@@ -990,7 +990,7 @@
               {{st.store_name}}
             </div>
             <div class="flex flex-justify-between store-list-address">
-              <div class="store-list-font" @click="$openLocation(st.store_lat,st.store_lon,st.store_name)">
+              <div class="store-list-font" @click.stop="goStore(st.biz_id)">
                 {{st.area_address}}
               </div>
               <div class="flex flex-vertical-center">
