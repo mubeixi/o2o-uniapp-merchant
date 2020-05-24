@@ -98,6 +98,7 @@ import {getUserID} from '@/common/request'
 import WzwPay from '@/componets/wzw-pay/wzw-pay'
 import BaseMixin from '@/mixins/BaseMixin'
 import Pay from '@/common/Pay'
+import {checkIsLogin} from '@/common/helper.js'
 export default {
   name: 'VipList',
   mixins: [BaseMixin],
@@ -173,6 +174,7 @@ export default {
 
     },
     async submit () {
+		if (!checkIsLogin(1, 1)) return
       let order = await createBuyLevelOrder({ level: this.vipData[this.inds].level,biz_id:this.biz_id,user_id:getUserID() }, {
         onlyData: true,
         tip: '加载中',

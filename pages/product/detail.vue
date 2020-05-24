@@ -1444,6 +1444,7 @@ export default {
       this.$refs.commentModal.show()
     },
     toShare () {
+		if (!checkIsLogin(1, 1)) return
       let url = '/pages/share/go?prod_id=' + this.prod_id
 
       // 限时抢购
@@ -1607,6 +1608,7 @@ export default {
       }
     },
     async shareFunc (channel) {
+		if (!checkIsLogin(1, 1)) return
       const _self = this
       const path = 'pages/product/detail?prod_id=' + this.prod_id
       const front_url = this.initData.front_url

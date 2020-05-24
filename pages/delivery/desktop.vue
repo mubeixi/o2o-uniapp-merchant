@@ -162,8 +162,7 @@ import LayoutLayer from '@/componets/layout-layer/layout-layer'
 import { error, modal } from '@/common/fun'
 import { Exception } from '@/common/Exception'
 import { getBizInfo } from '@/api/store'
-import { mergeObject, numberSort } from '@/common/helper'
-
+import { mergeObject, numberSort,checkIsLogin } from '@/common/helper'
 const attrInfoTmpl = {
   num: 0,
   attr_id: '', // 规格id
@@ -233,6 +232,7 @@ export default {
   },
   methods: {
     buyNow () {
+		if (!checkIsLogin(1, 1)) return
       if (this.totalPrice > 0 && this.totalPrice > this.bizInfo.city_express_config.limit_config.start_send_money) {
         this.$linkTo('/pages/order/OrderBooking?cart_key=waimai&biz_id=' + this.bid)
       } else {

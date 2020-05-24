@@ -1,10 +1,10 @@
 <template>
-  <div>
+  <div class="shopping-cart">
     <div class="bg-white" :style="{height:diyHeadHeight+'px'}"></div>
 
     <div class="top-box bg-white" :style="{height:diyHeadHeight+'px'}">
       <div :style="{height:menuButtonInfo.top+'px'}" class="bg-white" style="position: fixed;top: 0;width: 750rpx;z-index: 99;"></div>
-      <div class="cart-title flex flex-vertical-c flex-justify-c fz-16 c3" :style="{height:menuButtonInfo.height+'px'}">
+      <div class="cart-title flex flex-vertical-c flex-justify-c fz-16 c3" :style="{height:menuButtonInfo.height+'px',top:systemInfo.statusBarHeight+'px'}">
         <div>
           购物车
         </div>
@@ -17,8 +17,8 @@
     <div class="content">
       <div class="cartbox" v-if="total_count>0">
         <div :key="index" class="order_msg" v-for="(biz,index) in CartList">
-          <div class="biz_msg">
-            <div @click="selectBiz(index)" class="item-cart">
+          <div class="biz_msg" @click="selectBiz(index)">
+            <div  class="item-cart">
               <layout-icon color="#F43131" size="20" type="iconicon-check" v-if="bizCheck[index]"></layout-icon>
               <layout-icon color="#ccc" size="20" type="iconradio" v-else></layout-icon>
             </div>
@@ -122,7 +122,8 @@ export default {
       isDel: false,
       fan: false,
       qty: 0,
-      proList: []
+      proList: [],
+      isHavCheck: false
     }
   },
   computed: {
@@ -132,9 +133,9 @@ export default {
     manage () {
       return this.CartList.length === 0
     },
-	userInfo () {
+    userInfo () {
 	  return this.$store.getters['user/getUserInfo']()
-	}
+    }
   },
   watch: {
     // CartList: {
@@ -149,6 +150,11 @@ export default {
       this.$linkTo('/pages/search/result')
     },
     submit () {
+      this.SumPrice()
+      if (!this.isHavCheck) {
+        error('请选择商品')
+        return
+      }
       const obj = {}
       // 删除
       for (const i in this.CartList) {
@@ -254,6 +260,17 @@ export default {
           this.CartList[bizId][goods_idx][sku_idx].checked = rt
         }
       }
+      this.SumPrice()
+      // 判断是否所有商家全选
+      let isAllCheck = true
+      for (const item in this.bizCheck) {
+        if (!this.bizCheck[item]) {
+          isAllCheck = false
+          break
+        }
+      }
+      this.allCheck = isAllCheck
+      Storage.set('allCheck', this.allCheck)
     },
     async updateCart (pid, attrId, skuQty, bizId) {
       if (this.CartList[bizId][pid][attrId].Qty === 1 && skuQty <= 0) {
@@ -353,30 +370,31 @@ export default {
           }
         }
       }
+      if (total === 0) {
+        this.isHavCheck = false
+      } else {
+        this.isHavCheck = true
+      }
       this.totalPrice = Number(total).toFixed(2)
     },
     async init () {
-		
-		this.proList = await getProductList({}, { onlyData: true }).catch(e => {
+      this.proList = await getProductList({}, { onlyData: true }).catch(e => {
 		  throw Error(e.msg || '获取推荐商品信息失败')
-		})
-		
-		if(this.$checkIsLogin(0)){
-			const cart = await CartList({ cart_key: 'CartList' }, {
+      })
+
+      if (this.$checkIsLogin(0)) {
+        const cart = await CartList({ cart_key: 'CartList' }, {
 			  onlyData: true,
 			  tip: '加载中'
-			}).catch(e => {
+        }).catch(e => {
 			  throw Error(e.msg || '获取购物车产品失败')
-			})
-			this.total_count = cart.total_count
-			this.total_price = cart.total_price
-			this.CartList = cart.CartList
-			this.bizList = cart.biz_list
-			this.initCheck()
-		}
-      
-
-      
+        })
+        this.total_count = cart.total_count
+        this.total_price = cart.total_price
+        this.CartList = cart.CartList
+        this.bizList = cart.biz_list
+        this.initCheck()
+      }
     }
   },
   onShow () {
@@ -387,6 +405,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+	.shopping-cart{
+		width: 750rpx;
+		overflow-x: hidden;
+	}
   .wrap {
     background-color: #F8F8F8 !important;
     min-height: 100%;
@@ -398,6 +420,7 @@ export default {
   .top-box{
     position: fixed;
     top: 0;
+    z-index: 9;
     width: 750rpx;
   }
   .cart-title {
