@@ -7,20 +7,20 @@ export const getSmsCode = (param, options) => fetch({
   options
 })
 
-//退出登录
+// 退出登录
 export const bindUserClientId = (param, options) => fetch({
   act: 'user_uuid_set',
   param,
   options
 })
 
-//修改登录密码
+// 修改登录密码
 export const updateUserLoginPsw = (param, options) => fetch({
   act: 'update_user_login_psw',
   param,
   options
 })
-//修改支付密码
+// 修改支付密码
 export const updateUserPayPsw = (param, options) => fetch({
   act: 'update_user_pay_psw',
   param,
@@ -40,7 +40,6 @@ export const updateUserMobile = (param, options) => fetch({
   param,
   options
 })
-
 
 export const userLogin = (data, options) => {
   // 获取推荐人id
@@ -87,9 +86,17 @@ export const updateUserInfo = (param, options) => fetch({
   options
 })
 
-//用户获取系统消息
+export const jifenProdShippingPrice = (param, options) => fetch({ act: 'jifen_prod_shipping_price', param, options })
+export const jifenProdPay = (param, options) => fetch({ act: 'jifen_prod_pay', param, options })
+export const jifenProdDetail = (param, options) => fetch({ act: 'jifen_prod_detail', param, options })
+export const getShipping = (param, options) => fetch({ act: 'get_shipping', param, options })
+export const jifenProdDuihuan = (param, options) => fetch({ act: 'jifen_prod_duihuan', param, options })
+// 积分兑换产品列表
+export const getJifenProd = (param, options) => fetch({ act: 'get_jifen_prod', param, options })
+
+// 用户获取系统消息
 export const getUserMessage = (param, options) => fetch({ act: 'get_user_message', param, options })
-//用户已读系统消息
+// 用户已读系统消息
 export const readUserMessage = (param, options) => fetch({ act: 'read_user_message', param, options })
 
 export const getAddressList = (param, options) => fetch({ act: 'get_address', param, options })
@@ -270,6 +277,5 @@ export const addPromotionArticle = (param, options) => fetch({ act: 'add_promoti
 // 获取团队业绩来源
 export const getTeamSalesList = (param, options) => fetch({ act: 'getTeamSalesList', param, options })
 
-
-//获取分享赚和浏览量
+// 获取分享赚和浏览量
 export const getShareView = (param, options) => fetch({ act: 'getShareView', param, options })

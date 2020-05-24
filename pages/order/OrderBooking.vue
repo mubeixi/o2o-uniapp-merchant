@@ -95,7 +95,8 @@
               <span class="flex flex-vertical-c" style="text-align:right; color: #888;">
                 <span>
                   <block v-if="postData.shipping_name[biz_id]">
-                    {{postData.shipping_name[biz_id]}} {{(' ' + (orderInfo.Order_Shipping.Price > 0 ? '￥'+orderInfo.Order_Shipping.Price : '免运费'))}}
+
+                    {{postData.shipping_name[biz_id]}} {{(' ' + (bizList[biz_id].Order_Shipping.Price > 0 ? '￥'+bizList[biz_id].Order_Shipping.Price : '免运费'))}}
                   </block>
                   <block v-else>请选择物流</block>
                 </span>

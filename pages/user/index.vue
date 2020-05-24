@@ -242,6 +242,9 @@ export default {
   .wrap {
     padding: 0rpx 30rpx 0 30rpx;
     background: #EDF0F5;
+	width: 750rpx;
+	box-sizing: border-box;
+	overflow-x: hidden;
   }
 
   .flex {

@@ -39,8 +39,11 @@ export default {
 	components:{LayoutIcon},
 	data() {
 		return {
-			height:1000,//
-			pro:[],
+			height: 1000, //
+			pro: [],
+			page:1,
+			pageSize:10,
+			totalCount:0
 		};
 	},
 	onLoad() {
@@ -58,30 +61,43 @@ export default {
 		}
 	},
 	methods:{
-		readMsg(item,index){
-			if(item.is_read==0&&JSON.stringify(this.userInfo) != '{}'){
-				let data={}
-				data.msg_id=item.Message_ID;
-				readUserMessage(data).then(res=>{
-					this.pro[index].isShow=!this.pro[index].isShow;
-					this.pro[index].is_read=1;
-				}).catch(e=>{
-				})
-			}else{
-				this.pro[index].isShow=!this.pro[index].isShow;
-			}
-
-		},
-		getUserMessage(){
-			getUserMessage().then(res=>{
-				for(let item of res.data){
-					item.isShow=true;
+		readMsg (item, index) {
+		    if (item.is_read == 0 && JSON.stringify(this.userInfo) != '{}') {
+		      const data = {}
+		      data.msg_id = item.Message_ID
+		      readUserMessage(data).then(res => {
+		        this.pro[index].isShow = !this.pro[index].isShow
+		        this.pro[index].is_read = 1
+		      }).catch(e => {
+		      })
+		    } else {
+		      this.pro[index].isShow = !this.pro[index].isShow
+		    }
+		  },
+		  getUserMessage () {
+				let data={
+					page:this.page,
+					pageSize:this.pageSize
 				}
-				this.pro=res.data;
-			}).catch(e=>{
-			})
+		    getUserMessage(data).then(res => {
+		      for (const item of res.data) {
+		        item.isShow = true
+		      }
+				this.totalCount=res.totalCount
+				for(let item of  res.data){
+					this.pro.push(item)
+				}
+		   
+		    }).catch(e => {
+		    })
+		  }
+		},
+		onReachBottom() {
+			if(this.pro.length<this.totalCount){
+				this.page++
+				this.getUserMessage()
+			}
 		}
-	}
 }
 </script>
 

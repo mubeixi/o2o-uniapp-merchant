@@ -74,7 +74,7 @@ import BaseMixin from '@/mixins/BaseMixin'
 import { error } from '@/common/fun'
 import WzwPay from '@/componets/wzw-pay/wzw-pay'
 import Pay from '@/common/Pay'
-
+import { checkIsLogin } from '@/common/helper'
 export default {
   mixins: { BaseMixin },
   components: { WzwPay },
@@ -150,6 +150,7 @@ export default {
       
     },
     async submit () {
+		if (!checkIsLogin(1, 1)) return
       let order = await createRightsCardOrder({ card_id: this.rightCard[this.inds].id }, {
         onlyData: true,
         tip: '加载中',
