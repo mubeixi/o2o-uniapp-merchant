@@ -140,7 +140,6 @@ export default {
       // 需要刷新页面
       const list = await this.loadGoodsList({ Cate_ID: cateId })
       this.quickGoodsList = list
-      console.log(this.quickGoodsList)
     }
   },
   created () {

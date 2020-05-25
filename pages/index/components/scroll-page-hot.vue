@@ -273,7 +273,7 @@ export default {
             })
           }
         }
-        console.log(this.templateData)
+
         return true
       } catch (e) {
         return e
