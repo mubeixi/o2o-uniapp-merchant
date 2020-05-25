@@ -1,5 +1,5 @@
 <template>
-  <div v-if="ifshow">
+  <div class="popup-wrap" v-if="ifshow">
     <div @tap="ableClose" @touchmove.stop.prevent class="popup-layer" :style="{backgroundColor:bgColor,bottom:bottomStr}"></div>
     <div :class="[positions]"
          :style="{backgroundColor:mainBgColor,borderTopLeftRadius:radius,borderTopRightRadius:radius,bottom:bottomStr}" ref="popRef" class="popup-content"
@@ -86,6 +86,9 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+  .popup-wrap{
+    width: 750rpx;
+  }
   .popup-layer {
     position: fixed;
     z-index: 99;
@@ -123,5 +126,6 @@ export default {
 
   .bottom {
     bottom: 0;
+    left: 0;
   }
 </style>
