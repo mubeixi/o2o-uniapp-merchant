@@ -101,9 +101,7 @@ export default {
       Storage.set('myMethod', this.User_Method_ID)
       
       // 返回上一页
-      uni.navigateBack({
-        delta: 1,
-      })
+      this.$back()
     },
     // 获取用户提现方式
     getUserWithdrawMethod () {

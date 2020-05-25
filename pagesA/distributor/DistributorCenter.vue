@@ -678,11 +678,8 @@ export default {
             icon: 'none',
           })
           this.submitM = true
-          setTimeout(function () {
-            uni.navigateBack({
-              delta: 1,
-            })
-            
+          setTimeout(() => {
+           this.$back()
           }, 1000)
           
           this.textShen = res.msg

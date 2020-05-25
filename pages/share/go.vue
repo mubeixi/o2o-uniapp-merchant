@@ -26,7 +26,7 @@
             <block v-if="mode==='spike' || mode==='seckill'">{{detailData.price}}</block>
             <block v-else-if="detailData.is_pintuan">{{detailData.pintuan_pricex}}</block>
             <block v-else>{{detailData.Products_PriceX}}</block>
-          </span>shareProduct
+          </span>
           <span class="price-market text-through p-l-10">¥
           <block v-if="mode==='spike' || mode==='seckill' || detailData.is_pintuan">{{detailData.Products_PriceX}}</block>
           <block v-else>{{detailData.Products_PriceY}}</block>
@@ -36,11 +36,18 @@
           <div class="text">{{detailData.click_count}}人正在抢购</div>
         </div>
       </div>
+      <div class="active-info fz-12" v-if="mode==='spike' || mode==='seckill'">
+        <div class="active-btn color-white">
+          <block v-if="mode==='spike'">拼团</block>
+          <block v-if="mode==='seckill'">秒杀</block>
+        </div>
+        <div class="active-endtime c6">截止时间:{{detailData.end_time_text}}</div>
+      </div>
       <div class="preivew-hr"></div>
       <div class="preivew-spread">
         <image :src="userInfo.User_HeadImg" class="headimg"></image>
         <div class="nickname c3 p-l-10 fz-14"><span class="text">{{userInfo.User_NickName}}</span><span class="p-l-6">为您推荐</span></div>
-        <image :src="shareInfo.qrcode" class="qrcode"></image>
+        <image :src="shareInfo.img_url" class="qrcode"></image>
       </div>
     </div>
     <div class="bottom flex flex-justify-between flex-vertical-c">
@@ -143,8 +150,8 @@ export default {
         const ctx = canvasInstance
 
         const thumbTempFile = await Promisify('getImageInfo', { src: this.detailData.ImgPath }).catch(e => { throw Error(e.errMsg || '缓存商品缩略图失败') })
-        const headimgTempFile = await Promisify('getImageInfo', { src: this.userInfo.User_HeadImg }).catch(e => { throw Error(e.errMsg || '缓存商品缩略图失败') })
-        const qrimgTempFile = await Promisify('getImageInfo', { src: this.shareInfo.qrcode }).catch(e => { throw Error(e.errMsg || '缓存商品缩略图失败') })
+        const headimgTempFile = await Promisify('getImageInfo', { src: this.userInfo.User_HeadImg }).catch(e => { throw Error(e.errMsg || '缓存头像失败') })
+        const qrimgTempFile = await Promisify('getImageInfo', { src: this.shareInfo.img_url }).catch(e => { throw Error(e.errMsg || '缓存二维码失败') })
         // const wrapTempFile = await Promisify('getImageInfo', { src: this.wrapPath }).catch(e => { throw Error(e.errMsg || '缓存海报背景失败') })
         console.log(thumbTempFile.path)
         // 绘制底部白色
@@ -169,12 +176,21 @@ export default {
         ctx.setFillStyle('#666666')
         ctx.fillText('拼购价：', 63, 739)
         ctx.setFillStyle('#E41515')
-        ctx.fillText(`￥${this.detailData.Products_PriceX}`, 161, 739)
+
+        var price = this.detailData.Products_PriceX
+        if (this.mode === 'spike' || this.mode === 'seckill') {
+          price = this.detailData.price
+        }
+        if (this.detailData.is_pintuan) {
+          price = this.detailData.pintuan_pricex
+        }
+
+        ctx.fillText(`￥${price}`, 161, 739)
 
         ctx.setFillStyle('#999')
         ctx.fillText(`￥${this.detailData.Products_PriceY}`, 286, 739)
 
-        ctx.setFillStyle('#f8f8f8')
+        ctx.setFillStyle('#eeeeee')
         ctx.moveTo(286, 732)
         ctx.setLineWidth(1)
         ctx.lineTo(286 + (`￥${this.detailData.Products_PriceY}`).length * 16, 732)
@@ -189,6 +205,27 @@ export default {
         ctx.fillText(`${this.detailData.click_count}人正在抢购`, 520, 736, 170)
 
         ctx.textAlign = 'left'
+
+        if (this.mode === 'spike' || this.mode === 'seckill') {
+          var activeType = ''
+          if (this.mode === 'spike') {
+            activeType = '限时抢购'
+          }
+          if (this.mode === 'seckill') {
+            activeType = '秒杀活动'
+          }
+          ctx.drawImage('/static/share/acitve-btn.png', 70, 780, 72, 32)
+          ctx.setFontSize(16)
+          ctx.setFillStyle('#fff')
+
+          ctx.fillText(`${activeType}`, 75, 804, 170)
+          price = this.detailData.price
+
+          ctx.setFontSize(20)
+          ctx.setFillStyle('#666')
+          ctx.fillText(`截止时间: ${this.detailData.end_time_text}`, 170, 800)
+        }
+
         // 分割线
         ctx.moveTo(71, 858)
         ctx.setLineWidth(1)
@@ -257,6 +294,8 @@ export default {
           throw Error(e.msg || '获取商品信息失败')
         })
 
+        detailData.end_time_text = uni.$moment(detailData.end_time).format('YYYY-MM-DD h:m:s')
+
         this.detailData = detailData
         this.shareText = `${detailData.Products_Name},已售${detailData.Products_Sales}件,拼购价:${detailData.Products_PriceX},原价:${detailData.Products_PriceY}`
 
@@ -298,13 +337,15 @@ export default {
 
         const productShareInfo = await getProductSharePic({ product_id: this.prod_id }, { noUid: 1 }).then(res => res.data).catch(err => { throw Error(err.msg || '获取商品分享信息错误') })
         console.log(productShareInfo)
-        this.shareInfo = await getBizShare({
-          ...data,
-          biz_id: 3,
-          qrcode_type: getEnv()
-        }, { onlyData: true }).catch(e => {
-          throw Error(e.msg || '获取商品信息失败')
-        })
+  
+        this.shareInfo = productShareInfo
+        // this.shareInfo = await getBizShare({
+        //   ...data,
+        //   biz_id: this.detailData.biz_id,
+        //   qrcode_type: getEnv()
+        // }, { onlyData: true }).catch(e => {
+        //   throw Error(e.msg || '获取商品信息失败')
+        // })
 
         this.isReady = true
         hideLoading()
@@ -329,6 +370,17 @@ export default {
 </script>
 <style lang="scss" scoped>
 
+  .active-info{
+    display: flex;
+    align-items: center;
+    margin: 20rpx 30rpx 0;
+    .active-btn{
+      background:linear-gradient(270deg,rgba(255,0,6,1),rgba(255,132,23,1));
+      border-radius: 4rpx;
+      padding: 2px 4px;
+      margin-right: 10px;
+    }
+  }
   .myCanvas {
     position: fixed;
     left: 100%;

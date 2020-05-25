@@ -78,7 +78,7 @@
 <script>
 import popupLayer from '@/componets/layout-popup/layout-popup'
 import { getRefund, orderRefund } from '@/api/order'
-import { error, hideLoading, showLoading } from '@/common/fun'
+import { error, hideLoading, showLoading, toast } from '@/common/fun'
 import BaseMixin from '@/mixins/BaseMixin'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import { chooseImageByPromise, getArrColumn, uploadImages } from '@/common/helper'
@@ -180,17 +180,10 @@ export default {
         refund_desc: this.refund_desc,
         Order_ID: this.Order_ID
       }).then(res => {
-        uni.showToast({
-          title: '提交成功',
-          duration: 1500,
-          complete: function () {
-            setTimeout(() => {
-              uni.navigateBack({
-                delta: 1
-              })
-            }, 1500)
-          }
-        })
+        toast('提交成功')
+        setTimeout(() => {
+          this.$back()
+        }, 1500)
       }).catch(() => {
       })
     },

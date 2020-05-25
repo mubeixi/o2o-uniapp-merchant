@@ -36,9 +36,24 @@ export const modal = function () {
   uni.showModal(opt)
 }
 
+export function toHome () {
+  uni.switchTab({
+    url: '/pages/index'
+  })
+}
+
 export function backFunc () {
-  console.log('back')
-  uni.navigateBack()
+  const currentPages = getCurrentPages()
+  if (currentPages.length < 2) {
+    toHome()
+  }
+  uni.navigateBack({
+    fail (err) {
+      console.log(err.errMsg)
+      // 退无可退就回首页
+      toHome()
+    }
+  })
 }
 
 export const linkToEasy = (url, type = 'default') => {
@@ -57,7 +72,6 @@ export const linkToEasy = (url, type = 'default') => {
     })
   }
 }
-
 
 export const openLocation = (latitude, longitude, name, address) => {
   uni.openLocation({
