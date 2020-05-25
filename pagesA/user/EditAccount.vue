@@ -21,63 +21,53 @@
 </template>
 
 <script>
-	import {mapActions} from 'vuex'
-	import {confirm} from "@/common/fun";
-	import Storage from "@/common/Storage";
-	import BaseMixin from '@/mixins/BaseMixin'
+import { mapActions } from 'vuex'
+import { confirm, toHome } from '@/common/fun'
+import Storage from '@/common/Storage'
+import BaseMixin from '@/mixins/BaseMixin'
 
-	import {bindUserClientId} from "@/api/customer";
+import { bindUserClientId } from '@/api/customer'
 
-	export default {
-		mixins:[BaseMixin],
-		data() {
-			return {
+export default {
+  mixins: [BaseMixin],
+  data () {
+    return {
 
-			}
-		},
-		methods: {
-			...mapActions({
-				setUserInfo: 'user/setUserInfo',
-			}),
-			// 修改信息
-			update(type){
+    }
+  },
+  methods: {
+    ...mapActions({
+      setUserInfo: 'user/setUserInfo'
+    }),
+    // 修改信息
+    update (type) {
+      // type 0 表示修改登录，1，修改支付
+      uni.navigateTo({
+        url: '/pagesA/user/UpdateUserPsw?type=' + type
+      })
+    },
+    logoutFunc () {
+      confirm({ title: '操作提示', content: '是否退出登录' }).then(res => {
+        bindUserClientId({ action: 'clear' }, { errtip: false }).then(() => {}).catch(() => {})
 
-				// type 0 表示修改登录，1，修改支付
-				uni.navigateTo({
-					url: '/pagesA/user/UpdateUserPsw?type='+type
-				})
-			},
-			logoutFunc(){
-				confirm({title:'操作提示',content:'是否退出登录'}).then(res=>{
+        const users_id = Storage.get('users_id')
+        Storage.clear()
 
-					bindUserClientId({action:'clear'},{errtip:false}).then(()=>{}).catch(()=>{})
+        Storage.set('users_id', users_id)
 
+        // #ifdef H5
+        sessionStorage.removeItem('is_send_usrlog')
+        // #endif
 
-					let users_id = Storage.get('users_id');
-					Storage.clear();
+        this.setUserInfo({})
+        toHome()
+      }).catch(() => {
 
+      })
+    }
 
-					Storage.set('users_id',users_id);
-
-					// #ifdef H5
-					sessionStorage.removeItem('is_send_usrlog')
-					// #endif
-
-
-
-
-					this.setUserInfo({})
-					uni.switchTab({
-						url:'/pages/index'
-					})
-
-				}).catch(()=>{
-
-				})
-			},
-
-		}
-	}
+  }
+}
 </script>
 
 <style scoped lang="scss">

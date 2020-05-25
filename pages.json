@@ -1,7 +1,7 @@
 {
   "pages": [
     {
-      "path": "pages/index",
+      "path": "pages/index/index",
       "style": {
         "navigationBarTextStyle": "light",
         "backgroundTextStyle": "light",
@@ -574,7 +574,7 @@
     }
   ],
   "preloadRule": {
-    "pages/index": {
+    "pages/index/index": {
       "network": "all",
       "packages": [
         "onther"
@@ -593,7 +593,7 @@
     "selectedColor": "#26C78D",
     "list": [
       {
-        "pagePath": "pages/index",
+        "pagePath": "pages/index/index",
         "iconPath": "/static/tabbar/find.png",
         "selectedIconPath": "/static/tabbar/find-a.png",
         "text": "发现"

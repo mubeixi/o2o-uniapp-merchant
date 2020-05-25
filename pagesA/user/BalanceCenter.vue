@@ -305,7 +305,7 @@ export default {
       // })
     },
     goBack () {
-      uni.navigateBack(1)
+      this.$back()
     },
     goRecharge () {
       uni.navigateTo({

@@ -288,6 +288,7 @@ import { disApplyInit } from '@/api/customer'
 import { mapActions } from 'vuex'
 import BaseMixin from '@/mixins/BaseMixin'
 import CircleTitle from '@/componets/circle-title/circle-title'
+import { toHome } from '@/common/fun'
 
 export default {
   mixins: [BaseMixin],
@@ -344,9 +345,7 @@ export default {
       })
     },
     goIndex () {
-      uni.switchTab({
-        url: '/pages/index/index',
-      })
+      toHome()
     },
     goDetail (id) {
       uni.navigateTo({

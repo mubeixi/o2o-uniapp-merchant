@@ -17,6 +17,7 @@
 </template>
 
 <script>
+import { backFunc } from '@/common/fun'
 
 export default {
   name: 'PageTitle',
@@ -60,7 +61,7 @@ export default {
   },
   methods: {
     goBack () {
-      uni.navigateBack(1)
+      backFunc()
     },
     rightHandle () {
       this.$emit('rightHandle')

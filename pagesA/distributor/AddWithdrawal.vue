@@ -66,6 +66,7 @@
 import { addUserWithdrawMethod, getShopWithdrawMethod } from '@/api/customer'
 import { mapActions, mapGetters } from 'vuex'
 import BaseMixin from '@/mixins/BaseMixin'
+import {backFunc} from '@/common/fun'
 
 export default {
   mixins: [BaseMixin],
@@ -131,9 +132,7 @@ export default {
         setTimeout(function () {
           that.$vm.$emit('fir', User_Method_ID)
           // 返回上一页
-          uni.navigateBack({
-            delta: 1,
-          })
+          backFunc()
         }, 1000)
       }).catch(e => {
 

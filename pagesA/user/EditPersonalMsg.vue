@@ -92,9 +92,7 @@ export default {
         })
         this.setUserInfo(this.userInfo)
         setTimeout(() => {
-          uni.navigateBack({
-            delta: 1,
-          })
+          this.$back()
         }, 1500)
       }).catch(e => {
         error(e.msg)
@@ -167,9 +165,7 @@ export default {
                 })
                 that.setUserInfo(that.userInfo)
                 setTimeout(() => {
-                  uni.navigateBack({
-                    delta: 1,
-                  })
+                  this.$back()
                 }, 1500)
               }).catch(e => {
                 error(e.msg)
@@ -198,9 +194,7 @@ export default {
         })
         this.setUserInfo(this.userInfo)
         setTimeout(() => {
-          uni.navigateBack({
-            delta: 1,
-          })
+          this.$back()
         }, 1500)
       }).catch(e => {
         error(e.msg)
@@ -254,9 +248,7 @@ export default {
       this.type = parseInt(option.type)
       this.getTitle()
     } else {
-      uni.navigateBack({
-        delta: 1,
-      })
+      this.$back()
     }
   },
   onShow () {

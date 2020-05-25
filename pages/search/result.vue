@@ -222,7 +222,7 @@ export default {
     // 跳转搜索页
     goSearch () {
       if (this.refer === 'searchPage') {
-        uni.navigateBack()
+        this.$back()
         return
       }
       uni.navigateTo({

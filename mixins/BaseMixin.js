@@ -234,3 +234,45 @@ export default {
 
   }
 }
+
+export const componetMixin = {
+  data () {
+    return {
+      menuButtonInfo: {},
+      systemInfo: {
+        statusBarHeight: 0,
+        windowHeight: 0
+      },
+      diyHeadHeight: 0,
+      diyHeadRight: 0
+    }
+  },
+  methods: {
+    $getDomain: getDomain,
+    $openLocation: openLocation,
+    $cellPhone: cellPhone,
+    $back: backFunc,
+    $noop: () => {},
+    $toast: toast,
+    $error: error,
+    $modal: modal,
+    $linkTo: linkToEasy,
+    $toGoodsDetail: toGoodsDetail,
+    $checkIsLogin: checkIsLogin,
+    $openPop (name) {
+      this.$refs[name].show()
+    },
+    $closePop (name) {
+      this.$refs[name].close()
+    }
+  },
+  created () {
+    this.systemInfo = uni.getSystemInfoSync()
+    // #ifdef MP-WEIXIN
+    this.menuButtonInfo = uni.getMenuButtonBoundingClientRect()
+    const { height, top, left } = this.menuButtonInfo
+    this.diyHeadHeight = top + height + (top - this.systemInfo.statusBarHeight) + 10
+    this.diyHeadRight = this.systemInfo.windowWidth - left
+    // #endif
+  }
+}

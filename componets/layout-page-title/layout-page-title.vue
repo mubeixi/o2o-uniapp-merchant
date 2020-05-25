@@ -12,6 +12,7 @@
 
 <script>
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
+import { backFunc } from '@/common/fun'
 
 export default {
   name: 'layoutPageTitle',
@@ -49,7 +50,7 @@ export default {
   methods: {
     bindBack () {
       if (this.letfFn) this.$emit('clickLeft')
-      if (!this.letfFn) uni.navigateBack()
+      if (!this.letfFn) backFunc()
     }
   },
   mounted () {

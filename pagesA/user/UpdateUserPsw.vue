@@ -76,9 +76,7 @@ export default {
     // 返回上一页
     goBack () {
       setTimeout(() => {
-        uni.navigateBack({
-          delta: 1
-        })
+        this.$back()
       }, 1000)
     },
     confirm (e) {
@@ -224,7 +222,7 @@ export default {
             }).then(res => {
               this.setUserInfo(res.data)
               setTimeout(() => {
-                uni.navigateBack()
+                this.$back()
               }, 100)
             }).catch(e => {
             })
