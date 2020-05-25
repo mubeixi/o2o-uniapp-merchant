@@ -1,5 +1,5 @@
 <template>
-  <div class="page-wrap">
+  <div class="page-wrap" @click="commonClick">
     <div class="head-box" :style="{height:diyHeadHeight+'px',backgroundColor:primaryColor}">
       <div class="head" :style="{height:menuButtonInfo.height+'px',paddingRight:diyHeadRight+'px',marginTop:menuButtonInfo.top+'px'}">
         <ul class="tab-box">
@@ -329,7 +329,7 @@
                 </div>
 
                 <div class="store-top-item" v-for="(merchant,idx) in merchantList" :key="idx"
-                     @click="$linkTo('/pages/store/index?bid='+merchant.id)">
+                     @click="$linkTo('/pages/store/index?biz_id='+merchant.id)">
                   <div class="store-info flex flex-vertical-c flex-justify-between">
                     <div class="p-l-10 p-r-10 flex flex-vertical-c">
                       <image class="logo" :src="merchant.biz_logo"></image>

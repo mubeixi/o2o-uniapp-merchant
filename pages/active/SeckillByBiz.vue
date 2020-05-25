@@ -1,5 +1,5 @@
 <template>
-  <div class="seckill-all" :style="{backgroundImage:'url('+$getDomain('/static/client/seckill-bg.png')+')'}">
+  <div class="seckill-all" :style="{backgroundImage:'url('+$getDomain('/static/client/seckill-bg.png')+')'}"   @click="commonClick">
 
     <div class="flex flex-vertical-c seckill-title" :style="{marginTop:menuButtonInfo.top+'px'}">
       <layout-icon type="iconicon-arrow-left" size="20" color="#fff" class="back-icon m-r-2"

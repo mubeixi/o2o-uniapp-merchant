@@ -1,5 +1,5 @@
 <template>
-  <div class="wrap">
+  <div class="wrap"  @click="commonClick">
     <layout-page-title :letfFn="true" @clickLeft="bindBackFn" :page-title="pageTitle"></layout-page-title>
     <fun-err-msg ref="refMsg" :topStr="menuButtonInfo.height+menuButtonInfo.top+10+'px'"
                  :errs="formCheckResult"></fun-err-msg>

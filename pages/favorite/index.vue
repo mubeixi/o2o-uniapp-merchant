@@ -1,5 +1,5 @@
 <template>
-  <div class="page-wrap">
+  <div class="page-wrap"  @click="commonClick">
     <div
       class="flex flex-vertical-c navigator"
       :style="{paddingTop:menuButtonInfo.top+'px',paddingBottom:10+'px',height:menuButtonInfo.height+'px'}"
@@ -60,11 +60,11 @@
               </div>
             </div>
           </div>
-        
+
         </div>
       </div>
     </div>
-    
+
     <div class="handle-box" v-if="multiGoods||multiStore">
       <div @click="taggleAllCheck">
         <radio style="transform: scale(0.8)" :checked="allCheck"></radio>
@@ -74,7 +74,7 @@
         <div class="btn">删除({{selectes.length}})</div>
       </div>
     </div>
-  
+
   </div>
 </template>
 
@@ -258,7 +258,7 @@ export default {
           reject(err)
         })
       })
-      
+
     },
     async _init_func () {
       try {
@@ -300,20 +300,20 @@ export default {
     background: #fff;
     min-height: 100vh;
   }
-  
+
   .navigator {
     position: fixed;
     top: 0;
     width: 750rpx;
     z-index: 3;
-    
+
     .title {
       position: absolute;
       left: 50%;
       transform: translateX(-50%);
     }
   }
-  
+
   .tab {
     position: fixed;
     z-index: 3;
@@ -328,47 +328,47 @@ export default {
       text-align: center;
       padding: 24rpx 0;
       box-sizing: border-box;
-      
+
       &.active {
         color: $fun-primary-color;
         border-bottom: 2px solid $fun-primary-color;
       }
-      
+
       &:first-child {
         margin-right: 30rpx;
       }
     }
   }
-  
+
   .container {
     padding-bottom: 90rpx;
   }
-  
+
   .list {
     margin: 40rpx 20rpx;
-    
+
     .item {
       display: flex;
       margin-bottom: 30rpx;
       align-items: center;
-      
+
       .cover {
         width: 280rpx;
         height: 280rpx;
         background: #f2f2f2;
       }
-      
+
       .info {
         position: relative;
         height: 280rpx;
         margin-left: 20rpx;
         flex: 1;
-        
+
         .title {
           line-height: 42rpx;
           color: #333;
         }
-        
+
         .bottom {
           position: absolute;
           bottom: 0;
@@ -377,7 +377,7 @@ export default {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          
+
           .gobuy {
             background: #FF0000;
             color: #fff;
@@ -390,18 +390,18 @@ export default {
           }
         }
       }
-      
+
     }
   }
-  
+
   .storeList {
     padding: 40rpx 20rpx;
   }
-  
+
   .store-item {
     display: flex;
     align-items: center;
-    
+
     .box {
       height: 300rpx;
       width: 710rpx;
@@ -409,24 +409,24 @@ export default {
       border-radius: 10rpx;
       margin-bottom: 18px;
       box-shadow: 0px 0px 18px 0px rgba(0, 0, 0, 0.1);
-      
+
       .top {
         padding: 25rpx;
         border-bottom: 1px solid #e7e7e7;
-        
+
         .logo {
           width: 80rpx;
           height: 80rpx;
         }
       }
-      
+
       .content {
-      
+
       }
     }
-    
+
   }
-  
+
   /* 底部的操作栏start */
   .handle-box {
     position: fixed;
@@ -442,11 +442,11 @@ export default {
     font-size: 14px;
     padding: 0 20rpx;
     box-sizing: border-box;
-    
+
     .btn-list {
       display: flex;
       align-items: center;
-      
+
       .btn {
         display: block;
         height: 54rpx;
@@ -458,7 +458,7 @@ export default {
         color: $fun-red-color;
         background: white;
         margin-left: 20rpx;
-        
+
         &.btn-up {
           color: white;
           background: $fun-red-color;
@@ -466,6 +466,6 @@ export default {
       }
     }
   }
-  
+
   /*底部操作栏 end*/
 </style>

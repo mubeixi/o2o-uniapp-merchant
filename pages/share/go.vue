@@ -1,5 +1,5 @@
 <template>
-  <div class="page-wrap" v-if="isReady">
+  <div class="page-wrap" v-if="isReady"  @click="commonClick">
     <canvas class="myCanvas" id="myCanvas" canvas-id="myCanvas"/>
     <div class="text-box">
       <div class="flex flex-vertical-c flex-justify-between">

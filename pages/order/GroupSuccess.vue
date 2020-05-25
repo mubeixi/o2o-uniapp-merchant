@@ -1,5 +1,5 @@
 <template>
-  <div class="start">
+  <div class="start"  @click="commonClick">
     <!-- 商品详情部分 -->
     <div class="first">
       <div class="left">

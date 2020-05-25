@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div  @click="commonClick">
     <div class="zhezhao" v-if="password_input">
       <div class="input-wrap">
         <div>请输入余额支付密码</div>

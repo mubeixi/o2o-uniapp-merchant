@@ -1,9 +1,9 @@
 <template>
-  <view class="all">
+  <view class="all" @click="commonClick">
     <!-- #ifdef APP-PLUS -->
     <view class="status_bar" style="background-color: rgb(248, 248, 248);"><!-- 这里是状态栏 --></view>
     <!-- #endif -->
-    
+
     <div class="zhezhao" v-if="password_input">
       <div class="input-wrap">
         <div>请输入余额支付密码</div>
@@ -20,13 +20,13 @@
           <view></view>
         </view>
         <view class="lineQ">
-        
+
         </view>
         <view class="circleQ">
           <view></view>
         </view>
         <view class="lineQ">
-        
+
         </view>
         <view class="circleQ">
           <view></view>
@@ -44,7 +44,7 @@
         </view>
       </view>
     </view>
-    
+
     <block v-if="proData.Applyfor_Name">
       <view class="three">
         <view class="haha">
@@ -71,7 +71,7 @@
         {{proData.Order_TotalPrice}}元
       </view>
     </block>
-    
+
     <view class="four" @click="showPay">
       立即支付
     </view>
@@ -79,7 +79,7 @@
       取消申请
       <image class="image" :src="'/static/client/distributor/chakan.png'|domain"></image>
     </view>
-    
+
     <layout-layer ref="popupLayer" :direction="'top'">
       <div class="iMbx">
         <div class="c_method" v-for="(item,index) in initData.pay_arr" @click="chooseType(index)" :key="index">
@@ -103,7 +103,7 @@ export default {
   mixins: [BaseMixin],
   components: {
     LayoutLayer,
-    
+
   },
   data () {
     return {
@@ -115,7 +115,7 @@ export default {
     }
   },
   onShow () {
-  
+
   },
   computed: {
     initData () {
@@ -143,11 +143,11 @@ export default {
           })
         }, 1000)
       }).catch(e => {
-      
+
       })
     },
     payFailCall () {
-    
+
     },
     payMoney () {
       const data = {
@@ -169,7 +169,7 @@ export default {
     // 选择支付方式
     chooseType (index) {
       this.pay_type = index
-      
+
       if (index === 'remainder_pay') {
         if (this.userInfo.hasOwnProperty('User_PayPassword') && !this.userInfo.User_PayPassword) {
           confirm({
@@ -186,12 +186,12 @@ export default {
           })
           return
         }
-        
+
         this.$refs.popupLayer.close()
         this.password_input = true// 弹出密码输入框
         return
       }
-      
+
       this.payMoney()
     },
     showPay () {
@@ -199,11 +199,11 @@ export default {
     },
     paySuccessCall (res) {
       var _that = this
-      
+
       if (res && res.code && res.code === 2) {
         return
       }
-      
+
       if (res && res.code && res.code === 1) {
         toast('用户取消支付', 'none')
         return
@@ -221,7 +221,7 @@ export default {
                 url: '/pages/distributor/Main',
               })
             } else if (res.cancel) {
-            
+
             }
           },
         })
@@ -232,9 +232,9 @@ export default {
         toast('用户取消支付', 'none')
         return
       }
-      
+
       toast('支付成功')
-      
+
       uni.navigateTo({
         url: '/pagesA/distributor/Main',
       })
@@ -258,14 +258,14 @@ export default {
           })
         }, 1000)
       }).catch(e => {
-      
+
       })
     },
     getAgentApply () {
       getShaApply({ Order_ID: this.Order_ID }).then(res => {
         this.proData = res.data[0]
       }).catch(e => {
-      
+
       })
     },
     // 取消输入支付密码
@@ -282,7 +282,7 @@ export default {
       // 提交信息
       this.payNow()
     },
-    
+
   },
 }
 </script>
@@ -293,18 +293,18 @@ export default {
     background-color: #FFFFFF !important;
     min-height: 100vh;
   }
-  
+
   .top {
     width: 750rpx;
     padding: 50rpx 83rpx;
-    
+
     .first {
       padding-left: 33rpx;
       padding-right: 41rpx;
       height: 30rpx;
       display: flex;
       align-items: center;
-      
+
       .circleQ {
         width: 30rpx;
         height: 30rpx;
@@ -313,7 +313,7 @@ export default {
         display: flex;
         align-items: center;
         justify-content: center;
-        
+
         view {
           width: 15rpx;
           height: 15rpx;
@@ -321,22 +321,22 @@ export default {
           border-radius: 50%;
         }
       }
-      
+
       .circleW {
         border: 1px solid #999999;
-        
+
         view {
           background-color: #999999;
         }
       }
-      
+
       .lineQ {
         width: 210rpx;
         height: 4rpx;
         background-color: #F43131;
       }
     }
-    
+
     .second {
       margin-top: 21rpx;
       height: 25rpx;
@@ -344,23 +344,23 @@ export default {
       font-size: 26rpx;
       color: #999999;
       display: flex;
-      
+
       .secondQ {
         color: #F43131;
       }
-      
+
       .secondW {
         margin-left: 137rpx;
         color: #F43131;
       }
-      
+
       .secondE {
         margin-left: 135rpx;
         color: #F43131;
       }
     }
   }
-  
+
   .three {
     height: 88rpx;
     line-height: 88rpx;
@@ -369,39 +369,39 @@ export default {
     border-bottom: 1px solid #E7E7E7;
     display: flex;
     align-items: center;
-    
+
     .haha {
       font-size: 30rpx;
       color: #333333;
       margin-right: 42rpx;
       width: 64px;
     }
-    
+
     .inputs {
       height: 88rpx;
       line-height: 88rpx;
       font-size: 28rpx;
       color: #333333;
     }
-    
+
     .place {
       font-size: 28rpx;
       color: #CAC8C8;
     }
-    
+
     .myRadio {
       height: 88rpx;
       display: flex;
-      
+
       .myRadioQ {
         height: 88rpx;
         display: flex;
         margin-right: 17rpx;
-        
+
         .radio {
           transform: scale(0.7);
         }
-        
+
         .mbx {
           font-size: 28rpx;
           color: #777777;
@@ -409,9 +409,9 @@ export default {
         }
       }
     }
-    
+
   }
-  
+
   .four {
     width: 490rpx;
     height: 75rpx;
@@ -424,7 +424,7 @@ export default {
     font-size: 30rpx;
     color: #FFFFFF;
   }
-  
+
   .five {
     height: 23rpx;
     line-height: 23rpx;
@@ -434,14 +434,14 @@ export default {
     font-size: 24rpx;
     font-weight: 500;
     color: rgba(153, 153, 153, 1);
-    
+
     .image {
       width: 12rpx;
       height: 20rpx;
       margin-left: 10rpx;
     }
   }
-  
+
   .threes {
     height: 88rpx;
     line-height: 88rpx;
@@ -451,26 +451,26 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    
+
     .haha {
       font-size: 30rpx;
       color: #333333;
       //margin-right: 42rpx;
     }
-    
+
     .images {
       width: 16rpx;
       height: 88rpx;
       line-height: 88rpx;
-      
+
       .image {
         width: 16rpx;
         height: 25rpx;
       }
     }
-    
+
   }
-  
+
   .picker view {
     width: 180rpx;
     font-size: 28rpx;
@@ -478,39 +478,39 @@ export default {
     height: 90rpx;
     margin-right: 10rpx;
   }
-  
+
   .picker {
     display: flex;
-    
+
     .quyu {
       width: 120rpx;
     }
   }
-  
+
   .lineW {
     background-color: #F43131 !important;
   }
-  
+
   .iMbx {
     text-align: center;
     padding: 0 20 upx;
     font-size: 28 upx;
     color: #333;
-    
+
     .c_method {
       padding: 37 upx 0;
       border-bottom: 2 upx solid #E6E6E6;
     }
-    
+
     & .c_method:first-child {
       color: #F43131;
     }
-    
+
     & .c_method:nth-last-child(1) {
       border: none;
     }
   }
-  
+
   .zhezhao {
     left: 0;
     top: 0;
@@ -519,7 +519,7 @@ export default {
     height: 100%;
     background: rgba(0, 0, 0, .3);
     z-index: 1000;
-    
+
     .input-wrap {
       background: #fff;
       color: #000;
@@ -530,7 +530,7 @@ export default {
       box-sizing: border-box;
       font-size: 28rpx;
       border-radius: 10rpx;
-      
+
       .input {
         margin: 40rpx 0;
         border: 1px solid #efefef;
@@ -538,13 +538,13 @@ export default {
         line-height: 20px;
         padding: 10px 0px;
       }
-      
+
       .btns {
         display: flex;
         justify-content: space-around;
         height: 60rpx;
         line-height: 60rpx;
-        
+
         .btn {
           flex: 1;
         }

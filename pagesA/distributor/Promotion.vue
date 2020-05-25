@@ -1,6 +1,6 @@
 <template>
-  <view class="myall">
-    
+  <view class="myall" @click="commonClick">
+
     <view class="top">
       <view class="person">
         <image class="image" :src="data.disInfo.Shop_Logo"></image>
@@ -132,10 +132,10 @@ export default {
   },
   components: {
     CircleTitle,
-    
+
   },
   onLoad () {
-  
+
   },
   onShow () {
     this.nobiInfo()
@@ -146,7 +146,7 @@ export default {
       getDisInit().then(res => {
         this.data = res.data
       }, err => {
-      
+
       })
     },
     goFinance () {
@@ -158,7 +158,7 @@ export default {
       nobiInfo().then(res => {
         this.pro = res.data
       }).catch(e => {
-      
+
       })
     },
   },
@@ -170,7 +170,7 @@ export default {
     background-color: #FFFFFF !important;
     min-height: 100vh;
   }
-  
+
   .top {
     margin: 30rpx 0rpx 30rpx 20rpx;
     margin-top: 0rpx;
@@ -178,19 +178,19 @@ export default {
     height: 75rpx;
     display: flex;
     position: relative;
-    
+
     .person {
       width: 75rpx;
       height: 75rpx;
       border-radius: 50%;
       overflow: hidden;
-      
+
       .image {
         width: 100%;
         height: 100%;
       }
     }
-    
+
     .nickName {
       margin-left: 19rpx;
       font-size: 30rpx;
@@ -198,7 +198,7 @@ export default {
       line-height: 75rpx;
       color: #333333;
     }
-    
+
     .juewei {
       width: 125rpx;
       height: 46rpx;
@@ -215,7 +215,7 @@ export default {
       font-weight: 500;
     }
   }
-  
+
   .moneySum {
     width: 710rpx;
     height: 191rpx;
@@ -224,37 +224,37 @@ export default {
     border-radius: 10rpx;
     margin: 0 auto;
     margin-bottom: 34rpx;
-    
+
     .money {
       height: 104rpx;
       width: 710rpx;
       display: flex;
       padding-top: 30rpx;
       box-sizing: border-box;
-      
+
       & view:first-child {
         border-right: 1rpx solid #E7E7E7;
       }
-      
+
       view {
         height: 74rpx;
         width: 355rpx;
         text-align: center;
         color: #333333;
-        
+
         .moneyTop {
           height: 25rpx;
           line-height: 25rpx;
           font-size: 26rpx;
           margin-bottom: 21rpx;
         }
-        
+
         .moneyBottom {
           height: 28rpx;
           line-height: 28rpx;
           font-size: 24rpx;
           color: #F43131;
-          
+
           text {
             font-size: 36rpx;
             font-weight: bold;
@@ -262,14 +262,14 @@ export default {
         }
       }
     }
-    
+
     .chakan {
       height: 87rpx;
       line-height: 87rpx;
       text-align: center;
       font-size: 24rpx;
       color: #999999;
-      
+
       .image {
         width: 12rpx;
         height: 20rpx;
@@ -277,20 +277,20 @@ export default {
       }
     }
   }
-  
+
   .myData {
     border: 1rpx solid #E7E7E7;
     width: 710rpx;
     margin-left: 21rpx;
     margin-right: 19rpx;
     margin-bottom: 20rpx;
-    
+
     .myDataTop {
       width: 710rpx;
       height: 95rpx;
       background-color: #F4F4F4;
       display: flex;
-      
+
       .td {
         width: 236rpx;
         height: 95rpx;
@@ -299,28 +299,28 @@ export default {
         font-size: 26rpx;
         color: #333333;
       }
-      
+
       .shu {
         width: 1px;
         height: 95rpx;
         background-color: #E7E7E7;
       }
     }
-    
+
     .myDataBottom {
       background-color: #FFFFFF;
-      
+
       .td {
         font-size: 24rpx !important;
         color: #F43131 !important;
-        
+
         text {
           font-size: 30rpx !important;
         }
       }
     }
   }
-  
+
   .description {
     border: 1rpx solid #E7E7E7;
     border-bottom: 0rpx;
@@ -330,13 +330,13 @@ export default {
     margin-bottom: 29rpx;
     font-size: 24rpx;
     color: #333333;
-    
+
     .t1 {
       height: 80rpx;
       width: 710rpx;
       background-color: #F4F4F4;
       display: flex;
-      
+
       .names {
         width: 98rpx;
         height: 80rpx;
@@ -345,7 +345,7 @@ export default {
         border-right: 1px solid #E7E7E7;
         border-bottom: 1px solid #E7E7E7;
       }
-      
+
       .zishen {
         width: 153rpx;
         height: 80rpx;
@@ -354,27 +354,27 @@ export default {
         border-right: 1px solid #E7E7E7;
         border-bottom: 1px solid #E7E7E7;
       }
-      
+
       .rightZ {
         border-right: 0rpx;
       }
     }
-    
+
     .t2 {
       background-color: #FFFFFF;
-      
+
       .zishen {
         color: #F43131 !important;
       }
     }
   }
-  
+
   .noun {
     width: 710rpx;
     margin-left: 21rpx;
     margin-right: 19rpx;
     padding-bottom: 50rpx;
-    
+
     .vivi {
       font-size: 26rpx;
       color: #666666;

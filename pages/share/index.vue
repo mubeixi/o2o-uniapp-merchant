@@ -1,5 +1,5 @@
 <template>
-  <div class="page-wrap">
+  <div class="page-wrap"  @click="commonClick">
     <layout-icon :style="{top:menuButtonInfo.top+'px'}" :color="immersed?'#bbb':'#fff'" @click="$back" class="left-icon" :size="immersed?26:22" :type="immersed?'iconleft-circle-solid':'iconicon-arrow-left'"></layout-icon>
 
     <div class="head" :style="{backgroundImage: 'url('+$getDomain('/static/client/share/share_top.png')+')'}">

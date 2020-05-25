@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div  @click="commonClick">
     <form action="/">
       <div class="search-wrap">
         <icon type="search" size="34rpx" class="search_icon" />
@@ -102,7 +102,7 @@ export default {
     font-size: 30rpx;
     padding: 30rpx 22rpx 46rpx 20rpx;
     box-sizing: border-box;
-    
+
     .search-input {
       float: left;
       width: 600rpx;
@@ -115,38 +115,38 @@ export default {
       padding-left: 91rpx;
       box-sizing: border-box;
     }
-    
+
     .search_icon {
       position: absolute;
       top: 46rpx;
       left: 61rpx;
     }
-    
+
     .span {
       font-size: 30rpx;
       color: #333333;
     }
   }
-  
+
   .history {
     padding: 0 20rpx;
   }
-  
+
   .title {
     display: flex;
     justify-content: space-between;
     height: 40rpx;
     align-items: center;
   }
-  
+
   .title {
     font-size: 28rpx;
     color: #333;
     font-weight: 500;
     height: 40rpx;
-    
+
     line-height: 40rpx;
-    
+
     .img {
       width: 40rpx;
       height: 40rpx;
@@ -154,11 +154,11 @@ export default {
       /*height: 100%;*/
     }
   }
-  
+
   .dels {
     width: 40rpx;
   }
-  
+
   .h_content .span {
     float: left;
     background: rgba(245, 245, 245, 1);

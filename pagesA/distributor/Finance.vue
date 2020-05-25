@@ -1,6 +1,6 @@
 <template>
-  <view class="team">
-    
+  <view class="team"  @click="commonClick">
+
     <view class="nav">
       <view class="views" :class="index==0?'checked':''" @click="change(0)">
         分销
@@ -114,7 +114,7 @@ export default {
           }
           this.totalCount = res.totalCount
         }).catch(e => {
-        
+
         })
       } else if (this.index === 1) {
         getNobiRecordList(data).then(res => {
@@ -123,7 +123,7 @@ export default {
           }
           this.totalCount = res.totalCount
         }).catch(e => {
-        
+
         })
       } else if (this.index === 2) {
         getShaRecordList(data).then(res => {
@@ -132,7 +132,7 @@ export default {
           }
           this.totalCount = res.totalCount
         }).catch(e => {
-        
+
         })
       } else if (this.index === 4) {
         getManageRecordList(data).then(res => {
@@ -148,7 +148,7 @@ export default {
           }
           this.totalCount = res.totalCount
         }).catch(e => {
-        
+
         })
       }
     },
@@ -161,7 +161,7 @@ export default {
     background-color: #F8F8F8 !important;
     min-height: 100vh;
     box-sizing: border-box;
-    
+
     .nav {
       padding: 0rpx 70rpx;
       padding-left: 0rpx;
@@ -178,7 +178,7 @@ export default {
       z-index: 999;
       top: 0rpx;
       left: 0rpx;
-      
+
       .views {
         width: 150rpx;
         height: 65rpx;
@@ -188,7 +188,7 @@ export default {
         text-align: center;
         position: relative;
       }
-      
+
       .checked {
         &:after {
           content: '';
@@ -200,13 +200,13 @@ export default {
           background-color: #F43131;
         }
       }
-      
+
       .marginLeft {
         margin-left: 107rpx;
         margin-right: 107rpx;
       }
     }
-    
+
     .order {
       width: 710rpx;
       margin: 0 auto;
@@ -218,22 +218,22 @@ export default {
       border-radius: 20rpx;
       padding-bottom: 30rpx;
       margin-bottom: 10px;
-      
+
       & > view {
         //height: 50rpx;
         line-height: 50rpx;
-        
+
         text {
           color: #666666;
         }
-        
+
         .price {
           color: #F43131;
         }
       }
     }
   }
-  
+
   .defaults {
     margin: 0 auto;
     width: 640rpx;

@@ -729,7 +729,7 @@
 
 </style>
 <template>
-  <div class="page-wrap">
+  <div class="page-wrap"  @click="commonClick">
     <div class="head-box-default" v-show="1-activeHeadOpacity"
          :style="{height:diyHeadHeight+'px',opacity:1-activeHeadOpacity}">
       <div :style="{height:menuButtonInfo.top+'px'}"></div>

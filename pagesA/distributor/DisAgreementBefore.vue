@@ -1,10 +1,10 @@
 <template>
-  <view>
+  <view  @click="commonClick">
     <div class="pro_detail">
       <!-- #ifdef H5||APP-PLUS -->
       <div v-html="formatRichTexts(pro.dis_config.Dis_Agreement)" class="p_detail_des"></div>
       <!-- #endif -->
-      
+
       <!-- #ifdef MP -->
       <rich-text :nodes="pro.dis_config.Dis_Agreement|formatRichText" class="p_detail_des"></rich-text>
       <!-- #endif -->
@@ -55,12 +55,12 @@ export default {
         match = match.replace(/style="[^"]+"/gi, '')// .replace(/style='[^']+'/gi, '');
         match = match.replace(/width="[^"]+"/gi, '')// .replace(/width='[^']+'/gi, '');
         match = match.replace(/height="[^"]+"/gi, '')// .replace(/height='[^']+'/gi, '');
-        
+
         // 图片app不支持
         // #ifdef APP-PLUS
         match = match.replace(/!*.webp/gi, '')
         // #endif
-        
+
         return match
       })
       newContent = newContent.replace(/<div[^>]*>/gi, function (match, capture) {
@@ -75,7 +75,7 @@ export default {
         match = match.replace(/width:[^;]+;/gi, 'width:100%;').replace(/width:[^;]+;/gi, 'width:100%;')
         return match
       })
-      
+
       newContent = newContent.replace(/<br[^>]*\/>/gi, '')
       newContent = newContent.replace(/\<img/gi, '<img style="width:100%;float:left;"')
       newContent = newContent.replace(/src="\/\//gi, 'src="http://')
@@ -107,11 +107,11 @@ export default {
         match = match.replace(/width:[^;]+;/gi, 'width:100%;').replace(/width:[^;]+;/gi, 'width:100%;')
         return match
       })
-      
+
       newContent = newContent.replace(/<br[^>]*\/>/gi, '')
       newContent = newContent.replace(/\<img/gi, '<img style="width:100%;float:left;"')
       // newContent = newContent.replace(/>[\s]*</gi, "><");
-      
+
       return newContent
     },
   },
@@ -133,25 +133,25 @@ export default {
     line-height: 90rpx;
     margin-top: 40rpx;
   }
-  
+
   .pro_detail {
     .p_detail_des {
       width: 100%;
       font-size: 28rpx;
       color: #999;
-      
+
       img {
         width: 100% !important;
       }
     }
   }
-  
+
   .p_detail_title {
     padding: 30rpx 20rpx;
     color: #333;
     font-size: 30rpx;
   }
-  
+
   /* 商品详情 end */
   /* 遮罩层 */
   .modal {

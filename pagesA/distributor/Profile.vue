@@ -1,5 +1,5 @@
 <template>
-  <view class="myall">
+  <view class="myall" @click="commonClick">
     <view class="user-info">
       <view class="user-avator" @click="changeAvator">
         <image class="imgs" :src="Shop_Logo" mode=""></image>
@@ -80,10 +80,10 @@ export default {
         const ossUrls = await uploadImages({ imgs }).catch(() => {
           throw Error('文件上传失败')
         })
-        
+
         this.Shop_Logo = ossUrls[0]
         this.tem_Shop_Logo = ossUrls[0]
-        
+
         // 是否可以提交
         this.isSubmit = true
       } catch (e) {
@@ -114,7 +114,7 @@ export default {
     ...mapActions(['getInitData']),
   },
   onShow: function () {
-  
+
   },
   async created () {
     const initData = initData
@@ -130,19 +130,19 @@ export default {
     background-color: #FFFFFF !important;
     min-height: 100vh;
   }
-  
+
   .user-info {
     padding-top: 47rpx;
     text-align: center;
     font-size: 26rpx;
     color: #777;
-    
+
     .user-avator {
       position: relative;
       width: 120rpx;
       height: 120rpx;
       margin: 0 auto;
-      
+
       .xiangji {
         width: 100%;
         height: 100%;
@@ -157,30 +157,30 @@ export default {
         background-size: 42rpx 34rpx;
       }
     }
-    
+
     .imgs {
       width: 100%;
       height: 100%;
       border-radius: 60rpx;
       margin-bottom: 14rpx;
     }
-    
+
     .change {
       margin-top: 14rpx;
     }
   }
-  
+
   .content {
     font-size: 30rpx;
     margin-top: 57rpx;
     color: #333;
     padding-left: 19rpx;
-    
+
     .c_1 {
       display: flex;
       align-items: center;
       margin-bottom: 39rpx;
-      
+
       .inputs {
         width: 600rpx;
         height: 62rpx;
@@ -190,11 +190,11 @@ export default {
         box-sizing: border-box;
       }
     }
-    
+
     .c_2 {
       display: flex;
       align-items: center;
-      
+
       .text-content {
         width: 600rpx;
         height: 170rpx;
@@ -206,7 +206,7 @@ export default {
       }
     }
   }
-  
+
   .submit {
     height: 80rpx;
     width: 640rpx;
@@ -218,7 +218,7 @@ export default {
     text-align: center;
     line-height: 80rpx;
   }
-  
+
   .cannot {
     background: #999;
   }

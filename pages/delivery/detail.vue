@@ -8,7 +8,7 @@
 
   .share-btn {
     background: none;
-  
+
     &::after {
       border: none;
     }
@@ -948,7 +948,7 @@
 
 </style>
 <template>
-  <div class="page-wrap">
+  <div class="page-wrap"  @click="commonClick">
     <div class="head-box-default" v-show="1-activeHeadOpacity"
          :style="{height:diyHeadHeight+'px',opacity:1-activeHeadOpacity}">
       <div :style="{height:menuButtonInfo.top+'px'}"></div>
@@ -1258,7 +1258,7 @@
               {{attrInfo.attr_text}}
             </span>
             </block>
-            
+
           </div>
           <div>
             <div v-if="attrInfo.num<1" @click="confirmAdd" class="confirm-btn" :class="{disabled:!submitFlag}">加入购物车
@@ -1462,7 +1462,7 @@ export default {
     goodsNumPlus (goodsInfo) {
       const num = goodsInfo.num ? goodsInfo.num + 1 : 1
       this.$set(goodsInfo, 'num', num)
-    
+
       // const attrInfoTmpl = {
       //   num: 0,
       //   attr_id: '', // 规格id
@@ -1484,7 +1484,7 @@ export default {
       })
     },
     async openAttrLayer (goodsInfo) {
-      
+
       this.attrInfo = { ...attrInfoTmpl } // 重置
       this.check_attr = {}// 重置
       this.product = goodsInfo
@@ -1531,7 +1531,7 @@ export default {
         })
         this.attrInfo.num = this.attrInfo.count
       }
-    
+
       this.$store.commit('delivery/ADD_GOODS', {
         num: 1,
         product: { ...this.product, ...this.attrInfo }
@@ -1563,7 +1563,7 @@ export default {
         error('购买数量不能超过库存量')
         return
       }
-    
+
       // 实际也是加减的意思
       if (action === 'add') {
         this.$store.commit('delivery/ADD_GOODS', {
@@ -1630,9 +1630,9 @@ export default {
         this.attrInfo.attr_text = attr_val.Attr_Value_text
         this.attrInfo.count = attr_val.Property_count // 选择属性的库存
         this.attrInfo.price = attr_val.Attr_Price ? attr_val.Attr_Price : this.product.Products_PriceX // 选择属性的价格
-      
+
         this.submitFlag = !(!this.check_attr)
-      
+
         const atrr_id = attr_val.Product_Attr_ID
         const isCartHas = this.$store.getters['delivery/getRow'](atrr_id)
         console.log(isCartHas, attr_val)
@@ -1645,7 +1645,7 @@ export default {
       } else {
         this.attrInfo = { ...attrInfoTmpl }
       }
-    
+
       console.log(attr_val)
       // 判断属性库存
       if (attr_val && attr_val.Property_count <= 0) {
@@ -1654,7 +1654,7 @@ export default {
       }
       this.check_attr = check_attr
       this.submitFlag = !((!this.check_attr || Object.keys(this.check_attr).length !== Object.keys(this.product.skujosn_new).length))
-    
+
       // 购买数量处理  大于最高时赋值最高值
       if (this.attrInfo.num > this.attrInfo.count) {
         this.attrInfo.num = this.attrInfo.count

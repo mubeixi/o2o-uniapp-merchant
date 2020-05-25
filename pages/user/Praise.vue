@@ -1,5 +1,5 @@
 <template>
-  <div class="praise">
+  <div class="praise"  @click="commonClick">
     <div class="praise-item" v-for="(item,index) of praise" :key="index">
       <div class="praise-item-title flex flex-vertical-c">
         <image :src="item.User_HeadImg" class="user-img m-r-8"></image>

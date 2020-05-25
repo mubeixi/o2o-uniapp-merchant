@@ -1,5 +1,5 @@
 <template>
-  <view class="all">
+  <view class="all"  @click="commonClick">
     <!-- #ifdef APP-PLUS -->
     <view class="status_bar" style="background: #f81111;"><!-- 这里是状态栏 --></view>
     <!-- #endif -->

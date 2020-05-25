@@ -1,6 +1,6 @@
 <template>
-  <view class="myall">
-    
+  <view class="myall" @click="commonClick">
+
     <view class="center">
       <view class="left">
         提现方式
@@ -13,9 +13,9 @@
         <image class="image" :src="'/static/client/right.png'|domain"></image>
       </view>
     </view>
-    
+
     <form report-submit @submit="addInfo">
-      
+
       <block v-if="data.Method_Type=='bank_card'">
         <view class="centers">
           <view class="left">
@@ -82,7 +82,7 @@ export default {
         Bank_Position: '',// 开户行
       },
       withdraw_from: 1,
-      
+
     }
   },
   onLoad (options) {
@@ -136,7 +136,7 @@ export default {
           })
         }, 1000)
       }).catch(e => {
-      
+
       })
     },
     // 获取商城提现方式
@@ -148,7 +148,7 @@ export default {
         this.data.Method_Name = this.array[0].Method_Name
         this.data.Method_ID = this.array[0].Method_ID
       }).catch(err => {
-      
+
       })
     },
     bindPickerChange (e) {
@@ -166,7 +166,7 @@ export default {
     background-color: #FFFFFF !important;
     min-height: 100vh;
   }
-  
+
   .center {
     margin-top: 19rpx;
     width: 710rpx;
@@ -176,19 +176,19 @@ export default {
     align-items: center;
     border-bottom: 1rpx solid #E3E3E3;
     justify-content: space-between;
-    
+
     .left {
       font-size: 28rpx;
       color: #333333;
       width: 125rpx;
     }
-    
+
     .right {
       font-size: 26rpx;
       color: #888888;
       display: flex;
       align-items: center;
-      
+
       .image {
         width: 15rpx;
         height: 23rpx;
@@ -196,7 +196,7 @@ export default {
       }
     }
   }
-  
+
   .centers {
     margin-top: 19rpx;
     width: 710rpx;
@@ -206,25 +206,25 @@ export default {
     align-items: center;
     border-bottom: 1rpx solid #E3E3E3;
     position: relative;
-    
+
     .left {
       width: 125rpx;
       font-size: 28rpx;
       color: #333333;
     }
-    
+
     .inputs {
       width: 570rpx;
       color: #333333;
       font-size: 24rpx;
     }
   }
-  
+
   .places {
     color: #B8B8B8;
     font-size: 24rpx;
   }
-  
+
   .addInfo {
     width: 580rpx;
     height: 76rpx;

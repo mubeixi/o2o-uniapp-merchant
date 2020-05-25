@@ -1,5 +1,5 @@
 <template>
-  <view class="myall">
+  <view class="myall"  @click="commonClick">
     <view class="img-div">
       <image :src="'/static/client/free/paySuccess.png'|domain" style="width: 100%;height: 100%;"></image>
     </view>

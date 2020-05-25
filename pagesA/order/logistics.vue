@@ -1,5 +1,5 @@
 <template>
-  <view :style="{'height':systemInfo.windowHeight+'px'}" class="all">
+  <view :style="{'height':systemInfo.windowHeight+'px'}" class="all"  @click="commonClick">
 
     <view class="wuliu box-sizing" v-if="pro.list">
       <image :src="pro.imgpath" class="image"></image>

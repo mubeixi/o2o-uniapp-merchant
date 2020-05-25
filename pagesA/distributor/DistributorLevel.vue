@@ -1,5 +1,5 @@
 <template>
-  <view class="all">
+  <view class="all"  @click="commonClick">
     <view class="top">
       <swiper class="center" :indicator-dots="false" :autoplay="false" :duration="1000" :current="inds"
               @change="change">
@@ -11,7 +11,7 @@
           <block v-else>
             <image src='/static/vipBgColor.png' class="allImg"></image>
           </block>
-          
+
           <view class="vipGrade" v-if="item.Level_ID==pro.user_info.Level_ID&&userInfo.Is_Distribute==1">
             当前等级
           </view>
@@ -24,14 +24,14 @@
     </view>
     <view style="height: 220rpx;"></view>
     <circle-title title="级别简介"></circle-title>
-    
+
     <view class="level-description">
       {{Level_Description}}
     </view>
     <view style="height: 20rpx;background-color: #F8F8F8;"></view>
-    
+
     <circle-title title="级别条件"></circle-title>
-    
+
     <view class="titleMy" v-if="dis_level.length>0">
       <image src="/static/procurement/error.png" style="height: 25rpx;width: 25rpx;margin-right: 12rpx;"></image>
       注意：以下条件需{{dis_level[inds].arrive_limit_desc}}才能达到条件
@@ -60,7 +60,7 @@
           <view class="submit" @click="goIndex" v-else>
             去消费
           </view>
-        
+
         </view>
       </block>
       <block v-if="dis_level[inds].level_rules_edit.buy_prod">
@@ -82,7 +82,7 @@
               <view class="bottoms" v-else>
                 订单确认收货后计入
               </view>
-            
+
             </view>
             <view class="submit submitMbx" v-if="dis_level[inds].level_rules_edit.buy_prod.user_data>0">
               已完成
@@ -92,7 +92,7 @@
               去购买
             </view>
           </view>
-          
+
           <view class="productList" v-if="dis_level[inds].level_rules_edit.buy_prod.value.type=='2'">
             <block v-for="(item,index) in dis_level[inds].level_rules_edit.buy_prod.data" :key="index">
               <view class="myProduct" @click="goDetail(item.Products_ID)">
@@ -114,7 +114,7 @@
           </view>
         </view>
       </block>
-      
+
       <block v-if="dis_level[inds].level_rules_edit.buy_times">
         <!-- 商品购买几次 -->
         <view class="td" v-if="dis_level[inds].level_rules_edit.buy_times.checked=='1'">
@@ -134,10 +134,10 @@
           <view class="submit" @click="goIndex" v-else>
             去购买
           </view>
-        
+
         </view>
       </block>
-      
+
       <block v-if="dis_level[inds].level_rules_edit.team_sales">
         <!-- 团队业绩 -->
         <view class="td" v-if="dis_level[inds].level_rules_edit.team_sales.checked=='1'">
@@ -157,10 +157,10 @@
           <view class="submit" v-else @click="goFenxiao()">
             去完成
           </view>
-        
+
         </view>
       </block>
-      
+
       <block v-if="dis_level[inds].level_rules_edit.direct_buy">
         <!-- 直接购买 -->
         <view class="td" v-if="dis_level[inds].level_rules_edit.direct_buy.checked=='1'">
@@ -219,7 +219,7 @@
           </block>
         </view>
       </block>
-      
+
       <block v-if="dis_level[inds].level_rules_edit.direct_sons">
         <!-- 直邀请 -->
         <view class="td" style="display: block;height: auto;"
@@ -246,9 +246,9 @@
             </block>
           </view>
         </view>
-      
+
       </block>
-      
+
       <block v-if="dis_level[inds].level_rules_edit.team_sons">
         <!-- 团队 -->
         <view class="td" style="display: block;height: auto;"
@@ -276,9 +276,9 @@
           </view>
         </view>
       </block>
-    
+
     </view>
-  
+
   </view>
 </template>
 
@@ -302,10 +302,10 @@ export default {
   },
   components: {
     CircleTitle,
-    
+
   },
   onLoad () {
-  
+
   },
   onShow () {
     this.disApplyInit()
@@ -395,13 +395,13 @@ export default {
     overflow-x: hidden;
     box-sizing: border-box;
   }
-  
+
   .top {
     width: 750rpx;
     height: 200rpx;
     background: rgba(64, 61, 61, 1);
     position: relative;
-    
+
     .goBack {
       width: 20rpx;
       height: 30rpx;
@@ -409,7 +409,7 @@ export default {
       top: 29rpx;
       left: 20rpx;
     }
-    
+
     .titles {
       color: #FFFFFF;
       font-size: 32rpx;
@@ -419,7 +419,7 @@ export default {
       height: 31rpx;
       line-height: 31rpx;
     }
-    
+
     .center {
       position: absolute;
       top: 60rpx;
@@ -427,18 +427,18 @@ export default {
       width: 750rpx;
       height: 325rpx;
       white-space: nowrap;
-      
+
       .vipFir {
         width: 665rpx !important;
         height: 325rpx !important;
         display: inline-block;
         position: relative;
-        
+
         .allImg {
           width: 100%;
           height: 100%;
         }
-        
+
         .vipGrade {
           height: 24rpx;
           font-size: 11px;
@@ -450,12 +450,12 @@ export default {
           top: 28rpx;
           left: 36rpx;
         }
-        
+
       }
     }
-    
+
   }
-  
+
   .mmp {
     position: absolute;
     top: 128rpx; //84rpx;
@@ -466,7 +466,7 @@ export default {
     display: flex;
     align-items: center;
   }
-  
+
   .level-description {
     font-size: 24rpx;
     color: #666666;
@@ -475,7 +475,7 @@ export default {
     box-sizing: border-box;
     padding: 0rpx 34rpx 36rpx 20rpx;
   }
-  
+
   .ruhe {
     width: 710rpx;
     background: rgba(255, 255, 255, 1);
@@ -484,7 +484,7 @@ export default {
     margin: 0 auto;
     margin-top: 10rpx;
     margin-bottom: 60rpx;
-    
+
     .td {
       width: 690rpx;
       margin: 0 auto;
@@ -492,21 +492,21 @@ export default {
       border-bottom: 1rpx solid #ECE8E8;
       display: flex;
       align-items: center;
-      
+
       &:last-child {
         border-bottom: 0rpx;
       }
-      
+
       .image {
         width: 65rpx;
         height: 65rpx;
         margin-left: 21rpx;
       }
-      
+
       .mbx {
         height: 65rpx;
         margin-left: 24rpx;
-        
+
         .tops {
           height: 27rpx;
           line-height: 27rpx;
@@ -514,7 +514,7 @@ export default {
           font-weight: bold;
           font-size: 28rpx;
         }
-        
+
         .bottoms {
           margin-top: 15rpx;
           height: 23rpx;
@@ -523,7 +523,7 @@ export default {
           color: #999999;
         }
       }
-      
+
       .submit {
         width: 110rpx;
         height: 45rpx;
@@ -536,13 +536,13 @@ export default {
         margin-left: auto;
         margin-right: 20rpx;
       }
-      
+
       .submitMbx {
         background-color: #dedede !important;
       }
     }
   }
-  
+
   .productList {
     width: 710rpx;
     box-sizing: border-box;
@@ -551,16 +551,16 @@ export default {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    
+
     .myProduct {
       width: 310rpx;
-      
+
       .imgPro {
         width: 310rpx;
         height: 310rpx;
         margin-bottom: 16rpx;
       }
-      
+
       .proText {
         width: 300rpx;
         height: 52rpx;
@@ -573,7 +573,7 @@ export default {
         color: #333333;
         margin-bottom: 12rpx;
       }
-      
+
       .buttonLast {
         width: 310rpx;
         display: flex;
@@ -581,17 +581,17 @@ export default {
         align-items: center;
         height: 45rpx;
         margin-bottom: 22rpx;
-        
+
         .priceAll {
           color: #F43131;
           font-size: 30rpx;
-          
+
           .priceText {
             font-size: 24rpx;
             margin-right: 8rpx;
           }
         }
-        
+
         .proDetail {
           width: 105rpx;
           height: 45rpx;
@@ -605,13 +605,13 @@ export default {
       }
     }
   }
-  
+
   .myImgs {
     width: 36rpx;
     height: 36rpx;
     margin-right: 12rpx;
   }
-  
+
   .titleMy {
     padding-left: 20rpx;
     padding-right: 35rpx;
