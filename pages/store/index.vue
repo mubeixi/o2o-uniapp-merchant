@@ -1,5 +1,5 @@
 <template>
-  <div class="page-wrap">
+  <div class="page-wrap"  @click="commonClick">
 
     <div class="store-info">
       <div class="base">
@@ -660,11 +660,11 @@ export default {
 
   },
   onLoad (options) {
-    if (!options.bid) {
+    if (!options.biz_id) {
       modal('店铺id缺失')
       return
     }
-    this.bid = options.bid
+    this.bid = options.biz_id
     this._init_func()
   },
   created () {

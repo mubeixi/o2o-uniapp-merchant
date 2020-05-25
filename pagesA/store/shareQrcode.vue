@@ -1,5 +1,5 @@
 <template>
-  <view class="page-wrap">
+  <view class="page-wrap" @click="commonClick">
 
     <image v-show="drawPosterDone" class="preview" @click="preFn" :src="current_url" mode="widthFix" />
 
@@ -154,7 +154,7 @@ export default {
         ctx.setFontSize(itemInfo.nickname.size)
         ctx.setFillStyle('#333333')
         ctx.fillText(userInfo.nickname, itemInfo.nickname.left, itemInfo.nickname.left)
-  
+
         ctx.setFontSize(itemInfo.follow.size)
         ctx.setFillStyle('#333333')
         ctx.fillText(userInfo.follow, itemInfo.follow.left, itemInfo.follow.left)

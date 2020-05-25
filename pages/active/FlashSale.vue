@@ -1,5 +1,5 @@
 <template>
-  <div class="page-wrap">
+  <div class="page-wrap"  @click="commonClick">
     <div style="background: none" :style="{height:menuButtonInfo.top+'px'}"></div>
     <div class="top flex flex-vertical-c" :style="{height:menuButtonInfo.height+'px'}">
        <layoutIcon style="position: relative;z-index: 3" @click="$back" class="m-l-15" color="#fff" type="iconicon-arrow-left"></layoutIcon>

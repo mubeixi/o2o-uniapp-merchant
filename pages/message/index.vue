@@ -1,5 +1,5 @@
 <template>
-  <div class="page-wrap">
+  <div class="page-wrap"  @click="commonClick">
     <div class="message-list">
       <div class="list-item flex" v-for="item in 6">
         <div style="position: relative">
@@ -28,7 +28,7 @@
     background-color: #fff;
     overflow: hidden;
   }
-  
+
   .message-list {
     overflow: hidden;
     white-space: nowrap;
@@ -36,14 +36,14 @@
     background-color: #fff;
     padding: 46rpx 0 0 30rpx;
   }
-  
+
   .user-avatar {
     width: 95rpx;
     height: 95rpx;
     border-radius: 10rpx;
     margin-right: 36rpx;
   }
-  
+
   .num {
     position: absolute;
     right: 20rpx;
@@ -57,31 +57,31 @@
     line-height: 34rpx;
     background-color: #ff0000;
   }
-  
+
   .message-content {
     flex: 1;
     max-width: 590rpx;
     border-bottom: 1px solid #ECECEC;
   }
-  
+
   .nick-name {
     align-items: center;
     margin-top: 6rpx;
-    
+
     .user-name {
       font-size: 34rpx;
       max-width: 500rpx;
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    
+
     .message-time {
       font-size: 26rpx;
       color: #999;
       margin-right: 32rpx;
     }
   }
-  
+
   .message {
     width: 100%;
     color: #999;
@@ -91,7 +91,7 @@
     margin-bottom: 30rpx;
     margin-top: 10rpx;
   }
-  
+
   .list-item {
     margin-bottom: 20rpx;
   }

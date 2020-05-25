@@ -1,6 +1,6 @@
 <template>
-  <div class="page-wrap">
-    
+  <div class="page-wrap"  @click="commonClick">
+
     <div class="head" id="stickyTab">
       <div class="tab-box">
         <div v-for="(imgs,idx) in photoList" @click="setActive(idx)" :key="idx" class="tab-item"
@@ -8,12 +8,12 @@
           {{imgs.cate_name}}
           <span v-if="headTabIndex === idx" class="underline"></span>
         </div>
-      
+
       </div>
     </div>
     <!--  占位-->
     <!--    <div class="h50 bg-white" v-if="headTabSticky"></div>-->
-    
+
     <swiper
       :current="headTabIndex"
       @change="indexChangeEvent"
@@ -31,7 +31,7 @@
         </scroll-view>
       </swiper-item>
     </swiper>
-  
+
   </div>
 </template>
 
@@ -89,16 +89,16 @@ export default {
     async _init_func () {
       try {
         showLoading('加载中')
-        
+
         const base = { biz_id: this.bid }
-        
+
         this.photoList = await getCategoryList({
           ...base,
           get_photo: this.pageSize,
         }, { onlyData: 1 }).catch(e => {
           throw Error(e.msg || '获取相册信息失败')
         })
-        
+
         hideLoading()
       } catch (e) {
         hideLoading()
@@ -107,10 +107,10 @@ export default {
     },
   },
   onReachBottom () {
-  
+
   },
   onShow () {
-  
+
   },
   onLoad (options) {
     if (!options.bid) {
@@ -124,10 +124,10 @@ export default {
     this._init_func()
   },
   created () {
-  
+
   },
   onReady () {
-  
+
   },
 }
 </script>
@@ -136,10 +136,10 @@ export default {
     background: #f2f2f2;
     min-height: 100vh;
   }
-  
+
   .photo-section {
     margin: 20rpx 20rpx 40rpx;
-    
+
     .php-section-title {
       .label {
         width: 6rpx;
@@ -147,31 +147,31 @@ export default {
         background: #26C78D;
         margin-right: 8px;
       }
-      
+
       .text {
         font-size: 15px;
         font-weight: bold;
       }
     }
-    
+
     .photo-list {
       display: flex;
       flex-wrap: wrap;
     }
-    
+
     .photo-item {
       width: 350rpx;
       height: 350rpx;
       margin-bottom: 10rpx;
       margin-right: 10rpx;
       @include cover-img();
-      
+
       &:nth-child(even) {
         margin-right: 0;
       }
     }
   }
-  
+
   .tab-container {
     background: #fff;
     position: fixed;
@@ -179,18 +179,18 @@ export default {
     bottom: 0px;
     width: 750rpx;
     height: auto;
-    
+
     .tab-page-wrap {
       position: absolute;
       width: 750rpx;
       height: 100%;
       overflow-x: hidden;
       overflow-y: scroll;
-      
+
     }
-    
+
   }
-  
+
   .head {
     position: sticky;
     z-index: 999;
@@ -202,24 +202,24 @@ export default {
     padding: 10px 50rpx;
     align-items: center;
     color: #333;
-    
+
     .tab-box {
-      
+
       display: block;
       overflow-y: hidden;
       overflow-x: scroll;
-      
+
       .tab-item {
         display: inline-block;
         text-align: center;
         margin-right: 40rpx;
         padding-bottom: 8px;
         position: relative;
-        
+
         &:last-child {
           margin-right: 0;
         }
-        
+
         .underline {
           visibility: hidden;
           position: absolute;
@@ -230,16 +230,16 @@ export default {
           width: 18px;
           background: $fun-green-color;
         }
-        
+
         &.active {
           color: $fun-green-color;
-          
+
           .underline {
             visibility: visible;
           }
         }
       }
     }
-    
+
   }
 </style>

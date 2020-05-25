@@ -1,5 +1,5 @@
 <template>
-  <div class="start">
+  <div class="start"  @click="commonClick">
     <!-- 商品详情部分 -->
     <div class="first">
       <div class="left">
@@ -303,7 +303,7 @@ export default {
         // groupStam = setInterval(this.stampFunc, 1000)
 
         this.prodList = await getProductList({ ...this.prod_arg }, { onlyData: 1 }).catch(e => { throw Error(e.msg || '获取产品推荐列表失败') })
-        
+
       } catch (e) {
         Exception.handle(e)
       } finally {

@@ -1,5 +1,5 @@
 <template>
-  <div class="flashSale-all" :style="{backgroundImage:'url('+$getDomain('/static/client/flash-sale-bg.jpg')+')'}">
+  <div class="flashSale-all" :style="{backgroundImage:'url('+$getDomain('/static/client/flash-sale-bg.jpg')+')'}"   @click="commonClick">
     <div class="flex flex-vertical-c seckill-title" :style="{marginTop:menuButtonInfo.top+'px'}">
       <layout-icon type="iconicon-arrow-left" size="20" color="#fff" class="back-icon m-r-2" @click="$back"></layout-icon>
       <image class="seckill-title-img m-r-10" :src="bizInfo.biz_logo"></image>

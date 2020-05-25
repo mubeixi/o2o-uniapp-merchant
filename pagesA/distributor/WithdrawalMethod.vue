@@ -1,5 +1,5 @@
 <template>
-  <view class="all">
+  <view class="all" @click="commonClick">
     <!-- #ifdef APP-PLUS -->
     <view class="status_bar" style="background: #fff"><!-- 这里是状态栏 --></view>
     <!-- #endif -->
@@ -99,7 +99,7 @@ export default {
       }
       this.User_Method_ID = item.User_Method_ID
       Storage.set('myMethod', this.User_Method_ID)
-      
+
       // 返回上一页
       this.$back()
     },
@@ -126,12 +126,12 @@ export default {
     box-sizing: border-box;
     min-height: 100vh;
   }
-  
+
   .content {
     margin: 0 auto;
     margin-top: 40rpx;
     width: 710rpx;
-    
+
     .cardInfo {
       box-sizing: border-box;
       width: 710rpx;
@@ -144,11 +144,11 @@ export default {
       position: relative;
       font-size: 28rpx;
       color: #333333;
-      
+
       &:last-child {
         margin-bottom: 0rpx;
       }
-      
+
       .image {
         width: 32rpx;
         height: 23rpx;
@@ -157,14 +157,14 @@ export default {
         right: 35rpx;
       }
     }
-    
+
   }
-  
+
   .del {
     width: 25rpx !important;
     height: 30rpx !important;
   }
-  
+
   .addMethod {
     width: 460rpx;
     height: 76rpx;

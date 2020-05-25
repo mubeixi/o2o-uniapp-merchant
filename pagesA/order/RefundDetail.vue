@@ -1,5 +1,5 @@
 <template>
-  <view class="overflow">
+  <view class="overflow" @click="commonClick">
     <view class="tops">
       <view class="imgs box-sizing">
         <image class="image" :src="prod_list.prod_img"></image>
@@ -18,7 +18,7 @@
         </view>
       </view>
     </view>
-    
+
     <view class="centers" v-if="pro">
       <view class="td">
         退款编号：{{pro.Back_ID}}
@@ -50,7 +50,7 @@
           </view>
         </view>
         <view class="lines">
-        
+
         </view>
         <block v-for="(item,index) of pro.back_detail" :key="index">
           <view class="reason">
@@ -131,7 +131,7 @@ export default {
           })
         }, 2000)
       }).catch(e => {
-      
+
       })
     },
     getBackOrderDetail () {
@@ -139,7 +139,7 @@ export default {
       if (this.store_id) {
         data.store_id = this.store_id
       }
-      
+
       getBackOrderDetail(data).then(res => {
         this.pro = res.data
         this.prod_list = res.data.prod_list[0]
@@ -154,7 +154,7 @@ export default {
   .overflow {
     background-color: #FFFFFF;
     height: 100vh;
-    
+
     .tops {
       box-sizing: border-box;
       width: 750rpx;
@@ -163,22 +163,22 @@ export default {
       padding: 20rpx;
       display: flex;
       align-items: center;
-      
+
       .imgs {
         width: 200rpx;
         height: 200rpx;
-        
+
         .image {
           width: 100%;
           height: 100%;
         }
       }
-      
+
       .textRight {
         margin-left: 20rpx;
         width: 480rpx;
         height: 200rpx;
-        
+
         .topText {
           font-size: 30rpx;
           color: #333333;
@@ -187,7 +187,7 @@ export default {
           overflow: hidden;
           padding-top: 20rpx;
         }
-        
+
         .bottomText {
           margin-top: 40rpx;
           color: red;
@@ -196,16 +196,16 @@ export default {
           justify-content: space-between;
         }
       }
-      
+
     }
-    
+
     .centers {
       width: 710rpx;
       box-sizing: border-box;
       margin-left: 20rpx;
       margin-top: 15rpx;
       background-color: #FFFFFF;
-      
+
       .td {
         font-size: 28rpx;
         color: #555555;
@@ -215,14 +215,14 @@ export default {
         border-bottom: 1rpx solid #EEEEEE;
         padding-left: 20rpx;
       }
-      
+
       .fahuo {
         height: 80rpx;
         display: flex;
         justify-content: center;
         align-items: center;
         border-bottom: 1rpx solid #EEEEEE;
-        
+
         .fahuoSubmit {
           width: 200rpx;
           height: 60rpx;
@@ -234,7 +234,7 @@ export default {
           font-size: 28rpx;
         }
       }
-      
+
       .address {
         font-size: 28rpx;
         color: #555555;
@@ -245,14 +245,14 @@ export default {
         padding-top: 20rpx;
         padding-bottom: 20rpx;
       }
-      
+
       .lines {
         border-bottom: 1rpx solid #EEEEEE;
         height: 40rpx;
         width: 100%;
         padding-left: 20rpx;
       }
-      
+
       .reason {
         font-size: 28rpx;
         color: #555555;
@@ -261,10 +261,10 @@ export default {
         padding: 10rpx 20rpx 10rpx 20rpx;
         line-height: 60rpx;
       }
-      
-      
+
+
     }
-    
+
     .orderFa {
       width: 710rpx;
       box-sizing: border-box;
@@ -272,13 +272,13 @@ export default {
       background-color: #FFFFFF;
       padding-top: 30rpx;
       padding-bottom: 20rpx;
-      
+
       .inputs {
         width: 500rpx;
         height: 60rpx;
         box-sizing: border-box;
         margin: 0 auto;
-        
+
         .input {
           width: 100%;
           height: 40rpx;
@@ -287,7 +287,7 @@ export default {
         }
       }
     }
-    
+
     .submits {
       width: 550rpx;
       height: 60rpx;

@@ -1,5 +1,5 @@
 <template>
-  <div class="page-wrap">
+  <div class="page-wrap" @click="commonClick">
     <div class="input-box">
       <input class="input" @confirm="subFn" confirm-type="done" placeholder="请输入消费金额" type="digit" v-model="payMoney" />
     </div>

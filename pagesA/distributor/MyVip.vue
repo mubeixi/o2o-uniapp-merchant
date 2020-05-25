@@ -1,5 +1,5 @@
 <template>
-  <view class="myall">
+  <view class="myall"  @click="commonClick">
     <view class="centers" v-for="(item,index) of pro " :key="index">
       <view class="imgs">
         <image class="image" :src="item.User_HeadImg"></image>
@@ -62,7 +62,7 @@ export default {
         this.totalCount = res.totalCount
       })
         .catch(e => {
-        
+
         })
     },
   },
@@ -74,7 +74,7 @@ export default {
     background-color: #FFFFFF !important;
     min-height: 100vh;
   }
-  
+
   .centers {
     width: 710rpx;
     margin: 0 auto;
@@ -84,24 +84,24 @@ export default {
     display: flex;
     align-items: center;
     padding: 20rpx 0rpx;
-    
+
     .imgs {
       width: 98rpx;
       height: 98rpx;
       border-radius: 50%;
       overflow: hidden;
-      
+
       .image {
         width: 100%;
         height: 100%;
       }
     }
-    
+
     .titles {
       margin-left: 19rpx;
       width: 100%;
       height: 98rpx;
-      
+
       .bots {
         margin-top: 15rpx;
         height: 23rpx;
@@ -109,7 +109,7 @@ export default {
         font-weight: 500;
         color: rgba(136, 136, 136, 1);
       }
-      
+
       .msg {
         margin-top: 12rpx;
         font-size: 30rpx;
@@ -118,19 +118,19 @@ export default {
         align-items: center;
         justify-content: space-between;
         height: 29rpx;
-        
+
         .tops {
           height: 29rpx;
           line-height: 29rpx;
           width: 360rpx;
           overflow: hidden;
-          
+
           text {
             font-size: 28rpx;
             margin-left: 10rpx;
           }
         }
-        
+
         .rights {
           font-size: 24rpx;
           color: #888888;
@@ -138,7 +138,7 @@ export default {
       }
     }
   }
-  
+
   .defaults {
     margin: 0 auto;
     width: 640rpx;

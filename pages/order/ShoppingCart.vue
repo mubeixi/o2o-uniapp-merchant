@@ -1,5 +1,5 @@
 <template>
-  <div class="shopping-cart">
+  <div class="shopping-cart"  @click="commonClick">
     <div class="bg-white" :style="{height:diyHeadHeight+'px'}"></div>
 
     <div class="top-box bg-white" :style="{height:diyHeadHeight+'px'}">

@@ -1,5 +1,5 @@
 <template>
-  <div class="bd">
+  <div class="bd" @click="commonClick">
     <div class="cate1">
       <div class="pro" @click="$toGoodsDetail(item)" v-for="(item,i) of pro" :key="i">
         <image :src="item.ImgPath" class="pro-img"></image>
@@ -41,11 +41,11 @@ export default {
       return
     }
     this.bid = options.bid
-    
+
     this.getProd()
   },
   onShow () {
-  
+
   },
   onReachBottom () {
     if (this.pro.length < this.count) {
@@ -53,9 +53,9 @@ export default {
       this.getProd(this.orderby)
     }
   },
-  
+
   created () {
-  
+
   },
   methods: {
     async getProd (item) {
@@ -72,7 +72,7 @@ export default {
       }).catch(e => {
       })
     },
-    
+
   },
 }
 </script>
@@ -83,31 +83,31 @@ export default {
     overflow: hidden;
     background: white;
   }
-  
+
   .defaults {
     margin: 0 auto;
     width: 640rpx;
     height: 480rpx;
     margin-top: 100rpx;
   }
-  
+
   .cate1 {
     .pro {
       display: flex;
       padding: 0 20rpx;
       margin-bottom: 20rpx;
-      
+
       .pro-img {
         margin-right: 20rpx;
         width: 270rpx;
         height: 270rpx;
       }
-      
+
       .pro_desc {
         flex: 1;
         padding-top: 29rpx;
         text-align: left;
-        
+
         .title {
           overflow: hidden;
           text-overflow: ellipsis;
@@ -118,28 +118,28 @@ export default {
           line-height: 30rpx;
           height: 60rpx;
         }
-        
+
         .price {
           margin-top: 21rpx;
         }
-        
+
         .price .text {
           font-size: 24rpx;
           font-style: normal;
         }
-        
+
         .n_price {
           color: #F43131;
           font-size: 36rpx;
           margin-right: 10rpx;
         }
-        
+
         .o_price {
           color: #afafaf;
           font-size: 28rpx;
           text-decoration: line-through;
         }
-        
+
         .sold {
           color: #666;
           font-size: 19rpx;
@@ -148,7 +148,7 @@ export default {
       }
     }
   }
-  
+
   .imgm {
     width: 36rpx;
     height: 34rpx;

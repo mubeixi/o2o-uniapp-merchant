@@ -1,5 +1,5 @@
 <template>
-  <div class="bgColor-white">
+  <div class="bgColor-white" @click="commonClick">
     <div class="msg">
       <div class="item" @click="changeAvator">
         <div class="item-name">头像</div>
@@ -56,8 +56,8 @@
         </view>
       </div>
     </div>
-  
-  
+
+
   </div>
 </template>
 
@@ -108,13 +108,13 @@ export default {
         })
         this.userInfo.User_HeadImg = info.User_HeadImg
         this.setUserInfo(this.userInfo)
-        
+
       } catch (e) {
         console.log(e.message)
       } finally {
         hideLoading()
       }
-      
+
     },
     async init () {
       this.userInfo = await getUserInfo({}, {
@@ -143,21 +143,21 @@ export default {
   .bgColor-white {
     height: 100vh;
   }
-  
+
   .msg {
     padding: 0 22rpx;
-    
+
     .item {
       display: flex;
       align-items: center;
       padding: 39rpx 0;
       border-bottom: 1px solid #E3E3E3;
-      
+
       .item-name {
         font-size: 30rpx;
         color: #333;
       }
-      
+
       .info {
         display: flex;
         align-items: center;
@@ -167,20 +167,20 @@ export default {
         justify-content: flex-end;
         font-size: 26rpx;
         color: #999999;
-        
+
         .image {
           width: 88rpx;
           height: 88rpx;
           border-radius: 44rpx;
         }
       }
-      
+
       .go {
         display: flex;
         align-items: center;
         width: 15rpx;
         height: 23rpx;
-        
+
         image {
           width: 100%;
           height: 100%;

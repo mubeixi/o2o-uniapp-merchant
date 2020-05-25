@@ -1,5 +1,5 @@
 <template>
-	<view class="all">
+	<view class="all"  @click="commonClick">
 		<!-- <page-title title="发表评论" rightHidden="true" bgcolor="#ffffff"></page-title> -->
 		<view style="height: 40rpx;width: 100%;">
 
@@ -61,130 +61,125 @@
 <script>
 import BaseMixin from '@/mixins/BaseMixin'
 
-import uniRate from "@/componets/uni-rate/uni-rate"
+import uniRate from '@/componets/uni-rate/uni-rate'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
-import {comment,getOrderDetail} from '@/api/order'
+import { comment, getOrderDetail } from '@/api/order'
 import { chooseImageByPromise, uploadImages, getArrColumn } from '@/common/helper'
 import { showLoading, hideLoading } from '@/common/fun'
 export default {
-	mixins:[BaseMixin],
-	components: {uniRate,LayoutIcon},
-	data() {
-		return {
-			productList:[],
-			commitList:[],
-			imgList:[],
-			Note:'',
-			isSubmit:true,//是否可以提交
-			Order_ID:0,//订单id
-			Score:5,//评价分数
-			isAnonymous:1,//是否匿名评价
-			isLoadong:false
-		};
-	},
-	onLoad(options) {
-		this.Order_ID=options.Order_ID;
-		this.init()
-	},
-	methods:{
-		//是否匿名评价
-		switchChange(e){
-			if(e.target.value){
-				this.isAnonymous=1;
-			}else{
-				this.isAnonymous=0;
-			}
-		},
-		//评价分数
-		show(value,index){
-			this.commitList[index].Score=value.value;
-		},
-		//图片预览
-		yulan(index,ind){
-			let arr=[]
-			for(let item of this.imgList[index].img){
-				arr.push(item)
-			}
-			uni.previewImage({
-				urls: arr,
-				indicator:'default',
-				current:ind
-			});
-		},
-		//提交
-		submit(){
-			if(this.isLoadong)return
-			this.isLoadong=true
-			if(this.isSubmit){
+  mixins: [BaseMixin],
+  components: { uniRate, LayoutIcon },
+  data () {
+    return {
+      productList: [],
+      commitList: [],
+      imgList: [],
+      Note: '',
+      isSubmit: true, // 是否可以提交
+      Order_ID: 0, // 订单id
+      Score: 5, // 评价分数
+      isAnonymous: 1, // 是否匿名评价
+      isLoadong: false
+    }
+  },
+  onLoad (options) {
+    this.Order_ID = options.Order_ID
+    this.init()
+  },
+  methods: {
+    // 是否匿名评价
+    switchChange (e) {
+      if (e.target.value) {
+        this.isAnonymous = 1
+      } else {
+        this.isAnonymous = 0
+      }
+    },
+    // 评价分数
+    show (value, index) {
+      this.commitList[index].Score = value.value
+    },
+    // 图片预览
+    yulan (index, ind) {
+      const arr = []
+      for (const item of this.imgList[index].img) {
+        arr.push(item)
+      }
+      uni.previewImage({
+        urls: arr,
+        indicator: 'default',
+        current: ind
+      })
+    },
+    // 提交
+    submit () {
+      if (this.isLoadong) return
+      this.isLoadong = true
+      if (this.isSubmit) {
+        const data = {
+          Order_ID: this.Order_ID,
+          is_anonymous: this.isAnonymous,
+          comment_context: JSON.stringify(this.commitList)
+        }
+        comment(data).then(res => {
+          uni.showToast({
+            title: res.msg,
+            icon: ''
+          })
+          setTimeout(function () {
+            uni.redirectTo({
+              url: '/pages/order/OrderList?index=4&type=shop'
+            })
+          }, 2000)
+          this.isLoadong = false
+        }).catch(e => {
+          this.isLoadong = false
+        })
+      } else {
+        uni.showToast({
+          title: '图片还没上传完成',
+          icon: 'none'
+        })
+      }
+      this.isLoadong = false
+    },
+    // 删除某张预览图片
+    delImg (index, ind) {
+      this.commitList[index].image_path.splice(ind, 1)
+      this.imgList[index].img.splice(ind, 1)
+    },
+    async addImg (index) {
+      try {
+        showLoading('loading')
+        const files = await chooseImageByPromise({ count: 9 - this.commitList[index].image_path.length }).catch(e => {
+          throw Error(e.msg)
+        })
+        const imgs = getArrColumn(files, 'path')
+        const ossUrls = await uploadImages({ imgs }).catch(() => {
+          throw Error('文件批量上传失败')
+        })
 
-					let data={
-						Order_ID:this.Order_ID,
-						is_anonymous:this.isAnonymous,
-						comment_context:JSON.stringify(this.commitList)
-					}
-					comment(data).then(res=>{
-						uni.showToast({
-							title:res.msg,
-							icon:''
-						})
-						setTimeout(function(){
-							uni.redirectTo({
-								url:"/pages/order/OrderList?index=4&type=shop"
-							})
-						},2000)
-						this.isLoadong=false
-					}).catch(e=>{
-						this.isLoadong=false
-					})
-
-			}else{
-				uni.showToast({
-					title:'图片还没上传完成',
-					icon:'none'
-				})
-			}
-			this.isLoadong=false
-		},
-		//删除某张预览图片
-		delImg(index,ind){
-			this.commitList[index].image_path.splice(ind, 1);
-			this.imgList[index].img.splice(ind, 1);
-		},
-		async addImg(index){
-			try {
-				showLoading('loading')
-				const files = await chooseImageByPromise({ count: 9-this.commitList[index].image_path.length }).catch(e => {
-					throw Error(e.msg)
-				})
-				const imgs = getArrColumn(files, 'path')
-				const ossUrls = await uploadImages({ imgs }).catch(() => {
-					throw Error('文件批量上传失败')
-				})
-
-				imgs.map(item=>{
-					this.imgList[index].img.push(item)
-				})
-				ossUrls.map(item=>{
-					this.commitList[index].image_path.push(item)
-				})
-
-
-			} catch (e) {
-				console.log(e.message)
-			} finally {
-				hideLoading()
-			}
-
-		},
-		async init(){
-			let arr=await getOrderDetail({Order_ID:this.Order_ID},{onlyData:true}).catch(e=>{error(e.msg||'获取订单失败')})
-			this.productList=arr.prod_list
-			this.productList.map(item=>{
-				this.commitList.push({Product_ID:item.prod_id,Score:5,Note:'',image_path:[]})
-				this.imgList.push({img:[]})
-			})
-		}
-	}
+        imgs.map(item => {
+          this.imgList[index].img.push(item)
+        })
+        ossUrls.map(item => {
+          this.commitList[index].image_path.push(item)
+        })
+      } catch (e) {
+        console.log(e.message)
+      } finally {
+        hideLoading()
+      }
+    },
+    async init () {
+      const arr = await getOrderDetail({ Order_ID: this.Order_ID }, { onlyData: true }).catch(e => { error(e.msg || '获取订单失败') })
+      this.productList = arr.prod_list
+      this.productList.map(item => {
+        this.commitList.push({ Product_ID: item.prod_id, Score: 5, Note: '', image_path: [] })
+        this.imgList.push({ img: [] })
+      })
+    }
+  }
 }
 </script>
 

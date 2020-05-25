@@ -1,24 +1,24 @@
 <template>
-  <view class="myall">
+  <view class="myall" @click="commonClick">
     <view class="top">
       <image class="back" :src="'/static/client/fenxiao/top.png'|domain"></image>
       <!-- #ifdef H5 -->
       <layout-icon class="go" color="#fff" size="18" type="iconicon-arrow-left"></layout-icon>
       <!-- #endif -->
-      
+
       <view class="person">
         <image class="headimg" :src="disInfo.Shop_Logo||disInfo.User_HeadImg"></image>
         <view class="nickName">
           {{disInfo.Shop_Name}}
         </view>
       </view>
-      
+
       <view class="putong">
         {{disInfo.Level_Name}}
       </view>
     </view>
     <div class="line15"></div>
-    
+
     <view class="last">
       <view class="first">
         <block v-for="(item,index) of funcModules.child" :key="index">
@@ -31,10 +31,10 @@
             <view class="haha">{{item.name}}</view>
           </view>
         </block>
-      
+
       </view>
       <view style="width: 100%;height: 1rpx;background-color: #F3F3F3;"></view>
-    
+
     </view>
   </view>
 </template>
@@ -117,17 +117,17 @@ export default {
     background-color: #FFFFFF !important;
     min-height: 100vh;
   }
-  
+
   .top {
     width: 750rpx;
     height: 233rpx;
     overflow: hidden;
     position: relative;
-    
+
     image.back {
       width: 100%;
     }
-    
+
     .msg {
       width: 45rpx;
       height: 45rpx;
@@ -135,13 +135,13 @@ export default {
       top: 25rpx;
       right: 21rpx;
     }
-    
+
     .go {
       position: absolute;
       top: 33rpx;
       left: 19rpx;
     }
-    
+
     .person {
       width: 550rpx;
       height: 92rpx;
@@ -150,24 +150,24 @@ export default {
       top: 103rpx;
       left: 21rpx;
       display: flex;
-      
+
       .headimg {
         height: 92rpx;
         width: 92rpx;
         border-radius: 50%;
       }
-      
+
       .nickName {
-        
+
         line-height: 92rpx;
         font-size: 30rpx;
         font-weight: bold;
         color: #FFFFFF;
         margin-left: 10px;
-        
+
       }
     }
-    
+
     .ziliao {
       height: 30rpx;
       font-size: 22rpx;
@@ -177,14 +177,14 @@ export default {
       position: absolute;
       top: 159rpx;
       left: 136rpx;
-      
+
       .edit {
         width: 19rpx;
         height: 19rpx;
         margin-left: 18rpx;
       }
     }
-    
+
     .putong {
       width: 152rpx;
       height: 50rpx;
@@ -198,27 +198,27 @@ export default {
       right: 0rpx;
       border-radius: 152rpx 0px 0px 152rpx;
     }
-    
+
   }
-  
+
   .tuiguang {
     height: 182rpx;
     width: 750rpx;
     padding: 50rpx 21rpx 22rpx 20rpx;
     box-sizing: border-box;
-    
+
     .title {
       height: 27rpx;
       font-size: 28rpx;
       color: #333333;
       font-weight: 500;
     }
-    
+
     .inputSec {
       margin-top: 28rpx;
       height: 55rpx;
       display: flex;
-      
+
       .inputw {
         width: 580rpx;
         height: 55rpx;
@@ -228,7 +228,7 @@ export default {
         padding-left: 18rpx;
         box-sizing: border-box;
       }
-      
+
       .textw {
         width: 100rpx;
         height: 55rpx;
@@ -241,7 +241,7 @@ export default {
       }
     }
   }
-  
+
   .last {
     width: 710rpx;
     /*height: 433rpx;*/
@@ -249,29 +249,29 @@ export default {
     margin-top: 28rpx;
     background: rgba(255, 255, 255, 1);
     box-shadow: 0px 0rpx 15rpx 0px rgba(0, 0, 0, 0.18);
-    
+
     .first, .second {
       width: 710rpx;
       height: 216rpx;
       display: flex;
       position: relative;
-      
+
       .left, .right {
         width: 50%;
         text-align: center;
         position: relative;
-        
+
         .image {
           width: 79rpx;
           height: 79rpx;
         }
-        
+
         .haha {
           font-size: 28rpx;
           color: #333333;
         }
       }
-      
+
       .left:after {
         content: '';
         position: absolute;
@@ -282,11 +282,11 @@ export default {
         background-color: #E8E8E8;
       }
     }
-    
+
     view.first .image {
       margin-top: 46rpx;
     }
-    
+
     view.second .image {
       margin-top: 38rpx;
     }

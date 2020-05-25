@@ -1,5 +1,5 @@
 <template>
-  <div class="bd">
+  <div class="bd"  @click="commonClick">
 
     <div class="top">
       <icon type="search" size="34rpx" class="search_icon" />
@@ -101,6 +101,21 @@
         </div>
       </div>
     </div>
+
+    <layout-modal ref="commentModal" :autoClose="false">
+      <div class="refuseApplyDialog">
+        <div class="c3 fz-14 modal-title">
+          是否开启定位
+        </div>
+        <div class="fz-12 m-b-20 m-t-10 c9">
+          很抱歉，该功能必须基于地理位置提供商品检索，您需开启地理位置授权才可以使用该功能
+        </div>
+        <div class="control">
+          <button @click="backSetting" class="action-btn btn-cancel">取消</button>
+          <button open-type='openSetting' bindopensetting="openSetting" class="btn-sub action-btn">确定</button>
+        </div>
+      </div>
+    </layout-modal>
   </div>
 </template>
 
@@ -108,10 +123,12 @@
 import { getProductList } from '@/api/product'
 import BaseMixin from '@/mixins/BaseMixin'
 import Storage from '@/common/Storage'
-
+import { getLocation } from '@/common/tool/location'
+import { LayoutModal } from '@/componets/layout-modal/layout-modal'
 export default {
   mixins: [BaseMixin],
   name: 'SearchResult',
+  components: { LayoutModal },
   data () {
     return {
       active: 0,
@@ -129,19 +146,24 @@ export default {
       Cate_ID: 0, // 列表id
       isSheng: 0, // 是否升序
       Products_ID: '',
-      refer: ''// 来源
+      refer: '', // 来源
+      oneHourSend: 0,
+      lat: '',
+      lng: ''
     }
   },
-  onLoad: function (option) {
-    const { refer = '' } = option
+  onLoad (option) {
+    const { refer = '', oneHourSend = 0 } = option
     this.refer = refer
+    //是否是一小时达
+    this.oneHourSend = Number(oneHourSend)
     this.inputValue = option.inputValue
     if (option.pid) {
       this.Products_ID = option.pid
     }
     this.Cate_ID = option.Cate_ID
     this.searchAll = Storage.get('searchAll')
-    this.getProd()
+    // this.getProd()
   },
   onPullDownRefresh () {
     this.active = 0
@@ -151,7 +173,8 @@ export default {
     this.getProd(this.orderby)
   },
   onShow () {
-
+    this.$refs.commentModal.close()
+    this.init()
   },
   onReachBottom () {
     if (this.pro.length < this.count) {
@@ -159,11 +182,43 @@ export default {
       this.getProd(this.orderby)
     }
   },
-
-  created () {
-
-  },
   methods: {
+    backSetting () {
+      this.$refs.commentModal.close()
+      this.$back()
+    },
+    openSetting () {
+      this.$refs.commentModal.close()
+      // #ifdef H5
+      uni.openSetting({
+        success (res) {
+          if (res.authSetting['scope.userLocation']) {
+            this.init()
+          } else {
+            this.$back()
+          }
+        }
+      })
+      // #endif
+    },
+    init () {
+      if (this.oneHourSend === 1) {
+        const that = this
+        getLocation(that).then(res => {
+          if (res.code === 0) {
+            const localInfo = res.data
+
+            this.lat = localInfo.latitude
+            this.lng = localInfo.longitude
+          }
+          this.getProd()
+        }).catch(err => {
+          this.$refs.commentModal.show()
+        })
+      } else {
+        this.getProd()
+      }
+    },
     // 跳转搜索页
     goSearch () {
       if (this.refer === 'searchPage') {
@@ -305,6 +360,11 @@ export default {
       if (this.Products_ID) {
         data.Products_ID = this.Products_ID
       }
+      if (this.oneHourSend === 1) {
+        data.one_hour_send = 1
+        data.lat = this.lat
+        data.lng = this.lng
+      }
       getProductList(data).then(res => {
         for (var item of res.data) {
           this.pro.push(item)
@@ -354,7 +414,7 @@ export default {
     left: 0rpx;
     top: 0rpx;
     background-color: #FFFFFF;
-    z-index: 999;
+    z-index: 99;
 
     .search_icon {
       position: absolute;
@@ -419,7 +479,7 @@ export default {
     top: 94rpx;
     left: 0rpx;
     background-color: #FFFFFF;
-    z-index: 999;
+    z-index: 99;
     width: 100%;
     box-sizing: border-box;
   }
@@ -739,5 +799,41 @@ export default {
         margin-top: 2px;
       }
     }
+  }
+
+  .control{
+    display: flex;
+    width: 100%;
+    align-items: center;
+    .action-btn{
+      flex: 1;
+      text-align: center;
+      height: 80rpx;
+      line-height: 80rpx;
+      font-size: 16px;
+      background-color: #FFFFFF;
+      border: 0px;
+    }
+    button::after{
+      width: 0;
+      height: 0;
+    }
+  }
+
+  .refuseApplyDialog{
+    width: 560rpx;
+    box-sizing: border-box;
+    padding-left: 40rpx;
+    padding-right: 40rpx;
+    .modal-title{
+      height: 80rpx;
+      line-height: 80rpx;
+      text-align: center;
+      font-weight: bold;
+    }
+    .btn-sub{
+      color: #1aac19;
+    }
+
   }
 </style>

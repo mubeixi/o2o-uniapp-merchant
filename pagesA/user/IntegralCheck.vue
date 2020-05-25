@@ -1,5 +1,5 @@
 <template>
-  <view v-if="loading">
+  <view v-if="loading" @click="commonClick">
     <!--  <pagetitle title="提交订单"></pagetitle> -->
     <view @click="goAddressList" class="address" v-if="giftInfo.Gift_Shipping== 1">
       <image :src="'/static/client/location.png'|domain" alt="" class="loc_icon"></image>
