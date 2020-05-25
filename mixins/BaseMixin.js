@@ -14,7 +14,7 @@ const Analysis = {
     }
   },
   onLoad (options) {
-    this.analysisExt.options =options// JSON.stringify(options)
+    this.analysisExt.options = options// JSON.stringify(options)
   },
   onShow () {
     // #ifdef H5
@@ -94,9 +94,12 @@ const Analysis = {
       }
 
       if (!emptyObject(postData, 1)) return// 距离和坐标是肯定要有的
-	  
-      Object.assign(postData, this.analysisExt.options)
 
+      Object.assign(postData, this.analysisExt.options)
+      const owner_id = Storage.get('owner_id')
+      if (owner_id) {
+        postData.owner_id = owner_id
+      }
 
       let history = Storage.get('analysis')
       if (!history) history = []
