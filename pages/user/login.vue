@@ -144,15 +144,15 @@ export default {
           title: '操作提示',
           content: '是否跳过设置密码？',
           success: (res) => {
-            if (res.confirm) uni.navigateBack()
+            if (res.confirm)this.$back()
           }
         })
         return
       }
-      uni.navigateBack()
+      this.$back()
     },
     cancel () {
-      uni.navigateBack()
+      this.$back()
     },
     formReset () {
 
@@ -335,7 +335,7 @@ export default {
         success: (res) => {
           if (res.confirm) {
             this.$refs.pwd.close()
-            uni.navigateBack()
+            this.$back()
           }
         }
       })
@@ -366,7 +366,7 @@ export default {
       // }
       // await opBizInfo(postData, { tip: 'loading' }).catch(() => {})
       // this.$refs.pwd.close()
-      // uni.navigateBack()
+      // this.$back()
     },
     loginCall (userData) {
       const { access_token, User_ID: user_id } = userData
@@ -383,8 +383,8 @@ export default {
       //   return
       // }
 
-      setTimeout(function () {
-        uni.navigateBack()
+      setTimeout(() => {
+        this.$back()
       }, 200)
     },
     setMode (mode) {

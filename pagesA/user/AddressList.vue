@@ -64,9 +64,7 @@ export default {
       // 其他地方有用到的地方，就自己{address_id}，一样用的。。
       uni.$emit('bind_select_address', addressInfo)
       // 返回上一页
-      uni.navigateBack({
-        delta: 1,
-      })
+      this.$back()
       // return
       // if (this.from_page === 'checkout') {
       //   var pages = getCurrentPages() // 获取页面堆栈

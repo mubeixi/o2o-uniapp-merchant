@@ -8,6 +8,7 @@ module.exports = {
     'standard',
   ],
   globals: {
+    getCurrentPages:'readonly',
     plus:'readonly',
     uni: 'readonly',
     Atomics: 'readonly',
