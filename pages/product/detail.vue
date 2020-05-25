@@ -1438,9 +1438,9 @@ export default {
       this.commentItem.groupid = ''
     },
     clickCommentSend (item, goupId, userId) {
-      this.commentItem = item
-      this.commentItem.groupid = goupId
-      this.commentItem.User_ID = userId
+      this.commentItem =JSON.parse(JSON.stringify(item))
+      this.commentItem.groupid = JSON.parse(JSON.stringify(goupId))
+      this.commentItem.User_ID = JSON.parse(JSON.stringify(userId))
       this.$refs.commentModal.show()
     },
     toShare () {

@@ -64,14 +64,13 @@
       @payMehtod="payMehtod"
     />
 
-
   </div>
 </template>
 
 <script>
 import { createRightsCardOrder, getRightsCard, rightsCardPay } from '@/api/customer'
 import BaseMixin from '@/mixins/BaseMixin'
-import { error } from '@/common/fun'
+import { error, toast } from '@/common/fun'
 import WzwPay from '@/componets/wzw-pay/wzw-pay'
 import Pay from '@/common/Pay'
 import { checkIsLogin } from '@/common/helper'
@@ -83,28 +82,35 @@ export default {
       inds: 0,
       rightCard: [],
       order_id: '',
-      pay_type: '',
+      pay_type: ''
     }
   },
   methods: {
     async payMehtod (item) {
-      console.log(item, 'ss')
-      let data = {
+      const data = {
         order_id: this.order_id,
-        pay_method: item.pay_type,
+        pay_method: item.pay_type
       }
-      let payCan = await rightsCardPay(data, { tip: '加载中' }).catch(e => {
+      const payCan = await rightsCardPay(data, { tip: '加载中' }).catch(e => {
         error(e.msg || '创建订单失败')
       })
-      Pay(this, item.pay_type, payCan)
+      if (payCan.data) {
+        Pay(this, item.pay_type, payCan)
+      } else {
+        toast('支付成功')
+        setTimeout(function () {
+          uni.switchTab({
+            url: '/pages/user/index'
+          })
+        }, 1000)
+      }
     },
     payFailCall (err) {
       uni.showToast({
         title: err.msg ? err.msg : '支付失败',
         icon: 'none',
-        duration: 2000,
+        duration: 2000
       })
-
     },
     paySuccessCall (res) {
       var _that = this
@@ -130,7 +136,7 @@ export default {
             } else if (res.cancel) {
 
             }
-          },
+          }
         })
         return
       }
@@ -145,15 +151,14 @@ export default {
       toast('支付成功')
 
       uni.redirectTo({
-        url: '/pages/user/index',
+        url: '/pages/user/index'
       })
-
     },
     async submit () {
-		if (!checkIsLogin(1, 1)) return
-      let order = await createRightsCardOrder({ card_id: this.rightCard[this.inds].id }, {
+      if (!checkIsLogin(1, 1)) return
+      const order = await createRightsCardOrder({ card_id: this.rightCard[this.inds].id }, {
         onlyData: true,
-        tip: '加载中',
+        tip: '加载中'
       }).catch(e => {
         error(e.msg || '创建订单失败')
       })
@@ -164,18 +169,18 @@ export default {
       this.inds = e.mp.detail.current
     },
     async init () {
-      let arr = await getRightsCard({ status: 1 }, {
+      const arr = await getRightsCard({ status: 1 }, {
         onlyData: true,
-        tip: '加载中',
+        tip: '加载中'
       }).catch(e => {
         error(e.msg || '获取权益卡错误')
       })
       this.rightCard = arr
-    },
+    }
   },
   onLoad () {
     this.init()
-  },
+  }
 }
 </script>
 
