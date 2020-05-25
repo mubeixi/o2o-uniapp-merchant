@@ -38,7 +38,7 @@ export const modal = function () {
 
 export function toHome () {
   uni.switchTab({
-    url: '/pages/index'
+    url: '/pages/index/index'
   })
 }
 

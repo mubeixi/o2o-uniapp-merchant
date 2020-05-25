@@ -49,6 +49,7 @@
 <script>
 import BaseMixin from '@/mixins/BaseMixin'
 import { getCouponList } from '@/api/common'
+import { toHome } from '@/common/fun'
 
 export default {
   mixins: [BaseMixin],
@@ -100,9 +101,7 @@ export default {
     },
     goIndex (i) {
       if (i === '0') {
-        uni.switchTab({
-          url: '/pages/index/index',
-        })
+        toHome()
       } else {
         uni.redirectTo({
           url: '/pages/classify/result?pid=' + i,

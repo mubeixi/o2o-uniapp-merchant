@@ -95,6 +95,7 @@ import {
 import {
   getPayCoupons
 } from '@/api/order'
+import { toHome } from '@/common/fun'
 
 export default {
   mixins: [BaseMixin],
@@ -134,9 +135,7 @@ export default {
   methods: {
     goIndex (i) {
       if (parseInt(i) === 0) {
-        uni.switchTab({
-          url: '/pages/index'
-        })
+        toHome()
       } else {
         this.$linkTo('/pages/search/result?pid=' + i)
       }
