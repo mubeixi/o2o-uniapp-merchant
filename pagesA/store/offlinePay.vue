@@ -46,6 +46,7 @@ export default {
   mixins: [BaseMixin],
   data () {
     return {
+      payLoding: false,
       password_input: false,
       user_pay_password: '',
       biz_id: '',
@@ -71,15 +72,21 @@ export default {
   },
   methods: {
     payFailCall (err) {
+      this.payLoding = false
       error(err.msg || err.errMsg || '支付失败')
       this.payMoney = ''
     },
     paySuccessCall () {
+      this.payLoding = false
       toast('支付成功')
       this.payMoney = ''
+      setTimeout(() => {
+        this.$linkTo('/pages/store/index?biz_id=' + this.biz_id)
+      }, 1500)
     },
     // 获取用户支付方式
     chooseType (name) {
+      this.payLoding = true
       this.pay_type = name
       this.$closePop('payChannelList')
       if (name === 'remainder_pay') {
@@ -143,11 +150,13 @@ export default {
         }
       } catch (e) {
         Exception.handle(e)
+        this.payLoding = false
       } finally {
         hideLoading()
       }
     },
     async subFn () {
+      if (this.payLoding) return
       try {
         const payMoney = this.payMoney
         if (!payMoney) throw Error('金额必填')
