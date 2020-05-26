@@ -175,8 +175,7 @@
     {
       "path": "pages/order/OrderDetail",
       "style": {
-        "navigationBarTitleText": "订单详情",
-        "navigationStyle": "custom"
+        "navigationBarTitleText": "订单详情"
       }
     },
     {

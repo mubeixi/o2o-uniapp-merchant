@@ -195,6 +195,7 @@ export default {
       this.$linkTo(this.iconList[index].link)
     },
     goOrder (index) {
+      if (!checkIsLogin(1, 1)) return
       const url = '/pages/order/OrderList?type=shop&&index=' + index
       this.$linkTo(url)
     },

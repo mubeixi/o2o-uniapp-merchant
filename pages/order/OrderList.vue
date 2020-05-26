@@ -21,7 +21,7 @@
       </div>
     </div>
     <block v-if="orderList.length>0">
-      <div class="order" v-for="(order,index) of orderList" :key="index">
+      <div class="order" v-for="(order,index) of orderList" @click="goDetail(order)" :key="index">
         <div style="background-color: #F3F3F3;height: 20rpx;width: 100%;position: absolute;left: 0rpx;"></div>
         <div style="height: 20rpx;"></div>
         <div class="bizinfo">
@@ -45,7 +45,7 @@
           </div>
         </div>
         <div class="total flex flex-justify-between">
-          <view class="ptdesc" @click="goPintuan(order)" v-if="order.Order_Type ==='pintuan' && order.teamstatus_desc">{{order.teamstatus_desc}}</view>
+          <view class="ptdesc" @click.stop="goPintuan(order)" v-if="order.Order_Type ==='pintuan' && order.teamstatus_desc">{{order.teamstatus_desc}}</view>
           <div class="text-right flex1">
             共{{order.prod_list.length}}件商品 实付：<span class="price"><span>￥</span> {{order.Order_TotalPrice}} <block
             v-if="item.Order_Shipping.Price>0">(含运费{{item.Order_Shipping.Price}}元)</block></span>
@@ -280,8 +280,8 @@ export default {
         })
       }
     },
-    goDetail (id) {
-      this.$linkTo('/pages/order/OrderDetail')
+    goDetail (item) {
+      this.$linkTo('/pages/order/OrderDetail?Order_ID=' + item.Order_ID + '&pagefrom=order')
     }
   },
   onShow () {
