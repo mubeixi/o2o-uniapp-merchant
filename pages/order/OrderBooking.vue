@@ -95,7 +95,6 @@
               <span class="flex flex-vertical-c" style="text-align:right; color: #888;">
                 <span>
                   <block v-if="postData.shipping_name[biz_id]">
-
                     {{postData.shipping_name[biz_id]}} {{(' ' + (bizList[biz_id].Order_Shipping.Price > 0 ? '￥'+bizList[biz_id].Order_Shipping.Price : '免运费'))}}
                   </block>
                   <block v-else>请选择物流</block>
@@ -817,11 +816,23 @@ export default {
       //   }
       // }
 
+      console.log(bizList)
       // 初始化的时候搞一下
       if (isInit) {
         for (var biz_id in CartList) {
           this.$set(this.postData.shipping_id, biz_id, 0)// 初始化对应数量的物流方式，默认全是0.如果是实物订单，则在提交的时候校验就好了
           this.$set(this.postData.shipping_name, biz_id, '')// 初始化对应数量的物流方式，默认全是0.如果是实物订单，则在提交的时候校验就好了
+
+          for (var bid in bizList) {
+            if (bid === biz_id) {
+              console.log(bid,biz_id,bizList[bid].Order_Shipping,bizList[bid].shipping_company)
+              // 如果该商户有选择，那么就设置上
+              if (bizList[bid].Order_Shipping.shipping_id) {
+                this.$set(this.postData.shipping_id, biz_id, bizList[bid].Order_Shipping.shipping_id)
+                this.$set(this.postData.shipping_name, biz_id, bizList[bid].shipping_company[bizList[bid].Order_Shipping.shipping_id])
+              }
+            }
+          }
 
           this.$set(this.postData.coupon_id, biz_id, '')// 优惠券
           this.$set(this.postData.use_integral, biz_id, 0)// 积分抵扣

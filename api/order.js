@@ -44,13 +44,13 @@ export const createOrderCheck = (param, options) => fetch({
 // 提交订单
 export const createOrder = (param, options) => {
   // 获取推荐人id
-  let owner_id = Storage.get('owner_id')
-  if (!owner_id) {
-    owner_id = 0
+  let share_user_id = Storage.get('owner_id')
+  if (!share_user_id) {
+    share_user_id = 0
   }
   const _param = {
     ...param,
-    owner_id
+    share_user_id
   }
 
   return fetch({
