@@ -1,5 +1,5 @@
 <template>
-  <div class="free">
+  <div class="free"  @click="commonClick">
     <div class="top-box" :style="{height:menuButtonInfo.height+menuButtonInfo.top+'px',backgroundImage:'url('+$getDomain('/static/client/active/bg.png')+')'}">
       <div :style="{paddingTop:menuButtonInfo.top+'px'}"></div>
       <div class="flex flex-vertical-c" :style="{height:menuButtonInfo.height+'px'}" style="position: relative">

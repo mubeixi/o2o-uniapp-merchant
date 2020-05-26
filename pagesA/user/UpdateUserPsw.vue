@@ -1,5 +1,5 @@
 <template>
-  <view class="wrap" :style="{height: height + 'px', background:bgcolor}">
+  <view class="wrap" :style="{height: height + 'px', background:bgcolor}" @click="commonClick">
 
     <block v-if="type != 3">
       <form report-submit @submit="save">
@@ -164,7 +164,7 @@ export default {
       })
     },
     save (e) {
-     
+
       const arg = {
         curr_psw: this.curr_psw,
         new_psw: this.new_psw,

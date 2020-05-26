@@ -1,5 +1,5 @@
 <template>
-  <view class="all">
+  <view class="all" @click="commonClick">
     <view class="content">
       <view class="bank" v-if="isShow" @click="goMethod">
         <image :src="initData.ShopLogo|domain" class="bankCard"></image>
@@ -31,7 +31,7 @@
         </view>
       </view>
       <view class="kong">
-      
+
       </view>
       <view class="tishi">
         <image class="tishi-image" :src="'/static/client/distributor/tishi.png'|domain"></image>
@@ -126,7 +126,7 @@ export default {
         that.isQing = false
         return
       }
-      
+
       if (this.price === '') {
         uni.showToast({
           title: '未输入金额',
@@ -156,7 +156,7 @@ export default {
           that.isQing = false
         }, 4000)
         this.getUserWithdrawMethod()
-        
+
         // 提现成功清除金额
         that.price = ''
         uni.showToast({
@@ -179,7 +179,7 @@ export default {
         if (this.withdraw_from === 2) {
           this.balance = res.data.user_money
         }
-        
+
         this.User_Method_ID = Storage.get('myMethod')
         Storage.remove('myMethod')
         if (res.data.list.length > 0) {
@@ -199,7 +199,7 @@ export default {
           this.User_Method_ID = res.data.list[0].User_Method_ID
         }
       }).catch(err => {
-      
+
       })
     },
     // 我的提现方式
@@ -226,14 +226,14 @@ export default {
     overflow: hidden;
     box-sizing: border-box;
   }
-  
+
   .content {
     background-color: #FFFFFF;
     width: 710rpx;
     margin: 40rpx 20rpx 0rpx 20rpx;
     padding-bottom: 85rpx;
     border-radius: 10rpx;
-    
+
     .bank {
       width: 710rpx;
       background-color: #EEEEEE;
@@ -242,25 +242,25 @@ export default {
       display: flex;
       align-items: center;
       box-sizing: border-box;
-      
+
       .bankCard {
         width: 50rpx;
         height: 50rpx;
         margin-right: 18rpx;
       }
-      
+
       .bankName {
         font-size: 28rpx;
         color: #333333;
       }
-      
+
       .right {
         width: 18rpx;
         height: 27rpx;
         margin-left: auto;
       }
     }
-    
+
     .guanli {
       font-size: 28rpx;
       color: #5E9BFF;
@@ -268,7 +268,7 @@ export default {
       display: block;
       text-align: center;
     }
-    
+
     .tiMoney {
       width: 710rpx;
       height: 25rpx;
@@ -277,7 +277,7 @@ export default {
       font-size: 26rpx;
       color: #333333;
     }
-    
+
     .inputMoney {
       width: 650rpx;
       height: 66rpx;
@@ -288,13 +288,13 @@ export default {
       font-size: 48rpx;
       color: #333333;
       padding-bottom: 30rpx;
-      
+
       .input-money-inner {
         height: 35rpx;
         line-height: 35rpx;
         display: flex;
         align-items: center;
-        
+
         .input-money-input {
           margin-left: 20rpx;
           height: 35rpx;
@@ -302,7 +302,7 @@ export default {
         }
       }
     }
-    
+
     .canTi {
       width: 670rpx;
       height: 76rpx;
@@ -310,46 +310,46 @@ export default {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      
+
       .canTiMoney {
         font-size: 22rpx;
         color: #999999;
       }
-      
+
       .allTi {
         font-size: 22rpx;
         color: #69A1FF;
       }
     }
-    
+
     .kong {
       background-color: #F8F8F8;
       width: 690rpx;
       margin: 0 auto;
       height: 20rpx;
     }
-    
+
     .tishi {
       margin-top: 27rpx;
       margin-left: 32rpx;
       margin-right: 33rpx;
       width: 645rpx;
       display: flex;
-      
+
       .tishi-image {
         width: 22rpx;
         height: 22rpx;
         margin-right: 10rpx;
         margin-top: 5rpx;
       }
-      
+
       .tishi-view {
         width: 613rpx;
         font-size: 20rpx;
         color: #999999;
       }
     }
-    
+
     .liji {
       margin-top: 98rpx;
       width: 620rpx;
@@ -363,7 +363,7 @@ export default {
       font-size: 34rpx;
       color: #FFFFFF;
     }
-    
+
     .lishi {
       height: 21rpx;
       // width: 106rpx;
@@ -373,7 +373,7 @@ export default {
       color: #999999;
       display: flex;
       align-items: center;
-      
+
       .lishi-image {
         width: 12rpx;
         height: 20rpx;

@@ -1,5 +1,5 @@
 <template>
-  <view>
+  <view @click="commonClick">
     <view class="banner">
       <image class="src" :src="'/static/clientpop_default.jpg'|domain"></image>
       <form report-submit @submit="submit">
@@ -80,7 +80,7 @@ export default {
     }
   },
   onLoad () {
-  
+
   },
   onShow () {
     this.arr = this.arr1
@@ -167,40 +167,40 @@ export default {
   .banner {
     width: 100%;
     height: 400rpx;
-    
+
     .src {
       width: 100%;
       height: 100%;
     }
   }
-  
+
   .content {
     font-size: 28rpx;
     padding: 0 30rpx;
-    
+
     .title {
       line-height: 100rpx;
       font-size: 32rpx;
       font-weight: 700;
     }
-    
+
     .item {
       .sub-title {
         font-size: 30rpx;
         font-weight: 700;
         line-height: 80rpx;
       }
-      
+
       .website {
         border: 1px solid #efefef;
         height: 70rpx;
         line-height: 70rpx;
         padding-left: 20rpx;
       }
-      
+
     }
   }
-  
+
   .msg .input {
     border: 1px solid #efefef;
     margin: 20rpx 0;
@@ -208,7 +208,7 @@ export default {
     line-height: 70rpx;
     padding-left: 60rpx;
   }
-  
+
   /*form .msg input[type='text']:nth-of-type(1) {*/
   /*	background: url(/static/client/tuiguang/center.png) no-repeat 10rpx center ;*/
   /*	background-size: 40rpx 40rpx;*/
@@ -231,7 +231,7 @@ export default {
     align-items: center;
     margin-top: 40rpx;
     color: #fff;
-    
+
     .submit, .share {
       background: #F43131;
       color: #fff;
@@ -242,7 +242,7 @@ export default {
       font-size: 28rpx;
     }
   }
-  
+
   .picker {
     position: relative;
     text-align: center;
@@ -250,7 +250,7 @@ export default {
     margin: 10rpx 0;
     height: 70rpx;
     line-height: 70rpx;
-    
+
     .down {
       position: absolute;
       right: 0;

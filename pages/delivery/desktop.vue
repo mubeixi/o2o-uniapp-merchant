@@ -1,5 +1,5 @@
 <template>
-  <div class="page-wrap">
+  <div class="page-wrap"  @click="commonClick">
     <div style="position: fixed;left: 0;top:0;width:750rpx;"
          :style="{height:menuButtonInfo.top+menuButtonInfo.height+'px'}">
       <!--状态栏-->

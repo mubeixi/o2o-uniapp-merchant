@@ -1,5 +1,5 @@
 <template>
-  <view class="profitSum">
+  <view class="profitSum" @click="commonClick">
     <view class="titleClass">
       <view class="titleLeft">
         时间：
@@ -23,7 +23,7 @@
         搜索
       </view>
     </view>
-    
+
     <view style="height: 90rpx;"></view>
     <view class="order" v-for="(item,i) of resData " :key="i">
       <view class="view">
@@ -71,7 +71,7 @@ export default {
     }
   },
   onShow () {
-  
+
   },
   onLoad (options) {
     this.getDetail()
@@ -115,7 +115,7 @@ export default {
         } else {
           this.resData = this.resData.concat(res.data.list)
         }
-        
+
         this.totalCount = res.totalCount
       })
     },
@@ -128,7 +128,7 @@ export default {
     background-color: #F8F8F8;
     padding-bottom: 40rpx;
   }
-  
+
   .order-status {
     position: fixed;
     top: 0;
@@ -140,37 +140,37 @@ export default {
     align-items: center;
     // justify-content: center;
     text-align: center;
-    
+
     .status {
       display: inline-block;
       width: 150rpx;
       /*margin-right: 30rpx;*/
       line-height: 80rpx;
-      
+
       &.active {
         color: $fun-red-color;
         border-bottom: 2px solid $fun-red-color;
       }
     }
-    
+
     & .status:nth-last-child(1) {
       margin-right: 0;
     }
   }
-  
+
   .status {
     display: inline-block;
     width: 138rpx;
     /*margin-right: 30rpx;*/
     line-height: 80rpx;
     text-align: center;
-    
+
     &.active {
       color: $fun-red-color;
       border-bottom: 2px solid $fun-red-color;
     }
   }
-  
+
   .fixed {
     position: fixed;
     top: 0;
@@ -178,7 +178,7 @@ export default {
     z-index: 10;
     background-color: #F6F6F6;
   }
-  
+
   .order {
     width: 710rpx;
     margin: 0 auto;
@@ -190,33 +190,33 @@ export default {
     border-radius: 20rpx;
     padding-bottom: 30rpx;
     margin-bottom: 20rpx;
-    
+
     .view {
       //height: 50rpx;
       line-height: 50rpx;
-      
+
       text {
         color: #666666;
       }
-      
+
       .price {
         color: #F43131;
       }
     }
   }
-  
+
   .defaults {
     margin: 0 auto;
     width: 640rpx;
     height: 480rpx;
     margin-top: 100rpx;
   }
-  
+
   /deep/ .uni-scroll-view::-webkit-scrollbar {
     /* 隐藏滚动条，但依旧具备可以滚动的功能 */
     display: none
   }
-  
+
   .titleClass {
     height: 90rpx;
     font-size: 14px;
@@ -234,7 +234,7 @@ export default {
     z-index: 99;
     padding-left: 20rpx;
     padding-right: 20rpx;
-    
+
     .titleButton {
       width: 100rpx;
       height: 60rpx;
@@ -244,22 +244,22 @@ export default {
       background-color: #F43131;
       border-radius: 10rpx;
     }
-    
+
     .titleLeft {
       width: 100rpx;
     }
-    
+
     .titleCenter {
       width: 550rpx;
       height: 60rpx;
       display: flex;
       align-items: center;
-      
+
       .centerPicker {
         margin-left: 20rpx;
         margin-right: 20rpx;
       }
-      
+
       .picker {
         width: 200rpx;
         height: 60rpx;
@@ -270,7 +270,7 @@ export default {
         padding-left: 10rpx;
         position: relative;
         border: 1px solid #cccccc;
-        
+
         .img {
           width: 30rpx;
           height: 30rpx;
@@ -280,6 +280,6 @@ export default {
         }
       }
     }
-    
+
   }
 </style>

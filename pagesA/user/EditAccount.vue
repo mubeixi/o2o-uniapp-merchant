@@ -1,5 +1,5 @@
 <template>
-	<view  class="myall">
+	<view  class="myall" @click="commonClick">
 
 		<view class="wrap">
 			<view class="item" @click="update(3)">

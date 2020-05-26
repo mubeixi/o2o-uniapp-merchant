@@ -1,9 +1,9 @@
 <template>
-  <view class="profitSum">
+  <view class="profitSum" @click="commonClick">
     <view style="height: 90rpx;margin-bottom: 10px;font-size: 14px;">
       <view class="status fixed" :class="[status === 9 ? 'active' : '']" @click="changeStatus(9)">全部</view>
       <scroll-view class="order-status" scroll-x="true" style="width: 612rpx;white-space: nowrap;margin-left: 138rpx;">
-        
+
         <block v-if="Array.isArray(show_type)">
           <block v-for="(item,index) of show_type" :key="index">
             <view class="status" :class="[status === index ? 'active' : '']" @click="changeStatus(index)">{{item}}
@@ -27,7 +27,7 @@
         <view class="status" :class="[status === 8 ? 'active' : '']" @click="changeStatus(8)">贡献奖</view> -->
       </scroll-view>
     </view>
-    
+
     <view class="order" v-for="(item,i) of resData " :key="i">
       <view class="view">
         获取时间：
@@ -36,7 +36,7 @@
       <view class="view">
         变更金额：
         <text>{{item.Record_Money}}元</text>
-      
+
       </view>
       <view class="view">
         变更后剩余：
@@ -75,7 +75,7 @@ export default {
     }
   },
   onShow () {
-  
+
   },
   onLoad (options) {
     this.getDetail()
@@ -118,7 +118,7 @@ export default {
     background-color: #F8F8F8;
     padding-bottom: 40rpx;
   }
-  
+
   .order-status {
     position: fixed;
     top: 0;
@@ -129,37 +129,37 @@ export default {
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    
+
     .status {
       display: inline-block;
       width: 150rpx;
       /*margin-right: 30rpx;*/
       line-height: 80rpx;
-      
+
       &.active {
         color: $fun-red-color;
         border-bottom: 2px solid $fun-red-color;
       }
     }
-    
+
     & .status:nth-last-child(1) {
       margin-right: 0;
     }
   }
-  
+
   .status {
     display: inline-block;
     width: 138rpx;
     /*margin-right: 30rpx;*/
     line-height: 80rpx;
     text-align: center;
-    
+
     &.active {
       color: $fun-red-color;
       border-bottom: 2px solid $fun-red-color;
     }
   }
-  
+
   .fixed {
     position: fixed;
     top: 0;
@@ -167,7 +167,7 @@ export default {
     z-index: 10;
     background-color: #F6F6F6;
   }
-  
+
   .order {
     width: 710rpx;
     margin: 0 auto;
@@ -179,28 +179,28 @@ export default {
     border-radius: 20rpx;
     padding-bottom: 30rpx;
     margin-bottom: 20rpx;
-    
+
     .view {
       //height: 50rpx;
       line-height: 50rpx;
-      
+
       text {
         color: #666666;
       }
-      
+
       .price {
         color: #F43131;
       }
     }
   }
-  
+
   .defaults {
     margin: 0 auto;
     width: 640rpx;
     height: 480rpx;
     margin-top: 100rpx;
   }
-  
+
   /deep/ .uni-scroll-view::-webkit-scrollbar {
     /* 隐藏滚动条，但依旧具备可以滚动的功能 */
     display: none

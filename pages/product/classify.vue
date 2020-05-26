@@ -1,5 +1,5 @@
 <template>
-  <div class="wrap">
+  <div class="wrap" @click="commonClick">
     <view class="search-wrap" @click="goSearch">
       <icon type="search" size="34rpx" class="search_icon" />
       <input type="text" class="search-input" name="search" placeholder="请输入商品关键词"
@@ -19,7 +19,7 @@
         <view v-for="(first,index) in classifyData" :key="index" class="box">
           <block v-if="categoryActive === index">
             <block v-for="(second,j) in first.child" :key="j">
-              
+
               <!--<block v-if="is_has_child(classifyData)">-->
               <block v-if="j==0">
                 <view v-if="first.Category_Img" class="imgTop">
@@ -35,11 +35,11 @@
                 <image :src="item.Category_Img" />
                 <view class="nav-right-txt">{{item.Category_Name}}</view>
               </view>
-              
+
               <!--</block>-->
-              
+
               <!--<block v-else>-->
-              
+
               <!--<block v-if="j==0">-->
               <!--<view class="titles">-->
               <!--<view class="titleSum">{{first.Category_Name}}</view>-->
@@ -49,20 +49,20 @@
               <!--<img  class="imgs" :src="first.Category_Img">-->
               <!--</view>-->
               <!--</block>-->
-              
+
               <!--<view :id="j==0?'first':''" class="nav-right-item"  @click="cart(second)">-->
               <!--<image :src="second.Category_Img" />-->
               <!--<view class="nav-right-txt">{{second.Category_Name}}</view>-->
               <!--</view>-->
               <!--</block>-->
-            
+
             </block>
-            
+
             <!--<view class="bottomBorder">-->
-            
+
             <!--</view>-->
           </block>
-        
+
         </view>
       </scroll-view>
       <scroll-view v-if="!is_has_child" class="nav-right" scroll-y :scroll-top="scrollTop" @scroll="scroll"
@@ -127,7 +127,7 @@ export default {
           break
         }
       }
-      
+
       return rt
     },
   },

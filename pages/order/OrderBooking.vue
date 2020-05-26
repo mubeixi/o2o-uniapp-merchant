@@ -1,5 +1,5 @@
 <template>
-  <div :class="selectStore?'over':''" class="page-wrap">
+  <div :class="selectStore?'over':''" class="page-wrap"   @click="commonClick">
     <fun-err-msg ref="refMsg" :errs.sync="formCheckResult"></fun-err-msg>
     <block v-if="orderInfo.is_virtual===0">
       <div @click="goAddressList" class="address bg-white">

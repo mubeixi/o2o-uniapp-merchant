@@ -1,5 +1,5 @@
 <template>
-  <scroll-view scroll-y class='comment-wrap'>
+  <scroll-view scroll-y class='comment-wrap'  @click="commonClick">
     <div class="navs">
       <div class="nav" :class="index == 0 ? 'active' : ''" @click="getComment(0,1)">全部</div>
       <div class="nav" :class="index == 1 ? 'active' : ''" @click="getComment(1,1)">有图</div>

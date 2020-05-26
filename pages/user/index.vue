@@ -1,5 +1,5 @@
 <template>
-  <div class="wrap">
+  <div class="wrap"  @click="commonClick">
     <div :style="{height:systemInfo.statusBarHeight+'px'}"></div>
     <div :style="{height:diyHeadHeight+'px',opacity:activeHeadOpacity}" v-if="activeHeadOpacity" class="bg-white" style="position: fixed;z-index: 2;width: 750rpx;left:0;top:0">
       <div :style="{height:systemInfo.statusBarHeight+'px'}"></div>
@@ -215,14 +215,14 @@ export default {
     })
   },
   onPageScroll (e) {
-    
+
     const { scrollTop } = e
     const h = this.diyHeadHeight + 20 // 滑到这里的时候,就透明度为1
     const opacity = scrollTop / h
     this.activeHeadOpacity = opacity > 1 ? 1 : opacity
   },
   onShow () {
-  
+
 	if(this.userInfo.Users_ID){
 		getUserInfo().then(res => {
 		  this.setUserInfo(res.data)
@@ -230,9 +230,9 @@ export default {
 		})
 		this.getOrderNum()
 	}
-	
-	
-	
+
+
+
   },
   created () {
     this._init_func()
@@ -258,7 +258,7 @@ export default {
 
   .header {
     position: relative;
-    
+
 
     .left-icon-box {
       position: fixed;

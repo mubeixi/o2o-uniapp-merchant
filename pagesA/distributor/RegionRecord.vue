@@ -1,5 +1,5 @@
 <template>
-  <view class="all">
+  <view class="all" @click="commonClick">
     <div class="defaults" v-if="data.length<=0">
       <image :src="'/static/client/defaultImg.png'|domain"></image>
     </div>
@@ -130,7 +130,7 @@ export default {
             this.data.push(item)
           }
         }).catch(e => {
-        
+
         })
       } else {
         getShaApply(data).then(res => {
@@ -139,7 +139,7 @@ export default {
             this.data.push(item)
           }
         }).catch(e => {
-        
+
         })
       }
     },
@@ -152,7 +152,7 @@ export default {
     background-color: #f8f8f8;
     min-height: 100vh;
   }
-  
+
   .main {
     width: 710rpx;
     margin: 0 auto;
@@ -160,33 +160,33 @@ export default {
     background-color: #FFFFFF;
     box-sizing: border-box;
     padding: 28rpx 0rpx 32rpx 27rpx;
-    
+
     .fir {
       height: 48rpx;
       display: flex;
       font-size: 26rpx;
       align-items: center;
-      
+
       .left {
         color: #333333;
         margin-right: 20rpx;
       }
-      
+
       .right {
         color: #888888;
       }
-      
+
       .rightt {
         color: #888888;
         margin-left: 20rpx;
       }
-      
+
       .rights {
         color: #F43131;
       }
     }
   }
-  
+
   .defaults {
     margin: 0 auto;
     width: 640rpx;

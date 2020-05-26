@@ -1,5 +1,5 @@
 <template>
-  <view class="myall">
+  <view class="myall"  @click="commonClick">
     <view style="height: 10px;width: 100%;"></view>
     <view class="three">
       <view class="haha">
@@ -72,7 +72,7 @@ export default {
           })
         }, 1000)
       }).catch(e => {
-      
+
       })
     },
     isTell () {
@@ -92,7 +92,7 @@ export default {
     background-color: #FFFFFF !important;
     min-height: 100vh;
   }
-  
+
   .three {
     height: 88rpx;
     line-height: 88rpx;
@@ -101,38 +101,38 @@ export default {
     border-bottom: 1px solid #E7E7E7;
     display: flex;
     align-items: center;
-    
+
     .haha {
       font-size: 30rpx;
       color: #333333;
       margin-right: 42rpx;
     }
-    
+
     .inputs {
       height: 88rpx;
       line-height: 88rpx;
       font-size: 28rpx;
       color: #333333;
     }
-    
+
     .place {
       font-size: 28rpx;
       color: #CAC8C8;
     }
-    
+
     .myRadio {
       height: 88rpx;
       display: flex;
-      
+
       .myRadioQ {
         height: 88rpx;
         display: flex;
         margin-right: 17rpx;
-        
+
         .radio {
           transform: scale(0.7);
         }
-        
+
         .mbx {
           font-size: 28rpx;
           color: #777777;
@@ -140,9 +140,9 @@ export default {
         }
       }
     }
-    
+
   }
-  
+
   .four {
     width: 490rpx;
     height: 75rpx;
@@ -155,7 +155,7 @@ export default {
     font-size: 30rpx;
     color: #FFFFFF;
   }
-  
+
   .five {
     height: 23rpx;
     line-height: 23rpx;
@@ -165,7 +165,7 @@ export default {
     font-size: 24rpx;
     font-weight: 500;
     color: rgba(153, 153, 153, 1);
-    
+
     .image {
       width: 12rpx;
       height: 20rpx;

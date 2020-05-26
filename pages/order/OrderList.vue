@@ -1,5 +1,5 @@
 <template>
-  <div class="page-wrap">
+  <div class="page-wrap"  @click="commonClick">
     <div style="height: 100rpx;width: 750rpx"></div>
     <div class="navs">
       <div class="nav-item" :class="index==0?'active':''" @click="changIndex(0)">全部</div>

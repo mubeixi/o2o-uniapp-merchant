@@ -1,6 +1,6 @@
 <template>
-  <view class="bgColor-white">
-    
+  <view class="bgColor-white" @click="commonClick">
+
     <input class="v_input" placeholder="修改用户名" type="text" v-if="type === 0" v-model="userInfo.User_Name" />
     <input class="v_input" placeholder="修改昵称" type="text" v-if="type === 1" v-model="userInfo.User_NickName" />
     <block v-if="type === 2">
@@ -14,8 +14,8 @@
     </block>
     <input class="v_input" placeholder="修改邮箱" type="text" v-if="type === 3" v-model="userInfo.User_Email" />
     <block v-if="type === 4">
-      
-      
+
+
       <wzw-address :area="selectAreaId[2]" :city="selectAreaId[1]" :province="selectAreaId[0]" :town="selectAreaId[3]"
                    @up="updateAddress" class="address m-l-10 flex flex-vertical-center" ref="address">
       </wzw-address>
@@ -104,7 +104,7 @@ export default {
         this.saveAddress()
         return
       }
-      
+
       if (this.loading) return
       if (this.type === 0) {
         if (!this.userInfo.User_Name) {
@@ -141,7 +141,7 @@ export default {
           })
           return
         }
-        
+
         let that = this
         uni.showModal({
           title: '提示',
@@ -171,7 +171,7 @@ export default {
                 error(e.msg)
                 that.loading = false
               })
-              
+
             } else if (res.cancel) {
               return
             }
@@ -200,7 +200,7 @@ export default {
         error(e.msg)
         this.loading = false
       })
-      
+
     },
     //修改名字
     getTitle () {
@@ -218,7 +218,7 @@ export default {
           this.title = '修改地址'
           break
       }
-      
+
       uni.setNavigationBarTitle({
         title: this.title,
       })
@@ -230,7 +230,7 @@ export default {
       }).catch(e => {
         error(e.msg || '获取信息失败')
       })
-      
+
       this.dateValue = this.userInfo.User_Birthday
       this.User_Address = this.userInfo.User_Address
       this.selectArea = this.userInfo.User_Province_name + this.userInfo.User_City_name + this.userInfo.User_Area_name + this.userInfo.User_Tow_name
@@ -240,7 +240,7 @@ export default {
         this.selectAreaId.push(Number(this.userInfo.User_Area))
         this.selectAreaId.push(Number(this.userInfo.User_Tow))
       }
-      
+
     },
   },
   onLoad (option) {
@@ -254,7 +254,7 @@ export default {
   onShow () {
     this.init()
   },
-  
+
 }
 </script>
 
@@ -264,7 +264,7 @@ export default {
     padding-top: 20px;
     box-sizing: border-box;
   }
-  
+
   .v_input {
     border: 1px solid #efefef;
     width: 90%;
@@ -276,7 +276,7 @@ export default {
     box-sizing: border-box;
     border-radius: 10rpx;
   }
-  
+
   .save {
     height: 80rpx;
     width: 90%;
@@ -287,30 +287,30 @@ export default {
     text-align: center;
     border-radius: 10rpx;
   }
-  
+
   .area-item {
     display: flex;
     align-items: center;
     padding: 30rpx 20rpx;
     border-bottom: 1px solid #e3e3e3;
     font-size: 28rpx;
-    
+
     .area-label {
       display: inline-block;
       width: 180rpx;
       margin-right: 10rpx;
     }
   }
-  
+
   .picker {
     display: flex;
-    
+
     .p_item {
       flex: 1;
       // text-align: center;
     }
   }
-  
+
   .area-text {
     width: 600rpx;
     overflow: hidden;

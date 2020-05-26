@@ -1,5 +1,5 @@
 <template>
-  <div class="page-wrap">
+  <div class="page-wrap"  @click="commonClick">
     <div class="chat-list" v-if="chatList.length>0">
       <div class="chat-item flex" @click="toRoom(idx)" v-for="(chat,idx) in chatList" :key="idx">
         <div class="left">

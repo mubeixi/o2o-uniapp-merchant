@@ -1,5 +1,5 @@
 <template>
-  <view class="myall">
+  <view class="myall" @click="commonClick">
     <form report-submit="true">
       <view class='xinxi'>
         <text class="text">收货人</text>
@@ -22,11 +22,11 @@
         <input type="text" class="input" name="Address_Detailed" v-model="MyAddress.Address_Detailed" maxlength='30'
                placeholder="请输入详细地址" />
       </view>
-      
+
       <wzw-address :area="selectAreaId[2]" :city="selectAreaId[1]" :province="selectAreaId[0]" :town="selectAreaId[3]"
                    @up="updateAddress" class="address m-l-10 flex flex-vertical-center" ref="address">
       </wzw-address>
-      
+
       <view class='xinxi set_default'>
         <checkbox-group name="Address_Is_Default" @change="changeCheck">
           <label class="checkbox label">
@@ -35,7 +35,7 @@
           </label>
         </checkbox-group>
       </view>
-      
+
       <button class="tianjia-btn" @click="formSubmit">确定</button>
     </form>
   </view>
@@ -72,7 +72,7 @@ export default {
       this.is_first_add = false
     },
     async formSubmit () {
-      
+
       if (!this.MyAddress.Address_Name) {
         uni.showToast({
           title: '请输入收货人名称',
@@ -94,7 +94,7 @@ export default {
         })
         return
       }
-      
+
       if (!this.MyAddress.Address_Detailed) {
         uni.showToast({
           title: '请填写详细的地址',
@@ -121,7 +121,7 @@ export default {
       if (this.is_first_add) {
         data.Address_Is_Default = 1
       }
-      
+
       let that = this
       if (this.Address_ID) {
         data.Address_ID = this.Address_ID
@@ -141,7 +141,7 @@ export default {
           that.$back()
         }, 1000)
       }
-      
+
     },
     updateAddress (data) {
       this.selectArea = data.str
@@ -173,9 +173,9 @@ export default {
       this.Address_ID = options.addressid
       this.load()
     }
-    
+
   },
-  
+
 }
 </script>
 
@@ -184,11 +184,11 @@ export default {
     background-color: #FFFFFF !important;
     min-height: 100vh;
   }
-  
+
   div, view {
     box-sizing: content-box;
   }
-  
+
   .xinxi {
     width: 710rpx;
     padding: 0 20rpx;
@@ -196,14 +196,14 @@ export default {
     overflow: hidden;
     margin-bottom: 20rpx;
   }
-  
+
   .xinxi .text {
     float: left;
     width: 140rpx;
     font-size: 28rpx;
     line-height: 90rpx;
   }
-  
+
   .xinxi .input {
     width: 570rpx;
     float: left;
@@ -211,7 +211,7 @@ export default {
     line-height: 90rpx;
     height: 90rpx;
   }
-  
+
   .tianjia-btn {
     width: 710rpx;
     margin: 50rpx 20rpx 20rpx;
@@ -219,7 +219,7 @@ export default {
     background: #F43131;
     border-radius: 8rpx;
   }
-  
+
   .dizhi {
     width: 710rpx;
     padding: 0 20rpx;
@@ -227,7 +227,7 @@ export default {
     overflow: hidden;
     margin-bottom: 20rpx;
   }
-  
+
   .dizhi, .xiangzhen {
     width: 710rpx;
     padding: 0 20rpx;
@@ -235,21 +235,21 @@ export default {
     overflow: hidden;
     margin-bottom: 20rpx;
   }
-  
+
   .xiangzhen .text {
     float: left;
     width: 140rpx;
     font-size: 28rpx;
     line-height: 90rpx;
   }
-  
+
   .dizhi .text {
     float: left;
     width: 140rpx;
     font-size: 28rpx;
     line-height: 90rpx;
   }
-  
+
   .dizhi .input {
     width: 180rpx;
     float: left;
@@ -258,7 +258,7 @@ export default {
     height: 90rpx;
     margin-right: 10rpx;
   }
-  
+
   .picker .view {
     width: 180rpx;
     float: left;
@@ -267,36 +267,36 @@ export default {
     height: 90rpx;
     margin-right: 10rpx;
   }
-  
-  
+
+
   .set_default {
     border-bottom: none;
   }
-  
+
   .set_default .label {
     font-size: 28rpx;
   }
-  
+
   .set_default .label .checkbox {
     transform: scale(.7);
     position: relative;
     top: -2px;
   }
-  
+
   .area-item {
     display: flex;
     align-items: center;
     padding: 30rpx 20rpx;
     border-bottom: 1px solid #f4f4f4;
     font-size: 28rpx;
-    
+
     .area-label {
       display: inline-block;
       width: 140rpx;
       margin-right: 10rpx;
     }
   }
-  
+
   .area-text {
     width: 600rpx;
     overflow: hidden;
