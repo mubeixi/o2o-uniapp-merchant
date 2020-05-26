@@ -5,7 +5,6 @@
     <!-- #endif -->
 
     <view class="top">
-
       <view :style="{backgroundImage:'url('+$getDomain('/static/client/jifenduihuan/star.png')+')'}"
             class="img-wrap">
         <view class="t-title">我的积分</view>

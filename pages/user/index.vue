@@ -63,6 +63,7 @@
       <pro-tag
         v-for="(item,idx) in proList"
         :key="idx"
+        :index="idx"
         :prod_id="item.Products_ID"
         :pro_src="item.ImgPath"
         :pro_name="item.Products_Name"
@@ -365,7 +366,7 @@ export default {
 
   .product-list {
     flex-wrap: wrap;
-    justify-content: space-around;
+    margin: 0 10rpx;
   }
   .jiaobiao {
     position: absolute;

@@ -61,7 +61,7 @@
 
     <view class="contents">
       <template v-if="recordList.length > 0">
-        <view class="mingxi" v-for="(item,index) in recordList">
+        <view class="mingxi" v-for="(item,index) in recordList" :key="index">
           <view>
             <view>
               {{item.Record_Description}}

@@ -7,7 +7,7 @@
       支付成功
     </view>
     <view class="pay-button">
-      <view @click="$linkTo('/pages/index')" class="button-all button-goon">继续购买</view>
+      <view @click="goHome" class="button-all button-goon">继续购买</view>
       <view @click="goOrder" class="button-all button-next">查看订单</view>
     </view>
     <block>
@@ -148,6 +148,9 @@ export default {
         this.hasMore = (res.totalCount / this.prod_arg.pageSize) > this.prod_arg.page
         this.prod_arg.page += 1
       }).catch(e => {})
+    },
+    goHome () {
+      toHome()
     },
     goOrder () {
       // 去订单列表

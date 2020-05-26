@@ -1,5 +1,5 @@
 <template>
-  <div class="product" @click="openNext">
+  <div class="product" @click="openNext" :style="{marginRight:index%2===0?'50rpx':'0rpx'}">
     <image mode="heightFix" :src="pro_src" class="pro-img"></image>
     <div class="pro-name">{{pro_name}}</div>
     <div class="pro-price flex">
@@ -19,6 +19,9 @@ export default {
     prod_id: {
       type: String,
       default: ''
+    },
+    index: {
+      type: Number
     },
     pro_src: {
       type: String,
