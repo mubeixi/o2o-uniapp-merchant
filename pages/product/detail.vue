@@ -1090,7 +1090,7 @@
 
     <layout-modal ref="commentModal">
       <div class="refuseApplyDialog">
-        <textarea class="reason" @input="bingReasonInput" :value="commentValue" placeholder-style="color:#999"
+        <textarea :disabled="!commentModalShow" class="reason" @input="bingReasonInput" :value="commentValue" placeholder-style="color:#999"
                   placeholder="请输入评论" auto-height />
         <div class="control">
           <div @click="cancelComent" class="action-btn btn-cancel">取消</div>
@@ -1191,6 +1191,7 @@ export default {
         is_end: true
       },
       mode: 'default',
+      commentModalShow:false,
       flashsale_id: '',
       spike_good_id: '', // 限时抢购专用
       tabClick: false,
@@ -1396,6 +1397,7 @@ export default {
     cancelComent () {
       this.commentValue = ''
       this.$closePop('commentModal')
+      this.commentModalShow = false
     },
     async sureComment () {
       if (!checkIsLogin(1, 1)) return
@@ -1415,10 +1417,12 @@ export default {
         toast('评论成功')
         this.commentValue = ''
         this.$closePop('commentModal')
+        this.commentModalShow = false
         this.getCommit()
       }).catch(e => {
         error(e.msg || '评论失败')
         this.$closePop('commentModal')
+        this.commentModalShow = false
       })
     },
     async getCommit () {
@@ -1435,16 +1439,18 @@ export default {
     clickComment (item) {
       this.commentItem = item
       this.$refs.commentModal.show()
+      this.commentModalShow = true
       this.commentItem.groupid = ''
     },
     clickCommentSend (item, goupId, userId) {
-      this.commentItem =JSON.parse(JSON.stringify(item))
+      this.commentItem = JSON.parse(JSON.stringify(item))
       this.commentItem.groupid = JSON.parse(JSON.stringify(goupId))
       this.commentItem.User_ID = JSON.parse(JSON.stringify(userId))
       this.$refs.commentModal.show()
+      this.commentModalShow = true
     },
     toShare () {
-		if (!checkIsLogin(1, 1)) return
+      if (!checkIsLogin(1, 1)) return
       let url = '/pages/share/go?prod_id=' + this.prod_id
 
       // 限时抢购
@@ -1516,8 +1522,18 @@ export default {
           cart_key: 'DirectBuy' // 购物车类型   CartList（加入购物车）、DirectBuy（立即购买）、PTCartList（不能加入购物车）
           // productDetail_price: sku.price
         }
-        if (this.postData.active) {
-          postData.active = this.postData.active
+        // if (this.postData.active) {
+        //   postData.active = this.postData.active
+        // }
+        // 限时抢购
+        if (this.mode === 'spike' && this.spike_good_id) {
+          postData.active_id = this.spike_good_id
+          postData.active = 'spike'
+        }
+        // 秒杀
+        if (this.mode === 'seckill' && this.flashsale_id) {
+          postData.active_id = this.flashsale_id
+          postData.active = 'flashsale'
         }
         if (this.mode === 'seckill') {
           if (!this.postData.active_id) {
@@ -1546,6 +1562,17 @@ export default {
         qty: sku.qty,
         attr_id: sku.id
       }
+
+      // 限时抢购
+      if (this.mode === 'spike' && this.spike_good_id) {
+        data.active_id = this.spike_good_id
+        data.active = 'spike'
+      }
+      // 秒杀
+      if (this.mode === 'seckill' && this.flashsale_id) {
+        data.active_id = this.flashsale_id
+        data.active = 'flashsale'
+      }
       updateCart(data).then(res => {
         toast('加入购物车成功')
       }).catch(e => {
@@ -1571,6 +1598,18 @@ export default {
           cart_key: 'DirectBuy', // 购物车类型   CartList（加入购物车）、DirectBuy（立即购买）、PTCartList（不能加入购物车）
           productDetail_price: sku.price
         }
+
+        // 限时抢购
+        if (this.mode === 'spike' && this.spike_good_id) {
+          postData.active_id = this.spike_good_id
+          postData.active = 'spike'
+        }
+        // 秒杀
+        if (this.mode === 'seckill' && this.flashsale_id) {
+          postData.active_id = this.flashsale_id
+          postData.active = 'flashsale'
+        }
+
         await updateCart(postData).catch(e => {
           throw Error(e.msg || '下单失败')
         })
@@ -1608,7 +1647,7 @@ export default {
       }
     },
     async shareFunc (channel) {
-		if (!checkIsLogin(1, 1)) return
+      if (!checkIsLogin(1, 1)) return
       const _self = this
       const path = 'pages/product/detail?prod_id=' + this.prod_id
       const front_url = this.initData.front_url

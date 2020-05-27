@@ -63,7 +63,7 @@ import { getProductList } from '@/api/product'
 import {
   getShareView
 } from '@/api/customer'
-import { hideLoading, modal, showLoading } from '@/common/fun'
+import { error, hideLoading, modal, showLoading } from '@/common/fun'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import BaseMixin from '@/mixins/BaseMixin'
 
@@ -104,7 +104,14 @@ export default {
         }).catch(e => { throw Error(e.msg || '获取分享赚概览信息错误') })
         hideLoading()
       } catch (e) {
-        modal(e.message)
+        error(e.message)
+        // 回退一下
+        setTimeout(() => {
+          this.$back()
+        }, 1000)
+        
+      }finally {
+        hideLoading()
       }
     }
   },

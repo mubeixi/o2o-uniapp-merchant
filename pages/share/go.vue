@@ -178,22 +178,30 @@ export default {
         ctx.setFillStyle('#E41515')
 
         var price = this.detailData.Products_PriceX
-        if (this.mode === 'spike' || this.mode === 'seckill') {
-          price = this.detailData.price
-        }
         if (this.detailData.is_pintuan) {
           price = this.detailData.pintuan_pricex
+        }
+        if (this.mode === 'spike' || this.mode === 'seckill') {
+          price = this.detailData.price
         }
 
         ctx.fillText(`￥${price}`, 161, 739)
 
+        var Products_PriceY = this.detailData.Products_PriceY
+        if (this.mode === 'spike') {
+          Products_PriceY = this.detailData.Products_PriceX
+        }
+        if (this.mode === 'seckill') {
+          Products_PriceY = this.detailData.Products_PriceX
+        }
+
         ctx.setFillStyle('#999')
-        ctx.fillText(`￥${this.detailData.Products_PriceY}`, 286, 739)
+        ctx.fillText(`￥${Products_PriceY}`, 286, 739)
 
         ctx.setFillStyle('#eeeeee')
         ctx.moveTo(286, 732)
         ctx.setLineWidth(1)
-        ctx.lineTo(286 + (`￥${this.detailData.Products_PriceY}`).length * 16, 732)
+        ctx.lineTo(286 + (`￥${Products_PriceY}`).length * 16, 732)
         ctx.stroke()
 
         // 右侧
@@ -337,7 +345,7 @@ export default {
 
         const productShareInfo = await getProductSharePic({ product_id: this.prod_id }, { noUid: 1 }).then(res => res.data).catch(err => { throw Error(err.msg || '获取商品分享信息错误') })
         console.log(productShareInfo)
-  
+
         this.shareInfo = productShareInfo
         // this.shareInfo = await getBizShare({
         //   ...data,
@@ -357,7 +365,17 @@ export default {
   },
   // 自定义小程序分享
   onShareAppMessage () {
-    const path = '/pages/product/detail?prod_id=' + this.prod_id
+    var path = '/pages/product/detail?prod_id=' + this.prod_id
+
+    // 限时抢购
+    if (this.mode === 'spike' && this.spike_good_id) {
+      path += `&mode=spike&spike_good_id=${this.spike_good_id}`
+    }
+    // 秒杀
+    if (this.mode === 'seckill' && this.flashsale_id) {
+      path += `&mode=seckill&flashsale_id=${this.flashsale_id}`
+    }
+
     const shareObj = {
       title: this.detailData.Products_Name,
       desc: this.detailData.Products_BriefDescription,

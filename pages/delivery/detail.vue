@@ -1333,7 +1333,7 @@ import {
   getCountdownFunc,
   getProductThumb,
   mergeObject,
-  numberSort,
+  numberSort
 } from '@/common/helper'
 import uParse from '@/componets/gaoyia-parse/parse'
 import Storage from '@/common/Storage'
@@ -1369,7 +1369,7 @@ export default {
       skujosn_new: null,
       skuvaljosn: null,
       check_attr: {},
-      product:{},
+      product: {},
       submitFlag: false,
       attrInfo: {
         num: 0,
@@ -1484,7 +1484,6 @@ export default {
       })
     },
     async openAttrLayer (goodsInfo) {
-
       this.attrInfo = { ...attrInfoTmpl } // 重置
       this.check_attr = {}// 重置
       this.product = goodsInfo
@@ -1517,7 +1516,7 @@ export default {
     addCart () {
       if (this.productInfo.skujosn) {
         this.openAttrLayer(this.productInfo)
-      }else{
+      } else {
         this.goodsNumPlus(this.productInfo)
       }
     },
@@ -1916,6 +1915,7 @@ export default {
       })
     },
     buyNow () {
+      if (!checkIsLogin(1, 1)) return
       if (this.totalPrice > 0 && this.totalPrice > this.bizInfo.city_express_config.limit_config.start_send_money) {
         this.$linkTo('/pages/order/OrderBooking?cart_key=waimai&biz_id=' + this.productInfo.biz_id)
       } else {

@@ -88,7 +88,7 @@
             <image @click="toOffinePay" mode="scaleToFill" class="feature-item" :src="'/static/client/store/pay.png'|domain"></image>
             <image @click="$linkTo('/pages/product/apply?bid='+bid)" mode="scaleToFill" class="feature-item"
                    :src="'/static/client/store/join.png'|domain"></image>
-            <image @click="$linkTo('/pagesA/user/VipList?bid='+bid)" mode="scaleToFill" class="feature-item"
+            <image @click="toVip" mode="scaleToFill" class="feature-item"
                    :src="'/static/client/store/member.png'|domain"></image>
           </div>
 
@@ -449,6 +449,11 @@ export default {
     toShare () {
       if (checkIsLogin(1, 1)) {
         this.$linkTo(`/pagesA/store/shareQrcode?biz_id=${this.bid}`)
+      }
+    },
+    toVip(){
+      if (checkIsLogin(1, 1)) {
+        this.$linkTo('/pagesA/user/VipList?bid='+bid)
       }
     },
     toOffinePay () {

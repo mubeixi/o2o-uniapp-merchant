@@ -1,10 +1,10 @@
 <template>
   <div @click="commonClick" class="myall">
     <block v-if="2">
-      <div class="checkinfo-box line10 padding15" v-if="orderInfo.Order_IsVirtual == 1 && (orderInfo.Order_Status==2)">
+      <div class="checkinfo-box p-15 m-b-10" v-if="orderInfo.Order_IsVirtual == 1 && (orderInfo.Order_Status==2)">
         <div class="check-orderno ">
-          <div class="font36" style="color: #555;font-weight: 300">{{orderInfo.Order_Code}}</div>
-          <div class="graytext2 font12">兑换码</div>
+          <div style="color: #555;font-weight: 300;font-size: 36px;">{{orderInfo.Order_Code}}</div>
+          <div class="c9 fz-12">兑换码</div>
         </div>
         <div @click="showQrImg" class="check-qrcode text-right" v-if="qrVal">
           <wzw-qrcode
@@ -18,7 +18,7 @@
             ref="qrcode2"
             unit="px"
           />
-          <div class="graytext2 font12">请出示此二维码核销</div>
+          <div class="c9 fz-12">请出示此二维码核销</div>
         </div>
       </div>
     </block>
@@ -32,15 +32,15 @@
         </div>
       </div>
     </div>
-    <div class="state bgwhite" v-if="orderInfo.Order_Status == 1">
+    <div class="state  bg-white" v-if="orderInfo.Order_Status == 1">
       <layout-icon type="icontime" size="24"></layout-icon>
       <span class="state-desc">等待买家付款</span>
     </div>
-    <view class="address bgwhite line10 order-id">
+    <view class="address  bg-white m-b-10 order-id">
       <view>订单号：{{orderInfo.Order_ID}}</view>
       <view>下单时间: {{orderInfo.Order_CreateTime | formatTime('YYYY-MM-DD hh:mm:ss',1)}}</view>
     </view>
-    <div class="address bgwhite line10" v-if="orderInfo.Order_IsVirtual == 0 ">
+    <div class="address bg-white m-b-10" v-if="orderInfo.Order_IsVirtual == 0 ">
       <layout-icon class="m-r-15" type="iconicon-address" size="24"></layout-icon>
       <div class="add_msg">
         <div class="name">收货人：{{orderInfo.Address_Name}} <span>{{orderInfo.Address_Mobile}}</span></div>
@@ -50,7 +50,7 @@
         </div>
       </div>
     </div>
-    <div class="order_msg bgwhite">
+    <div class="order_msg bg-white">
       <div class="biz_msg">
         <image :src="orderInfo.ShopLogo|domain" alt="" class="biz_logo" />
         <span class="biz_name">{{orderInfo.ShopName}}</span>
@@ -65,7 +65,7 @@
         </div>
       </div>
     </div>
-    <div class="other  bgwhite" v-if="orderInfo.Order_IsVirtual == 0">
+    <div class="other  bg-white" v-if="orderInfo.Order_IsVirtual == 0">
       <div class="bd">
         <div class="o_title">
           <span>运费选择</span>
@@ -76,7 +76,7 @@
         </div>
       </div>
     </div>
-    <view class="other bgwhite" v-if="orderInfo.Order_IsRecieve == 1">
+    <view class="other bg-white" v-if="orderInfo.Order_IsRecieve == 1">
       <view class="bd">
         <view class="o_title">
           <span>卡密</span>
@@ -84,7 +84,7 @@
         </view>
       </view>
     </view>
-    <view class="other bgwhite" v-if="orderInfo.Order_IsVirtual == 1">
+    <view class="other  bg-white" v-if="orderInfo.Order_IsVirtual == 1">
       <view class="bd">
         <view class="o_title">
           <span>购买人姓名</span>
@@ -92,7 +92,7 @@
         </view>
       </view>
     </view>
-    <view class="other bgwhite" v-if="orderInfo.Order_IsVirtual == 1">
+    <view class="other  bg-white" v-if="orderInfo.Order_IsVirtual == 1">
       <view class="bd">
         <view class="o_title">
           <span>购买人手机号</span>
@@ -100,7 +100,7 @@
         </view>
       </view>
     </view>
-    <div class="other bgwhite" v-if="orderInfo.Order_Type=='pintuan'||orderInfo.Order_Type=='shop'">
+    <div class="other  bg-white" v-if="orderInfo.Order_Type=='pintuan'||orderInfo.Order_Type=='shop'">
       <div class="bd">
         <div class="o_title">
           <span>优惠券选择</span>
@@ -108,7 +108,7 @@
         </div>
       </div>
     </div>
-    <div class="other bgwhite">
+    <div class="other  bg-white">
       <div class="bd">
         <div class="o_title">
           <span>积分抵扣</span>
@@ -117,7 +117,7 @@
       </div>
     </div>
     <block v-if="orderInfo.Order_Status == 1">
-      <div class="other bgwhite" v-if="orderInfo.is_use_money && orderInfo.is_use_money == 1">
+      <div class="other  bg-white" v-if="orderInfo.is_use_money && orderInfo.is_use_money == 1">
         <div class="bd">
           <div class="o_title">
             <span>是否使用余额</span>
@@ -129,7 +129,7 @@
                  v-model="user_money" />
         </div>
       </div>
-      <div class="other bgwhite" v-if="initData.invoice_switch == 1">
+      <div class="other  bg-white" v-if="initData.invoice_switch == 1">
         <div class="bd">
           <div class="o_title">
             <span>是否开具发票</span>
@@ -142,7 +142,7 @@
                  v-if="openInvoice" />
         </div>
       </div>
-      <div class="other bgwhite">
+      <div class="other  bg-white">
         <div class="bd" style="border-bottom: none">
           <div class="o_title  words">
             <span>买家留言</span>
@@ -152,7 +152,7 @@
       </div>
     </block>
     <block v-else>
-      <div class="other bgwhite" v-if="orderInfo.Order_Yebc > 0">
+      <div class="other  bg-white" v-if="orderInfo.Order_Yebc > 0">
         <div class="bd">
           <div class="o_title">
             <span>使用余额:</span>
@@ -160,7 +160,7 @@
           </div>
         </div>
       </div>
-      <div class="other bgwhite" v-if="orderInfo.Order_NeedInvoice == 1">
+      <div class="other  bg-white" v-if="orderInfo.Order_NeedInvoice == 1">
         <div class="bd">
           <div class="o_title">
             <span>发票信息</span>
@@ -168,7 +168,7 @@
           </div>
         </div>
       </div>
-      <div class="other bgwhite">
+      <div class="other  bg-white">
         <div class="bd" style="border-bottom: none">
           <div class="o_title  words">
             <span>买家留言</span>
@@ -275,7 +275,7 @@ import { cancelOrder, confirmOrder, getOrderDetail } from '@/api/order'
 import BaseMixin from '@/mixins/BaseMixin'
 import { GetQueryByString, isWeiXin } from '@/common/helper'
 import Storage from '@/common/Storage'
-import { toast } from '@/common/fun'
+import { modal, toast } from '@/common/fun'
 import LayoutLayer from '@/componets/layout-layer/layout-layer'
 import WzwPay from '@/componets/wzw-pay/wzw-pay'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
@@ -494,6 +494,9 @@ export default {
             // _self.$refs.popupLayer.show();
           })
         }
+      }).catch(err => {
+        modal(err.message)
+        this.$back()
       })
     },
     // 用户重新更改了余额
@@ -661,7 +664,8 @@ export default {
   }
 
   .myall {
-    /*background-color: #f8f8f8;*/
+    min-height: 100vh;
+    background-color: #f8f8f8;
   }
 
   .mxdetail {
