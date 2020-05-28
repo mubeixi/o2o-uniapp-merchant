@@ -1149,7 +1149,7 @@
 <!--        </div>-->
 <!--      </div>-->
 
-      <div id="section3" class="section-store-info flex flex-vertical-c"  v-show="isReady" @click="$linkTo('/pages/store/index?bid='+productInfo.biz_id)">
+      <div id="section3" class="section-store-info flex flex-vertical-c"  v-show="isReady" @click="$linkTo('/pages/store/index?biz_id='+productInfo.biz_id)">
         <image :src="store[0].biz_logo" style="width: 96rpx;height: 96rpx;margin-right: 28rpx;border-radius: 50%;" v-if="store[0].biz_logo"></image>
         <div class="store-info-title">{{store[0].biz_shop_name}}</div>
         <div class="into-btn c9 fz-14">进店逛逛</div>
@@ -1776,7 +1776,7 @@ export default {
       this.$linkTo(url)
     },
     goStore (bid) {
-      const url = '/pages/store/index?bid=' + bid
+      const url = '/pages/store/index?biz_id=' + bid
       this.$linkTo(url)
     },
     bingReasonInput (e) {

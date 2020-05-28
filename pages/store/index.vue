@@ -677,7 +677,7 @@ export default {
   },
   // 自定义小程序分享
   onShareAppMessage () {
-    const path = '/pages/store/index?bid=' + this.bid
+    const path = '/pages/store/index?biz_id=' + this.bid
     const shareObj = {
       title: this.storeInfo.biz_shop_name,
       desc: this.storeInfo.intro,

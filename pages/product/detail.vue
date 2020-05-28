@@ -1388,7 +1388,7 @@ export default {
       this.$linkTo(`/pagesA/support/Im?type=biz&tid=${this.productInfo.biz_id}&productId=${this.prod_id}`)
     },
     goStore (bid) {
-      const url = '/pages/store/index?bid=' + bid
+      const url = '/pages/store/index?biz_id=' + bid
       this.$linkTo(url)
     },
     bingReasonInput (e) {

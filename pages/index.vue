@@ -329,7 +329,7 @@
                 </div>
 
                 <div class="store-top-item" v-for="(merchant,idx) in merchantList" :key="idx"
-                     @click="$linkTo('/pages/store/index?biz_id='+merchant.id)">
+                     @click="$linkTo('?biz_id='+merchant.id)">
                   <div class="store-info flex flex-vertical-c flex-justify-between">
                     <div class="p-l-10 p-r-10 flex flex-vertical-c">
                       <image class="logo" :src="merchant.biz_logo"></image>

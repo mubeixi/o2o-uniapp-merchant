@@ -140,7 +140,7 @@ export default {
   },
   methods: {
     goStore (bid) {
-      linkToEasy('/pages/store/index?bid=' + bid)
+      linkToEasy('/pages/store/index?biz_id=' + bid)
     },
 
     changeActive (index) {
