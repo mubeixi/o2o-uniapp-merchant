@@ -11,11 +11,11 @@
       <view @click="goOrder" class="button-all button-next">查看订单</view>
     </view>
     <block>
-      <block>
+      <block v-if="couponList.length>0">
         <view class="pay-succ-last">
           本次购物可享权益
         </view>
-        <view class="youhuijuan" v-for="(item,idx) in couponList">
+        <view class="youhuijuan" v-for="(item,idx) in couponList" :key="idx">
           <image class="allImg" :src="'/static/client/free/mbxcoupon.png'|domain"></image>
           <view class="infoImg">
             <image class="image" :src="item.Coupon_PhotoPath"></image>
@@ -43,12 +43,12 @@
           </view>
         </view>
       </block>
-      <block>
+      <block v-else>
         <!-- 猜你喜欢 -->
         <div class=" container">
           <div class="fenge"><span class="red"></span><span class="caini">猜你喜欢</span><span class="red"></span></div>
           <div class="prolist">
-            <div class="pro-item" v-for="(prod,idx) in prodList" :key="idx">
+            <div class="pro-item" v-for="(prod,idx) in prodList" :key="idx" @click="goPro(prod)">
               <img class="pro-cover" :src="prod.ImgPath" alt="">
               <div class="item-name">{{prod.Products_Name}}</div>
               <div class="price">
@@ -133,11 +133,19 @@ export default {
     }
   },
   methods: {
+    goPro (prod) {
+      const id = prod.Products_ID
+      uni.redirectTo({
+        url: '/pages/product/detail?prod_id=' + id
+      })
+    },
     goIndex (i) {
       if (parseInt(i) === 0) {
         toHome()
       } else {
-        this.$linkTo('/pages/search/result?pid=' + i)
+        uni.redirectTo({
+          url: '/pages/search/result?pid=' + i
+        })
       }
     },
     getProd () {
