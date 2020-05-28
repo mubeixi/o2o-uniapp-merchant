@@ -88,7 +88,7 @@ import {
   getProductList
 } from '@/api/product'
 import { getBizInfo } from '@/api/store'
-import { hideLoading, modal, showLoading } from '@/common/fun'
+import { error, hideLoading, modal, showLoading, toast } from '@/common/fun'
 import { Exception } from '@/common/Exception'
 
 export default {
@@ -168,7 +168,11 @@ export default {
           throw Error(e.msg || '获取推荐商品失败')
         })
       } catch (e) {
-        Exception.handle(e)
+        error(e.message)
+        // 回退一下
+        setTimeout(() => {
+          this.$back()
+        }, 1000)
       } finally {
         hideLoading()
       }
@@ -176,7 +180,7 @@ export default {
   },
   onLoad (options) {
     const { activeId, biz_id } = options
-    //免单专区不分商家  商家所有的免单产品都在这里面
+    // 免单专区不分商家  商家所有的免单产品都在这里面
     // if (!activeId) {
     //   modal('活动id缺失')
     //   return

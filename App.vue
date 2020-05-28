@@ -12,11 +12,12 @@ export default {
   },
   onLaunch: function () {
     console.log('App Launch')
+    Storage.set('users_id', users_id)
     this.$store.dispatch('system/loadInitData')
     this.$store.dispatch('theme/refreshTheme')
   },
   onShow: function () {
-    Storage.set('users_id', users_id)
+    
     console.log('App Show')
   },
   onHide: function () {

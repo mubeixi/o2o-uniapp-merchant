@@ -82,9 +82,9 @@
     <div class="block kill-box">
       <div class="block-title flex-ver-c">
         <div class="block-title-text">今日秒杀</div>
-        <div class="block-title-more flex flex-ver-c c9 fz-12">
-          <!--<span>查看全部</span>
-          <layout-icon type="iconicon-arrow-right" size="14" color="#999"></layout-icon>-->
+        <div class="block-title-more flex flex-ver-c c9 fz-12" @click="$linkTo('/pages/active/SeckillByBiz')">
+          <span>查看全部</span>
+          <layout-icon display="inline" type="iconicon-arrow-right" size="14" color="#999"></layout-icon>
         </div>
       </div>
       <div class="block-content">
@@ -177,10 +177,7 @@ import DiyCube from '@/componets/diy-cube/diy-cube'
 import DiyTab from '@/componets/diy-tab/diy-tab'
 import DiyGroup from '@/componets/diy-group/diy-group'
 import DiyFlash from '@/componets/diy-flash/diy-flash'
-import GoodsItem from '@/componets/good-item/good-item'
 import DiyNav from '@/componets/diy-nav/diy-nav'
-
-import LayoutAd from '@/componets/layout-ad/layout-ad'
 import LayoutCopyright from '@/componets/layout-copyright/layout-copyright'
 import { toGoodsDetail } from '@/common/helper'
 import { hideLoading, showLoading } from '@/common/fun'
@@ -188,13 +185,14 @@ import { getFlashsaleList, getProductCategory, getProductList } from '@/api/prod
 import { Exception } from '@/common/Exception'
 import { getSkinConfig } from '@/api/common'
 import { componetMixin } from '@/mixins/BaseMixin'
+import LayoutIcon from '@/componets/layout-icon/layout-icon'
 
 export default {
   name: 'scroll-page-hot',
   mixins: [componetMixin],
   components: {
+    LayoutIcon,
     DiyNav,
-    GoodsItem,
     DiyFlash,
     DiyGroup,
     DiyTab,
@@ -207,7 +205,6 @@ export default {
     DiyVideo,
     DiySwiper,
     DiyBase,
-    LayoutAd,
     LayoutCopyright
   },
   data () {

@@ -35,8 +35,8 @@
 
     </block>
 
-    <div class="container m-t-15" v-if="orderInfo.is_virtual === 1">
-      <div class="section-box bg-white">
+    <div class="container p-t-15" v-if="orderInfo.is_virtual === 1">
+      <div class="section-box bg-white" style="margin-bottom: 0">
         <div class="other">
           <div class="bd">
             <div class="o_title  words">
@@ -114,7 +114,7 @@
             </div>
           </div>
 
-          <div @click="focusInvoice(biz_id)" class="bd" v-if="1||bizList[biz_id].invoice_switch === 1">
+          <div @click="focusInvoice(biz_id)" class="bd" v-if="bizList[biz_id].invoice_switch === 1">
             <div class="o_title">
               <span>是否开具发票</span>
               <switch :checked="postData.need_invoice[biz_id]" @change="faPiaoChange($event,biz_id)"
@@ -234,10 +234,10 @@
             <span class="flex1">{{ship}}</span>
             <radio :checked="shipid===ship_current" :value="shipid" class="radio" color="#F43131" />
           </label>
-          <label class="row flex flex-justify-between flex-vertical-b p-10">
-            <span class="flex1">到店自取</span>
-            <radio :checked="'is_store'===ship_current" class="radio" color="#F43131" value="is_store" />
-          </label>
+<!--          <label class="row flex flex-justify-between flex-vertical-b p-10">-->
+<!--            <span class="flex1">到店自取</span>-->
+<!--            <radio :checked="'is_store'===ship_current" class="radio" color="#F43131" value="is_store" />-->
+<!--          </label>-->
         </radio-group>
         <div @click="$closePop('freightPop')" class="submit-btn">确定</div>
       </div>

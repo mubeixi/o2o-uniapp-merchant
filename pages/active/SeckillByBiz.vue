@@ -4,8 +4,13 @@
     <div class="flex flex-vertical-c seckill-title" :style="{marginTop:menuButtonInfo.top+'px'}">
       <layout-icon type="iconicon-arrow-left" size="20" color="#fff" class="back-icon m-r-2"
                    @click="$back()"></layout-icon>
-      <image class="seckill-title-img m-r-10" :src="bizInfo.biz_logo"></image>
-      <span class="seckill-title-text" :style="{width:(menuButtonInfo.left-80)+'px'}">{{bizInfo.biz_shop_name}}（{{bizInfo.biz_address}}）</span>
+      <block v-if="biz_id">
+        <image class="seckill-title-img m-r-10" :src="bizInfo.biz_logo"></image>
+        <span class="seckill-title-text" :style="{width:(menuButtonInfo.left-80)+'px'}">{{bizInfo.biz_shop_name}}（{{bizInfo.biz_address}}）</span>
+      </block>
+      <block v-else>
+        <span class="seckill-title-text" :style="{width:(menuButtonInfo.left-80)+'px'}">秒杀活动</span>
+      </block>
     </div>
 
     <scroll-view scroll-y class="seckill-list" :style="{top:menuButtonInfo.bottom+120+'px'}">
@@ -94,16 +99,20 @@ export default {
     async init () {
       try {
         showLoading()
-        this.bizInfo = await getBizInfo({ biz_id: this.biz_id }).then(res => {
-          return res.data[0]
-        }).catch(e => {
-          throw Error(e.msg || '获取商家信息错误')
-        })
+        if (this.biz_id) {
+          this.bizInfo = await getBizInfo({ biz_id: this.biz_id }).then(res => {
+            return res.data[0]
+          }).catch(e => {
+            throw Error(e.msg || '获取商家信息错误')
+          })
+        }
 
         const data = {
           page: this.page,
-          pageSize: this.pageSize,
-          biz_id: this.biz_id
+          pageSize: this.pageSize
+        }
+        if (this.biz_id) {
+          data.biz_id = this.biz_id
         }
         this.seckillList = await getFlashsaleList(data, { onlyData: true }).catch(e => {
           throw Error(e.msg || '获取秒杀列表失败')
@@ -119,14 +128,14 @@ export default {
   },
   onLoad (options) {
     const { activeId, biz_id } = options
-    if (!activeId) {
-      modal('活动id缺失')
-      return
-    }
-    if (!biz_id) {
-      modal('商家id缺失')
-      return
-    }
+    // if (!activeId) {
+    //   modal('活动id缺失')
+    //   return
+    // }
+    // if (!biz_id) {
+    //   modal('商家id缺失')
+    //   return
+    // }
     this.activeId = activeId
     this.biz_id = biz_id
     this.postData.biz_id = biz_id

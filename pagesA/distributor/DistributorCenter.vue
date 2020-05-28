@@ -22,7 +22,7 @@
       </div>
     </div>
     <view class="titleImg">
-      <image class="image" :src="'/static/client/distributor/join.jpg'|domain" mode=""></image>
+      <image class="image" :src="'/static/client/distributor/bedistributor.jpg'|domain" mode=""></image>
     </view>
 
     <!--  申请逻辑 -->
@@ -85,7 +85,7 @@
         </view>
       </block>
 
-      <view class="checks" v-if="pro.dis_config.Distribute_AgreementOpen">
+      <view class="checks m-t-15" v-if="pro.dis_config.Distribute_AgreementOpen">
         <radio @click="changes" :checked="isAgree" style="transform:scale(0.7)" />
         <text @click="goDistributeAgreement">同意
           <text class="checkq">{{pro.dis_config.Distribute_AgreementTitle}}</text>
@@ -242,7 +242,7 @@ export default {
     },
   },
   onLoad (options) {
-    this.level_id = options.id
+    this.level_id = parseInt(options.id)
     this.type = options.type
     const that = this
 
@@ -935,10 +935,13 @@ export default {
               dislist = item
             }
           }
+          console.log(dislist,this.pro)
           dislist.manual_rules = typeof dislist.manual_rules !== 'object' ? JSON.parse(dislist.manual_rules) : dislist.manual_rules
+          console.log(dislist.manual_rules)
           var select_arrays = []
           var text_arrays = []
           for (var fi in dislist.manual_rules) {
+            console.log(fi)
             if (dislist.manual_rules[fi].type === 'select') {
               dislist.manual_rules[fi].name + '|' + dislist.manual_rules[fi].place
               var select_array = dislist.manual_rules[fi].place.split('|')
@@ -1038,6 +1041,7 @@ export default {
           var select_arrays = []
           var text_arrays = []
           for (var fi in dislist.Distribute_Form) {
+            console.log(fi)
             if (dislist.Distribute_Form[fi].Type === 'select') {
               dislist.Distribute_Form[fi].Name + '|' + dislist.Distribute_Form[fi].Value
               var select_array = dislist.Distribute_Form[fi].Value.split('|')
@@ -1094,9 +1098,9 @@ export default {
   }
 
   .titleImg {
-    width: 750 upx;
-    height: 330 upx;
-    margin-bottom: 25 upx;
+    width: 750upx;
+    height: 330upx;
+    margin-bottom: 25upx;
 
     .image {
       width: 100%;
@@ -1105,57 +1109,57 @@ export default {
   }
 
   .fenxiao {
-    margin-top: 30 upx;
-    margin-left: 20 upx;
-    font-size: 30 upx;
+    margin-top: 30upx;
+    margin-left: 20upx;
+    font-size: 30upx;
 
     .textq {
-      font-size: 24 upx;
+      font-size: 24upx;
       color: #666666;
 
       .textw {
-        font-size: 28 upx;
+        font-size: 28upx;
         color: #F43131;
       }
     }
   }
 
   .isFenxiao {
-    width: 620 upx;
-    height: 80 upx;
+    width: 620upx;
+    height: 80upx;
     background: rgba(244, 49, 49, 1);
-    border-radius: 20 upx;
+    border-radius: 20upx;
     margin: 0 auto;
-    margin-top: 50 upx;
-    font-size: 34 upx;
+    margin-top: 50upx;
+    font-size: 34upx;
     color: #FFFFFF;
-    line-height: 80 upx;
+    line-height: 80upx;
     text-align: center;
   }
 
   .line {
-    width: 750 upx;
-    height: 20 upx;
+    width: 750upx;
+    height: 20upx;
     background: rgba(248, 248, 248, 1);
-    margin-top: 30 upx;
+    margin-top: 30upx;
   }
 
   .pro {
-    width: 750 upx;
-    padding: 30 upx 20 upx;
+    width: 750upx;
+    padding: 30upx 20upx;
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
-    margin-top: 50 upx;
-    padding-top: 0 upx;
-    padding-bottom: 0 upx;
+    margin-top: 50upx;
+    padding-top: 0upx;
+    padding-bottom: 0upx;
 
     .forOf {
-      width: 345 upx;
+      width: 345upx;
 
       .imgs {
-        width: 345 upx;
-        height: 345 upx;
+        width: 345upx;
+        height: 345upx;
 
         .image {
           width: 100%;
@@ -1164,11 +1168,11 @@ export default {
       }
 
       .text {
-        margin: 17 upx 15 upx 20 upx 11 upx;
-        width: 319 upx;
-        height: 60 upx;
-        line-height: 30 upx;
-        font-size: 24 upx;
+        margin: 17upx 15upx 20upx 11upx;
+        width: 319upx;
+        height: 60upx;
+        line-height: 30upx;
+        font-size: 24upx;
         font-weight: 500;
         color: rgba(51, 51, 51, 1);
         text-overflow: -o-ellipsis-lastline;
@@ -1184,20 +1188,20 @@ export default {
 
   .prices {
     color: #F43131;
-    font-size: 24 upx;
-    margin-left: 15 upx;
-    margin-bottom: 37 upx;
+    font-size: 24upx;
+    margin-left: 15upx;
+    margin-bottom: 37upx;
 
     text {
-      font-size: 34 upx;
+      font-size: 34upx;
       font-weight: bold;
     }
   }
 
   .titleImg {
-    width: 750 upx;
-    height: 330 upx;
-    margin-bottom: 25 upx;
+    width: 750upx;
+    height: 330upx;
+    margin-bottom: 25upx;
 
     .image {
       width: 100%;
@@ -1206,31 +1210,31 @@ export default {
   }
 
   .center {
-    height: 98 upx;
-    width: 710 upx;
+    height: 98upx;
+    width: 710upx;
     margin: 0 auto;
-    border-bottom: 1 upx solid #E7E7E7;
+    border-bottom: 1upx solid #E7E7E7;
     display: flex;
     align-items: center;
 
     .mbx {
-      width: 140 upx;
-      font-size: 30 upx;
+      width: 140upx;
+      font-size: 30upx;
       color: #333333;
     }
 
     .inputa {
-      width: 600 upx;
-      font-size: 28 upx;
+      width: 600upx;
+      font-size: 28upx;
     }
   }
 
   .checks {
-    font-size: 20 upx;
+    font-size: 20upx;
     color: #333333;
     display: flex;
     align-items: center;
-    margin-left: 4 upx;
+    margin-left: 4upx;
   }
 
   .disHaihong {
@@ -1244,38 +1248,38 @@ export default {
 
   .checkq {
     color: #69A1FF;
-    margin-left: 10 upx;
+    margin-left: 10upx;
   }
 
   .submits {
-    width: 620 upx;
-    height: 80 upx;
-    line-height: 80 upx;
+    width: 620upx;
+    height: 80upx;
+    line-height: 80upx;
     background: rgba(244, 49, 49, 1);
-    border-radius: 20 upx;
+    border-radius: 20upx;
     margin: 0 auto;
-    font-size: 34 upx;
+    font-size: 34upx;
     color: #FFFFFF;
     text-align: center;
-    margin-top: 40 upx;
-    margin-bottom: 120 upx;
+    margin-top: 40upx;
+    margin-bottom: 120upx;
   }
 
   .qwe {
-    width: 750 upx;
-    height: 100 upx;
+    width: 750upx;
+    height: 100upx;
     position: fixed;
-    bottom: 0 upx;
-    left: 0 upx;
+    bottom: 0upx;
+    left: 0upx;
     background: rgba(64, 61, 61, 1);
     display: flex;
     align-items: center;
-    padding-left: 20 upx;
-    padding-right: 24 upx;
+    padding-left: 20upx;
+    padding-right: 24upx;
 
     .imgs {
-      width: 68 upx;
-      height: 68 upx;
+      width: 68upx;
+      height: 68upx;
       border-radius: 50%;
 
       .image {
@@ -1285,38 +1289,38 @@ export default {
     }
 
     .nickName {
-      font-size: 30 upx;
+      font-size: 30upx;
       color: #FFFFFF;
-      margin-left: 16 upx;
+      margin-left: 16upx;
     }
 
     .liji {
-      margin-left: 113 upx;
-      font-size: 22 upx;
+      margin-left: 113upx;
+      font-size: 22upx;
       color: #FFFFFF;
     }
 
     .hahas {
-      width: 140 upx;
-      height: 50 upx;
+      width: 140upx;
+      height: 50upx;
       background: rgba(244, 49, 49, 1);
-      border-radius: 10 upx;
+      border-radius: 10upx;
       position: absolute;
-      top: 25 upx;
-      right: 20 upx;
-      font-size: 26 upx;
+      top: 25upx;
+      right: 20upx;
+      font-size: 26upx;
       color: #FFFFFF;
       text-align: center;
-      line-height: 50 upx;
+      line-height: 50upx;
     }
   }
 
   .picker view {
-    width: 160 upx;
-    font-size: 28 upx;
-    line-height: 90 upx;
-    height: 90 upx;
-    margin-right: 10 upx;
+    width: 160upx;
+    font-size: 28upx;
+    line-height: 90upx;
+    height: 90upx;
+    margin-right: 10upx;
     overflow: hidden;
   }
 
@@ -1324,45 +1328,45 @@ export default {
     display: flex;
 
     .quyu {
-      width: 120 upx;
+      width: 120upx;
     }
   }
 
   view.haha {
-    font-size: 30 upx;
+    font-size: 30upx;
     color: #333333;
-    margin-right: 42 upx;
+    margin-right: 42upx;
   }
 
   .disConfig {
-    padding-bottom: 50 upx;
+    padding-bottom: 50upx;
   }
 
   .uni-list-cell {
     display: flex;
     align-items: center;
-    font-size: 25 upx;
+    font-size: 25upx;
     color: #333333;
-    height: 25 upx;
-    padding-top: 38 upx;
-    margin-left: 20 upx;
-    width: 710 upx;
+    height: 25upx;
+    padding-top: 38upx;
+    margin-left: 20upx;
+    width: 710upx;
 
     &:last-child {
-      padding-bottom: 30 upx;
-      border-bottom: 1 upx solid #E7E7E7;
+      padding-bottom: 30upx;
+      border-bottom: 1upx solid #E7E7E7;
     }
   }
 
   .iMbx {
     text-align: center;
-    padding: 0 20 upx;
-    font-size: 28 upx;
+    padding: 0 20upx;
+    font-size: 28upx;
     color: #333;
 
     .c_method {
-      padding: 37 upx 0;
-      border-bottom: 2 upx solid #E6E6E6;
+      padding: 37upx 0;
+      border-bottom: 2upx solid #E6E6E6;
     }
 
     & .c_method:first-child {

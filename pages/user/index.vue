@@ -25,22 +25,22 @@
       <div class="order-item" @click="goOrder(1)">
         <LayoutIcon type="icondaifukuan" color="#9CA2F9" size="26"></LayoutIcon>
         <div class="order-desc">待付款</div>
-		 <div class="jiaobiao" v-if="orderNum.waitpay">{{orderNum.waitpay}}</div>
+		 <div class="jiaobiao" v-if="userInfo.Users_ID && orderNum.waitpay">{{orderNum.waitpay}}</div>
       </div>
       <div class="order-item" @click="goOrder(2)">
         <LayoutIcon type="iconfahuotixing" color="#88C79A" size="26"></LayoutIcon>
         <div class="order-desc">待发货</div>
-		<div class="jiaobiao" v-if="orderNum.waitsend">{{orderNum.waitsend}}</div>
+		<div class="jiaobiao" v-if="userInfo.Users_ID && orderNum.waitsend">{{orderNum.waitsend}}</div>
       </div>
       <div class="order-item" @click="goOrder(3)">
         <LayoutIcon type="icondaishouhuo" color="#FDBB59" size="26"></LayoutIcon>
         <div class="order-desc">待收货</div>
-		<div class="jiaobiao" v-if="orderNum.waitconfirm">{{orderNum.waitconfirm}}</div>
+		<div class="jiaobiao" v-if="userInfo.Users_ID && orderNum.waitconfirm">{{orderNum.waitconfirm}}</div>
       </div>
       <div class="order-item" @click="goOrder(4)">
         <LayoutIcon type="iconpingjia" color="#7DCAF7" size="26"></LayoutIcon>
         <div class="order-desc">待评价</div>
-		<div class="jiaobiao" v-if="orderNum.waitcomment">{{orderNum.waitcomment}}</div>
+		<div class="jiaobiao" v-if="userInfo.Users_ID && orderNum.waitcomment">{{orderNum.waitcomment}}</div>
       </div>
     </div>
     <div class="quanyi" @click="$linkTo('/pagesA/user/EquityCard')">

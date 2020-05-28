@@ -61,14 +61,16 @@ export default {
   methods: {
     toRoom (idx) {
       const chatItem = this.chatList[idx]
-      const breakStrIdx = chatItem.to_uid.indexOf('_')
+      // 客户得找商家聊
+      const str = chatItem.to_uid.indexOf('biz') !== -1 ? chatItem.to_uid : chatItem.from_uid
+      const breakStrIdx = str.indexOf('_')
       if (breakStrIdx === -1) {
         modal('进入聊天室失败')
         return
       }
-      const type = chatItem.to_uid.substr(0, breakStrIdx)
-      const id = chatItem.to_uid.substr(breakStrIdx + 1)
-      this.$linkTo(`/pagesA/support/Im?type=${type}tid=${id}`)
+      const type = str.substr(0, breakStrIdx)
+      const id = str.substr(breakStrIdx + 1)
+      this.$linkTo(`/pagesA/support/Im?type=${type}&tid=${id}`)
     },
     async _init_func () {
       await imInstance._getAccessToken() // 等拿token
