@@ -10,7 +10,7 @@
         <picker @change="bindPickerChange" :value="index" :range="array" range-key="Method_Name">
           <view class="uni-input">{{array[index].Method_Name}}</view>
         </picker>
-        <image class="image" :src="'/static/client/right.png'|domain"></image>
+        <layout-icon type="iconicon-arrow-right"></layout-icon>
       </view>
     </view>
 
@@ -66,9 +66,11 @@
 import { addUserWithdrawMethod, getShopWithdrawMethod } from '@/api/customer'
 import { mapActions, mapGetters } from 'vuex'
 import BaseMixin from '@/mixins/BaseMixin'
-import {backFunc} from '@/common/fun'
+import { backFunc } from '@/common/fun'
+import LayoutIcon from '@/componets/layout-icon/layout-icon'
 
 export default {
+  components: { LayoutIcon },
   mixins: [BaseMixin],
   data () {
     return {
@@ -80,9 +82,9 @@ export default {
         Method_Name: '', // 提现方式名称
         Account_Name: '', // 户名
         Account_Val: '', // 账号
-        Bank_Position: '',// 开户行
+        Bank_Position: ''// 开户行
       },
-      withdraw_from: 1,
+      withdraw_from: 1
 
     }
   },
@@ -94,7 +96,9 @@ export default {
     this.getShopWithdrawMethod()
   },
   computed: {
-    ...mapGetters(['userInfo']),
+    userInfo () {
+      return this.$store.getters['user/getUserInfo']()
+    }
   },
   methods: {
     ...mapActions(['getInitData', 'setUserInfo']),
@@ -107,18 +111,18 @@ export default {
           // Method_Name:this.data.Method_Name,//提现方式名称
           Account_Name: this.data.Account_Name, // 户名
           Account_Val: this.data.Account_Val, // 账号
-          Bank_Position: this.data.Bank_Position, // 开户行
+          Bank_Position: this.data.Bank_Position // 开户行
         }
       } else if (this.data.Method_Type === 'alipay') {
         data = {
           Method_ID: this.data.Method_ID, // 提现方式类型
           // Method_Name:this.data.Method_Name,//提现方式名称
           Account_Name: this.data.Account_Name, // 户名
-          Account_Val: this.data.Account_Val,// 账号
+          Account_Val: this.data.Account_Val// 账号
         }
       } else {
         data = {
-          Method_ID: this.data.Method_ID,// 提现方式类型
+          Method_ID: this.data.Method_ID// 提现方式类型
           // Method_Name:this.data.Method_Name//提现方式名称
         }
       }
@@ -127,10 +131,10 @@ export default {
         const User_Method_ID = res.data.User_Method_ID
         uni.showToast({
           title: res.msg,
-          icon: 'success',
+          icon: 'success'
         })
         setTimeout(function () {
-          that.$vm.$emit('fir', User_Method_ID)
+          uni.$emit('fir', User_Method_ID)
           // 返回上一页
           backFunc()
         }, 1000)
@@ -155,8 +159,8 @@ export default {
       this.data.Method_Type = this.array[this.index].Method_Type
       this.data.Method_Name = this.array[this.index].Method_Name
       this.data.Method_ID = this.array[this.index].Method_ID
-    },
-  },
+    }
+  }
 }
 </script>
 

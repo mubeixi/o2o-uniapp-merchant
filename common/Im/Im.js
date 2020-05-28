@@ -1,7 +1,7 @@
 import {
   IM_APPID, IM_APPSECRET, IM_WSS_URL
 } from '@/common/env'
-import { bindUid, getAccessToken, getMsgList, sendMsg } from '@/common/Im/Fetch'
+import { bindUid, getAccessToken, getMsgList, sendMsg,checkOnline } from '@/common/Im/Fetch'
 import Promisify from '@/common/Promisify'
 import { Exception } from '@/common/Exception'
 import Storage from '@/common/Storage'
@@ -352,6 +352,9 @@ class IM {
       // 为了预防有需要异步上传的情况
       const content = await message.getContent(chatIdx, this.chatList)
 
+      
+      checkOnline({out_uid:this.getOutUid()})
+
       sendMsg({ type, content, out_uid: this.getOutUid(), to: this.getToUid() }).then(res => {
         console.log('发送成功', res)
         this.chatList[chatIdx].sendStatus = 1 // 标记成功
@@ -408,7 +411,10 @@ class IM {
       return
     }
 
-    this.chatList.push({ ...messageObj, direction: 'from' })
+     // 只允许限定的类别
+     if (this.allowMsgType.includes(type)) {
+      this.chatList.push({ ...messageObj, direction: 'from' })
+    }
   }
 
   // 建立连接
@@ -481,6 +487,7 @@ IM.prototype.heartBeatTimout = 30 * 1000 // 心跳保持时间，默认三十秒
 IM.prototype.heartBeatFailMax = 3 // 最大心跳丢失次数，错误3次重新建立socket请求
 IM.prototype.tryRequestMax = 5 // 最大重连次数，重连超过5次不成功，就直接报错提醒用户洗洗睡
 IM.prototype.historyPageSize = 20 // 一次加载以往消息20条
+IM.prototype.allowMsgType = ['text', 'image', 'video', 'prod', 'live_text', 'live_pop'] // 目前只handler这几种，不允许其他的
 // 1.创建实例
 // 2.拿到token(阻塞操作，带mask的全屏loading)
 // 3.获取最近的20条信息

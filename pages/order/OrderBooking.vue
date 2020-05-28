@@ -114,7 +114,7 @@
             </div>
           </div>
 
-          <div @click="focusInvoice(biz_id)" class="bd" v-if="1||bizList[biz_id].invoice_switch === 1">
+          <div @click="focusInvoice(biz_id)" class="bd" v-if="bizList[biz_id].invoice_switch === 1">
             <div class="o_title">
               <span>是否开具发票</span>
               <switch :checked="postData.need_invoice[biz_id]" @change="faPiaoChange($event,biz_id)"

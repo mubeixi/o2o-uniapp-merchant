@@ -111,6 +111,16 @@ export default {
     }
   },
   methods: {
+    /**
+     * 手动让视图到底部，适用于高度变化的情况
+     */
+    refreshScrollBottomPostion() {
+      const toViewIdx = this.toViewIdx
+      this.toViewIdx = ''
+      setTimeout(() => {
+        this.toViewIdx = toViewIdx
+      }, 50)
+    },
     // 更新记录用，用于添加的时候
     setViewIdx (val) {
       this.toViewIdx = val || ('msg-' + (this.imInstance.chatList.length - 1))
@@ -132,7 +142,10 @@ export default {
       if (!this.triggered) this.triggered = true
 
       // 不论成功还是失败
-      this.imInstance.getHistory().finally(() => {
+      this.imInstance.getHistory().then(() => {
+        this.triggered = false
+        this.isFreshing = false
+      }).catch(()=>{
         this.triggered = false
         this.isFreshing = false
       })
@@ -166,6 +179,7 @@ export default {
     },
     taggleMore () {
       this.showOnther = !this.showOnther
+      if (this.showOnther) this.refreshScrollBottomPostion()
     },
     async _init_func (options) {
       const { productId, orderId, origin } = options

@@ -1191,7 +1191,7 @@ export default {
         is_end: true
       },
       mode: 'default',
-      commentModalShow:false,
+      commentModalShow: false,
       flashsale_id: '',
       spike_good_id: '', // 限时抢购专用
       tabClick: false,
@@ -1507,6 +1507,11 @@ export default {
       this.hasCart = false
       this.postData.active = 'pintuan' // 标记为是拼团
       this.checkfrom = 'group'
+
+      // 限时抢购
+      // if (this.mode === 'spike' && this.spike_good_id) {
+      //   postData.active_id = this.spike_good_id
+      // }
       this.productInfo.minPrice = this.productInfo.pintuan_pricex
       this.$refs.mySku.show()
     },
@@ -1522,9 +1527,10 @@ export default {
           cart_key: 'DirectBuy' // 购物车类型   CartList（加入购物车）、DirectBuy（立即购买）、PTCartList（不能加入购物车）
           // productDetail_price: sku.price
         }
-        // if (this.postData.active) {
-        //   postData.active = this.postData.active
-        // }
+        // 拼团用的
+        if (this.postData.active === 'pintuan') {
+          postData.active = 'pintuan'
+        }
         // 限时抢购
         if (this.mode === 'spike' && this.spike_good_id) {
           postData.active_id = this.spike_good_id

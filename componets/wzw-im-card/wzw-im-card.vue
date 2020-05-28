@@ -26,9 +26,9 @@
             </block>
           </div>
           <div class="headimg" :style="{backgroundImage:'url('+headimg+')'}"></div>
-          <div v-if="message.type==='text' && message.direction!=='to'" class="content-arrow">
+          <div v-if="message.direction!=='to'" class="content-arrow">
             <block v-if="message.type==='text'">
-              <image mode="widthFix" class="arrow-icon" src="/static/im/chat-arrow-let.png"></image>
+              <image mode="widthFix" class="arrow-icon" src="/static/im/chat-arrow-left.png"></image>
             </block>
             <block v-else>
               <div class="arrow-icon"></div>

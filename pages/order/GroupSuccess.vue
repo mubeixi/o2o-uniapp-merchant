@@ -254,9 +254,10 @@ export default {
     },
     goOrderDetail () {
       // 这里应该需要跳转到订单详情页
-      uni.navigateTo({
-        url: '/pages/order/pintuanOrderlist?index=' + 2
-      })
+      this.$linkTo(`/pages/order/OrderDetail?Order_ID=${this.orderInfo.Order_ID}`)
+      // uni.navigateTo({
+      //   url: '/pages/order/OrderList?type=pintuan&index=' + 2
+      // })
     },
     async _init_func () {
       try {
