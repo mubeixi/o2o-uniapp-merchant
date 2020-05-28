@@ -1,25 +1,17 @@
 <template>
   <view class="all"  @click="commonClick">
-    <!-- #ifdef APP-PLUS -->
-    <view class="status_bar" style="background: #f81111;"><!-- 这里是状态栏 --></view>
-    <!-- #endif -->
     <view class="top">
       <image class="image" :src="'/static/client/fenxiao/top.png'|domain"></image>
-      <!-- #ifdef APP-PLUS -->
-      <view class="title">分销中心</view>
-      <!-- #endif -->
       <div v-if="userInfo.User_ID&&userInfo.Is_Distribute==1">
-        <image v-if="userInfo.User_ID" class="msg" :src="'/static/client/fenxiao/msg.png'|domain"
-               @click="goMsg"></image>
         <view class="person">
           <image class="image" style="border-radius: 50%;overflow: hidden"
                  :src="data.disInfo.Shop_Logo||data.disInfo.User_HeadImg" @click="tofenxiaoshang"></image>
         </view>
         <view class="nickName" v-if="userInfo.User_ID&&userInfo.Is_Distribute==1" @click="tofenxiaoshang">
-          {{data.disInfo.Shop_Name}}
+          {{data.disInfo.Shop_Name||''}}
         </view>
         <view class="putong" v-if="userInfo.User_ID&&userInfo.Is_Distribute==1" @click="goDistributor">
-          {{data.disInfo.Level_Name}}
+          {{data.disInfo.Level_Name||''}}
           <layout-icon display="inline" size="14" v-if="data.disInfo.Level_Name" class="rightMy" type="iconicon-arrow-right" color="#000"></layout-icon>
 
         </view>

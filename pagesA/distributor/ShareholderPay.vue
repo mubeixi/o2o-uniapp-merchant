@@ -493,13 +493,13 @@ export default {
 
   .iMbx {
     text-align: center;
-    padding: 0 20 upx;
-    font-size: 28 upx;
+    padding: 0 20upx;
+    font-size: 28upx;
     color: #333;
 
     .c_method {
-      padding: 37 upx 0;
-      border-bottom: 2 upx solid #E6E6E6;
+      padding: 37upx 0;
+      border-bottom: 2upx solid #E6E6E6;
     }
 
     & .c_method:first-child {

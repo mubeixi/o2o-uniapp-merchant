@@ -9,13 +9,13 @@
       <block v-for="(item,index) of data " :key="index">
         <view class="cardInfo" @click="change(item)" v-if="item.Method_Type=='bank_card'||item.Method_Type=='alipay'">
           {{item.Method_Name}} （{{item.Account_Val}}）
-          <image class="image" :src="'/static/client/distributor/xuanzhong.png'|domain"
+          <image class="image" :src="'/static/client/fenxiao/xuanzhong.png'|domain"
                  v-if="User_Method_ID==item.User_Method_ID&&!isShow"></image>
           <image class="image del" src="/static/red-del.png" v-else-if="isShow" @click="del(item)"></image>
         </view>
         <view class="cardInfo" @click="change(item)" v-else>
           {{item.Method_Name}}
-          <image class="image" :src="'/static/client/distributor/xuanzhong.png'|domain"
+          <image class="image" :src="'/static/client/fenxiao/xuanzhong.png'|domain"
                  v-if="User_Method_ID==item.User_Method_ID&&!isShow"></image>
           <image class="image del" src="/static/red-del.png" v-else-if="isShow" @click="del(item)"></image>
         </view>
@@ -59,7 +59,7 @@ export default {
     })
   },
   onShow () {
-    this.$vm.$on('fir', (data) => {
+    uni.$on('fir', (data) => {
       this.User_Method_ID = data
     })
     this.getUserWithdrawMethod()

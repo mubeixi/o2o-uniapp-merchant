@@ -9,7 +9,7 @@
         <view class="bankName" v-else>
           {{data.Method_Name}}
         </view>
-        <image :src="'/static/client/distributor/right.png'|domain" class="right"></image>
+        <image :src="'/static/client/fenxiao/right.png'|domain" class="right"></image>
       </view>
       <view class="bank guanli" @click="guanWithdrawal" v-else>
         + 管理提现方式
@@ -34,7 +34,7 @@
 
       </view>
       <view class="tishi">
-        <image class="tishi-image" :src="'/static/client/distributor/tishi.png'|domain"></image>
+        <image class="tishi-image" :src="'/static/client/fenxiao/tishi.png'|domain"></image>
         <view class="tishi-view">
           申请提现后，系统会自动扣除您提现的{{init.Poundage_Ratio}}%的手续费
           <block v-if="withdraw_from==1">
@@ -47,7 +47,7 @@
       </view>
       <view class="lishi" @click="goRecord">
         历史提现
-        <image class="lishi-image" :src="'/static/client/distributor/right.png'|domain"></image>
+        <image class="lishi-image" :src="'/static/client/fenxiao/right.png'|domain"></image>
       </view>
     </view>
   </view>

@@ -35,12 +35,15 @@
       <div class="vip-has-title fz-17 c3">
         赠送优惠卷
       </div>
-      <div class="p-l-20 p-r-20 p-b-20">
-        <div class="vip-coupon" v-for="(item,index) of coupon" :key="index">
-          <image :src="'/static/client/vip/coupon.png'|domain" class="img-full"></image>
-          <div class="vip-coupon-title">满{{item.Coupon_Condition}}可用</div>
-          <div class="vip-coupon-price">{{item.Coupon_Cash}}</div>
+      <div class="vip-coupon-list">
+        <div class="vip-coupon-item" v-for="(item,index) of coupon" :key="index">
+          <div class="vip-coupon" >
+            <image :src="'/static/client/vip/coupon.png'|domain" class="img-full"></image>
+            <div class="vip-coupon-title">满{{item.Coupon_Condition}}可用</div>
+            <div class="vip-coupon-price">{{item.Coupon_Cash}}</div>
+          </div>
         </div>
+        
       </div>
     </div>
 
@@ -415,11 +418,20 @@ export default {
     color: #FFFFFF;
   }
 
+  .vip-coupon-list{
+    padding: 25rpx;
+    display: flex;
+    flex-wrap: wrap;
+    .vip-coupon-item{
+      width: 220rpx;
+      margin-bottom: 25rpx;
+    }
+  }
   .vip-coupon {
     width: 168rpx;
     height: 184rpx;
+    margin: 0 auto;
     position: relative;
-
     &-title {
       position: absolute;
       left: 0rpx;
