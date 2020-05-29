@@ -7,7 +7,7 @@
         <div class="small-font">￥</div>
         {{pro_price}}
       </div>
-      <div class="old-price small-font">￥{{pro_price}}</div>
+      <div class="old-price small-font">￥{{pro_price_old}}</div>
     </div>
   </div>
 </template>
