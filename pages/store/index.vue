@@ -59,8 +59,8 @@
         <div id="scrollView1" class="tab-page-wrap">
 
           <!--优惠券-->
-          <div class="coupon-section flex flex-justify-c"  v-if="couponList.length>0">
-            <div class="coupon-item" v-for="(coupon,idx) in couponList" :key="idx">
+          <scroll-view class="coupon-section" scroll-x v-if="couponList.length>0">
+            <div class="coupon-item" v-for="(coupon,idx) in couponList" :key="idx" @click="getCoupon(coupon,idx)">
               <div class="containier">
                 <div class="price">
                   <div class="sign">{{coupon.Coupon_UseType?'￥':'折'}}</div>
@@ -130,8 +130,6 @@
               </div>
             </div>
           </div>
-
-
 
           <!--产品专区-->
           <div class="block goods-box">
@@ -375,7 +373,7 @@ import LayoutComment from '@/componets/layout-comment/layout-comment'
 import LayoutCopyright from '@/componets/layout-copyright/layout-copyright'
 import { buildSharePath, checkIsLogin, getArrColumn } from '@/common/helper'
 import LayoutModal from '@/componets/layout-modal/layout-modal'
-import { addFavourite, cancelFavourite, checkFavourite, commentReply } from '@/api/customer'
+import { addFavourite, cancelFavourite, checkFavourite, commentReply, getUserCoupon } from '@/api/customer'
 import { Exception } from '@/common/Exception'
 
 export default {
@@ -528,6 +526,15 @@ export default {
         this.$closePop('commentModal')
       })
     },
+    getCoupon (coupon,idx) {
+      console.log(coupon)
+      getUserCoupon({ coupon_id: coupon.Coupon_ID }).then(() => {
+        toast('领取成功')
+        this.couponList.splice(idx,1)
+      }).catch((err) => {
+        error(err.msg)
+      })
+    },
     clickComment (item) {
       if (!checkIsLogin(1, 1)) return
       this.commentItem = item
@@ -604,7 +611,8 @@ export default {
           throw Error('获取商家自定义分类失败')
         })
 
-        this.couponList = await getCouponList({ biz_id: this.bid }, { onlyData: true, noUid: 1 }).catch((e) => {
+        //不要赠送的优惠券
+        this.couponList = await getCouponList({ biz_id: this.bid,front_show:1 }, { onlyData: true, noUid: 1 }).catch((e) => {
           throw Error('获取优惠券失败')
         })
 
@@ -1056,6 +1064,7 @@ export default {
         width: 74rpx;
         height: 74rpx;
         background: #f2f2f2;
+        @include cover-img();
         /*border-radius: 50%;*/
         /*overflow: hidden;*/
       }

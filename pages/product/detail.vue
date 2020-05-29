@@ -822,7 +822,8 @@
 
               </span>
             </div>
-            <div class="product-price-right" @click="toShare" v-if="mode!='gift' && productInfo.share_commission>0">
+            <!-- && productInfo.share_commission>0-->
+            <div class="product-price-right" @click="toShare" v-if="mode!='gift'">
               <image :src="'/static/client/product/product_share.png'|domain" class="full-img"
                      style="width: 130% !important;"></image>
               <div class="product-share">

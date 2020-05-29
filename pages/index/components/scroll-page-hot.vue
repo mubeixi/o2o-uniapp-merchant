@@ -127,8 +127,8 @@
       </div>
       <div class="block-content">
         <div class="live-list">
-          <block v-for="(item,idx) in liveGoodsList" :key="idx">
-            <div class="live-item" v-if="idx<3" @click="$toGoodsDetail(item)">
+          <block v-for="(item,idx) in liveNav[liveNavIndex].goodsList" :key="idx">
+            <div class="live-item"  @click="$toGoodsDetail(item)">
               <div class="left">
                 <div class="cover" :style="{backgroundImage:'url('+item.ImgPath+')'}"></div>
               </div>
@@ -179,8 +179,8 @@ import DiyGroup from '@/componets/diy-group/diy-group'
 import DiyFlash from '@/componets/diy-flash/diy-flash'
 import DiyNav from '@/componets/diy-nav/diy-nav'
 import LayoutCopyright from '@/componets/layout-copyright/layout-copyright'
-import { toGoodsDetail } from '@/common/helper'
-import { hideLoading, showLoading } from '@/common/fun'
+import { objTranslate, toGoodsDetail } from '@/common/helper'
+import { error, hideLoading, showLoading, toast } from '@/common/fun'
 import { getFlashsaleList, getProductCategory, getProductList } from '@/api/product'
 import { Exception } from '@/common/Exception'
 import { getSkinConfig } from '@/api/common'
@@ -215,17 +215,27 @@ export default {
       liveNavIndex: 0,
       liveNav: [],
       killList: [],
-      liveGoodsList: []
+      livePaginate: {
+        pageSize: 10,
+        page: 1
+      }
     }
   },
   watch: {
     liveNavIndex: {
       handler (idx, oldIdx) {
-        if (idx !== oldIdx) this.loadLiveGoodsList(idx)
+        if (idx !== oldIdx) {
+          this.livePaginate.page = 1
+          this.loadLiveGoodsList(idx)
+        }
       }
     }
   },
   methods: {
+    bindReachBottom () {
+      console.log('bindReachBottom')
+      this.loadLiveGoodsList(this.liveNavIndex)
+    },
     changeLiveNav (idx) {
       this.liveNavIndex = idx
     },
@@ -277,14 +287,21 @@ export default {
       }
     },
     async loadLiveGoodsList (idx) {
+      if (this.liveNav[idx].goodsList.length >= this.liveNav[idx].totalCount) {
+        // toast('已经到底了', 'none')
+        return
+      }
       const cateId = this.liveNav[idx].Category_ID
 
-      this.liveGoodsList = await getProductList({
+      const { data: liveGoodsList, totalCount } = await getProductList({
         Cate_ID: cateId,
-        pageSize: 3
-      }, { onlyData: true }).catch(e => {
-        throw Error(e.msg || '刷新直播商品列表失败')
-      })
+        page: this.liveNav[idx].page,
+        pageSize: this.liveNav[idx].pageSize
+      }).catch(e => { throw Error(e.msg || '刷新直播商品列表失败') })
+      this.liveNav[idx].page++
+      this.$set(this.liveNav[idx], 'goodsList', this.liveNav[idx].goodsList.concat(liveGoodsList))
+      this.$set(this.liveNav[idx], 'totalCount', totalCount)
+      console.log(this.liveNav[idx])
     },
     async _init_func () {
       showLoading('初始化数据')
@@ -300,7 +317,13 @@ export default {
           throw Error('获取商品分类失败')
         })
 
-        this.liveNav = this.firstCateList.concat([]) // 也是一级分类
+        this.liveNav = this.firstCateList.map(row => {
+          row.goodsList = []
+          row.totalCount = 999
+          row.pageSize = 10
+          row.page = 1
+          return objTranslate(row)
+        }) // 也是一级分类
         this.loadLiveGoodsList(0) // 加载第一个分类的商品
       } catch (e) {
         Exception.handle(e)

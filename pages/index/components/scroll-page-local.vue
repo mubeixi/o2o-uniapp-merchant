@@ -70,6 +70,7 @@ import { getProductCategory, getProductList } from '@/api/product'
 import { Exception } from '@/common/Exception'
 import { componetMixin } from '@/mixins/BaseMixin'
 import GoodsItem from '@/componets/good-item/good-item'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'scroll-page-local',
@@ -84,6 +85,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      primaryColor: 'theme/pimaryColor'
+    }),
     cateViewHeight () {
       try {
         return this.systemInfo.windowHeight - this.diyHeadHeight - this.firstCateHeight
@@ -137,8 +141,14 @@ export default {
     async loadQuickGoodsList (idx) {
       const cateId = this.firstCateList[idx].Category_ID
       if (!cateId) return
+
+      var postData = { Cate_ID: cateId }
+      this.userAddressInfo = this.$store.getters['user/getUserAddressInfo']()
+      if (this.userAddressInfo && this.userAddressInfo.hasOwnProperty('latitude') && this.userAddressInfo.hasOwnProperty('longitude')) {
+        Object.assign(postData, { lat: this.userAddressInfo.latitude, lng: this.userAddressInfo.longitude })
+      }
       // 需要刷新页面
-      const list = await this.loadGoodsList({ Cate_ID: cateId })
+      const list = await this.loadGoodsList(postData)
       this.quickGoodsList = list
     }
   },
