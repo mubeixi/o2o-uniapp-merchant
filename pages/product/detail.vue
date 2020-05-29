@@ -846,7 +846,7 @@
             </div>
           </div>
 
-          <div class="product-activity m-t-10">
+          <div class="product-activity m-t-10"  v-if="userLevelList.length>0">
             <div class="flex" style="padding-bottom: 30rpx" v-if="active.length>0">
               <div class="product-activity-title">
                 优惠活动
@@ -1135,7 +1135,7 @@ import {
   judgeReceiveGift,
   spikeProdDetail
 } from '@/api/product'
-import { getActiveInfo, getCommitList, getCouponList } from '@/api/common'
+import { getActiveInfo, getCommitList, getCouponList, getUserLevel } from '@/api/common'
 import { getBizInfo } from '@/api/store'
 import { commentReply, getUserCoupon } from '@/api/customer'
 
@@ -1172,6 +1172,7 @@ export default {
   },
   data () {
     return {
+      userLevelList: [], // 是否有会员
       commentDrawerOpen: false,
       commentAnimationData: {},
       thumbTempFilePath: '', // 图片本地地址
@@ -1787,6 +1788,10 @@ export default {
           throw Error(e.msg || '获取商品详情失败')
         })
         Object.assign(this.productInfo, productInfo)
+
+        this.userLevelList = await getUserLevel({ biz_id: productInfo.biz_id }, { onlyData: true }).catch(e => {
+          throw Error(e.msg || '获取商品详情失败')
+        })
 
         // 秒杀
         if (this.mode === 'seckill') {

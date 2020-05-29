@@ -95,15 +95,13 @@
     {
       "path": "pages/order/OrderPaySuccess",
       "style": {
-        "navigationBarTitleText": "付款成功",
-        "navigationStyle": "custom"
+        "navigationBarTitleText": "付款成功"
       }
     },
     {
       "path": "pages/order/OrderFreeSuccess",
       "style": {
-        "navigationBarTitleText": "享免单成功",
-        "navigationStyle": "custom"
+        "navigationBarTitleText": "享免单成功"
       }
     },
     {

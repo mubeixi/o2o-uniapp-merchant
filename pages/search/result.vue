@@ -155,7 +155,7 @@ export default {
   onLoad (option) {
     const { refer = '', oneHourSend = 0 } = option
     this.refer = refer
-    //是否是一小时达
+    // 是否是一小时达
     this.oneHourSend = Number(oneHourSend)
     this.inputValue = option.inputValue
     if (option.pid) {
@@ -174,6 +174,8 @@ export default {
   },
   onShow () {
     this.$refs.commentModal.close()
+    this.pro = []
+    this.page = 1
     this.init()
   },
   onReachBottom () {
