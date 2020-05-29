@@ -26,7 +26,7 @@
           <!--<div><button @click="cancel" class="sub-btn m-b-20" >暂不登录</button></div>-->
 
           <div class="flex flex-vertical-center flex-justify-between p-t-10">
-            <div class="fz-12 text-right">登录及表示您已阅读并接受<span class="color-primary">《用户服务协议》</span></div>
+            <div class="fz-12 text-right">登录即表示您已阅读并接受<span class="color-primary">《用户服务协议》</span></div>
             <!--            <span class="c6 fz-12" style="text-decoration: underline" @click="cancel">暂不登录</span>-->
           </div>
         </div>
@@ -442,12 +442,12 @@ export default {
         }
 
         // 需要绑定手机号
-        if (errorCode === 88001) {
-          this.bindPhoneTempData = data
-          this.pageTitle = '绑定手机'
-          this.binbPhoneShow = true // 设置这个之后，无法后退
-          this.$refs.phone.show()
-        }
+        // if (errorCode === 88001) {
+        //   this.bindPhoneTempData = data
+        //   this.pageTitle = '绑定手机'
+        //   this.binbPhoneShow = true // 设置这个之后，无法后退
+        //   this.$refs.phone.show()
+        // }
       } catch (e) {
         console.log(e)
         error(e.message)

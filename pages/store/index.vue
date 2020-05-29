@@ -1030,6 +1030,7 @@ export default {
         width: 74rpx;
         height: 74rpx;
         background: #f2f2f2;
+        @include cover-img();
         /*border-radius: 50%;*/
         /*overflow: hidden;*/
       }

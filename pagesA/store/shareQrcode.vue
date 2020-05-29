@@ -153,11 +153,11 @@ export default {
 
         ctx.setFontSize(itemInfo.nickname.size)
         ctx.setFillStyle('#333333')
-        ctx.fillText(userInfo.nickname, itemInfo.nickname.left, itemInfo.nickname.left)
+        ctx.fillText(userInfo.nickname, itemInfo.nickname.left, itemInfo.nickname.top)
 
         ctx.setFontSize(itemInfo.follow.size)
         ctx.setFillStyle('#333333')
-        ctx.fillText(userInfo.follow, itemInfo.follow.left, itemInfo.follow.left)
+        ctx.fillText(itemInfo.follow, itemInfo.follow.left, itemInfo.follow.top)
 
         await new Promise(resolve => {
           ctx.draw(false, function () {
