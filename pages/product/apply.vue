@@ -31,7 +31,18 @@
       </div>
     </div>
 
-    <div class="submit">
+    <product-sku
+      ref="mySku"
+      :mode="mode"
+      @sureSku="save"
+      :hasCart="hasCart"
+      @submitSure="submitSure"
+      @updaCart="updaCart"
+      @buyNow="buyNow"
+      :product-info="selectValue"
+    ></product-sku>
+
+    <div class="submit" @click="nextTemp">
       下一步
     </div>
 
@@ -43,11 +54,12 @@ import { getProductList } from '@/api/product'
 import BaseMixin from '@/mixins/BaseMixin'
 import { modal } from '@/common/fun'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
+import ProductSku from '@/componets/product-sku/product-sku'
 export default {
   mixins: [BaseMixin],
   name: 'ProductApply',
   components: {
-    LayoutIcon
+    LayoutIcon, ProductSku
   },
   data () {
     return {
@@ -83,9 +95,13 @@ export default {
 
   },
   methods: {
+    nextTemp () {
+      this.$refs.mySku.show()
+    },
     selectItem (item) {
       this.selectId = item.Products_ID
       this.selectValue = item
+      this.selectValue.minPrice = this.selectValue.Products_PriceX
     },
     search () {
       this.page = 1
