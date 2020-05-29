@@ -127,10 +127,9 @@
           <div class="bd" v-if="bizList[biz_id].max_diyong_intergral > 0">
             <div class="o_title">
               <span>是否参与积分抵扣</span>
-              <switch :checked="intergralChecked" @change="intergralSwitchChange" color="#04B600"
-                      style="transform: scale(0.8)" />
+              <switch :checked="postData.intergralChecked[biz_id]" @change="intergralSwitchChange($event,biz_id)" color="#04B600" style="transform: scale(0.8)" />
             </div>
-            <div class="o_de" v-if="intergralChecked">您当前共有
+            <div class="o_de" v-if="postData.intergralChecked[biz_id]">您当前共有
               <text>{{userInfo.User_Integral}}</text>
               积分，每
               <text>{{bizList[biz_id].Integral_Buy}}</text>
@@ -333,6 +332,7 @@ export default {
         coupon_id: {},
         coupon_current: {},
         coupon_desc: {}, // 优惠券描述
+        intergralChecked: {}, // 积分抵扣
         use_integral: {}, // 用于抵扣的积分数
         use_money: {}, // 余额支付金额
         use_money_conf: {}, // 用来控制配置的，不提交
@@ -636,11 +636,14 @@ export default {
     },
 
     // 积分抵扣开关
-    intergralSwitchChange (e) {
-      this.intergralChecked = e.detail.value
-      this.postData.use_integral = this.orderInfo.max_diyong_intergral
-      if (!this.intergralChecked) {
-        this.postData.use_integral = 0
+    intergralSwitchChange (e, biz_id) {
+      console.log(e)
+      this.postData.intergralChecked[biz_id] = !!e.detail.value
+
+      if (!this.postData.intergralChecked[biz_id]) {
+        this.postData.use_integral[biz_id] = 0
+      } else {
+        this.postData.use_integral[biz_id] = this.bizList[biz_id].max_diyong_intergral
       }
 
       this.checkOrderParam()
@@ -845,7 +848,11 @@ export default {
           }
 
           this.$set(this.postData.coupon_id, biz_id, '')// 优惠券
+
           this.$set(this.postData.use_integral, biz_id, 0)// 积分抵扣
+
+          this.$set(this.postData.intergralChecked, biz_id, false)// 积分抵扣
+
           this.$set(this.postData.need_invoice, biz_id, 0)// 是否需要发票
           this.$set(this.postData.invoice_info, biz_id, '')// 发票信息
           this.$set(this.postData.use_money, biz_id, '')// 使用余额
