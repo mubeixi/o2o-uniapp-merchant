@@ -22,44 +22,66 @@
         </div>
       </div>
     </div>
-    <!--  占位-->
+    <!--占位-->
     <div :style="{height:diyHeadHeight+'px'}"></div>
     <div class="main tab-container" :style="{top:diyHeadHeight+'px'}">
-      <scroll-view class="tab-page-wrap" scroll-y v-show="headTabIndex===0">
-        <scroll-page-hot></scroll-page-hot>
+      <scroll-view lower-threshold="1" @scrolltolower="bindGetMore(0)" class="tab-page-wrap" scroll-y v-show="headTabIndex===0">
+        <scroll-page-hot ref="page0"></scroll-page-hot>
       </scroll-view>
-      <scroll-view class="tab-page-wrap" scroll-y v-show="headTabIndex===1">
-        <scroll-page-local></scroll-page-local>
+      <scroll-view lower-threshold="1" @scrolltolower="bindGetMore(1)" class="tab-page-wrap" scroll-y v-show="headTabIndex===1">
+        <scroll-page-local ref="page1"></scroll-page-local>
       </scroll-view>
-      <scroll-view class="tab-page-wrap" scroll-y v-show="headTabIndex===2">
-        <scroll-page-merchat></scroll-page-merchat>
+      <scroll-view lower-threshold="1" @scrolltolower="bindGetMore(2)" class="tab-page-wrap" scroll-y v-show="headTabIndex===2">
+        <scroll-page-merchat ref="page2"></scroll-page-merchat>
       </scroll-view>
     </div>
     <div class="publish-btn" @click="toMerchant">
       <layout-icon size="18" display="inline" color="#fff" type="iconfabu"></layout-icon>
       <div class="fz-10 color-white">发布活动</div>
     </div>
+
+    <layout-modal ref="openLocalSettingModal" :autoClose="false">
+      <div class="refuseApplyDialog">
+        <div class="c3 fz-16 modal-title">
+          是否开启定位
+        </div>
+        <div class="fz-14 m-b-20 m-t-10 c9">
+          很抱歉，该功能必须基于地理位置提供商品检索，您需开启地理位置授权才可以使用该功能
+        </div>
+        <div class="control flex flex-justify-between flex-justify-c">
+          <button size="mini" @click="$closePop('openLocalSettingModal')" class="action-btn btn-cancel">取消</button>
+          <button size="mini" open-type='openSetting' bindopensetting="bindOpenSetting" class="btn-sub action-btn">确定</button>
+        </div>
+      </div>
+    </layout-modal>
+
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import { modal } from '@/common/fun'
 import BaseMixin from '@/mixins/BaseMixin'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import ScrollPageHot from '@/pages/index/components/scroll-page-hot'
 import ScrollPageLocal from '@/pages/index/components/scroll-page-local'
 import ScrollPageMerchat from '@/pages/index/components/scroll-page-merchat'
+import Promisify from '@/common/Promisify'
+import LayoutModal from '@/componets/layout-modal/layout-modal'
 
 export default {
   mixins: [BaseMixin],
   components: {
+    LayoutModal,
     ScrollPageMerchat,
     ScrollPageLocal,
     ScrollPageHot,
     LayoutIcon
   },
   computed: {
+    userAddressInfo () {
+      return this.$store.getters['user/getUserAddressInfo']()
+    },
     ...mapGetters({
       primaryColor: 'theme/pimaryColor'
     })
@@ -90,7 +112,6 @@ export default {
           setTimeout(() => {
             const query = uni.createSelectorQuery()
             query.select(`#tabItemTip${idx}`).boundingClientRect(data => {
-
               // 正下方
               underlineAnimation.width('18px').left(data.left - 10 - 4).step()
               underlineAnimation.width('8px').step()
@@ -100,9 +121,7 @@ export default {
         }
       }
     }
-
   },
-
   methods: {
     toMerchant () {
       uni.navigateToMiniProgram({
@@ -120,9 +139,36 @@ export default {
         }
       })
     },
+    bindOpenSetting () {
+      uni.openSetting({
+        success: (res) => {
+          if (res.authSetting['scope.userLocation']) {
+            this.getUserLocation()
+          }
+        }
+      })
+    },
     setHeadTabIndex (idx) {
       this.defaultUnderlineLeft = 0 // 没有左边距了
       this.headTabIndex = idx
+      if (idx > 0 && (!this.userAddressInfo || JSON.stringify(this.userAddressInfo === '{}'))) {
+        Promisify('authorize', { scope: 'scope.userLocation' }).then(() => {
+          this.getUserLocation()
+        }).catch(() => {
+          this.$refs.openLocalSettingModal.show()
+        })
+      }
+    },
+    getUserLocation () {
+      uni.getLocation({
+        type: 'wgs84',
+        success: (res) => {
+          console.log('当前位置的经度：' + res.longitude)
+          console.log('当前位置的纬度：' + res.latitude)
+
+          this.setUserAddressInfo(res)
+        }
+      })
     },
     indexChangeEvent (event) {
       const { current } = event.detail
@@ -130,11 +176,32 @@ export default {
     },
     async _init_func () {
 
-    }
-
+    },
+    bindGetMore (idx) {
+      console.log(idx)
+      this.$refs[`page${idx}`].bindReachBottom()
+    },
+    ...mapActions({
+      setUserAddressInfo: 'user/setUserAddressInfo'
+    })
   },
+  // onReachBottom () {
+  //   if (this.headTabIndex === 0) this.$refs.page0.bindReachBottom()
+  //   if (this.headTabIndex === 1) this.$refs.page1.bindReachBottom()
+  //   if (this.headTabIndex === 2) this.$refs.page2.bindReachBottom()
+  // },
   onLoad () {
     console.log(this.$store.getters['theme/pimaryColor'])
+  },
+  onShow () {
+    this.$refs.openLocalSettingModal.close()
+    if (this.headTabIndex > 0) {
+      Promisify('authorize', { scope: 'scope.userLocation' }).then(() => {
+        this.getUserLocation()
+      }).catch(() => {
+        this.$refs.openLocalSettingModal.show()
+      })
+    }
   },
   onReady () {
     const query = uni.createSelectorQuery()
@@ -152,7 +219,7 @@ export default {
   },
   created () {
     this._init_func()
-  },
+  }
 }
 </script>
 <style lang="scss" scoped>
@@ -251,6 +318,23 @@ export default {
         transform: translateY(-50%);
       }
     }
+  }
+
+  .refuseApplyDialog{
+    width: 400rpx;
+    box-sizing: border-box;
+    padding-left: 30rpx;
+    padding-right: 30rpx;
+    .modal-title{
+      height: 80rpx;
+      line-height: 80rpx;
+      text-align: center;
+      font-weight: bold;
+    }
+    .btn-sub{
+      color: #1aac19;
+    }
+
   }
 
 </style>

@@ -1,10 +1,15 @@
 import Storage from '@/common/Storage'
 
 const state = {
-  userInfo: false
+  userInfo: false,
+  addressInfo: null
 }
 
 const mutations = {
+  SET_USER_ADDRESS (state, value) {
+    state.userInfo = value
+    Storage.set('userAddressInfo', value, 1)
+  },
   SET_USER_INFO (state, value) {
     state.userInfo = value
 
@@ -27,10 +32,24 @@ const mutations = {
 const actions = {
   setUserInfo: ({ commit }, data) => {
     commit('SET_USER_INFO', data)
+  },
+  setUserAddressInfo: ({ commit }, data) => {
+    commit('SET_USER_ADDRESS', data)
   }
 }
 
 const getters = {
+  getUserAddressInfo: (state) => () => {
+    try {
+      // 第一次是在内存里
+      const data = state.addressInfo || Storage.get('userAddressInfo')
+      if (!data || typeof data !== 'object') throw Error('获取用户信息失败')
+      return data
+    } catch (e) {
+      return {}
+    }
+  },
+  addressInfo: (state) => state.addressInfo || Storage.get('userAddressInfo'),
   userInfo: (state) => state.userInfo || Storage.get('userInfo'),
   // 利用方法的方式去获取
   getUserInfo: (state) => () => {

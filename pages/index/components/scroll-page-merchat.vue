@@ -91,6 +91,7 @@ import { getProductCategory } from '@/api/product'
 import { Exception } from '@/common/Exception'
 import { componetMixin } from '@/mixins/BaseMixin'
 import { getBizInfo } from '@/api/store'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'scroll-page-merchat',
@@ -104,11 +105,24 @@ export default {
     }
   },
   computed: {
+
+    ...mapGetters({
+      primaryColor: 'theme/pimaryColor'
+    }),
     cateViewHeight () {
       try {
         return this.systemInfo.windowHeight - this.diyHeadHeight - this.firstCateHeight
       } catch (e) {
         return 'auto'
+      }
+    }
+  },
+  watch: {
+    storeFirstCateIdx: {
+      handler (idx, oldIdx) {
+        if (idx !== oldIdx) {
+          this.loadMerchantList(idx)
+        }
       }
     }
   },
@@ -131,7 +145,7 @@ export default {
           throw Error('获取商品分类失败')
         })
 
-        this.loadMerchantList()
+        this.loadMerchantList(0)
       } catch (e) {
         Exception.handle(e)
       } finally {
@@ -139,14 +153,21 @@ export default {
       }
     },
     async loadMerchantList (idx) {
-      // const cateId = this.liveNav[idx].Category_ID
-
-      // 商家无法利用一级分类获取到
-      this.merchantList = await getBizInfo({
+      const cateId = this.firstCateList[idx].Category_ID
+      if (!cateId) return
+      var postData = {
+        cate_id: cateId,
         get_prod: 3,
         with_prod: 1,
-        get_active: 1
-      }, { onlyData: true }).catch((e) => {
+        get_active: 1,
+        pageSize: 999
+      }
+      this.userAddressInfo = this.$store.getters['user/getUserAddressInfo']()
+      if (this.userAddressInfo && this.userAddressInfo.hasOwnProperty('latitude') && this.userAddressInfo.hasOwnProperty('longitude')) {
+        Object.assign(postData, { lat: this.userAddressInfo.latitude, lng: this.userAddressInfo.longitude })
+      }
+      // 商家无法利用一级分类获取到
+      this.merchantList = await getBizInfo(postData, { onlyData: true }).catch((e) => {
         throw Error('获取人气商家列表失败')
       })
     }

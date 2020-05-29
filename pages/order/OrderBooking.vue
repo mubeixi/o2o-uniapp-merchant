@@ -108,7 +108,7 @@
             <div @click="changeCoupon(biz_id)" class="o_title">
               <span>优惠券选择</span>
               <span style="text-align: right; color: #888;display: flex;align-items: center;">
-              <span>{{bizList[biz_id].coupon_list.length>0?(coupon_desc?coupon_desc:'您有优惠券使用'): '暂无可用优惠券'}}</span>
+              <span>{{bizList[biz_id].coupon_list.length>0?(postData.coupon_desc[biz_id]?postData.coupon_desc[biz_id]:'您有优惠券使用'): '暂无可用优惠券'}}</span>
               <layout-icon class="right" color="#999" type="iconicon-arrow-right"></layout-icon>
             </span>
             </div>
@@ -248,11 +248,11 @@
         <radio-group @change="CouponRadioChange">
           <label :key="i" class="row flex flex-justify-between flex-vertical-b p-10" v-for="(coupon,i) in popupCoupons">
             <span class="flex1">满{{coupon.Coupon_Condition}} - {{coupon.Coupon_Cash > 0 ? coupon.Coupon_Cash : coupon.Coupon_Discount}}</span>
-            <radio :checked="i===coupon_current" :value="coupon.Coupon_ID" class="radio" color="#F43131" />
+            <radio :checked="i==postData.coupon_current[activeBizId]" :value="i" class="radio" color="#F43131" />
           </label>
           <label class="row flex flex-justify-between flex-vertical-b p-10">
             <span class="flex1">不使用优惠</span>
-            <radio :checked="'nouse'===coupon_current" class="radio" color="#F43131" value="nouse" />
+            <radio :checked="'nouse'==postData.coupon_current[activeBizId]" class="radio" color="#F43131" value="nouse" />
           </label>
         </radio-group>
         <div @click="$closePop('couponPop')" class="submit-btn">确定</div>
@@ -331,6 +331,8 @@ export default {
         shipping_name: {}, // 对应名称,不过不需要提交到后台
         shipping_id: {},
         coupon_id: {},
+        coupon_current: {},
+        coupon_desc: {}, // 优惠券描述
         use_integral: {}, // 用于抵扣的积分数
         use_money: {}, // 余额支付金额
         use_money_conf: {}, // 用来控制配置的，不提交
@@ -732,12 +734,13 @@ export default {
     },
     CouponRadioChange (e) {
       const idx = e.detail.value
-      this.coupon_current = idx
+      this.postData.coupon_current[this.activeBizId] = idx
       if (idx === 'nouse') {
         this.postData.coupon_desc[this.activeBizId] = '暂不使用优惠'
+        this.postData.coupon_id[this.activeBizId] = ''
       } else {
         this.postData.coupon_id[this.activeBizId] = this.popupCoupons[idx].Coupon_ID
-        const descStr = `满${this.popupCoupons[idx].Coupon_Condition} - ${this.popupCoupons[idx].Coupon_Cash > 0 ? this.popupCoupons[idx].Coupon_Cash : this.popupCoupons[idx].Coupon_Discount}`
+        const descStr = `满${this.popupCoupons[idx].Coupon_Condition} - ` + (this.popupCoupons[idx].Coupon_Cash > 0 ? this.popupCoupons[idx].Coupon_Cash : this.popupCoupons[idx].Coupon_Discount)
         this.postData.coupon_desc[this.activeBizId] = descStr
       }
 
@@ -825,13 +828,20 @@ export default {
 
           for (var bid in bizList) {
             if (bid === biz_id) {
-              console.log(bid,biz_id,bizList[bid].Order_Shipping,bizList[bid].shipping_company)
+              console.log(bid, biz_id, bizList[bid].Order_Shipping, bizList[bid].shipping_company)
               // 如果该商户有选择，那么就设置上
               if (bizList[bid].Order_Shipping.shipping_id) {
                 this.$set(this.postData.shipping_id, biz_id, bizList[bid].Order_Shipping.shipping_id)
                 this.$set(this.postData.shipping_name, biz_id, bizList[bid].shipping_company[bizList[bid].Order_Shipping.shipping_id])
               }
             }
+          }
+
+          if (!this.postData.coupon_desc.hasOwnProperty(biz_id)) {
+            this.$set(this.postData.coupon_desc, biz_id, '')// 优惠券描述
+          }
+          if (!this.postData.coupon_current.hasOwnProperty(biz_id)) {
+            this.$set(this.postData.coupon_current, biz_id, 'nouse')
           }
 
           this.$set(this.postData.coupon_id, biz_id, '')// 优惠券

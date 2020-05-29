@@ -157,7 +157,7 @@ export default {
 
         ctx.setFontSize(itemInfo.follow.size)
         ctx.setFillStyle('#333333')
-        ctx.fillText(itemInfo.follow, itemInfo.follow.left, itemInfo.follow.top)
+        ctx.fillText(this.bizInfo.follow, itemInfo.follow.left, itemInfo.follow.top)
 
         await new Promise(resolve => {
           ctx.draw(false, function () {
