@@ -338,6 +338,12 @@
           }
         },
         {
+          "path": "user/MyRedemption",
+          "style": {
+            "navigationBarTitleText": "我的兑换"
+          }
+        },
+        {
           "path": "user/MyGift",
           "style": {
             "navigationBarTitleText": "赠品中心"

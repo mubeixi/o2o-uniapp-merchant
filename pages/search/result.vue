@@ -149,7 +149,8 @@ export default {
       refer: '', // 来源
       oneHourSend: 0,
       lat: '',
-      lng: ''
+      lng: '',
+      biz_ids: ''
     }
   },
   onLoad (option) {
@@ -160,6 +161,9 @@ export default {
     this.inputValue = option.inputValue
     if (option.pid) {
       this.Products_ID = option.pid
+    }
+    if (option.biz_id) {
+      this.biz_ids = option.biz_id
     }
     this.Cate_ID = option.Cate_ID
     this.searchAll = Storage.get('searchAll')
@@ -366,6 +370,9 @@ export default {
         data.one_hour_send = 1
         data.lat = this.lat
         data.lng = this.lng
+      }
+      if (this.biz_ids) {
+        data.biz_ids = this.biz_ids
       }
       getProductList(data).then(res => {
         for (var item of res.data) {

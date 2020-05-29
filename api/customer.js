@@ -1,6 +1,28 @@
 import { fetch } from '@/common/request'
 import Storage from '@/common/Storage'
 
+
+
+export const jifenProdOrder = (param, options) => fetch({
+  act: 'jifen_prod_order',
+  param,
+  options
+})
+
+
+export const confirmJifenProdOrder = (param, options) => fetch({
+  act: 'confirm_jifen_prod_order',
+  param,
+  options
+})
+
+export const cancelJifenProdOrder = (param, options) => fetch({
+  act: 'cancel_jifen_prod_order',
+  param,
+  options
+})
+
+
 export const getSmsCode = (param, options) => fetch({
   act: 'login_sms',
   param,
