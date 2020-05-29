@@ -102,13 +102,17 @@ export default {
         this.goodsList = await getProductList({ pageSize: 999 }, { onlyData: true }).catch(e => {
           throw Error(e.msg || '获取商品列表错误')
         })
+        if (this.userInfo.User_ID) {
+          this.info = await getShareView({ user_id: this.userInfo.User_ID }).then(res => {
+            return res.data
+          }).catch(e => {
+            throw Error('获取分享赚概览信息错误')
+          })
+        }
 
-        this.info = await getShareView({ user_id: this.userInfo.User_ID }).then(res => {
-          return res.data
-        }).catch(e => { throw Error('获取分享赚概览信息错误') })
         hideLoading()
       } catch (e) {
-        error(e.message)
+          error(e.message)
         // 回退一下
         // setTimeout(() => {
         //   this.$back()

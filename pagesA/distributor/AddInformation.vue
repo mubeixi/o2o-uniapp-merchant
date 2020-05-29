@@ -179,25 +179,25 @@ export default {
   },
   onLoad (options) {
     this.items = []
-    if (options.pro === 1) {
+    if (Number(options.pro) === 1) {
       this.items.push({
         name: '省级',
         value: 'pro',
       })
     }
-    if (options.cit === 1) {
+    if (Number(options.cit) === 1) {
       this.items.push({
         name: '市级',
         value: 'cit',
       })
     }
-    if (options.cou === 1) {
+    if (Number(options.cou) === 1) {
       this.items.push({
         name: '县/区',
         value: 'cou',
       })
     }
-    if (options.tow === 1) {
+    if (Number(options.tow) === 1) {
       this.items.push({
         name: '镇',
         value: 'tow',

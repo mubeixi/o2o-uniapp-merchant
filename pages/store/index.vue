@@ -72,14 +72,14 @@
                 </div>
               </div>
             </div>
-          </scroll-view>
+          </div>
 
           <!--限时抢购-->
-          <scroll-view scroll-x class="activity-list" @touchmove.stop v-if="activityList.length>0">
+          <div scroll-x class="activity-list  flex flex-justify-c" @touchmove.stop v-if="activityList.length>0">
             <div class="activity-item" v-for="(item,idx) in activityList" :key="idx"
                  @click="$linkTo('/pages/active/FlashSaleByBiz?biz_id='+bid+'&spike_id='+item.id)">{{item.name}}
             </div>
-          </scroll-view>
+          </div>
 
           <!--便捷操作-->
           <div class="feature-list">
@@ -138,9 +138,9 @@
               <li class="nav-item" @click="goodsNavIndex=1" :class="{active:goodsNavIndex === 1}">产品分类</li>
               <li class="nav-item" @click="goodsNavIndex=2" :class="{active:goodsNavIndex === 2}">全部产品</li>
             </ul>
-            <!-- style="height: 540rpx;overflow-y: hidden"             :style="{height:systemInfo.windowHeight+'px'}"-->
+            <!-- style="height: 540rpx;overflow-y: hidden"      :style="{height:systemInfo.windowHeight+'px'}"       :style="{height:systemInfo.windowHeight+'px'}"-->
             <swiper
-              :style="{height:systemInfo.windowHeight+'px'}"
+              style="height: 300px"
               @change="prodIndexChangeEvent"
               :current="goodsNavIndex">
               <swiper-item style="overflow-y: scroll">
@@ -161,6 +161,10 @@
                       </div>
                     </div>
                   </div>
+                </div>
+                <div class="flex flex-vertical-c flex-justify-c look-more"  @click="$linkTo('/pages/search/result?biz_id='+bid)">
+                  <span class="c9 fz-12">查看更多</span>
+                  <layout-icon size="14" color="#999" type="iconicon-arrow-right"></layout-icon>
                 </div>
               </swiper-item>
               <swiper-item class="tab-page" style="overflow-y: scroll">
@@ -192,6 +196,10 @@
                       </div>
                     </div>
                   </div>
+                </div>
+                <div class="flex flex-vertical-c flex-justify-c look-more"  @click="$linkTo('/pages/search/result?biz_id='+bid)">
+                  <span class="c9 fz-12">查看更多</span>
+                  <layout-icon size="14" color="#999" type="iconicon-arrow-right"></layout-icon>
                 </div>
               </swiper-item>
             </swiper>
@@ -580,14 +588,14 @@ export default {
 
         const base = { biz_ids: this.bid }
         this.recommends = await getProductList({
-          pageSize: 5,
+          pageSize: 2,
           Is_Recommend: 1,
           ...base
         }, { onlyData: true }).catch(e => {
           throw Error(e.msg || '获取商品列表错误')
         })
 
-        this.goodsList = await getProductList({ pageSize: 4, ...base }, { onlyData: true }).catch(e => {
+        this.goodsList = await getProductList({ pageSize: 2, ...base }, { onlyData: true }).catch(e => {
           throw Error(e.msg || '获取商品列表错误')
         })
         // 虚拟商品
@@ -1443,5 +1451,9 @@ export default {
         transform: translateY(-50%);
       }
     }
+  }
+  .look-more{
+    height: 60rpx;
+    line-height: 60rpx;
   }
 </style>

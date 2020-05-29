@@ -203,7 +203,7 @@ export default {
     // 去我的兑换列表
     gotoMyExchange () {
       uni.navigateTo({
-        url: '/pagesA/person/myRedemption',
+        url: '/pagesA/user/MyRedemption'
       })
     },
     goBack () {

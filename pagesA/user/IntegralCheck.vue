@@ -135,7 +135,7 @@ export default {
       address_id: 0,
       shipping_price: 0, // 运费
       pay_arr: [],
-      initData: {}
+      //initData: {}
     }
   },
   filters: {
@@ -151,7 +151,8 @@ export default {
   async onShow () {
     this.getAddressList()
     this.getShipping()
-    const initData = await this.getInitData()
+    const initData = this.initData//await this.getInitData()
+    console.log(initData,"s")
     this.pay_arr = initData.pay_arr
   },
   async created () {
@@ -174,6 +175,9 @@ export default {
     this.jifenProdDetail()
   },
   computed: {
+    initData () {
+      return this.$store.state.system.initData
+    },
     loading: function () {
       return this.addressLoading && this.giftLoading
     },
@@ -641,7 +645,7 @@ export default {
       })
     },
     async $_init_wxpay_env () {
-      const initData = await this.getInitData()
+      const initData =this.initData// await this.getInitData()
 
       const login_methods = initData.login_methods
       const component_appid = login_methods.component_appid
@@ -720,7 +724,7 @@ export default {
         title: '支付成功'
       })
       uni.redirectTo({
-        url: '/pagesA/person/myRedemption'
+        url: '/pagesA/user/MyRedemption'
       })
     }
   }

@@ -233,7 +233,7 @@ export default {
       }
 
       uni.navigateTo({
-        url: '/pagesA/distributor/AddInformation?pro=' + pro + '&cit=' + cit + '&cou=' + cou + '&tow=' + tow,
+        url: '/pagesA/distributor/AddInformation?pro=' + pro + '&cit=' + cit + '&cou=' + cou + '&tow=' + tow
       })
     },
   },
