@@ -141,12 +141,20 @@ export default {
         // }).catch(e => {
         //   throw Error(e.msg || '获取商家信息错误')
         // })
+        let that=this
 
         this.activeInfo = await getActiveInfo({ type: 'freeorder', ...this.postData }, {
           onlyData: true
         }).catch(e => {
           throw Error(e.msg || '获取活动失败')
         })
+        if (Array.isArray(this.activeInfo)) {
+          error('暂无免单活动')
+          setTimeout(function () {
+            that.$back()
+          }, 1000)
+          return
+        }
 
         // php时间戳
         this.start_time = uni.$moment(this.activeInfo.start_time * 1000).format('YYYY.MM.DD')

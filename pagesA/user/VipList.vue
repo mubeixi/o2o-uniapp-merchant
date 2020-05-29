@@ -43,7 +43,7 @@
             <div class="vip-coupon-price">{{item.Coupon_Cash}}</div>
           </div>
         </div>
-        
+
       </div>
     </div>
 
@@ -86,57 +86,62 @@
       @payMehtod="payMehtod"
     />
 
-
   </div>
 </template>
 
 <script>
 
-
-
 import { getUserLevel, getShopGiftList, getCouponList } from '@/api/common'
-import  {createBuyLevelOrder,userLevelPay} from '@/api/order'
-import {error,toast} from '@/common/fun'
-import {getUserID} from '@/common/request'
+import { createBuyLevelOrder, userLevelPay } from '@/api/order'
+import { error, toast } from '@/common/fun'
+import { getUserID } from '@/common/request'
 import WzwPay from '@/componets/wzw-pay/wzw-pay'
 import BaseMixin from '@/mixins/BaseMixin'
 import Pay from '@/common/Pay'
-import {checkIsLogin} from '@/common/helper.js'
+import { checkIsLogin } from '@/common/helper.js'
 export default {
   name: 'VipList',
   mixins: [BaseMixin],
-  components:{WzwPay},
+  components: { WzwPay },
   data () {
     return {
       vipData: [{ basic_rights: '' }],
       inds: 0,
       coupon: [],
       pro: [],
-	    biz_id:'',
-      order_id:'',
+	    biz_id: '',
+      order_id: ''
     }
   },
   methods: {
     async payMehtod (item) {
-      let data = {
+      const that = this
+      const data = {
         user_id: getUserID(),
         order_id: this.order_id,
-        pay_method: item.pay_type,
+        pay_method: item.pay_type
       }
-      let payCan = await userLevelPay(data, { tip: '加载中' }).catch(e => {
+      const payCan = await userLevelPay(data, { tip: '加载中' }).catch(e => {
         error(e.msg || '创建订单失败')
       })
-      Pay(this, item.pay_type, payCan)
+      if (payCan.data) {
+        Pay(this, item.pay_type, payCan)
+      } else {
+        toast('支付成功')
+        setTimeout(function () {
+          that.$back()
+        }, 1000)
+      }
     },
     payFailCall (err) {
       uni.showToast({
         title: err.msg ? err.msg : '支付失败',
         icon: 'none',
-        duration: 2000,
+        duration: 2000
       })
     },
     paySuccessCall (res) {
-      let _that = this
+      const _that = this
       if (res && res.code && res.code === 2) {
         _that.payFailCall()
         return
@@ -159,7 +164,7 @@ export default {
             } else if (res.cancel) {
 
             }
-          },
+          }
         })
         return
       }
@@ -174,13 +179,12 @@ export default {
       toast('支付成功')
 
       this.$back()
-
     },
     async submit () {
-		if (!checkIsLogin(1, 1)) return
-      let order = await createBuyLevelOrder({ level: this.vipData[this.inds].level,biz_id:this.biz_id,user_id:getUserID() }, {
+      if (!checkIsLogin(1, 1)) return
+      const order = await createBuyLevelOrder({ level: this.vipData[this.inds].level, biz_id: this.biz_id, user_id: getUserID() }, {
         onlyData: true,
-        tip: '加载中',
+        tip: '加载中'
       }).catch(e => {
         error(e.msg || '创建订单失败')
       })
@@ -194,7 +198,7 @@ export default {
         const id = this.vipData[this.inds].upgrade_rights.coupon.value
         this.coupon = await getCouponList({ coupon_id: id }, {
           onlyData: true,
-          tip: '加载中',
+          tip: '加载中'
         }).catch(e => {
           throw Error(e.msg || '获取优惠券信息失败')
         })
@@ -205,7 +209,7 @@ export default {
         const id = this.vipData[this.inds].upgrade_rights.product.value
         this.pro = await getShopGiftList({ ids: id }, {
           onlyData: true,
-          tip: '加载中',
+          tip: '加载中'
         }).catch(e => {
           throw Error(e.msg || '获取赠送商品信息失败')
         })
@@ -215,18 +219,26 @@ export default {
     },
     async init () {
       try {
+        const that = this
         const arr = await getUserLevel({ biz_id: this.biz_id }, {
           onlyData: true,
-          tip: '加载中',
+          tip: '加载中'
         }).catch(e => {
           throw Error(e.msg || '获取会员信息失败')
         })
+        if (arr.length <= 0) {
+          error('该商家暂无会员卡')
+          setTimeout(function () {
+            that.$back()
+          }, 1500)
+          return
+        }
         this.vipData = arr
         if (this.vipData[this.inds].upgrade_rights && this.vipData[this.inds].upgrade_rights.coupon) {
           const id = this.vipData[this.inds].upgrade_rights.coupon.value
           this.coupon = await getCouponList({ coupon_id: id }, {
             onlyData: true,
-            tip: '加载中',
+            tip: '加载中'
           }).catch(e => {
             throw Error(e.msg || '获取优惠券信息失败')
           })
@@ -235,7 +247,7 @@ export default {
           const id = this.vipData[this.inds].upgrade_rights.product.value
           this.pro = await getShopGiftList({ ids: id }, {
             onlyData: true,
-            tip: '加载中',
+            tip: '加载中'
           }).catch(e => {
             throw Error(e.msg || '获取赠送商品信息失败')
           })
@@ -243,14 +255,14 @@ export default {
       } catch (e) {
         this.$modal(e.message)
       }
-    },
+    }
   },
   onShow () {
     this.init()
   },
   onLoad (options) {
     this.biz_id = options.bid
-  },
+  }
 }
 </script>
 
