@@ -216,10 +216,10 @@ export const chooseImageByPromise = ({ count = 1, sourceType = ['camera', 'album
  * @param len
  * @returns {*[]}
  */
-export const createUpTaskArr = (len=1) => {
+export const createUpTaskArr = (len = 1) => {
   const arr = []
   for (var i = 0; i < len; i++) {
-    arr[i] = {  }
+    arr[i] = { }
   }
   return arr.concat([])
 }
@@ -327,9 +327,7 @@ export const checkIsDistribute = (redirect, tip) => {
         uni.navigateTo({
           url: '/pages/distributor/DistributorCenter'
         })
-      }).catch(() => {
-
-      })
+      }).catch(() => {})
     }
     return false
   }
@@ -342,7 +340,7 @@ export const checkIsDistribute = (redirect, tip) => {
  * @param redirect
  * @return {boolean}
  */
-export const checkIsLogin = (redirect = 1, tip = 0) => {
+export const checkIsLogin = (redirect = 1, tip = 0, isBack = 0) => {
   const access_token = getAccessToken()
 
   if (!access_token) {
@@ -364,10 +362,13 @@ export const checkIsLogin = (redirect = 1, tip = 0) => {
           url: '/pages/user/login'
         })
       }).catch(() => {
+        if (isBack === 1) {
+          uni.navigateBack()
+        }
       })
-    }else{
-		return false
-	}
+    } else {
+      return false
+    }
     return false
   }
 

@@ -212,6 +212,7 @@ export const confirm = (options) => {
         if (res.confirm) {
           resolve(res)
         } else if (res.cancel) {
+          console.log("cancel")
           reject(res)
         }
       },

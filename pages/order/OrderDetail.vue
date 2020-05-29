@@ -38,7 +38,7 @@
     </div>
     <view class="address  bg-white m-b-10 order-id">
       <view>订单号：{{orderInfo.Order_ID}}</view>
-      <view>下单时间: {{orderInfo.Order_CreateTime | formatTime('YYYY-MM-DD hh:mm:ss',1)}}</view>
+      <view>下单时间: {{orderInfo.Order_CreateTime | formatTime('YYYY-MM-DD HH:mm:ss',1)}}</view>
     </view>
     <div class="address bg-white m-b-10" v-if="orderInfo.Order_IsVirtual == 0 ">
       <layout-icon class="m-r-15" type="iconicon-address" size="24"></layout-icon>

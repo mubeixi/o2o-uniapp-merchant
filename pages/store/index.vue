@@ -131,25 +131,7 @@
             </div>
           </div>
 
-          <!--评论列表-->
-          <div class="block comment-box" v-if="comments.length>0">
 
-            <div class="block-title">
-              <div class="block-title-text">留言评论</div>
-              <div class="block-title-more flex flex-vertical-center c9 fz-12" @click="headTabIndex=4">
-                <span>查看全部</span>
-                <icon class="iconright" type="iconright" size="14" color="#999"></icon>
-              </div>
-            </div>
-            <div class="block-content">
-              <div class="comment-list">
-                <div v-for="(item,idx) in comments" :key="idx">
-                  <layout-comment :isLast="comments.length-1===idx" :comment="item" @comment="clickComment"></layout-comment>
-                </div>
-
-              </div>
-            </div>
-          </div>
 
           <!--产品专区-->
           <div class="block goods-box">
@@ -158,6 +140,7 @@
               <li class="nav-item" @click="goodsNavIndex=1" :class="{active:goodsNavIndex === 1}">产品分类</li>
               <li class="nav-item" @click="goodsNavIndex=2" :class="{active:goodsNavIndex === 2}">全部产品</li>
             </ul>
+            <!-- style="height: 540rpx;overflow-y: hidden"             :style="{height:systemInfo.windowHeight+'px'}"-->
             <swiper
               :style="{height:systemInfo.windowHeight+'px'}"
               @change="prodIndexChangeEvent"
@@ -215,6 +198,42 @@
               </swiper-item>
             </swiper>
 
+          </div>
+
+          <!--评论列表-->
+          <div class="block comment-box" v-if="comments.length>0">
+
+            <div class="block-title">
+              <div class="block-title-text">留言评论</div>
+              <div class="block-title-more flex flex-vertical-center c9 fz-12" @click="headTabIndex=4">
+                <span>查看全部</span>
+                <icon class="iconright" type="iconright" size="14" color="#999"></icon>
+              </div>
+            </div>
+            <div class="block-content">
+              <div class="comment-list">
+                <div v-for="(item,idx) in comments" :key="idx">
+                  <layout-comment :isLast="comments.length-1===idx" :comment="item" @comment="clickComment"></layout-comment>
+                  <div class="comment-send" v-if="item.child.length>0">
+                    <block v-for="(com,ind) of item.child" :key="ind">
+                      <block v-for="(co,indx) of com" :key="indx">
+                        <div class="fz-12 c3 comment-send-item" @click.stop="clickCommentSend(item,co.groupid,co.userid)">
+                          <block v-if="co.touserid==item.User_ID">
+                            <span class="color-comment p-r-5">{{co.user_nickname}}:</span> {{co.content}}
+                          </block>
+                          <block v-else>
+                            <span class="color-comment p-r-2">{{co.user_nickname}}</span>回复<span
+                            class="color-comment p-r-5">{{co.to_user_nickname}}</span>{{co.content}}
+                          </block>
+                        </div>
+                      </block>
+
+                    </block>
+                  </div>
+                </div>
+
+              </div>
+            </div>
           </div>
 
           <!--发布评论-->
@@ -295,9 +314,10 @@
           <!--评论列表-->
 
           <div class="block-content">
-            <div class="comment-list">
+            <div class="comment-list" v-if="comments.length>0">
               <div v-for="(item,idx) in comments" :key="idx" class="comment-item">
-                <layout-comment :isLast="comments.length-1===idx" :comment="item" @comment="clickComment"></layout-comment>
+                <layout-comment :isLast="comments.length-1===idx" :comment="item"
+                                @comment="clickComment"></layout-comment>
                 <div class="comment-send" v-if="item.child.length>0">
                   <block v-for="(com,ind) of item.child" :key="ind">
                     <block v-for="(co,indx) of com" :key="indx">
@@ -451,9 +471,9 @@ export default {
         this.$linkTo(`/pagesA/store/shareQrcode?biz_id=${this.bid}`)
       }
     },
-    toVip(){
+    toVip () {
       if (checkIsLogin(1, 1)) {
-        this.$linkTo('/pagesA/user/VipList?bid='+bid)
+        this.$linkTo('/pagesA/user/VipList?bid=' + this.bid)
       }
     },
     toOffinePay () {
@@ -576,7 +596,7 @@ export default {
           throw Error('获取商家自定义分类失败')
         })
 
-        this.couponList = await getCouponList({ biz_id: this.bid }, { onlyData: true }).catch((e) => {
+        this.couponList = await getCouponList({ biz_id: this.bid }, { onlyData: true, noUid: 1 }).catch((e) => {
           throw Error('获取优惠券失败')
         })
 
@@ -760,45 +780,43 @@ export default {
     box-sizing: border-box;
     background: white;
 
-    .color-comment {
-      color: #476DB9;
+  }
+  .color-comment {
+    color: #476DB9;
+  }
+
+  .comment-item {
+    border-bottom: 1px solid #E8E8E8;
+    padding-bottom: 30rpx;
+  }
+
+  .block-title {
+    padding: 20px 0;
+
+    .block-title-text {
+      font-weight: bold;
     }
+  }
 
-    .comment-item {
-      border-bottom: 1px solid #E8E8E8;
-      padding-bottom: 30rpx;
-    }
-
-    .block-title {
-      padding: 20px 0;
-
-      .block-title-text {
-        font-weight: bold;
-      }
-    }
-
-    .comment-list {
-
-    }
-
-    .commtent-add {
-      margin: 50rpx 25rpx;
-      background: #F7F7F7;
-      min-height: 150rpx;
-      padding: 20rpx;
-
-      .textarea {
-        font-size: 14px;
-        line-height: 1.4;
-
-        &::placeholder {
-          color: #999;
-        }
-      }
-    }
+  .comment-list {
 
   }
 
+  .commtent-add {
+    margin: 50rpx 25rpx;
+    background: #F7F7F7;
+    min-height: 150rpx;
+    padding: 20rpx;
+
+    .textarea {
+      font-size: 14px;
+      line-height: 1.4;
+
+      &::placeholder {
+        color: #999;
+      }
+    }
+  }
   .store-section {
 
     .store-su {

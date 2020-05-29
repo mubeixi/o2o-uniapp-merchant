@@ -63,6 +63,7 @@ import { getProductList } from '@/api/product'
 import {
   getShareView
 } from '@/api/customer'
+import { checkIsLogin } from '@/common/helper'
 import { error, hideLoading, modal, showLoading } from '@/common/fun'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import BaseMixin from '@/mixins/BaseMixin'
@@ -91,6 +92,9 @@ export default {
     const { scrollTop } = e
     this.immersed = scrollTop > 240
   },
+  onShow () {
+    if (!checkIsLogin(1, 1, 1)) return
+  },
   methods: {
     async _init_func () {
       try {
@@ -101,16 +105,15 @@ export default {
 
         this.info = await getShareView({ user_id: this.userInfo.User_ID }).then(res => {
           return res.data
-        }).catch(e => { throw Error(e.msg || '获取分享赚概览信息错误') })
+        }).catch(e => { throw Error('获取分享赚概览信息错误') })
         hideLoading()
       } catch (e) {
         error(e.message)
         // 回退一下
-        setTimeout(() => {
-          this.$back()
-        }, 1000)
-        
-      }finally {
+        // setTimeout(() => {
+        //   this.$back()
+        // }, 1000)
+      } finally {
         hideLoading()
       }
     }
