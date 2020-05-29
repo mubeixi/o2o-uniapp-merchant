@@ -264,6 +264,9 @@ export default {
       if (this.index > 0) {
         data.Order_Status = this.index
       }
+      if (Number(this.index) === 4) {
+        data.Is_Commit = 0
+      }
       const orderLsit = await getOrderList(data).catch(e => {
         error(e.msg || '获取订单列表失败')
       })
