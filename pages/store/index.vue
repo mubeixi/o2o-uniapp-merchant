@@ -9,7 +9,7 @@
       </div>
       <div class="actions">
         <div class="action-item"
-             @click="$openLocation(storeInfo.biz_lat,storeInfo.biz_lon,storeInfo.biz_shop_name,storeInfo.biz_address)">
+             @click="$openLocation(storeInfo.biz_lat_gd,storeInfo.biz_lon_gd,storeInfo.biz_shop_name,storeInfo.biz_address)">
           <layout-icon size="26" type="iconicon-address" color="#26C78D"></layout-icon>
         </div>
         <div class="action-item" @click.stop="$cellPhone(storeInfo.biz_mobile)">

@@ -1,13 +1,16 @@
 <template>
-  <div class="wrap"  @click="commonClick">
+  <div class="wrap" @click="commonClick">
     <div :style="{height:systemInfo.statusBarHeight+'px'}"></div>
-    <div :style="{height:diyHeadHeight+'px',opacity:activeHeadOpacity}" v-if="activeHeadOpacity" class="bg-white" style="position: fixed;z-index: 2;width: 750rpx;left:0;top:0">
+    <div :style="{height:diyHeadHeight+'px',opacity:activeHeadOpacity}" v-if="activeHeadOpacity" class="bg-white"
+         style="position: fixed;z-index: 2;width: 750rpx;left:0;top:0">
       <div :style="{height:systemInfo.statusBarHeight+'px'}"></div>
-      <div :style="{height:menuButtonInfo.height+'px',lineHeight:menuButtonInfo.height+'px'}" class="c3 text-center">个人中心</div>
+      <div :style="{height:menuButtonInfo.height+'px',lineHeight:menuButtonInfo.height+'px'}" class="c3 text-center">
+        个人中心
+      </div>
     </div>
 
     <div class="header">
-      <div class="left-icon-box" :style="{top:menuButtonInfo.top+'px',height:menuButtonInfo.height+'px'}" >
+      <div class="left-icon-box" :style="{top:menuButtonInfo.top+'px',height:menuButtonInfo.height+'px'}">
         <!--:plain="false" :wrap-bg="activeHeadOpacity===1?'#f2f2f2':'none'" wrap-padding="6px"-->
         <layout-icon type="iconshezhi" size="24" color="#333" @click="goSetting"></layout-icon>
         <layout-icon class="p-l-10" type="iconicon" size="24" color="#333" @click="goDailyCheck"></layout-icon>
@@ -25,25 +28,25 @@
       <div class="order-item" @click="goOrder(1)">
         <LayoutIcon type="icondaifukuan" color="#9CA2F9" size="26"></LayoutIcon>
         <div class="order-desc">待付款</div>
-		 <div class="jiaobiao" v-if="userInfo.Users_ID && orderNum.waitpay">{{orderNum.waitpay}}</div>
+        <div class="jiaobiao" v-if="userInfo.Users_ID && orderNum.waitpay">{{orderNum.waitpay}}</div>
       </div>
       <div class="order-item" @click="goOrder(2)">
         <LayoutIcon type="iconfahuotixing" color="#88C79A" size="26"></LayoutIcon>
         <div class="order-desc">待发货</div>
-		<div class="jiaobiao" v-if="userInfo.Users_ID && orderNum.waitsend">{{orderNum.waitsend}}</div>
+        <div class="jiaobiao" v-if="userInfo.Users_ID && orderNum.waitsend">{{orderNum.waitsend}}</div>
       </div>
       <div class="order-item" @click="goOrder(3)">
         <LayoutIcon type="icondaishouhuo" color="#FDBB59" size="26"></LayoutIcon>
         <div class="order-desc">待收货</div>
-		<div class="jiaobiao" v-if="userInfo.Users_ID && orderNum.waitconfirm">{{orderNum.waitconfirm}}</div>
+        <div class="jiaobiao" v-if="userInfo.Users_ID && orderNum.waitconfirm">{{orderNum.waitconfirm}}</div>
       </div>
       <div class="order-item" @click="goOrder(4)">
         <LayoutIcon type="iconpingjia" color="#7DCAF7" size="26"></LayoutIcon>
         <div class="order-desc">待评价</div>
-		<div class="jiaobiao" v-if="userInfo.Users_ID && orderNum.waitcomment">{{orderNum.waitcomment}}</div>
+        <div class="jiaobiao" v-if="userInfo.Users_ID && orderNum.waitcomment">{{orderNum.waitcomment}}</div>
       </div>
     </div>
-    <div class="quanyi" @click="$linkTo('/pagesA/user/EquityCard')">
+    <div class="quanyi" @click="$linkTo('/pagesA/user/EquityCard')"  v-if="cardList.length>0">
       <LayoutIcon type="iconquanyi" color="#DA8E4B" size="26" class="v-icon"></LayoutIcon>
       <div class="quanyi-title">超值权益卡</div>
       <div class="quanyi-ad">海量积分赠送·满立减优惠券</div>
@@ -54,7 +57,8 @@
     </div>
     <div class="functions flex flex-justify-between">
       <block v-for="(item,index) of  iconList" :key="index">
-        <LayoutFun width="150rpx" :type="item.className" @openNext="openNext" :index="index" :name="item.name" :color="item.color"></LayoutFun>
+        <LayoutFun width="150rpx" :type="item.className" @openNext="openNext" :index="index" :name="item.name"
+                   :color="item.color"></LayoutFun>
       </block>
     </div>
     <div class="intro">为你推荐</div>
@@ -85,7 +89,7 @@ import {
   getProductList
 } from '@/api/product'
 import { getOrderNum } from '@/api/order'
-import { getUserInfo } from '@/api/customer'
+import { getUserInfo, getRightsCard } from '@/api/customer'
 import { mapActions } from 'vuex'
 
 export default {
@@ -97,8 +101,9 @@ export default {
   },
   data () {
     return {
-      activeHeadOpacity:0,
-	  orderNum:{},
+      cardList:[],
+      activeHeadOpacity: 0,
+      orderNum: {},
       iconList: [
         {
           className: 'iconpintuan',
@@ -182,6 +187,15 @@ export default {
     }
   },
   methods: {
+    async init () {
+      const arr = await getRightsCard({ status: 1 }, {
+        onlyData: true,
+        tip: '加载中'
+      }).catch(e => {
+        error(e.msg || '获取权益卡错误')
+      })
+      this.cardList=arr
+    },
     goDailyCheck () {
       if (!checkIsLogin(1, 1)) return
       this.$linkTo('/pagesA/user/DailyCheck')
@@ -204,36 +218,32 @@ export default {
         throw Error(e.msg || '获取推荐商品信息失败')
       })
     },
-	// 获取订单角标数
-	getOrderNum () {
-	  getOrderNum({ Order_Type: 'shop' }).then(res => {
-	    this.orderNum = res.data
-	  }).catch(e => {
-	  })
-	},
+    // 获取订单角标数
+    getOrderNum () {
+      getOrderNum({ Order_Type: 'shop' }).then(res => {
+        this.orderNum = res.data
+      }).catch(e => {
+      })
+    },
     ...mapActions({
       setUserInfo: 'user/setUserInfo'
     })
   },
   onPageScroll (e) {
-
     const { scrollTop } = e
     const h = this.diyHeadHeight + 20 // 滑到这里的时候,就透明度为1
     const opacity = scrollTop / h
     this.activeHeadOpacity = opacity > 1 ? 1 : opacity
   },
   onShow () {
-
-	if(this.userInfo.Users_ID){
-		getUserInfo().then(res => {
-		  this.setUserInfo(res.data)
-		}).catch(err => {
-		})
-		this.getOrderNum()
-	}
-
-
-
+    this.init()
+    if (this.userInfo.Users_ID) {
+      getUserInfo().then(res => {
+        this.setUserInfo(res.data)
+      }).catch(err => {
+      })
+      this.getOrderNum()
+    }
   },
   created () {
     this._init_func()
@@ -244,9 +254,9 @@ export default {
   .wrap {
     padding: 0rpx 30rpx 0 30rpx;
     background: #EDF0F5;
-	width: 750rpx;
-	box-sizing: border-box;
-	overflow-x: hidden;
+    width: 750rpx;
+    box-sizing: border-box;
+    overflow-x: hidden;
   }
 
   .flex {
@@ -259,7 +269,6 @@ export default {
 
   .header {
     position: relative;
-
 
     .left-icon-box {
       position: fixed;
@@ -298,7 +307,7 @@ export default {
       text-align: center;
       font-size: 28rpx;
       color: #333;
-	  position: relative;
+      position: relative;
 
       .order-desc {
         margin-top: 22rpx;
@@ -369,6 +378,7 @@ export default {
     flex-wrap: wrap;
     margin: 0 10rpx;
   }
+
   .jiaobiao {
     position: absolute;
     top: 0rpx;
