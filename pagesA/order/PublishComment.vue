@@ -1,6 +1,7 @@
 <template>
 	<view class="all"  @click="commonClick">
 		<!-- <page-title title="发表评论" rightHidden="true" bgcolor="#ffffff"></page-title> -->
+		<wzw-im-tip ref="wzwImTip"></wzw-im-tip>
 		<view style="height: 40rpx;width: 100%;">
 
 		</view>
@@ -66,9 +67,10 @@ import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import { comment, getOrderDetail } from '@/api/order'
 import { chooseImageByPromise, uploadImages, getArrColumn } from '@/common/helper'
 import { showLoading, hideLoading } from '@/common/fun'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 export default {
   mixins: [BaseMixin],
-  components: { uniRate, LayoutIcon },
+  components: { WzwImTip, uniRate, LayoutIcon },
   data () {
     return {
       productList: [],

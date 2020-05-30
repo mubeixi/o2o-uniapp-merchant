@@ -1,5 +1,6 @@
 <template>
   <div :class="selectStore?'over':''" class="page-wrap"   @click="commonClick">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <fun-err-msg ref="refMsg" :errs.sync="formCheckResult"></fun-err-msg>
     <block v-if="orderInfo.is_virtual===0">
       <div @click="goAddressList" class="address bg-white">
@@ -124,7 +125,7 @@
                    type="text" v-if="postData.need_invoice[biz_id]" v-model="postData.invoice_info[biz_id]" />
           </div>
 
-          <div class="bd" v-if="bizList[biz_id].max_diyong_intergral > 0">
+          <div class="bd">
             <div class="o_title">
               <span>是否参与积分抵扣</span>
               <switch :checked="postData.intergralChecked[biz_id]" @change="intergralSwitchChange($event,biz_id)" color="#04B600" style="transform: scale(0.8)" />
@@ -276,10 +277,12 @@ import { Exception } from '@/common/Exception'
 import DiyForm from '@/componets/diy-form/diy-form'
 import { mapGetters } from 'vuex'
 import { computeArrayColumnSum } from '@/pages/order/pay'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
   mixins: [BaseMixin],
   components: {
+    WzwImTip,
     DiyForm,
     FunErrMsg,
     LayoutIcon,

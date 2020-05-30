@@ -1,6 +1,6 @@
 <template>
   <div class="page-wrap"  @click="commonClick">
-
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <div class="store-info">
       <div class="base">
         <div class="logo"
@@ -375,10 +375,12 @@ import { buildSharePath, checkIsLogin, getArrColumn } from '@/common/helper'
 import LayoutModal from '@/componets/layout-modal/layout-modal'
 import { addFavourite, cancelFavourite, checkFavourite, commentReply, getUserCoupon } from '@/api/customer'
 import { Exception } from '@/common/Exception'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
   name: 'StoreIndex',
   components: {
+    WzwImTip,
     LayoutModal,
     LayoutCopyright,
     LayoutComment,

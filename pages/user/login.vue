@@ -1,5 +1,6 @@
 <template>
   <div class="wrap"  @click="commonClick">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <layout-page-title :letfFn="true" @clickLeft="bindBackFn" :page-title="pageTitle"></layout-page-title>
     <fun-err-msg ref="refMsg" :topStr="menuButtonInfo.height+menuButtonInfo.top+10+'px'"
                  :errs="formCheckResult"></fun-err-msg>
@@ -101,11 +102,15 @@ import { regPhone } from '@/common/Regs'
 import { validateFun } from '@/common/helper'
 import Promisify from '@/common/Promisify'
 import Storage from '@/common/Storage'
+import IM from '@/common/Im/Im'
+import eventHub from '@/common/eventHub'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
   name: 'UserLogin',
   mixins: [BaseMixin],
   components: {
+    WzwImTip,
     LayoutIcon,
     LayoutPopup,
     FunErrMsg,
@@ -144,7 +149,7 @@ export default {
           title: '操作提示',
           content: '是否跳过设置密码？',
           success: (res) => {
-            if (res.confirm)this.$back()
+            if (res.confirm) this.$back()
           }
         })
         return
@@ -368,12 +373,24 @@ export default {
       // this.$refs.pwd.close()
       // this.$back()
     },
-    loginCall (userData) {
+    async loginCall (userData) {
       const { access_token, User_ID: user_id } = userData
       Storage.set('access_token', access_token)
       Storage.set('user_id', user_id)
 
       this.$store.commit('user/SET_USER_INFO', userData)
+
+      // 新增全局监听
+      if (!Storage.get('listenStatus')) {
+        // IM全局
+        const imInstance = new IM()
+        // 设置本地用户信息
+        imInstance.setSendInfo({ type: 'user', id: user_id, name: userData.User_NickName, avatar: userData.User_HeadImg })
+        await imInstance.start() // 等拿token
+
+        imInstance.openListen()
+        eventHub.imInstance = imInstance // 全局用一个句柄
+      }
 
       // 需要设置密码
       // if (userData.hasOwnProperty('biz_passwd')) {

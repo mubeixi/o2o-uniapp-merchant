@@ -1,5 +1,6 @@
 <template>
   <div class="shopping-cart"  @click="commonClick">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <div class="bg-white" :style="{height:diyHeadHeight+'px'}"></div>
 
     <div class="top-box bg-white" :style="{height:diyHeadHeight+'px'}">
@@ -104,10 +105,12 @@ import { error } from '@/common/fun'
 import ProTag from '@/componets/pro-tag/pro-tag'
 import { objTranslate } from '@/common/helper'
 import { mapActions } from 'vuex'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
   mixins: [BaseMixin],
   components: {
+    WzwImTip,
     LayoutIcon,
     ProTag
   },

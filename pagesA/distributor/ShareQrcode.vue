@@ -1,6 +1,6 @@
 <template>
   <view class="page-wrap" @click="commonClick">
-
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <image @click="preFn(current_url)" :src="current_url|domain" style="width: 750rpx" mode="widthFix" />
 
     <div class="swiper">
@@ -23,8 +23,10 @@ import { mapActions } from 'vuex'
 import { getDistributeWxQrcode, getPosterDetail, getPosterList } from '@/api/common'
 import { error } from '@/common/fun'
 import BaseMixin from '@/mixins/BaseMixin'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
+  components: { WzwImTip },
   mixins: [BaseMixin],
   data () {
     return {

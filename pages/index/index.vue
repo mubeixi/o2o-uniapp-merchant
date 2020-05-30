@@ -1,5 +1,6 @@
 <template>
   <div class="page-wrap">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <div class="head-box" :style="{height:diyHeadHeight+'px',backgroundColor:primaryColor}">
       <div class="head" :style="{height:menuButtonInfo.height+'px',paddingRight:diyHeadRight+'px',marginTop:menuButtonInfo.top+'px'}">
         <ul class="tab-box">
@@ -68,10 +69,12 @@ import ScrollPageLocal from '@/pages/index/components/scroll-page-local'
 import ScrollPageMerchat from '@/pages/index/components/scroll-page-merchat'
 import Promisify from '@/common/Promisify'
 import LayoutModal from '@/componets/layout-modal/layout-modal'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
   mixins: [BaseMixin],
   components: {
+    WzwImTip,
     LayoutModal,
     ScrollPageMerchat,
     ScrollPageLocal,

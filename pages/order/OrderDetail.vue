@@ -1,5 +1,6 @@
 <template>
   <div @click="commonClick" class="myall">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <block v-if="2">
       <div class="checkinfo-box p-15 m-b-10" v-if="orderInfo.Order_IsVirtual == 1 && (orderInfo.Order_Status==2)">
         <div class="check-orderno ">
@@ -279,10 +280,12 @@ import { modal, toast } from '@/common/fun'
 import LayoutLayer from '@/componets/layout-layer/layout-layer'
 import WzwPay from '@/componets/wzw-pay/wzw-pay'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
   mixins: [BaseMixin],
   components: {
+    WzwImTip,
     LayoutIcon,
     WzwPay,
     LayoutLayer,

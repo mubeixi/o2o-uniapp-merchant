@@ -10,6 +10,8 @@
       :refresher-triggered="triggered"
       @refresherrestore="onRestore"
       @refresherrefresh="onRefresh"
+      @scroll="bindScroll"
+      @scrolltolower="bindScrolltolower"
     >
       <block v-for="(chat,idx) in chatList" :key="idx">
         <div class="im-item-box">
@@ -24,6 +26,9 @@
       </block>
       <div :style="{height:'426rpx'}" v-if="showOnther"></div>
     </scroll-view>
+    <div class="show-new-tip" :style="{marginBottom:showOnther?'130px':'0px'}" v-if="showNewMsg && !isToLower" @click="showNewMsgFun">
+      <layout-icon color="#00A8FF" size="12" type="iconright1" display="inline"></layout-icon>有新消息
+    </div>
     <div class="im-bottom-action">
       <div class="text">
         <div class="input-box">
@@ -58,17 +63,22 @@ import WzwImCard from '@/componets/wzw-im-card/wzw-im-card'
 // import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import { Exception } from '@/common/Exception'
 import { getProductDetail } from '@/api/product'
+import eventHub from '@/common/eventHub'
+import LayoutIcon from '@/componets/layout-icon/layout-icon'
 
 let imInstance = null
 const progressList = []
 export default {
   mixins: [BaseMixin],
   components: {
+    LayoutIcon,
     // LayoutIcon,
     WzwImCard
   },
   data () {
     return {
+      isToLower: true,
+      showNewMsg: false,
       toid: '',
       totype: '',
       isFreshing: false,
@@ -111,10 +121,21 @@ export default {
     }
   },
   methods: {
+    showNewMsgFun () {
+      this.setViewIdx()
+      this.refreshScrollBottomPostion()
+      this.showNewMsg = false
+    },
+    bindScroll (e) {
+      this.isToLower = false
+    },
+    bindScrolltolower () {
+      this.isToLower = true
+    },
     /**
      * 手动让视图到底部，适用于高度变化的情况
      */
-    refreshScrollBottomPostion() {
+    refreshScrollBottomPostion () {
       const toViewIdx = this.toViewIdx
       this.toViewIdx = ''
       setTimeout(() => {
@@ -145,7 +166,7 @@ export default {
       this.imInstance.getHistory().then(() => {
         this.triggered = false
         this.isFreshing = false
-      }).catch(()=>{
+      }).catch(() => {
         this.triggered = false
         this.isFreshing = false
       })
@@ -185,14 +206,21 @@ export default {
       const { productId, orderId, origin } = options
 
       setNavigationBarTitle('Im')
-      this.imInstance = imInstance = new IM({ origin })
+      if (eventHub.imInstance) {
+        this.imInstance = imInstance = eventHub.imInstance
+      } else {
+        this.imInstance = imInstance = new IM({ origin })
+      }
 
       // 设置本地用户信息
       imInstance.setSendInfo({ type: 'user', id: Storage.get('user_id'), name: this.userInfo.User_NickName, avatar: this.userInfo.User_HeadImg })
       // 设置接收人的信息
       imInstance.setReceiveInfo({ type: this.totype, id: this.toid })
 
-      await imInstance.start() // 等拿token
+      // 如果没有start过,就start
+      if (this.intervalInstance) {
+        await imInstance.start() // 等拿token
+      }
 
       // 先加载一下最近消息
       await imInstance.getHistory()
@@ -238,6 +266,16 @@ export default {
     this.toid = tid
     this.totype = type
     this._init_func(options)
+
+    uni.$on('getMsg', (res) => {
+      console.log(res)
+      if (this.isToLower) {
+        this.setViewIdx()
+        this.refreshScrollBottomPostion()
+      } else {
+        this.showNewMsg = true
+      }
+    })
   },
   created () {
 
@@ -256,6 +294,20 @@ export default {
     overflow-y: scroll;
     width: 750rpx;
     background: #e5e5e5;
+  }
+  .show-new-tip{
+    position: fixed;
+    transform: translateY(-80px);
+    bottom: constant(safe-area-inset-bottom);
+    bottom: env(safe-area-inset-bottom);
+    right: 20px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    border: 1px solid #e7e7e7;
+    font-size: 12px;
+    color: $fun-blue-color;
+    background: #fff;
+    z-index: 9;
   }
   .im-bottom-action{
     position: fixed;

@@ -1,6 +1,6 @@
 <template>
   <view class="team"  @click="commonClick">
-
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view class="nav">
       <view class="views" :class="index==0?'checked':''" @click="change(0)">
         分销
@@ -59,8 +59,10 @@ import {
   getShaRecordList,
 } from '@/api/customer'
 import BaseMixin from '@/mixins/BaseMixin'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
+  components: { WzwImTip },
   mixins: [BaseMixin],
   data () {
     return {

@@ -1,6 +1,6 @@
 <template>
   <view :style="{'height':systemInfo.windowHeight+'px'}" class="all"  @click="commonClick">
-
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view class="wuliu box-sizing" v-if="pro.list">
       <image :src="pro.imgpath" class="image"></image>
       <view>
@@ -85,8 +85,10 @@
 import BaseMixin from '@/mixins/BaseMixin'
 import { getOrderExpress } from '@/api/order'
 import { error } from '@/common/fun'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
+  components: { WzwImTip },
   mixins: [BaseMixin],
   data () {
     return {

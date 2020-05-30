@@ -1,5 +1,6 @@
 <template>
   <view class="all" v-if="pro" @click="commonClick">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view class="top">
       <view class="yuan" @click="signinMethod">
         <image class="image" :src="'/static/client/qiandao.png'|domain"></image>
@@ -36,10 +37,11 @@
 import BaseMixin from '@/mixins/BaseMixin'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import { getSignin, userSignin } from '@/api/customer'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
   mixins: [BaseMixin],
-  components: { LayoutIcon },
+  components: { WzwImTip, LayoutIcon },
   data () {
     return {
       continue_: [],

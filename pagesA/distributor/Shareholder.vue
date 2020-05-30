@@ -1,6 +1,6 @@
 <template>
   <view class="myall" v-show="isLoad" @click="commonClick">
-
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view class="top">
       <view class="person">
         <image class="headimg" :src="pro.disInfo.Shop_Logo"></image>
@@ -132,6 +132,7 @@
 import { shaInit } from '@/api/customer'
 import BaseMixin from '@/mixins/BaseMixin'
 import CircleTitle from '@/componets/circle-title/circle-title'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
   mixins: [BaseMixin],
@@ -157,6 +158,7 @@ export default {
     },
   },
   components: {
+    WzwImTip,
     CircleTitle,
 
   },

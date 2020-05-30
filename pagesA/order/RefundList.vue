@@ -1,6 +1,6 @@
 <template>
   <div class="myall" @click="commonClick">
-
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <div class="order" v-for="(item,index) of data" :key="index">
       <template v-if="item.prod_list.length>0">
         <div style="background-color: #F3F3F3;height: 20rpx;width: 100%;position: absolute;left: 0rpx;"></div>
@@ -46,8 +46,10 @@
 
 import { cancelRefund, getBackOrder } from '@/api/order'
 import BaseMixin from '@/mixins/BaseMixin'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
+  components: { WzwImTip },
   mixins: [BaseMixin],
   data () {
     return {

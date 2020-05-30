@@ -1,5 +1,6 @@
 <template>
   <div class="wrap">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <div class="bg"></div>
     <div class="moneybox font14" :style="{backgroundImage:'url('+$getDomain('/static/client/moneybox.png')+')'}">
       分销佣金<span class="font14" style="color: #f43838">￥</span><span
@@ -14,8 +15,10 @@
 <script>
 import Storage from '@/common/Storage'
 import BaseMixin from '@/mixins/BaseMixin'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
+  components: { WzwImTip },
   mixins: [BaseMixin],
   data () {
     return {

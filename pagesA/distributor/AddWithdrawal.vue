@@ -1,6 +1,6 @@
 <template>
   <view class="myall" @click="commonClick">
-
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view class="center">
       <view class="left">
         提现方式
@@ -68,9 +68,10 @@ import { mapActions, mapGetters } from 'vuex'
 import BaseMixin from '@/mixins/BaseMixin'
 import { backFunc } from '@/common/fun'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
-  components: { LayoutIcon },
+  components: { WzwImTip, LayoutIcon },
   mixins: [BaseMixin],
   data () {
     return {

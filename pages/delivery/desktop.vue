@@ -1,5 +1,6 @@
 <template>
   <div class="page-wrap"  @click="commonClick">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <div style="position: fixed;left: 0;top:0;width:750rpx;"
          :style="{height:menuButtonInfo.top+menuButtonInfo.height+'px'}">
       <!--状态栏-->
@@ -167,6 +168,7 @@ import { error, modal } from '@/common/fun'
 import { Exception } from '@/common/Exception'
 import { getBizInfo } from '@/api/store'
 import { mergeObject, numberSort, checkIsLogin, findArrayIdx } from '@/common/helper'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 const attrInfoTmpl = {
   num: 0,
   attr_id: '', // 规格id
@@ -178,6 +180,7 @@ export default {
   name: 'DeliveryDesktop',
   mixins: [BaseMixin],
   components: {
+    WzwImTip,
     LayoutLayer,
     LayoutIcon
   },

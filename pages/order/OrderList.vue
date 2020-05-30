@@ -1,5 +1,6 @@
 <template>
   <div class="page-wrap"  @click="commonClick">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <div style="height: 100rpx;width: 750rpx"></div>
     <div class="navs">
       <div class="nav-item" :class="index==0?'active':''" @click="changIndex(0)">全部</div>
@@ -113,9 +114,10 @@ import { cancelOrder, delOrder, getOrderList, getOrderNum, confirmOrder } from '
 import BaseMixin from '@/mixins/BaseMixin'
 import { error } from '@/common/fun'
 import LayoutModal from '@/componets/layout-modal/layout-modal'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
-  components: { LayoutModal },
+  components: { WzwImTip, LayoutModal },
   mixins: [BaseMixin],
   data () {
     return {

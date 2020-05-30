@@ -1,5 +1,6 @@
 <template>
   <view class="boxSizing" @click="commonClick">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view class="zhezhao" v-if="isShow">
       <view class="zhezhaoView">
         <image :src="'/static/client/check/close.png'|domain" class="closeZ" @click="isShow=false"></image>
@@ -87,10 +88,11 @@
 import { getUserInfo, transferIntegral, userIntegralRecord } from '@/api/customer'
 import BaseMixin from '@/mixins/BaseMixin'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 //import '@/common/tool/TweenMax.min'
 export default {
   mixins: [BaseMixin],
-  components: { LayoutIcon },
+  components: { WzwImTip, LayoutIcon },
   data () {
     return {
       isShow: false,

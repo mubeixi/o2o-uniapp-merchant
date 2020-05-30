@@ -1,5 +1,6 @@
 <template>
   <view class="myall" @click="commonClick">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <!-- #ifdef APP-PLUS -->
     <view class="status_bar" style="background:#2e323c;"></view>
     <!-- #endif -->
@@ -85,6 +86,7 @@ import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import BaseMixin from '@/mixins/BaseMixin'
 import { getTaskCenter } from '@/api/customer'
 import CircleTitle from '@/componets/circle-title/circle-title'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
   mixins: [BaseMixin],
@@ -94,6 +96,7 @@ export default {
     }
   },
   components: {
+    WzwImTip,
     CircleTitle,
 
     LayoutIcon,

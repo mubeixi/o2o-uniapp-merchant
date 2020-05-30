@@ -1,5 +1,6 @@
 <template>
   <div class="page-wrap"  @click="commonClick">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <layout-icon :style="{top:menuButtonInfo.top+'px'}" :color="immersed?'#bbb':'#fff'" @click="$back" class="left-icon" :size="immersed?26:22" :type="immersed?'iconleft-circle-solid':'iconicon-arrow-left'"></layout-icon>
 
     <div class="head" :style="{backgroundImage: 'url('+$getDomain('/static/client/share/share_top.png')+')'}">
@@ -67,11 +68,13 @@ import { checkIsLogin } from '@/common/helper'
 import { error, hideLoading, modal, showLoading } from '@/common/fun'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import BaseMixin from '@/mixins/BaseMixin'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
   name: 'ShareIndex',
   mixins: [BaseMixin],
   components: {
+    WzwImTip,
     LayoutIcon,
     LayoutAd
   },

@@ -1,6 +1,6 @@
 <template>
   <div class="seckill-all" :style="{backgroundImage:'url('+$getDomain('/static/client/seckill-bg.png')+')'}"   @click="commonClick">
-
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <div class="flex flex-vertical-c seckill-title" :style="{marginTop:menuButtonInfo.top+'px'}">
       <layout-icon type="iconicon-arrow-left" size="20" color="#fff" class="back-icon m-r-2"
                    @click="$back()"></layout-icon>
@@ -50,10 +50,11 @@ import { getBizInfo } from '@/api/store'
 import { getCountdownFunc } from '@/common/helper'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import { hideLoading, modal, showLoading } from '@/common/fun'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
   mixins: [BaseMixin],
-  components: { LayoutIcon },
+  components: { WzwImTip, LayoutIcon },
   data () {
     return {
       biz_id: null,

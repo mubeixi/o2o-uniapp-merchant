@@ -1,5 +1,6 @@
 <template>
   <view class="all" v-if="pro.agent_rate" @click="commonClick">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view class="top">
       <view class="person" v-if="pro.disInfo">
         <image class="image" :src="pro.disInfo.Shop_Logo"></image>
@@ -151,6 +152,7 @@ import BaseMixin from '@/mixins/BaseMixin'
 
 import { agentInfo } from '@/api/customer'
 import CircleTitle from '@/componets/circle-title/circle-title'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
   mixins: [BaseMixin],
@@ -175,6 +177,7 @@ export default {
     },
   },
   components: {
+    WzwImTip,
     CircleTitle,
 
   },

@@ -1,5 +1,6 @@
 <template>
   <div class="wrap" @click="commonClick">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view class="search-wrap" @click="goSearch">
       <icon type="search" size="34rpx" class="search_icon" />
       <input type="text" class="search-input" name="search" placeholder="请输入商品关键词"
@@ -91,9 +92,11 @@
 <script>
 import BaseMixin from '@/mixins/BaseMixin'
 import { getProductCategory } from '@/api/product'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
   name: 'ProductClassify',
+  components: { WzwImTip },
   mixins: [BaseMixin],
   data () {
     return {

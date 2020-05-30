@@ -1,5 +1,6 @@
 <template>
   <view class="profitSum" @click="commonClick">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view style="height: 90rpx;margin-bottom: 10px;font-size: 14px;">
       <view class="status fixed" :class="[status === 9 ? 'active' : '']" @click="changeStatus(9)">全部</view>
       <scroll-view class="order-status" scroll-x="true" style="width: 612rpx;white-space: nowrap;margin-left: 138rpx;">
@@ -61,8 +62,10 @@
 
 import { getBalanceDetail } from '@/api/customer'
 import BaseMixin from '@/mixins/BaseMixin'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
+  components: { WzwImTip },
   mixins: [BaseMixin],
   data () {
     return {

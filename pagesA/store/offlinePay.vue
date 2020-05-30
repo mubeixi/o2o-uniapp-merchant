@@ -1,5 +1,6 @@
 <template>
   <div class="page-wrap" @click="commonClick">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <div class="input-box">
       <input class="input" @confirm="subFn" confirm-type="done" placeholder="请输入消费金额" type="digit" v-model="payMoney" />
     </div>
@@ -37,12 +38,13 @@ import { Exception } from '@/common/Exception'
 import LayoutLayer from '@/componets/layout-layer/layout-layer'
 import Pay from '@/common/Pay'
 import Promisify from '@/common/Promisify'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 const floatNumber = /^[0-9]+.?[0-9]*$/ // 大于等于0的浮点数或者数字字符串
 const intNumber = /^[0-9]+$/ // 大于等于0的浮点数或者数字字符串
 
 export default {
-  components: { LayoutLayer },
+  components: { WzwImTip, LayoutLayer },
   mixins: [BaseMixin],
   data () {
     return {

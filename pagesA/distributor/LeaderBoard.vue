@@ -1,6 +1,6 @@
 <template>
   <view class="wrap"  @click="commonClick">
-
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view class="all">
       <view class="hahas" :class="index==0?'checked':''" @click="change(0)">
         总部{{commi_rename.commi}}
@@ -113,8 +113,10 @@
 <script>
 import { getBalanceRank } from '@/api/customer'
 import BaseMixin from '@/mixins/BaseMixin'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
+  components: { WzwImTip },
   mixins: [BaseMixin],
   data () {
     return {

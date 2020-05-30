@@ -1,5 +1,6 @@
 <template>
   <div  @click="commonClick">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <div class="zhezhao" v-if="password_input">
       <div class="input-wrap">
         <div>请输入余额支付密码</div>
@@ -187,11 +188,13 @@ import WzwPay from '@/componets/wzw-pay/wzw-pay'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import { computeArrayColumnSum, farmatPayParam } from '@/pages/order/pay'
 import { Exception } from '@/common/Exception'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
   name: 'OrderPay',
   mixins: [BaseMixin],
   components: {
+    WzwImTip,
     LayoutIcon,
     WzwPay,
     LayoutLayer

@@ -1,5 +1,6 @@
 <template>
   <view class="all" @click="commonClick">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view class="yue">
       <image class="yue-image" :src="'/static/client/blance/recharge.jpg'|domain"></image>
       <view class="yueq">
@@ -46,8 +47,10 @@ import Pay from '@/common/Pay'
 import { checkIsLogin, GetQueryByString, isWeiXin, urlencode } from '@/common/helper'
 import Storage from '@/common/Storage'
 import BaseMixin from '@/mixins/BaseMixin'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
+  components: { WzwImTip },
   mixins: [BaseMixin],
   data () {
     return {

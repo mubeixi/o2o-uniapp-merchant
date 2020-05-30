@@ -1,5 +1,6 @@
 <template>
   <view v-if="loading" @click="commonClick">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <!--  <pagetitle title="提交订单"></pagetitle> -->
     <view @click="goAddressList" class="address" v-if="giftInfo.Gift_Shipping== 1">
       <image :src="'/static/client/location.png'|domain" alt="" class="loc_icon"></image>
@@ -107,11 +108,13 @@ import Pay from '@/common/Pay'
 import { GetQueryByString, isWeiXin,  urlencode } from '@/common/helper'
 import { backFunc } from '@/common/fun'
 import {Storage} from '@/common/Storage'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 
 export default {
   mixins: [BaseMixin],
   components: {
+    WzwImTip,
     popupLayer
   },
   data () {

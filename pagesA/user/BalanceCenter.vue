@@ -1,5 +1,6 @@
 <template>
   <view class="boxSizing" @click="commonClick">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view class="zhezhao" v-if="isShow">
       <view class="zhezhaoView">
         <image :src="'/static/client/check/close.png'|domain" class="closeZ" @click="isShow=false"></image>
@@ -151,8 +152,10 @@ import { getUserChargeRecord, getUserInfo, getUserMoneyRecord, transferBalance }
 import { mapActions } from 'vuex'
 import { confirm, error } from '@/common/fun'
 import { checkIsLogin } from '@/common/helper'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
+  components: { WzwImTip },
   mixins: [BaseMixin],
   data () {
     return {

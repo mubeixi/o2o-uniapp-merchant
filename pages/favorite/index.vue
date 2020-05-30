@@ -1,5 +1,6 @@
 <template>
   <div class="page-wrap"  @click="commonClick">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <div
       class="flex flex-vertical-c navigator"
       :style="{paddingTop:menuButtonInfo.top+'px',paddingBottom:10+'px',height:menuButtonInfo.height+'px'}"
@@ -84,11 +85,12 @@ import BaseMixin from '@/mixins/BaseMixin'
 import { linkToEasy, modal, toast } from '@/common/fun'
 import { cancelFavourite, getFavouriteProdList } from '@/api/customer'
 import Storage from '@/common/Storage'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
   name: 'FavoriteIndex',
   mixins: [BaseMixin],
-  components: { LayoutIcon },
+  components: { WzwImTip, LayoutIcon },
   watch: {
     'allCheck': function (val) {
       if (val) {

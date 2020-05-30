@@ -1,5 +1,6 @@
 <template>
   <div class="bgColor-white" @click="commonClick">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <div class="msg">
       <div class="item" @click="changeAvator">
         <div class="item-name">头像</div>
@@ -70,10 +71,11 @@ import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import { chooseImageByPromise, getArrColumn, uploadImages } from '@/common/helper'
 import { hideLoading, showLoading } from '@/common/fun'
 import { mapActions } from 'vuex'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
   mixins: [BaseMixin],
-  components: { LayoutIcon },
+  components: { WzwImTip, LayoutIcon },
   data () {
     return {
       userInfo: {},

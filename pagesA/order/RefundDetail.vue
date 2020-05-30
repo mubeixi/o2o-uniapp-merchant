@@ -1,5 +1,6 @@
 <template>
   <view class="overflow" @click="commonClick">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view class="tops">
       <view class="imgs box-sizing">
         <image class="image" :src="prod_list.prod_img"></image>
@@ -80,8 +81,10 @@
 
 import { getBackOrderDetail, refundSend } from '@/api/order'
 import BaseMixin from '@/mixins/BaseMixin'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
+  components: { WzwImTip },
   mixins: [BaseMixin],
   data () {
     return {
