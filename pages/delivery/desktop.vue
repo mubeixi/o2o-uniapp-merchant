@@ -32,23 +32,25 @@
 
       </div>
       <scroll-view scroll-y="true" class="list">
-        <div class="goods-item" v-for="(goods,idx) in showList" :key="idx" @click="toDetail(goods)">
-          <div class="cover" :style="{backgroundImage:'url('+$getDomain(goods.ImgPath)+')'}"></div>
-          <div class="info">
+        <div class="goods-item" v-for="(goods,idx) in showList" :key="idx" >
+          <div class="cover" @click="toDetail(goods)" :style="{backgroundImage:'url('+$getDomain(goods.ImgPath)+')'}"></div>
+          <div class="info" @click="toDetail(goods)">
             <div class="title">{{goods.Products_Name}}</div>
             <div class="fz-12 c9 p-t-6 p-b-6">销量：{{goods.Products_Sales}}</div>
             <div><span class="price-selling fz-12">￥</span><span
               class="price-selling fz-14">{{goods.Products_PriceX}}</span></div>
           </div>
-          <div class="action m-r-20" @click.stop="$noop">
-            <div class="btn-open-attr" @click.stop="openAttrLayer(goods.Products_ID)" v-if="goods.skujosn">选择规格</div>
+          <div class="action m-r-10" @click.stop="$noop">
+            <div class="btn-open-attr m-r-10" @click.stop="openAttrLayer(goods.Products_ID)" v-if="goods.skujosn">
+              选规格
+              <div class="goods-num-tag" v-if="goods.num>0">{{goods.num}}</div>
+            </div>
             <div v-else class="flex flex-vertical-c" @click="setActiveGoodsIdx(idx)">
               <block v-if="goods.num>0">
-                <layout-icon @click.stop="goodsNumMinus(goods)" size="24" color="#26C78D"
-                             type="iconicon-minus"></layout-icon>
+                <layout-icon @click.stop="goodsNumMinus(goods)" size="24" color="#26C78D" type="iconicon-minus p-10"></layout-icon>
                 <input :value="goods.num" @input="changeGoodsNum" class="input-num text-center fz-12" />
               </block>
-              <layout-icon @click.stop="goodsNumPlus(goods)" size="24" color="#26C78D" type="iconicon-plus"></layout-icon>
+              <layout-icon @click.stop="goodsNumPlus(goods)" size="24" color="#26C78D" type="iconicon-plus p-10"></layout-icon>
             </div>
           </div>
         </div>
@@ -87,14 +89,12 @@
                   class="price-selling fz-14">{{row.Products_PriceX}}</span><span
                   class="p-l-4 price-market text-through">￥{{row.Products_PriceY}}</span>
                 </div>
-                <div style="width: 150rpx" class="action flex flex-vertical-c" @click="setActiveAttrIdx(idx)">
+                <div style="width: 120px" class="action flex flex-vertical-c" @click="setActiveAttrIdx(idx)">
                   <block v-if="row.num>0">
-                    <layout-icon @click.stop="attrNumMinus(row)" size="24" color="#26C78D"
-                                 type="iconicon-minus"></layout-icon>
+                    <layout-icon @click.stop="attrNumMinus(row)" size="24" color="#26C78D" type="iconicon-minus p-10"></layout-icon>
                     <input @input="changeAttrNum" :value="row.num" class="input-num text-center fz-12" />
                   </block>
-                  <layout-icon @click.stop="attrNumPlus(row)" size="24" color="#26C78D"
-                               type="iconicon-plus"></layout-icon>
+                  <layout-icon @click.stop="attrNumPlus(row)" size="24" color="#26C78D" type="iconicon-plus p-10"></layout-icon>
                 </div>
               </div>
             </div>
@@ -124,25 +124,29 @@
             </div>
           </div>
         </div>
-        <div class="actions">
-          <div>
-            <block v-if="attrInfo.price">
-              <span class="price-selling fz-12">￥</span>
-              <span class="price-selling fz-14 c3">{{attrInfo.price}}</span>
-              <span class="c9 fz-12 p-l-4">
+        <div class="p-10">
+          <block v-if="attrInfo.price">
+            <span class="fz-12 p-r-4 c9">已选择:</span>
+            <span class="price-selling fz-12">￥</span>
+            <span class="price-selling fz-14 c3">{{attrInfo.price}}</span>
+            <span class="c9 fz-12 p-l-4">
               {{attrInfo.attr_text}}
               </span>
-            </block>
+          </block>
+        </div>
+        <div class="actions">
+          <div class="flex1">
+
           </div>
           <div>
             <div v-if="attrInfo.num<1" @click="confirmAdd" class="confirm-btn" :class="{disabled:!submitFlag}">加入购物车
             </div>
-            <div v-else class="flex flex-vertical-c" style="width: 150rpx">
+            <div v-else class="flex flex-vertical-c" style="width: 120px">
               <block v-if="attrInfo.num>0">
-                <layout-icon @click.stop="delNum" size="24" color="#26C78D" type="iconicon-minus"></layout-icon>
-                <input v-model="attrInfo.num" class="input-num text-center fz-12" />
+                <layout-icon @click.stop="delNum" size="24" color="#26C78D" type="iconicon-minus p-10"></layout-icon>
+                <input @input="changeNum" v-model="attrInfo.num" class="input-num text-center fz-12" />
               </block>
-              <layout-icon @click.stop="addNum" size="24" color="#26C78D" type="iconicon-plus"></layout-icon>
+              <layout-icon @click.stop="addNum" size="24" color="#26C78D" type="iconicon-plus p-10"></layout-icon>
             </div>
           </div>
 
@@ -162,7 +166,7 @@ import LayoutLayer from '@/componets/layout-layer/layout-layer'
 import { error, modal } from '@/common/fun'
 import { Exception } from '@/common/Exception'
 import { getBizInfo } from '@/api/store'
-import { mergeObject, numberSort,checkIsLogin } from '@/common/helper'
+import { mergeObject, numberSort, checkIsLogin, findArrayIdx } from '@/common/helper'
 const attrInfoTmpl = {
   num: 0,
   attr_id: '', // 规格id
@@ -212,16 +216,22 @@ export default {
   },
   computed: {
     totalNum () {
-      return this.$store.getters['delivery/getTotalNum']()
+      return this.$store.getters['delivery/getTotalNum'](this.bid)
     },
     totalPrice () {
-      return this.$store.getters['delivery/getTotalMoney']()
+      return this.$store.getters['delivery/getTotalMoney'](this.bid)
     },
     carts () {
-      return this.$store.getters['delivery/getCartList']()
+      return this.$store.getters['delivery/getCartList'](this.bid)
     }
   },
   watch: {
+    carts: {
+      deep: true,
+      handler (list) {
+        this.refreshShowListNum()
+      }
+    }
     // cateActiveIdx: {
     //   immediate: true,
     //   handler(val){
@@ -231,8 +241,22 @@ export default {
     // }
   },
   methods: {
+    refreshShowListNum () {
+      for (var idx in this.showList) {
+        this.$set(this.showList[idx], 'num', this.$store.getters['delivery/getGoodsTotalById'](this.showList[idx].Products_ID))
+      }
+      // for (const row of this.carts) {
+      //   const { Products_ID } = row
+      //   const chagneProductIndex = findArrayIdx(this.showList, { Products_ID })
+      //   console.log(chagneProductIndex)
+      //   if (this.showList.length > 0 && chagneProductIndex !== false) {
+      //     const oldNum = this.showList[chagneProductIndex].num
+      //     this.$set(this.showList[chagneProductIndex], 'num', oldNum + row.num)
+      //   }
+      // }
+    },
     buyNow () {
-		if (!checkIsLogin(1, 1)) return
+      if (!checkIsLogin(1, 1)) return
       if (this.totalPrice > 0 && this.totalPrice > this.bizInfo.city_express_config.limit_config.start_send_money) {
         this.$linkTo('/pages/order/OrderBooking?cart_key=waimai&biz_id=' + this.bid)
       } else {
@@ -337,13 +361,36 @@ export default {
     delNum () {
       if (this.attrInfo.num > 0) {
         this.attrInfo.num -= 1
+
+        this.$store.commit('delivery/MINUS_GOODS', {
+          num: 1,
+          product: { attr_id: this.attrInfo.attr_id }
+        })
       } else {
         uni.showToast({
           title: '购买数量不能小于0',
           icon: 'none'
         })
-        this.attrInfo.num = 0
+        // this.attrInfo.num = 0
       }
+    },
+    changeNum (e) {
+      let amount = parseInt(e.detail.value)
+      const currentAttrInfo = this.attrInfo
+      if (currentAttrInfo.num === amount) return
+      if (amount < 0) {
+        amount = currentAttrInfo.num
+        error('至少购买一件')
+      }
+      if (amount > currentAttrInfo.count) {
+        amount = currentAttrInfo.count
+        error('购买数量不能超过库存量')
+      }
+
+      this.$store.commit('delivery/SET_GOODS_NUM', {
+        num: amount,
+        product: { attr_id: currentAttrInfo.attr_id }
+      })
     },
     // 用户手动输入数量
     setCount (e) {
@@ -376,9 +423,10 @@ export default {
       }
     },
     toDetail (goodsInfo) {
-      this.$linkTo('/pages/delivery/detail?prod_id=' + goodsInfo.Products_ID)
+      this.$linkTo('/pagesA/delivery/detail?bid=' + this.bid + '&prod_id=' + goodsInfo.Products_ID)
     },
     attrNumMinus (attr) {
+      console.log(attr)
       this.$store.commit('delivery/MINUS_GOODS', {
         num: 1,
         product: { attr_id: attr.attr_id }
@@ -552,7 +600,7 @@ export default {
           const list = ret.data.map(goods => {
             return {
               ...goods,
-              num: 0
+              num: 0 // 不管有没有规格，都给数量。但是有规格的商品，数量仅仅作为展示而已
             }
           })
           this.$set(this.cateList[idx], 'list', list)
@@ -560,6 +608,8 @@ export default {
           this.$set(this.cateList[idx], 'totalCount', ret.totalCount)
         }
         this.showList = this.cateList[idx].list
+        // 每次都更新一下
+        this.refreshShowListNum()
       } catch (e) {
         this.showList = []
       }
@@ -844,14 +894,14 @@ export default {
       background: #F8F8F8;
 
       .cate-item {
-        height: 74rpx;
-        line-height: 74rpx;
+        height: 38px;
+        line-height: 38px;
         text-align: center;
         padding: 0 6px;
         overflow: hidden;
         text-overflow: ellipsis;
         border-bottom: 1px solid #fff;
-        font-size: 13px;
+        font-size: 14px;
         color: #333;
 
         &.active {
@@ -904,6 +954,20 @@ export default {
             line-height: 38rpx;
             border-radius: 19rpx;
             text-align: center;
+            position: relative;
+            .goods-num-tag{
+              position: absolute;
+              right: -10px;
+              top: -10px;
+              background: $fun-red-color;
+              border-radius: 50%;
+              overflow: hidden;
+              height: 20px;
+              width: 20px;
+              font-size: 10px;
+              line-height: 20px;
+              text-align: center;
+            }
           }
         }
       }
