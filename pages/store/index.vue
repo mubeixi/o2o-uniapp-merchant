@@ -4,6 +4,7 @@
     <div class="store-info">
       <div class="base">
         <div class="logo"
+		v-if="storeInfo.biz_logo"
              :style="{backgroundImage:'url('+storeInfo.biz_logo+')'}"></div>
         <div class="title">{{storeInfo.biz_shop_name}}</div>
       </div>
