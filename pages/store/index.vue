@@ -268,7 +268,7 @@
             <div class="php-section-title m-b-10 flex flex-vertical-c">
               <div class="label"></div>
               <div class="text flex1 c3">{{imgs.cate_name}}</div>
-              <div class="flex flex-vertical-c" @click="$linkTo('/pages/store/photo?bid='+bid+'&tab='+idx1)">
+              <div class="flex flex-vertical-c" @click="$linkTo('/pagesA/store/photo?bid='+bid+'&tab='+idx1)">
                 <span class="c9 fz-12">查看更多</span>
                 <layout-icon size="14" color="#999" type="iconicon-arrow-right"></layout-icon>
               </div>
