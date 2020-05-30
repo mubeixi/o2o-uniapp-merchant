@@ -46,12 +46,7 @@
         "navigationBarTitleText": "商品列表"
       }
     },
-    {
-      "path": "pages/store/photo",
-      "style": {
-        "navigationBarTitleText": "相册"
-      }
-    },
+
     {
       "path": "pages/share/index",
       "style": {
@@ -132,13 +127,6 @@
       }
     },
     {
-      "path": "pages/delivery/detail",
-      "style": {
-        "navigationBarTitleText": "外卖详情",
-        "navigationStyle": "custom"
-      }
-    },
-    {
       "path": "pages/product/classify",
       "style": {
         "navigationBarTitleText": "商品分类",
@@ -211,12 +199,6 @@
       }
     },
     {
-      "path": "pages/product/SharePic/SharePic",
-      "style": {
-        "navigationBarTitleText": "分享海报"
-      }
-    },
-    {
       "path": "pages/user/Praise",
       "style": {
         "navigationBarTitleText": "好评"
@@ -228,6 +210,25 @@
       "root": "pagesA",
       "name": "onther",
       "pages": [
+        {
+          "path": "delivery/detail",
+          "style": {
+            "navigationBarTitleText": "外卖详情",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "product/SharePic/SharePic",
+          "style": {
+            "navigationBarTitleText": "分享海报"
+          }
+        },
+        {
+          "path": "store/photo",
+          "style": {
+            "navigationBarTitleText": "相册"
+          }
+        },
         {
           "path": "order/logistics",
           "style": {

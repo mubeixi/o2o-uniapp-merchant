@@ -1086,7 +1086,7 @@ export default {
       })
 
       const cart_buy = {}
-      const deliveryCartList = this.$store.getters['delivery/getCartList']()
+      const deliveryCartList = this.$store.getters['delivery/getCartList'](options.biz_id)
       console.log(deliveryCartList)
       for (var row of deliveryCartList) {
         // 创建biz_id

@@ -1249,26 +1249,29 @@
             </div>
           </div>
         </div>
+        <div class="p-10">
+          <block v-if="attrInfo.price">
+            <span class="fz-12 p-r-4 c9">已选择:</span>
+            <span class="price-selling fz-12">￥</span>
+            <span class="price-selling fz-14 c3">{{attrInfo.price}}</span>
+            <span class="c9 fz-12 p-l-4">
+              {{attrInfo.attr_text}}
+              </span>
+          </block>
+        </div>
         <div class="actions">
           <div>
-            <block v-if="attrInfo.price">
-              <span class="price-selling fz-12">￥</span>
-              <span class="price-selling fz-14 c3">{{attrInfo.price}}</span>
-              <span class="c9 fz-12 p-l-4">
-              {{attrInfo.attr_text}}
-            </span>
-            </block>
 
           </div>
           <div>
             <div v-if="attrInfo.num<1" @click="confirmAdd" class="confirm-btn" :class="{disabled:!submitFlag}">加入购物车
             </div>
-            <div v-else class="flex flex-vertical-c" style="width: 150rpx">
+            <div v-else class="flex flex-vertical-c" style="width: 120px">
               <block v-if="attrInfo.num>0">
-                <layout-icon @click.stop="delNum" size="24" color="#26C78D" type="iconicon-minus"></layout-icon>
-                <input v-model="attrInfo.num" class="input-num text-center fz-12" />
+                <layout-icon @click.stop="delNum" size="24" color="#26C78D" type="iconicon-minus p-10"></layout-icon>
+                <input @input="changeNum" v-model="attrInfo.num" class="input-num text-center fz-12" />
               </block>
-              <layout-icon @click.stop="addNum" size="24" color="#26C78D" type="iconicon-plus"></layout-icon>
+              <layout-icon @click.stop="addNum" size="24" color="#26C78D" type="iconicon-plus p-10"></layout-icon>
             </div>
           </div>
 
@@ -1409,6 +1412,7 @@ export default {
       tabIndex: 0,
       headTabSticky: false,
       prod_id: '', // 商品id
+      bid: '', // 店铺id
       recieve: false,
       gift: null, // 赠品id
       gift_attr_id: null,
@@ -1439,13 +1443,13 @@ export default {
   },
   computed: {
     totalNum () {
-      return this.$store.getters['delivery/getTotalNum']()
+      return this.$store.getters['delivery/getTotalNum'](this.bid)
     },
     totalPrice () {
-      return this.$store.getters['delivery/getTotalMoney']()
+      return this.$store.getters['delivery/getTotalMoney'](this.bid)
     },
     carts () {
-      return this.$store.getters['delivery/getCartList']()
+      return this.$store.getters['delivery/getCartList'](this.bid)
     },
     imgs () {
       try {
@@ -1520,6 +1524,24 @@ export default {
         this.goodsNumPlus(this.productInfo)
       }
     },
+    changeNum (e) {
+      let amount = parseInt(e.detail.value)
+      const currentAttrInfo = this.attrInfo
+      if (currentAttrInfo.num === amount) return
+      if (amount < 0) {
+        amount = currentAttrInfo.num
+        error('至少购买一件')
+      }
+      if (amount > currentAttrInfo.count) {
+        amount = currentAttrInfo.count
+        error('购买数量不能超过库存量')
+      }
+    
+      this.$store.commit('delivery/SET_GOODS_NUM', {
+        num: amount,
+        product: { attr_id: currentAttrInfo.attr_id }
+      })
+    },
     addNum () {
       if (this.attrInfo.num < this.attrInfo.count) {
         this.attrInfo.num = Number(this.attrInfo.num) + 1
@@ -1539,12 +1561,17 @@ export default {
     delNum () {
       if (this.attrInfo.num > 0) {
         this.attrInfo.num -= 1
+
+        this.$store.commit('delivery/MINUS_GOODS', {
+          num: 1,
+          product: { attr_id: this.attrInfo.attr_id }
+        })
       } else {
         uni.showToast({
           title: '购买数量不能小于0',
           icon: 'none'
         })
-        this.attrInfo.num = 0
+        // this.attrInfo.num = 0
       }
     },
     // 用户手动输入数量
@@ -1950,7 +1977,7 @@ export default {
     },
     async shareFunc (channel) {
       const _self = this
-      const path = 'pages/delivery/detail?prod_id=' + this.prod_id
+      const path = 'pagesA/delivery/detail?prod_id=' + this.prod_id
       const front_url = this.initData.front_url
       const shareObj = {
         title: this.productInfo.Products_Name,
@@ -2021,7 +2048,7 @@ export default {
           }
           setTimeout(function () {
             uni.navigateTo({
-              url: '/pages/product/SharePic/SharePic'
+              url: '/pagesA/product/SharePic/SharePic'
             })
           }, 200)
           // uni.previewImage({
@@ -2140,6 +2167,11 @@ export default {
   },
   onLoad (options) {
     const { mode = 'waimai', prod_id } = options
+    if (!options.bid) {
+      modal('店铺id缺失')
+      return
+    }
+    this.bid = options.bid
     if (!prod_id) {
       modal('产品id必传')
       setTimeout(() => {
@@ -2153,7 +2185,7 @@ export default {
   },
   // 自定义小程序分享
   onShareAppMessage () {
-    const path = '/pages/delivery/detail?prod_id=' + this.prod_id
+    const path = '/pagesA/delivery/detail?prod_id=' + this.prod_id
     const shareObj = {
       title: this.productInfo.Products_Name,
       desc: this.productInfo.Products_BriefDescription,

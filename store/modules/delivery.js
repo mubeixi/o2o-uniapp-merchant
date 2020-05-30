@@ -94,8 +94,6 @@ const mutations = {
         this.commit('delivery/REMOVE_GOODS', attr_id)
       }
     }
-    
-    
   },
   // 移除指定id商品，不传id就是清空
   REMOVE_GOODS (state, attr_id) {
@@ -131,26 +129,46 @@ const getters = {
 
     return false
   },
-  getTotalNum: (state) => () => {
+  getTotalNum: (state) => (bid) => {
     try {
       const cartList = state.cartList.length > 0 ? state.cartList : Storage.get('deliveryCartList')
       if (!Array.isArray(cartList)) throw Error('获取价格失败')
       let count = 0
       for (var row of cartList) {
-        count += row.num
+        if (Number(row.biz_id) === Number(bid)) {
+          count += row.num
+        }
       }
       return count
     } catch (e) {
       return 0
     }
   },
-  getTotalMoney: (state) => () => {
+  getTotalMoney: (state) => (bid) => {
     try {
       const cartList = state.cartList.length > 0 ? state.cartList : Storage.get('deliveryCartList')
       if (!Array.isArray(cartList)) throw Error('获取价格失败')
       let count = 0
       for (var row of cartList) {
-        count += row.num * row.Products_PriceX
+        if (Number(row.biz_id) === Number(bid)) {
+          count += row.num * row.Products_PriceX
+        }
+      }
+      return count
+    } catch (e) {
+      return 0
+    }
+  },
+  // 获取某个商品的所有数量
+  getGoodsTotalById: (state) => (Products_ID) => {
+    try {
+      const cartList = state.cartList.length > 0 ? state.cartList : Storage.get('deliveryCartList')
+      if (!Array.isArray(cartList)) throw Error('获取数量失败')
+      let count = 0
+      for (var row of cartList) {
+        if (Number(row.Products_ID) === Number(Products_ID)) {
+          count += row.num
+        }
       }
       return count
     } catch (e) {
@@ -158,13 +176,15 @@ const getters = {
     }
   },
   // 利用方法的方式去获取
-  getCartList: (state) => () => {
+  getCartList: (state) => (bid) => {
     try {
+      if (!bid) return []
+      console.log(bid)
       // 第一次是在内存里
       let cartList = state.cartList.length > 0 ? state.cartList : Storage.get('deliveryCartList')
       if (!cartList) cartList = []
       if (!cartList || !Array.isArray(cartList)) throw Error('获取外卖购物车失败')
-      return cartList
+      return cartList.filter(item => Number(item.biz_id) === Number(bid))
     } catch (e) {
       Exception.handle(e)
       return []

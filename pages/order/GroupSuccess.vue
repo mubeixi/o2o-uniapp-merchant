@@ -396,7 +396,7 @@ export default {
 
           setTimeout(function () {
             uni.navigateTo({
-              url: '/pages/detail/sharepic/sharepic'
+              url: '/pagesA/product/SharePic/SharePic'
             })
           }, 200)
           break
