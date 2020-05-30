@@ -181,6 +181,7 @@ export default {
     }
   },
   onLoad () {
+	  if (!checkIsLogin(1, 1)) return
     this.init()
   }
 }

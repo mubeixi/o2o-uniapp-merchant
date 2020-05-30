@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { getJifenProd, jifenProdDuihuan } from '@/api/customer'
+import { getJifenProd, jifenProdDuihuan, getUserInfo } from '@/api/customer'
 import { mapActions } from 'vuex'
 import BaseMixin from '@/mixins/BaseMixin'
 import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
@@ -68,11 +68,15 @@ export default {
   onShow () {
     this.reset()
     this.get_jifen_prod()
-  },
-  onLoad () {
-
+    getUserInfo().then(res => {
+      this.userInfo = res.data
+      this.setUserInfo(res.data)
+    }).catch()
   },
   methods: {
+    ...mapActions({
+      setUserInfo: 'user/setUserInfo',
+    }),
     reset () {
       this.prod_list = []
       this.page = 1
@@ -100,7 +104,7 @@ export default {
       }
       this.isClicked = true
       uni.navigateTo({
-        url: '/pagesA/person/myRedemption'
+        url: '/pagesA/user/MyRedemption'
       })
     },
     cancelPsw () {
