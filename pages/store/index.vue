@@ -59,7 +59,7 @@
         <div id="scrollView1" class="tab-page-wrap">
 
           <!--优惠券-->
-          <scroll-view class="coupon-section" scroll-x v-if="couponList.length>0">
+          <div class="coupon-section flex flex-justify-c"  v-if="couponList.length>0">
             <div class="coupon-item" v-for="(coupon,idx) in couponList" :key="idx" @click="getCoupon(coupon,idx)">
               <div class="containier">
                 <div class="price">
@@ -75,7 +75,7 @@
           </div>
 
           <!--限时抢购-->
-          <div scroll-x class="activity-list  flex flex-justify-c" @touchmove.stop v-if="activityList.length>0">
+          <div  class="activity-list  flex flex-justify-c"  v-if="activityList.length>0">
             <div class="activity-item" v-for="(item,idx) in activityList" :key="idx"
                  @click="$linkTo('/pages/active/FlashSaleByBiz?biz_id='+bid+'&spike_id='+item.id)">{{item.name}}
             </div>
