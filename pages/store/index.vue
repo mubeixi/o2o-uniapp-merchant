@@ -364,7 +364,7 @@
 
 <script>
 import BaseMixin from '@/mixins/BaseMixin'
-import { getBizInfo, getBizSpikeList, getCategoryList, getStoreList } from '@/api/store'
+import { getBizInfo, getBizSpikeList, getAlbumList, getStoreList } from '@/api/store'
 import { error, hideLoading, modal, showLoading, toast } from '@/common/fun'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import { getBizProdCateList, getProductList } from '@/api/product'
@@ -504,7 +504,7 @@ export default {
       this.commentValue = ''
       this.$closePop('commentModal')
     },
-    sureComment () {
+    async sureComment () {
       if (!this.commentValue) {
         error('评论内容不能为空')
         return
@@ -517,20 +517,28 @@ export default {
       if (this.commentItem.groupid) {
         data.groupid = this.commentItem.groupid
       }
-      commentReply(data).then(res => {
+       commentReply(data).then(res => {
         toast('评论成功')
         this.commentValue = ''
+        getCommitList({
+          biz_id: this.bid,
+          pageSize: 3
+        }, { onlyData: true }).then(res=>{
+			this.comments=res
+		}).catch((e) => {
+         error(e.msg||'获取评论数据失败')
+        })
         this.$closePop('commentModal')
       }).catch(e => {
         error(e.msg || '评论失败')
         this.$closePop('commentModal')
       })
     },
-    getCoupon (coupon,idx) {
+    getCoupon (coupon, idx) {
       console.log(coupon)
       getUserCoupon({ coupon_id: coupon.Coupon_ID }).then(() => {
         toast('领取成功')
-        this.couponList.splice(idx,1)
+        this.couponList.splice(idx, 1)
       }).catch((err) => {
         error(err.msg)
       })
@@ -611,8 +619,8 @@ export default {
           throw Error('获取商家自定义分类失败')
         })
 
-        //不要赠送的优惠券
-        this.couponList = await getCouponList({ biz_id: this.bid,front_show:1 }, { onlyData: true, noUid: 1 }).catch((e) => {
+        // 不要赠送的优惠券
+        this.couponList = await getCouponList({ biz_id: this.bid, front_show: 1 }, { onlyData: true, noUid: 1 }).catch((e) => {
           throw Error('获取优惠券失败')
         })
 
@@ -630,7 +638,7 @@ export default {
           throw Error('获取门店列表数据失败')
         })
 
-        this.photoList = await getCategoryList({
+        this.photoList = await getAlbumList({
           biz_id: this.bid,
           get_photo: 4
         }, { onlyData: 1 }).catch(e => {
