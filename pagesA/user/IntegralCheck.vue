@@ -150,10 +150,19 @@ export default {
   },
   async onShow () {
     this.getAddressList()
-    this.getShipping()
+    //this.getShipping()
     const initData = this.initData//await this.getInitData()
     console.log(initData,"s")
     this.pay_arr = initData.pay_arr
+	
+	
+	jifenProdShippingPrice({
+	  Gift_ID: this.gift_id,
+	  Address_ID: this.address_id,
+	  Shipping_ID: this.shipping_id
+	}).then(res => {
+	  this.shipping_company = res.data.shipping_company_dropdown
+	})
   },
   async created () {
     const userInfo = this.getUserInfo(true)
