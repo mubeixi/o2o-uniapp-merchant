@@ -108,7 +108,7 @@ export default {
     toBuy (item) {
       if (item.Orders_Status == 1) {
         uni.navigateTo({
-          url: '/pagesA/person/jifenCheck?gift_id=' + item.Gift_ID
+          url: '/pagesA/user/IntegralCheck?gift_id=' + item.Gift_ID
         })
       }
 

@@ -1790,6 +1790,8 @@ export default {
         })
         Object.assign(this.productInfo, productInfo)
 
+        this.analysisExt.options.biz_id = productInfo.biz_id
+
         this.userLevelList = await getUserLevel({ biz_id: productInfo.biz_id }, { onlyData: true }).catch(e => {
           throw Error(e.msg || '获取商品详情失败')
         })
