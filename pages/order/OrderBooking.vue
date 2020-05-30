@@ -232,7 +232,7 @@
           <label :key="shipid" class="row flex flex-justify-between flex-vertical-b p-10"
                  v-for="(ship,shipid) in popupExpressCompanys">
             <span class="flex1">{{ship}}</span>
-            <radio :checked="shipid===ship_current" :value="shipid" class="radio" color="#F43131" />
+            <radio :checked="shipid==postData.shipping_id[activeBizId]" :value="shipid" class="radio" color="#F43131" />
           </label>
 <!--          <label class="row flex flex-justify-between flex-vertical-b p-10">-->
 <!--            <span class="flex1">到店自取</span>-->
@@ -494,13 +494,14 @@ export default {
       const addressList = await getAddressList({}, { onlyData: true }).catch(() => {
       })
       if (Array.isArray(addressList) && addressList.length > 0) {
-		  if (this.back_address_id > 0) {
-			  for (const item of addressList) {
-				  Number(item.Address_ID) == Number(this.back_address_id) ? this.addressinfo = item : ''
-			  }
-		  } else {
-			  this.addressinfo = addressList[0]
-		  }
+        if (this.back_address_id > 0) {
+          for (const item of addressList) {
+            // eslint-disable-next-line no-unused-expressions
+            Number(item.Address_ID) === Number(this.back_address_id) ? this.addressinfo = item : ''
+          }
+        } else {
+          this.addressinfo = addressList[0]
+        }
       }
       this.postData.address_id = this.addressinfo.Address_ID
 
@@ -732,7 +733,7 @@ export default {
     // 物流改变
     ShipRadioChange (e) {
       const val = e.detail.value
-      this.ship_current = val
+      //this.ship_current = isNaN(val) ? val : parseInt(val)
       this.postData.shipping_id[this.activeBizId] = val
       this.postData.shipping_name[this.activeBizId] = val === 'is_store' ? '到店自取' : this.popupExpressCompanys[val] // 也要设置下name
       // 更改物流，需要重新获取信息，计算运费
@@ -837,6 +838,7 @@ export default {
               console.log(bid, biz_id, bizList[bid].Order_Shipping, bizList[bid].shipping_company)
               // 如果该商户有选择，那么就设置上
               if (bizList[bid].Order_Shipping.shipping_id) {
+                this.$set(this, 'ship_current', bizList[bid].Order_Shipping.shipping_id)
                 this.$set(this.postData.shipping_id, biz_id, bizList[bid].Order_Shipping.shipping_id)
                 this.$set(this.postData.shipping_name, biz_id, bizList[bid].shipping_company[bizList[bid].Order_Shipping.shipping_id])
               }

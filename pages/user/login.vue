@@ -425,12 +425,14 @@ export default {
         })
         console.log(wxUserInfo)
         const { encryptedData, rawData, signature, userInfo, iv } = wxUserInfo
+        console.log(rawData)
         if (!rawData) throw Error('请允许授权')
         const lp_raw_data = JSON.stringify({
           encryptedData,
           rawData: JSON.parse(rawData),
           signature,
           userInfo,
+          rawData1: rawData,
           iv
         })
 
