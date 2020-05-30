@@ -84,7 +84,8 @@
 
           <!--便捷操作-->
           <div class="feature-list">
-            <image @click="$linkTo('/pages/delivery/desktop?bid='+bid)" mode="scaleToFill" class="feature-item"
+            <!--$linkTo()-->
+            <image @click="toDelivery" mode="scaleToFill" class="feature-item"
                    :src="'/static/client/store/send.png'|domain"></image>
             <image @click="toOffinePay" mode="scaleToFill" class="feature-item" :src="'/static/client/store/pay.png'|domain"></image>
             <image @click="$linkTo('/pages/product/apply?bid='+bid)" mode="scaleToFill" class="feature-item"
@@ -485,6 +486,15 @@ export default {
         this.$linkTo('/pagesA/user/VipList?bid=' + this.bid)
       }
     },
+    toDelivery () {
+      if (!this.storeInfo.sales_status) {
+        toast('该店铺已打烊','none')
+        return
+      }
+      if (checkIsLogin(1, 1)) {
+        this.$linkTo('/pages/delivery/desktop?bid=' + this.bid)
+      }
+    },
     toOffinePay () {
       if (checkIsLogin(1, 1)) {
         this.$linkTo(`/pagesA/store/offlinePay?biz_id=${this.bid}`)
@@ -520,16 +530,16 @@ export default {
       if (this.commentItem.groupid) {
         data.groupid = this.commentItem.groupid
       }
-       commentReply(data).then(res => {
+      commentReply(data).then(res => {
         toast('评论成功')
         this.commentValue = ''
         getCommitList({
           biz_id: this.bid,
           pageSize: 3
-        }, { onlyData: true }).then(res=>{
-			this.comments=res
-		}).catch((e) => {
-         error(e.msg||'获取评论数据失败')
+        }, { onlyData: true }).then(res => {
+          this.comments = res
+        }).catch((e) => {
+          error(e.msg || '获取评论数据失败')
         })
         this.$closePop('commentModal')
       }).catch(e => {

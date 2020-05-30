@@ -118,6 +118,7 @@ export default {
   },
   data () {
     return {
+      wx_code: '',
       mode: 'password',
       binbPhoneShow: false,
       bindPwdShow: false,
@@ -199,12 +200,13 @@ export default {
      */
     async bingPhoneFn () {
       try {
-        // 获取暂存的userInfO和code
-        const lp_raw_data = JSON.stringify(this.bindPhoneTempData)
         const wxLoginRt = await Promisify('login').catch(() => {
           throw Error('微信login错误')
         })
         const { code: lp_code } = wxLoginRt
+
+        // 获取暂存的userInfO和code
+        const lp_raw_data = JSON.stringify(this.bindPhoneTempData)
 
         const postData = {
           login_method: 'wx_lp',
@@ -411,6 +413,12 @@ export default {
     },
     async weixinlogin (e) {
       try {
+        // 获取code
+        const wxLoginRt = await Promisify('login').catch(() => {
+          throw Error('微信login错误')
+        })
+        const { code: lp_code } = wxLoginRt
+
         const checkSeting = await Promisify('getSetting').catch(() => {
           throw Error('获取配置失败')
         })
@@ -435,12 +443,6 @@ export default {
           rawData1: rawData,
           iv
         })
-
-        // 获取code
-        const wxLoginRt = await Promisify('login').catch(() => {
-          throw Error('微信login错误')
-        })
-        const { code: lp_code } = wxLoginRt
 
         // 请求接口
         console.log('snslogin data is', {
@@ -472,6 +474,9 @@ export default {
         error(e.message)
       }
     }
+  },
+  onReady () {
+
   }
 }
 </script>
