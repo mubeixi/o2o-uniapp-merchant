@@ -22,8 +22,8 @@ export const getStoreList = (param, options) => fetch({
 })
 
 // 获取门店相册
-export const getCategoryList = (param, options) => fetch({
-  act: 'getCategoryList',
+export const getAlbumList = (param, options) => fetch({
+  act: 'getAlbumList',
   param,
   options
 })
