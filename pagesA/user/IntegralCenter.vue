@@ -118,13 +118,8 @@ export default {
     },
   },
   onShow () {
-
     this.reset()
     this.userIntegralRecord()
-  },
-  created () {
-
-    //this.getUserInfo(true)
     getUserInfo().then(res => {
       this.info = res.data
       this.user_intergatal = res.data.User_Integral

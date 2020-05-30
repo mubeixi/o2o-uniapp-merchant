@@ -1,8 +1,8 @@
 <template>
   <div class="bd" @click="commonClick">
     <div class="search-wrap">
-      <icon type="search" size="34rpx" class="search_icon" @click="search"/>
-      <input type="text" class="search-input" name="search" v-model="inputValue" @confirm="success"
+      <icon type="search" size="34rpx" class="search_icon" @click="search" />
+      <input type="text" class="search-input" name="search" v-model="inputValue" @confirm="search"
              confirm-type='search' focus="focus" autofocus="autofocus">
     </div>
     <div class="cate1">
@@ -31,17 +31,17 @@
       </div>
     </div>
 
+
+    <div class="safearea-box fixed"></div>
     <product-sku
       ref="mySku"
       :mode="mode"
-      @sureSku="save"
       :hasCart="hasCart"
       @submitSure="submitSure"
-      @updaCart="updaCart"
-      @buyNow="buyNow"
       :product-info="selectValue"
     ></product-sku>
 
+    <div style="width: 750rpx;height: 86rpx"></div>
     <div class="submit" @click="nextTemp">
       下一步
     </div>
@@ -52,7 +52,8 @@
 <script>
 import { getProductList } from '@/api/product'
 import BaseMixin from '@/mixins/BaseMixin'
-import { modal } from '@/common/fun'
+import { updateCart } from '@/api/order'
+import { modal, showLoading, hideLoading } from '@/common/fun'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import ProductSku from '@/componets/product-sku/product-sku'
 export default {
@@ -95,6 +96,30 @@ export default {
 
   },
   methods: {
+    async submitSure (sku) {
+      try {
+        console.log(sku, 'ss')
+        showLoading()
+        const postData = {
+          prod_id: this.selectId, // 产品ID
+          attr_id: sku.id, // 选择属性id
+          // count: sku.count, // 选择属性的库存
+          qty: sku.qty, // 购买数量
+          cart_key: 'DirectBuy' // 购物车类型   CartList（加入购物车）、DirectBuy（立即购买）、PTCartList（不能加入购物车）
+          // productDetail_price: sku.price
+        }
+        await updateCart(postData).catch(e => {
+          throw Error(e.msg || '下单失败')
+        })
+        const { order_temp_id = '', biz_id = '' } = this.selectValue
+        const url = `/pages/order/OrderBooking?cart_key=DirectBuy&order_temp_id=${order_temp_id}&biz_id=${biz_id}&checkfrom=${this.checkfrom}`
+        this.$linkTo(url)
+      } catch (e) {
+        this.$modal(e.message)
+      } finally {
+        hideLoading()
+      }
+    },
     nextTemp () {
       this.$refs.mySku.show()
     },
@@ -231,6 +256,7 @@ export default {
       position: absolute;
       top: 46rpx;
       right: 61rpx;
+      z-index: 8;
     }
 
     .span {
