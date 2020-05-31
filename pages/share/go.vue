@@ -1,5 +1,6 @@
 <template>
   <div class="page-wrap" v-if="isReady"  @click="commonClick">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <canvas class="myCanvas" id="myCanvas" canvas-id="myCanvas"/>
     <div class="text-box">
       <div class="flex flex-vertical-c flex-justify-between">
@@ -76,11 +77,13 @@ import { getEnv } from '@/common/request'
 import Promisify from '@/common/Promisify'
 import { buildSharePath, cutstrFun } from '@/common/helper'
 import { Exception } from '@/common/Exception'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 let canvasInstance = null
 export default {
   name: 'ShareIndex',
   mixins: [BaseMixin],
   components: {
+    WzwImTip,
     LayoutIcon
   },
   data () {

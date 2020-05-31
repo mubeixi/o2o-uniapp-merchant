@@ -1,7 +1,7 @@
 import {
   IM_APPID, IM_APPSECRET, IM_WSS_URL
 } from '@/common/env'
-import { bindUid, getAccessToken, getMsgList, sendMsg,checkOnline } from '@/common/Im/Fetch'
+import { bindUid, getAccessToken, getMsgList, sendMsg, checkOnline } from '@/common/Im/Fetch'
 import Promisify from '@/common/Promisify'
 import { Exception } from '@/common/Exception'
 import Storage from '@/common/Storage'
@@ -55,10 +55,9 @@ class Image extends Message {
     this.tempPath = tempPath
     this.taskList = createUpTaskArr()
     this.styleObj = { width: 0, height: 0, mode: 'widthFix' }
-    
   }
 
-  async getImgInfo() {
+  async getImgInfo () {
     try {
       // 本地图片，所以获取图片信息非常快
       const res = await Promisify('getImageInfo', { src: this.tempPath }).catch(err => {
@@ -186,6 +185,9 @@ class IM {
     this.heartBeatFailNum = 0 // 心跳丢失次数
     this.connectFailNum = 0// 连接失败次数
     // console.log(extConf)
+  
+    this.listenStatus = 0
+    
   }
 
   /**
@@ -316,7 +318,24 @@ class IM {
   }
 
   close () {
-    this.task.close()
+   uni.closeSocket()
+  this.clearIntervalFn()
+    //this.task.close()
+  }
+
+  /**
+   * 打开监听
+   */
+  openListen () {
+    uni.$emit('IM_EVENT', 'im listern start')
+    this.listenStatus = 1 // 开启监听
+    Storage.set('listenStatus', 1)
+  }
+
+  cancalListen () {
+    uni.$emit('IM_EVENT', 'im listern stop')
+    this.listenStatus = 0 // 开启监听
+    Storage.set('listenStatus', 0)
   }
 
   /**
@@ -352,8 +371,7 @@ class IM {
       // 为了预防有需要异步上传的情况
       const content = await message.getContent(chatIdx, this.chatList)
 
-      
-      checkOnline({out_uid:this.getOutUid()})
+      checkOnline({ out_uid: this.getOutUid() })
 
       sendMsg({ type, content, out_uid: this.getOutUid(), to: this.getToUid() }).then(res => {
         console.log('发送成功', res)
@@ -362,7 +380,7 @@ class IM {
       }).catch(err => {
         console.log('消息发送失败')
         this.chatList[chatIdx].sendStatus = -1 // 标记失败
-        Exception.handle(err)
+        Exception.handle(Error(err.msg))
       })
     } else {
       this.msgQueue.push(message)
@@ -387,13 +405,19 @@ class IM {
         // 丢失心跳达到最大次数之后需要重连
         if (this.heartBeatFailNum > this.heartBeatFailMax) {
           console.log('心跳请求超过三次错误')
-          clearInterval(this.intervalInstance)
+          
+          //先关掉
+          this.close()
           // 重连吧
           this.start()
         }
       }
     })
   }
+  
+    clearIntervalFn() {
+      clearInterval(this.intervalInstance)
+    }
 
   _takeMessage (messageObj) {
     const { type, content, from } = messageObj
@@ -411,9 +435,13 @@ class IM {
       return
     }
 
-     // 只允许限定的类别
-     if (this.allowMsgType.includes(type)) {
+    // 只允许限定的类别
+    if (this.allowMsgType.includes(type)) {
       this.chatList.push({ ...messageObj, direction: 'from' })
+      uni.$emit('getMsg',{...messageObj})
+      if (this.listenStatus) {
+        uni.$emit('IM_TAKE_MSG', {...messageObj})
+      }
     }
   }
 

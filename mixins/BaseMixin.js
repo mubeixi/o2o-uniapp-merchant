@@ -205,9 +205,33 @@ export default {
         Storage.set('users_id', users_id)
       }
     },
+    getCurrentPageRoute() {
+      const pageInstanceList = getCurrentPages()
+      const currentPagePath = pageInstanceList[pageInstanceList.length - 1].route
+      return currentPagePath
+    },
     // #ifdef H5
     WX_JSSDK_INIT
     // #endif
+  },
+  onShow() {
+    // 这个机制还是要onShow 兼容返回的情况
+    Storage.set('currentPagePath', this.getCurrentPageRoute())// 标记当前的页面，这样就不会每个事件都响应了
+    this.currentPagePath = this.getCurrentPageRoute()
+  },
+  onReady() {
+    uni.$on('IM_EVENT', (res) => {
+      console.log(res)
+    })
+  
+    uni.$on('IM_TAKE_MSG', (res) => {
+      // 只有当前页面响应
+      console.log(Storage.get('currentPagePath'), this.currentPagePath)
+      if (Storage.get('currentPagePath') === this.currentPagePath) {
+        console.log(res, this.$refs,this.$refs.hasOwnProperty('wzwImTip'))
+        if (this.$refs.hasOwnProperty('wzwImTip')) this.$refs.wzwImTip.show(res)
+      }
+    })
   },
   onLoad (options) {
     const opt = { ...options }

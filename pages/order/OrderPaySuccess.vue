@@ -1,5 +1,6 @@
 <template>
   <view class="myall"  @click="commonClick">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view class="img-div">
       <image :src="'/static/client/free/paySuccess.png'|domain" style="width: 100%;height: 100%;"></image>
     </view>
@@ -96,10 +97,11 @@ import {
   getPayCoupons
 } from '@/api/order'
 import { toHome } from '@/common/fun'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
   mixins: [BaseMixin],
-  components: { LayoutIcon },
+  components: { WzwImTip, LayoutIcon },
   data () {
     return {
       free_money: 0,

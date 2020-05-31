@@ -1,6 +1,6 @@
 <template>
   <view class="myall" @click="commonClick">
-
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view class="top">
       <view class="person">
         <image class="image" :src="data.disInfo.Shop_Logo"></image>
@@ -121,6 +121,7 @@
 import { getDisInit, nobiInfo } from '@/api/customer'
 import BaseMixin from '@/mixins/BaseMixin'
 import CircleTitle from '@/componets/circle-title/circle-title'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
   mixins: [BaseMixin],
@@ -131,6 +132,7 @@ export default {
     }
   },
   components: {
+    WzwImTip,
     CircleTitle,
 
   },

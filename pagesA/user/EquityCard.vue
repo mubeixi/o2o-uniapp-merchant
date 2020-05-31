@@ -1,5 +1,6 @@
 <template>
   <div @click="commonClick">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <div class="equity-card">
       <swiper class="center" :indicator-dots="false" :autoplay="false" :duration="1000" :current="inds"
               @change="change">
@@ -74,9 +75,10 @@ import { error, toast } from '@/common/fun'
 import WzwPay from '@/componets/wzw-pay/wzw-pay'
 import Pay from '@/common/Pay'
 import { checkIsLogin } from '@/common/helper'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 export default {
   mixins: { BaseMixin },
-  components: { WzwPay },
+  components: { WzwImTip, WzwPay },
   data () {
     return {
       inds: 0,

@@ -1,6 +1,6 @@
 <template>
   <view class="bgColor-white" @click="commonClick">
-
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <input class="v_input" placeholder="修改用户名" type="text" v-if="type === 0" v-model="userInfo.User_Name" />
     <input class="v_input" placeholder="修改昵称" type="text" v-if="type === 1" v-model="userInfo.User_NickName" />
     <block v-if="type === 2">
@@ -39,10 +39,11 @@ import BaseMixin from '@/mixins/BaseMixin'
 import { mapActions } from 'vuex'
 import { error } from '@/common/fun'
 import WzwAddress from '@/componets/wzw-address/wzw-address'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
   mixins: [BaseMixin],
-  components: { WzwAddress },
+  components: { WzwImTip, WzwAddress },
   data () {
     return {
       dateValue: '',

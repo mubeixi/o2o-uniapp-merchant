@@ -730,6 +730,7 @@
 </style>
 <template>
   <div class="page-wrap"  @click="commonClick">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <div class="head-box-default" v-show="1-activeHeadOpacity"
          :style="{height:diyHeadHeight+'px',opacity:1-activeHeadOpacity}">
       <div :style="{height:menuButtonInfo.top+'px'}"></div>
@@ -1155,6 +1156,7 @@ import Storage from '@/common/Storage'
 import LayoutModal from '@/componets/layout-modal/layout-modal'
 import { Exception } from '@/common/Exception'
 import ProductComment from '@/pages/product/components/product-comment'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 let countdownInstance = null
 
@@ -1162,6 +1164,7 @@ export default {
   name: 'ProductDetail',
   mixins: [BaseMixin],
   components: {
+    WzwImTip,
     ProductComment,
     LayoutModal,
     LayoutIcon,
@@ -1387,6 +1390,7 @@ export default {
       this.$linkTo(url)
     },
     goIM () {
+      if (!checkIsLogin(1, 1)) return
       this.$linkTo(`/pagesA/support/Im?type=biz&tid=${this.productInfo.biz_id}&productId=${this.prod_id}`)
     },
     goStore (bid) {

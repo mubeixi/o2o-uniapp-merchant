@@ -1,6 +1,6 @@
 <template>
   <view class="page-wrap" @click="commonClick">
-
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <image v-show="drawPosterDone" class="preview" @click="preFn" :src="current_url" mode="widthFix" />
 
     <canvas class="myCanvas" id="myCanvas" canvas-id="myCanvas"/>
@@ -23,9 +23,11 @@ import { error, hideLoading, showLoading, toast } from '@/common/fun'
 import { getDomain, saveImageToDisk } from '@/common/helper'
 import Promisify from '@/common/Promisify'
 import { getBizInfo } from '@/api/store'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 let canvasInstance = null
 export default {
+  components: { WzwImTip },
   mixins: [BaseMixin],
   data () {
     return {

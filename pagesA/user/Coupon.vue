@@ -1,5 +1,6 @@
 <template>
   <view class="myall" @click="commonClick">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view class="defaults" v-if="pro.length<=0">
       <image :src="'/static/client/defaultImg.png'|domain"></image>
     </view>
@@ -50,8 +51,10 @@
 import BaseMixin from '@/mixins/BaseMixin'
 import { getCouponList } from '@/api/common'
 import { toHome } from '@/common/fun'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
+  components: { WzwImTip },
   mixins: [BaseMixin],
   data () {
     return {

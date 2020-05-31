@@ -1,5 +1,6 @@
 <template>
   <div class="page-wrap"  @click="commonClick">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <div class="message-list">
       <div class="list-item flex" v-for="item in 6">
         <div style="position: relative">
@@ -18,7 +19,10 @@
   </div>
 </template>
 <script>
-
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+export default {
+  components: { WzwImTip },
+}
 </script>
 <style lang="scss" scoped>
   .page-wrap {

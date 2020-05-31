@@ -1,5 +1,6 @@
 <template>
   <view class="all"  @click="commonClick">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view class="top">
       <image class="image" :src="'/static/client/fenxiao/top.png'|domain"></image>
       <div v-if="userInfo.User_ID&&userInfo.Is_Distribute==1">
@@ -83,6 +84,7 @@ import { getDisInit, getFuncModule, getUserInfo } from '@/api/customer'
 import { mapActions } from 'vuex'
 import { checkIsDistribute, checkIsLogin } from '@/common/helper'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 const routerList = {
   '/pagesA/fenxiao/erweima': '/pagesA/distributor/Qrcode',
@@ -97,6 +99,7 @@ const routerList = {
 export default {
   mixins: [BaseMixin],
   components: {
+    WzwImTip,
     LayoutIcon
     // TabbarComponents
   },

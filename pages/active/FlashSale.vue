@@ -1,5 +1,6 @@
 <template>
   <div class="page-wrap"  @click="commonClick">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <div style="background: none" :style="{height:menuButtonInfo.top+'px'}"></div>
     <div class="top flex flex-vertical-c" :style="{height:menuButtonInfo.height+'px'}">
        <layoutIcon style="position: relative;z-index: 3" @click="$back" class="m-l-15" color="#fff" type="iconicon-arrow-left"></layoutIcon>
@@ -67,9 +68,11 @@ import { error } from '@/common/fun'
 import layoutIcon from '@/componets/layout-icon/layout-icon'
 import BaseMixin from '@/mixins/BaseMixin'
 import LayoutAd from '@/componets/layout-ad/layout-ad'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 export default {
   mixins: [BaseMixin],
   components: {
+    WzwImTip,
     LayoutAd,
     layoutIcon
   },

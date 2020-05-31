@@ -1,6 +1,6 @@
 <template>
 	<view  class="myall" @click="commonClick">
-
+		<wzw-im-tip ref="wzwImTip"></wzw-im-tip>
 		<view class="wrap">
 			<view class="item" @click="update(3)">
 				<view>修改手机号码</view>
@@ -27,8 +27,12 @@ import Storage from '@/common/Storage'
 import BaseMixin from '@/mixins/BaseMixin'
 
 import { bindUserClientId } from '@/api/customer'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import eventHub from '@/common/eventHub'
+
 
 export default {
+  components: { WzwImTip },
   mixins: [BaseMixin],
   data () {
     return {
@@ -60,6 +64,14 @@ export default {
         // #endif
 
         this.setUserInfo({})
+
+	      // 取消监听
+	      if (eventHub.imInstance) {
+		      eventHub.imInstance.cancalListen()
+		      eventHub.imInstance.close()
+		      eventHub.imInstance = null
+	      }
+
         toHome()
       }).catch(() => {
 

@@ -1,5 +1,6 @@
 <template>
   <div :class="selectStore?'over':''" class="page-wrap"   @click="commonClick">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <fun-err-msg ref="refMsg" :errs.sync="formCheckResult"></fun-err-msg>
     <block v-if="orderInfo.is_virtual===0">
       <div @click="goAddressList" class="address bg-white">
@@ -124,7 +125,7 @@
                    type="text" v-if="postData.need_invoice[biz_id]" v-model="postData.invoice_info[biz_id]" />
           </div>
 
-          <div class="bd" v-if="bizList[biz_id].max_diyong_intergral > 0">
+          <div class="bd">
             <div class="o_title">
               <span>是否参与积分抵扣</span>
               <switch :checked="postData.intergralChecked[biz_id]" @change="intergralSwitchChange($event,biz_id)" color="#04B600" style="transform: scale(0.8)" />
@@ -231,7 +232,7 @@
           <label :key="shipid" class="row flex flex-justify-between flex-vertical-b p-10"
                  v-for="(ship,shipid) in popupExpressCompanys">
             <span class="flex1">{{ship}}</span>
-            <radio :checked="shipid===ship_current" :value="shipid" class="radio" color="#F43131" />
+            <radio :checked="shipid==postData.shipping_id[activeBizId]" :value="shipid" class="radio" color="#F43131" />
           </label>
 <!--          <label class="row flex flex-justify-between flex-vertical-b p-10">-->
 <!--            <span class="flex1">到店自取</span>-->
@@ -276,10 +277,12 @@ import { Exception } from '@/common/Exception'
 import DiyForm from '@/componets/diy-form/diy-form'
 import { mapGetters } from 'vuex'
 import { computeArrayColumnSum } from '@/pages/order/pay'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
   mixins: [BaseMixin],
   components: {
+    WzwImTip,
     DiyForm,
     FunErrMsg,
     LayoutIcon,
@@ -491,13 +494,14 @@ export default {
       const addressList = await getAddressList({}, { onlyData: true }).catch(() => {
       })
       if (Array.isArray(addressList) && addressList.length > 0) {
-		  if (this.back_address_id > 0) {
-			  for (const item of addressList) {
-				  Number(item.Address_ID) == Number(this.back_address_id) ? this.addressinfo = item : ''
-			  }
-		  } else {
-			  this.addressinfo = addressList[0]
-		  }
+        if (this.back_address_id > 0) {
+          for (const item of addressList) {
+            // eslint-disable-next-line no-unused-expressions
+            Number(item.Address_ID) === Number(this.back_address_id) ? this.addressinfo = item : ''
+          }
+        } else {
+          this.addressinfo = addressList[0]
+        }
       }
       this.postData.address_id = this.addressinfo.Address_ID
 
@@ -729,7 +733,7 @@ export default {
     // 物流改变
     ShipRadioChange (e) {
       const val = e.detail.value
-      this.ship_current = val
+      //this.ship_current = isNaN(val) ? val : parseInt(val)
       this.postData.shipping_id[this.activeBizId] = val
       this.postData.shipping_name[this.activeBizId] = val === 'is_store' ? '到店自取' : this.popupExpressCompanys[val] // 也要设置下name
       // 更改物流，需要重新获取信息，计算运费
@@ -834,6 +838,7 @@ export default {
               console.log(bid, biz_id, bizList[bid].Order_Shipping, bizList[bid].shipping_company)
               // 如果该商户有选择，那么就设置上
               if (bizList[bid].Order_Shipping.shipping_id) {
+                this.$set(this, 'ship_current', bizList[bid].Order_Shipping.shipping_id)
                 this.$set(this.postData.shipping_id, biz_id, bizList[bid].Order_Shipping.shipping_id)
                 this.$set(this.postData.shipping_name, biz_id, bizList[bid].shipping_company[bizList[bid].Order_Shipping.shipping_id])
               }

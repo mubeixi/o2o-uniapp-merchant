@@ -1,6 +1,6 @@
 <template>
 	<view  class="all" @click="commonClick">
-
+		<wzw-im-tip ref="wzwImTip"></wzw-im-tip>
 		<!-- <page-title  title="消息" bgcolor="#ffffff" class="titless"></page-title> -->
 		<view style="height: 30rpx;"></view>
 		<view class="centers" v-for="(item,index) of pro" :key="item" @click="readMsg(item,index)">
@@ -34,9 +34,12 @@
 import {getUserMessage,readUserMessage} from '@/api/customer'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import BaseMixin from '@/mixins/BaseMixin'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 export default {
 	mixins:[BaseMixin],
-	components:{LayoutIcon},
+	components:{
+		WzwImTip,
+		LayoutIcon},
 	data() {
 		return {
 			height: 1000, //

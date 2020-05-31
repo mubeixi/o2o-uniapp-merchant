@@ -1,5 +1,6 @@
 <template>
   <view  class="all" @click="commonClick">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <!-- #ifdef APP-PLUS -->
     <view class="status_bar" style="background-color: #FF5C33;"><!-- 这里是状态栏 --></view>
     <!-- #endif -->
@@ -43,8 +44,10 @@
 import { getJifenProd, jifenProdDuihuan, getUserInfo } from '@/api/customer'
 import { mapActions } from 'vuex'
 import BaseMixin from '@/mixins/BaseMixin'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
+  components: { WzwImTip },
   mixins: [BaseMixin],
   data () {
     return {

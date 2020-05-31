@@ -1,5 +1,6 @@
 <template>
   <view class="all" @click="commonClick">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <!-- #ifdef APP-PLUS -->
     <view class="status_bar" style="background-color: rgb(248, 248, 248);"><!-- 这里是状态栏 --></view>
     <!-- #endif -->
@@ -98,10 +99,12 @@ import Pay from '@/common/Pay'
 import { confirm, error, toast } from '@/common/fun'
 import BaseMixin from '@/mixins/BaseMixin'
 import LayoutLayer from '@/componets/layout-layer/layout-layer'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
   mixins: [BaseMixin],
   components: {
+    WzwImTip,
     LayoutLayer,
 
   },

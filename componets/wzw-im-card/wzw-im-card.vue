@@ -15,7 +15,8 @@
     </div>
     <div v-else class="content-wrap" :class="{reverse:message.direction==='to'}">
       <div class="content-label">
-        <div class="flex flex-vertical-c">
+        <!-- flex-vertical-c-->
+        <div class="flex">
 
           <div v-if="message.direction==='to'" class="content-arrow">
             <block v-if="message.type==='text'">
@@ -164,8 +165,9 @@ export default {
         .arrow-icon{
           width: 8px;
           position: absolute;
-          left: 0;
-          top: 0;
+          right: 0;
+          left: auto;
+          top: 4px;
         }
 
       }
@@ -252,7 +254,11 @@ export default {
       .content-arrow{
 
         .arrow-icon{
-
+          width: 8px;
+          position: absolute;
+          left: 0;
+          right: auto;
+          top: 4px;
         }
       }
     }

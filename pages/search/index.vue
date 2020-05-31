@@ -1,5 +1,6 @@
 <template>
   <div  @click="commonClick">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <form action="/">
       <div class="search-wrap">
         <icon type="search" size="34rpx" class="search_icon" />
@@ -24,6 +25,7 @@
 
 <script>
 import BaseMixin from '@/mixins/BaseMixin'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
   mixins: [BaseMixin],
@@ -34,7 +36,7 @@ export default {
       searchAll: [],
     }
   },
-  components: {},
+  components: { WzwImTip },
   onLoad (options) {
     if (options.keyword) {
       this.inputValue = options.keyword

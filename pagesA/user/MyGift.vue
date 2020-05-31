@@ -1,5 +1,6 @@
 <template>
   <view class="all" @click="commonClick">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view class="nav">
       <view class="ins" :class="checked==0?'checked':''" @click="change(0)">
         未领取
@@ -44,8 +45,10 @@
 <script>
 import BaseMixin from '@/mixins/BaseMixin'
 import { getGiftList } from '@/api/product'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
+  components: { WzwImTip },
   mixins: [BaseMixin],
   data () {
     return {

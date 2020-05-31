@@ -1,5 +1,6 @@
 <template>
   <view class="myall" @click="commonClick">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view class="user-info">
       <view class="user-avator" @click="changeAvator">
         <image class="imgs" :src="Shop_Logo" mode=""></image>
@@ -38,8 +39,10 @@ import { mapActions } from 'vuex'
 import BaseMixin from '@/mixins/BaseMixin'
 import { chooseImageByPromise, getArrColumn, uploadImages } from '@/common/helper'
 import { Exception } from '@/common/Exception'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
+  components: { WzwImTip },
   mixins: [BaseMixin],
   data () {
     return {

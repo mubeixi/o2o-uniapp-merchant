@@ -1,5 +1,6 @@
 <template>
   <div  @click="commonClick">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <div class="zhezhao" v-if="password_input">
       <div class="input-wrap">
         <div>请输入余额支付密码</div>
@@ -187,11 +188,13 @@ import WzwPay from '@/componets/wzw-pay/wzw-pay'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import { computeArrayColumnSum, farmatPayParam } from '@/pages/order/pay'
 import { Exception } from '@/common/Exception'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
   name: 'OrderPay',
   mixins: [BaseMixin],
   components: {
+    WzwImTip,
     LayoutIcon,
     WzwPay,
     LayoutLayer
@@ -470,11 +473,13 @@ export default {
         this.orderList = order_list
 
         for (var orderItem of order_list) {
+          console.log(orderItem,orderItem.Order_ID)
           this.$set(this.postData.need_invoice, orderItem.Order_ID, orderItem.Order_NeedInvoice ? 1 : 0)// 是否需要发票
           this.$set(this.postData.invoice_info, orderItem.Order_ID, orderItem.Order_InvoiceInfo || '')// 发票信息
           this.$set(this.postData.use_money, orderItem.Order_ID, parseFloat(orderItem.Order_Yebc) > 0 ? orderItem.Order_Yebc : '')// 使用余额
           this.$set(this.postData.use_money_conf, orderItem.Order_ID, parseFloat(orderItem.Order_Yebc) > 0 ? 1 : 0)// 使用余额
-          this.$set(this.postData.order_remark, orderItem.Order_ID, orderItem.order_remark || '')// 订单备注
+          this.$set(this.postData.order_remark, orderItem.Order_ID, orderItem.Order_Remark || '')// 订单备注
+
         }
 
         this.refreshPayMoney()

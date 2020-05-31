@@ -1,5 +1,6 @@
 <template>
   <view class="myall"  @click="commonClick">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view style="height: 10px;width: 100%;"></view>
     <view class="three">
       <view class="haha">
@@ -27,8 +28,10 @@
 <script>
 import BaseMixin from '@/mixins/BaseMixin'
 import { shaApply } from '@/api/customer'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
+  components: { WzwImTip },
   mixins: [BaseMixin],
   data () {
     return {

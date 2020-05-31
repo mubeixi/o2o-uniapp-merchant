@@ -1,5 +1,6 @@
 <template>
   <div class="vip-all" @click="commonClick">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <div class="top">
       <image :src="'/static/client/vip/vip-bg.png'|domain" class="img-full"></image>
       <swiper class="center" :indicator-dots="false" :autoplay="false" :duration="1000" :current="inds"
@@ -99,10 +100,11 @@ import WzwPay from '@/componets/wzw-pay/wzw-pay'
 import BaseMixin from '@/mixins/BaseMixin'
 import Pay from '@/common/Pay'
 import { checkIsLogin } from '@/common/helper.js'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 export default {
   name: 'VipList',
   mixins: [BaseMixin],
-  components: { WzwPay },
+  components: { WzwImTip, WzwPay },
   data () {
     return {
       vipData: [{ basic_rights: '' }],

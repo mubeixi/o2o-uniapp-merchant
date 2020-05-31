@@ -1,5 +1,6 @@
 <template>
   <div class="free"  @click="commonClick">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <div class="top-box" :style="{height:menuButtonInfo.height+menuButtonInfo.top+'px',backgroundImage:'url('+$getDomain('/static/client/active/bg.png')+')'}">
       <div :style="{paddingTop:menuButtonInfo.top+'px'}"></div>
       <div class="flex flex-vertical-c" :style="{height:menuButtonInfo.height+'px'}" style="position: relative">
@@ -88,11 +89,12 @@ import { getProductList } from '@/api/product'
 import { getBizInfo } from '@/api/store'
 import { hideLoading, modal, showLoading } from '@/common/fun'
 import { Exception } from '@/common/Exception'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 
 export default {
   name: 'OrderFree',
-  components: { LayoutIcon },
+  components: { WzwImTip, LayoutIcon },
   mixins: [BaseMixin],
   data () {
     return {

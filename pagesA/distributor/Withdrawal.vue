@@ -1,5 +1,6 @@
 <template>
   <view class="all" @click="commonClick">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view class="content">
       <view class="bank" v-if="isShow" @click="goMethod">
         <image :src="initData.ShopLogo|domain" class="bankCard"></image>
@@ -58,8 +59,10 @@ import { mapGetters } from 'vuex'
 import Storage from '@/common/Storage'
 import { getUserWithdrawMethod, getWithdrawConfig, withdrawApply } from '@/api/customer'
 import BaseMixin from '@/mixins/BaseMixin'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
+  components: { WzwImTip },
   mixins: [BaseMixin],
   data () {
     return {

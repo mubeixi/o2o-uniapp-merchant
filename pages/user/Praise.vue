@@ -1,5 +1,6 @@
 <template>
   <div class="praise"  @click="commonClick">
+    <wzw-im-tip></wzw-im-tip>
     <div class="praise-item" v-for="(item,index) of praise" :key="index">
       <div class="praise-item-title flex flex-vertical-c">
         <image :src="item.User_HeadImg" class="user-img m-r-8"></image>
@@ -43,10 +44,11 @@ import BaseMixin from '@/mixins/BaseMixin'
 import { getCommitList } from '@/api/common'
 import { error } from '@/common/fun'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
   mixins: [BaseMixin],
-  components: { LayoutIcon },
+  components: { WzwImTip, LayoutIcon },
   data () {
     return {
       praise: [],

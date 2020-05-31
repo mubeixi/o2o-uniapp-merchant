@@ -1,5 +1,6 @@
 <template>
   <view class="profitSum" @click="commonClick">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view class="titleClass">
       <view class="titleLeft">
         时间：
@@ -57,8 +58,10 @@
 
 import { getTeamSalesList } from '@/api/customer'
 import BaseMixin from '@/mixins/BaseMixin'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
+  components: { WzwImTip },
   mixins: [BaseMixin],
   data () {
     return {

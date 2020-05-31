@@ -1,8 +1,10 @@
 <template>
   <div class="wrap" @click="commonClick">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <!-- #ifdef APP-PLUS -->
     <view class="status_bar" style="background-color: rgb(248, 248, 248);"><!-- 这里是状态栏 --></view>
     <!-- #endif -->
+
 
     <div :key="item" class="pro" v-for="(item,index) of refundInfo.refund_prod_list">
       <div class="pro-div">
@@ -82,10 +84,12 @@ import { error, hideLoading, showLoading, toast } from '@/common/fun'
 import BaseMixin from '@/mixins/BaseMixin'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import { chooseImageByPromise, getArrColumn, uploadImages } from '@/common/helper'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
   mixins: [BaseMixin],
   components: {
+    WzwImTip,
     popupLayer,
     LayoutIcon
   },

@@ -1,5 +1,6 @@
 <template>
   <div class="wrap" @click="commonClick">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <div :style="{height:systemInfo.statusBarHeight+'px'}"></div>
     <div :style="{height:diyHeadHeight+'px',opacity:activeHeadOpacity}" v-if="activeHeadOpacity" class="bg-white"
          style="position: fixed;z-index: 2;width: 750rpx;left:0;top:0">
@@ -91,10 +92,12 @@ import {
 import { getOrderNum } from '@/api/order'
 import { getUserInfo, getRightsCard } from '@/api/customer'
 import { mapActions } from 'vuex'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
   mixins: [BaseMixin],
   components: {
+    WzwImTip,
     LayoutIcon,
     LayoutFun,
     ProTag

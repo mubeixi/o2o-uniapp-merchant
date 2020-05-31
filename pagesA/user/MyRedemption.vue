@@ -1,5 +1,6 @@
 <template>
   <view @click="commonClick" class="all">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <!-- <page-title title="我的兑换" bgcolor="#ffffff"></page-title> -->
     <view style="height: 10rpx;width: 100%;"></view>
     <template v-if="prod_list.length > 0">
@@ -60,8 +61,10 @@
 import { cancelJifenProdOrder, confirmJifenProdOrder, jifenProdOrder } from '@/api/customer'
 import { modal } from '@/common/fun'
 import BaseMixin from '@/mixins/BaseMixin'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
+  components: { WzwImTip },
   mixins: [BaseMixin],
   data () {
     return {

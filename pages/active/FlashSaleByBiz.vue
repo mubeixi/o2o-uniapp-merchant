@@ -1,5 +1,6 @@
 <template>
   <div class="flashSale-all" :style="{backgroundImage:'url('+$getDomain('/static/client/flash-sale-bg.jpg')+')'}"   @click="commonClick">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <div class="flex flex-vertical-c seckill-title" :style="{marginTop:menuButtonInfo.top+'px'}">
       <layout-icon type="iconicon-arrow-left" size="20" color="#fff" class="back-icon m-r-2" @click="$back"></layout-icon>
       <image class="seckill-title-img m-r-10" :src="bizInfo.biz_logo"></image>
@@ -45,11 +46,12 @@ import { getBizSpikeDetail, getSpikeProd } from '@/api/product'
 import { getBizInfo } from '@/api/store'
 import { getCountdownFunc } from '@/common/helper'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 let countdownInstance = null
 export default {
   mixins: [BaseMixin],
-  components: { LayoutIcon },
+  components: { WzwImTip, LayoutIcon },
   data () {
     return {
       biz_id: null,

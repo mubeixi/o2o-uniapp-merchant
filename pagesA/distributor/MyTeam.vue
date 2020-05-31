@@ -1,6 +1,6 @@
 <template>
   <view class="team" @click="commonClick">
-
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view style="width: 100%;height: 20rpx;"></view>
     <view class="teamName" v-if="pro.disInfo">
       <view class="teamImg">
@@ -37,8 +37,10 @@
 <script>
 import { getDisTeamCount } from '@/api/customer'
 import BaseMixin from '@/mixins/BaseMixin'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
+  components: { WzwImTip },
   mixins: [BaseMixin],
   data () {
     return {

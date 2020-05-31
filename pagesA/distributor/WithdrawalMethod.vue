@@ -1,5 +1,6 @@
 <template>
   <view class="all" @click="commonClick">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <!-- #ifdef APP-PLUS -->
     <view class="status_bar" style="background: #fff"><!-- 这里是状态栏 --></view>
     <!-- #endif -->
@@ -33,9 +34,10 @@ import { delUserWithdrawMethod, getUserWithdrawMethod } from '@/api/customer'
 import BaseMixin from '@/mixins/BaseMixin'
 
 import PageTitle from '@/componets/page-title/page-title'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
-  components: { PageTitle },
+  components: { WzwImTip, PageTitle },
   mixins: [BaseMixin],
   data () {
     return {

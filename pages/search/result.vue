@@ -1,5 +1,6 @@
 <template>
   <div class="bd"  @click="commonClick">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
 
     <div class="top">
       <icon type="search" size="34rpx" class="search_icon" />
@@ -125,10 +126,11 @@ import BaseMixin from '@/mixins/BaseMixin'
 import Storage from '@/common/Storage'
 import { getLocation } from '@/common/tool/location'
 import { LayoutModal } from '@/componets/layout-modal/layout-modal'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 export default {
   mixins: [BaseMixin],
   name: 'SearchResult',
-  components: { LayoutModal },
+  components: { WzwImTip, LayoutModal },
   data () {
     return {
       active: 0,

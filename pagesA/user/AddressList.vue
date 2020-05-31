@@ -1,6 +1,6 @@
 <template>
-
   <view class="myall" @click="commonClick">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <radio-group @change="radioChange" class="radio-group">
       <label :class="!check_flag ? 'no-redio' : ''" :key="idx" class="radio-item" v-for="(item,idx) in addresslist">
         <radio style="transform: scale(0.8)" class="radio-ele" :checked="Number(item.Address_ID) === Number(check_address_id)"
@@ -42,10 +42,11 @@
 import { delAddress, getAddressList } from '@/api/customer'
 import BaseMixin from '@/mixins/BaseMixin'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
   mixins: [BaseMixin],
-  components: { LayoutIcon },
+  components: { WzwImTip, LayoutIcon },
   data () {
     return {
       addresslist: [],

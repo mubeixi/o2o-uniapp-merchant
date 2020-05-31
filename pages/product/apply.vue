@@ -1,5 +1,6 @@
 <template>
   <div class="bd" @click="commonClick">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <div class="search-wrap">
       <icon type="search" size="34rpx" class="search_icon" @click="search" />
       <input type="text" class="search-input" name="search" v-model="inputValue" @confirm="search"
@@ -56,10 +57,12 @@ import { updateCart } from '@/api/order'
 import { modal, showLoading, hideLoading } from '@/common/fun'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import ProductSku from '@/componets/product-sku/product-sku'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 export default {
   mixins: [BaseMixin],
   name: 'ProductApply',
   components: {
+    WzwImTip,
     LayoutIcon, ProductSku
   },
   data () {

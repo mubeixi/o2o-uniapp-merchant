@@ -1,6 +1,6 @@
 <template>
   <view  @click="commonClick">
-
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <!-- <view class="zhezhao" v-if="password_input">
       <view class="input-wrap">
         <view>请输入余额支付密码</view>
@@ -171,10 +171,12 @@ import Storage from '@/common/Storage'
 import { confirm, error, toast } from '@/common/fun'
 import BaseMixin from '@/mixins/BaseMixin'
 import LayoutLayer from '@/componets/layout-layer/layout-layer'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
   mixins: [BaseMixin],
   components: {
+    WzwImTip,
     LayoutLayer,
 
   },

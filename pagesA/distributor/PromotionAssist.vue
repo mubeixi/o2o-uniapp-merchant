@@ -1,5 +1,6 @@
 <template>
   <view @click="commonClick">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view class="banner">
       <image class="src" :src="'/static/clientpop_default.jpg'|domain"></image>
       <form report-submit @submit="submit">
@@ -45,8 +46,10 @@
 import { addPromotionArticle } from '@/api/customer'
 
 import BaseMixin from '@/mixins/BaseMixin'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
+  components: { WzwImTip },
   mixins: [BaseMixin],
   data () {
     return {

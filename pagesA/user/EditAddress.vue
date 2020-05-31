@@ -1,5 +1,6 @@
 <template>
   <view class="myall" @click="commonClick">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <form report-submit="true">
       <view class='xinxi'>
         <text class="text">收货人</text>
@@ -48,10 +49,11 @@ import { addAddress, editAddress, getAddressList } from '@/api/customer'
 import WzwAddress from '@/componets/wzw-address/wzw-address'
 import { regPhone } from '@/common/Regs'
 import { error, toast } from '@/common/fun'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
   mixins: [BaseMixin],
-  components: { WzwAddress },
+  components: { WzwImTip, WzwAddress },
   data () {
     return {
       Address_ID: '',//是否是编辑还是新增

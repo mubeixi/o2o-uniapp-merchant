@@ -1,6 +1,6 @@
 <template>
   <div class="page-wrap"  @click="commonClick">
-
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <div class="head" id="stickyTab">
       <div class="tab-box">
         <div v-for="(imgs,idx) in photoList" @click="setActive(idx)" :key="idx" class="tab-item"
@@ -42,10 +42,11 @@ import BaseMixin from '@/mixins/BaseMixin'
 import { hideLoading, modal, showLoading } from '@/common/fun'
 import { getAlbumList, getPhotoList } from '@/api/store'
 import { getArrColumn } from '@/common/helper'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
   name: 'StorePhoto',
-  components: {},
+  components: { WzwImTip },
   mixins: [BaseMixin],
   computed: {},
   data () {

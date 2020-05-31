@@ -1,6 +1,6 @@
 <template>
   <view class="wrap" :style="{height: height + 'px', background:bgcolor}" @click="commonClick">
-
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <block v-if="type != 3">
       <form report-submit @submit="save">
         <view v-if="type === 0" class="content">
@@ -45,8 +45,10 @@ import { updateUserLoginPsw, updateUserPayPsw, updateMobileSms, updateUserMobile
 import { mapActions } from 'vuex'
 
 import BaseMixin from '@/mixins/BaseMixin'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
+  components: { WzwImTip },
   mixins: [BaseMixin],
   data () {
     return {

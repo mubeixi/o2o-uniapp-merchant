@@ -38,6 +38,7 @@ import { modal } from '@/common/fun'
 import IM from '@/common/Im/Im'
 import Storage from '@/common/Storage'
 import { checkIsLogin } from '@/common/helper'
+import eventHub from '@/common/eventHub'
 let imInstance = null
 export default {
   mixins: [BaseMixin],
@@ -107,7 +108,13 @@ export default {
   },
   onLoad () {
     if (!checkIsLogin(0, 0)) return
-    this.imInstance = imInstance = new IM()
+
+    if (eventHub.imInstance) {
+      this.imInstance = imInstance = eventHub.imInstance
+    } else {
+      this.imInstance = imInstance = new IM()
+    }
+
     // 设置本地用户信息
     imInstance.setSendInfo({ type: 'user', id: Storage.get('user_id') })
     this.out_uid = imInstance.getOutUid()
@@ -136,8 +143,9 @@ export default {
     }
   }
   .right{
-    width: 690rpx;
-    padding: 30rpx 30rpx 30rpx 0;
+      width: 590rpx;
+      padding: 30rpx 30rpx 30rpx 0;
+      box-sizing: border-box;
     border-bottom: 1px solid #ECECEC;
     display: flex;
     flex-direction: column;

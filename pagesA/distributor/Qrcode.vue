@@ -1,5 +1,6 @@
 <template>
   <view class="myall" @click="commonClick">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view class="top">
       <image class="back" :src="'/static/client/fenxiao/top.png'|domain"></image>
       <!-- #ifdef H5 -->
@@ -44,9 +45,10 @@ import { mapActions } from 'vuex'
 import { getDisInit, getDistributeWxQrcode, getFuncModule } from '@/api/customer'
 import BaseMixin from '@/mixins/BaseMixin'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
-  components: { LayoutIcon },
+  components: { WzwImTip, LayoutIcon },
   mixins: [BaseMixin],
   data () {
     return {

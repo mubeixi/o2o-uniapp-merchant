@@ -1,5 +1,6 @@
 <template>
   <view class="all"  @click="commonClick">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view class="top">
       <swiper class="center" :indicator-dots="false" :autoplay="false" :duration="1000" :current="inds"
               @change="change">
@@ -289,6 +290,7 @@ import { mapActions } from 'vuex'
 import BaseMixin from '@/mixins/BaseMixin'
 import CircleTitle from '@/componets/circle-title/circle-title'
 import { toHome } from '@/common/fun'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
   mixins: [BaseMixin],
@@ -302,6 +304,7 @@ export default {
     }
   },
   components: {
+    WzwImTip,
     CircleTitle,
 
   },

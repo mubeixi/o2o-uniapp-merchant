@@ -1,5 +1,6 @@
 <template>
   <div class="start"  @click="commonClick">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <!-- 商品详情部分 -->
     <div class="first">
       <div class="left">
@@ -150,6 +151,7 @@ import LayoutLayer from '@/componets/layout-layer/layout-layer'
 import { Exception } from '@/common/Exception'
 import { mapActions } from 'vuex'
 import ProductSku from '@/componets/product-sku/product-sku'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 const groupStam = null
 const getGroupCountdown = ({ end_timeStamp = 1571221631, current = (new Date()).getTime() } = {}) => {
@@ -172,6 +174,7 @@ const getGroupCountdown = ({ end_timeStamp = 1571221631, current = (new Date()).
 
 export default {
   components: {
+    WzwImTip,
     ProductSku,
     LayoutLayer
   },
