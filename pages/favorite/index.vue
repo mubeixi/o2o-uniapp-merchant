@@ -92,13 +92,13 @@ export default {
   mixins: [BaseMixin],
   components: { WzwImTip, LayoutIcon },
   watch: {
-    'allCheck': function (val) {
+    allCheck: function (val) {
       if (val) {
         this.isSelectAll = true
       } else {
         this.isSelectAll = false
       }
-    },
+    }
   },
   computed: {
     selectes () {
@@ -116,13 +116,13 @@ export default {
       } else {
         return this.storeFavoriteList && this.storeFavoriteList.filter(item => item.is_check).length === this.storeFavoriteList.length || false
       }
-    },
+    }
   },
   data () {
     return {
       multiGoods: false,
       multiStore: false,
-      activeIndex: 0,  //0是产品 1是商家
+      activeIndex: 0, // 0是产品 1是商家
       goodsFavoriteList: [],
       storeFavoriteList: [],
       pageSize: 10,
@@ -131,13 +131,13 @@ export default {
       param: {
         type: 1,
         pageSize: 4,
-        page: 1,
+        page: 1
       },
       isSelectAll: false,
-      is_biz_more: true, //是否还有更多商家
-      is_pro_more: true,  //是否还有更多产品
+      is_biz_more: true, // 是否还有更多商家
+      is_pro_more: true, // 是否还有更多产品
       store_total: 0,
-      pro_total: 0,
+      pro_total: 0
     }
   },
   methods: {
@@ -155,7 +155,7 @@ export default {
     },
     call (phone) {
       uni.makePhoneCall({
-        phoneNumber: phone,
+        phoneNumber: phone
       })
     },
     openMap (store) {
@@ -165,12 +165,12 @@ export default {
         name: store.biz_shop_name,
         success: function () {
           console.log('success')
-        },
+        }
       })
     },
     // 取消收藏
     cancel () {
-      let arr = []
+      const arr = []
       let list = []
       if (this.activeIndex === 0) {
         list = this.goodsFavoriteList.filter(item => item.is_check)
@@ -179,7 +179,7 @@ export default {
         list = this.storeFavoriteList.filter(item => item.is_check)
         list.forEach(item => arr.push(item.id))
       }
-      let param = {}
+      const param = {}
       if (this.activeIndex === 0) {
         param.prod_id = JSON.stringify(arr)
       } else {
@@ -232,9 +232,12 @@ export default {
             return
           }
           this.pro_page++
-          res.data.map(item => {
-            item.is_check = false
-          })
+          if (res.data.length > 0) {
+            res.data.map(item => {
+              item.is_check = false
+            })
+          }
+
           resolve(this.goodsFavoriteList.concat(res.data))
         }).catch(err => {
           reject(err)
@@ -252,28 +255,31 @@ export default {
             return
           }
           this.biz_page++
-          res.data.map(item => {
-            item.is_check = false
-          })
+          if (res.data.length > 0) {
+            res.data.map(item => {
+              item.is_check = false
+            })
+          }
+
           resolve(this.storeFavoriteList.concat(res.data))
         }).catch(err => {
           reject(err)
         })
       })
-
     },
     async _init_func () {
       try {
-        this.goodsFavoriteList = await this.getProList().catch(e => {
-          throw Error(e.msg || '获取收藏列表失败')
-        })
         this.storeFavoriteList = await this.getStoreList().catch(e => {
           throw Error(e.msg || '获取商家列表失败')
+        })
+
+        this.goodsFavoriteList = await this.getProList().catch(e => {
+          throw Error(e.msg || '获取收藏列表失败')
         })
       } catch (e) {
         modal(e.message)
       }
-    },
+    }
   },
   created () {
     this.param.User_ID = Storage.get('User_ID')
@@ -294,7 +300,7 @@ export default {
         throw Error(e.msg || '获取商家列表失败')
       })
     }
-  },
+  }
 }
 </script>
 <style lang="scss" scoped>
@@ -326,7 +332,7 @@ export default {
     justify-content: center;
     //box-shadow: rgba(155,155,155,.1) 0 10px 10px;
     .tab-item {
-      width: 130rpx;
+      width: 200rpx;
       text-align: center;
       padding: 24rpx 0;
       box-sizing: border-box;

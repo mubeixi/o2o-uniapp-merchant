@@ -4,17 +4,28 @@
     <!--  <pagetitle title="提交订单"></pagetitle> -->
     <view @click="goAddressList" class="address" v-if="giftInfo.Gift_Shipping== 1">
       <image :src="'/static/client/location.png'|domain" alt="" class="loc_icon"></image>
-      <view class="add_msg" v-if="addressinfo.Address_Name">
-        <view class="name">收货人：{{addressinfo.Address_Name}} <span>{{addressinfo.Address_Mobile | formatphone}}</span>
+      <block v-if="have_Order_ID">
+        <view class="add_msg">
+          <view class="name">收货人：{{initDataValue.Address_Name}} <span>{{initDataValue.Address_Mobile | formatphone}}</span>
+          </view>
+          <view class="location">
+            收货地址：{{initDataValue.Address_Province_name}}{{initDataValue.Address_City_name}}{{initDataValue.Address_Area_name}}{{initDataValue.Address_Town_name}}{{initDataValue.Address_Detailed}}
+          </view>
         </view>
-        <view class="location">
-          收货地址：{{addressinfo.Address_Province_name}}{{addressinfo.Address_City_name}}{{addressinfo.Address_Area_name}}{{addressinfo.Address_Town_name}}
+      </block>
+      <block v-else>
+        <view class="add_msg" v-if="addressinfo.Address_Name">
+          <view class="name">收货人：{{addressinfo.Address_Name}} <span>{{addressinfo.Address_Mobile | formatphone}}</span>
+          </view>
+          <view class="location">
+            收货地址：{{addressinfo.Address_Province_name}}{{addressinfo.Address_City_name}}{{addressinfo.Address_Area_name}}{{addressinfo.Address_Town_name}}{{addressinfo.Address_Detailed}}
+          </view>
         </view>
-      </view>
-      <view class="add_msg" v-else>
-        <view>暂无收货地址，去添加</view>
-      </view>
-      <image :src="'/static/client/right.png'|domain" alt="" class="right"></image>
+        <view class="add_msg" v-else>
+          <view>暂无收货地址，去添加</view>
+        </view>
+      </block>
+      <layout-icon class="right" type="iconicon-arrow-right"></layout-icon>
     </view>
     <view class="order_msg">
       <img :src="giftInfo.Gift_ImgPath" alt="" class="pro-img">
@@ -27,10 +38,19 @@
       <view class="bd">
         <view @click="changeShip" class="o_title">
           <span>运费选择</span>
-          <span style="text-align:right; color: #888;">
-						<span>{{shipping_name?(shipping_name + ' ' + (shipping_price > 0 ? shipping_price : '免运费')):'请选择物流'}}</span>
-                        <image :src="'/static/client/right.png'|domain" alt="" class="right"></image>
-                    </span>
+          <span style="text-align:right; color: #888;display: flex;align-items: center">
+          <block v-if="have_Order_ID">
+            <span>{{initDataValue.Orders_Shipping}}{{( initDataValue.Order_Shipping_Price> 0 ? initDataValue.Order_Shipping_Price : '免运费')}}</span>
+                  <layout-icon class="right" type="iconicon-arrow-right"></layout-icon>
+
+          </block>
+          <block v-else>
+            <span>{{shipping_name?(shipping_name + ' ' + (shipping_price > 0 ? shipping_price : '免运费')):'请选择物流'}}</span>
+            <layout-icon class="right" type="iconicon-arrow-right"></layout-icon>
+
+          </block>
+
+          </span>
         </view>
       </view>
     </view>
@@ -60,7 +80,7 @@
     </view>
     <view class="pwd-wrap" v-if="psdInput">
       <view class="input-box">
-        <input class="input-psw" placeholder="请输入支付密码" type="password" v-model="password" />
+        <input class="input-psw" placeholder="请输入支付密码" type="password" v-model="password"/>
         <view class="btns">
           <view @click="cancelPsw" class="cancel btn">取消</view>
           <view @click="pswConfirm" class="confirm btn">确定</view>
@@ -76,7 +96,7 @@
             {{ship}}
           </view>
           <radio-group @change="ShipRadioChange">
-            <radio :checked="shipid==ship_current" :value="shipid" color="#F43131" style="float:right;" />
+            <radio :checked="shipid==ship_current" :value="shipid" color="#F43131" style="float:right;"/>
           </radio-group>
         </view>
       </view>
@@ -100,22 +120,24 @@ import {
   jifenProdDetail,
   jifenProdDuihuan,
   jifenProdPay,
-  jifenProdShippingPrice
+  jifenProdShippingPrice,
+  jifenProdOrder
 } from '@/api/customer'
 import BaseMixin from '@/mixins/BaseMixin'
 import { mapActions, mapGetters } from 'vuex'
 import Pay from '@/common/Pay'
-import { GetQueryByString, isWeiXin,  urlencode } from '@/common/helper'
-import { backFunc } from '@/common/fun'
-import {Storage} from '@/common/Storage'
+import { GetQueryByString, isWeiXin, urlencode } from '@/common/helper'
+import { backFunc, error } from '@/common/fun'
+import { Storage } from '@/common/Storage'
 import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
-
+import LayoutIcon from '@/componets/layout-icon/layout-icon'
 
 export default {
   mixins: [BaseMixin],
   components: {
     WzwImTip,
-    popupLayer
+    popupLayer,
+    LayoutIcon
   },
   data () {
     return {
@@ -138,7 +160,9 @@ export default {
       address_id: 0,
       shipping_price: 0, // 运费
       pay_arr: [],
-      //initData: {}
+      have_Order_ID: '',
+      initDataValue: {}
+      // initData: {}
     }
   },
   filters: {
@@ -153,19 +177,18 @@ export default {
   },
   async onShow () {
     this.getAddressList()
-    //this.getShipping()
-    const initData = this.initData//await this.getInitData()
-    console.log(initData,"s")
+    // this.getShipping()
+    const initData = this.initData// await this.getInitData()
+    console.log(initData, 's')
     this.pay_arr = initData.pay_arr
-	
-	
-	jifenProdShippingPrice({
-	  Gift_ID: this.gift_id,
-	  Address_ID: this.address_id,
-	  Shipping_ID: this.shipping_id
-	}).then(res => {
-	  this.shipping_company = res.data.shipping_company_dropdown
-	})
+
+    jifenProdShippingPrice({
+      Gift_ID: this.gift_id,
+      Address_ID: this.address_id,
+      Shipping_ID: this.shipping_id
+    }).then(res => {
+      this.shipping_company = res.data.shipping_company_dropdown
+    })
   },
   async created () {
     const userInfo = this.getUserInfo(true)
@@ -183,7 +206,15 @@ export default {
   },
   onLoad (options) {
     this.gift_id = options.gift_id
-
+    if (options.Order_ID) {
+      this.have_Order_ID = options.Order_ID
+      this.init()
+    }
+    // 页面直接传值很方便，为什么这么难受
+    uni.$on('bind_select_address', (data) => {
+      this.address_id = data.Address_ID
+      this.addressinfo = data
+    })
     this.jifenProdDetail()
   },
   computed: {
@@ -202,6 +233,13 @@ export default {
   },
   methods: {
     ...mapActions(['getUserInfo', 'getInitData']),
+    init () {
+      jifenProdOrder({ Order_ID: this.have_Order_ID }).then(res => {
+        this.initDataValue = res.data[0]
+      }).catch(e => {
+        error(e.msg)
+      })
+    },
     // 物流信息列表
     getShipping () {
       getShipping().then(res => {
@@ -238,14 +276,15 @@ export default {
     },
     // 跳转地址列表页
     goAddressList () {
+      if (this.have_Order_ID) return
       uni.navigateTo({
-        url: '/pages/addressList/addressList?from=checkout&addressid=' + this.address_id
+        url: '/pagesA/user/AddressList?from=checkout&addressid=' + this.address_id
       })
     },
     // 跳转新增地址页面
     goEditAdd () {
       uni.navigateTo({
-        url: '/pagesA/editAddress/editAddress?from=checkout'
+        url: '/pagesA/user/EditAddress?from=checkout'
       })
     },
     cancelPsw () {
@@ -256,30 +295,40 @@ export default {
       if (!this.password) {
         return
       }
-      jifenProdDuihuan({
-        Gift_ID: this.gift_id,
-        password: this.password,
-        Address_ID: this.address_id,
-        Shipping_ID: this.shipping_id
-      }).then(res => {
+      if (this.have_Order_ID) {
         this.psdInput = false
-        this.Order_ID = res.data.Orders_ID
-        // 判断是否是待支付状态
-        if (res.data.Order_Status == 1) {
-          this.$refs.popMethod.show()
-        } else if (res.data.Order_Status == 2) {
-          this.paySuccessCall()
-        }
-      }, err => {
-        uni.showToast({
-          title: err.msg,
-          icon: 'none'
+        this.Order_ID = this.have_Order_ID
+        this.$refs.popMethod.show()
+      } else {
+        jifenProdDuihuan({
+          Gift_ID: this.gift_id,
+          password: this.password,
+          Address_ID: this.address_id,
+          Shipping_ID: this.shipping_id
+        }).then(res => {
+          this.psdInput = false
+          this.Order_ID = res.data.Orders_ID
+          // 判断是否是待支付状态
+          if (res.data.Order_Status == 1) {
+            this.$refs.popMethod.show()
+          } else if (res.data.Order_Status == 2) {
+            this.paySuccessCall()
+          }
+        }, err => {
+          uni.showToast({
+            title: err.msg,
+            icon: 'none'
+          })
+          this.password = ''
         })
-        this.password = ''
-      })
+      }
     },
     // 提交订单
     form_submit () {
+      if(this.have_Order_ID){
+        this.psdInput = true
+        return
+      }
       if (this.giftInfo.Gift_Shipping == 1) {
         if (!this.shipping_id) {
           uni.showToast({
@@ -313,6 +362,7 @@ export default {
     },
     // 选择运费
     changeShip () {
+      if (this.have_Order_ID) return
       this.type = 'shipping'
       this.ship_current = this.shipping_id
 
@@ -657,7 +707,7 @@ export default {
       })
     },
     async $_init_wxpay_env () {
-      const initData =this.initData// await this.getInitData()
+      const initData = this.initData// await this.getInitData()
 
       const login_methods = initData.login_methods
       const component_appid = login_methods.component_appid

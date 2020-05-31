@@ -27,7 +27,7 @@
       <view class="content" v-for="(item,index) of pro " :key="index" v-if="index==0">
         <view class="contentLeft">
           <view class="ming">
-            <image class='image' :src="'/static/client/distributor/first.png'|domain"></image>
+            <image class='image' src="/static/first.png"></image>
           </view>
           <view class="info">
             <image class="image" :src="item.Shop_Logo"></image>
@@ -47,7 +47,7 @@
       <view class="content" v-else-if="index==1">
         <view class="contentLeft">
           <view class="ming">
-            <image class='image' :src="'/static/client/distributor/second.png'|domain"></image>
+            <image class='image' src="/static/second.png"></image>
           </view>
           <view class="info">
             <image :src="item.Shop_Logo"></image>
@@ -67,7 +67,7 @@
       <view class="content" v-else-if="index==2">
         <view class="contentLeft">
           <view class="ming">
-            <image class='image' :src="'/static/client/distributor/three.png'|domain"></image>
+            <image class='image' src="/static/three.png"></image>
           </view>
           <view class="info">
             <image :src="item.Shop_Logo"></image>

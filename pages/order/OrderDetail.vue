@@ -48,6 +48,7 @@
         <div class="location">
           收货地址：{{orderInfo.Address_Province_name}}{{orderInfo.Address_City_name}}{{orderInfo.Address_Area_name}}
           <block v-if="orderInfo.Address_Town_name">{{orderInfo.Address_Town_name}}</block>
+          <block v-if="orderInfo.Address_Detailed">{{orderInfo.Address_Detailed}}</block>
         </div>
       </div>
     </div>
@@ -60,7 +61,8 @@
         <image :src="pro.prod_img" alt="" class="pro-img" />
         <div class="pro-msg">
           <div class="pro-name">{{pro.prod_name}}</div>
-          <div class="attr" v-if="pro.attr_info"><span>{{pro.attr_info.attr_name}}</span></div>
+          <div class="attr" v-if="pro.attr_info.attr_name"><span>{{pro.attr_info.attr_name}}</span></div>
+          <div class="attrs" v-else></div>
           <div class="pro-price"><span>￥</span>{{pro.prod_price}} <span class="amount">x<span class="num">{{pro.prod_count}}</span></span>
           </div>
         </div>
@@ -817,6 +819,15 @@ export default {
     height: 50rpx;
     line-height: 50rpx;
     background: #FFF5F5;
+    color: #666;
+    font-size: 24rpx;
+    padding: 0 20rpx;
+    margin-bottom: 20rpx;
+  }
+  .attrs{
+    display: inline-block;
+    height: 50rpx;
+    line-height: 50rpx;
     color: #666;
     font-size: 24rpx;
     padding: 0 20rpx;

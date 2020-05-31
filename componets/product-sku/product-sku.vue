@@ -1,6 +1,6 @@
 <template>
   <view v-if="isShow">
-    <layout-popup ref="productSku" :showPop="true" @maskClicked="close">
+    <layout-popup ref="productSku" :showPop="true" @maskClicked="closePro">
       <div class="cartSku" @touchmove.prevent.stop="noop">
         <div class="cartTop">
           <image class="image" @click="showImgDetal"
@@ -308,6 +308,12 @@ export default {
     },
     show () {
       this.isShow = true
+    },
+    closePro () {
+      this.submitFlag=false
+      this.postData.id = ''
+      this.check_attr = {}
+      this.isShow = false
     },
     close () {
       this.isShow = false

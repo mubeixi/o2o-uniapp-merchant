@@ -572,6 +572,11 @@
           "style": {
             "navigationBarTitleText": "积分兑换"
           }
+        },{
+          "path": "user/ExpiredCoupon",
+          "style": {
+            "navigationBarTitleText": "失效优惠券"
+          }
         }
       ]
     }
