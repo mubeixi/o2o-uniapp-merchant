@@ -11,7 +11,7 @@
           </view>
           <view class="views times">
             <image :src="'/static/client/check/time.png'|domain" class="imgs"></image>
-            {{item.Orders_CreateTime}}
+            {{item.Orders_CreateTime*1000 | formatTime}}
 <!--             | formatTime-->
           </view>
         </view>
@@ -114,7 +114,7 @@ export default {
     toBuy (item) {
       if (item.Orders_Status == 1) {
         uni.navigateTo({
-          url: '/pagesA/user/IntegralCheck?gift_id=' + item.Gift_ID
+          url: '/pagesA/user/IntegralCheck?gift_id=' + item.Gift_ID + '&Order_ID=' + item.Orders_ID
         })
       }
 

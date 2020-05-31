@@ -45,7 +45,7 @@ import { getJifenProd, jifenProdDuihuan, getUserInfo } from '@/api/customer'
 import { mapActions } from 'vuex'
 import BaseMixin from '@/mixins/BaseMixin'
 import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
-
+import {error} from '@/common/fun'
 export default {
   components: { WzwImTip },
   mixins: [BaseMixin],
@@ -75,7 +75,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      setUserInfo: 'user/setUserInfo',
+      setUserInfo: 'user/setUserInfo'
     }),
     reset () {
       this.prod_list = []
@@ -127,15 +127,15 @@ export default {
         uni.showToast({
           title: '兑换成功'
         })
+        this.psdInput = false
         setTimeout(() => {
           uni.navigateTo({
-            url: '/pagesA/person/myRedemption'
+            url: '/pagesA/user/MyRedemption'
           })
         }, 1500)
       }, err => {
-        uni.showToast({
-          title: res.msg
-        })
+        error(err.msg)
+        this.psdInput = false
       })
     },
     // 积分兑换

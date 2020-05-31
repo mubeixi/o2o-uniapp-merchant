@@ -22,7 +22,7 @@
 
     <view class="centers" v-if="pro">
       <view class="td">
-        退款编号：{{pro.Back_ID}}
+        退款编号：{{pro.Back_Sn}}
       </view>
       <view class="td">
         退款时间：{{pro.Back_CreateTime}}

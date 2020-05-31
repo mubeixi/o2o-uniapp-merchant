@@ -6,7 +6,7 @@
         <div style="background-color: #F3F3F3;height: 20rpx;width: 100%;position: absolute;left: 0rpx;"></div>
         <div style="height: 20rpx;"></div>
         <div class="bizinfo">
-          <span class="bizname">订单编号:</span>
+          <span class="bizname">退款编号:</span>
           <span class="status">{{item.Back_Sn}}</span>
         </div>
         <block v-for="(i,k) of item.prod_list" :key="k">
@@ -16,7 +16,7 @@
             </div>
             <div class="pro-msg">
               <div class="pro-name">{{i.prod_name}}</div>
-              <div class="attr" v-if="i.attr_info"><span>{{i.attr_info.attr_name}}</span></div>
+              <div class="attr" v-if="i.attr_info.attr_name"><span>{{i.attr_info.attr_name}}</span></div>
               <div class="attr" v-else style="background-color: #FFFFFF;"><span></span></div>
               <div class="pro-price"><span>￥</span>{{i.prod_price}} <span class="amount">x{{i.prod_count}}</span></div>
             </div>

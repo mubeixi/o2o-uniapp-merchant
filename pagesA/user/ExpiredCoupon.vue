@@ -29,21 +29,11 @@
         <view class="man">
           满{{item.Coupon_Condition}}可用
         </view>
-        <view class="button" @click="goIndex(item.coupon_prod)">
-          去使用
-        </view>
+        <image class="yishiyong" src="/static/coupon-disabled.png"></image>
       </view>
 
     </block>
-    <view class="lasts">
-      <view class="lefts">
-        没有更多可用券 |
-      </view>
-      <view class="rights" @click="goExpired">
-        查看已失效的券 >
-      </view>
-    </view>
-    <view style="height: 30rpx;"></view>
+
   </view>
 </template>
 
@@ -92,7 +82,7 @@ export default {
         page: this.page,
         pageSize: this.pageSize,
         User_ID: 49,
-        status: 1,
+        status: 2
       }
       getCouponList(data).then(res => {
         this.totalCount = res.totalCount
@@ -296,6 +286,13 @@ export default {
     width: 640rpx;
     height: 480rpx;
     padding-top: 100rpx;
+  }
+  .yishiyong {
+    position: absolute;
+    width: 106rpx;
+    height: 106rpx;
+    top: 47rpx;
+    left: 455rpx;
   }
 
 </style>

@@ -7,7 +7,7 @@ const state = {
 
 const mutations = {
   SET_USER_ADDRESS (state, value) {
-    state.userInfo = value
+    //state.userInfo = value
     Storage.set('userAddressInfo', value, 1)
   },
   SET_USER_INFO (state, value) {
