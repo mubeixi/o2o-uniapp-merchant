@@ -38,6 +38,9 @@
                 取消兑换
               </view>
             </view>
+            <view @click.stop="lookItem(item)" class="rty confirm" v-if="item.Orders_Status == 4">
+              <view class="rightM payed" style="float: right;">查看物流</view>
+            </view>
             <view @click.stop="confirmJifenProdOrder(item)" class="rty confirm" v-if="item.Orders_Status == 3">
               <view class="rightM payed" style="float: right;">确认收货</view>
             </view>
@@ -90,7 +93,7 @@ export default {
           break
       }
     }
-   // formatTime: formatTime
+    // formatTime: formatTime
   },
   methods: {
     get_jifen_order () {
@@ -133,6 +136,9 @@ export default {
       }).catch(() => {
         modal('操作失败')
       })
+    },
+    lookItem (item) {
+      this.$linkTo('/pagesA/order/logistics?shipping_id=' + item.Orders_ShippingID)
     },
     //	确认订单
     confirmJifenProdOrder (item) {

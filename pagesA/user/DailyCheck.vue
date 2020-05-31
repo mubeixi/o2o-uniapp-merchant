@@ -39,6 +39,7 @@ import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import { getSignin, userSignin } from '@/api/customer'
 import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
+import { checkIsLogin } from '@/common/helper'
 export default {
   mixins: [BaseMixin],
   components: { WzwImTip, LayoutIcon },
@@ -50,6 +51,7 @@ export default {
     }
   },
   onLoad () {
+	  if (!checkIsLogin(1, 1,1)) return
     this.getSignin()
   },
   methods: {
