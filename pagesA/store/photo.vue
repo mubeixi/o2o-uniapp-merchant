@@ -14,23 +14,25 @@
     <!--  占位-->
     <!--    <div class="h50 bg-white" v-if="headTabSticky"></div>-->
 
-    <swiper
-      :current="headTabIndex"
-      @change="indexChangeEvent"
-      class="tab-container"
-    >
-      <swiper-item class="tab-page">
-        <scroll-view class="tab-page-wrap" scroll-y @scrolltolower="loadMore">
+<!--    <swiper-->
+<!--      :current="headTabIndex"-->
+<!--      @change="indexChangeEvent"-->
+<!--      class="tab-container"-->
+<!--    >-->
+<!--      <swiper-item class="tab-page">-->
+<!--        <scroll-view class="tab-page-wrap" scroll-y @scrolltolower="loadMore">-->
           <div class="photo-section">
             <div class="photo-list">
-              <div class="photo-item" @click="priviewFn(photoList[headTabIndex],idx2)"
-                   v-for="(img,idx2) in photoList[headTabIndex].photo" :key="idx2"
-                   :style="{backgroundImage:'url('+img.photo_img+')'}"></div>
+              <block     v-for="(img,idx2) in photoList[headTabIndex].photo" :key="idx2">
+                <image class="photo-item"  @click="priviewFn(photoList[headTabIndex],idx2)"
+                     :src="img.photo_img"></image>
+              </block>
+
             </div>
           </div>
-        </scroll-view>
-      </swiper-item>
-    </swiper>
+<!--        </scroll-view>-->
+<!--      </swiper-item>-->
+<!--    </swiper>-->
 
   </div>
 </template>
@@ -38,7 +40,7 @@
 <script>
 import BaseMixin from '@/mixins/BaseMixin'
 import { hideLoading, modal, showLoading } from '@/common/fun'
-import { getCategoryList, getPhotoList } from '@/api/store'
+import { getAlbumList, getPhotoList } from '@/api/store'
 import { getArrColumn } from '@/common/helper'
 
 export default {
@@ -50,9 +52,9 @@ export default {
     return {
       childSwiperHeight: 'auto',
       bid: null,
-      pageSize: 20,
+      pageSize: 1000,
       headTabIndex: 0,
-      photoList: [],
+      photoList: []
     }
   },
   methods: {
@@ -60,7 +62,7 @@ export default {
       const urls = getArrColumn(imgs.photo, 'photo_img')
       uni.previewImage({
         urls,
-        current,
+        current
       })
     },
     setActive (idx) {
@@ -72,12 +74,12 @@ export default {
     },
     loadMore () {
       // 第一页数据已经初始化了
-      const { page = 2, id: cate_id } = this.photoList[this.headTabIndex]
+      const { page = 1, id: cate_id } = this.photoList[this.headTabIndex]
       getPhotoList({
         page,
         pageSize: this.pageSize,
         cate_id,
-        biz_id: this.bid,
+        biz_id: this.bid
       }).then(res => {
         if (Array.isArray(res.data) && res.data.length > 0) {
           this.$set(this.photoList[this.headTabIndex], 'page', page + 1)
@@ -92,19 +94,20 @@ export default {
 
         const base = { biz_id: this.bid }
 
-        this.photoList = await getCategoryList({
+        this.photoList = await getAlbumList({
           ...base,
-          get_photo: this.pageSize,
+          get_photo: this.pageSize
         }, { onlyData: 1 }).catch(e => {
           throw Error(e.msg || '获取相册信息失败')
         })
+        this.loadMore()
 
         hideLoading()
       } catch (e) {
         hideLoading()
         modal(e.message)
       }
-    },
+    }
   },
   onReachBottom () {
 
@@ -119,7 +122,7 @@ export default {
     }
     this.bid = options.bid
     if (options.tab) {
-      this.headTabIndex = options.tab
+      this.headTabIndex = Number(options.tab)
     }
     this._init_func()
   },
@@ -128,7 +131,7 @@ export default {
   },
   onReady () {
 
-  },
+  }
 }
 </script>
 <style lang="scss" scoped>
@@ -195,7 +198,6 @@ export default {
     position: sticky;
     z-index: 999;
     top: 0;
-    height: 50px;
     width: 750rpx;
     box-sizing: border-box;
     background: white;
