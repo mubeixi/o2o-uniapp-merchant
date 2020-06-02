@@ -114,6 +114,7 @@ export default {
     },
     // 取消输入支付密码
     cancelInput () {
+      this.payLoding = false
       this.password_input = false
     },
     // 用户输入密码完毕
@@ -158,12 +159,14 @@ export default {
       }
     },
     async subFn () {
-      if (this.payLoding) return
+      if (this.payLoding) {
+        error('重复操作')
+        return
+      }
       try {
         const payMoney = this.payMoney
         if (!payMoney) throw Error('金额必填')
         if (!payMoney.match(floatNumber) && !payMoney.match(intNumber)) throw Error('请输入最多两位小数的正数')
-
         this.$openPop('payChannelList')
       } catch (e) {
         Exception.handle(e)

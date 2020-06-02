@@ -24,13 +24,13 @@
         </div>
       </div>
 
-      <div class="free-title m-b-18">
+      <div v-if="recommendProdList.length>0" class="free-title m-b-18">
         <div class="free-line"></div>
         <span class="fz-16 c3 m-l-10 m-r-10">推荐商品</span>
         <div class="free-line"></div>
       </div>
 
-      <scroll-view class="scroll-view_H  " scroll-x="true" scroll-left="120">
+      <scroll-view v-if="recommendProdList.length>0" class="scroll-view_H" scroll-x="true" scroll-left="120">
         <div class=" uni-bg-red m-r-10" v-for="(pro,ind) of recommendProdList" :key="ind"  @click="$toGoodsDetail(pro)">
           <div class="img-div">
             <image :src="pro.ImgPath" class="img-full"></image>
@@ -50,13 +50,13 @@
 
       </scroll-view>
 
-      <div class="free-title m-b-18">
+      <div class="free-title m-b-18" v-if="prodList.length>0">
         <div class="free-line"></div>
         <span class="fz-16 c3 m-l-10 m-r-10">全部商品</span>
         <div class="free-line"></div>
       </div>
 
-      <div class="free-list flex ">
+      <div class="free-list flex " v-if="prodList.length>0">
         <div class="free-list-item " v-for="(item,index) of prodList" :key="index" @click="$toGoodsDetail(item)">
           <div class="free-list-item-img m-b-9">
             <image :src="item.ImgPath" class="img-full"></image>
@@ -76,6 +76,10 @@
 
       </div>
 
+      <block v-if="prodList.length<1 && recommendProdList.length<1">
+        <wzw-empty-img></wzw-empty-img>
+      </block>
+
     </scroll-view>
   </div>
 </template>
@@ -92,10 +96,11 @@ import { getBizInfo } from '@/api/store'
 import { error, hideLoading, modal, showLoading, toast } from '@/common/fun'
 import { Exception } from '@/common/Exception'
 import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import WzwEmptyImg from '@/componets/wzw-empyt-img/wzw-empty-img'
 
 export default {
   name: 'OrderFree',
-  components: { WzwImTip, LayoutIcon },
+  components: { WzwEmptyImg, WzwImTip, LayoutIcon },
   mixins: [BaseMixin],
   data () {
     return {
@@ -143,7 +148,7 @@ export default {
         // }).catch(e => {
         //   throw Error(e.msg || '获取商家信息错误')
         // })
-        let that=this
+        const that = this
 
         this.activeInfo = await getActiveInfo({ type: 'freeorder', ...this.postData }, {
           onlyData: true
@@ -162,21 +167,25 @@ export default {
         this.start_time = uni.$moment(this.activeInfo.start_time * 1000).format('YYYY.MM.DD')
         this.end_time = uni.$moment(this.activeInfo.end_time * 1000).format('YYYY.MM.DD')
 
-        this.recommendProdList = await getProductList({
-          Products_ID: this.activeInfo.active_info.recommend_prod_id
-        }, {
-          onlyData: true
-        }).catch(e => {
-          throw Error(e.msg || '获取推荐商品失败')
-        })
+        if (this.activeInfo.active_info.recommend_prod_id) {
+          this.recommendProdList = await getProductList({
+            Products_ID: this.activeInfo.active_info.recommend_prod_id
+          }, {
+            onlyData: true
+          }).catch(e => {
+            throw Error(e.msg || '获取推荐商品失败')
+          })
+        }
 
-        this.prodList = await getProductList({
-          Products_ID: this.activeInfo.active_info.prod_id
-        }, {
-          onlyData: true
-        }).catch(e => {
-          throw Error(e.msg || '获取推荐商品失败')
-        })
+        if (this.activeInfo.active_info.prod_id) {
+          this.prodList = await getProductList({
+            Products_ID: this.activeInfo.active_info.prod_id
+          }, {
+            onlyData: true
+          }).catch(e => {
+            throw Error(e.msg || '获取推荐商品失败')
+          })
+        }
       } catch (e) {
         error(e.message)
         // 回退一下
