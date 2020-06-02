@@ -272,6 +272,8 @@ export default {
   .vip-all {
     background-color: #f1f1f1;
     min-height: 100vh;
+    width: 750rpx;
+    overflow-x: hidden;
   }
 
   .top {
