@@ -26,7 +26,7 @@
             v-for="(item,idx) in first.child"
             :key="idx"
           >
-            <image style="vertical-align: top" class="icon-img b-radius-aircle w44 h44" mode="heightFix" :src="item.Category_Img"></image>
+            <image style="vertical-align: top" class="icon-img b-radius-aircle w44 h44" :src="item.Category_Img"></image>
             <div class="title m-t-9 h14 fz-14 c3 text-nowrap" style="line-height: 14px">{{item.Category_Name}}
             </div>
           </div>

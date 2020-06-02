@@ -3,7 +3,7 @@ import wx from 'weixin-js-sdk'
 import { getJsSign } from '@/api/common'
 import { isWeiXin } from '@/common/helper'
 // #endif
-
+export const isCustom = false
 export const isDev = process.env.NODE_ENV !== 'production'
 
 // export const apiBaseUrl = 'https://www.newo2osrc.com'

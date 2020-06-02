@@ -218,7 +218,7 @@ export default {
       imInstance.setReceiveInfo({ type: this.totype, id: this.toid })
 
       // 如果没有start过,就start
-      if (this.intervalInstance) {
+      if (!imInstance.intervalInstance) {
         await imInstance.start() // 等拿token
       }
 

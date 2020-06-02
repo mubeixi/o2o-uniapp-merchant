@@ -185,9 +185,8 @@ class IM {
     this.heartBeatFailNum = 0 // 心跳丢失次数
     this.connectFailNum = 0// 连接失败次数
     // console.log(extConf)
-  
+
     this.listenStatus = 0
-    
   }
 
   /**
@@ -318,9 +317,9 @@ class IM {
   }
 
   close () {
-   uni.closeSocket()
-  this.clearIntervalFn()
-    //this.task.close()
+    uni.closeSocket()
+    this.clearIntervalFn()
+    // this.task.close()
   }
 
   /**
@@ -356,6 +355,9 @@ class IM {
         message = new Message(type, content, ext)
         break
     }
+
+    // 不然本地发送的会没有头像
+    Object.assign(message, { nickname: this.sendName, avatar: this.sendAvatar })
 
     if (type === 'image') {
       await message.getImgInfo()
@@ -405,8 +407,8 @@ class IM {
         // 丢失心跳达到最大次数之后需要重连
         if (this.heartBeatFailNum > this.heartBeatFailMax) {
           console.log('心跳请求超过三次错误')
-          
-          //先关掉
+
+          // 先关掉
           this.close()
           // 重连吧
           this.start()
@@ -414,10 +416,10 @@ class IM {
       }
     })
   }
-  
-    clearIntervalFn() {
-      clearInterval(this.intervalInstance)
-    }
+
+  clearIntervalFn () {
+    clearInterval(this.intervalInstance)
+  }
 
   _takeMessage (messageObj) {
     const { type, content, from } = messageObj
@@ -438,9 +440,9 @@ class IM {
     // 只允许限定的类别
     if (this.allowMsgType.includes(type)) {
       this.chatList.push({ ...messageObj, direction: 'from' })
-      uni.$emit('getMsg',{...messageObj})
+      uni.$emit('getMsg', { ...messageObj })
       if (this.listenStatus) {
-        uni.$emit('IM_TAKE_MSG', {...messageObj})
+        uni.$emit('IM_TAKE_MSG', { ...messageObj })
       }
     }
   }

@@ -7,7 +7,7 @@ import { hexMD5 } from './tool/md5'
 import Base64 from './tool/base64.js'
 import Vue from 'vue'
 
-export const getUsersID = () => Storage.get('users_id') ? Storage.get('users_id') : 'wkbq6nc2kc'
+export const getUsersID = () => Storage.get('users_id')
 
 export const getAccessToken = () => Storage.get('access_token')
 
