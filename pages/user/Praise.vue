@@ -31,7 +31,7 @@
           </div>
 
         </div>
-        <layout-icon type="iconicon-arrow-right" color="#777777" size="20" style="margin-left: auto"></layout-icon>
+        <layout-icon type="iconicon-arrow-right" color="#999" size="16" style="margin-left: auto;margin-right: 20rpx;"></layout-icon>
 
       </div>
 
@@ -101,6 +101,8 @@ export default {
     box-sizing: border-box;
     background-color: #FFFFFF;
     padding: 20rpx;
+    border-radius: 20rpx;
+    overflow: hidden;
   }
 
   .praise-item-title {
@@ -113,6 +115,8 @@ export default {
     .user-img {
       width: 64rpx;
       height: 64rpx;
+      border-radius: 50%;
+      overflow: hidden;
     }
 
     .user-name {
@@ -120,12 +124,13 @@ export default {
       line-height: 64rpx;
     }
 
-    .user-content {
-      width: 670rpx;
-      padding-left: 6rpx;
-      padding-right: 4px;
-      line-height: 36rpx;
-    }
+    
+  }
+  .user-content {
+    width: 670rpx;
+    padding-left: 6rpx;
+    padding-right: 4px;
+    line-height: 36rpx;
   }
 
   .coment-img {
@@ -133,12 +138,19 @@ export default {
     height: 220rpx;
     margin-right: 4rpx;
     margin-bottom: 8rpx;
+    border-radius: 6rpx;
+    overflow: hidden;
+    border-radius: 6rpx;
+    overflow: hidden;
   }
 
   .pro-comment {
     margin-left: 4rpx;
     width: 672rpx;
     height: 84rpx;
+    background: #F6F6F6;
+    border-radius: 10rpx;
+    overflow: hidden;
   }
 
   .pro-img {
@@ -155,8 +167,8 @@ export default {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    margin-top: 10px;
-    margin-bottom: 9px;
+
+    margin-bottom: 19rpx;
   }
 
   .pro-price {

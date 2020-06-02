@@ -3,10 +3,11 @@
   @import "./assets/app.scss";
 </style>
 <script>
-import { users_id } from '@/common/env'
+import { users_id,isCustom } from '@/common/env'
 import Storage from '@/common/Storage'
 import eventHub from '@/common/eventHub'
 import IM from '@/common/Im/Im'
+import { modal } from '@/common/fun'
 
 export default {
   globalData: {
@@ -14,13 +15,32 @@ export default {
   },
   onLaunch: function () {
     console.log('App Launch')
+    // #ifdef MP-WEIXIN
+    let _users_id = ''
+    if (isCustom) {
+      _users_id = users_id
+    } else {
+      const extConfig = wx.getExtConfigSync ? wx.getExtConfigSync() : {}
+      _users_id = extConfig.users_id
+    }
+    if (!_users_id) modal('初始化应用失败:users_id')
+    // 切换的时候清空资料
+    if (Storage.get('users_id') && _users_id !== Storage.get('users_id')) {
+      Storage.set('userInfo', {}, 1)
+    }
+    Storage.set('users_id', _users_id)
+    // #endif
+
+    // #ifndef MP-WEIXIN
     Storage.set('users_id', users_id)
+    // #endif
+
     this.$store.dispatch('system/loadInitData')
     this.$store.dispatch('theme/refreshTheme')
 
     // 初始化信息
     const userInfo = this.$store.getters['user/getUserInfo']()
-    console.log(userInfo)
+
     if (userInfo && userInfo.User_ID) {
       // IM全局
       const imInstance = new IM()

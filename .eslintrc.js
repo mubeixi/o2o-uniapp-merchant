@@ -11,6 +11,7 @@ module.exports = {
     getCurrentPages:'readonly',
     plus:'readonly',
     uni: 'readonly',
+    wx: 'readonly',
     Atomics: 'readonly',
     SharedArrayBuffer: 'readonly',
   },
