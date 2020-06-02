@@ -97,6 +97,7 @@ export default {
   },
   onShow () {
     if (!checkIsLogin(1, 1, 1)) return
+    this._init_func()
   },
   methods: {
     async _init_func () {
@@ -115,7 +116,7 @@ export default {
 
         hideLoading()
       } catch (e) {
-          error(e.message)
+        error(e.message)
         // 回退一下
         // setTimeout(() => {
         //   this.$back()
@@ -126,7 +127,7 @@ export default {
     }
   },
   created () {
-    this._init_func()
+
   }
 }
 </script>
