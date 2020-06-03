@@ -4,7 +4,7 @@
     <div class="search-wrap">
       <icon type="search" size="34rpx" class="search_icon" @click="search" />
       <input type="text" class="search-input" name="search" v-model="inputValue" @confirm="search"
-             confirm-type='search' focus="focus" autofocus="autofocus">
+             confirm-type='search' >
     </div>
     <div class="cate1">
       <block v-for="(item,i) of pro" :key="i">
