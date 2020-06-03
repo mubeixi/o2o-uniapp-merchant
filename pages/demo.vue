@@ -1,12 +1,14 @@
 <template>
-
+<layout-loading type="circle" tips=" "></layout-loading>
 </template>
 
 <script>
 
+import LayoutLoading from '@/componets/layout-loading/layout-loading'
 export default {
   mixins: [],
   components: {
+    LayoutLoading,
   },
   data () {
     return {

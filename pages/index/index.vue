@@ -170,6 +170,14 @@ export default {
           console.log('当前位置的纬度：' + res.latitude)
 
           this.setUserAddressInfo(res)
+
+          // 另外两个组件，刷新数据
+          if (this.headTabIndex === 1) {
+            this.$refs.page1.refreshByLocal()
+          }
+          if (this.headTabIndex === 2) {
+            this.$refs.page2.refreshByLocal()
+          }
         }
       })
     },

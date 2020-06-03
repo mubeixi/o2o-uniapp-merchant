@@ -10,6 +10,7 @@
   </div>
   <swiper
     :current="storeFirstCateIdx"
+    duration="300"
     @change="storeCateIndexChange"
     :style="{top:diyHeadHeight+firstCateHeight+'px',height:(cateViewHeight+'px')}"
     class="quick-cate-swiper"
@@ -35,8 +36,12 @@
         <div class="bg-white">
           <layout-ad :lazy-load="true" :ready="storeFirstCateIdx===idx1" paddingStr="20px 0 20px 0" code="good_shop_under_nav" :cate-id="first.Category_ID" position="hot"></layout-ad>
         </div>
+  
+        <div v-if="merchantList.length<1">
+          <layout-loading></layout-loading>
+        </div>
 
-        <div style="background: #f8f8f8" class="p-b-15 p-t-15">
+        <div style="background: #f8f8f8" class="p-b-15 p-t-15" v-show="merchantList.length>0">
           <div class="page-section-title">
             <span class="before" :style="{backgroundColor: primaryColor}"></span>
             <span class="text">人气商家</span>
@@ -92,9 +97,11 @@ import { Exception } from '@/common/Exception'
 import { componetMixin } from '@/mixins/BaseMixin'
 import { getBizInfo } from '@/api/store'
 import { mapGetters } from 'vuex'
+import LayoutLoading from '@/componets/layout-loading/layout-loading'
 
 export default {
   name: 'scroll-page-merchat',
+  components: { LayoutLoading },
   mixins: [componetMixin],
   data () {
     return {
@@ -127,6 +134,9 @@ export default {
     }
   },
   methods: {
+    refreshByLocal () {
+      this.loadMerchantList(this.storeFirstCateIdx)
+    },
     storeCateIndexChange (event) {
       const { current } = event.detail
       this.storeFirstCateIdx = current
@@ -153,23 +163,31 @@ export default {
       }
     },
     async loadMerchantList (idx) {
-      const cateId = this.firstCateList[idx].Category_ID
-      if (!cateId) return
-      var postData = {
-        cate_id: cateId,
-        get_prod: 3,
-        with_prod: 1,
-        get_active: 1,
-        pageSize: 999
+      try {
+        this.merchantList = []
+        // showLoading()
+        const cateId = this.firstCateList[idx].Category_ID
+        if (!cateId) return
+        var postData = {
+          cate_id: cateId,
+          get_prod: 3,
+          with_prod: 1,
+          get_active: 1,
+          pageSize: 999
+        }
+        this.userAddressInfo = this.$store.getters['user/getUserAddressInfo']()
+        if (this.userAddressInfo && this.userAddressInfo.hasOwnProperty('latitude') && this.userAddressInfo.hasOwnProperty('longitude')) {
+          Object.assign(postData, { lat: this.userAddressInfo.latitude, lng: this.userAddressInfo.longitude })
+        }
+        // 商家无法利用一级分类获取到
+        this.merchantList = await getBizInfo(postData, { onlyData: true }).catch((e) => {
+          throw Error('获取人气商家列表失败')
+        })
+      } catch (e) {
+        Exception.handle(e)
+      } finally {
+        // hideLoading()
       }
-      this.userAddressInfo = this.$store.getters['user/getUserAddressInfo']()
-      if (this.userAddressInfo && this.userAddressInfo.hasOwnProperty('latitude') && this.userAddressInfo.hasOwnProperty('longitude')) {
-        Object.assign(postData, { lat: this.userAddressInfo.latitude, lng: this.userAddressInfo.longitude })
-      }
-      // 商家无法利用一级分类获取到
-      this.merchantList = await getBizInfo(postData, { onlyData: true }).catch((e) => {
-        throw Error('获取人气商家列表失败')
-      })
     }
   },
   created () {
