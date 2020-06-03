@@ -1648,6 +1648,7 @@ export default {
         this.postData.cart_key = 'DirectBuy'
         // 领取礼物
         this.postData.attr_id = this.gift_attr_id
+		this.postData.prod_id = this.prod_id
         await updateCart(this.postData).catch((e) => {
           throw Error(e.msg || '赠品加入购物车失败')
         })
