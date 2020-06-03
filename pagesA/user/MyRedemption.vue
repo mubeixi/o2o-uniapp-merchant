@@ -37,10 +37,11 @@
               <view @click.stop="cancelJifenProdOrder(item)" class="rightM complated" v-if="item.Orders_Status == 1">
                 取消兑换
               </view>
+			  <view @click.stop="lookItem(item)" class="rightM complated payed" v-if="item.Orders_Status == 4||item.Orders_Status == 3">
+					查看物流
+			  </view>
             </view>
-            <view @click.stop="lookItem(item)" class="rty confirm" v-if="item.Orders_Status == 4">
-              <view class="rightM payed" style="float: right;">查看物流</view>
-            </view>
+            
             <view @click.stop="confirmJifenProdOrder(item)" class="rty confirm" v-if="item.Orders_Status == 3">
               <view class="rightM payed" style="float: right;">确认收货</view>
             </view>
@@ -170,7 +171,7 @@ export default {
 
   .myHa {
     width: 700rpx;
-    height: 320rpx;
+    height: 340rpx;
     background: rgba(255, 255, 255, 1);
     border-radius: 40rpx;
     margin: 0 auto;
@@ -272,7 +273,7 @@ export default {
         }
 
         .payed {
-          background-color: #FF5C33
+          background-color: #FF5C33 !important;
         }
 
         .complated {

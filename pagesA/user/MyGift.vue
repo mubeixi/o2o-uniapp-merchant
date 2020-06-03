@@ -89,7 +89,7 @@ export default {
         this.$linkTo('/pages/product/detail?mode=gift&gift=' + item.id + '&prod_id=' + item.product_id)
       }
       if (this.checked === 1) {
-        this.$linkTo('/pagesA/order/OrderDetail?Order_ID=' + item.order_id)
+        this.$linkTo('/pages/order/OrderDetail?Order_ID=' + item.order_id)
       }
     },
     // 获取列表

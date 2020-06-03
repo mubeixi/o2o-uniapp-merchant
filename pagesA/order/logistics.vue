@@ -121,6 +121,7 @@ export default {
       })
     },
     getOrderExpress () {
+		let that=this
       const data = {
         shipping_id: this.shipping_id,
         express: this.express,
@@ -131,6 +132,9 @@ export default {
         this.pro = res.data
       }).catch(e => {
         error(e.msg)
+		setTimeout(function(){
+			that.$back()
+		},1000)
       })
     }
   }
