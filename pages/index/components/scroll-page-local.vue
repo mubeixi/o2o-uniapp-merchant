@@ -10,7 +10,7 @@
   <swiper
     :current="quickFirstCateIdx"
     @change="quickCateIndexChange"
-    duration="100"
+    duration="300"
     :style="{top:diyHeadHeight+firstCateHeight+'px',height:(cateViewHeight+'px')}"
     class="quick-cate-swiper"
   >
@@ -34,6 +34,10 @@
 
         <div class="bg-white">
           <layout-ad :lazy-load="true" :ready="quickFirstCateIdx===idx1" paddingStr="20px 0 20px 0" code="city_under_nav" :cate-id="first.Category_ID" position="city"></layout-ad>
+        </div>
+
+        <div v-if="quickGoodsList.length<1">
+          <layout-loading></layout-loading>
         </div>
 
         <div class="page-section-title" v-show="quickGoodsList.length>0">
@@ -71,10 +75,11 @@ import { Exception } from '@/common/Exception'
 import { componetMixin } from '@/mixins/BaseMixin'
 import GoodsItem from '@/componets/good-item/good-item'
 import { mapGetters } from 'vuex'
+import LayoutLoading from '@/componets/layout-loading/layout-loading'
 
 export default {
   name: 'scroll-page-local',
-  components: { GoodsItem },
+  components: { LayoutLoading, GoodsItem },
   mixins: [componetMixin],
   data () {
     return {
@@ -106,6 +111,9 @@ export default {
     }
   },
   methods: {
+    refreshByLocal () {
+      this.loadQuickGoodsList(this.quickFirstCateIdx)
+    },
     bindCateClick (cate) {
       console.log(cate)
       this.$linkTo(`/pages/search/result?Cate_ID=${cate.Category_ID}`)
@@ -139,17 +147,25 @@ export default {
       return obj.concat([])
     },
     async loadQuickGoodsList (idx) {
-      const cateId = this.firstCateList[idx].Category_ID
-      if (!cateId) return
+      try {
+        this.quickGoodsList = []
+        // showLoading()
+        const cateId = this.firstCateList[idx].Category_ID
+        if (!cateId) return
 
-      var postData = { Cate_ID: cateId }
-      this.userAddressInfo = this.$store.getters['user/getUserAddressInfo']()
-      if (this.userAddressInfo && this.userAddressInfo.hasOwnProperty('latitude') && this.userAddressInfo.hasOwnProperty('longitude')) {
-        Object.assign(postData, { lat: this.userAddressInfo.latitude, lng: this.userAddressInfo.longitude })
+        var postData = { Cate_ID: cateId }
+        this.userAddressInfo = this.$store.getters['user/getUserAddressInfo']()
+        if (this.userAddressInfo && this.userAddressInfo.hasOwnProperty('latitude') && this.userAddressInfo.hasOwnProperty('longitude')) {
+          Object.assign(postData, { lat: this.userAddressInfo.latitude, lng: this.userAddressInfo.longitude })
+        }
+        // 需要刷新页面
+        const list = await this.loadGoodsList(postData)
+        this.quickGoodsList = list
+      } catch (e) {
+
+      } finally {
+        // hideLoading()
       }
-      // 需要刷新页面
-      const list = await this.loadGoodsList(postData)
-      this.quickGoodsList = list
     }
   },
   created () {

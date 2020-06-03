@@ -73,13 +73,13 @@
 
 <script>
 // 消息卡片组件
-import LayoutLoading from '@/componets/layout-loading/layout-loading'
+
 import { objTranslate } from '@/common/helper'
 import { linkToEasy } from '@/common/fun'
 
 export default {
   name: 'wzw-im-card',
-  components: { LayoutLoading },
+  components: {  },
   props: {
     msgId: {
       type: Number
