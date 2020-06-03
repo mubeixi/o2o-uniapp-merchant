@@ -1,10 +1,24 @@
 <template>
   <div class="page-wrap"  @click="commonClick">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
-    <layout-icon :style="{top:menuButtonInfo.top+'px'}" :color="immersed?'#bbb':'#fff'" @click="$back" class="left-icon" :size="immersed?26:22" :type="immersed?'iconleft-circle-solid':'iconicon-arrow-left'"></layout-icon>
 
+    <div :style="{height:diyHeadHeight+'px',opacity:activeHeadOpacity}" v-if="activeHeadOpacity" class="bg-white"
+         style="position: fixed;z-index: 9;width: 750rpx;left:0;top:0">
+      <div :style="{height:systemInfo.statusBarHeight+'px'}"></div>
+      <div  class="c3 text-center" style="position: relative">
+        <layout-icon
+          display="inline"
+          style="position: absolute;top: 50%;transform: translateY(-50%);left: 15px"
+          color="#777" @click="$back" size="18" type="iconicon-arrow-left"></layout-icon>
+        <div :style="{height:menuButtonInfo.height+'px',lineHeight:menuButtonInfo.height+'px'}">分享赚</div>
+      </div>
+    </div>
+
+    <layout-icon
+      :style="{top:menuButtonInfo.top+'px',opacity:1-activeHeadOpacity}"
+      :color="immersed?'#666':'#fff'" @click="$back" class="left-icon" size="18" type="iconicon-arrow-left"></layout-icon>
     <div class="head" :style="{backgroundImage: 'url('+$getDomain('/static/client/share/share_top.png')+')'}">
-      <div class="userInfo">
+      <div class="userInfo" :style="{top:menuButtonInfo.top+'px'}">
         <image class="avatar" :src="userInfo.User_HeadImg"></image>
         <div class="nickname fz-16">{{userInfo.User_NickName}}</div>
       </div>
@@ -31,8 +45,7 @@
     <!--code="indexTop" :imgs="adData"-->
     <layout-ad code="share_commi_top_goods"></layout-ad>
     <div class="goods-list">
-      <div class="goods-item" v-for="(item,idx) in goodsList" :key="idx"
-           @click="$linkTo('/pages/share/go?prod_id='+item.Products_ID)">
+      <div class="goods-item" v-for="(item,idx) in goodsList" :key="idx" @click="$toGoodsDetail(item)">
         <div class="goods-item-cover" :style="{backgroundImage:'url('+item.ImgPath+')'}"></div>
         <div class="goods-item-info">
           <div class="title">{{item.Products_Name}}</div>
@@ -43,7 +56,7 @@
             <span class="fz-14">{{item.Products_PriceX}}</span>
             <span style="color: #ccc;font-style: italic" class="text-underline p-l-15">￥{{item.Products_PriceY}}</span>
           </div>
-          <div class="actions">
+          <div class="actions" @click.stop="$linkTo('/pages/share/go?prod_id='+item.Products_ID)">
             <div class="share flex flex-vertical-c color-white" :style="{backgroundImage: 'url('+$getDomain('/static/client/share/share_action_btn.png')+')'}">
               <layout-icon color="#fff" type="iconicon-share"></layout-icon>
               <div class="flex1 p-l-6">
@@ -80,6 +93,7 @@ export default {
   },
   data () {
     return {
+      activeHeadOpacity: 0,
       immersed: false,
       info: {},
       goodsList: [],
@@ -91,21 +105,26 @@ export default {
       return this.$store.getters['user/getUserInfo']()
     }
   },
-  onPageScroll (e) {
-    const { scrollTop } = e
-    this.immersed = scrollTop > 240
-  },
   onShow () {
     if (!checkIsLogin(1, 1, 1)) return
     this._init_func()
+  },
+  onPageScroll (e) {
+    const { scrollTop } = e
+    this.immersed = scrollTop > 240
+    const h = this.diyHeadHeight + 20 // 滑到这里的时候,就透明度为1
+    const opacity = scrollTop / h
+    this.activeHeadOpacity = opacity > 1 ? 1 : opacity
   },
   methods: {
     async _init_func () {
       try {
         showLoading()
-        this.goodsList = await getProductList({ pageSize: 999 }, { onlyData: true }).catch(e => {
+        const list = await getProductList({ pageSize: 999 }, { onlyData: true }).catch(e => {
           throw Error(e.msg || '获取商品列表错误')
         })
+
+        this.goodsList = list.filter(row => row.share_commission > 0)
         if (this.userInfo.User_ID) {
           this.info = await getShareView({ user_id: this.userInfo.User_ID }).then(res => {
             return res.data
@@ -140,7 +159,7 @@ export default {
 
   .left-icon{
     position: fixed;
-    z-index: 3;
+    z-index: 11;
     left: 15px;
   }
 
@@ -161,7 +180,6 @@ export default {
 
   .userInfo {
     position: absolute;
-    top: 44rpx;
     left: 50%;
     transform: translateX(-50%);
     text-align: center;

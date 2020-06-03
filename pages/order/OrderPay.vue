@@ -706,8 +706,11 @@ export default {
 
       console.log(Order_Type, Order_ID)
       if (Order_Type === 'pintuan') {
+        // uni.redirectTo({
+        //   url: '/pages/order/GroupSuccess?Order_Type=' + Order_Type + '&OrderId=' + Order_ID
+        // })
         uni.redirectTo({
-          url: '/pages/order/GroupSuccess?Order_Type=' + Order_Type + '&OrderId=' + Order_ID
+          url: '/pages/order/OrderPaySuccess?Order_Type=' + Order_Type + '&OrderId=' + Order_ID
         })
       } else {
         if (pagefrom === 'check') {
