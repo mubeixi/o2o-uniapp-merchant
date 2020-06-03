@@ -12,8 +12,23 @@
           <image class="swiper-itm-img" :src="poster.thumb_bg_img"></image>
         </div>
       </div>
-      <div class="share-btn" @click="saveFn">保存海报</div>
+      <div class="share-btn" @click="saveImg">保存海报</div>
     </div>
+    <layout-modal ref="commentModal" :autoClose="false">
+      <div class="refuseApplyDialog">
+        <div class="c3 fz-14 modal-title">
+          是否开启相册权限
+        </div>
+        <div class="fz-12 m-b-20 m-t-10 c9">
+          很抱歉，该功能您需开启相册授权才能保存
+        </div>
+        <div class="control">
+          <button @click="backSetting" class="action-btn btn-cancel">取消</button>
+          <button open-type='openSetting' bindopensetting="openSetting" class="btn-sub action-btn">确定</button>
+        </div>
+      </div>
+    </layout-modal>
+
   </view>
 </template>
 <script>
@@ -24,10 +39,11 @@ import { getDomain, saveImageToDisk } from '@/common/helper'
 import Promisify from '@/common/Promisify'
 import { getBizInfo } from '@/api/store'
 import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import LayoutModal from '@/componets/layout-modal/layout-modal'
 
 let canvasInstance = null
 export default {
-  components: { WzwImTip },
+  components: { WzwImTip, LayoutModal },
   mixins: [BaseMixin],
   data () {
     return {
@@ -70,6 +86,7 @@ export default {
   },
   onShow () {
 
+    this.$refs.commentModal.close()
   },
   onLoad (options) {
     if (!options.hasOwnProperty('biz_id') || !options.biz_id) {
@@ -84,6 +101,36 @@ export default {
   },
   methods: {
     getDomain,
+    backSetting () {
+      this.$refs.commentModal.close()
+    },
+    openSetting () {
+      const _self = this
+      console.log(this)
+      uni.authorize({
+        scope: 'scope.writePhotosAlbum',
+        success () {
+          _self.saveFn()
+        },
+        fail () {
+          _self.$refs.commentModal.show()
+          error('拒绝相册授权,保存失败')
+        }
+      })
+    },
+    saveImg () {
+      const _self = this
+      uni.getSetting({
+        success: (res) => {
+          if (!res.authSetting['scope.writePhotosAlbum']) {
+            // this.$refs.commentModal.show()
+            this.openSetting()
+          } else { // 用户已经授权过了
+            _self.saveFn()
+          }
+        }
+      })
+    },
     async saveFn () {
       const handleRT = await saveImageToDisk({
         fileUrl: this.current_url,
@@ -293,6 +340,42 @@ export default {
       line-height: 90rpx;
       background: $fun-primary-color;
       color: white;
+    }
+
+  }
+
+  .control{
+    display: flex;
+    width: 100%;
+    align-items: center;
+    .action-btn{
+      flex: 1;
+      text-align: center;
+      height: 80rpx;
+      line-height: 80rpx;
+      font-size: 16px;
+      background-color: #FFFFFF;
+      border: 0px;
+    }
+    button::after{
+      width: 0;
+      height: 0;
+    }
+  }
+
+  .refuseApplyDialog{
+    width: 560rpx;
+    box-sizing: border-box;
+    padding-left: 40rpx;
+    padding-right: 40rpx;
+    .modal-title{
+      height: 80rpx;
+      line-height: 80rpx;
+      text-align: center;
+      font-weight: bold;
+    }
+    .btn-sub{
+      color: #1aac19;
     }
 
   }

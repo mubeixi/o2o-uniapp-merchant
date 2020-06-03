@@ -83,16 +83,16 @@ export default {
       pageSize: 10,
       data: [],
       totalCount: 0,
-      index: 1,
+      index: 1
     }
   },
   onLoad (options) {
     const that = this
-    that.index = options.index
+    that.index = Number(options.index)
     uni.getSystemInfo({
       success: function (res) {
         that.height = res.screenHeight - 68
-      },
+      }
     })
   },
   onShow () {
@@ -117,14 +117,14 @@ export default {
       } catch (e) {
         return {}
       }
-    },
+    }
   },
   methods: {
     // 获取提现记录
     getWithdrawRecordList () {
       const data = {
         page: this.page,
-        pageSize: this.pageSize,
+        pageSize: this.pageSize
       }
       if (this.index === 1) {
         getAgentApply(data).then(res => {
@@ -145,8 +145,8 @@ export default {
 
         })
       }
-    },
-  },
+    }
+  }
 }
 </script>
 
