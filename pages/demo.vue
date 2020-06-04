@@ -1,5 +1,5 @@
 <template>
-<layout-loading type="circle" tips=" "></layout-loading>
+<layout-loading type="type"></layout-loading>
 </template>
 
 <script>

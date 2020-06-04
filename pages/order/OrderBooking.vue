@@ -226,7 +226,7 @@
 
     <layout-layer bottomStr="50px" @maskClicked="handClicked" ref="popupMX" title="明细">
       <div class="mxdetail">
-        <div class="mxitem">产品原价
+        <div class="mxitem" v-if="!checkfrom">产品原价
           <text class="num">{{allGoodsPrice}}</text>
         </div>
         <div class="mxitem" v-if="checkfrom">{{active_name}}
