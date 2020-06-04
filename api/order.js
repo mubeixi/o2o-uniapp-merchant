@@ -170,3 +170,6 @@ export const offlinePay = (param, options) => fetch({ act: 'offlinePay', param, 
 
 // 获取订单物流追踪
 export const getOrderExpress = (param, options) => fetch({ act: 'get_order_express', param, options })
+
+// 获取同城配送物流
+export const cityOrderExpress = (param, options) => fetch({ act: 'cityOrderExpress', param, options })

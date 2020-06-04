@@ -69,12 +69,12 @@ export default {
       }
       const type = str.substr(0, breakStrIdx)
       const id = str.substr(breakStrIdx + 1)
-      console.log(type, id, `/pagesA/support/Im?type=${type}tid=${id}`)
+      console.log(type, id, `/pagesA/support/Im?type=${type}tid=${id}&room_title=${chatItem.name}`)
       if (!type || !id) {
         modal('聊天室参数错误')
         return
       }
-      linkToEasy(`/pagesA/support/Im?type=${type}&tid=${id}`)
+      linkToEasy(`/pagesA/support/Im?type=${type}&tid=${id}&room_title=${chatItem.name}`)
     },
     show (chat) {
       console.log('plugin is show', chat)

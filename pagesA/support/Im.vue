@@ -205,7 +205,7 @@ export default {
     async _init_func (options) {
       const { productId, orderId, origin } = options
 
-      setNavigationBarTitle('Im')
+     
       if (eventHub.imInstance) {
         this.imInstance = imInstance = eventHub.imInstance
       } else {
@@ -220,6 +220,9 @@ export default {
       // 如果没有start过,就start
       if (!imInstance.intervalInstance) {
         await imInstance.start() // 等拿token
+      } else {
+        // 清空聊天记录
+        imInstance.clearHistory() // 等拿token
       }
 
       // 先加载一下最近消息
@@ -258,11 +261,12 @@ export default {
   onLoad (options) {
     if (!checkIsLogin(1, 0)) return
 
-    const { tid, type } = options
+    const { tid, type, room_title = 'IM' } = options
     if (!tid || !type) {
       modal('参数错误')
       return
     }
+    setNavigationBarTitle(room_title)
     this.toid = tid
     this.totype = type
     this._init_func(options)

@@ -316,6 +316,12 @@ class IM {
     this.intervalInstance = setInterval(this._holdHeartBeat.bind(this), this.heartBeatTimout)
   }
 
+    // 清空之前的聊天记录
+    clearHistory() {
+      this.chatList = [] // 清空记录
+      this.page = 1 // 重置页码
+    }
+
   close () {
     uni.closeSocket()
     this.clearIntervalFn()
