@@ -1227,6 +1227,7 @@ export default {
       }, // 商品数据
       active: [], // 满减活动列表
       store: [{ biz_go: '' }], // 门店
+      bizInfo:{},
       storeList: [],
       comments: [],
       commentValue: '',
@@ -1391,7 +1392,7 @@ export default {
     },
     goIM () {
       if (!checkIsLogin(1, 1)) return
-      this.$linkTo(`/pagesA/support/Im?type=biz&tid=${this.productInfo.biz_id}&productId=${this.prod_id}`)
+      this.$linkTo(`/pagesA/support/Im?type=biz&tid=${this.productInfo.biz_id}&productId=${this.prod_id}&room_title=${this.bizInfo.biz_shop_name}`)
     },
     goStore (bid) {
       const url = '/pages/store/index?biz_id=' + bid
@@ -1878,6 +1879,8 @@ export default {
         this.store = await getBizInfo({ biz_id: this.productInfo.biz_id }, { onlyData: true }).catch(e => {
           throw Error(e.msg || '获取店铺信息失败')
         })
+
+        this.bizInfo = this.store[0]
 
         this.storeList = await getStoreList({ biz_id: this.productInfo.biz_id }, {
           onlyData: true

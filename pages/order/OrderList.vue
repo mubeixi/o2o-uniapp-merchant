@@ -74,6 +74,7 @@
             <div @click.stop="extendReceiptFn(order)" v-if="item.extend" class="tooltip">确认延迟</div>
           </div>
           <span @click.stop="goLogistics(order)" v-if="order.Order_Shipping.shipping_id!==2">查看物流</span>
+          <span @click.stop="goLogisticsByLocal(order)" v-if="order.Order_Shipping.shipping_id==2">配送进度</span>
           <span @click.stop="goPay(order)" style="margin-left: 15rpx;"
                 v-if="order.Order_Shipping.shipping_id!==2">申请退款退货</span>
           <span class="active" @click.stop="confirmOrder(order,index)">确认收货</span>
@@ -136,6 +137,19 @@ export default {
     }
   },
   methods: {
+    goLogisticsByLocal(item){
+      // 处理物流名称
+      let express = {}
+      if (typeof item.Order_Shipping === 'object') {
+        express = item.Order_Shipping.Express
+      } else {
+        express = JSON.parse(item.Order_Shipping).Express
+      }
+      console.log(express)
+      uni.navigateTo({
+        url: '/pagesA/order/logisticsByLocation?order_id=' + item.Order_ID
+      })
+    },
     goLogistics (item) {
       // 处理物流名称
       let express = {}
@@ -307,6 +321,9 @@ export default {
     switch (type) {
       case 'spike':
         pageTitle = '限时抢购订单'
+        break
+      case 'waimai':
+        pageTitle = '外卖订单'
         break
       case 'flashsale':
         pageTitle = '秒杀订单'

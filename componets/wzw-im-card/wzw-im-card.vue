@@ -27,7 +27,7 @@
             </block>
           </div>
           <div class="headimg" :style="{backgroundImage:'url('+(message.avatar||message.from_avatar)+')'}"></div>
-          <div v-if="message.direction!=='to'" class="content-arrow">
+          <div v-if="message.direction!=='to'" class="content-arrow" @click="bindClickLeft(message)">
             <block v-if="message.type==='text'">
               <image mode="widthFix" class="arrow-icon" src="/static/im/chat-arrow-left.png"></image>
             </block>
@@ -75,11 +75,11 @@
 // 消息卡片组件
 
 import { objTranslate } from '@/common/helper'
-import { linkToEasy } from '@/common/fun'
+import { linkToEasy, modal } from '@/common/fun'
 
 export default {
   name: 'wzw-im-card',
-  components: {  },
+  components: { },
   props: {
     msgId: {
       type: Number
@@ -97,6 +97,19 @@ export default {
     return {}
   },
   methods: {
+    bindClickLeft (chatItem) {
+      // 客户得找商家聊
+      const str = chatItem.from_uid
+      const breakStrIdx = str.indexOf('_')
+      if (breakStrIdx === -1) {
+        return
+      }
+      const type = str.substr(0, breakStrIdx)
+      const id = str.substr(breakStrIdx + 1)
+      if (type === 'biz') {
+        linkToEasy(`/pages/store/index?biz_id=${id}`)
+      }
+    },
     toGoods (content) {
       if (content.hasOwnProperty('url'))linkToEasy(content.url)
     },
