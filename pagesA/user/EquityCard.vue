@@ -2,10 +2,14 @@
   <div @click="commonClick">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <div class="equity-card">
+      <div class="equity-top">
+        <layout-icon type="iconback1" size="24" color="#fff" @click="$back()"  class="back-icon"></layout-icon>
+        <span>权益</span>
+      </div>
       <swiper class="center" :indicator-dots="false" :autoplay="false" :duration="1000" :current="inds"
               @change="change">
         <swiper-item class="vipFir" v-for="(item,index) of rightCard" :key="index">
-          <image :src="'/static/client/rightCard.png'|domain" class="img-full"></image>
+          <image src="/static/user/equitySwper.png" class="img-full"></image>
           <div class="fz-20 equity-card-title">
             {{item.card_name}}
           </div>
@@ -24,28 +28,61 @@
         </swiper-item>
       </swiper>
 
-      <div class="flex flex-vertical-c score-coupon">
-        <div class="score-coupon-item" v-if="rightCard[inds].card_content.score">
-          <image src="/static/rightCardScore.png" class="score-img"></image>
-          <div class="fz-12 score-text">
-            赠送积分
-          </div>
-        </div>
-        <div class="score-coupon-item" v-if="rightCard[inds].card_content.coupon">
-          <image src="/static/rightCardCoupon.png" class="score-img"></image>
-          <div class="fz-12 score-text">
-            赠送优惠券
-          </div>
-        </div>
-
-      </div>
-
     </div>
 
-    <div class="buy-know m-t-29 fz-17 c3 m-b-20">
-      购买须知
+  <div class="score-List" v-if="rightCard[inds].card_content&&rightCard[inds].card_content.score">
+        <div class="score-List-item flex flex-justify-c flex-vertical-c">
+            <image src="/static/user/titleLeft.png" class="title-img"></image>
+            <span class="m-l-10 m-r-10">
+              赠送积分
+            </span>
+            <image src="/static/user/titleRight.png" class="title-img"></image>
+        </div>
+
+        <div class="flex flex-vertical-c score-List-detail" >
+          <image src="/static/user/scopeImg.png" class="score-img"></image>
+          <span class="score-List-detail-test">
+            购买此权益卡可享赠送<span class="score-List-color">{{rightCard[inds].card_content.score}}</span>积分特权
+          </span>
+        </div>
+
+  </div>
+
+
+    <div class="score-coupon flex flex-justify-c flex-vertical-c" v-if="rightCard[inds].coupons">
+      <image src="/static/user/titleLeft.png" class="title-img"></image>
+      <span class="m-l-10 m-r-10">
+              赠送优惠券
+            </span>
+      <image src="/static/user/titleRight.png" class="title-img"></image>
     </div>
-    <div class="buy-know-list fz-13 c8">
+    <scroll-view scroll-x class="score-coupon-list flex flex-vertical-c " v-if="rightCard[inds].coupons">
+        <div class="score-coupon-list-div"  v-for="(coupon,index) of rightCard[inds].coupons"  :key="index">
+              <div class="Coupon_Cash">
+                {{coupon.Coupon_Cash}}
+              </div>
+              <div class="Coupon_Condition">
+                领劵满100减90
+              </div>
+              <div v-if="coupon.coupon_prod>0" class="coupon-use">
+                全店通用
+              </div>
+              <div v-else class="coupon-use">
+                指定商品可用
+              </div>
+        </div>
+    </scroll-view>
+
+    <div style="width: 750rpx;height: 20rpx;background-color: #f5f5f5"  v-if="rightCard[inds].descr"></div>
+
+    <div class="score-coupon flex flex-justify-c flex-vertical-c" v-if="rightCard[inds].descr">
+      <image src="/static/user/titleLeft.png" class="title-img"></image>
+      <span class="m-l-10 m-r-10">
+              购买须知
+            </span>
+      <image src="/static/user/titleRight.png" class="title-img"></image>
+    </div>
+    <div class="buy-know-list fz-13 c8" v-if="rightCard[inds].descr">
       {{rightCard[inds].descr}}
 
     </div>
@@ -76,9 +113,10 @@ import WzwPay from '@/componets/wzw-pay/wzw-pay'
 import Pay from '@/common/Pay'
 import { checkIsLogin } from '@/common/helper'
 import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import LayoutIcon from '@/componets/layout-icon/layout-icon'
 export default {
   mixins: { BaseMixin },
-  components: { WzwImTip, WzwPay },
+  components: { WzwImTip, WzwPay, LayoutIcon },
   data () {
     return {
       inds: 0,
@@ -177,6 +215,9 @@ export default {
       }).catch(e => {
         error(e.msg || '获取权益卡错误')
       })
+      // arr.map(item => {
+      //   item.card_content = JSON.parse(item.card_content)
+      // })
       this.rightCard = arr
     }
   },
@@ -189,50 +230,78 @@ export default {
 
 <style lang="scss" scoped>
   .equity-card {
-    background-color: #3A3731;
-    height: 566rpx;
+    /*background-color: #3A3731;*/
+    height:434rpx;
     width: 750rpx;
-    padding-top: 50rpx;
     box-sizing: border-box;
-
+    background-image: url("/static/user/equityCardBg.png");
+    background-size: 100% 100%;
+    padding-top: 150rpx;
+    margin-bottom: 120rpx;
     &-title {
-      color: #4E4436;
-      height: 38rpx;
-      line-height: 38rpx;
+      color: #885E24;
+      font-weight: bold;
+      height: 44rpx;
+      line-height: 44rpx;
+      font-size: 46rpx;
       position: absolute;
-      top: 48rpx;
-      left: 320rpx;
+      top: 46rpx;
+      left: 40rpx;
     }
 
     &-coupon {
-      height: 22rpx;
-      line-height: 22rpx;
-      color: #5C533D;
+      /*width:360rpx;*/
+      height:60rpx;
+      line-height: 60rpx;
+      background:linear-gradient(90deg,rgba(97,98,107,1) 0%,rgba(50,51,57,1) 100%);
+      border-radius:30rpx;
+      padding: 0px 24rpx;
+      color:#FFE590;
+      font-size: 24rpx;
       position: absolute;
-      top: 158rpx;
-      left: 26rpx;
+      top: 132rpx;
+      left: 48rpx;
     }
 
     &-no {
-      color: #5C533D;
-      height: 18rpx;
-      line-height: 18rpx;
+      color: #172B27;
+      height: 20rpx;
+      font-size: 24rpx;
+      line-height: 20rpx;
       position: absolute;
-      top: 160rpx;
-      right: 18rpx;
+      bottom: 80rpx;
+      left: 48rpx;
     }
 
   }
 
+  .equity-top{
+    height: 34rpx;
+    width: 750rpx;
+    font-size: 36rpx;
+    color: #FFFFFF;
+    line-height: 34rpx;
+    text-align: center;
+    position: absolute;
+    left: 0;
+    top: 70rpx;
+    box-sizing: border-box;
+    padding: 0px 20rpx;
+  }
+  .back-icon{
+    position: absolute;
+    left: 10px;
+    top: 0;
+  }
   .center {
     width: 700rpx;
-    height: 400rpx;
+    height: 340rpx;
     margin: 0 auto;
     white-space: nowrap;
 
     .vipFir {
       width: 700rpx !important;
-      height: 400rpx !important;
+      height: 340rpx !important;
       display: inline-block;
       position: relative;
     }
@@ -256,38 +325,37 @@ export default {
 
   .indicator-div {
     position: absolute;
-    top: 236rpx;
+    bottom: 40rpx;
     left: 50%;
     transform: translateX(-50%);
   }
 
-  .score-coupon {
-    width: 700rpx;
-    height: 120rpx;
-    position: absolute;
-    top: 350rpx;
-    left: 24rpx;
-    padding: 0rpx 30rpx;
+  .score-List {
+    width: 710rpx;
+    height: 220rpx;
+    padding: 0rpx 42rpx;
     box-sizing: border-box;
-
-    &-item {
-      margin-right: 74rpx;
-      text-align: center;
+    margin: 0 auto;
+    box-shadow:0px 0px 20rpx 0px rgba(0, 0, 0, 0.11);
+    border-radius:10rpx;
+    &-item{
+      width: 100%;
+      padding: 40rpx 0rpx;
+      height: 112rpx;
+      line-height: 32rpx;
+      box-sizing: border-box;
     }
-
-    .score-img {
-      width: 80rpx;
-      height: 80rpx;
-      margin: 0 auto;
+    &-detail{
+      height: 44rpx;
+      width: 100%;
+      margin-top: 20rpx;
     }
+  }
 
-    .score-text {
-      color: #FEF1C6;
-      height: 24rpx;
-      margin-top: 10rpx;
-      line-height: 24rpx;
-      text-align: center;
-    }
+  .score-img{
+    width: 46rpx;
+    height: 44rpx;
+    margin-right: 40rpx;
   }
 
   .buy-know {
@@ -314,5 +382,73 @@ export default {
     color: #FFFFFF;
     background: rgba(38, 199, 141, 1);
   }
+  .title-img{
+    width: 106rpx;
+    height: 16rpx;
+  }
+  .score-List-detail-test{
+    height: 28rpx;
+    line-height: 28rpx;
+    color: #666666;
+  }
+  .score-List-color{
+    color: #26C78D;
+    font-size: 32rpx;
+  }
+  .score-coupon{
+    width: 750rpx;
+    height: 32rpx;
+    line-height: 32rpx;
+    padding: 54rpx 0rpx;
+  }
 
+  .score-coupon-list{
+    height: 192rpx;
+    width: 750rpx;
+    box-sizing: border-box;
+    padding: 0rpx 14rpx  44rpx 14rpx;
+    white-space:nowrap;
+  }
+  .score-coupon-list-div{
+    display: inline-block;
+    position: relative;
+    width: 214rpx;
+    height: 148rpx;
+    background-image: url("/static/user/coupon.png");
+    background-size: 100% 100%;
+    margin-right: 40rpx;
+    .Coupon_Cash{
+      width: 96rpx;
+      height: 44rpx;
+      line-height: 44rpx;
+      color: #FF0000;
+      font-size: 60rpx;
+      font-weight: 800;
+      position: absolute;
+      top:30rpx;
+      left: 46rpx;
+    }
+    .Coupon_Condition{
+      height: 16rpx;
+      line-height: 16rpx;
+      color: #333333;
+      font-size: 10px;
+      width: 214rpx;
+      text-align: center;
+      position: absolute;
+      left: 0;
+      top: 84rpx;
+    }
+      .coupon-use{
+        font-size: 10px;
+        color: #F8F9F5;
+        height: 18rpx;
+        line-height: 18rpx;
+        position: absolute;
+        bottom: 18rpx;
+        left: 0;
+        width: 214rpx;
+        text-align: center;
+      }
+  }
 </style>
