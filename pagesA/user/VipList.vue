@@ -73,9 +73,10 @@
     </div>
 
     <div style="width: 750rpx;height: 100rpx"></div>
-    <div class="fz-12 submit" @click="submit">
+    <div class="fz-12 submit" @click="submit"  v-if="vipData[inds].user_level<vipData[inds].level">
       ¥<span class="fz-16">{{vipData[inds].price}}直接购买</span>
     </div>
+
 
     <wzw-pay
       ref="payLayer"

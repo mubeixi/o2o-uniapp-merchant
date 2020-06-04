@@ -62,7 +62,7 @@
       <!--这行代码特别关键 bind click="activeBizId=biz_id"-->
       <div :key="biz_id" @click="setActiveBizId(biz_id)" class="section-box store-item bg-white"
            v-for="(bizData,biz_id) in CartList">
-        <div class="biz-info bor-b">
+        <div class="biz-info ">
           <div style="display: flex;align-items: center;">
             <image :src="bizList[biz_id].biz_logo" class="biz_logo" />
             <span class="biz_name">{{bizList[biz_id].biz_name}}</span>
@@ -89,10 +89,36 @@
           </block>
         </div>
         <div class="other">
+          <div class="bd  bg-f8" v-if="bizList[biz_id].is_virtual === 0">
+            <div  class="o_title" v-if="bizList[biz_id].shipping_company&&bizList[biz_id].shipping_company.is_self_get">
+              <span>取货方式</span>
+              <span class="flex flex-vertical-c fz-13" style="text-align:right; color: #888;">
 
-          <div class="bd" v-if="bizList[biz_id].is_virtual === 0">
+                      <div class="flex flex-vertical-c "  @click="changeShpping(biz_id)">
+
+                          <div class="unchecked m-r-8" v-if="postData.shipping_id[biz_id]=='is_self_get'">
+                          </div>
+                          <div class="checked m-r-8" v-else>
+                            <div class="checked-radio"></div>
+                          </div>
+                          <span>商家发货</span>
+                      </div>
+                      <div class="flex flex-vertical-c m-l-20 "  @click="changeIsSelft(biz_id)">
+                          <div class="checked m-r-8" v-if="postData.shipping_id[biz_id]=='is_self_get'">
+                            <div class="checked-radio"></div>
+                          </div>
+                          <div class="unchecked m-r-8" v-else>
+                          </div>
+                          <span>到店自提</span>
+                      </div>
+
+              </span>
+            </div>
+          </div>
+
+          <div class="bd bg-f8" v-if="bizList[biz_id].is_virtual === 0&&postData.shipping_id[biz_id]!='is_self_get'">
             <div @click="changeShip(biz_id)" class="o_title">
-              <span>配送方式</span>
+              <span>运费选择</span>
               <span class="flex flex-vertical-c" style="text-align:right; color: #888;">
                 <span>
                   <block v-if="postData.shipping_name[biz_id]">
@@ -229,11 +255,14 @@
     <layout-layer ref="freightPop" title="选择快递">
       <div class="freight-popup-wrap popup-wrap">
         <radio-group @change="ShipRadioChange">
-          <label :key="shipid" class="row flex flex-justify-between flex-vertical-b p-10"
-                 v-for="(ship,shipid) in popupExpressCompanys">
-            <span class="flex1">{{ship}}</span>
-            <radio :checked="shipid==postData.shipping_id[activeBizId]" :value="shipid" class="radio" color="#F43131" />
-          </label>
+          <block v-for="(ship,shipid) in popupExpressCompanys"  :key="shipid">
+            <label  class="row flex flex-justify-between flex-vertical-b p-10"
+                    v-if="shipid!='is_self_get'">
+              <span class="flex1">{{ship}}</span>
+              <radio :checked="shipid==postData.shipping_id[activeBizId]" :value="shipid" class="radio" color="#F43131" />
+            </label>
+          </block>
+
 <!--          <label class="row flex flex-justify-between flex-vertical-b p-10">-->
 <!--            <span class="flex1">到店自取</span>-->
 <!--            <radio :checked="'is_store'===ship_current" class="radio" color="#F43131" value="is_store" />-->
@@ -730,10 +759,34 @@ export default {
 
       this.postData.coupon_id = e.target.value
     },
+    changeShpping (bizId) {
+      this.activeBizId = bizId
+      this.ship_current = this.postData.shipping_id[bizId]
+
+      for (const it in this.popupExpressCompanys) {
+        if (it !== 'is_self_get') {
+          this.postData.shipping_id[this.activeBizId] = it
+          this.postData.shipping_name[this.activeBizId] = this.popupExpressCompanys[it]
+        }
+      }
+
+      // 更改物流，需要重新获取信息，计算运费
+      this.checkOrderParam()
+    },
+    // 到店自提
+    changeIsSelft (bizId) {
+      this.activeBizId = bizId
+      this.ship_current = this.postData.shipping_id[bizId]
+
+      this.postData.shipping_id[this.activeBizId] = 'is_self_get'
+      this.postData.shipping_name[this.activeBizId] = '到店自提'
+      // 更改物流，需要重新获取信息，计算运费
+      this.checkOrderParam()
+    },
     // 物流改变
     ShipRadioChange (e) {
       const val = e.detail.value
-      //this.ship_current = isNaN(val) ? val : parseInt(val)
+      // this.ship_current = isNaN(val) ? val : parseInt(val)
       this.postData.shipping_id[this.activeBizId] = val
       this.postData.shipping_name[this.activeBizId] = val === 'is_store' ? '到店自取' : this.popupExpressCompanys[val] // 也要设置下name
       // 更改物流，需要重新获取信息，计算运费
@@ -1303,7 +1356,7 @@ export default {
     .goods-hr {
       margin: 15px 0;
       height: 1px;
-      background: #eee;
+      //background: #eee;
     }
   }
 
@@ -1370,7 +1423,7 @@ export default {
   /* 订单信息 end */
   /* 订单其他信息 start */
   .other {
-    padding: 0 40rpx 0 30rpx;
+    /*padding: 0 40rpx 0 30rpx;*/
     font-size: 22rpx;
 
     .right {
@@ -1381,8 +1434,9 @@ export default {
   }
 
   .other .bd {
-    margin-top: 30rpx;
-    padding-bottom: 30rpx;
+    /*margin-top: 30rpx;*/
+    /*padding-bottom: 30rpx;*/
+    padding: 30rpx 40rpx 30rpx 30rpx;
     border-bottom: 2rpx solid #efefef;
 
     &:last-child {
@@ -1624,30 +1678,29 @@ export default {
     height: 100%;
     overflow: hidden;
   }
-
-  .disMbx {
+  .bg-f8{
+    background-color: #F8F8F8 !important;
+  }
+  .checked{
+    width: 32rpx;
+    height: 32rpx;
+    border-radius: 50%;
+    border: 1px solid #F43131;
     display: flex;
+    justify-content: center;
     align-items: center;
   }
-
-  .zhouri {
-    width: 9px;
-    height: 14px;
-    margin-left: 5px;
+  .checked-radio{
+    width: 14rpx;
+    height: 14rpx;
+    border-radius: 50%;
+    background-color: #F43131;
+  }
+  .unchecked{
+    width: 32rpx;
+    height: 32rpx;
+    border-radius: 50%;
+    border: 1px solid #B5B5B5;
   }
 
-  .mbx-mbx {
-    display: flex;
-    flex: 1;
-    height: 100%;
-    align-items: center;
-    justify-content: flex-end;
-  }
-
-  .mbxs {
-    width: 100%;
-    display: flex;
-    justify-content: flex-end;
-    height: 100%;
-  }
 </style>
