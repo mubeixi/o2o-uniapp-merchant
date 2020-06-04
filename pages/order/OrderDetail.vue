@@ -406,7 +406,7 @@ export default {
       }
       // 跳转物流追踪
       uni.navigateTo({
-        url: '/pages/order/logistics?shipping_id=' + shipping_id + '&express=' + express + '&prod_img=' + prod_img + '&order_id=' + orderInfo.Order_ID
+        url: '/pagesA/order/logistics?shipping_id=' + shipping_id + '&express=' + express + '&prod_img=' + prod_img + '&order_id=' + orderInfo.Order_ID
       })
     },
     // 取消订单

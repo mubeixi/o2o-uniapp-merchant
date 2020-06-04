@@ -236,6 +236,12 @@
           }
         },
         {
+          "path": "order/logisticsByLocation",
+          "style": {
+            "navigationBarTitleText": "同城配送进度"
+          }
+        },
+        {
           "path": "store/shareQrcode",
           "style": {
             "navigationBarTitleText": "商家分享"

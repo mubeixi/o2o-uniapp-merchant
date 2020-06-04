@@ -71,7 +71,7 @@ export default {
       }
       const type = str.substr(0, breakStrIdx)
       const id = str.substr(breakStrIdx + 1)
-      this.$linkTo(`/pagesA/support/Im?type=${type}&tid=${id}`)
+      this.$linkTo(`/pagesA/support/Im?type=${type}&tid=${id}&room_title=${chatItem.name}`)
     },
     async _init_func () {
       await imInstance._getAccessToken() // 等拿token
