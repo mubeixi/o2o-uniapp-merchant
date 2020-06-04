@@ -36,12 +36,12 @@
         <div class="bg-white">
           <layout-ad :lazy-load="true" :ready="storeFirstCateIdx===idx1" paddingStr="20px 0 20px 0" code="good_shop_under_nav" :cate-id="first.Category_ID" position="hot"></layout-ad>
         </div>
-  
+
         <div v-if="merchantList.length<1">
           <layout-loading></layout-loading>
         </div>
 
-        <div style="background: #f8f8f8" class="p-b-15 p-t-15" v-show="merchantList.length>0">
+        <div style="background: #f8f8f8" class="p-b-15 p-t-15" v-if="merchantList.length>0">
           <div class="page-section-title">
             <span class="before" :style="{backgroundColor: primaryColor}"></span>
             <span class="text">人气商家</span>
