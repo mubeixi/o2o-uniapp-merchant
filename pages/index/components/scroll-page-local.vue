@@ -40,13 +40,13 @@
           <layout-loading></layout-loading>
         </div>
 
-        <div class="page-section-title" v-show="quickGoodsList.length>0">
+        <div class="page-section-title" v-if="quickGoodsList.length>0">
           <span class="before" :style="{backgroundColor: primaryColor}"></span>
           <span class="text">钜惠推荐</span>
           <span class="after" :style="{backgroundColor: primaryColor}"></span>
         </div>
 
-        <div class="fun-goods-list bg-white b-radius-5 m-t-10" style="width: 710rpx;margin-left: 20rpx;" v-show="quickGoodsList.length>0">
+        <div class="fun-goods-list bg-white b-radius-5 m-t-10" style="width: 710rpx;margin-left: 20rpx;" v-if="quickGoodsList.length>0">
           <div class="fun-goods-col" style="padding: 0 15rpx 0 30rpx">
             <block v-for="(goods,idx) in quickGoodsList" :key="idx">
               <goods-item v-if="idx%2===0" :marketPrice="true" coverRadius="8rpx" :vo="goods" mode="top-bottom"></goods-item>

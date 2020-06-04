@@ -17,7 +17,7 @@
           有效期：{{item.Coupon_StartTime.substring(0,10)}}至{{item.Coupon_EndTime.substring(0,10)}}
         </view>
         <view class="subject">
-          {{item.limit_txt}}
+          {{item.limit_txt||''}}
         </view>
         <view class="prices" v-if="item.Coupon_Discount<=0">
           ¥

@@ -36,7 +36,7 @@
             <image class="pro-img" :src="pro.prod_img" alt="" />
             <div class="pro-msg">
               <div class="pro-name">{{pro.prod_name}}</div>
-              <div class="attr" v-if="pro.attr_info"><span>{{pro.attr_info.attr_name}}</span></div>
+              <div class="attr" v-if="pro.attr_info && pro.attr_info.attr_name"><span>{{pro.attr_info.attr_name}}</span></div>
               <div class="pro-price"><span>￥</span>{{pro.prod_price}} <span class="amount">x<span class="num">{{pro.prod_count}}</span></span>
               </div>
             </div>
@@ -473,13 +473,15 @@ export default {
         this.orderList = order_list
 
         for (var orderItem of order_list) {
-          console.log(orderItem,orderItem.Order_ID)
+          console.log(orderItem.users_coupon_money, orderItem.Coupon_Money)
+          if (orderItem.users_coupon_money > 0 && orderItem.Coupon_Money == 0) {
+            orderItem.Coupon_Money = orderItem.users_coupon_money
+          }
           this.$set(this.postData.need_invoice, orderItem.Order_ID, orderItem.Order_NeedInvoice ? 1 : 0)// 是否需要发票
           this.$set(this.postData.invoice_info, orderItem.Order_ID, orderItem.Order_InvoiceInfo || '')// 发票信息
           this.$set(this.postData.use_money, orderItem.Order_ID, parseFloat(orderItem.Order_Yebc) > 0 ? orderItem.Order_Yebc : '')// 使用余额
           this.$set(this.postData.use_money_conf, orderItem.Order_ID, parseFloat(orderItem.Order_Yebc) > 0 ? 1 : 0)// 使用余额
           this.$set(this.postData.order_remark, orderItem.Order_ID, orderItem.Order_Remark || '')// 订单备注
-
         }
 
         this.refreshPayMoney()
