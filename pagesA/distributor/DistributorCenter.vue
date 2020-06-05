@@ -220,15 +220,16 @@ export default {
       pay_type: '', // 支付方式
       pay_money: 0, // 支付金额
       level_id: '',
+      textShen:"",
     }
   },
   computed: {
-    textShen () {
-      if (this.commi_rename) {
-        return '立即申请成为' + this.commi_rename.commi
-      }
-      return ''
-    },
+    // textShen () {
+    //   if (this.commi_rename) {
+    //     return '立即申请成为' + this.commi_rename.commi
+    //   }
+    //   return ''
+    // },
     userInfo () {
       return this.$store.getters['user/getUserInfo']()
     },
@@ -927,6 +928,7 @@ export default {
       this.disBuy()
     },
     disApplyInit () {
+      let _self=this
       disApplyInit().then(res => {
         this.pro = res.data
         if (this.type === 'edit') {
@@ -977,15 +979,17 @@ export default {
           if (!((JSON.stringify(dislist.apply_order) === '{}'))) {
             const myInfo = JSON.parse(dislist.apply_order.manual_form)
 
+
+            console.log( dislist.apply_order,"ss")
             if (dislist.apply_order.status === 3) {
-              this.textShen = dislist.apply_order.status_desc + '(' + dislist.apply_order.reason + ')'
+              _self.textShen = dislist.apply_order.status_desc + '(' + dislist.apply_order.reason + ')'
             }
             if (dislist.apply_order.status === 1) {
-              this.submitM = true
-              this.textShen = dislist.apply_order.status_desc
+              _self.submitM = true
+              _self.textShen = dislist.apply_order.status_desc
             }
             if (dislist.apply_order.status === 2) {
-              this.textShen = dislist.apply_order.status_desc
+              _self.textShen = dislist.apply_order.status_desc
             }
             for (const item in myInfo) {
               if (myInfo[item].type === 'address') {
@@ -1090,6 +1094,8 @@ export default {
     uni.setNavigationBarTitle({
       title: initData.commi_rename.commi + '信息',
     })
+    this.textShen='立即申请成为' + this.commi_rename.commi
+   
   },
 }
 </script>
