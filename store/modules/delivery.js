@@ -110,12 +110,24 @@ const mutations = {
     }
 
     this.commit('delivery/ASYNC_DATA', cartList)
+  },
+  
+  // 移除指定商户下的商品
+  REMOVE_GOODS_BY_BIZ (state, biz_id) {
+    console.log('remove biz_id is', biz_id)
+    // 不怕页面刷新的获取购物车
+    let cartListData = state.cartList.length > 0 ? state.cartList : Storage.get('deliveryCartList')
+    
+    const cartList = cartListData.filter(item => Number(item.biz_id) !== Number(biz_id))
+
+    this.commit('delivery/ASYNC_DATA', cartList)
   }
 }
 
 const actions = {
-  // 所有操作后面都要同步的
-
+  remove_goods_by_biz({ commit, state },biz_id){
+    commit('REMOVE_GOODS_BY_BIZ',biz_id)
+  }
 }
 
 const getters = {
