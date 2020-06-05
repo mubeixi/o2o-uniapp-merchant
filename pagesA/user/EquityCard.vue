@@ -3,7 +3,7 @@
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <div class="equity-card">
       <div class="equity-top">
-        <layout-icon type="iconback1" size="24" color="#fff" @click="$back()"  class="back-icon"></layout-icon>
+        <layout-icon type="iconback1" size="24" color="#fff" @click="backNext"  class="back-icon"></layout-icon>
         <span>权益</span>
       </div>
       <swiper class="center" :indicator-dots="false" :autoplay="false" :duration="1000" :current="inds"
@@ -126,6 +126,9 @@ export default {
     }
   },
   methods: {
+	  backNext(){
+		  uni.navigateBack()
+	  },
     async payMehtod (item) {
       const data = {
         order_id: this.order_id,
