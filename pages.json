@@ -262,8 +262,7 @@
         {
           "path": "user/EquityCard",
           "style": {
-            "navigationBarTitleText": "权益",
-            "navigationBarBackgroundColor": "#3A3731"
+            "navigationStyle": "custom"
           }
         },
         {
