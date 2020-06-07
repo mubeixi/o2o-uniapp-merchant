@@ -38,8 +38,12 @@
             <div class="pro-name">{{pro.prod_name}}</div>
             <div class="attr" v-if="pro.attr_info.attr_name"><span>{{pro.attr_info.attr_name}}</span></div>
             <div class="attrs" v-else></div>
-            <div class="pro-price fz-12"><span>￥</span>{{pro.prod_price}} <span
-              class="amount">x{{pro.prod_count}}</span></div>
+            <div class="pro-price fz-12">
+              <span>￥</span>
+              {{pro.prod_price}}
+              <span class="m-l-10 fz-14"  v-if="order.Order_Status==2&&order.Order_Type !== 'gift'"  @click.stop="goPay(order,pro)">申请退款</span>
+              <span class="m-l-10 fz-14"  v-else-if="order.Order_Status==3&&order.Order_Shipping.shipping_id!==2"  @click.stop="goPay(order,pro)">申请退货退款</span>
+              <span class="amount">x{{pro.prod_count}}</span></div>
             <div class="fz-14 c7" v-if="(Number(pro.prod_count)-Number(pro.is_back_num))*Number(pro.single_free_money)>0">
               免单金额({{(Number(pro.prod_count)-Number(pro.is_back_num))*Number(pro.single_free_money)}}元)
             </div>
@@ -137,7 +141,7 @@ export default {
     }
   },
   methods: {
-    goLogisticsByLocal(item){
+    goLogisticsByLocal (item) {
       // 处理物流名称
       let express = {}
       if (typeof item.Order_Shipping === 'object') {
@@ -199,14 +203,18 @@ export default {
       }
     },
     // 跳转申请退款 支付   发表评论
-    goPay (item) {
+    goPay (item, pro) {
       if (item.Order_Status === 1) {
         uni.navigateTo({
           url: '/pages/order/OrderPay?Order_ID=' + item.Order_ID
         })
       } else if (item.Order_Status === 2 || item.Order_Status === 3) {
+        let url = '/pagesA/order/Refund?Order_ID=' + item.Order_ID
+        if (pro) {
+          url += '&prod_id=' + pro.prod_id + '&attr_id=' + pro.attr_id
+        }
         uni.navigateTo({
-          url: '/pagesA/order/Refund?Order_ID=' + item.Order_ID
+          url
         })
       } else if (item.Order_Status === 4) {
         uni.navigateTo({

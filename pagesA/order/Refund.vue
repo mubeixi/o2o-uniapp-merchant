@@ -5,7 +5,6 @@
     <view class="status_bar" style="background-color: rgb(248, 248, 248);"><!-- 这里是状态栏 --></view>
     <!-- #endif -->
 
-
     <div :key="item" class="pro" v-for="(item,index) of refundInfo.refund_prod_list">
       <div class="pro-div">
         <image :src="item.prod_img" alt="" class="pro-img" />
@@ -14,17 +13,34 @@
         <div class="pro-name">{{item.prod_name}}</div>
         <div class="attr" v-if="item.attr_info"><span>{{item.attr_info.attr_name}}</span></div>
         <div class="attr" style="background-color:#fff;" v-else><span></span></div>
-        <div class=""><span class="span amount">x{{item.prod_count}}</span></div>
+        <div class=""><span class="span amount">x{{item.prod_count-item.is_back_num}}</span></div>
         <div class="fz-14  graytext2  c9">
-          <div>退回余额:<span class="fz-16 danger-color"><span class="span fz-12">￥</span>{{item.refund_money_fee}} </span>
-          </div>
-          <div>原路退回:<span class="fz-16 danger-color"><span class="span fz-12">￥</span>{{item.refund_pay_fee}} </span>
-          </div>
+            <span class="fz-16 danger-color"><span class="span fz-12">￥</span>{{item.prod_price}} </span>
+<!--          <div>退回余额:<span class="fz-16 danger-color"><span class="span fz-12">￥</span>{{item.refund_money_fee}} </span>-->
+<!--          </div>-->
+<!--          <div>原路退回:<span class="fz-16 danger-color"><span class="span fz-12">￥</span>{{item.refund_pay_fee}} </span>-->
+<!--          </div>-->
+
         </div>
       </div>
     </div>
     <div style="height: 20rpx;width: 100%;background-color: #F3F3F3;">
-
+    </div>
+    <div class="item  flex flex-justify-between">
+      <div class="item-left">退回余额</div>
+      <span>¥{{refundInfo.refund_money_fee}}</span>
+    </div>
+    <div class="item  flex flex-justify-between">
+      <div class="item-left">原路返回</div>
+      <span>¥{{refundInfo.refund_pay_fee}}</span>
+    </div>
+    <div class="item  flex flex-justify-between">
+      <div class="item-left">退款数量</div>
+      <span class="amount">
+        <span :class="backNumber==1?'disabled':''" @click="delNumber"  class="plus">-</span>
+        <input  @blur="inputNumber" class="attr_num" min="1" type="number"  v-model="backNumber" />
+        <span  class="plus" @click="addNumber">+</span>
+      </span>
     </div>
     <div @click="showReason" class="item ">
       <div class="item-left">退款原因</div>
@@ -112,11 +128,20 @@ export default {
       reasonDes: '', // 退款原因
       current: 0,
       reason_id: 0, // 退款原因id
-      refund_desc: '' // 退款说明
+      refund_desc: '', // 退款说明
+      prod_id: '',
+      attr_id: '',
+      backNumber: 0,
+      maxNumber: 0
     }
   },
   onLoad (option) {
     this.Order_ID = option.Order_ID
+
+    if (option.prod_id) {
+      this.prod_id = option.prod_id
+      this.attr_id = option.attr_id
+    }
   },
   onShow () {
     this.getRefund()
@@ -130,6 +155,59 @@ export default {
     }
   },
   methods: {
+    inputNumber () {
+      if (this.backNumber > this.maxNumber) {
+        this.backNumber = this.maxNumber
+        error('退款数量不能大于最大可退数量')
+        return
+      }
+      this.initNumber()
+    },
+    addNumber () {
+      if (this.backNumber >= this.maxNumber) {
+        this.backNumber = this.maxNumber
+        error('退款数量不能大于最大可退数量')
+        return
+      } else {
+        this.backNumber++
+      }
+      this.initNumber()
+    },
+    delNumber () {
+      if (this.backNumber <= 1) {
+        error('退款数量不能小于1')
+        return
+      } else {
+        this.backNumber--
+      }
+      this.initNumber()
+    },
+    initNumber () {
+      const postData = {
+        Order_ID: this.Order_ID,
+        prod_id: this.prod_id,
+        attr_id: this.attr_id,
+        back_num: this.backNumber
+      }
+      getRefund(postData).then(res => {
+        for (var i in res.data) {
+          if (i === 'refund_prod_list') {
+            for (var j in res.data[i]) {
+              for (var k in res.data[i][j]) {
+                if (k === 'attr_info') {
+                  if (res.data[i][j][k]) {
+                    res.data[i][j][k] = JSON.parse(res.data[i][j][k] && res.data[i][j][k])
+                  }
+                }
+              }
+            }
+          }
+        }
+        this.refundInfo = res.data
+      }).catch(e => {
+
+      })
+    },
     // 退款说明
     inputHandle (e) {
       this.refund_desc = e.detail.value
@@ -148,10 +226,17 @@ export default {
     },
     // 获取申请退货退款页面
     getRefund () {
-      getRefund({ Order_ID: this.Order_ID }).then(res => {
+      const postData = { Order_ID: this.Order_ID }
+      if (this.prod_id) {
+        postData.prod_id = this.prod_id
+        postData.attr_id = this.attr_id
+      }
+      getRefund(postData).then(res => {
         for (var i in res.data) {
           if (i === 'refund_prod_list') {
             for (var j in res.data[i]) {
+              this.backNumber = this.maxNumber = res.data[i][j].prod_count - res.data[i][j].is_back_num
+
               for (var k in res.data[i][j]) {
                 if (k === 'attr_info') {
                   if (res.data[i][j][k]) {
@@ -178,12 +263,19 @@ export default {
       for (const item of this.arr) {
         arr.push(item[0])
       }
-      orderRefund({
+      const postData = {
         image_path: JSON.stringify(arr),
         reason_id: this.reason_id,
         refund_desc: this.refund_desc,
         Order_ID: this.Order_ID
-      }).then(res => {
+      }
+      if (this.prod_id) {
+        postData.prod_id = this.prod_id
+        postData.attr_id = this.attr_id
+        postData.back_num = this.backNumber
+      }
+
+      orderRefund(postData).then(res => {
         toast('提交成功')
         setTimeout(() => {
           this.$back()
@@ -470,5 +562,41 @@ export default {
 
   .danger-color {
     color: #f43131;
+  }
+  .amount {
+    float: right;
+    display: flex;
+    color: #666;
+    height: 50rpx;
+    width: 168rpx;
+  }
+
+  .amount {
+    .attr_num {
+      width: 72rpx;
+      height: 50rpx;
+      line-height: 50rpx;
+      font-size: 28rpx;
+      text-align: center;
+      border: 1px solid #D1D1D1 {
+        left: 0;
+        right: 0;
+      };
+      box-sizing: border-box;
+      min-height: 0;
+    }
+  }
+
+  .plus {
+    width: 48rpx;
+    height: 50rpx;
+    border: 1px solid #D1D1D1;
+    text-align: center;
+    line-height: 50rpx;
+    box-sizing: border-box;
+
+    &.disabled {
+      background: #efefef;
+    }
   }
 </style>

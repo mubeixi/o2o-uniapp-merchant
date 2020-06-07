@@ -1033,6 +1033,8 @@
     <wzw-goods-action
       class="wzw-goods-action"
       @goIM="goIM"
+      @tofavorite="tofavorite"
+      :isFavorite="isFavorite"
       @goStore="goStore(productInfo.biz_id)"
       @goShare="toShare"
     >
@@ -1139,7 +1141,7 @@ import {
 } from '@/api/product'
 import { getActiveInfo, getCommitList, getCouponList, getUserLevel } from '@/api/common'
 import { getBizInfo } from '@/api/store'
-import { commentReply, getUserCoupon } from '@/api/customer'
+import { commentReply, getUserCoupon, checkFavourite, addFavourite, cancelFavourite } from '@/api/customer'
 
 import ProductSku from '@/componets/product-sku/product-sku'
 import { updateCart } from '@/api/order'
@@ -1227,7 +1229,7 @@ export default {
       }, // 商品数据
       active: [], // 满减活动列表
       store: [{ biz_go: '' }], // 门店
-      bizInfo:{},
+      bizInfo: {},
       storeList: [],
       comments: [],
       commentValue: '',
@@ -1237,7 +1239,8 @@ export default {
         prod_id: '',
         qty: 1 // 购买数量
       },
-      commentItem: {}// 要评论的对象
+      commentItem: {}, // 要评论的对象
+      isFavorite: false
     }
   },
   computed: {
@@ -1253,6 +1256,24 @@ export default {
     }
   },
   methods: {
+    // 收藏
+    tofavorite () {
+      if (this.isFavorite) {
+        cancelFavourite({ prod_id: this.prod_id }).then(res => {
+          toast(res.msg)
+          this.isFavorite=false
+        }).catch(e => {
+          error(e.msg || '取消收藏失败')
+        })
+      } else {
+        addFavourite({ prod_id: this.prod_id }).then(res => {
+          toast(res.msg)
+          this.isFavorite=true
+        }).catch(e => {
+          error(e.msg || '收藏失败')
+        })
+      }
+    },
     bindLeftBtnClick () {
       if (this.commentDrawerOpen) {
         this.closeCommentDrawer()
@@ -1649,7 +1670,7 @@ export default {
         this.postData.cart_key = 'DirectBuy'
         // 领取礼物
         this.postData.attr_id = this.gift_attr_id
-		this.postData.prod_id = this.prod_id
+        this.postData.prod_id = this.prod_id
         await updateCart(this.postData).catch((e) => {
           throw Error(e.msg || '赠品加入购物车失败')
         })
@@ -1795,6 +1816,12 @@ export default {
           throw Error(e.msg || '获取商品详情失败')
         })
         Object.assign(this.productInfo, productInfo)
+
+        const is_favourite =await checkFavourite(data, { onlyData: true }).catch(e => {
+          throw Error(e.msg || '检查商品是否收藏失败')
+        })
+        this.isFavorite = Number(is_favourite.is_favourite) === 1
+
 
         this.analysisExt.options.biz_id = productInfo.biz_id
 
