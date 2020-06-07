@@ -26,6 +26,16 @@
             客服
           </div>
         </div>
+        <div class="bottom-q" @click="tofavorite">
+          <div style="display: flex;justify-content: center;margin-bottom: 6rpx">
+            <layout-icon v-if="isFavorite" weight="bold" type="iconshoucang18-copy" size="20" color="#ff0000"></layout-icon>
+            <layout-icon v-else weight="bold" type="iconicon-favorite" size="20" color="#666666"></layout-icon>
+
+          </div>
+          <div>
+            收藏
+          </div>
+        </div>
       </div>
       <div class="bottom-btn">
         <slot name="action"></slot>
@@ -41,7 +51,10 @@ import { linkToEasy } from '@/common/fun'
 export default {
   components: { LayoutIcon },
   props: {
-
+    isFavorite: {
+      type: Boolean,
+      default: false
+    }
   },
   data () {
     return {}
@@ -57,6 +70,9 @@ export default {
       // linkToEasy('/pagesA/support/Im')
       // linkToEasy('/pages/demo')
       this.$emit('goIM')
+    },
+    tofavorite () {
+      this.$emit('tofavorite')
     },
     goStore () {
       this.$emit('goStore')
