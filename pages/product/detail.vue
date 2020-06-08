@@ -1258,6 +1258,7 @@ export default {
   methods: {
     // 收藏
     tofavorite () {
+	  if (!checkIsLogin(1, 1)) return
       if (this.isFavorite) {
         cancelFavourite({ prod_id: this.prod_id }).then(res => {
           toast(res.msg)
@@ -1817,11 +1818,14 @@ export default {
         })
         Object.assign(this.productInfo, productInfo)
 
-        const is_favourite =await checkFavourite(data, { onlyData: true }).catch(e => {
-          throw Error(e.msg || '检查商品是否收藏失败')
-        })
-        this.isFavorite = Number(is_favourite.is_favourite) === 1
-
+		if(checkIsLogin(0,0)){
+			const is_favourite =await checkFavourite(data, { onlyData: true }).catch(e => {
+			  throw Error(e.msg || '检查商品是否收藏失败')
+			})
+			this.isFavorite = Number(is_favourite.is_favourite) === 1
+			
+		}
+        
 
         this.analysisExt.options.biz_id = productInfo.biz_id
 
