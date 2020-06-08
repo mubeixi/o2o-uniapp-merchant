@@ -383,6 +383,8 @@ export default {
   .wrap {
     /*   height: 100vh; */
     background: #fff;
+	width: 750rpx;
+	overflow-x: hidden;
   }
 
   .pro {
