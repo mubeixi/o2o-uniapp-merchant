@@ -740,7 +740,7 @@ export default {
 
   // #ifdef  MP
   .checkout {
-    bottom: 0rpx;
+    bottom: 48px;
   }
 
   // #endif
