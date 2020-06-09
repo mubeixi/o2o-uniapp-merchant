@@ -740,7 +740,9 @@ export default {
 
   // #ifdef  MP
   .checkout {
-    bottom: 0rpx;
+    margin-bottom: constant(safe-area-inset-bottom);
+    margin-bottom: env(safe-area-inset-bottom);
+    bottom: 48px;
   }
 
   // #endif
