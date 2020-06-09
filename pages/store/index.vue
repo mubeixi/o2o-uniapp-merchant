@@ -370,7 +370,7 @@
     <!--101: 直播中, 102: 未开始, 103: 已结束, 104: 禁播, 105: 暂停中, 106: 异常，107：已过期-->
     <div @click="toRoom" class="live-status-box" v-if="liveStatus == 101 || liveStatus == 105 || liveStatus == 102">
       <image class="icon" src="/static/live/live-pre.png" v-if="liveStatus ==102"></image>
-      <image class="icon" src="/static/live/live-pre.png" v-if="liveStatus ==101 || liveStatus ==105"></image>
+      <image class="icon" src="/static/live/live-ing.png" v-if="liveStatus ==101 || liveStatus ==105"></image>
     </div>
 
   </div>
@@ -497,7 +497,7 @@ export default {
         path: 'pages/store/index?biz_id=' + this.bid,
         owner_id: this.$store.getters['user/getUserId']()// 公共参数
       }))
-      buildSharePath()
+      console.log(`plugin-private://wx2b03c6e691cd7370/pages/live-player-plugin?room_id=${roomId}&custom_params=${customParams}`)
       // 开发者在直播间页面路径上携带自定义参数（如示例中的path和pid参数），后续可以在分享卡片链接和跳转至商详页时获取，
       // 详见【获取自定义参数】、【直播间到商详页面携带参数】章节（上限600个字符，超过部分会被截断）
       wx.navigateTo({
@@ -639,13 +639,13 @@ export default {
         if (room_id) {
           // 首次获取立马返回直播状态
           const roomId = room_id // 房间 id
-          console.log('roomid is ' + roomId)
+          console.log('roomid is ' + roomId,livePlayer)
           livePlayer.getLiveStatus({ room_id: roomId })
             .then(res => {
               // 101: 直播中, 102: 未开始, 103: 已结束, 104: 禁播, 105: 暂停中, 106: 异常，107：已过期
               this.liveStatus = res.liveStatus
 
-              console.log('get live status', liveStatus)
+              console.log('get live status', res.liveStatus)
             })
             .catch(err => {
               console.log('get live status', err)
@@ -810,8 +810,8 @@ export default {
     z-index: 999;
     right: 15px;
     bottom: 25px;
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
     overflow: hidden;
     background: #fff;
@@ -819,8 +819,8 @@ export default {
 
     .icon {
       margin: 7px;
-      width: 36px;
-      height: 36px;
+      width: 46px;
+      height: 46px;
     }
   }
 

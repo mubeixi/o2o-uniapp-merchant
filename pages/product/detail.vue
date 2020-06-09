@@ -6,27 +6,27 @@
     bottom: 75px;
     margin-bottom: constant(safe-area-inset-bottom);
     margin-bottom: env(safe-area-inset-bottom);
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
     overflow: hidden;
     background: #fff;
     box-shadow: 0px 0px 20rpx 0px rgba(0, 0, 0, 0.1);
-    
+
     .icon {
       margin: 7px;
-      width: 36px;
-      height: 36px;
+      width: 46px;
+      height: 46px;
     }
   }
-  
+
   .page-wrap {
     background-color: #ffffff;
     width: 750rpx;
     overflow-x: hidden;
     overflow-y: hidden;
   }
-  
+
   .comment-list-drawer {
     transform: translateX(100%);
     position: fixed;
@@ -38,20 +38,20 @@
     background: white;
     z-index: 11;
   }
-  
+
   .share-btn {
     background: none;
-    
+
     &::after {
       border: none;
     }
   }
-  
+
   .lazy-box {
     bottom: constant(safe-area-inset-bottom);
     bottom: env(safe-area-inset-bottom);
   }
-  
+
   .container-wrap {
     position: fixed;
     width: 750rpx;
@@ -59,7 +59,7 @@
     bottom: 60px;
     z-index: 1;
   }
-  
+
   .head-box-default {
     position: fixed;
     z-index: 3;
@@ -67,14 +67,14 @@
     width: 750rpx;
     background: none;
   }
-  
+
   .head-box-active {
     position: fixed;
     z-index: 2;
     top: 0;
     width: 750rpx;
     background: #f2f2f2;
-    
+
     .head-search {
       width: 200rpx;
       height: 32px;
@@ -83,7 +83,7 @@
       background: #fff;
     }
   }
-  
+
   .head-tab-active {
     position: fixed;
     z-index: 9;
@@ -93,16 +93,16 @@
     box-sizing: border-box;
     padding: 10px 0;
     display: flex;
-    
+
     .head-tab-item {
       flex: 1;
       text-align: center;
-      
+
       &.active {
         color: $fun-primary-color;
       }
     }
-    
+
     .head-tab-underline {
       position: absolute;
       bottom: 0;
@@ -111,9 +111,9 @@
       width: 20px;
       background: $fun-primary-color;
     }
-    
+
   }
-  
+
   .end-time {
     width: 750rpx;
     height: 58rpx;
@@ -123,7 +123,7 @@
     font-size: 22rpx;
     background-color: #F2FFFA;
   }
-  
+
   .end-time-block {
     width: 36rpx;
     height: 36rpx;
@@ -136,11 +136,11 @@
     color: #ffffff;
     margin: 0px 4rpx;
   }
-  
+
   .end-time-day {
     margin: 0px 4rpx;
   }
-  
+
   .product-price {
     background-color: #ffffff;
     display: flex;
@@ -152,18 +152,18 @@
     justify-content: space-between;
     color: #ABABAB;
   }
-  
+
   .product-price-red {
     font-size: 20px;
     color: #F53636;
   }
-  
+
   .product-price-right {
     width: 168rpx;
     height: 70rpx;
     position: relative;
   }
-  
+
   .product-share {
     height: 20rpx;
     font-size: 11px;
@@ -174,7 +174,7 @@
     top: 12rpx;
     left: 84rpx;
   }
-  
+
   .product-title {
     width: 698rpx;
     line-height: 40rpx;
@@ -190,18 +190,18 @@
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
   }
-  
+
   .line-f8 {
     width: 750rpx;
     height: 20rpx;
     background: rgba(248, 248, 248, 1);
   }
-  
+
   .full-img {
     width: 100% !important;
     height: 100% !important;
   }
-  
+
   .product-price-share {
     font-size: 13px;
     height: 20rpx;
@@ -211,19 +211,19 @@
     position: absolute;
     bottom: 12rpx;
     left: 74rpx;
-    
+
     .price-q {
       font-size: 10px;
     }
   }
-  
+
   .product-activity {
     width: 750rpx;
     padding: 30rpx 20rpx 0rpx 20rpx;
     box-sizing: border-box;
     background: #fff;
   }
-  
+
   .product-activity-title {
     width: 134rpx;
     height: 34rpx;
@@ -232,7 +232,7 @@
     color: rgba(51, 51, 51, 1);
     line-height: 30rpx;
   }
-  
+
   .activity-item {
     width: 104rpx;
     height: 34rpx;
@@ -243,7 +243,7 @@
     margin-right: 20rpx;
     position: relative;
   }
-  
+
   .activity-img {
     position: absolute;
     top: 0;
@@ -251,10 +251,10 @@
     width: 104rpx;
     height: 34rpx
   }
-  
+
   .activity-second {
     margin-top: 20rpx;
-    
+
     .color-first {
       color: #1CA272;
       height: 32rpx;
@@ -266,7 +266,7 @@
       margin-right: 16rpx;
       font-size: 10px;
     }
-    
+
     .color-second {
       color: #333333;
       height: 22rpx;
@@ -276,13 +276,13 @@
       line-height: 22rpx;
     }
   }
-  
+
   .vip-img {
     width: 710rpx;
     margin: 0 auto;
     height: 96rpx;
   }
-  
+
   .shouhou {
     width: 750rpx;
     box-sizing: border-box;
@@ -290,7 +290,7 @@
     height: 86rpx;
     padding: 30rpx 20rpx;
   }
-  
+
   .shouhou-item {
     display: flex;
     height: 28rpx;
@@ -300,13 +300,13 @@
     line-height: 28rpx;
     margin-right: 36rpx;
   }
-  
+
   .shouhou-img {
     width: 28rpx;
     height: 28rpx;
     margin-right: 10rpx
   }
-  
+
   .store {
     position: sticky;
     z-index: 999;
@@ -317,7 +317,7 @@
     box-sizing: border-box;
     padding: 0rpx 72rpx;
     justify-content: space-between;
-    
+
     .li-item {
       width: 60rpx;
       height: 84rpx;
@@ -329,11 +329,11 @@
       font-weight: bold;
       position: relative;
     }
-    
+
     .color-store {
       color: #26C78D;
     }
-    
+
     .active {
       width: 36rpx;
       height: 6rpx;
@@ -345,16 +345,16 @@
       bottom: 0rpx;
     }
   }
-  
+
   .tab-containers {
     border-top: 1px solid #f1f1f1;
   }
-  
+
   .store-info {
     width: 710rpx;
     padding: 0 20rpx;
   }
-  
+
   .store-info-title {
     width: 540rpx;
     height: 30rpx;
@@ -366,7 +366,7 @@
     line-height: 30rpx;
     margin-bottom: 24rpx;
   }
-  
+
   .store-info-call {
     height: 28rpx;
     line-height: 28rpx;
@@ -374,17 +374,17 @@
     font-size: 13px;
     color: #999999;
   }
-  
+
   .section-store {
     background: white;
     padding-bottom: 30rpx;
   }
-  
+
   .store-list {
     width: 710rpx;
     padding: 0 20rpx;
   }
-  
+
   .store-list-top {
     height: 32rpx;
     display: flex;
@@ -392,7 +392,7 @@
     font-size: 13px;
     color: #999999;
   }
-  
+
   .block-div {
     background-color: #26C78D;
     width: 8rpx;
@@ -400,19 +400,19 @@
     margin-right: 16rpx;
     display: inline-block;
   }
-  
+
   .store-list-item {
     width: 710rpx;
     padding: 30rpx 24rpx;
     box-sizing: border-box;
     border-bottom: 1px solid #EBEBEB;
-    
+
     &:last-child {
     }
-    
+
     border-bottom: none;
   }
-  
+
   .store-list-title {
     width: 600rpx;
     height: 28px;
@@ -421,11 +421,11 @@
     line-height: 28px;
     margin-bottom: 10rpx;
   }
-  
+
   .isStickly {
     border-bottom: 1px solid #eee;
   }
-  
+
   .store-list-address {
     width: 100%;
     box-sizing: border-box;
@@ -434,14 +434,14 @@
     line-height: 34rpx;
     align-items: center;
   }
-  
+
   .store-list-font {
     color: #999999;
     font-size: 12px;
     height: 12px;
     line-height: 12px;
   }
-  
+
   .store-su {
     width: 1px;
     height: 34rpx;
@@ -449,43 +449,43 @@
     margin: 0px 24rpx;
     display: inline-block;
   }
-  
+
   .over {
     overflow-x: hidden;
     overflow-y: scroll;
   }
-  
+
   ul li {
     list-style: none;
   }
-  
+
   .section-comment {
     background: white;
-    
+
     .block-title {
     }
-    
+
     .comment-list {
       padding: 0 25rpx;
     }
   }
-  
+
   .commtent-add {
     margin: 50rpx 25rpx;
     background: #F7F7F7;
     min-height: 150rpx;
     padding: 20rpx;
-    
+
     .textarea {
       font-size: 14px;
       line-height: 1.4;
-      
+
       &::placeholder {
         color: #999;
       }
     }
   }
-  
+
   .wzw-goods-action {
     position: fixed;
     left: 0px;
@@ -493,7 +493,7 @@
     bottom: env(safe-area-inset-bottom);
     z-index: 10;
   }
-  
+
   .back-icon {
     position: fixed;
     top: 60rpx;
@@ -501,7 +501,7 @@
     //opacity: 0.5;
     z-index: 9;
   }
-  
+
   /*分享开始*/
   .shareinfo {
     background: #fff;
@@ -512,34 +512,34 @@
     border-top-left-radius: 10rpx;
     border-top-right-radius: 10rpx;
   }
-  
+
   .shareinfo {
     padding-bottom: 0;
     color: #333;
     font-size: 24rpx;
   }
-  
+
   .shareinfo > div {
     text-align: center;
   }
-  
+
   .s_top {
     display: flex;
     justify-content: center;
     align-items: center;
   }
-  
+
   .s_top .img {
     width: 76rpx;
     height: 76rpx;
     display: block;
     margin: 0 auto 10rpx;
   }
-  
+
   .s_top > div:nth-child(1) {
     /*margin-right: 120rpx;*/
   }
-  
+
   .s_bottom {
     position: relative;
     bottom: 0;
@@ -551,14 +551,14 @@
     line-height: 60rpx;
     margin-top: 16rpx;
   }
-  
+
   /*分享结束*/
   .refuseApplyDialog {
     width: 560rpx;
     box-sizing: border-box;
     padding: 15px;
     font-size: 14px;
-    
+
     .reason {
       font-size: 14px;
       min-height: 200px;
@@ -568,12 +568,12 @@
       width: auto;
       padding: 10px;
     }
-    
+
     .control {
       margin-top: 15px;
       display: flex;
       justify-content: center;
-      
+
       .action-btn {
         width: 70px;
         height: 36px;
@@ -582,7 +582,7 @@
         text-align: center;
         color: #666;
         background: #e9e9e9;
-        
+
         &.btn-sub {
           background: #f43131;
           color: white;
@@ -591,7 +591,7 @@
       }
     }
   }
-  
+
   .comment-send {
     width: 700rpx;
     box-sizing: border-box;
@@ -599,22 +599,22 @@
     background-color: #F6F6F6;
     border-radius: 6rpx;
     margin-top: 10px;
-    
+
     &-item {
       width: 600rpx;
       line-height: 40rpx;
     }
   }
-  
+
   .color-comment {
     color: #476DB9;
   }
-  
+
   .comment-item {
     border-bottom: 1px solid #E8E8E8;
     padding-bottom: 30rpx;
   }
-  
+
   /* 领券start */
   .coupon-box {
     padding: 30rpx 20rpx;
@@ -625,13 +625,13 @@
     background: white;
     border-bottom: 20rpx solid #f8f8f8;
   }
-  
+
   .coupon-box .btn {
     padding: 0 10rpx;
     color: #26C78D;
     border: 1px solid #26C78D;
   }
-  
+
   .right {
     display: flex;
     align-items: center;
@@ -639,13 +639,13 @@
     color: #666666;
     font-weight: 500;
   }
-  
+
   .right .img {
     width: 20rpx;
     height: 26rpx;
     margin-left: 20rpx;
   }
-  
+
   /* 领券 end */
   .ticks {
     max-height: 1050rpx;
@@ -653,7 +653,7 @@
     padding-top: 0rpx !important;
     // overflow: scroll;
   }
-  
+
   .t_title {
     font-size: 30rpx;
     color: #333;
@@ -665,14 +665,14 @@
     line-height: 90rpx;
     background-color: #FFFFFF;
   }
-  
+
   .t_title .delIcon {
-    
+
     position: absolute;
     top: 0rpx;
     right: 20rpx;
   }
-  
+
   .t_content {
     position: relative;
     width: 720rpx;
@@ -685,34 +685,34 @@
     font-size: 22rpx;
     color: #F43131;
   }
-  
+
   .t_left {
     float: left;
   }
-  
+
   .t_left .t_left_t .money {
     font-size: 42rpx;
     margin-right: 10rpx;
   }
-  
+
   .t_left .t_left_t {
     font-size: 24rpx;
     margin-bottom: 10rpx;
   }
-  
+
   .t_left .t_left_b {
     margin-top: 6rpx;
   }
-  
+
   .t_left .t_left_t i {
     font-size: 22rpx;
     font-style: normal;
   }
-  
+
   .t_left .t_left_c, .t_left .t_left_b {
     font-size: 22rpx;
   }
-  
+
   .t_right {
     float: right;
     height: 116rpx;
@@ -721,10 +721,10 @@
     font-size: 30rpx;
     border-left: 2rpx dotted #999;
     //width: 124rpx;
-    
+
     text-align: center;
   }
-  
+
   .left-btn {
     font-size: 14px;
     padding: 0 20rpx;
@@ -735,7 +735,7 @@
     border-radius: 42rpx;
     background: #85D4B8; //行内可以覆盖
   }
-  
+
   .right-btn {
     font-size: 14px;
     margin-left: 10rpx;
@@ -768,7 +768,7 @@
         </div>
       </div>
     </div>
-    
+
     <div :style="{height:diyHeadHeight+'px',opacity:activeHeadOpacity}" class="head-box-active"
          v-show="activeHeadOpacity">
       <div :style="{height:menuButtonInfo.top+'px'}"></div>
@@ -800,7 +800,7 @@
       <div :class="{active:headTabIndex===3}" @click="setAcitveTabIndx(3)" class="head-tab-item">门店</div>
       <span :animation="tabUnderlineAnimationData" class="head-tab-underline"></span>
     </div>
-    
+
     <scroll-view
       :scroll-into-view="currentEleId"
       :scroll-with-animation="true"
@@ -808,7 +808,7 @@
       @scroll="bindScrollEvent"
       @scrolltolower="bindScrollLowerEvent"
       @scrolltoupper="bindScrollToupperEvent" @touchmove.stop.prevent="bindScrollTouchEvent" class="container-wrap" scroll-y>
-      
+
       <div id="section0">
         <swiper autoplay="true" circular="true" duration="500"
                 indicator-active-color="#26C78D" indicator-color="rgba(0,0,0,.16)" indicator-dots="true" interval="3000" style="height:750rpx;width: 750rpx;">
@@ -816,7 +816,7 @@
             <image :src="item+'-r640'" @click="previewImg(index)" class="full-img" v-if="item" />
           </swiper-item>
         </swiper>
-        
+
         <block v-show="isReady">
           <div class="end-time" v-if="mode==='spike' || mode==='seckill'">
             <block v-if="!countdown.is_end">
@@ -874,7 +874,7 @@
               <layout-icon size="20" type="iconicon-arrow-right"></layout-icon>
             </div>
           </div>
-          
+
           <div class="product-activity m-t-10" v-if="userLevelList.length>0">
             <div class="flex" style="padding-bottom: 30rpx" v-if="active.length>0">
               <div class="product-activity-title">
@@ -920,7 +920,7 @@
           </div>
         </block>
       </div>
-      
+
       <div class="section-content" id="section1" v-show="isReady">
         <div class="block" style="padding:40rpx 25rpx">
           <div class="block-title">
@@ -931,12 +931,12 @@
         <block v-if="richTextReady">
           <u-parse :content="richContent"></u-parse>
         </block>
-      
+
       </div>
-      
+
       <!--评论列表-->
       <div class="block section-comment" id="section2" v-show="isReady">
-        
+
         <div class="block-title" style="padding:40rpx 25rpx">
           <div class="block-title-text fz-b">留言评论</div>
           <div @click="openCommentDrawer" class="block-title-more flex flex-vertical-center c9 fz-12">
@@ -962,18 +962,18 @@
                       </block>
                     </div>
                   </block>
-                
+
                 </block>
               </div>
             </div>
-          
+
           </div>
           <div class="fz-14 c9 text-center p-10" v-else>
             暂未评论
           </div>
         </div>
       </div>
-      
+
       <div class="section-store" id="section3" v-show="isReady">
         <div class="block" style="padding:40rpx 25rpx">
           <div class="block-title">
@@ -981,7 +981,7 @@
             <div class="block-title-more flex flex-vertical-center c9 fz-12"></div>
           </div>
         </div>
-        
+
         <div class="store-info flex">
           <div style="width: 96rpx;height: 96rpx;margin-right: 28rpx">
             <image :src="store[0].biz_logo" class="full-img" v-if="store[0].biz_logo"></image>
@@ -1034,17 +1034,17 @@
           </div>
         </div>
       </div>
-      
+
       <div :style="{height:diyHeadHeight+40+'px'}"></div>
-    
+
     </scroll-view>
-    
+
     <!--    <div v-if="!isReady" class="lazy-box" style="position: fixed;top: 0rpx;width: 750rpx;z-index: 102;background: #f8f8f8;" @touchmove.stop.prevent>-->
     <!--      <div style="width: 750rpx;height: 750rpx;background: #f2f2f2;background-size: cover;background-repeat: no-repeat;background-position: center;" :style="{backgroundImage:'url('+thumbTempFilePath+')'}"></div>-->
     <!--      <image mode="widthFix" src="/static/goods/detail-lazy-1.png" style="width: 750rpx;"></image>-->
     <!--      <image mode="widthFix" src="/static/goods/detail-lazy-3.png" style="width: 750rpx;position: fixed;bottom: 0;left: 0;z-index: 102" class=""></image>-->
     <!--    </div>-->
-    
+
     <div class="safearea-box fixed"></div>
     <product-sku
       :hasCart="hasCart"
@@ -1057,7 +1057,7 @@
       ref="mySku"
       v-if="productInfo.Products_ID"
     ></product-sku>
-    
+
     <wzw-goods-action
       :isFavorite="isFavorite"
       @goIM="goIM"
@@ -1076,21 +1076,21 @@
           </div>
         </div>
       </block>
-      
+
       <block v-if="mode==='gift'" v-slot:action>
         <div @click="onePay" class="right-btn">立即领取</div>
       </block>
-      
+
       <block v-if="mode==='seckill'" v-slot:action>
         <div @click="onePay" class="right-btn">立即秒杀</div>
       </block>
-      
+
       <block v-if="mode==='spike'" v-slot:action>
         <div @click="onePay" class="right-btn">立即抢购</div>
       </block>
-    
+
     </wzw-goods-action>
-    
+
     <!--    分享 -->
     <!--    <layout-popup  ref="share">-->
     <!--      <div class="shareinfo" >-->
@@ -1115,12 +1115,12 @@
     <!--        <div class="s_bottom" @click="cancel">取消</div>-->
     <!--      </div>-->
     <!--    </layout-popup>-->
-    
+
     <div :animation="commentAnimationData" :style="{top:diyHeadHeight+'px'}" class="comment-list-drawer"
          id="commentList">
       <product-comment></product-comment>
     </div>
-    
+
     <layout-modal ref="commentModal">
       <div class="refuseApplyDialog">
         <textarea :disabled="!commentModalShow" :value="commentValue" @input="bingReasonInput" auto-height
@@ -1132,7 +1132,7 @@
         </div>
       </div>
     </layout-modal>
-    
+
     <layout-popup ref="couponModal">
       <view>
         <div class="t_title ">
@@ -1155,14 +1155,13 @@
         </scroll-view>
       </view>
     </layout-popup>
-    
-    
+
     <!--101: 直播中, 102: 未开始, 103: 已结束, 104: 禁播, 105: 暂停中, 106: 异常，107：已过期-->
     <div @click="toRoom" class="live-status-box" v-if="liveStatus == 101 || liveStatus == 105 || liveStatus == 102">
       <image class="icon" src="/static/live/live-pre.png" v-if="liveStatus ==102"></image>
-      <image class="icon" src="/static/live/live-pre.png" v-if="liveStatus ==101 || liveStatus ==105"></image>
+      <image class="icon" src="/static/live/live-ing.png" v-if="liveStatus ==101 || liveStatus ==105"></image>
     </div>
-  
+
   </div>
 </template>
 
@@ -1174,7 +1173,7 @@ import {
   getProductSharePic,
   getStoreList,
   judgeReceiveGift,
-  spikeProdDetail,
+  spikeProdDetail
 } from '@/api/product'
 import { getActiveInfo, getCommitList, getCouponList, getUserLevel } from '@/api/common'
 import { getBizInfo } from '@/api/store'
@@ -1215,7 +1214,7 @@ export default {
     ProductSku,
     WzwGoodsAction,
     uParse,
-    LayoutPopup,
+    LayoutPopup
   },
   data () {
     return {
@@ -1230,14 +1229,14 @@ export default {
       // 倒计时
       activeInfo: {
         start_time: '',
-        end_time: '',
+        end_time: ''
       },
       countdown: {
         h: 0,
         s: 0,
         m: 0,
         d: 0,
-        is_end: true,
+        is_end: true
       },
       mode: 'default',
       commentModalShow: false,
@@ -1267,7 +1266,7 @@ export default {
         Products_PriceY: '0',
         Products_JSON: {},
         Products_Description: '',
-        Products_Promise: [],
+        Products_Promise: []
       }, // 商品数据
       active: [], // 满减活动列表
       store: [{ biz_go: '' }], // 门店
@@ -1279,10 +1278,10 @@ export default {
       checkfrom: '',
       postData: {
         prod_id: '',
-        qty: 1, // 购买数量
+        qty: 1 // 购买数量
       },
       commentItem: {}, // 要评论的对象
-      isFavorite: false,
+      isFavorite: false
     }
   },
   computed: {
@@ -1295,13 +1294,12 @@ export default {
     },
     initData () {
       return this.$store.state.system.initData
-    },
+    }
   },
   methods: {
     toRoom () {
-      
       let path = '/pages/product/detail?prod_id=' + this.prod_id
-      
+
       // 限时抢购
       if (this.mode === 'spike' && this.spike_good_id) {
         path += `&mode=spike&spike_good_id=${this.spike_good_id}`
@@ -1318,7 +1316,7 @@ export default {
       // 开发者在直播间页面路径上携带自定义参数（如示例中的path和pid参数），后续可以在分享卡片链接和跳转至商详页时获取，
       // 详见【获取自定义参数】、【直播间到商详页面携带参数】章节（上限600个字符，超过部分会被截断）
       wx.navigateTo({
-        url: `plugin-private://wx2b03c6e691cd7370/pages/live-player-plugin?room_id=${roomId}&custom_params=${customParams}`,
+        url: `plugin-private://wx2b03c6e691cd7370/pages/live-player-plugin?room_id=${roomId}&custom_params=${customParams}`
       })
     },
     // 收藏
@@ -1351,7 +1349,7 @@ export default {
       this.commentDrawerOpen = true
       var animation = uni.createAnimation({
         duration: 400,
-        timingFunction: 'ease',
+        timingFunction: 'ease'
       })
       animation.translateX(0).step()
       this.commentAnimationData = animation.export()
@@ -1360,7 +1358,7 @@ export default {
       this.commentDrawerOpen = false
       var animation = uni.createAnimation({
         duration: 400,
-        timingFunction: 'ease',
+        timingFunction: 'ease'
       })
       animation.translateX(this.systemInfo.windowWidth).step()
       this.commentAnimationData = animation.export()
@@ -1383,12 +1381,12 @@ export default {
     bindScrollEvent (e) {
       const { scrollTop } = e.detail
       const h = this.diyHeadHeight + 40 // 滑到这里的时候,就透明度为1
-      
+
       // this.scrollViewTop = scrollTop > h ? h : scrollTop
-      
+
       const opacity = scrollTop / h
       this.activeHeadOpacity = opacity > 1 ? 1 : opacity
-      
+
       // 生效一次，就取消掉
       if (this.tabClick) {
         this.tabClick = false
@@ -1396,26 +1394,26 @@ export default {
       }
       /** 根据滑动的位置切换tab start **/
       const currentScrollTop = scrollTop + 10// 顶部有部分是看不到的，所以要加上他 //额外给10算是精度吧
-      
+
       if (currentScrollTop > this.sectionTops[3]) {
         this.setAcitveTabIndx(3, true)
         return
       }
-      
+
       if (currentScrollTop > this.sectionTops[2]) {
         this.setAcitveTabIndx(2, true)
         return
       }
-      
+
       if (currentScrollTop > this.sectionTops[1]) {
         this.setAcitveTabIndx(1, true)
         return
       }
-      
+
       if (currentScrollTop > this.sectionTops[0]) {
         this.setAcitveTabIndx(0, true)
       }
-      
+
       /** 根据滑动的位置切换tab end **/
     },
     /**
@@ -1426,18 +1424,18 @@ export default {
     setAcitveTabIndx (idx, stop = false) {
       this.tabClick = true// 标记为改动
       this.headTabIndex = idx
-      
+
       var underlineAnimation = uni.createAnimation({
         duration: 200,
-        timingFunction: 'ease',
+        timingFunction: 'ease'
       })
-      
+
       const left = this.systemInfo.windowWidth / 4 * idx + this.systemInfo.windowWidth / 4 / 2 - 10 + 'px'
-      
+
       // 正下方
       underlineAnimation.width('40px').left(left).step()
       underlineAnimation.width('20px').step()
-      
+
       this.tabUnderlineAnimationData = underlineAnimation.export()
       this.scrollViewTop = idx > 0 ? 110 : 0
       if (!stop) {
@@ -1450,20 +1448,20 @@ export default {
       if (this.isLoading === true) return
       this.isLoading = true
       const data = {
-        coupon_id: item,
+        coupon_id: item
       }
       getUserCoupon(data, {
         tip: '领取中',
-        mask: true,
+        mask: true
       }).then(res => {
         uni.showToast({
           title: res.msg,
-          icon: 'none',
+          icon: 'none'
         })
         this.isLoading = false
         this.page = 1
         this.couponList.splice(i, 1)
-        
+
         if (this.couponList.length <= 0) {
           this.$closePop('couponModal')
         }
@@ -1472,7 +1470,7 @@ export default {
       })
       // this.getCoupon();
     },
-    
+
     goVipList () {
       const url = '/pagesA/user/VipList?bid=' + this.productInfo.biz_id
       this.$linkTo(url)
@@ -1502,7 +1500,7 @@ export default {
       const data = {
         touserid: this.commentItem.User_ID,
         commit_id: this.commentItem.Item_ID,
-        content: this.commentValue,
+        content: this.commentValue
       }
       if (this.commentItem.groupid) {
         data.groupid = this.commentItem.groupid
@@ -1523,9 +1521,9 @@ export default {
       this.comments = await getCommitList({
         Products_ID: this.productInfo.Products_ID,
         pageSize: 999,
-        page: 1,
+        page: 1
       }, {
-        onlyData: true,
+        onlyData: true
       }).catch((e) => {
         throw Error('获取评论数据失败')
       })
@@ -1546,7 +1544,7 @@ export default {
     toShare () {
       if (!checkIsLogin(1, 1)) return
       let url = '/pages/share/go?prod_id=' + this.prod_id
-      
+
       // 限时抢购
       if (this.mode === 'spike' && this.spike_good_id) {
         url += `&mode=spike&spike_good_id=${this.spike_good_id}`
@@ -1555,12 +1553,12 @@ export default {
       if (this.mode === 'seckill' && this.flashsale_id) {
         url += `&mode=seckill&flashsale_id=${this.flashsale_id}`
       }
-      
+
       this.$linkTo(url)
     },
     onePay () {
       if (!checkIsLogin(1, 1)) return
-      
+
       // 赠品
       if (this.mode === 'gift') {
         this.lingqu()
@@ -1569,18 +1567,18 @@ export default {
       // 重置参数，后面有需要再设置回来
       this.productInfo.minPrice = this.productInfo.Products_PriceX
       this.checkfrom = ''
-      
+
       if (this.mode === 'default') {
         this.hasCart = true
       }
-      
+
       if (this.mode === 'spike') {
         this.hasCart = false
         this.postData.active = 'spike' // 标记为是限时抢购
         this.checkfrom = 'spike'
         this.productInfo.minPrice = this.productInfo.price
       }
-      
+
       if (this.mode === 'seckill') {
         this.hasCart = false
         this.postData.active_id = this.productInfo.id // 秒杀id
@@ -1588,12 +1586,12 @@ export default {
         this.postData.active = 'flashsale' // 标记为是秒杀
         this.productInfo.minPrice = this.productInfo.price
       }
-      
+
       // 如果是有下单模板的商品,或者是虚拟商品，都不能加入购物车
       if (this.productInfo.order_temp_id || this.productInfo.Products_IsVirtual === 1) {
         this.hasCart = false
       }
-      
+
       this.$refs.mySku.show()
     },
     allPay () {
@@ -1601,7 +1599,7 @@ export default {
       this.hasCart = false
       this.postData.active = 'pintuan' // 标记为是拼团
       this.checkfrom = 'group'
-      
+
       // 限时抢购
       // if (this.mode === 'spike' && this.spike_good_id) {
       //   postData.active_id = this.spike_good_id
@@ -1618,7 +1616,7 @@ export default {
           attr_id: sku.id, // 选择属性id
           // count: sku.count, // 选择属性的库存
           qty: sku.qty, // 购买数量
-          cart_key: 'DirectBuy', // 购物车类型   CartList（加入购物车）、DirectBuy（立即购买）、PTCartList（不能加入购物车）
+          cart_key: 'DirectBuy' // 购物车类型   CartList（加入购物车）、DirectBuy（立即购买）、PTCartList（不能加入购物车）
           // productDetail_price: sku.price
         }
         // 拼团用的
@@ -1660,9 +1658,9 @@ export default {
         cart_key: 'CartList',
         prod_id: this.productInfo.Products_ID,
         qty: sku.qty,
-        attr_id: sku.id,
+        attr_id: sku.id
       }
-      
+
       // 限时抢购
       if (this.mode === 'spike' && this.spike_good_id) {
         data.active_id = this.spike_good_id
@@ -1685,7 +1683,7 @@ export default {
       try {
         showLoading()
         // HUAWEI Mate 30 Pro
-        
+
         // count: 553
         // id: 990
         // price: 11790
@@ -1696,9 +1694,9 @@ export default {
           count: sku.count, // 选择属性的库存
           qty: sku.qty, // 购买数量
           cart_key: 'DirectBuy', // 购物车类型   CartList（加入购物车）、DirectBuy（立即购买）、PTCartList（不能加入购物车）
-          productDetail_price: sku.price,
+          productDetail_price: sku.price
         }
-        
+
         // 限时抢购
         if (this.mode === 'spike' && this.spike_good_id) {
           postData.active_id = this.spike_good_id
@@ -1709,7 +1707,7 @@ export default {
           postData.active_id = this.flashsale_id
           postData.active = 'flashsale'
         }
-        
+
         await updateCart(postData).catch(e => {
           throw Error(e.msg || '下单失败')
         })
@@ -1730,7 +1728,7 @@ export default {
         this.directBuy()
         return
       }
-      
+
       try {
         showLoading()
         this.postData.cart_key = 'DirectBuy'
@@ -1756,9 +1754,9 @@ export default {
         title: this.productInfo.Products_Name,
         desc: this.productInfo.Products_BriefDescription,
         imageUrl: getProductThumb(this.productInfo.ImgPath),
-        path: buildSharePath(path),
+        path: buildSharePath(path)
       }
-      
+
       switch (channel) {
         case 'wx':
           uni.share({
@@ -1772,7 +1770,7 @@ export default {
             success: function (res) {
             },
             fail: function (err) {
-            },
+            }
           })
           break
         case 'wxtimeline':
@@ -1787,7 +1785,7 @@ export default {
             success: function (res) {
             },
             fail: function (err) {
-            },
+            }
           })
           break
         case 'wxmini':
@@ -1801,17 +1799,17 @@ export default {
               id: _self.wxMiniOriginId,
               path: '/' + shareObj.path,
               type: 0,
-              webUrl: 'http://uniapp.dcloud.io',
+              webUrl: 'http://uniapp.dcloud.io'
             },
             success: ret => {
-            },
+            }
           })
           break
         case 'pic':
           // this.$toast('comming soon')
           const res = await getProductSharePic({ product_id: this.prod_id }, {
             tip: '努力加载中',
-            mask: true,
+            mask: true
           })
           Storage.set('temp_sharepic_info', res.data)
           const sharePic = res.data.img_url
@@ -1821,7 +1819,7 @@ export default {
           }
           setTimeout(function () {
             uni.navigateTo({
-              url: '/pages/product/SharePic/SharePic',
+              url: '/pages/product/SharePic/SharePic'
             })
           }, 200)
           // uni.previewImage({
@@ -1838,13 +1836,13 @@ export default {
       uni.previewImage({
         urls: imgs,
         indicator: 'default',
-        current: index,
+        current: index
       })
     },
     stampFunc () {
       const data = getCountdownFunc({
         start_timeStamp: this.activeInfo.start_time,
-        end_timeStamp: this.activeInfo.end_time,
+        end_timeStamp: this.activeInfo.end_time
       })
       if (data) {
         this.countdown = data
@@ -1855,12 +1853,12 @@ export default {
     async _init_func (options) {
       try {
         showLoading()
-        
+
         if (options.gift) {
           this.gift = options.gift
           this.postData.active_id = options.gift
           this.postData.active = 'gift'
-          
+
           if (!checkIsLogin()) {
             return
           }
@@ -1871,18 +1869,18 @@ export default {
           this.skuval = giftInfo.skuval
           this.recieve = true
         }
-        
+
         // 获取优惠券
         this.page = 1
         const data = {
-          prod_id: this.prod_id,
+          prod_id: this.prod_id
         }
-        
+
         const productInfo = await getProductDetail(data, { onlyData: true }).catch(e => {
           throw Error(e.msg || '获取商品详情失败')
         })
         Object.assign(this.productInfo, productInfo)
-        
+
         const { room_id } = productInfo
         if (room_id) {
           // 首次获取立马返回直播状态
@@ -1891,30 +1889,27 @@ export default {
             .then(res => {
               // 101: 直播中, 102: 未开始, 103: 已结束, 104: 禁播, 105: 暂停中, 106: 异常，107：已过期
               this.liveStatus = res.liveStatus
-              
-              console.log('get live status', liveStatus)
+
+              console.log('get live status', res.liveStatus)
             })
             .catch(err => {
               console.log('get live status', err)
             })
         }
-        
 
-        if(checkIsLogin(0,0)){
-          const is_favourite =await checkFavourite(data, { onlyData: true }).catch(e => {
+        if (checkIsLogin(0, 0)) {
+          const is_favourite = await checkFavourite(data, { onlyData: true }).catch(e => {
             throw Error(e.msg || '检查商品是否收藏失败')
           })
           this.isFavorite = Number(is_favourite.is_favourite) === 1
-          
         }
-        
 
         this.analysisExt.options.biz_id = productInfo.biz_id
-        
+
         this.userLevelList = await getUserLevel({ biz_id: productInfo.biz_id }, { onlyData: true }).catch(e => {
           throw Error(e.msg || '获取商品详情失败')
         })
-        
+
         // 秒杀
         if (this.mode === 'seckill') {
           const seckillInfo = await getFlashsaleDetail({ flashsale_id: this.flashsale_id }).then(res => {
@@ -1922,11 +1917,11 @@ export default {
           }).catch(e => {
             throw Error(e.msg || '获取秒杀信息错误')
           })
-          
+
           Object.assign(this.productInfo, seckillInfo)
           this.activeInfo.start_time = seckillInfo.start_time
           this.activeInfo.end_time = seckillInfo.end_time
-          
+
           for (var i in this.productInfo.skuvaljosn) {
             for (var k in seckillInfo.attr_json) {
               if (this.productInfo.skuvaljosn[i].Attr_Value_text === seckillInfo.attr_json[k].name) {
@@ -1937,7 +1932,7 @@ export default {
           }
           countdownInstance = setInterval(this.stampFunc, 1000)
         }
-        
+
         // 限时抢购
         if (this.mode === 'spike') {
           const spikeInfo = await spikeProdDetail({ spike_good_id: this.spike_good_id }).then(res => {
@@ -1947,77 +1942,77 @@ export default {
           })
           console.log(spikeInfo)
           Object.assign(this.productInfo, spikeInfo)
-          
+
           this.activeInfo.start_time = spikeInfo.start_time
           this.activeInfo.end_time = spikeInfo.end_time
-          
+
           // 替换显示抢购的价格
           for (var j in this.productInfo.skuvaljosn) {
             this.productInfo.skuvaljosn[j].Attr_Price = this.productInfo.skuvaljosn[j].xs_pricex
           }
           countdownInstance = setInterval(this.stampFunc, 1000)
         }
-        
+
         // this.productInfo.Products_Promise = [{ name: '随时退款' }, { name: '随时退款' }, { name: '随时退款' }, { name: '随时退款' }]
         // this.productInfo.Products_Description = formatRichTextByUparseFn(this.productInfo.Products_Description)
-        
+
         this.richContent = formatRichTextByUparseFn(this.productInfo.Products_Description)
         this.richTextReady = true
         this.isVirtual = this.productInfo.Products_IsVirtual === 1
-        
+
         this.isReady = true
-        
+
         const couponParam = {
           pageSize: 999,
           page: 1,
           status: 3,
           front_show: 1,
-          biz_id: this.productInfo.biz_id,
+          biz_id: this.productInfo.biz_id
         }
-        
+
         this.couponList = await getCouponList(couponParam, { onlyData: true }).catch(e => {
           throw Error(e.msg || '获取优惠券失败')
         })
-        
+
         this.comments = await getCommitList({
           Products_ID: this.productInfo.Products_ID,
           pageSize: 999,
-          page: 1,
+          page: 1
         }, {
-          onlyData: true,
+          onlyData: true
         }).catch((e) => {
           throw Error('获取评论数据失败')
         })
-        
+
         this.store = await getBizInfo({ biz_id: this.productInfo.biz_id }, { onlyData: true }).catch(e => {
           throw Error(e.msg || '获取店铺信息失败')
         })
-        
+
         this.bizInfo = this.store[0]
-        
+
         this.storeList = await getStoreList({ biz_id: this.productInfo.biz_id }, {
-          onlyData: true,
+          onlyData: true
         }).catch(e => {
           throw Error(e.msg || '获取店铺列表失败')
         })
-        
+
         const res = await getActiveInfo({
           biz_id: this.productInfo.biz_id,
-          type: 'manjian',
+          type: 'manjian'
         }, { onlyData: true }).catch(e => {
         })
         if (res !== null && res.active_info) {
           this.active = res.active_info
         }
-        
+
         hideLoading()
-        
+
         await new Promise(resolve => {
           setTimeout(() => {
             resolve(true)
           }, 1000)
         })
-        
+
         const query = uni.createSelectorQuery()
         this.$nextTick().then(() => {
           const task0 = new Promise(resolve => {
@@ -2026,28 +2021,28 @@ export default {
               resolve()
             }).exec()
           })
-          
+
           const task1 = new Promise(resolve => {
             query.select('#section1').boundingClientRect(data => {
               this.$set(this.sectionTops, 1, data.top)
               resolve()
             }).exec()
           })
-          
+
           const task2 = new Promise(resolve => {
             query.select('#section2').boundingClientRect(data => {
               this.$set(this.sectionTops, 2, data.top)
               resolve()
             }).exec()
           })
-          
+
           const task3 = new Promise(resolve => {
             query.select('#section3').boundingClientRect(data => {
               this.$set(this.sectionTops, 3, data.top)
               resolve()
             }).exec()
           })
-          
+
           Promise.all([task0, task1, task2, task3]).then(res => {
             console.log('获取尺寸完毕')
           })
@@ -2057,7 +2052,7 @@ export default {
       } finally {
         hideLoading()
       }
-    },
+    }
   },
   onReady () {
     this.setAcitveTabIndx(0)
@@ -2065,10 +2060,10 @@ export default {
   },
   onPageScroll (e) {
     // console.log(e)
-    
+
   },
   mounted () {
-  
+
   },
   onLoad (options) {
     const { mode, spike_good_id, flashsale_id, prod_id } = options
@@ -2082,19 +2077,19 @@ export default {
     if (mode) this.mode = mode
     if (spike_good_id) this.spike_good_id = spike_good_id
     if (flashsale_id) this.flashsale_id = flashsale_id
-    
+
     // 秒杀
-    
+
     // if (Storage.get('thumbTempFilePath')) {
     //   this.thumbTempFilePath = Storage.get('thumbTempFilePath')
     // }
-    
+
     this._init_func(options)
   },
   // 自定义小程序分享
   onShareAppMessage () {
     let path = '/pages/product/detail?prod_id=' + this.prod_id
-    
+
     // 限时抢购
     if (this.mode === 'spike' && this.spike_good_id) {
       path += `&mode=spike&spike_good_id=${this.spike_good_id}`
@@ -2103,14 +2098,14 @@ export default {
     if (this.mode === 'seckill' && this.flashsale_id) {
       path += `&mode=seckill&flashsale_id=${this.flashsale_id}`
     }
-    
+
     const shareObj = {
       title: this.productInfo.Products_Name,
       desc: this.productInfo.Products_BriefDescription,
       imageUrl: this.productInfo.ImgPath,
-      path: buildSharePath(path),
+      path: buildSharePath(path)
     }
     return shareObj
-  },
+  }
 }
 </script>
