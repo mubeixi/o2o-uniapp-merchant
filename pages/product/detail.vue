@@ -1313,7 +1313,7 @@ export default {
       const roomId = this.productInfo.room_id // 填写具体的房间号，可通过下面【获取直播房间列表】 API 获取
       const customParams = encodeURIComponent(JSON.stringify({
         path: path,
-        pid: 1,
+        owner_id: this.$store.getters['user/getUserId']()// 公共参数
       }))
       // 开发者在直播间页面路径上携带自定义参数（如示例中的path和pid参数），后续可以在分享卡片链接和跳转至商详页时获取，
       // 详见【获取自定义参数】、【直播间到商详页面携带参数】章节（上限600个字符，超过部分会被截断）
