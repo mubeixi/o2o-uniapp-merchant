@@ -1,12 +1,14 @@
 <template>
-  <div class="flashSale-all" :style="{backgroundImage:'url('+$getDomain('/static/client/flash-sale-bg.jpg')+')'}"   @click="commonClick">
+  <div :style="{backgroundImage:'url('+$getDomain('/static/client/flash-sale-bg.jpg')+')'}" @click="commonClick"
+       class="flashSale-all">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
-    <div class="flex flex-vertical-c seckill-title" :style="{marginTop:menuButtonInfo.top+'px'}">
-      <layout-icon type="iconicon-arrow-left" size="20" color="#fff" class="back-icon m-r-2" @click="$back"></layout-icon>
-      <image class="seckill-title-img m-r-10" :src="bizInfo.biz_logo"></image>
-      <span class="seckill-title-text" :style="{width:(menuButtonInfo.left-80)+'px'}">{{bizInfo.biz_shop_name}}（{{bizInfo.biz_address}}）</span>
+    <div :style="{marginTop:menuButtonInfo.top+'px'}" class="flex flex-vertical-c seckill-title">
+      <layout-icon @click="$back" class="back-icon m-r-2" color="#fff" size="20"
+                   type="iconicon-arrow-left"></layout-icon>
+      <image :src="bizInfo.biz_logo" class="seckill-title-img m-r-10"></image>
+      <span :style="{width:(menuButtonInfo.left-80)+'px'}" class="seckill-title-text">{{bizInfo.biz_shop_name}}（{{bizInfo.biz_address}}）</span>
     </div>
-
+    
     <div class="flashSale-time flex flex-justify-c flex-vertical-c m-b-44">
       <block v-if="!countdown.is_end">
         距{{countdown.is_start?'结束':'开始'}}还有： {{countdown.d}}天 <span class="span-time m-l-6">{{countdown.h}}</span>：<span
@@ -16,10 +18,11 @@
         已经结束
       </block>
     </div>
-
-    <div class="flashSale-item flex flex-vertical-c" v-for="(item,index) of produtList" @click="$toGoodsDetail(item)" :key="index">
+    
+    <div :key="index" @click="$toGoodsDetail(item)" class="flashSale-item flex flex-vertical-c"
+         v-for="(item,index) of produtList">
       <div class="flashSale-item-left">
-        <image class="img-full" :src="item.ImgPath"></image>
+        <image :src="item.ImgPath" class="img-full"></image>
       </div>
       <div class="flashSale-item-right">
         <div class="item-title">
@@ -36,7 +39,7 @@
         </div>
       </div>
     </div>
-
+  
   </div>
 </template>
 
@@ -51,14 +54,17 @@ import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 let countdownInstance = null
 export default {
   mixins: [BaseMixin],
-  components: { WzwImTip, LayoutIcon },
+  components: {
+    WzwImTip,
+    LayoutIcon,
+  },
   data () {
     return {
       biz_id: null,
       bizInfo: [],
       postData: {
         page: 1,
-        pageSize: 999
+        pageSize: 999,
       },
       activeId: null,
       activeInfo: {},
@@ -67,8 +73,8 @@ export default {
         h: 0,
         s: 0,
         m: 0,
-        d: 0
-      }
+        d: 0,
+      },
     }
   },
   methods: {
@@ -81,22 +87,22 @@ export default {
     },
     async init () {
       this.postData.biz_id = this.biz_id
-
+      
       this.activeInfo = await getBizSpikeDetail({
         ...this.postData,
-        spike_id: this.activeId
+        spike_id: this.activeId,
       }, { onlyData: true }).catch(e => {
         throw Error(e.msg || '获取抢购活动信息失败')
       })
-
+      
       countdownInstance = setInterval(this.stampFunc, 1000)
-
+      
       this.produtList = await getSpikeProd({
         ...this.postData,
-        spike_id: this.activeId
+        spike_id: this.activeId,
       }, {
         tip: '加载中',
-        onlyData: true
+        onlyData: true,
       }).catch(e => {
         throw Error(e.msg || '获取抢购商品列表失败')
       })
@@ -104,14 +110,14 @@ export default {
     stampFunc () {
       const data = getCountdownFunc({
         start_timeStamp: this.activeInfo.start_time,
-        end_timeStamp: this.activeInfo.end_time
+        end_timeStamp: this.activeInfo.end_time,
       })
       if (data) {
         this.countdown = data
       } else {
         clearInterval(countdownInstance)
       }
-    }
+    },
   },
   onLoad (options) {
     // this.biz_id=options.biz_id
@@ -121,7 +127,7 @@ export default {
   },
   onShow () {
     this.init()
-  }
+  },
 }
 </script>
 
@@ -133,7 +139,7 @@ export default {
     height: auto;
     background-size: 100%;
   }
-
+  
   .seckill-title {
     padding-left: 5px;
     height: 80rpx;
@@ -141,7 +147,7 @@ export default {
     box-sizing: border-box;
     color: #FFFFFF;
     font-weight: bold;
-
+    
     &-text {
       display: inline-block;
       height: 80rpx;
@@ -150,14 +156,14 @@ export default {
       text-overflow: ellipsis;
       white-space: nowrap;
     }
-
+    
     &-img {
       width: 80rpx;
       height: 80rpx;
       border-radius: 50%;
     }
   }
-
+  
   .flashSale-time {
     width: 508rpx;
     height: 66rpx;
@@ -167,7 +173,7 @@ export default {
     border-radius: 16rpx;
     font-size: 30rpx;
     color: #6B1000;
-
+    
     .span-time {
       display: inline-block;
       height: 46rpx;
@@ -178,7 +184,7 @@ export default {
       background-color: #6B1000;
     }
   }
-
+  
   .flashSale-item {
     width: 710rpx;
     height: 232rpx;
@@ -187,20 +193,20 @@ export default {
     background-color: #FFFFFF;
     margin: 0 auto 24rpx;
     border-radius: 16rpx;
-
+    
     &-left {
       width: 200rpx;
       height: 200rpx;
       margin-right: 24rpx;
     }
-
+    
     &-right {
       height: 200rpx;
       width: 446rpx;
     }
-
+    
   }
-
+  
   .item-title {
     height: 70rpx;
     width: 446rpx;
@@ -213,17 +219,17 @@ export default {
     margin-top: 16rpx;
     margin-bottom: 44rpx;
   }
-
+  
   .item-price {
     color: #FF0000;
   }
-
+  
   .priceY {
     text-decoration: line-through;
     color: #bfbfbf;
     margin-left: 12rpx;
   }
-
+  
   .now-buy {
     width: 144rpx;
     height: 60rpx;

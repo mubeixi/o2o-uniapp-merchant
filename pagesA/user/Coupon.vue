@@ -1,14 +1,14 @@
 <template>
-  <view class="myall" @click="commonClick">
+  <view @click="commonClick" class="myall">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view class="defaults" v-if="pro.length<=0">
       <image :src="'/static/client/defaultImg.png'|domain"></image>
     </view>
     <block>
-      <view class="youhuijuan" v-for="(item,index) of pro" :key="index">
-        <image class="allImg" :src="'/static/client/mbxcoupon.png'|domain"></image>
+      <view :key="index" class="youhuijuan" v-for="(item,index) of pro">
+        <image :src="'/static/client/mbxcoupon.png'|domain" class="allImg"></image>
         <view class="infoImg">
-          <image class="image" :src="item.Coupon_PhotoPath"></image>
+          <image :src="item.Coupon_PhotoPath" class="image"></image>
         </view>
         <view class="storeTitle">
           {{item.Coupon_Subject}}
@@ -29,17 +29,17 @@
         <view class="man">
           满{{item.Coupon_Condition}}可用
         </view>
-        <view class="button" @click="goIndex(item.coupon_prod)">
+        <view @click="goIndex(item.coupon_prod)" class="button">
           去使用
         </view>
       </view>
-
+    
     </block>
     <view class="lasts">
       <view class="lefts">
         没有更多可用券 |
       </view>
-      <view class="rights" @click="goExpired">
+      <view @click="goExpired" class="rights">
         查看已失效的券 >
       </view>
     </view>
@@ -83,7 +83,7 @@ export default {
   methods: {
     goExpired () {
       uni.navigateTo({
-        url: '/pagesA/user/ExpiredCoupon'
+        url: '/pagesA/user/ExpiredCoupon',
       })
     },
     // 获取用户已领取可使用的优惠券
@@ -113,7 +113,7 @@ export default {
     },
     // 	change(item){
     // 		this.checked=item;
-
+    
     // 	}
   },
 }
@@ -124,7 +124,7 @@ export default {
     background-color: #FFFFFF !important;
     min-height: 100vh;
   }
-
+  
   .titless {
     position: fixed;
     top: 0rpx;
@@ -132,7 +132,7 @@ export default {
     width: 100%;
     z-index: 999;
   }
-
+  
   .nav {
     z-index: 999;
     position: fixed;
@@ -146,17 +146,17 @@ export default {
     align-items: center;
     font-size: 30rpx;
     color: #333333;
-
+    
     .views {
       width: 236rpx;
       height: 72rpx;
       line-height: 72rpx;
       text-align: center;
       position: relative;
-
+      
       &.checked {
         color: #F43131;
-
+        
         &:after {
           content: '';
           display: flex;
@@ -170,19 +170,19 @@ export default {
       }
     }
   }
-
+  
   .youhuijuan {
     width: 709rpx;
     height: 206rpx;
     margin-left: 20rpx;
     margin-bottom: 30rpx;
     position: relative;
-
+    
     .allImg {
       width: 100%;
       height: 100%;
     }
-
+    
     .infoImg {
       width: 89rpx;
       height: 89rpx;
@@ -191,13 +191,13 @@ export default {
       top: 56rpx;
       left: 44rpx;
       overflow: hidden;
-
+      
       .image {
         width: 100%;
         height: 100%;
       }
     }
-
+    
     .storeTitle {
       font-size: 28rpx;
       color: #333333;
@@ -206,7 +206,7 @@ export default {
       top: 48rpx;
       left: 150rpx;
     }
-
+    
     .times {
       font-size: 20rpx;
       color: #666666;
@@ -214,7 +214,7 @@ export default {
       top: 92rpx;
       left: 148rpx;
     }
-
+    
     .subject {
       font-size: 16rpx;
       color: #FF565F;
@@ -222,7 +222,7 @@ export default {
       left: 148rpx;
       top: 130rpx;
     }
-
+    
     .prices {
       width: 110rpx;
       height: 40rpx;
@@ -234,13 +234,13 @@ export default {
       position: absolute;
       top: 41rpx;
       left: 534rpx;
-
+      
       text {
         margin-left: 11rpx;
         font-size: 52rpx;
       }
     }
-
+    
     .man {
       height: 19rpx;
       font-size: 20rpx;
@@ -249,7 +249,7 @@ export default {
       top: 95rpx;
       left: 534rpx;
     }
-
+    
     .button {
       width: 125rpx;
       height: 44rpx;
@@ -263,7 +263,7 @@ export default {
       top: 133rpx;
       left: 527rpx;
     }
-
+    
     .yishiyong {
       position: absolute;
       width: 106rpx;
@@ -272,7 +272,7 @@ export default {
       left: 455rpx;
     }
   }
-
+  
   .lasts {
     font-size: 14px;
     padding-top: 30rpx;
@@ -280,17 +280,17 @@ export default {
     text-align: center;
     display: flex;
     justify-content: center;
-
+    
     .lefts {
       color: #666666;
     }
-
+    
     .rights {
       margin-left: 10rpx;
       color: #F43131;
     }
   }
-
+  
   .defaults {
     margin: 0 auto;
     width: 640rpx;

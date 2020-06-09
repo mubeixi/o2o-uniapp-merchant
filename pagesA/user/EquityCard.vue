@@ -3,13 +3,13 @@
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <div class="equity-card">
       <div class="equity-top">
-        <layout-icon type="iconback1" size="24" color="#fff" @click="backNext"  class="back-icon"></layout-icon>
+        <layout-icon @click="backNext" class="back-icon" color="#fff" size="24" type="iconback1"></layout-icon>
         <span>权益</span>
       </div>
-      <swiper class="center" :indicator-dots="false" :autoplay="false" :duration="1000" :current="inds"
-              @change="change">
-        <swiper-item class="vipFir" v-for="(item,index) of rightCard" :key="index">
-          <image src="/static/user/equitySwper.png" class="img-full"></image>
+      <swiper :autoplay="false" :current="inds" :duration="1000" :indicator-dots="false" @change="change"
+              class="center">
+        <swiper-item :key="index" class="vipFir" v-for="(item,index) of rightCard">
+          <image class="img-full" src="/static/user/equitySwper.png"></image>
           <div class="fz-20 equity-card-title">
             {{item.card_name}}
           </div>
@@ -20,88 +20,88 @@
             NO.8888888888
           </div>
           <div class="indicator-div flex flex-vertical-c flex-justify-c" v-if="index==inds">
-            <block v-for="(item,index) of rightCard" :key="index">
+            <block :key="index" v-for="(item,index) of rightCard">
               <div class="div-block-active" v-if="index==inds"></div>
               <div class="div-block" v-else></div>
             </block>
           </div>
         </swiper-item>
       </swiper>
-
+    
     </div>
-
-  <div class="score-List" v-if="rightCard[inds].card_content&&rightCard[inds].card_content.score">
-        <div class="score-List-item flex flex-justify-c flex-vertical-c">
-            <image src="/static/user/titleLeft.png" class="title-img"></image>
-            <span class="m-l-10 m-r-10">
+    
+    <div class="score-List" v-if="rightCard[inds].card_content&&rightCard[inds].card_content.score">
+      <div class="score-List-item flex flex-justify-c flex-vertical-c">
+        <image class="title-img" src="/static/user/titleLeft.png"></image>
+        <span class="m-l-10 m-r-10">
               赠送积分
             </span>
-            <image src="/static/user/titleRight.png" class="title-img"></image>
-        </div>
-
-        <div class="flex flex-vertical-c score-List-detail" >
-          <image src="/static/user/scopeImg.png" class="score-img"></image>
-          <span class="score-List-detail-test">
+        <image class="title-img" src="/static/user/titleRight.png"></image>
+      </div>
+      
+      <div class="flex flex-vertical-c score-List-detail">
+        <image class="score-img" src="/static/user/scopeImg.png"></image>
+        <span class="score-List-detail-test">
             购买此权益卡可享赠送<span class="score-List-color">{{rightCard[inds].card_content.score}}</span>积分特权
           </span>
-        </div>
-
-  </div>
-
-
+      </div>
+    
+    </div>
+    
+    
     <div class="score-coupon flex flex-justify-c flex-vertical-c" v-if="rightCard[inds].coupons">
-      <image src="/static/user/titleLeft.png" class="title-img"></image>
+      <image class="title-img" src="/static/user/titleLeft.png"></image>
       <span class="m-l-10 m-r-10">
               赠送优惠券
             </span>
-      <image src="/static/user/titleRight.png" class="title-img"></image>
+      <image class="title-img" src="/static/user/titleRight.png"></image>
     </div>
-    <scroll-view scroll-x class="score-coupon-list flex flex-vertical-c " v-if="rightCard[inds].coupons">
-        <div class="score-coupon-list-div"  v-for="(coupon,index) of rightCard[inds].coupons"  :key="index">
-              <div class="Coupon_Cash">
-                {{coupon.Coupon_Cash}}
-              </div>
-              <div class="Coupon_Condition">
-                领劵满100减90
-              </div>
-              <div v-if="coupon.coupon_prod>0" class="coupon-use">
-                全店通用
-              </div>
-              <div v-else class="coupon-use">
-                指定商品可用
-              </div>
+    <scroll-view class="score-coupon-list flex flex-vertical-c " scroll-x v-if="rightCard[inds].coupons">
+      <div :key="index" class="score-coupon-list-div" v-for="(coupon,index) of rightCard[inds].coupons">
+        <div class="Coupon_Cash">
+          {{coupon.Coupon_Cash}}
         </div>
+        <div class="Coupon_Condition">
+          领劵满100减90
+        </div>
+        <div class="coupon-use" v-if="coupon.coupon_prod>0">
+          全店通用
+        </div>
+        <div class="coupon-use" v-else>
+          指定商品可用
+        </div>
+      </div>
     </scroll-view>
-
-    <div style="width: 750rpx;height: 20rpx;background-color: #f5f5f5"  v-if="rightCard[inds].descr"></div>
-
+    
+    <div style="width: 750rpx;height: 20rpx;background-color: #f5f5f5" v-if="rightCard[inds].descr"></div>
+    
     <div class="score-coupon flex flex-justify-c flex-vertical-c" v-if="rightCard[inds].descr">
-      <image src="/static/user/titleLeft.png" class="title-img"></image>
+      <image class="title-img" src="/static/user/titleLeft.png"></image>
       <span class="m-l-10 m-r-10">
               购买须知
             </span>
-      <image src="/static/user/titleRight.png" class="title-img"></image>
+      <image class="title-img" src="/static/user/titleRight.png"></image>
     </div>
     <div class="buy-know-list fz-13 c8" v-if="rightCard[inds].descr">
       {{rightCard[inds].descr}}
-
+    
     </div>
-
+    
     <div style="width: 750rpx;height: 90rpx"></div>
-    <div class="submit fz-17" @click="submit">
+    <div @click="submit" class="submit fz-17">
       <span class="fz-12">¥</span>{{rightCard[inds].price}} 立即购买
     </div>
-
+    
     <wzw-pay
-      ref="payLayer"
       :isOpen='false'
       :is_use_order_pay="false"
-      :pay_money="rightCard[inds].price"
-      :paySuccessCall="paySuccessCall"
       :payFailCall="payFailCall"
+      :paySuccessCall="paySuccessCall"
+      :pay_money="rightCard[inds].price"
       @payMehtod="payMehtod"
+      ref="payLayer"
     />
-
+  
   </div>
 </template>
 
@@ -114,25 +114,30 @@ import Pay from '@/common/Pay'
 import { checkIsLogin } from '@/common/helper'
 import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
+
 export default {
   mixins: { BaseMixin },
-  components: { WzwImTip, WzwPay, LayoutIcon },
+  components: {
+    WzwImTip,
+    WzwPay,
+    LayoutIcon,
+  },
   data () {
     return {
       inds: 0,
       rightCard: [],
       order_id: '',
-      pay_type: ''
+      pay_type: '',
     }
   },
   methods: {
-	  backNext(){
-		  uni.navigateBack()
-	  },
+    backNext () {
+      uni.navigateBack()
+    },
     async payMehtod (item) {
       const data = {
         order_id: this.order_id,
-        pay_method: item.pay_type
+        pay_method: item.pay_type,
       }
       const payCan = await rightsCardPay(data, { tip: '加载中' }).catch(e => {
         error(e.msg || '创建订单失败')
@@ -143,7 +148,7 @@ export default {
         toast('支付成功')
         setTimeout(function () {
           uni.switchTab({
-            url: '/pages/user/index'
+            url: '/pages/user/index',
           })
         }, 1000)
       }
@@ -152,7 +157,7 @@ export default {
       uni.showToast({
         title: err.msg ? err.msg : '支付失败',
         icon: 'none',
-        duration: 2000
+        duration: 2000,
       })
     },
     paySuccessCall (res) {
@@ -165,7 +170,7 @@ export default {
         toast('用户取消支付', 'none')
         return
       }
-
+      
       // 头条小程序
       if (res && res.code && res.code === 9) {
         uni.showModal({
@@ -175,33 +180,33 @@ export default {
           confirmText: '已支付',
           success: function (res) {
             if (res.confirm) {
-
+            
             } else if (res.cancel) {
-
+            
             }
-          }
+          },
         })
         return
       }
-
+      
       // 0：支付成功 1：支付超时 2：支付失败 3：支付关闭 4：支付取消 9：订单状态开发者自行获取
-
+      
       if (res && res.code && res.code === 4) {
         toast('用户取消支付', 'none')
         return
       }
-
+      
       toast('支付成功')
-
+      
       uni.redirectTo({
-        url: '/pages/user/index'
+        url: '/pages/user/index',
       })
     },
     async submit () {
       if (!checkIsLogin(1, 1)) return
       const order = await createRightsCardOrder({ card_id: this.rightCard[this.inds].id }, {
         onlyData: true,
-        tip: '加载中'
+        tip: '加载中',
       }).catch(e => {
         error(e.msg || '创建订单失败')
       })
@@ -214,7 +219,7 @@ export default {
     async init () {
       const arr = await getRightsCard({ status: 1 }, {
         onlyData: true,
-        tip: '加载中'
+        tip: '加载中',
       }).catch(e => {
         error(e.msg || '获取权益卡错误')
       })
@@ -222,25 +227,26 @@ export default {
       //   item.card_content = JSON.parse(item.card_content)
       // })
       this.rightCard = arr
-    }
+    },
   },
   onLoad () {
-	  if (!checkIsLogin(1, 1)) return
+    if (!checkIsLogin(1, 1)) return
     this.init()
-  }
+  },
 }
 </script>
 
 <style lang="scss" scoped>
   .equity-card {
     /*background-color: #3A3731;*/
-    height:434rpx;
+    height: 434rpx;
     width: 750rpx;
     box-sizing: border-box;
     background-image: url("/static/user/equityCardBg.png");
     background-size: 100% 100%;
     padding-top: 150rpx;
     margin-bottom: 120rpx;
+    
     &-title {
       color: #885E24;
       font-weight: bold;
@@ -251,21 +257,21 @@ export default {
       top: 46rpx;
       left: 40rpx;
     }
-
+    
     &-coupon {
       /*width:360rpx;*/
-      height:60rpx;
+      height: 60rpx;
       line-height: 60rpx;
-      background:linear-gradient(90deg,rgba(97,98,107,1) 0%,rgba(50,51,57,1) 100%);
-      border-radius:30rpx;
+      background: linear-gradient(90deg, rgba(97, 98, 107, 1) 0%, rgba(50, 51, 57, 1) 100%);
+      border-radius: 30rpx;
       padding: 0px 24rpx;
-      color:#FFE590;
+      color: #FFE590;
       font-size: 24rpx;
       position: absolute;
       top: 132rpx;
       left: 48rpx;
     }
-
+    
     &-no {
       color: #172B27;
       height: 20rpx;
@@ -275,10 +281,10 @@ export default {
       bottom: 80rpx;
       left: 48rpx;
     }
-
+    
   }
-
-  .equity-top{
+  
+  .equity-top {
     height: 34rpx;
     width: 750rpx;
     font-size: 36rpx;
@@ -291,17 +297,19 @@ export default {
     box-sizing: border-box;
     padding: 0px 20rpx;
   }
-  .back-icon{
+  
+  .back-icon {
     position: absolute;
     left: 10px;
     top: 0;
   }
+  
   .center {
     width: 700rpx;
     height: 340rpx;
     margin: 0 auto;
     white-space: nowrap;
-
+    
     .vipFir {
       width: 700rpx !important;
       height: 340rpx !important;
@@ -309,7 +317,7 @@ export default {
       position: relative;
     }
   }
-
+  
   .div-block {
     width: 20rpx;
     height: 4rpx;
@@ -317,7 +325,7 @@ export default {
     background-color: #3A3731;
     margin-right: 8rpx;
   }
-
+  
   .div-block-active {
     width: 20rpx;
     height: 4rpx;
@@ -325,55 +333,57 @@ export default {
     background-color: #FFFFFF;
     margin-right: 8rpx;
   }
-
+  
   .indicator-div {
     position: absolute;
     bottom: 40rpx;
     left: 50%;
     transform: translateX(-50%);
   }
-
+  
   .score-List {
     width: 710rpx;
     height: 220rpx;
     padding: 0rpx 42rpx;
     box-sizing: border-box;
     margin: 0 auto;
-    box-shadow:0px 0px 20rpx 0px rgba(0, 0, 0, 0.11);
-    border-radius:10rpx;
-    &-item{
+    box-shadow: 0px 0px 20rpx 0px rgba(0, 0, 0, 0.11);
+    border-radius: 10rpx;
+    
+    &-item {
       width: 100%;
       padding: 40rpx 0rpx;
       height: 112rpx;
       line-height: 32rpx;
       box-sizing: border-box;
     }
-    &-detail{
+    
+    &-detail {
       height: 44rpx;
       width: 100%;
       margin-top: 20rpx;
     }
   }
-
-  .score-img{
+  
+  .score-img {
     width: 46rpx;
     height: 44rpx;
     margin-right: 40rpx;
   }
-
+  
   .buy-know {
     width: 750rpx;
     height: 28rpx;
     line-height: 28rpx;
     text-align: center;
   }
-
+  
   .buy-know-list {
     width: 710rpx;
     margin: 0 auto;
     line-height: 52rpx;
   }
-
+  
   .submit {
     position: fixed;
     bottom: 0px;
@@ -385,34 +395,39 @@ export default {
     color: #FFFFFF;
     background: rgba(38, 199, 141, 1);
   }
-  .title-img{
+  
+  .title-img {
     width: 106rpx;
     height: 16rpx;
   }
-  .score-List-detail-test{
+  
+  .score-List-detail-test {
     height: 28rpx;
     line-height: 28rpx;
     color: #666666;
   }
-  .score-List-color{
+  
+  .score-List-color {
     color: #26C78D;
     font-size: 32rpx;
   }
-  .score-coupon{
+  
+  .score-coupon {
     width: 750rpx;
     height: 32rpx;
     line-height: 32rpx;
     padding: 54rpx 0rpx;
   }
-
-  .score-coupon-list{
+  
+  .score-coupon-list {
     height: 192rpx;
     width: 750rpx;
     box-sizing: border-box;
-    padding: 0rpx 14rpx  44rpx 14rpx;
-    white-space:nowrap;
+    padding: 0rpx 14rpx 44rpx 14rpx;
+    white-space: nowrap;
   }
-  .score-coupon-list-div{
+  
+  .score-coupon-list-div {
     display: inline-block;
     position: relative;
     width: 214rpx;
@@ -420,7 +435,8 @@ export default {
     background-image: url("/static/user/coupon.png");
     background-size: 100% 100%;
     margin-right: 40rpx;
-    .Coupon_Cash{
+    
+    .Coupon_Cash {
       width: 96rpx;
       height: 44rpx;
       line-height: 44rpx;
@@ -428,10 +444,11 @@ export default {
       font-size: 60rpx;
       font-weight: 800;
       position: absolute;
-      top:30rpx;
+      top: 30rpx;
       left: 46rpx;
     }
-    .Coupon_Condition{
+    
+    .Coupon_Condition {
       height: 16rpx;
       line-height: 16rpx;
       color: #333333;
@@ -442,16 +459,17 @@ export default {
       left: 0;
       top: 84rpx;
     }
-      .coupon-use{
-        font-size: 10px;
-        color: #F8F9F5;
-        height: 18rpx;
-        line-height: 18rpx;
-        position: absolute;
-        bottom: 18rpx;
-        left: 0;
-        width: 214rpx;
-        text-align: center;
-      }
+    
+    .coupon-use {
+      font-size: 10px;
+      color: #F8F9F5;
+      height: 18rpx;
+      line-height: 18rpx;
+      position: absolute;
+      bottom: 18rpx;
+      left: 0;
+      width: 214rpx;
+      text-align: center;
+    }
   }
 </style>

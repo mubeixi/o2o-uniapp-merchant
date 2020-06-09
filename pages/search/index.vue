@@ -1,11 +1,11 @@
 <template>
-  <div  @click="commonClick">
+  <div @click="commonClick">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <form action="/">
       <div class="search-wrap">
-        <icon type="search" size="34rpx" class="search_icon" />
-        <input type="text" class="search-input" name="search" v-model="inputValue" @confirm="success"
-               confirm-type='search' focus="focus" autofocus="autofocus">
+        <icon class="search_icon" size="34rpx" type="search" />
+        <input @confirm="success" autofocus="autofocus" class="search-input" confirm-type='search' focus="focus"
+               name="search" type="text" v-model="inputValue">
         <span @click="close" class="span">取消</span>
       </div>
     </form>
@@ -13,11 +13,11 @@
       <div class="title">
         <div>搜索历史</div>
         <div @click="clear" class="dels">
-          <image class="img" :src="'/static/client/del.png'|domain" />
+          <image :src="'/static/client/del.png'|domain" class="img" />
         </div>
       </div>
       <div class="h_content">
-        <span class="span" v-for="(item,i) of searchAll" :key='i' @click="goSearch(item)">{{item}}</span>
+        <span :key='i' @click="goSearch(item)" class="span" v-for="(item,i) of searchAll">{{item}}</span>
       </div>
     </div>
   </div>
@@ -95,7 +95,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
   .search-wrap {
     position: relative;
     display: flex;
@@ -104,7 +104,7 @@ export default {
     font-size: 30rpx;
     padding: 30rpx 22rpx 46rpx 20rpx;
     box-sizing: border-box;
-
+    
     .search-input {
       float: left;
       width: 600rpx;
@@ -117,38 +117,38 @@ export default {
       padding-left: 91rpx;
       box-sizing: border-box;
     }
-
+    
     .search_icon {
       position: absolute;
       top: 46rpx;
       left: 61rpx;
     }
-
+    
     .span {
       font-size: 30rpx;
       color: #333333;
     }
   }
-
+  
   .history {
     padding: 0 20rpx;
   }
-
+  
   .title {
     display: flex;
     justify-content: space-between;
     height: 40rpx;
     align-items: center;
   }
-
+  
   .title {
     font-size: 28rpx;
     color: #333;
     font-weight: 500;
     height: 40rpx;
-
+    
     line-height: 40rpx;
-
+    
     .img {
       width: 40rpx;
       height: 40rpx;
@@ -156,11 +156,11 @@ export default {
       /*height: 100%;*/
     }
   }
-
+  
   .dels {
     width: 40rpx;
   }
-
+  
   .h_content .span {
     float: left;
     background: rgba(245, 245, 245, 1);

@@ -1,8 +1,8 @@
 <template>
-  <view class="all" @click="commonClick">
+  <view @click="commonClick" class="all">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view class="yue">
-      <image class="yue-image" :src="'/static/client/blance/recharge.jpg'|domain"></image>
+      <image :src="'/static/client/blance/recharge.jpg'|domain" class="yue-image"></image>
       <view class="yueq">
         余额
       </view>
@@ -10,28 +10,28 @@
         {{info.User_Money}}
       </view>
     </view>
-
-    <input class="inputs" v-model="money" type="digit" placeholder="请输入充值金额">
+    
+    <input class="inputs" placeholder="请输入充值金额" type="digit" v-model="money">
     <view class="line"></view>
     <view class="payMethod">
       支付方式
     </view>
-
-    <view class="selectq" v-for="(channel,idx) in payChannelList" @click="changeChannelIdx(idx)">
+    
+    <view @click="changeChannelIdx(idx)" class="selectq" v-for="(channel,idx) in payChannelList">
       <view>
         {{channel}}
       </view>
       <view class="radio">
-        <view class="el-radio" :class="{check:payChannel==idx}"></view>
+        <view :class="{check:payChannel==idx}" class="el-radio"></view>
       </view>
     </view>
     <div style="height: 10px"></div>
-    <view class="youhui" v-for="(item,index) of pro.gives " :key="index">
+    <view :key="index" class="youhui" v-for="(item,index) of pro.gives ">
       {{index+1}}、充值满{{item.deposit_money}}赠送
       <text class="youhui-text">{{item.present_money}}</text>
       余额
     </view>
-    <view class="queren" @click="confirm">
+    <view @click="confirm" class="queren">
       确认
     </view>
   </view>
@@ -69,12 +69,12 @@ export default {
     }, err => {
     }).catch()
   },
-
+  
   computed: {
-
+    
     payChannelList () {
       const obj = {}
-
+      
       if (!this.initData || !this.initData.pay_arr) return arr
       for (var i in this.initData.pay_arr) {
         if (i !== 'remainder_pay') {
@@ -102,11 +102,11 @@ export default {
         }
       }
     }
-
+    
     // #ifdef H5
     if (isWeiXin()) {
       this.code = GetQueryByString(location.href, 'code')
-
+      
       if (this.code) {
         if (Storage.get('recharge_money')) {
           this.money = Storage.get('recharge_money')
@@ -150,7 +150,7 @@ export default {
           error('支付渠道必选')
           return
         }
-
+        
         payConf = {
           pay_type: this.payChannel,
           money: this.money || Storage.get('recharge_money'),
@@ -165,27 +165,27 @@ export default {
         error('即将上线')
         return
       }
-
+      
       if (this.pay_type === 'ali_app') {
-
+      
       }
-
+      
       // 下面都是微信
-
+      
       // 需要格外有一个code
-
+      
       // #ifdef H5
-
+      
       // 微信h5
       if (this.pay_type === 'wx_h5') {
         payConf.pay_type = 'wx_h5'
       }
-
+      
       // 阿里h5
       if (this.pay_type === 'alipay') {
         payConf.pay_type = 'alipay'
       }
-
+      
       // 公众号需要code
       if (this.pay_type === 'wx_mp') {
         if (!isWeiXin()) {
@@ -193,7 +193,7 @@ export default {
           return
         }
         const isHasCode = this.code || GetQueryByString('code')
-
+        
         if (isHasCode) {
           // payConf.code = isHasCode;
           // 拿到之前的配置
@@ -210,17 +210,17 @@ export default {
           return
         }
       }
-
+      
       // #endif
-
+      
       // #ifdef MP-TOUTIAO
-
+      
       // #endif
-
+      
       // #ifdef MP-WEIXIN
-
+      
       payConf.pay_type = 'wx_lp'
-
+      
       await new Promise((resolve) => {
         uni.login({
           success: function (loginRes) {
@@ -230,7 +230,7 @@ export default {
         })
       })
       // #endif
-
+      
       depositBalance(payConf, {
         tip: '正在加载中',
         mask: true,
@@ -242,18 +242,18 @@ export default {
           content: '获取支付参数失败:' + err.msg,
         })
       }).catch(e => {
-
+      
       })
       // create recharge order
-
+      
       // redirect to pay page
     },
     async $_init_wxpay_env () {
       const initData = await this.getInitData()
       const { login_methods, component_appid } = initData
-
+      
       let channel = null
-
+      
       // 根据服务器返回配置设置channels,只有微信公众号和小程序会用到component_appid
       // 而且状态可以灵活控制 state为1
       for (var i in login_methods) {
@@ -266,12 +266,12 @@ export default {
           break
         }
       }
-
+      
       if (!channel) {
         this.$error('未开通公众号支付')
         return false
       }
-
+      
       // 如果url有code去掉
       let {
         origin,
@@ -287,20 +287,20 @@ export default {
             strArr.push(tempArr[i])
           }
         }
-
+        
         let newSearchStr = strArr.join('&')
-
+        
         if (newSearchStr.indexOf('?') === -1) {
           newSearchStr = '?' + newSearchStr
         }
-
+        
         search = newSearchStr
       }
-
+      
       const REDIRECT_URI = urlencode(origin + pathname + search + hash)
-
+      
       let wxAuthUrl = null
-
+      
       if (channel.component_appid) {
         // 服务商模式登录
         wxAuthUrl =
@@ -310,14 +310,14 @@ export default {
         wxAuthUrl =
           `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${channel.appid}&redirect_uri=${REDIRECT_URI}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect`
       }
-
+      
       window.location.href = wxAuthUrl
     },
     payFailCall () {
       if (Storage.get('money')) {
         this.money = Storage.get('recharge_money')
       }
-
+      
       uni.showToast({
         title: '支付失败',
         icon: 'none',
@@ -325,7 +325,7 @@ export default {
       })
     },
     paySuccessCall () {
-
+      
       toast('支付成功')
       // #ifndef H5
       this.$back()
@@ -347,19 +347,19 @@ export default {
     min-height: 100vh;
     background-color: #FFFFFF !important;
   }
-
+  
   .yue {
     width: 650rpx;
     height: 300rpx;
     margin: 0 auto;
     padding-top: 44rpx;
     position: relative;
-
+    
     .yue-image {
       width: 100%;
       height: 100%;
     }
-
+    
     .yueq {
       position: absolute;
       top: 83rpx;
@@ -369,7 +369,7 @@ export default {
       line-height: 27rpx;
       color: #FFFFFF;
     }
-
+    
     .pricsw {
       position: absolute;
       top: 144rpx;
@@ -381,7 +381,7 @@ export default {
       color: #FFFFFF;
     }
   }
-
+  
   .inputs {
     margin-top: 40rpx;
     height: 101rpx;
@@ -390,14 +390,14 @@ export default {
     width: 646rpx;
     font-size: 28rpx;
   }
-
+  
   .line {
     width: 650rpx;
     height: 10rpx;
     margin: 0 auto;
     background: rgba(244, 244, 244, 1);
   }
-
+  
   .payMethod {
     margin: 58rpx 0rpx 24rpx 51rpx;
     height: 29rpx;
@@ -406,7 +406,7 @@ export default {
     color: #333333;
     font-weight: bold;
   }
-
+  
   .selectq {
     margin: 0 auto;
     width: 650rpx;
@@ -420,7 +420,7 @@ export default {
     justify-content: space-between;
     padding-top: 20rpx;
   }
-
+  
   .radio {
     background-color: #EFEFEF;
     width: 28rpx;
@@ -429,19 +429,19 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-
+    
     .el-radio {
       width: 12rpx;
       height: 12rpx;
       background: linear-gradient(107deg, rgba(237, 236, 238, 1), rgba(228, 228, 228, 1));
       border-radius: 50%;
-
+      
       &.check {
         background: linear-gradient(107deg, rgba(255, 187, 170, 1), rgba(254, 80, 37, 1));
       }
     }
   }
-
+  
   .queren {
     width: 648rpx;
     height: 84rpx;
@@ -456,14 +456,14 @@ export default {
     color: #FFFFFF;
     font-weight: 400;
   }
-
+  
   .youhui {
     width: 650rpx;
     margin: 0 auto;
     font-size: 25rpx;
     line-height: 40rpx;
     color: #999999;
-
+    
     .youhui-text {
       color: red;
     }

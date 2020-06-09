@@ -1,11 +1,13 @@
 <template>
-  <div class="shopping-cart"  @click="commonClick">
+  <div @click="commonClick" class="shopping-cart">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
-    <div class="bg-white" :style="{height:diyHeadHeight+'px'}"></div>
+    <div :style="{height:diyHeadHeight+'px'}" class="bg-white"></div>
 
-    <div class="top-box bg-white" :style="{height:diyHeadHeight+'px'}">
-      <div :style="{height:menuButtonInfo.top+'px'}" class="bg-white" style="position: fixed;top: 0;width: 750rpx;z-index: 99;"></div>
-      <div class="cart-title flex flex-vertical-c flex-justify-c fz-16 c3" :style="{height:menuButtonInfo.height+'px',top:systemInfo.statusBarHeight+'px'}">
+    <div :style="{height:diyHeadHeight+'px'}" class="top-box bg-white">
+      <div :style="{height:menuButtonInfo.top+'px'}" class="bg-white"
+           style="position: fixed;top: 0;width: 750rpx;z-index: 99;"></div>
+      <div :style="{height:menuButtonInfo.height+'px',top:systemInfo.statusBarHeight+'px'}"
+           class="cart-title flex flex-vertical-c flex-justify-c fz-16 c3">
         <div>
           购物车
         </div>
@@ -18,8 +20,8 @@
     <div class="content">
       <div class="cartbox" v-if="total_count>0">
         <div :key="index" class="order_msg" v-for="(biz,index) in CartList">
-          <div class="biz_msg" @click="selectBiz(index)">
-            <div  class="item-cart">
+          <div @click="selectBiz(index)" class="biz_msg">
+            <div class="item-cart">
               <layout-icon color="#F43131" size="20" type="iconicon-check" v-if="bizCheck[index]"></layout-icon>
               <layout-icon color="#ccc" size="20" type="iconradio" v-else></layout-icon>
             </div>
@@ -42,8 +44,10 @@
                   <div class="pro-price">
                     <span class="span">￥</span>{{item.ProductsPriceX}}
                     <span class="amount">
-                      <span :class="item.Qty===1?'disabled':''" @click="updateCart(ind,indx,-1,index)" class="plus">-</span>
-                      <input @blur="inputQty(ind,indx,$event,index,item.Qty)" @focus="getQty(item.Qty)" class="attr_num" min="1" type="number" v-model="item.Qty" />
+                      <span :class="item.Qty===1?'disabled':''" @click="updateCart(ind,indx,-1,index)"
+                            class="plus">-</span>
+                      <input @blur="inputQty(ind,indx,$event,index,item.Qty)" @focus="getQty(item.Qty)" class="attr_num"
+                             min="1" type="number" v-model="item.Qty" />
                       <span @click="updateCart(ind,indx,1,index)" class="plus">+</span>
                     </span>
                   </div>
@@ -79,23 +83,25 @@
     <div class="product-list flex">
 
       <pro-tag
-        v-for="(item,idx) in proList"
-        :key="idx"
         :index="idx"
-        :prod_id="item.Products_ID"
-        :pro_src="item.ImgPath"
+        :key="idx"
         :pro_name="item.Products_Name"
         :pro_price="item.Products_PriceX"
         :pro_price_old="item.Products_PriceY"
+        :pro_src="item.ImgPath"
+        :prod_id="item.Products_ID"
+        v-for="(item,idx) in proList"
       />
 
     </div>
+
+    <div class="safearea-box"></div>
 
   </div>
 </template>
 
 <script>
-import BaseMixin from '@/mixins/BaseMixin'
+import BaseMixin, { tabbarMixin } from '@/mixins/BaseMixin'
 import { CartList, DelCart } from '@/api/customer'
 import { updateCart } from '@/api/order'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
@@ -104,12 +110,14 @@ import { getProductList } from '@/api/product'
 import { error } from '@/common/fun'
 import ProTag from '@/componets/pro-tag/pro-tag'
 import { objTranslate } from '@/common/helper'
-import { mapActions } from 'vuex'
 import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
+import eventHub from '@/common/eventHub'
+
 export default {
-  mixins: [BaseMixin],
+  mixins: [BaseMixin, tabbarMixin],
   components: {
+
     WzwImTip,
     LayoutIcon,
     ProTag
@@ -138,7 +146,7 @@ export default {
       return this.CartList.length === 0
     },
     userInfo () {
-	  return this.$store.getters['user/getUserInfo']()
+      return this.$store.getters['user/getUserInfo']()
     }
   },
   watch: {
@@ -383,15 +391,15 @@ export default {
     },
     async init () {
       this.proList = await getProductList({}, { onlyData: true }).catch(e => {
-		  throw Error(e.msg || '获取推荐商品信息失败')
+        throw Error(e.msg || '获取推荐商品信息失败')
       })
 
       if (this.$checkIsLogin(0)) {
         const cart = await CartList({ cart_key: 'CartList' }, {
-			  onlyData: true,
-			  tip: '加载中'
+          onlyData: true,
+          tip: '加载中'
         }).catch(e => {
-			  throw Error(e.msg || '获取购物车产品失败')
+          throw Error(e.msg || '获取购物车产品失败')
         })
         this.total_count = cart.total_count
         this.total_price = cart.total_price
@@ -402,6 +410,9 @@ export default {
     }
   },
   onShow () {
+    this.setTabBarIndex(3)
+    this.$store.dispatch('system/setTabActiveIdx', 3)
+    this.refreshTabTag()
     this.init()
   }
 
@@ -409,10 +420,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-	.shopping-cart{
-		width: 750rpx;
-		overflow-x: hidden;
-	}
+  .shopping-cart {
+    width: 750rpx;
+    overflow-x: hidden;
+    padding-bottom: 100rpx;
+  }
+
   .wrap {
     background-color: #F8F8F8 !important;
     min-height: 100%;
@@ -421,12 +434,13 @@ export default {
     /* #endif */
   }
 
-  .top-box{
+  .top-box {
     position: fixed;
     top: 0;
     z-index: 9;
     width: 750rpx;
   }
+
   .cart-title {
     width: 750rpx;
     background-color: #FFFFFF;
@@ -434,6 +448,7 @@ export default {
     z-index: 99;
     top: 0;
     left: 0;
+
     &-right {
       position: absolute;
       top: 50%;
@@ -725,13 +740,14 @@ export default {
 
   // #ifdef  MP
   .checkout {
-    bottom: 0;
+    bottom: 0rpx;
   }
 
   // #endif
+
   // #ifdef APP-PLUS
   .checkout {
-    bottom: 0;
+    bottom: 0rpx;
   }
 
   // #endif

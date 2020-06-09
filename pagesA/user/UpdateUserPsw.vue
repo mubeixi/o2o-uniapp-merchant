@@ -1,38 +1,38 @@
 <template>
-  <view class="wrap" :style="{height: height + 'px', background:bgcolor}" @click="commonClick">
+  <view :style="{height: height + 'px', background:bgcolor}" @click="commonClick" class="wrap">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <block v-if="type != 3">
-      <form report-submit @submit="save">
-        <view v-if="type === 0" class="content">
-          <input type="password" class="item" v-model="curr_psw" placeholder="请输入原始登录密码,如未设置请留空">
-          <input type="password" class="item" v-model="new_psw" placeholder="请输入新的登录密码">
-          <input type="password" class="item" v-model="check_psw" placeholder="请再次输入新密码">
+      <form @submit="save" report-submit>
+        <view class="content" v-if="type === 0">
+          <input class="item" placeholder="请输入原始登录密码,如未设置请留空" type="password" v-model="curr_psw">
+          <input class="item" placeholder="请输入新的登录密码" type="password" v-model="new_psw">
+          <input class="item" placeholder="请再次输入新密码" type="password" v-model="check_psw">
         </view>
-        <view v-if="type === 1" class="content">
-          <input type="password" class="item" v-model="curr_psw" placeholder="请输入原始支付密码,如未设置请留空">
-          <input type="password" class="item" v-model="new_psw" placeholder="请输入新的支付密码">
-          <input type="password" class="item" v-model="check_psw" placeholder="请再次输入新密码">
+        <view class="content" v-if="type === 1">
+          <input class="item" placeholder="请输入原始支付密码,如未设置请留空" type="password" v-model="curr_psw">
+          <input class="item" placeholder="请输入新的支付密码" type="password" v-model="new_psw">
+          <input class="item" placeholder="请再次输入新密码" type="password" v-model="check_psw">
         </view>
-        <button formType="submit" class="save">保存</button>
+        <button class="save" formType="submit">保存</button>
       </form>
-
+    
     </block>
     <block v-else>
-      <form report-submit @submit="confirm">
+      <form @submit="confirm" report-submit>
         <view class="other">
           <view class="other-item">
             您现在的手机号是： {{userInfo.User_Mobile}}
           </view>
           <view class="other-item">
             手机号
-            <input type="text" v-model="mobile" maxlength="11" class="input phone" placeholder="请输入手机号" />
+            <input class="input phone" maxlength="11" placeholder="请输入手机号" type="text" v-model="mobile" />
           </view>
           <view class="other-item">
             验证码
-            <input type="text" v-model="code" class="input code" placeholder="请输入验证码" />
-            <view class="get-msg" @click="getCode">{{countdownStatus?(countdownNum + '秒'):'获取验证码'}}</view>
+            <input class="input code" placeholder="请输入验证码" type="text" v-model="code" />
+            <view @click="getCode" class="get-msg">{{countdownStatus?(countdownNum + '秒'):'获取验证码'}}</view>
           </view>
-          <button formType="submit" class="confirm">确认修改</button>
+          <button class="confirm" formType="submit">确认修改</button>
         </view>
       </form>
     </block>
@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import { updateUserLoginPsw, updateUserPayPsw, updateMobileSms, updateUserMobile, getUserInfo } from '@/api/customer'
+import { getUserInfo, updateMobileSms, updateUserLoginPsw, updateUserMobile, updateUserPayPsw } from '@/api/customer'
 
 import { mapActions } from 'vuex'
 
@@ -63,17 +63,17 @@ export default {
       mobile: '',
       code: '',
       countdownStatus: false, // 是否开启倒计时了
-      countdownNum: 60
+      countdownNum: 60,
     }
   },
   computed: {
     userInfo () {
       return this.$store.getters['user/getUserInfo']()
-    }
+    },
   },
   methods: {
     ...mapActions({
-      setUserInfo: 'user/setUserInfo'
+      setUserInfo: 'user/setUserInfo',
     }),
     // 返回上一页
     goBack () {
@@ -89,28 +89,28 @@ export default {
       if (!(/^1[3456789]\d{9}$/.test(this.mobile))) {
         uni.showToast({
           title: '手机号输入错误，请重新输入',
-          icon: 'none'
+          icon: 'none',
         })
         return
       }
       if (!this.code) {
         uni.showToast({
           title: '验证码不能为空',
-          icon: 'none'
+          icon: 'none',
         })
         return
       }
       updateUserMobile({
         mobile: this.mobile,
-        code: this.code
+        code: this.code,
       }).then(res => {
         uni.showToast({
-          title: res.msg
+          title: res.msg,
         })
-
+        
         getUserInfo({}, {
           tip: '',
-          errtip: false
+          errtip: false,
         }).then(res => {
           this.setUserInfo(res.data)
           this.goBack()
@@ -119,14 +119,14 @@ export default {
       }).catch(err => {
         uni.showToast({
           title: err.msg,
-          icon: 'none'
+          icon: 'none',
         })
       })
     },
     toast (title, icon = 'none') {
       uni.showToast({
         title: title,
-        icon: icon
+        icon: icon,
       })
     },
     startCountdown () {
@@ -151,26 +151,26 @@ export default {
       if (!isMobileOK) {
         uni.showToast({
           title: '手机号格式不正确',
-          icon: 'none'
+          icon: 'none',
         })
         return
       }
       updateMobileSms({
-        mobile: this.mobile
+        mobile: this.mobile,
       }).then(res => {
         uni.showToast({
           title: '验证码已发送',
-          icon: 'success'
+          icon: 'success',
         })
         this.startCountdown()
       })
     },
     save (e) {
-
+      
       const arg = {
         curr_psw: this.curr_psw,
         new_psw: this.new_psw,
-        check_psw: this.check_psw
+        check_psw: this.check_psw,
       }
       if (this.type === 1) {
         // 原始密码默认为空
@@ -192,7 +192,7 @@ export default {
         // 	return;
         // }
       }
-
+      
       if (arg.new_psw === '') {
         this.toast('新密码不能为空')
         return
@@ -220,7 +220,7 @@ export default {
             // 更新信息
             getUserInfo({}, {
               tip: '',
-              errtip: false
+              errtip: false,
             }).then(res => {
               this.setUserInfo(res.data)
               setTimeout(() => {
@@ -233,7 +233,7 @@ export default {
           this.toast(err.msg)
         })
       }
-    }
+    },
   },
   onLoad (options) {
     if (options.type == 0) {
@@ -251,26 +251,26 @@ export default {
       this.bgcolor = '#fff'
     }
     uni.setNavigationBarTitle({
-      title: this.title
+      title: this.title,
     })
     uni.getSystemInfo({
       success: res => {
         this.height = res.screenHeight
-      }
+      },
     })
-  }
+  },
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
   .wrap {
     width: 100%;
     background: #efefef;
   }
-
+  
   .content {
     padding: 20rpx 0;
-
+    
     .item {
       background: #fff;
       padding-left: 20rpx;
@@ -280,7 +280,7 @@ export default {
       font-size: 30rpx;
     }
   }
-
+  
   .save {
     width: 90%;
     background: #F43131;
@@ -291,23 +291,23 @@ export default {
     line-height: 80rpx;
     border-radius: 10rpx;
   }
-
+  
   .other {
     padding: 14rpx 20rpx 0;
-
+    
     .other-item {
       display: flex;
       align-items: center;
       line-height: 98rpx;
       font-size: 28rpx;
       border-bottom: 1px solid #E3E3E3;
-
+      
       .input {
         flex: 1;
         font-size: 24rpx;
         margin-left: 42rpx;
       }
-
+      
       .get-msg {
         height: 50rpx;
         line-height: 50rpx;
@@ -319,7 +319,7 @@ export default {
         border-radius: 5rpx;
       }
     }
-
+    
     .confirm {
       height: 76rpx;
       line-height: 76rpx;

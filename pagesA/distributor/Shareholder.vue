@@ -1,9 +1,9 @@
 <template>
-  <view class="myall" v-show="isLoad" @click="commonClick">
+  <view @click="commonClick" class="myall" v-show="isLoad">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view class="top">
       <view class="person">
-        <image class="headimg" :src="pro.disInfo.Shop_Logo"></image>
+        <image :src="pro.disInfo.Shop_Logo" class="headimg"></image>
       </view>
       <view class="nickName">
         <view class="tops" v-if="pro.disInfo">
@@ -13,24 +13,24 @@
           {{pro.disInfo.sha_level_name}}
         </view>
       </view>
-
-      <view v-if="pro.waiting_pay_apply" class="juewei" @click="goGudongPay(pro.waiting_pay_apply.Order_ID)">
+      
+      <view @click="goGudongPay(pro.waiting_pay_apply.Order_ID)" class="juewei" v-if="pro.waiting_pay_apply">
         立即支付
       </view>
-      <view v-else-if="pro.sha_config.Sha_Agent_Type==1&&pro.is_apply" class="juewei" @click="goGudong">
+      <view @click="goGudong" class="juewei" v-else-if="pro.sha_config.Sha_Agent_Type==1&&pro.is_apply">
         立即申请
       </view>
-      <view v-else class="juewei">
+      <view class="juewei" v-else>
         暂不可申请
       </view>
       <!-- <view  v-else-if="pro.disInfo.sha_level_id>0" class="juewei">
         {{pro.disInfo.sha_level_name}}
       </view> -->
-
+      
       <!-- <view  v-else-if="" class="juewei" >
         暂不可申请
       </view> -->
-
+    
     </view>
     <view class="moneySum">
       <view class="money">
@@ -53,13 +53,13 @@
           </view>
         </view>
       </view>
-      <view class="chakan" @click="goFinance" v-if="!pro.total_sales && pro.total_sales!==0">
+      <view @click="goFinance" class="chakan" v-if="!pro.total_sales && pro.total_sales!==0">
         查看明细
-        <image class="image" :src="'/static/client/distributor/chakan.png'|domain"></image>
+        <image :src="'/static/client/distributor/chakan.png'|domain" class="image"></image>
       </view>
     </view>
     <circle-title title="股东条件说明"></circle-title>
-    <view class="xiang" v-for="(item,index) of pro.sha_config.Sha_Rate" :key="index" v-if="item.sha_name">
+    <view :key="index" class="xiang" v-for="(item,index) of pro.sha_config.Sha_Rate" v-if="item.sha_name">
       <view class="xiangTop">
         {{item.sha_name}}
       </view>
@@ -93,20 +93,20 @@
         </view>
       </view>
     </view>
-
+    
     <view style="height: 20rpx;width: 100%;"></view>
     <circle-title title="收益介绍"></circle-title>
-
+    
     <view class="shouyi">
       <view class="tt">
-        <view class="view" :class="{rightZ:index==pro.sha_config.Sha_Rate.length-1}"
-              v-for="(item,index) of pro.sha_config.Sha_Rate" :key="index">
+        <view :class="{rightZ:index==pro.sha_config.Sha_Rate.length-1}" :key="index"
+              class="view" v-for="(item,index) of pro.sha_config.Sha_Rate">
           {{item.sha_name}}
         </view>
       </view>
       <view class="tt ts">
-        <view class="view" :class="{rightZ:index==pro.sha_config.Sha_Rate.length-1}"
-              v-for="(item,index) of pro.sha_config.Sha_Rate" :key="index">
+        <view :class="{rightZ:index==pro.sha_config.Sha_Rate.length-1}" :key="index"
+              class="view" v-for="(item,index) of pro.sha_config.Sha_Rate">
           {{item.sha_commi_scale}}%
         </view>
       </view>
@@ -118,12 +118,12 @@
         <block v-if="index!==pro.sha_config.Sha_Rate.length-1">、</block>
       </block>
       分别获得
-      <block v-for="(item,index) of pro.sha_config.Sha_Rate" :key="index">{{item.sha_commi_scale}}元
+      <block :key="index" v-for="(item,index) of pro.sha_config.Sha_Rate">{{item.sha_commi_scale}}元
         <block v-if="index!==pro.sha_config.Sha_Rate.length-1">、</block>
       </block>
       收益。
     </view>
-
+  
   </view>
 </template>
 
@@ -160,10 +160,10 @@ export default {
   components: {
     WzwImTip,
     CircleTitle,
-
+    
   },
   onLoad () {
-
+  
   },
   onShow () {
     this.shaInit()
@@ -200,7 +200,7 @@ export default {
     background-color: #F8F8F8 !important;
     min-height: 100vh;
   }
-
+  
   .top {
     margin: 30rpx 0rpx 30rpx 20rpx;
     margin-top: 0rpx;
@@ -208,26 +208,26 @@ export default {
     height: 75rpx;
     display: flex;
     position: relative;
-
+    
     .person {
       width: 75rpx;
       height: 75rpx;
       border-radius: 50%;
-
+      
       .headimg {
         border-radius: 50%;
         width: 100%;
         height: 100%;
       }
     }
-
+    
     .nickName {
       margin-left: 19rpx;
       font-size: 30rpx;
       height: 75rpx;
       line-height: 75rpx;
       color: #333333;
-
+      
       .tops {
         margin-top: 10rpx;
         margin-left: 1rpx;
@@ -235,7 +235,7 @@ export default {
         font-size: 30rpx;
         line-height: 28rpx;
       }
-
+      
       .bottoms {
         font-size: 22rpx;
         color: #666666;
@@ -244,7 +244,7 @@ export default {
         margin-top: 20rpx;
       }
     }
-
+    
     .juewei {
       width: 125rpx;
       height: 46rpx;
@@ -261,7 +261,7 @@ export default {
       font-weight: 500;
     }
   }
-
+  
   .moneySum {
     width: 710rpx;
     height: 191rpx;
@@ -270,37 +270,37 @@ export default {
     border-radius: 10rpx;
     margin: 0 auto;
     margin-bottom: 34rpx;
-
+    
     .money {
       height: 104rpx;
       width: 710rpx;
       display: flex;
       padding-top: 30rpx;
       box-sizing: border-box;
-
+      
       & view:first-child {
         border-right: 1rpx solid #E7E7E7;
       }
-
+      
       view {
         height: 74rpx;
         width: 355rpx;
         text-align: center;
         color: #333333;
-
+        
         .moneyTop {
           height: 25rpx;
           line-height: 25rpx;
           font-size: 26rpx;
           margin-bottom: 21rpx;
         }
-
+        
         .moneyBottom {
           height: 28rpx;
           line-height: 28rpx;
           font-size: 24rpx;
           color: #F43131;
-
+          
           text {
             font-size: 36rpx;
             font-weight: bold;
@@ -308,14 +308,14 @@ export default {
         }
       }
     }
-
+    
     .chakan {
       height: 87rpx;
       line-height: 87rpx;
       text-align: center;
       font-size: 24rpx;
       color: #999999;
-
+      
       .image {
         width: 12rpx;
         height: 20rpx;
@@ -323,20 +323,20 @@ export default {
       }
     }
   }
-
+  
   .myData {
     border: 1rpx solid #E7E7E7;
     width: 710rpx;
     margin-left: 21rpx;
     margin-right: 19rpx;
     margin-bottom: 20rpx;
-
+    
     .myDataTop {
       width: 710rpx;
       height: 95rpx;
       background-color: #F4F4F4;
       display: flex;
-
+      
       .td {
         width: 236rpx;
         height: 95rpx;
@@ -345,28 +345,28 @@ export default {
         font-size: 26rpx;
         color: #333333;
       }
-
+      
       .shu {
         width: 1rpx;
         height: 95rpx;
         background-color: #E7E7E7;
       }
     }
-
+    
     .myDataBottom {
       background-color: #FFFFFF;
-
+      
       .td {
         font-size: 24rpx !important;
         color: #F43131 !important;
-
+        
         text {
           font-size: 30rpx !important;
         }
       }
     }
   }
-
+  
   .description {
     border: 1rpx solid #E7E7E7;
     border-bottom: 0rpx;
@@ -376,13 +376,13 @@ export default {
     margin-bottom: 29rpx;
     font-size: 24rpx;
     color: #333333;
-
+    
     .t1 {
       height: 80rpx;
       width: 710rpx;
       background-color: #F4F4F4;
       display: flex;
-
+      
       .names {
         width: 98rpx;
         height: 80rpx;
@@ -391,7 +391,7 @@ export default {
         border-right: 1px solid #E7E7E7;
         border-bottom: 1px solid #E7E7E7;
       }
-
+      
       .zishen {
         width: 153rpx;
         height: 80rpx;
@@ -400,34 +400,34 @@ export default {
         border-right: 1px solid #E7E7E7;
         border-bottom: 1px solid #E7E7E7;
       }
-
+      
       .rightZ {
         border-right: 0rpx;
       }
     }
-
+    
     .t2 {
       background-color: #FFFFFF;
-
+      
       .zishen {
         color: #F43131 !important;
       }
     }
   }
-
+  
   .noun {
     width: 710rpx;
     margin-left: 21rpx;
     margin-right: 19rpx;
     margin-bottom: 50rpx;
-
+    
     .viewq {
       font-size: 26rpx;
       color: #666666;
       line-height: 50rpx;
     }
   }
-
+  
   .xiang {
     width: 710rpx;
     margin: 0 auto;
@@ -436,7 +436,7 @@ export default {
     padding: 25rpx 34rpx 33rpx 34rpx;
     background-color: #FFFFFF;
     box-sizing: border-box;
-
+    
     .xiangTop {
       width: 186rpx;
       height: 56rpx;
@@ -448,12 +448,12 @@ export default {
       color: #333333;
       text-align: center;
     }
-
+    
     .xiangCenter {
       width: 642rpx;
       display: flex;
       margin-top: 24rpx;
-
+      
       .xiangLeft {
         font-size: 28rpx;
         color: #333333;
@@ -461,7 +461,7 @@ export default {
         height: 50rpx;
         line-height: 50rpx;
       }
-
+      
       .xiangRight {
         .view {
           font-size: 24rpx;
@@ -471,43 +471,43 @@ export default {
         }
       }
     }
-
+    
     .xiangBottom {
       display: flex;
       margin-top: 34rpx;
       height: 27rpx;
       line-height: 27rpx;
-
+      
       .xiangBottomT {
         font-size: 28rpx;
         color: #333333;
         margin-right: 10rpx;
       }
-
+      
       .xiangBottomB {
         font-size: 24rpx;
         color: #F43131;
-
+        
         .text {
           font-size: 32rpx;
         }
       }
     }
   }
-
+  
   .shouyi {
     width: 710rpx;
     margin: 0 auto;
     margin-bottom: 25rpx;
     border-top: 2rpx solid #eee;
     border-left: 2rpx solid #eee;
-
+    
     .tt {
       width: 710rpx;
       /*height: 95rpx;*/
       display: flex;
       background-color: #E3E2E2;
-
+      
       .view {
         flex: 1;
         /*width: 177rpx;*/
@@ -521,15 +521,15 @@ export default {
         border-right: 2rpx solid #eee;
         border-bottom: 2rpx solid #eee;
       }
-
+      
       .rightZ {
         /*border-right: 0rpx;*/
       }
     }
-
+    
     .ts {
       background-color: #FFFFFF;
-
+      
       .view {
         font-size: 30rpx !important;
         color: #F43131 !important;
@@ -537,7 +537,7 @@ export default {
       }
     }
   }
-
+  
   .guize {
     width: 677rpx;
     margin-left: 21rpx;
@@ -545,7 +545,7 @@ export default {
     font-size: 24rpx;
     color: #666666;
     padding-bottom: 100rpx;
-
+    
     .text {
       color: #F43131;
     }

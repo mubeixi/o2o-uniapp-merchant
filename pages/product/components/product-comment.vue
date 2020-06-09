@@ -1,10 +1,10 @@
 <template>
-  <scroll-view scroll-y class='comment-wrap'  @click="commonClick">
+  <scroll-view @click="commonClick" class='comment-wrap' scroll-y>
     <div class="navs">
-      <div class="nav" :class="index == 0 ? 'active' : ''" @click="getComment(0,1)">全部</div>
-      <div class="nav" :class="index == 1 ? 'active' : ''" @click="getComment(1,1)">有图</div>
+      <div :class="index == 0 ? 'active' : ''" @click="getComment(0,1)" class="nav">全部</div>
+      <div :class="index == 1 ? 'active' : ''" @click="getComment(1,1)" class="nav">有图</div>
     </div>
-    <block v-for="(item,index) of comment_list" :key="item">
+    <block :key="item" v-for="(item,index) of comment_list">
       <div class="c_content" v-if="!item.ImgPath">
         <div class="c_content_title">
           <img :src="item.User_HeadImg" alt="">
@@ -22,13 +22,13 @@
         </div>
         <div class="c_content_msg">{{item.Note}}</div>
         <div class="c_content_img">
-          <block v-for="(i,j) of item.ImgPath" :key="i">
-            <img :src="i"  @click="yulan(index,j)">
+          <block :key="i" v-for="(i,j) of item.ImgPath">
+            <img :src="i" @click="yulan(index,j)">
           </block>
         </div>
       </div>
     </block>
-
+  
   </scroll-view>
 </template>
 
@@ -39,8 +39,8 @@ import { getCommitList } from '@/api/common'
 export default {
   props: {
     Products_ID: {
-      requred: true
-    }
+      requred: true,
+    },
   },
   data () {
     return {
@@ -48,10 +48,10 @@ export default {
       commentArgs: {
         Products_ID: '', // 查询指定产品的评论
         page: 1,
-        pageSize: 9999
+        pageSize: 9999,
       },
       totalCount: 0, // 评论个数
-      comment_list: [] // 评论列表
+      comment_list: [], // 评论列表
     }
   },
   created () {
@@ -69,9 +69,9 @@ export default {
       this.comment_list = await getCommitList({
         Products_ID: this.Products_ID,
         pageSize: 999,
-        page: 1
+        page: 1,
       }, {
-        onlyData: true
+        onlyData: true,
       }).catch((e) => {
         throw Error('获取评论数据失败')
       })
@@ -84,7 +84,7 @@ export default {
       uni.previewImage({
         urls: imgPath,
         indicator: 'default',
-        current: i
+        current: i,
       })
     },
     getComment (i, j) {
@@ -94,7 +94,7 @@ export default {
       }
       this.index = i
       this.commentArgs.has_img = i
-
+      
       this.getComments()
     },
     getComments () {
@@ -106,27 +106,29 @@ export default {
       }).catch(err => {
         uni.showToast({
           title: err.msg,
-          icon: 'none'
+          icon: 'none',
         })
       })
-    }
-  }
+    },
+  },
 }
 </script>
 
-<style scoped lang="scss">
-  .comment-wrap{
+<style lang="scss" scoped>
+  .comment-wrap {
     position: absolute;
     top: 0;
     left: 0;
     bottom: 0;
     right: 0;
   }
+  
   .navs {
     margin: 40rpx 0 36rpx;
     padding-left: 20rpx;
     display: flex;
   }
+  
   .nav {
     width: 110rpx;
     height: 50rpx;
@@ -137,14 +139,17 @@ export default {
     border-radius: 40rpx;
     color: #999;
   }
+  
   .navs .nav:nth-child(1) {
     margin-right: 30rpx;
   }
+  
   .nav.active {
     background: #F43131;
     color: #fff;
     border-color: #F43131;
   }
+  
   /* 内容 */
   /* 评价 start */
   .c_content {
@@ -152,24 +157,29 @@ export default {
     padding: 0 20rpx 0;
     border-bottom: 2rpx solid #FFECE8E8;
   }
+  
   .c_content_title {
     display: flex;
     align-items: center;
     font-size: 30rpx;
     color: #333;
   }
-  .c_content_title>img {
+  
+  .c_content_title > img {
     width: 70rpx;
     height: 70rpx;
     margin-right: 20rpx;
   }
+  
   .user_name {
     flex: 1;
   }
+  
   .c_time {
     font-size: 26rpx;
     color: #777;
   }
+  
   .c_content_msg {
     font-size: 24rpx;
     color: #333;
@@ -178,49 +188,59 @@ export default {
     padding-bottom: 29rpx;
     text-align: left;
   }
-  .c_content_img{
+  
+  .c_content_img {
     display: flex;
     flex-wrap: wrap;
   }
+  
   .c_content_img img {
     width: 142rpx;
     height: 142rpx;
     margin-right: 20rpx;
     margin-bottom: 30rpx;
   }
+  
   /* 内容 end */
-  .cartSku{
+  .cartSku {
     padding: 0rpx 10rpx;
-    .cartTop{
+    
+    .cartTop {
       position: relative;
       display: flex;
       padding-top: 20rpx;
-      .image{
+      
+      .image {
         width: 220rpx;
         height: 220rpx;
       }
-      .cartTitle{
+      
+      .cartTitle {
         margin-left: 20rpx;
         font-size: 32rpx;
         width: 420rpx;
-        .cartTitles{
+        
+        .cartTitles {
           height: 80rpx;
           overflow: hidden;
           margin-top: 20rpx;
           line-height: 40rpx;
         }
-        .addInfo{
+        
+        .addInfo {
           width: 450rpx;
           margin-top: 70rpx;
           display: flex;
           flex-flow: row;
           justify-content: space-between;
           align-items: flex-end;
-          .addPrice{
+          
+          .addPrice {
             font-size: 42rpx;
             color: #ff4200;
           }
-          .proSale{
+          
+          .proSale {
             font-size: 24rpx;
             color: #999;
             justify-content: flex-end;
@@ -228,22 +248,27 @@ export default {
         }
       }
     }
-    .cartCenter{
+    
+    .cartCenter {
       margin-top: 20rpx;
-      .cartAttr{
+      
+      .cartAttr {
         display: flex;
         padding: 15rpx 0rpx;
-        .sku{
+        
+        .sku {
           font-size: 28rpx;
           height: 70rpx;
           line-height: 70rpx;
           width: 140rpx;
         }
-        .skuValue{
+        
+        .skuValue {
           display: flex;
-          flex:1;
+          flex: 1;
           flex-wrap: wrap;
-          .skuview{
+          
+          .skuview {
             margin-bottom: 10px;
             height: 70rpx;
             line-height: 70rpx;
@@ -256,30 +281,35 @@ export default {
             margin-right: 20rpx;
             border: 1px solid #ccc;
           }
+          
           .unablechoose {
             background: #ddd;
           }
         }
       }
     }
-    .numBer{
+    
+    .numBer {
       margin-top: 20rpx;
       display: flex;
       padding: 15rpx 0rpx;
       justify-content: space-between;
-      .numBers{
+      
+      .numBers {
         font-size: 28rpx;
         height: 70rpx;
         line-height: 70rpx;
         width: 140rpx;
       }
-      .inputNumber{
+      
+      .inputNumber {
         border: 1px solid #ccc;
         border-radius: 6rpx;
         height: 50rpx;
         margin-right: 50rpx;
         display: flex;
-        .inputq{
+        
+        .inputq {
           color: black;
           margin: 0 auto;
           width: 80rpx;
@@ -289,7 +319,8 @@ export default {
           border-left: 2rpx solid #ccc;
           border-right: 2rpx solid #ccc;
         }
-        .clicks{
+        
+        .clicks {
           height: 50rpx;
           line-height: 50rpx;
           width: 60rpx;
@@ -298,20 +329,23 @@ export default {
       }
     }
   }
-  .cartSub{
+  
+  .cartSub {
     width: 100%;
     height: 90rpx;
     background-color: #F43131;
-    font-size:20px;
+    font-size: 20px;
     line-height: 90rpx;
     text-align: center;
     color: #FFFFFF;
     margin-top: 30rpx;
+    
     &.disabled {
       background: #999;
     }
   }
-  .skuCheck{
+  
+  .skuCheck {
     color: #fff !important;
     background-color: #ff4200 !important;
   }

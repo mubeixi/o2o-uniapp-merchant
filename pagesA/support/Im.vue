@@ -1,50 +1,53 @@
 <template>
   <div class="page-wrap">
     <scroll-view
-      scroll-y
-      class="im-card-box"
-      :scroll-into-view="toViewIdx"
-      :style="{paddingBottom:'110rpx'}"
       :refresher-enabled="true"
       :refresher-threshold="100"
       :refresher-triggered="triggered"
-      @refresherrestore="onRestore"
+      :scroll-into-view="toViewIdx"
+      :style="{paddingBottom:'110rpx'}"
       @refresherrefresh="onRefresh"
+      @refresherrestore="onRestore"
       @scroll="bindScroll"
       @scrolltolower="bindScrolltolower"
+      class="im-card-box"
+      scroll-y
     >
-      <block v-for="(chat,idx) in chatList" :key="idx">
+      <block :key="idx" v-for="(chat,idx) in chatList">
         <div class="im-item-box">
           <wzw-im-card
-            :msg-id="'msg-'+idx"
             :message="chat"
+            :msg-id="'msg-'+idx"
             @bindProductSend="handleProductSend"
           />
           <!--用来搞事的-->
-          <div class="div-line h10" :id="'msg-'+idx"></div>
+          <div :id="'msg-'+idx" class="div-line h10"></div>
         </div>
       </block>
       <div :style="{height:'426rpx'}" v-if="showOnther"></div>
     </scroll-view>
-    <div class="show-new-tip" :style="{marginBottom:showOnther?'130px':'0px'}" v-if="showNewMsg && !isToLower" @click="showNewMsgFun">
-      <layout-icon color="#00A8FF" size="12" type="iconright1" display="inline"></layout-icon>有新消息
+    <div :style="{marginBottom:showOnther?'130px':'0px'}" @click="showNewMsgFun" class="show-new-tip"
+         v-if="showNewMsg && !isToLower">
+      <layout-icon color="#00A8FF" display="inline" size="12" type="iconright1"></layout-icon>
+      有新消息
     </div>
     <div class="im-bottom-action">
       <div class="text">
         <div class="input-box">
-          <input type="text" confirm-type="发送" @confirm="sendMsg" @focus="mode='text'" @blur="inputBlur" class="input-ele"  v-model="tempText" />
+          <input @blur="inputBlur" @confirm="sendMsg" @focus="mode='text'" class="input-ele" confirm-type="发送"
+                 type="text" v-model="tempText" />
         </div>
-        <div class="submit-btn" @click="taggleMore">
-          <image class="img-btn"  src="/static/im/im-action-more.png"></image>
+        <div @click="taggleMore" class="submit-btn">
+          <image class="img-btn" src="/static/im/im-action-more.png"></image>
         </div>
       </div>
       <div class="onther" v-if="showOnther">
-        <div class="onther-item" @click="sendImg">
-          <image src="/static/im/im-action-img.png" class="icon-box"></image>
+        <div @click="sendImg" class="onther-item">
+          <image class="icon-box" src="/static/im/im-action-img.png"></image>
           <div class="label">图片</div>
         </div>
-        <div class="onther-item" @click="sendCamera">
-          <image src="/static/im/im-action-camera.png" class="icon-box"></image>
+        <div @click="sendCamera" class="onther-item">
+          <image class="icon-box" src="/static/im/im-action-camera.png"></image>
           <div class="label">拍照</div>
         </div>
       </div>
@@ -65,6 +68,7 @@ import { Exception } from '@/common/Exception'
 import { getProductDetail } from '@/api/product'
 import eventHub from '@/common/eventHub'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
+import { readMsg } from '@/common/Im/Fetch'
 
 let imInstance = null
 const progressList = []
@@ -73,7 +77,7 @@ export default {
   components: {
     LayoutIcon,
     // LayoutIcon,
-    WzwImCard
+    WzwImCard,
   },
   data () {
     return {
@@ -88,7 +92,7 @@ export default {
       showOnther: false,
       imInstance: null,
       imReady: false,
-      tempText: ''
+      tempText: '',
     }
   },
   computed: {
@@ -118,7 +122,7 @@ export default {
       } catch (e) {
         return []
       }
-    }
+    },
   },
   methods: {
     showNewMsgFun () {
@@ -148,7 +152,11 @@ export default {
     },
     async handleProductSend (productInfo) {
       // 发送产品消息
-      await imInstance.sendImMessage({ content: productInfo, type: 'prod', isTip: 0 })
+      await imInstance.sendImMessage({
+        content: productInfo,
+        type: 'prod',
+        isTip: 0,
+      })
       this.setViewIdx()
     },
     onPulling () {
@@ -161,7 +169,7 @@ export default {
       this.isFreshing = true
       // 界面下拉触发，triggered可能不是true，要设为true
       if (!this.triggered) this.triggered = true
-
+      
       // 不论成功还是失败
       this.imInstance.getHistory().then(() => {
         this.triggered = false
@@ -171,13 +179,23 @@ export default {
         this.isFreshing = false
       })
     },
-    onRestore () {},
+    onRestore () {
+    },
     async sendImg () {
       try {
-        const files = await chooseImageByPromise({ sizeType: 1, sourceType: ['album'] }).catch(err => { throw Error(err.errMsg || '选择照片失败') })
+        const files = await chooseImageByPromise({
+          sizeType: 1,
+          sourceType: ['album'],
+        }).catch(err => {
+          throw Error(err.errMsg || '选择照片失败')
+        })
         const imgs = getArrColumn(files, 'path')
-
-        await imInstance.sendImMessage({ content: '', type: 'image', tempPath: imgs[0] })
+        
+        await imInstance.sendImMessage({
+          content: '',
+          type: 'image',
+          tempPath: imgs[0],
+        })
         this.setViewIdx()
       } catch (e) {
         Exception.handle(e)
@@ -185,9 +203,18 @@ export default {
     },
     async sendCamera () {
       try {
-        const files = await chooseImageByPromise({ sizeType: 1, sourceType: ['camera'] }).catch(err => { throw Error(err.errMsg || '选择照片失败') })
+        const files = await chooseImageByPromise({
+          sizeType: 1,
+          sourceType: ['camera'],
+        }).catch(err => {
+          throw Error(err.errMsg || '选择照片失败')
+        })
         const imgs = getArrColumn(files, 'path')
-        await imInstance.sendImMessage({ content: '', type: 'image', tempPath: imgs[0] })
+        await imInstance.sendImMessage({
+          content: '',
+          type: 'image',
+          tempPath: imgs[0],
+        })
         this.setViewIdx()
       } catch (e) {
         Exception.handle(e)
@@ -204,19 +231,26 @@ export default {
     },
     async _init_func (options) {
       const { productId, orderId, origin } = options
-
-     
+      
       if (eventHub.imInstance) {
         this.imInstance = imInstance = eventHub.imInstance
       } else {
         this.imInstance = imInstance = new IM({ origin })
       }
-
+      
       // 设置本地用户信息
-      imInstance.setSendInfo({ type: 'user', id: Storage.get('user_id'), name: this.userInfo.User_NickName, avatar: this.userInfo.User_HeadImg })
+      imInstance.setSendInfo({
+        type: 'user',
+        id: Storage.get('user_id'),
+        name: this.userInfo.User_NickName,
+        avatar: this.userInfo.User_HeadImg,
+      })
       // 设置接收人的信息
-      imInstance.setReceiveInfo({ type: this.totype, id: this.toid })
-
+      imInstance.setReceiveInfo({
+        type: this.totype,
+        id: this.toid,
+      })
+      
       // 如果没有start过,就start
       if (!imInstance.intervalInstance) {
         await imInstance.start() // 等拿token
@@ -224,12 +258,23 @@ export default {
         // 清空聊天记录
         imInstance.clearHistory() // 等拿token
       }
-
+      
       // 先加载一下最近消息
       await imInstance.getHistory()
-
+      
+      // 将最后一个设置为已读
+      if (this.chatList.length > 0) {
+        await readMsg({
+          msg_id: this.chatList[this.chatList.length - 1].id,
+          to: imInstance.getToUid(),
+          out_uid: imInstance.getOutUid(),
+        }).catch(err => {
+          console.log(err.msg || '消息设置已读失败')
+        })
+      }
+      
       // productId, orderId,
-
+      
       // 如果有商品的话，需要加一个商品提示信息
       if (productId) {
         console.log(`有商品${productId}`)
@@ -237,11 +282,17 @@ export default {
           // const { Products_Name, ImgPath, Products_ID, Products_Sales,Products_PriceX,pintuan_pricex,price } = res.data
           delete res.data.Products_Description
           return res.data // { Products_Name, ImgPath, Products_ID, Products_Sales,Products_PriceX,pintuan_pricex,price }
-        }).catch(err => { throw Error(err.msg || '获取商品信息错误') })
+        }).catch(err => {
+          throw Error(err.msg || '获取商品信息错误')
+        })
         // isTip为1代表，是显示产品信息，提醒用户发送而已
-        imInstance.sendImMessage({ content: productInfo, type: 'prod', isTip: 1 })
+        imInstance.sendImMessage({
+          content: productInfo,
+          type: 'prod',
+          isTip: 1,
+        })
       }
-
+      
       this.setViewIdx()
       this.imReady = true
     },
@@ -256,11 +307,11 @@ export default {
     },
     bindInputChange (e) {
       this.tempText = e.detail.value
-    }
+    },
   },
   onLoad (options) {
     if (!checkIsLogin(1, 0)) return
-
+    
     const { tid, type, room_title = 'IM' } = options
     if (!tid || !type) {
       modal('参数错误')
@@ -270,7 +321,7 @@ export default {
     this.toid = tid
     this.totype = type
     this._init_func(options)
-
+    
     uni.$on('getMsg', (res) => {
       console.log(res)
       if (this.isToLower) {
@@ -282,15 +333,15 @@ export default {
     })
   },
   created () {
-
+  
   },
   onShow () {
-
-  }
+  
+  },
 }
 </script>
 <style lang="scss" scoped>
-  .im-card-box{
+  .im-card-box {
     position: fixed;
     top: 0;
     bottom: constant(safe-area-inset-bottom);
@@ -299,7 +350,8 @@ export default {
     width: 750rpx;
     background: #e5e5e5;
   }
-  .show-new-tip{
+  
+  .show-new-tip {
     position: fixed;
     transform: translateY(-80px);
     bottom: constant(safe-area-inset-bottom);
@@ -313,49 +365,58 @@ export default {
     background: #fff;
     z-index: 9;
   }
-  .im-bottom-action{
+  
+  .im-bottom-action {
     position: fixed;
     width: 750rpx;
     left: 0;
     bottom: 0;
     background: #f2f2f2;
-    .safearea-space{
+    
+    .safearea-space {
       height: constant(safe-area-inset-bottom);
       height: env(safe-area-inset-bottom);
     }
-    .onther{
+    
+    .onther {
       padding: 40rpx 0;
       display: flex;
-      .onther-item{
+      
+      .onther-item {
         width: 96rpx;
         height: 126rpx;
         margin-left: 70rpx;
         text-align: center;
-        .label{
+        
+        .label {
           font-size: 28rpx;
           height: 30rpx;
           line-height: 30rpx;
           color: #666;
         }
-        .icon-box{
+        
+        .icon-box {
           width: 96rpx;
           height: 96rpx;
         }
-
+        
       }
     }
-    .text{
+    
+    .text {
       display: flex;
       align-items: center;
       width: 750rpx;
       height: 110rpx;
       border-bottom: 1px solid #E2E2E2;
-      .input-box{
+      
+      .input-box {
         margin-left: 20rpx;
         flex: 1;
         display: flex;
         align-items: center;
-        .input-ele{
+        
+        .input-ele {
           flex: 1;
           margin-right: 20rpx;
           padding: 0 20rpx;
@@ -367,15 +428,18 @@ export default {
           font-size: 28rpx;
         }
       }
-      .submit-btn{
+      
+      .submit-btn {
         padding-right: 20rpx;
         height: 110rpx;
-        .img-btn{
+        
+        .img-btn {
           margin-top: 31rpx;
           width: 48rpx;
           height: 48rpx;
         }
-        .btn{
+        
+        .btn {
           width: 120rpx;
           text-align: center;
           line-height: 70rpx;
@@ -387,6 +451,6 @@ export default {
         }
       }
     }
-
+    
   }
 </style>

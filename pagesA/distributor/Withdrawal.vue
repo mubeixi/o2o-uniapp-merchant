@@ -1,8 +1,8 @@
 <template>
-  <view class="all" @click="commonClick">
+  <view @click="commonClick" class="all">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view class="content">
-      <view class="bank" v-if="isShow" @click="goMethod">
+      <view @click="goMethod" class="bank" v-if="isShow">
         <image :src="initData.ShopLogo|domain" class="bankCard"></image>
         <view class="bankName" v-if="data.Method_Type=='bank_card'||data.Method_Type=='alipay'">
           {{data.Method_Name}}({{data.Account_Val}})
@@ -12,7 +12,7 @@
         </view>
         <image :src="'/static/client/fenxiao/right.png'|domain" class="right"></image>
       </view>
-      <view class="bank guanli" @click="guanWithdrawal" v-else>
+      <view @click="guanWithdrawal" class="bank guanli" v-else>
         + 管理提现方式
       </view>
       <view class="tiMoney">
@@ -27,15 +27,15 @@
         <view class="canTiMoney">
           可提现金额：{{balance}}元
         </view>
-        <view class="allTi" @click="allTi">
+        <view @click="allTi" class="allTi">
           全部提现
         </view>
       </view>
       <view class="kong">
-
+      
       </view>
       <view class="tishi">
-        <image class="tishi-image" :src="'/static/client/fenxiao/tishi.png'|domain"></image>
+        <image :src="'/static/client/fenxiao/tishi.png'|domain" class="tishi-image"></image>
         <view class="tishi-view">
           申请提现后，系统会自动扣除您提现的{{init.Poundage_Ratio}}%的手续费
           <block v-if="withdraw_from==1">
@@ -43,19 +43,18 @@
           </block>
         </view>
       </view>
-      <view class="liji" @click="withdrawApply">
+      <view @click="withdrawApply" class="liji">
         立即提现
       </view>
-      <view class="lishi" @click="goRecord">
+      <view @click="goRecord" class="lishi">
         历史提现
-        <image class="lishi-image" :src="'/static/client/fenxiao/right.png'|domain"></image>
+        <image :src="'/static/client/fenxiao/right.png'|domain" class="lishi-image"></image>
       </view>
     </view>
   </view>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import Storage from '@/common/Storage'
 import { getUserWithdrawMethod, getWithdrawConfig, withdrawApply } from '@/api/customer'
 import BaseMixin from '@/mixins/BaseMixin'
@@ -100,7 +99,7 @@ export default {
   computed: {
     initData () {
       return this.$store.state.system.initData
-    }
+    },
   },
   onShow () {
     // 获取我的提现方式
@@ -129,7 +128,7 @@ export default {
         that.isQing = false
         return
       }
-
+      
       if (this.price === '') {
         uni.showToast({
           title: '未输入金额',
@@ -159,7 +158,7 @@ export default {
           that.isQing = false
         }, 4000)
         this.getUserWithdrawMethod()
-
+        
         // 提现成功清除金额
         that.price = ''
         uni.showToast({
@@ -182,7 +181,7 @@ export default {
         if (this.withdraw_from === 2) {
           this.balance = res.data.user_money
         }
-
+        
         this.User_Method_ID = Storage.get('myMethod')
         Storage.remove('myMethod')
         if (res.data.list.length > 0) {
@@ -202,7 +201,7 @@ export default {
           this.User_Method_ID = res.data.list[0].User_Method_ID
         }
       }).catch(err => {
-
+      
       })
     },
     // 我的提现方式
@@ -221,7 +220,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
   .all {
     background-color: #f8f8f8;
     width: 750rpx;
@@ -229,14 +228,14 @@ export default {
     overflow: hidden;
     box-sizing: border-box;
   }
-
+  
   .content {
     background-color: #FFFFFF;
     width: 710rpx;
     margin: 40rpx 20rpx 0rpx 20rpx;
     padding-bottom: 85rpx;
     border-radius: 10rpx;
-
+    
     .bank {
       width: 710rpx;
       background-color: #EEEEEE;
@@ -245,25 +244,25 @@ export default {
       display: flex;
       align-items: center;
       box-sizing: border-box;
-
+      
       .bankCard {
         width: 50rpx;
         height: 50rpx;
         margin-right: 18rpx;
       }
-
+      
       .bankName {
         font-size: 28rpx;
         color: #333333;
       }
-
+      
       .right {
         width: 18rpx;
         height: 27rpx;
         margin-left: auto;
       }
     }
-
+    
     .guanli {
       font-size: 28rpx;
       color: #5E9BFF;
@@ -271,7 +270,7 @@ export default {
       display: block;
       text-align: center;
     }
-
+    
     .tiMoney {
       width: 710rpx;
       height: 25rpx;
@@ -280,7 +279,7 @@ export default {
       font-size: 26rpx;
       color: #333333;
     }
-
+    
     .inputMoney {
       width: 650rpx;
       height: 66rpx;
@@ -291,13 +290,13 @@ export default {
       font-size: 48rpx;
       color: #333333;
       padding-bottom: 30rpx;
-
+      
       .input-money-inner {
         height: 35rpx;
         line-height: 35rpx;
         display: flex;
         align-items: center;
-
+        
         .input-money-input {
           margin-left: 20rpx;
           height: 35rpx;
@@ -305,7 +304,7 @@ export default {
         }
       }
     }
-
+    
     .canTi {
       width: 670rpx;
       height: 76rpx;
@@ -313,46 +312,46 @@ export default {
       display: flex;
       align-items: center;
       justify-content: space-between;
-
+      
       .canTiMoney {
         font-size: 22rpx;
         color: #999999;
       }
-
+      
       .allTi {
         font-size: 22rpx;
         color: #69A1FF;
       }
     }
-
+    
     .kong {
       background-color: #F8F8F8;
       width: 690rpx;
       margin: 0 auto;
       height: 20rpx;
     }
-
+    
     .tishi {
       margin-top: 27rpx;
       margin-left: 32rpx;
       margin-right: 33rpx;
       width: 645rpx;
       display: flex;
-
+      
       .tishi-image {
         width: 22rpx;
         height: 22rpx;
         margin-right: 10rpx;
         margin-top: 5rpx;
       }
-
+      
       .tishi-view {
         width: 613rpx;
         font-size: 20rpx;
         color: #999999;
       }
     }
-
+    
     .liji {
       margin-top: 98rpx;
       width: 620rpx;
@@ -366,7 +365,7 @@ export default {
       font-size: 34rpx;
       color: #FFFFFF;
     }
-
+    
     .lishi {
       height: 21rpx;
       // width: 106rpx;
@@ -376,7 +375,7 @@ export default {
       color: #999999;
       display: flex;
       align-items: center;
-
+      
       .lishi-image {
         width: 12rpx;
         height: 20rpx;

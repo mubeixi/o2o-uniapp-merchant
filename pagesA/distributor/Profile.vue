@@ -1,13 +1,13 @@
 <template>
-  <view class="myall" @click="commonClick">
+  <view @click="commonClick" class="myall">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view class="user-info">
-      <view class="user-avator" @click="changeAvator">
-        <image class="imgs" :src="Shop_Logo" mode=""></image>
-        <view class="xiangji"
-              :style="{backgroundImage:'url('+$fun.domainFn('/static/client/distributor/xj.png')+')'}"></view>
+      <view @click="changeAvator" class="user-avator">
+        <image :src="Shop_Logo" class="imgs" mode=""></image>
+        <view :style="{backgroundImage:'url('+$fun.domainFn('/static/client/distributor/xj.png')+')'}"
+              class="xiangji"></view>
       </view>
-      <view class="change" @click="changeAvator">更换头像</view>
+      <view @click="changeAvator" class="change">更换头像</view>
     </view>
     <view class="content">
       <view class="c_1">
@@ -15,9 +15,9 @@
         <input class="inputs" type="text" v-model="Shop_Name" /></view>
       <view class="c_2">
         <text>公告</text>
-        <textarea v-model="Shop_Announce" class="text-content"></textarea></view>
+        <textarea class="text-content" v-model="Shop_Announce"></textarea></view>
     </view>
-    <view class="submit" @click="save">保存</view>
+    <view @click="save" class="submit">保存</view>
   </view>
 </template>
 
@@ -83,10 +83,10 @@ export default {
         const ossUrls = await uploadImages({ imgs }).catch(() => {
           throw Error('文件上传失败')
         })
-
+        
         this.Shop_Logo = ossUrls[0]
         this.tem_Shop_Logo = ossUrls[0]
-
+        
         // 是否可以提交
         this.isSubmit = true
       } catch (e) {
@@ -117,7 +117,7 @@ export default {
     ...mapActions(['getInitData']),
   },
   onShow: function () {
-
+  
   },
   async created () {
     const initData = initData
@@ -128,24 +128,24 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
   .myall {
     background-color: #FFFFFF !important;
     min-height: 100vh;
   }
-
+  
   .user-info {
     padding-top: 47rpx;
     text-align: center;
     font-size: 26rpx;
     color: #777;
-
+    
     .user-avator {
       position: relative;
       width: 120rpx;
       height: 120rpx;
       margin: 0 auto;
-
+      
       .xiangji {
         width: 100%;
         height: 100%;
@@ -160,30 +160,30 @@ export default {
         background-size: 42rpx 34rpx;
       }
     }
-
+    
     .imgs {
       width: 100%;
       height: 100%;
       border-radius: 60rpx;
       margin-bottom: 14rpx;
     }
-
+    
     .change {
       margin-top: 14rpx;
     }
   }
-
+  
   .content {
     font-size: 30rpx;
     margin-top: 57rpx;
     color: #333;
     padding-left: 19rpx;
-
+    
     .c_1 {
       display: flex;
       align-items: center;
       margin-bottom: 39rpx;
-
+      
       .inputs {
         width: 600rpx;
         height: 62rpx;
@@ -193,11 +193,11 @@ export default {
         box-sizing: border-box;
       }
     }
-
+    
     .c_2 {
       display: flex;
       align-items: center;
-
+      
       .text-content {
         width: 600rpx;
         height: 170rpx;
@@ -209,7 +209,7 @@ export default {
       }
     }
   }
-
+  
   .submit {
     height: 80rpx;
     width: 640rpx;
@@ -221,7 +221,7 @@ export default {
     text-align: center;
     line-height: 80rpx;
   }
-
+  
   .cannot {
     background: #999;
   }

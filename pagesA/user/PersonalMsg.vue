@@ -1,17 +1,17 @@
 <template>
-  <div class="bgColor-white" @click="commonClick">
+  <div @click="commonClick" class="bgColor-white">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <div class="msg">
-      <div class="item" @click="changeAvator">
+      <div @click="changeAvator" class="item">
         <div class="item-name">头像</div>
         <div class="info">
-          <image class="image" :src="userInfo.User_HeadImg"></image>
+          <image :src="userInfo.User_HeadImg" class="image"></image>
         </div>
         <div class="go">
           <layout-icon size="16" type="iconicon-arrow-right"></layout-icon>
         </div>
       </div>
-      <div class="item" @click="update(0)">
+      <div @click="update(0)" class="item">
         <div class="item-name">用户名</div>
         <div class="info">
           {{userInfo.User_Name}}
@@ -20,7 +20,7 @@
           <layout-icon size="16" type="iconicon-arrow-right"></layout-icon>
         </div>
       </div>
-      <div class="item" @click="update(1)">
+      <div @click="update(1)" class="item">
         <div class="item-name">昵称</div>
         <div class="info">
           {{userInfo.User_NickName}}
@@ -29,7 +29,7 @@
           <layout-icon size="16" type="iconicon-arrow-right"></layout-icon>
         </div>
       </div>
-      <div class="item" @click="update(2)">
+      <div @click="update(2)" class="item">
         <div class="item-name">生日</div>
         <div class="info">
           {{userInfo.User_Birthday==0?'':userInfo.User_Birthday}}
@@ -38,7 +38,7 @@
           <layout-icon size="16" type="iconicon-arrow-right"></layout-icon>
         </div>
       </div>
-      <div class="item" @click="update(3)">
+      <div @click="update(3)" class="item">
         <div class="item-name">邮箱</div>
         <div class="info">
           {{userInfo.User_Email}}
@@ -47,7 +47,7 @@
           <layout-icon size="16" type="iconicon-arrow-right"></layout-icon>
         </div>
       </div>
-      <div class="item" @click="update(4)">
+      <div @click="update(4)" class="item">
         <div class="item-name">详细地址</div>
         <div class="info">
           {{userInfo.User_Province_name}}{{userInfo.User_City_name}}{{userInfo.User_Area_name}}{{userInfo.User_Tow_name}}{{userInfo.User_Address}}
@@ -57,8 +57,8 @@
         </view>
       </div>
     </div>
-
-
+  
+  
   </div>
 </template>
 
@@ -75,7 +75,10 @@ import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
   mixins: [BaseMixin],
-  components: { WzwImTip, LayoutIcon },
+  components: {
+    WzwImTip,
+    LayoutIcon,
+  },
   data () {
     return {
       userInfo: {},
@@ -110,13 +113,13 @@ export default {
         })
         this.userInfo.User_HeadImg = info.User_HeadImg
         this.setUserInfo(this.userInfo)
-
+        
       } catch (e) {
         console.log(e.message)
       } finally {
         hideLoading()
       }
-
+      
     },
     async init () {
       this.userInfo = await getUserInfo({}, {
@@ -141,25 +144,25 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
   .bgColor-white {
     height: 100vh;
   }
-
+  
   .msg {
     padding: 0 22rpx;
-
+    
     .item {
       display: flex;
       align-items: center;
       padding: 39rpx 0;
       border-bottom: 1px solid #E3E3E3;
-
+      
       .item-name {
         font-size: 30rpx;
         color: #333;
       }
-
+      
       .info {
         display: flex;
         align-items: center;
@@ -169,20 +172,20 @@ export default {
         justify-content: flex-end;
         font-size: 26rpx;
         color: #999999;
-
+        
         .image {
           width: 88rpx;
           height: 88rpx;
           border-radius: 44rpx;
         }
       }
-
+      
       .go {
         display: flex;
         align-items: center;
         width: 15rpx;
         height: 23rpx;
-
+        
         image {
           width: 100%;
           height: 100%;

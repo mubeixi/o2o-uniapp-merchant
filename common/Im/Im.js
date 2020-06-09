@@ -1,12 +1,13 @@
 import {
   IM_APPID, IM_APPSECRET, IM_WSS_URL
 } from '@/common/env'
-import { bindUid, getAccessToken, getMsgList, sendMsg, checkOnline } from '@/common/Im/Fetch'
+import { bindUid, getAccessToken, getMsgList, sendMsg, checkOnline,getNoReadMsg } from '@/common/Im/Fetch'
 import Promisify from '@/common/Promisify'
 import { Exception } from '@/common/Exception'
 import Storage from '@/common/Storage'
 import { modal } from '@/common/fun'
 import { createUpTaskArr, getDomain, uploadImages } from '@/common/helper'
+import store from '@/store'
 
 // 消息类,就先不用继承了吧
 /**
@@ -316,16 +317,29 @@ class IM {
     this.intervalInstance = setInterval(this._holdHeartBeat.bind(this), this.heartBeatTimout)
   }
 
-    // 清空之前的聊天记录
-    clearHistory() {
-      this.chatList = [] // 清空记录
-      this.page = 1 // 重置页码
-    }
+  // 清空之前的聊天记录
+  clearHistory () {
+    this.chatList = [] // 清空记录
+    this.page = 1 // 重置页码
+  }
 
   close () {
     uni.closeSocket()
     this.clearIntervalFn()
     // this.task.close()
+  }
+
+  /**
+   * 获取未读消息总数
+   */
+  async getNoReadMsgCount () {
+    const total = await getNoReadMsg({ out_uid: this.getOutUid() }).then(res => res.totalCount).catch(err => {
+      console.log(err.msg || '获取未读记录失败')
+      return 0
+    })
+    console.log(total)
+    store.commit('system/SET_TABBAR_TAG', { idx: 1, num: total })
+    return total
   }
 
   /**

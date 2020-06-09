@@ -1,5 +1,5 @@
 <template>
-  <view  @click="commonClick">
+  <view @click="commonClick">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <!-- <view class="zhezhao" v-if="password_input">
       <view class="input-wrap">
@@ -14,7 +14,7 @@
     <div class="zhezhao" v-if="password_input">
       <div class="input-wrap">
         <div>请输入余额支付密码</div>
-        <input type="password" class="input" placeholder="请输入密码" v-model="user_pay_password" @blur="user_password">
+        <input @blur="user_password" class="input" placeholder="请输入密码" type="password" v-model="user_pay_password">
         <div class="btns">
           <div @click="cancelInput" class="btn">取消</div>
           <div @click="confirmInput" class="btn">确定</div>
@@ -22,30 +22,30 @@
       </div>
     </div>
     <view class="titleImg">
-      <image class="image" :src="'/static/client/distributor/bedistributor.jpg'|domain" mode=""></image>
+      <image :src="'/static/client/distributor/bedistributor.jpg'|domain" class="image" mode=""></image>
     </view>
-
+    
     <!--  申请逻辑 -->
     <block v-if="type=='edit'">
       <block>
         <block v-if="select_lists.length>0">
-          <view class="center" v-for="(itm,idx2) of select_lists" :key="idx2">
+          <view :key="idx2" class="center" v-for="(itm,idx2) of select_lists">
             <view class="mbx">
               {{itm.name}}
             </view>
             <view class="haha  disMy">
-              <picker :value="itm.index" mode="selector" :range="itm.options" @change="selectS(idx2,$event)"
+              <picker :range="itm.options" :value="itm.index" @change="selectS(idx2,$event)" mode="selector"
                       style="width: 90%;">
                 <view class="picker">
                   {{itm.options[itm.index]}}
                 </view>
               </picker>
-              <image class="disMyImg" :src="'/static/client/person/right.png' | domain"></image>
+              <image :src="'/static/client/person/right.png' | domain" class="disMyImg"></image>
             </view>
           </view>
         </block>
         <block v-if="text_lists.length>0">
-          <view class="center" v-for="(m,n) of text_lists" :key="n">
+          <view :key="n" class="center" v-for="(m,n) of text_lists">
             <view class="mbx">
               {{m.Name}}
             </view>
@@ -57,8 +57,8 @@
             区域选择
           </view>
           <view class="haha">
-            <picker mode="multiSelector" @change="bindMultiPickerChange" @columnchange="bindMultiPickerColumnChange"
-                    :value="change_multiIndex" :range="change_objectMultiArray" range-key="name">
+            <picker :range="change_objectMultiArray" :value="change_multiIndex" @change="bindMultiPickerChange"
+                    @columnchange="bindMultiPickerColumnChange" mode="multiSelector" range-key="name">
               <view class="picker" style="text-align: center;">
                 <view v-if="!address_info.Address_Province">选择省份</view>
                 <view v-else>{{objectMultiArray[0][multiIndex[0]]['name']}}</view>
@@ -75,81 +75,81 @@
             选择街道
           </view>
           <view class="haha">
-            <picker mode="selector" @change="t_pickerChange" :range="t_arr" range-key="name" :value="t_index">
+            <picker :range="t_arr" :value="t_index" @change="t_pickerChange" mode="selector" range-key="name">
               <view class="picker">
-                <view v-if="!address_info.Address_Town" style="margin-left: 20upx;width: 300upx;">选择街道</view>
-                <view v-else style="margin-left: 20upx;width: 300upx;">{{t_arr[t_index]['name']}}</view>
+                <view style="margin-left: 20upx;width: 300upx;" v-if="!address_info.Address_Town">选择街道</view>
+                <view style="margin-left: 20upx;width: 300upx;" v-else>{{t_arr[t_index]['name']}}</view>
               </view>
             </picker>
           </view>
         </view>
       </block>
-
+      
       <view class="checks m-t-15" v-if="pro.dis_config.Distribute_AgreementOpen">
-        <radio @click="changes" :checked="isAgree" style="transform:scale(0.7)" />
+        <radio :checked="isAgree" @click="changes" style="transform:scale(0.7)" />
         <text @click="goDistributeAgreement">同意
           <text class="checkq">{{pro.dis_config.Distribute_AgreementTitle}}</text>
         </text>
       </view>
-
-      <view class="submits" @click="application">
+      
+      <view @click="application" class="submits">
         {{textShen}}
         <!--				立即申请成为分销商-->
       </view>
     </block>
-
+    
     <block v-else>
       <block v-if="pro.dis_config.Level_Form">
         <view class="center" v-if="pro.dis_config.Reserve_DisplayName==1">
           <view class="mbx">
             姓名
           </view>
-          <input class="inputa" type="text" placeholder="请输入您的姓名" placeholder-style="color: #CAC8C8;"
+          <input class="inputa" placeholder="请输入您的姓名" placeholder-style="color: #CAC8C8;" type="text"
                  v-model="shenArr.DisplayName">
         </view>
         <view class="center" v-if="pro.dis_config.Reserve_DisplayTelephone==1">
           <view class="mbx">
             电话
           </view>
-          <input class="inputa" type="text" placeholder="请输入您的电话" placeholder-style="color: #CAC8C8;"
-                 v-model="shenArr.DisplayTelephone" @blur="isTell">
+          <input @blur="isTell" class="inputa" placeholder="请输入您的电话" placeholder-style="color: #CAC8C8;"
+                 type="text" v-model="shenArr.DisplayTelephone">
         </view>
-        <view class="center" v-for="(itm,idx) of select_lists" :key="idx">
+        <view :key="idx" class="center" v-for="(itm,idx) of select_lists">
           <view class="mbx">
             {{itm.name}}
           </view>
           <view class="haha">
-            <picker :value="itm.index" mode="selector" :range="itm.options" @change="selectS(idx,$event)">
+            <picker :range="itm.options" :value="itm.index" @change="selectS(idx,$event)" mode="selector">
               <view class="picker">
                 {{itm.options[itm.index]}}
               </view>
             </picker>
           </view>
         </view>
-        <view class="center" v-for="(m,n1) of text_lists" :key="n1">
+        <view :key="n1" class="center" v-for="(m,n1) of text_lists">
           <view class="mbx">
             {{m.Name}}
           </view>
-          <input class="inputa" type="text" v-model="m.Value" :placeholder="'请输入'+m.Name">
+          <input :placeholder="'请输入'+m.Name" class="inputa" type="text" v-model="m.Value">
         </view>
       </block>
       <view class="disHaihong" v-if="disData.Level_Name">
         {{disData.Level_Name}}({{disData.level_rules_edit.direct_buy.value.money}}元)
       </view>
       <view class="checks" v-if="pro.dis_config.Distribute_AgreementOpen">
-        <radio @click="changes" :checked="isAgree" style="transform:scale(0.7)" />
+        <radio :checked="isAgree" @click="changes" style="transform:scale(0.7)" />
         <text @click="goDistributeAgreement">同意
           <text class="checkq">{{pro.dis_config.Distribute_AgreementTitle}}</text>
         </text>
       </view>
-      <view class="submits" @click="becomeFenxiao">
+      <view @click="becomeFenxiao" class="submits">
         立即购买成为{{commi_rename.commi}}
       </view>
     </block>
-
-    <layout-layer ref="popupLayer" :direction="'top'">
+    
+    <layout-layer :direction="'top'" ref="popupLayer">
       <div class="iMbx">
-        <div class="c_method" v-for="(item,index) in initData.pay_arr" @click="chooseType(index)" :key="index">
+        <div :key="index" @click="chooseType(index)" class="c_method" v-for="(item,index) in initData.pay_arr">
           {{item}}
           <text>￥{{pay_money}}</text>
         </div>
@@ -178,7 +178,7 @@ export default {
   components: {
     WzwImTip,
     LayoutLayer,
-
+    
   },
   data () {
     return {
@@ -186,7 +186,7 @@ export default {
       addressArr: {},
       isShowAddress: false,
       type: '', // 是申请还是购买
-
+      
       isXu: false, // 是否弹出购买须知
       isAgree: false, // 是否同意
       pro: {
@@ -220,7 +220,7 @@ export default {
       pay_type: '', // 支付方式
       pay_money: 0, // 支付金额
       level_id: '',
-      textShen:"",
+      textShen: '',
     }
   },
   computed: {
@@ -248,7 +248,7 @@ export default {
     this.level_id = parseInt(options.id)
     this.type = options.type
     const that = this
-
+    
     this.disApplyInit()
     this.objectMultiArray = [
       array_change(area[0]['0']),
@@ -305,7 +305,7 @@ export default {
       this.pay_type = index
       if (index === 'remainder_pay') {
         this.$refs.popupLayer.close()
-
+        
         if (this.userInfo.hasOwnProperty('User_PayPassword') && !this.userInfo.User_PayPassword) {
           confirm({
             title: '提示',
@@ -324,7 +324,7 @@ export default {
         this.password_input = true// 弹出密码输入框
         return
       }
-
+      
       this.disBuy()
     },
     paySuccessCall (res) {
@@ -332,12 +332,12 @@ export default {
       if (res && res.code && res.code === 2) {
         return
       }
-
+      
       if (res && res.code && res.code === 1) {
         toast('用户取消支付', 'none')
         return
       }
-
+      
       if (res && res.code && res.code === 9) {
         uni.showModal({
           title: '提示',
@@ -351,20 +351,20 @@ export default {
                 url: '/pages/distributor/Main',
               })
             } else if (res.cancel) {
-
+            
             }
           },
         })
         return
       }
-
+      
       // 0：支付成功 1：支付超时 2：支付失败 3：支付关闭 4：支付取消 9：订单状态开发者自行获取
-
+      
       if (res && res.code && res.code === 4) {
         toast('用户取消支付', 'none')
         return
       }
-
+      
       // 微信小程序下需要模板消息
       // #ifdef MP-WEIXIN
       // const initData = this.initData
@@ -429,24 +429,24 @@ export default {
       }
       // #endif
       // #ifdef H5
-
+      
       // 微信h5
       if (this.pay_type === 'wx_h5') {
         data.pay_type = 'wx_h5'
       }
-
+      
       // 阿里h5
       if (this.pay_type === 'alipay') {
         data.pay_type = 'alipay'
       }
-
+      
       // 公众号需要code
       if (this.pay_type === 'wx_mp') {
         if (!isWeiXin()) {
           error('请在微信内打开')
           return
         }
-
+        
         const isHasCode = this.code || GetQueryByString('code')
         if (isHasCode) {
           // 拿到之前的配置
@@ -463,9 +463,9 @@ export default {
           return
         }
       }
-
+      
       // #endif
-
+      
       if (this.pay_type === 'remainder_pay') {
         data.user_pay_password = this.user_pay_password
       } else {
@@ -473,7 +473,7 @@ export default {
           data.code = this.code
         }
       }
-
+      
       if (this.pay_type === 'remainder_pay') {
         disBuy(data).then(res => {
           this.paySuccessCall(res)
@@ -503,7 +503,7 @@ export default {
         }).catch(e => {
         })
       }
-
+      
       // }else if(this.pay_type=='ali_app'){
       // 		disBuy(data).then(res=>{
       // 			let provider = 'alipay';
@@ -609,9 +609,9 @@ export default {
         })
         return
       }
-
+      
       let arr = true
-
+      
       // 循环判断输入框
       if (this.text_lists.length > 0) {
         for (const item of this.text_lists) {
@@ -636,7 +636,7 @@ export default {
           return
         }
       }
-
+      
       if (this.pro.dis_config.Distribute_AgreementOpen) {
         if (!this.isAgree) {
           uni.showToast({
@@ -650,7 +650,7 @@ export default {
       // 是否同意购买须知
       if (arr) {
         const apply_info = {}
-
+        
         if (this.isShowAddress) {
           const DisplayLocaltion = this.addressArr.name
           apply_info[DisplayLocaltion] = {}
@@ -671,7 +671,7 @@ export default {
             apply_info[item.Name] = item.Value
           }
         }
-
+        
         disApply({
           apply_info: JSON.stringify(apply_info),
           apply_level_id: this.level_id,
@@ -682,9 +682,9 @@ export default {
           })
           this.submitM = true
           setTimeout(() => {
-           this.$back()
+            this.$back()
           }, 1000)
-
+          
           this.textShen = res.msg
         }).catch(res => {
           this.textShen = res.msg
@@ -757,7 +757,7 @@ export default {
       var column = e.detail.column // 修改的列
       var index = e.detail.value // 选择列的下标（从0开始）
       var change_multiIndex = 'change_multiIndex[' + column + ']'
-
+      
       var columnValue = [
         column === 0 ? index : this.change_multiIndex[0],
         column === 0 ? 0 : (column === 1 ? index : this.change_multiIndex[1]),
@@ -781,12 +781,12 @@ export default {
     },
     async $_init_wxpay_env () {
       const initData = await this.getInitData()
-
+      
       const login_methods = initData.login_methods
       const component_appid = login_methods.component_appid
-
+      
       let channel = null
-
+      
       // 根据服务器返回配置设置channels,只有微信公众号和小程序会用到component_appid
       // 而且状态可以灵活控制 state为1
       for (var i in login_methods) {
@@ -801,12 +801,12 @@ export default {
           break
         }
       }
-
+      
       if (!channel) {
         this.$error('未开通公众号支付')
         return false
       }
-
+      
       // 如果url有code去掉
       let {
         origin,
@@ -827,14 +827,14 @@ export default {
         if (newSearchStr.indexOf('?') === -1) {
           newSearchStr = '?' + newSearchStr
         }
-
+        
         search = newSearchStr
       }
-
+      
       const REDIRECT_URI = urlencode(origin + pathname + search + hash)
-
+      
       let wxAuthUrl = null
-
+      
       if (channel.component_appid) {
         // 服务商模式登录
         wxAuthUrl =
@@ -844,50 +844,50 @@ export default {
         wxAuthUrl =
           `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${channel.appid}&redirect_uri=${REDIRECT_URI}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect`
       }
-
+      
       window.location.href = wxAuthUrl
     },
     async self_orderPay (is_forward) {
       const _self = this
       let payConf = {}
-
+      
       // 不是跳转的
       if (!is_forward) {
         return
       }
-
+      
       if (this.pay_type === 'unionpay') {
         error('即将上线')
         return
       }
-
+      
       if (this.pay_type === 'ali_app') {
-
+      
       }
-
+      
       // 下面都是微信
-
+      
       // 需要格外有一个code
-
+      
       // #ifdef H5
-
+      
       // 微信h5
       if (this.pay_type === 'wx_h5') {
         payConf.pay_type = 'wx_h5'
       }
-
+      
       // 阿里h5
       if (this.pay_type === 'alipay') {
         payConf.pay_type = 'alipay'
       }
-
+      
       // 公众号需要code
       if (this.pay_type === 'wx_mp') {
         if (!isWeiXin()) {
           error('请在微信内打开')
           return
         }
-
+        
         const isHasCode = this.code || GetQueryByString('code')
         // 已经用过的code不再用
         if (isHasCode && isHasCode !== Storage.get('isUseCode')) {
@@ -897,7 +897,7 @@ export default {
             code: isHasCode,
             pay_type: 'wx_mp',
           }
-
+          
           Storage.set('isUseCode', isHasCode)
         } else {
           // 存上临时的数据
@@ -907,15 +907,15 @@ export default {
           return
         }
       }
-
+      
       // #endif
-
+      
       // #ifdef MP-TOUTIAO
       // #endif
-
+      
       // #ifdef MP-WEIXIN
       payConf.pay_type = 'wx_lp'
-
+      
       await new Promise((resolve) => {
         uni.login({
           success: function (loginRes) {
@@ -928,7 +928,7 @@ export default {
       this.disBuy()
     },
     disApplyInit () {
-      let _self=this
+      let _self = this
       disApplyInit().then(res => {
         this.pro = res.data
         if (this.type === 'edit') {
@@ -939,7 +939,7 @@ export default {
               dislist = item
             }
           }
-          console.log(dislist,this.pro)
+          console.log(dislist, this.pro)
           dislist.manual_rules = typeof dislist.manual_rules !== 'object' ? JSON.parse(dislist.manual_rules) : dislist.manual_rules
           console.log(dislist.manual_rules)
           var select_arrays = []
@@ -978,9 +978,8 @@ export default {
           if (!dislist.apply_order) return
           if (!((JSON.stringify(dislist.apply_order) === '{}'))) {
             const myInfo = JSON.parse(dislist.apply_order.manual_form)
-
-
-            console.log( dislist.apply_order,"ss")
+            
+            console.log(dislist.apply_order, 'ss')
             if (dislist.apply_order.status === 3) {
               _self.textShen = dislist.apply_order.status_desc + '(' + dislist.apply_order.reason + ')'
             }
@@ -1015,7 +1014,7 @@ export default {
                 this.multiIndex = multiIndex
               }
             }
-
+            
             for (const ite in myInfo) {
               for (const text in this.text_lists) {
                 if (this.text_lists[text].Name === ite) {
@@ -1089,13 +1088,13 @@ export default {
       }
     }
     // #endif
-
+    
     const initData = await this.getInitData()
     uni.setNavigationBarTitle({
       title: initData.commi_rename.commi + '信息',
     })
-    this.textShen='立即申请成为' + this.commi_rename.commi
-   
+    this.textShen = '立即申请成为' + this.commi_rename.commi
+    
   },
 }
 </script>
@@ -1104,83 +1103,83 @@ export default {
   view {
     box-sizing: border-box;
   }
-
+  
   .titleImg {
-    width: 750upx;
-    height: 330upx;
-    margin-bottom: 25upx;
-
+    width: 750 upx;
+    height: 330 upx;
+    margin-bottom: 25 upx;
+    
     .image {
       width: 100%;
       height: 100%;
     }
   }
-
+  
   .fenxiao {
-    margin-top: 30upx;
-    margin-left: 20upx;
-    font-size: 30upx;
-
+    margin-top: 30 upx;
+    margin-left: 20 upx;
+    font-size: 30 upx;
+    
     .textq {
-      font-size: 24upx;
+      font-size: 24 upx;
       color: #666666;
-
+      
       .textw {
-        font-size: 28upx;
+        font-size: 28 upx;
         color: #F43131;
       }
     }
   }
-
+  
   .isFenxiao {
-    width: 620upx;
-    height: 80upx;
+    width: 620 upx;
+    height: 80 upx;
     background: rgba(244, 49, 49, 1);
-    border-radius: 20upx;
+    border-radius: 20 upx;
     margin: 0 auto;
-    margin-top: 50upx;
-    font-size: 34upx;
+    margin-top: 50 upx;
+    font-size: 34 upx;
     color: #FFFFFF;
-    line-height: 80upx;
+    line-height: 80 upx;
     text-align: center;
   }
-
+  
   .line {
-    width: 750upx;
-    height: 20upx;
+    width: 750 upx;
+    height: 20 upx;
     background: rgba(248, 248, 248, 1);
-    margin-top: 30upx;
+    margin-top: 30 upx;
   }
-
+  
   .pro {
-    width: 750upx;
-    padding: 30upx 20upx;
+    width: 750 upx;
+    padding: 30 upx 20 upx;
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
-    margin-top: 50upx;
-    padding-top: 0upx;
-    padding-bottom: 0upx;
-
+    margin-top: 50 upx;
+    padding-top: 0 upx;
+    padding-bottom: 0 upx;
+    
     .forOf {
-      width: 345upx;
-
+      width: 345 upx;
+      
       .imgs {
-        width: 345upx;
-        height: 345upx;
-
+        width: 345 upx;
+        height: 345 upx;
+        
         .image {
           width: 100%;
           height: 100%;
         }
       }
-
+      
       .text {
-        margin: 17upx 15upx 20upx 11upx;
-        width: 319upx;
-        height: 60upx;
-        line-height: 30upx;
-        font-size: 24upx;
+        margin: 17 upx 15 upx 20 upx 11 upx;
+        width: 319 upx;
+        height: 60 upx;
+        line-height: 30 upx;
+        font-size: 24 upx;
         font-weight: 500;
         color: rgba(51, 51, 51, 1);
         text-overflow: -o-ellipsis-lastline;
@@ -1193,58 +1192,58 @@ export default {
       }
     }
   }
-
+  
   .prices {
     color: #F43131;
-    font-size: 24upx;
-    margin-left: 15upx;
-    margin-bottom: 37upx;
-
+    font-size: 24 upx;
+    margin-left: 15 upx;
+    margin-bottom: 37 upx;
+    
     text {
-      font-size: 34upx;
+      font-size: 34 upx;
       font-weight: bold;
     }
   }
-
+  
   .titleImg {
-    width: 750upx;
-    height: 330upx;
-    margin-bottom: 25upx;
-
+    width: 750 upx;
+    height: 330 upx;
+    margin-bottom: 25 upx;
+    
     .image {
       width: 100%;
       height: 100%;
     }
   }
-
+  
   .center {
-    height: 98upx;
-    width: 710upx;
+    height: 98 upx;
+    width: 710 upx;
     margin: 0 auto;
-    border-bottom: 1upx solid #E7E7E7;
+    border-bottom: 1 upx solid #E7E7E7;
     display: flex;
     align-items: center;
-
+    
     .mbx {
-      width: 140upx;
-      font-size: 30upx;
+      width: 140 upx;
+      font-size: 30 upx;
       color: #333333;
     }
-
+    
     .inputa {
-      width: 600upx;
-      font-size: 28upx;
+      width: 600 upx;
+      font-size: 28 upx;
     }
   }
-
+  
   .checks {
-    font-size: 20upx;
+    font-size: 20 upx;
     color: #333333;
     display: flex;
     align-items: center;
-    margin-left: 4upx;
+    margin-left: 4 upx;
   }
-
+  
   .disHaihong {
     font-size: 30rpx;
     height: 60rpx;
@@ -1253,146 +1252,146 @@ export default {
     margin-top: 10px;
     margin-bottom: 10px;
   }
-
+  
   .checkq {
     color: #69A1FF;
-    margin-left: 10upx;
+    margin-left: 10 upx;
   }
-
+  
   .submits {
-    width: 620upx;
-    height: 80upx;
-    line-height: 80upx;
+    width: 620 upx;
+    height: 80 upx;
+    line-height: 80 upx;
     background: rgba(244, 49, 49, 1);
-    border-radius: 20upx;
+    border-radius: 20 upx;
     margin: 0 auto;
-    font-size: 34upx;
+    font-size: 34 upx;
     color: #FFFFFF;
     text-align: center;
-    margin-top: 40upx;
-    margin-bottom: 120upx;
+    margin-top: 40 upx;
+    margin-bottom: 120 upx;
   }
-
+  
   .qwe {
-    width: 750upx;
-    height: 100upx;
+    width: 750 upx;
+    height: 100 upx;
     position: fixed;
-    bottom: 0upx;
-    left: 0upx;
+    bottom: 0 upx;
+    left: 0 upx;
     background: rgba(64, 61, 61, 1);
     display: flex;
     align-items: center;
-    padding-left: 20upx;
-    padding-right: 24upx;
-
+    padding-left: 20 upx;
+    padding-right: 24 upx;
+    
     .imgs {
-      width: 68upx;
-      height: 68upx;
+      width: 68 upx;
+      height: 68 upx;
       border-radius: 50%;
-
+      
       .image {
         width: 100%;
         height: 100%;
       }
     }
-
+    
     .nickName {
-      font-size: 30upx;
+      font-size: 30 upx;
       color: #FFFFFF;
-      margin-left: 16upx;
+      margin-left: 16 upx;
     }
-
+    
     .liji {
-      margin-left: 113upx;
-      font-size: 22upx;
+      margin-left: 113 upx;
+      font-size: 22 upx;
       color: #FFFFFF;
     }
-
+    
     .hahas {
-      width: 140upx;
-      height: 50upx;
+      width: 140 upx;
+      height: 50 upx;
       background: rgba(244, 49, 49, 1);
-      border-radius: 10upx;
+      border-radius: 10 upx;
       position: absolute;
-      top: 25upx;
-      right: 20upx;
-      font-size: 26upx;
+      top: 25 upx;
+      right: 20 upx;
+      font-size: 26 upx;
       color: #FFFFFF;
       text-align: center;
-      line-height: 50upx;
+      line-height: 50 upx;
     }
   }
-
+  
   .picker view {
-    width: 160upx;
-    font-size: 28upx;
-    line-height: 90upx;
-    height: 90upx;
-    margin-right: 10upx;
+    width: 160 upx;
+    font-size: 28 upx;
+    line-height: 90 upx;
+    height: 90 upx;
+    margin-right: 10 upx;
     overflow: hidden;
   }
-
+  
   .picker {
     display: flex;
-
+    
     .quyu {
-      width: 120upx;
+      width: 120 upx;
     }
   }
-
+  
   view.haha {
-    font-size: 30upx;
+    font-size: 30 upx;
     color: #333333;
-    margin-right: 42upx;
+    margin-right: 42 upx;
   }
-
+  
   .disConfig {
-    padding-bottom: 50upx;
+    padding-bottom: 50 upx;
   }
-
+  
   .uni-list-cell {
     display: flex;
     align-items: center;
-    font-size: 25upx;
+    font-size: 25 upx;
     color: #333333;
-    height: 25upx;
-    padding-top: 38upx;
-    margin-left: 20upx;
-    width: 710upx;
-
+    height: 25 upx;
+    padding-top: 38 upx;
+    margin-left: 20 upx;
+    width: 710 upx;
+    
     &:last-child {
-      padding-bottom: 30upx;
-      border-bottom: 1upx solid #E7E7E7;
+      padding-bottom: 30 upx;
+      border-bottom: 1 upx solid #E7E7E7;
     }
   }
-
+  
   .iMbx {
     text-align: center;
-    padding: 0 20upx;
-    font-size: 28upx;
+    padding: 0 20 upx;
+    font-size: 28 upx;
     color: #333;
-
+    
     .c_method {
-      padding: 37upx 0;
-      border-bottom: 2upx solid #E6E6E6;
+      padding: 37 upx 0;
+      border-bottom: 2 upx solid #E6E6E6;
     }
-
+    
     & .c_method:first-child {
       color: #F43131;
     }
-
+    
     & .c_method:nth-last-child(1) {
       border: none;
     }
   }
-
+  
   // .zhezhao {
   // 		position: fixed;
   // 		width: 100%;
   // 		height: 100%;
   // 		background: rgba($color: #000000, $alpha: 0.3);
   // 		z-index: 1000;
-
+  
   // 		.input-wrap {
   // 			background: #fff;
   // 			color: #000;
@@ -1402,23 +1401,23 @@ export default {
   // 			padding: 40px 50upx;
   // 			box-sizing: border-box;
   // 			font-size: 28upx;
-
+  
   // 			.inputpass {
   // 				margin: 40upx 0;
   // 				border: 1px solid #efefef;
   // 			}
-
+  
   // 			.btns {
   // 				display: flex;
   // 				justify-content: space-around;
-
+  
   // 				.btn {
   // 					flex: 1;
   // 				}
   // 			}
   // 		}
   // 	}
-
+  
   .zhezhao {
     left: 0;
     top: 0;
@@ -1427,7 +1426,7 @@ export default {
     height: 100%;
     background: rgba(0, 0, 0, .3);
     z-index: 1000;
-
+    
     .input-wrap {
       background: #fff;
       color: #000;
@@ -1438,7 +1437,7 @@ export default {
       box-sizing: border-box;
       font-size: 28rpx;
       border-radius: 10rpx;
-
+      
       .input {
         margin: 40rpx 0;
         border: 1px solid #efefef;
@@ -1446,20 +1445,20 @@ export default {
         line-height: 20px;
         padding: 10px 0px;
       }
-
+      
       .btns {
         display: flex;
         justify-content: space-around;
         height: 60rpx;
         line-height: 60rpx;
-
+        
         .btn {
           flex: 1;
         }
       }
     }
   }
-
+  
   .disMy {
     display: flex;
     align-items: center;
@@ -1467,7 +1466,7 @@ export default {
     width: 100%;
     margin-right: 0px !important;
   }
-
+  
   .disMyImg {
     width: 9px;
     height: 14px;

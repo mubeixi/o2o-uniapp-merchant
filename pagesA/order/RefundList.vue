@@ -1,7 +1,7 @@
 <template>
-  <div class="myall" @click="commonClick">
+  <div @click="commonClick" class="myall">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
-    <div class="order" v-for="(item,index) of data" :key="index">
+    <div :key="index" class="order" v-for="(item,index) of data">
       <template v-if="item.prod_list.length>0">
         <div style="background-color: #F3F3F3;height: 20rpx;width: 100%;position: absolute;left: 0rpx;"></div>
         <div style="height: 20rpx;"></div>
@@ -9,15 +9,15 @@
           <span class="bizname">退款编号:</span>
           <span class="status">{{item.Back_Sn}}</span>
         </div>
-        <block v-for="(i,k) of item.prod_list" :key="k">
-          <div class="pro" @click="goDetail(item)">
+        <block :key="k" v-for="(i,k) of item.prod_list">
+          <div @click="goDetail(item)" class="pro">
             <div class="pro-div">
-              <img class="pro-img" :src="i.prod_img">
+              <img :src="i.prod_img" class="pro-img">
             </div>
             <div class="pro-msg">
               <div class="pro-name">{{i.prod_name}}</div>
               <div class="attr" v-if="i.attr_info.attr_name"><span>{{i.attr_info.attr_name}}</span></div>
-              <div class="attr" v-else style="background-color: #FFFFFF;"><span></span></div>
+              <div class="attr" style="background-color: #FFFFFF;" v-else><span></span></div>
               <div class="pro-price"><span>￥</span>{{i.prod_price}} <span class="amount">x{{i.prod_count}}</span></div>
             </div>
           </div>
@@ -30,8 +30,8 @@
         </div>
         <div class="btn-group">
           <span class="span" style="border: 0rpx;color: red;">{{item.Back_Status_desc}}</span>
-          <span class="span" v-if="item.Back_Status==0" @click="cancelRefund(item,index)">取消退款</span>
-          <span class="span" v-else-if="item.Back_Status==1" @click="goDetail(item)">买家发货</span>
+          <span @click="cancelRefund(item,index)" class="span" v-if="item.Back_Status==0">取消退款</span>
+          <span @click="goDetail(item)" class="span" v-else-if="item.Back_Status==1">买家发货</span>
         </div>
       </template>
     </div>
@@ -100,7 +100,7 @@ export default {
     goDetail (item) {
       let url = '/pagesA/order/RefundDetail?Back_ID=' + item.Back_ID
       this.$linkTo(url)
-
+      
     },
     //跳转申请退款 支付   发表评论
     goPay (item) {
@@ -117,19 +117,19 @@ export default {
           url: '/pages/order/publishComment?Order_ID=' + item.Order_ID,
         })
       }
-
+      
     },
-
+    
   },
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
   .myall {
     min-height: 100vh;
     background-color: #FFFFFF !important;
   }
-
+  
   .titless {
     position: fixed;
     top: 0rpx;
@@ -137,7 +137,7 @@ export default {
     width: 100%;
     z-index: 999;
   }
-
+  
   .navs {
     z-index: 999;
     position: fixed;
@@ -145,7 +145,7 @@ export default {
     /* #ifdef APP-PLUS */
     top: var(--status-bar-height); //86rpx;
     /* #endif */
-
+    
     left: 0rpx;
     width: 750rpx;
     box-sizing: border-box;
@@ -156,13 +156,13 @@ export default {
     background: #fff;
     font-size: 28rpx;
     padding: 0 10px;
-
+    
     .nav-item {
       flex: 1;
       box-sizing: border-box;
       text-align: center;
       position: relative;
-
+      
       .jiaobiao {
         position: absolute;
         top: 24rpx;
@@ -179,25 +179,25 @@ export default {
         color: #F43131;
       }
     }
-
+    
     .nav-item.active {
       color: red;
       border-bottom: 2px solid red;
     }
   }
-
+  
   .space {
     /* #ifdef APP-PLUS */
     margin-top: var(--status-bar-height);
     /* #endif */
-
+    
   }
-
+  
   .order {
     padding: 0rpx 20rpx;
     background: #fff;
     position: relative;
-
+    
     .bizinfo {
       margin-top: 20rpx;
       display: flex;
@@ -214,34 +214,34 @@ export default {
         // flex: 1;
         font-size: 28rpx;
       }
-
+      
       .status {
         color: red;
         font-size: 26rpx;
       }
     }
-
+    
     .pro {
       display: flex;
       margin-bottom: 50rpx;
       margin-top: 30rpx;
     }
-
+    
     .pro-msg {
       margin-left: 27rpx;
       width: 476rpx;
     }
-
+    
     .pro-div {
       width: 200rpx;
       height: 200rpx;
     }
-
+    
     .pro-img {
       width: 100%;
       height: 100%;
     }
-
+    
     .pro-name {
       font-size: 26rpx;
       margin-bottom: 20rpx;
@@ -252,7 +252,7 @@ export default {
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
     }
-
+    
     .attr {
       display: inline-block;
       height: 50rpx;
@@ -263,42 +263,42 @@ export default {
       padding: 0 20rpx;
       margin-bottom: 20rpx;
     }
-
+    
     .pro-price {
       color: #F43131;
       font-size: 36rpx;
     }
-
+    
     .pro-price span {
       font-size: 24rpx;
       font-style: normal;
     }
-
+    
     .amount {
       font-size: 30rpx;
       float: right;
       color: #333;
     }
-
+    
     .total {
       font-size: 24rpx;
       margin: 40rpx 0rpx;
       margin-right: 15rpx;
-
+      
       .price {
         color: red;
         font-size: 30rpx;
-
+        
         .p-span {
           font-size: 24rpx;
         }
       }
     }
-
+    
     .btn-group {
       text-align: right;
       padding-bottom: 30rpx;
-
+      
       .span {
         display: inline-block;
         //width: 150rpx;
@@ -310,11 +310,11 @@ export default {
         border-radius: 10rpx;
         color: #999;
         font-size: 26rpx;
-
+        
         &:last-child {
           margin-left: 14rpx;
         }
-
+        
         &.active {
           color: #fff;
           background: #F43131;
@@ -323,18 +323,18 @@ export default {
       }
     }
   }
-
+  
   .text-right {
     text-align: right;
   }
-
+  
   .defaults {
     margin: 0 auto;
     width: 640rpx;
     height: 480rpx;
     padding-top: 100rpx;
   }
-
+  
   .danger-color {
     color: #f43131;
   }

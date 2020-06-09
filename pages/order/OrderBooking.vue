@@ -1,10 +1,10 @@
 <template>
-  <div :class="selectStore?'over':''" class="page-wrap"   @click="commonClick">
+  <div :class="selectStore?'over':''" @click="commonClick" class="page-wrap">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
-    <fun-err-msg ref="refMsg" :errs.sync="formCheckResult"></fun-err-msg>
+    <fun-err-msg :errs.sync="formCheckResult" ref="refMsg"></fun-err-msg>
     <block v-if="orderInfo.is_virtual===0">
       <div @click="goAddressList" class="address bg-white">
-
+        
         <layout-icon class="loc_icon" color="#F53636" size="24" type="iconicon-address"></layout-icon>
         <div class="add_msg" v-if="addressinfo.Address_Name">
           <div class="name">收货人：{{addressinfo.Address_Name}} <span>{{addressinfo.Address_Mobile | formatphone}}</span>
@@ -18,7 +18,7 @@
         </div>
         <layout-icon class="right" type="iconicon-arrow-right"></layout-icon>
       </div>
-
+      
       <div class="remind-wrap" v-if="!addressinfo.Address_Name">
         <div class="remind-add">
           <div class="text-align-center mb20">新建收货地址</div>
@@ -33,9 +33,9 @@
           </div>
         </div>
       </div>
-
+    
     </block>
-
+    
     <div class="container p-t-15" v-if="orderInfo.is_virtual === 1">
       <div class="section-box bg-white" style="margin-bottom: 0">
         <div class="other">
@@ -56,9 +56,9 @@
         </div>
       </div>
     </div>
-
+    
     <div class="container" v-if="CartListReady && bizListReady">
-
+      
       <!--这行代码特别关键 bind click="activeBizId=biz_id"-->
       <div :key="biz_id" @click="setActiveBizId(biz_id)" class="section-box store-item bg-white"
            v-for="(bizData,biz_id) in CartList">
@@ -90,11 +90,11 @@
         </div>
         <div class="other">
           <div class="bd  bg-f8" v-if="bizList[biz_id].is_virtual === 0">
-            <div  class="o_title" v-if="bizList[biz_id].shipping_company&&bizList[biz_id].shipping_company.is_self_get">
+            <div class="o_title" v-if="bizList[biz_id].shipping_company&&bizList[biz_id].shipping_company.is_self_get">
               <span>取货方式</span>
               <span class="flex flex-vertical-c fz-13" style="text-align:right; color: #888;">
 
-                      <div class="flex flex-vertical-c "  @click="changeShpping(biz_id)">
+                      <div @click="changeShpping(biz_id)" class="flex flex-vertical-c ">
 
                           <div class="unchecked m-r-8" v-if="postData.shipping_id[biz_id]=='is_self_get'">
                           </div>
@@ -103,7 +103,7 @@
                           </div>
                           <span>商家发货</span>
                       </div>
-                      <div class="flex flex-vertical-c m-l-20 "  @click="changeIsSelft(biz_id)">
+                      <div @click="changeIsSelft(biz_id)" class="flex flex-vertical-c m-l-20 ">
                           <div class="checked m-r-8" v-if="postData.shipping_id[biz_id]=='is_self_get'">
                             <div class="checked-radio"></div>
                           </div>
@@ -115,7 +115,7 @@
               </span>
             </div>
           </div>
-
+          
           <div class="bd bg-f8" v-if="bizList[biz_id].is_virtual === 0&&postData.shipping_id[biz_id]!='is_self_get'">
             <div @click="changeShip(biz_id)" class="o_title">
               <span>运费选择</span>
@@ -130,7 +130,7 @@
               </span>
             </div>
           </div>
-
+          
           <div class="bd" v-if="bizList[biz_id].coupon_list.length > 0">
             <div @click="changeCoupon(biz_id)" class="o_title">
               <span>优惠券选择</span>
@@ -140,7 +140,7 @@
             </span>
             </div>
           </div>
-
+          
           <div @click="focusInvoice(biz_id)" class="bd" v-if="bizList[biz_id].invoice_switch === 1">
             <div class="o_title">
               <span>是否开具发票</span>
@@ -150,11 +150,12 @@
             <input @blur="faPiaoConfirm($event,biz_id)" class="o_desc" placeholder="点此输入发票抬头和纳税人识别号"
                    type="text" v-if="postData.need_invoice[biz_id]" v-model="postData.invoice_info[biz_id]" />
           </div>
-
+          
           <div class="bd">
             <div class="o_title">
               <span>是否参与积分抵扣</span>
-              <switch :checked="postData.intergralChecked[biz_id]" @change="intergralSwitchChange($event,biz_id)" color="#04B600" style="transform: scale(0.8)" />
+              <switch :checked="postData.intergralChecked[biz_id]" @change="intergralSwitchChange($event,biz_id)"
+                      color="#04B600" style="transform: scale(0.8)" />
             </div>
             <div class="o_de" v-if="postData.intergralChecked[biz_id]">您当前共有
               <text>{{userInfo.User_Integral}}</text>
@@ -169,7 +170,7 @@
               元
             </div>
           </div>
-
+          
           <div class="bd" v-if="bizList[biz_id].is_use_money === 1">
             <div class="o_title">
               <span>是否使用余额</span>
@@ -188,23 +189,23 @@
               v-if="postData.use_money_conf[biz_id]"
               v-model="postData.use_money[biz_id]" />
           </div>
-
+          
           <div class="bd">
             <div class="o_title  words">
               <span>买家留言</span>
               <input @input="remarkConfirm($event,biz_id)" class="inputs" placeholder="点此填写留言内容" type="text">
             </div>
           </div>
-
+        
         </div>
       </div>
-
+      
       <div class="section-box bg-white" v-if="tmplFromList.length>0">
         <diy-form :forms="tmplFromList" @update="upOrderTmplData" eid="material" ref="material"></diy-form>
       </div>
-
+    
     </div>
-
+    
     <div :style="{'z-index':zIndex}" class="order_total">
       <div class="totalinfo">
         <div class="info">共{{prodCount}}件商品 总计：
@@ -216,15 +217,16 @@
         <div class="tips" v-if="orderInfo.obtain_desc">{{orderInfo.obtain_desc}}</div>
       </div>
       <div @click="seeDetail" class="mx">明细
-        <layout-icon class="p-l-4" :type="isSlide?'iconicon-arrow-down':'iconicon-arrow-top'" color="#999" display="inline"></layout-icon>
+        <layout-icon :type="isSlide?'iconicon-arrow-down':'iconicon-arrow-top'" class="p-l-4" color="#999"
+                     display="inline"></layout-icon>
       </div>
       <button @click="submitFn" class="submit">提交订单</button>
     </div>
-
+    
     <div class="space-box"></div>
     <div class="safearea-box fixed"></div>
-
-    <layout-layer bottomStr="50px" @maskClicked="handClicked" ref="popupMX" title="明细">
+    
+    <layout-layer @maskClicked="handClicked" bottomStr="50px" ref="popupMX" title="明细">
       <div class="mxdetail">
         <div class="mxitem" v-if="!checkfrom">产品原价
           <text class="num">{{allGoodsPrice}}</text>
@@ -255,22 +257,23 @@
     <layout-layer ref="freightPop" title="选择快递">
       <div class="freight-popup-wrap popup-wrap">
         <radio-group @change="ShipRadioChange">
-          <block v-for="(ship,shipid) in popupExpressCompanys"  :key="shipid">
-            <label  class="row flex flex-justify-between flex-vertical-b p-10"
-                    v-if="shipid!='is_self_get'">
+          <block :key="shipid" v-for="(ship,shipid) in popupExpressCompanys">
+            <label class="row flex flex-justify-between flex-vertical-b p-10"
+                   v-if="shipid!='is_self_get'">
               <span class="flex1">{{ship}}</span>
-              <radio :checked="shipid==postData.shipping_id[activeBizId]" :value="shipid" class="radio" color="#F43131" />
+              <radio :checked="shipid==postData.shipping_id[activeBizId]" :value="shipid" class="radio"
+                     color="#F43131" />
             </label>
           </block>
-
-<!--          <label class="row flex flex-justify-between flex-vertical-b p-10">-->
-<!--            <span class="flex1">到店自取</span>-->
-<!--            <radio :checked="'is_store'===ship_current" class="radio" color="#F43131" value="is_store" />-->
-<!--          </label>-->
+          
+          <!--          <label class="row flex flex-justify-between flex-vertical-b p-10">-->
+          <!--            <span class="flex1">到店自取</span>-->
+          <!--            <radio :checked="'is_store'===ship_current" class="radio" color="#F43131" value="is_store" />-->
+          <!--          </label>-->
         </radio-group>
         <div @click="$closePop('freightPop')" class="submit-btn">确定</div>
       </div>
-
+    
     </layout-layer>
     <layout-layer ref="couponPop">
       <div class="coupon-popup-wrap popup-wrap">
@@ -281,7 +284,8 @@
           </label>
           <label class="row flex flex-justify-between flex-vertical-b p-10">
             <span class="flex1">不使用优惠</span>
-            <radio :checked="'nouse'==postData.coupon_current[activeBizId]" class="radio" color="#F43131" value="nouse" />
+            <radio :checked="'nouse'==postData.coupon_current[activeBizId]" class="radio" color="#F43131"
+                   value="nouse" />
           </label>
         </radio-group>
         <div @click="$closePop('couponPop')" class="submit-btn">确定</div>
@@ -315,7 +319,7 @@ export default {
     DiyForm,
     FunErrMsg,
     LayoutIcon,
-    LayoutLayer
+    LayoutLayer,
   },
   data () {
     return {
@@ -328,19 +332,19 @@ export default {
       selfObj: null,
       selectStore: false,
       tabIdx: 0,
-
+      
       addressinfo: {}, // 收货地址信息
-
+      
       activeBizId: null, // 活跃的商户id,很多操作之前都需要先改变这个
       CartList: {},
       bizList: {},
       CartListReady: false,
       bizListReady: false,
-
+      
       orderInfo: {
         is_use_money: 0,
         prod_count: 0,
-        Order_Fyepay: 0
+        Order_Fyepay: 0,
       },
       type: 'shipping',
       cart_buy: '',
@@ -371,7 +375,7 @@ export default {
         use_money_conf: {}, // 用来控制配置的，不提交
         need_invoice: {},
         invoice_info: {}, // 发票抬头
-        order_remark: {} // 买家留言
+        order_remark: {}, // 买家留言
       },
       Order_ID: 0,
       addressLoading: false, // 收货地址信息是否加载完
@@ -387,7 +391,7 @@ export default {
       setStoreMode: '',
       idD: '',
       checkfrom: '', // 支付订单的来源页面，用于展示明细活动价，spike,秒杀，limit限时抢购，group 拼团，
-      shipping_store_id: '' // 选择的门店id
+      shipping_store_id: '', // 选择的门店id
     }
   },
   computed: {
@@ -426,7 +430,7 @@ export default {
       // 用...来代表子属性
       return computeArrayColumnSum(this.bizList, 'Order_Shipping...Price')
     },
-
+    
     isAllowUseMoney () {
       try {
         return parseFloat(this.userInfo.User_Money) < parseFloat(this.bizList[biz_id].Order_TotalPrice)
@@ -508,8 +512,8 @@ export default {
       return this.$store.getters['system/initData']
     },
     ...mapGetters({
-      userInfo: 'user/userInfo'
-    })
+      userInfo: 'user/userInfo',
+    }),
   },
   methods: {
     upOrderTmplData (data) {
@@ -520,7 +524,7 @@ export default {
     },
     async _init_func () {
       if (!this.$checkIsLogin(1, 1)) return
-
+      
       const addressList = await getAddressList({}, { onlyData: true }).catch(() => {
       })
       if (Array.isArray(addressList) && addressList.length > 0) {
@@ -534,13 +538,13 @@ export default {
         }
       }
       this.postData.address_id = this.addressinfo.Address_ID
-
+      
       // 获取用户收货地址，获取订单信息，后台判断运费信息
       await this.checkOrderParam({ isInit: true })
       if (this.order_temp_id && this.bid) {
         const { temp_info: temp_infoStr = '' } = await getBizOrderTemplateList({
           id: this.order_temp_id,
-          biz_id: this.bid
+          biz_id: this.bid,
         }, { onlyData: true }).catch(err => {
           modal(err.msg)
         })
@@ -579,7 +583,7 @@ export default {
             this.orderInfo.CartList[i][j].store = storeInfo
           }
         }
-
+        
         this.orderInfo.Stores_Name = storeInfo.Stores_Name
       } else {
         const tempArr = this.setStoreMode.split('::')
@@ -589,24 +593,24 @@ export default {
         this.orderInfo.Stores_Name = storeInfo.Stores_Name
       }
       this.$refs.stroeComp.close()
-
+      
       if (this.postData.shipping_id === 'is_store') {
         const obj = {}
         for (const it in this.orderInfo.CartList) {
           for (const iq in this.orderInfo.CartList[it]) {
             obj[it] = {
-              [iq]: this.orderInfo.CartList[it][iq].store.Stores_ID
+              [iq]: this.orderInfo.CartList[it][iq].store.Stores_ID,
             }
           }
         }
         this.postData.self_pick_store_id = JSON.stringify(obj)
       }
-
+      
       // 新增
       // if(this.tabIdx===0){
       this.checkOrderParam()
       // }
-
+      
       this.zIndex = 88
     },
     multipleSelectStore () {
@@ -635,7 +639,7 @@ export default {
         this.$refs.stroeComp.show(ids)
       }
     },
-
+    
     // 查看明细
     seeDetail () {
       if (!this.isSlide) {
@@ -661,25 +665,25 @@ export default {
     // 跳转地址列表页
     goAddressList () {
       uni.navigateTo({
-        url: '/pagesA/user/AddressList?from=checkout&addressid=' + this.postData.address_id
+        url: '/pagesA/user/AddressList?from=checkout&addressid=' + this.postData.address_id,
       })
     },
     // 跳转新增地址页面
     goEditAdd () {
       this.$linkTo('/pagesA/user/EditAddress?from=checkout')
     },
-
+    
     // 积分抵扣开关
     intergralSwitchChange (e, biz_id) {
       console.log(e)
       this.postData.intergralChecked[biz_id] = !!e.detail.value
-
+      
       if (!this.postData.intergralChecked[biz_id]) {
         this.postData.use_integral[biz_id] = 0
       } else {
         this.postData.use_integral[biz_id] = this.bizList[biz_id].max_diyong_intergral
       }
-
+      
       this.checkOrderParam()
     },
     // 余额支付开关
@@ -711,7 +715,7 @@ export default {
           throw Error('金额不符合格式')
         }
         const input_money = parseFloat(Number(val).toFixed(2))
-
+        
         if (isNaN(input_money)) {
           throw Error('金额格式化失败')
         }
@@ -720,28 +724,28 @@ export default {
           this.postData.use_money[biz_id] = ''
           throw Error('输入的金额不能小于0')
         }
-
+        
         // 如果价格过大
         if (input_money > parseFloat(this.bizList[biz_id].Order_TotalPrice)) {
           this.postData.use_money[biz_id] = ''
           throw Error('输入金额超过订单总价')
         }
-
+        
         console.log(input_money, input_money + this.useMoneyCount, parseFloat(this.userInfo.User_Money))
-
+        
         if (input_money + this.useMoneyCount > parseFloat(this.userInfo.User_Money)) {
           throw Error('余额不足抵扣已选商品')
         }
-
+        
         if (input_money + this.useMoneyCount <= parseFloat(this.userInfo.User_Money)) {
           this.postData.use_money[biz_id] = input_money
         }
-
+        
         this.checkOrderParam()
       } catch (e) {
         Exception.handle(e)
       } finally {
-
+      
       }
     },
     // 留言
@@ -757,20 +761,20 @@ export default {
           break
         }
       }
-
+      
       this.postData.coupon_id = e.target.value
     },
     changeShpping (bizId) {
       this.activeBizId = bizId
       this.ship_current = this.postData.shipping_id[bizId]
-
+      
       for (const it in this.popupExpressCompanys) {
         if (it !== 'is_self_get') {
           this.postData.shipping_id[this.activeBizId] = it
           this.postData.shipping_name[this.activeBizId] = this.popupExpressCompanys[it]
         }
       }
-
+      
       // 更改物流，需要重新获取信息，计算运费
       this.checkOrderParam()
     },
@@ -778,7 +782,7 @@ export default {
     changeIsSelft (bizId) {
       this.activeBizId = bizId
       this.ship_current = this.postData.shipping_id[bizId]
-
+      
       this.postData.shipping_id[this.activeBizId] = 'is_self_get'
       this.postData.shipping_name[this.activeBizId] = '到店自提'
       // 更改物流，需要重新获取信息，计算运费
@@ -804,7 +808,7 @@ export default {
         const descStr = `满${this.popupCoupons[idx].Coupon_Condition} - ` + (this.popupCoupons[idx].Coupon_Cash > 0 ? this.popupCoupons[idx].Coupon_Cash : this.popupCoupons[idx].Coupon_Discount)
         this.postData.coupon_desc[this.activeBizId] = descStr
       }
-
+      
       // 优惠券更改
       this.checkOrderParam()
     },
@@ -830,17 +834,17 @@ export default {
     async checkOrderParam ({ isInit = false } = {}) {
       try {
         const oldOrderInfo = { ...this.orderInfo }
-
+        
         let params = {}
         // 初始化的时候只有这个必传（也就是说默认的时候不算运费，毕竟运费可以通过选择运费后实时计算)
         if (isInit) {
           params = {
             cart_key: this.postData.cart_key,
-            address_id: this.postData.address_id
+            address_id: this.postData.address_id,
           }
         } else {
           const { shipping_id, coupon_id, use_integral, need_invoice, invoice_info, use_money, order_remark, ..._params } = objTranslate(this.postData)
-
+          
           params = Object.assign({}, _params, {
             shipping_id: JSON.stringify(shipping_id),
             coupon_id: JSON.stringify(coupon_id),
@@ -848,27 +852,27 @@ export default {
             need_invoice: JSON.stringify(need_invoice),
             invoice_info: JSON.stringify(invoice_info),
             use_money: JSON.stringify(use_money),
-            order_remark: JSON.stringify(order_remark)
+            order_remark: JSON.stringify(order_remark),
           })
-
+          
           // 来自购物车和外卖，需要加上这个
           if (['CartList', 'waimai'].includes(this.postData.cart_key)) {
             params.cart_buy = JSON.stringify(params.cart_buy)
           }
         }
-
+        
         // 来自购物车和外卖，需要加上这个
         if (['CartList', 'waimai'].includes(params.cart_key)) {
           params.cart_buy = JSON.stringify(this.postData.cart_buy)
         }
-
+        
         const preOrderData = await createOrderCheck({ ...params }, { onlyData: true }).catch(e => {
           throw Error(e.msg)
         })
-
+        
         // CartList数据不能覆盖吧，毕竟后台不会储存我的
         const { CartList, biz_list: bizList, ...orderInfo } = preOrderData
-
+        
         // 第一层是商户
         // for (var biz_id in CartList) {
         //   // 第二个是产品
@@ -880,14 +884,14 @@ export default {
         //     }
         //   }
         // }
-
+        
         // console.log(bizList)
         // 初始化的时候搞一下
         if (isInit) {
           for (var biz_id in CartList) {
             this.$set(this.postData.shipping_id, biz_id, 0)// 初始化对应数量的物流方式，默认全是0.如果是实物订单，则在提交的时候校验就好了
             this.$set(this.postData.shipping_name, biz_id, '')// 初始化对应数量的物流方式，默认全是0.如果是实物订单，则在提交的时候校验就好了
-
+            
             for (var bid in bizList) {
               if (bid === biz_id) {
                 // console.log(bid, biz_id, bizList[bid].Order_Shipping, bizList[bid].shipping_company)
@@ -899,20 +903,20 @@ export default {
                 }
               }
             }
-
+            
             if (!this.postData.coupon_desc.hasOwnProperty(biz_id)) {
               this.$set(this.postData.coupon_desc, biz_id, '')// 优惠券描述
             }
             if (!this.postData.coupon_current.hasOwnProperty(biz_id)) {
               this.$set(this.postData.coupon_current, biz_id, 'nouse')
             }
-
+            
             this.$set(this.postData.coupon_id, biz_id, '')// 优惠券
-
+            
             this.$set(this.postData.use_integral, biz_id, 0)// 积分抵扣
-
+            
             this.$set(this.postData.intergralChecked, biz_id, false)// 积分抵扣
-
+            
             this.$set(this.postData.need_invoice, biz_id, 0)// 是否需要发票
             this.$set(this.postData.invoice_info, biz_id, '')// 发票信息
             this.$set(this.postData.use_money, biz_id, '')// 使用余额
@@ -920,13 +924,13 @@ export default {
             this.$set(this.postData.order_remark, biz_id, '')// 订单备注
           }
         }
-
+        
         this.$set(this, 'bizList', bizList)
         this.$set(this, 'CartList', CartList)
-
+        
         this.CartListReady = true
         this.bizListReady = true
-
+        
         // console.log(orderInfo)
         // 更新订单总价这些信息
         this.orderInfo = Object.assign(oldOrderInfo, orderInfo)
@@ -934,12 +938,12 @@ export default {
         //   this.orderInfo.coupon_list.push({ Coupon_ID: '' })
         // }
         // this.couponlist = orderInfo.coupon_list
-
+        
         // 如果该规格有门店 就优先后台设置的
         // if (this.orderInfo.all_has_stores === 1 && isInit === true && this.orderInfo.is_virtual !== 1) {
         //   this.tabIdx = this.initData.order_submit_first
         // }
-
+        
         // if (orderInfo.Order_Shipping && orderInfo.Order_Shipping.shipping_id) this.postData.shipping_id = orderInfo.Order_Shipping.shipping_id
         // this.idD = this.postData.shipping_id
         // for (var k in this.orderInfo.shipping_company) {
@@ -958,7 +962,7 @@ export default {
       try {
         this.formCheckResult = []
         const bizListLen = getObjectAttrNum(this.bizList) // 获得当前订单中有多少个商家，用来比较一些必填项的数量是否正确
-
+        
         const {
           shipping_id,
           coupon_id,
@@ -969,22 +973,22 @@ export default {
           order_remark,
           ...params
         } = objTranslate(this.postData)
-
+        
         if (this.orderInfo.is_virtual === 0 && Object.values(shipping_id).filter(val => val === 0 || val === '0').length > 0) {
           throw Error('实体商品物流必须设置')
         }
-
+        
         if (getObjectAttrNum(shipping_id) !== bizListLen) {
           throw Error('每个商家都请设置物流')
         }
-
+        
         if (Object.values(use_integral).filter(num => (num < 0 || isNaN(num)) && num !== '').length > 0) {
           throw Error('每个商家积分抵扣数值都为大于等于0的数')
         }
         if (Object.values(use_money).filter(num => (num < 0 || isNaN(num)) && num !== '').length > 0) {
           throw Error('每个商家使用余额数值都为大于等于0的数')
         }
-
+        
         Object.assign(params, {
           shipping_id: JSON.stringify(shipping_id),
           coupon_id: JSON.stringify(coupon_id),
@@ -992,14 +996,14 @@ export default {
           need_invoice: JSON.stringify(need_invoice),
           invoice_info: JSON.stringify(invoice_info),
           use_money: JSON.stringify(use_money),
-          order_remark: JSON.stringify(order_remark)
+          order_remark: JSON.stringify(order_remark),
         })
-
+        
         // 来自购物车和外卖，需要加上这个
         if (['CartList', 'waimai'].includes(this.postData.cart_key)) {
           params.cart_buy = JSON.stringify(params.cart_buy)
         }
-
+        
         // 校验自定义表单
         if (this.order_temp_id) {
           for (const item of this.order_temp_data) {
@@ -1009,7 +1013,7 @@ export default {
           }
           params.order_temp_data = JSON.stringify(this.order_temp_data)
         }
-
+        
         // 虚拟商品
         if (this.orderInfo.is_virtual === 1 || this.postData.shipping_id === 'is_store') {
           // if (!this.user_name) {
@@ -1029,21 +1033,21 @@ export default {
           //   this.submited = false
           //   return
           // }
-
+          
           this.postData.user_name = this.user_name
           this.postData.user_mobile = this.user_mobile
         }
-
+        
         showLoading()
-
+        
         const createOrderResult = await createOrder(params, { onlyData: true }).catch(e => {
           throw Error(e.msg || '下单失败')
         })
-
+        
         if (['waimai'].includes(this.postData.cart_key) && this.delivery_biz_id) {
           this.$store.dispatch('delivery/remove_goods_by_biz', this.delivery_biz_id)
         }
-
+        
         // 订单的分销信息，在成功下单后就清除
         if (Storage.get('owner_id')) {
           Storage.remove('owner_id')
@@ -1058,10 +1062,10 @@ export default {
           this.$linkTo('/pages/order/OrderList')
           return
         }
-
+        
         const url = '/pages/order/OrderPay?Order_ID=' + createOrderResult.Order_ID + '&pagefrom=check'
         uni.redirectTo({
-          url: url
+          url: url,
         })
       } catch (e) {
         console.log(e)
@@ -1071,10 +1075,10 @@ export default {
       } finally {
         hideLoading()
       }
-    }
+    },
     // ...mapActions(['getUserInfo','setUserInfo']),
   },
-
+  
   onShow () {
     this._init_func()
   },
@@ -1091,34 +1095,34 @@ export default {
     }
     if (options.checkfrom) {
       this.checkfrom = options.checkfrom
-
+      
       switch (this.checkfrom) {
         case 'seckill' :
           uni.setNavigationBarTitle({
-            title: '秒杀订单确认'
+            title: '秒杀订单确认',
           })
           break
         case 'spike' :
           uni.setNavigationBarTitle({
-            title: '限时抢购订单确认'
+            title: '限时抢购订单确认',
           })
           break
         case 'group' :
           uni.setNavigationBarTitle({
-            title: '拼团订单确认'
+            title: '拼团订单确认',
           })
         default:
           break
       }
     }
-
+    
     if (options.gift) {
       this.gift = true
       uni.setNavigationBarTitle({
-        title: '赠品订单确认'
+        title: '赠品订单确认',
       })
     }
-
+    
     // 如果有物流模板，必须要有biz_id
     if (options.order_temp_id) {
       this.order_temp_id = options.order_temp_id
@@ -1128,14 +1132,14 @@ export default {
       }
       this.bid = options.biz_id
     }
-
+    
     if (['waimai'].includes(options.cart_key)) {
       if (!options.biz_id) {
         modal('biz_id必传')
         return
       }
     }
-
+    
     if (options.cart_key === 'CartList') {
       const cart_buy = this.$store.state.cart_buy
       for (var i in cart_buy) {
@@ -1147,13 +1151,13 @@ export default {
       }
       this.postData.cart_buy = cart_buy
     }
-
+    
     // cart_key==waimai：{"biz_id_1":{"prod_id_1":{"attr_id_1":"购买数量","attr_id_2":"购买数量"},"prod_id_2":["购买数量"]}}，例如：{"1":{"1561":{"2125":"1"},"1564":["2"]}}
     if (options.cart_key === 'waimai') {
       uni.setNavigationBarTitle({
-        title: '外卖订单确认'
+        title: '外卖订单确认',
       })
-
+      
       const cart_buy = {}
       const deliveryCartList = this.$store.getters['delivery/getCartList'](options.biz_id)
       this.delivery_biz_id = options.biz_id
@@ -1163,7 +1167,7 @@ export default {
         if (!cart_buy.hasOwnProperty(row.biz_id)) cart_buy[row.biz_id] = {}
         // 创建product_id
         if (!cart_buy[row.biz_id].hasOwnProperty(row.Products_ID)) cart_buy[row.biz_id][row.Products_ID] = {}
-
+        
         // 根据是否有属性，来做不同的事情
         if (isNaN(row.attr_id) && row.attr_id.indexOf('noattr') !== -1) {
           cart_buy[row.biz_id][row.Products_ID] = [row.num]
@@ -1172,18 +1176,18 @@ export default {
         }
       }
       this.postData.cart_buy = cart_buy
-
+      
       // this.deliveryCartList = deliveryCartList
     }
-
+    
     // 页面直接传值很方便，为什么这么难受
     uni.$on('bind_select_address', (data) => {
       this.back_address_id = data.Address_ID
       this.addressinfo = data
-
+      
       this.checkOrderParam()
     })
-  }
+  },
 }
 </script>
 
@@ -1191,45 +1195,45 @@ export default {
   .page-wrap {
     background: #f8f8f8;
     min-height: 100vh;
-
+    
     /* #ifdef MP */
     padding-bottom: constant(safe-area-inset-bottom);
     padding-bottom: env(safe-area-inset-bottom);
     /* #endif */
   }
-
+  
   //底部占位
-  .space-box{
+  .space-box {
     height: 50px;
   }
-
+  
   .top {
     padding: 10px 0;
-
+    
     .tabs {
       display: flex;
       justify-content: center;
       font-size: 14px;
-
+      
       .tabs-item {
         width: 170rpx;
         padding: 6px 0;
         margin-right: 70rpx;
         color: #333;
         text-align: center;
-
+        
         &.active {
           color: $fun-primary-color;
           border-bottom: 2px solid $fun-primary-color;
         }
-
+        
         &:last-child {
           margin-right: 0;
         }
       }
     }
   }
-
+  
   .mxdetail {
     width: 750rpx;
     box-sizing: border-box;
@@ -1243,16 +1247,16 @@ export default {
       font-size: 28rpx;
       text-align: center;
     }
-
+    
     .mxitem {
       border-bottom: 1px solid #eaeaea;
-
+      
       .num {
         float: right;
       }
     }
   }
-
+  
   /* 收货地址 start */
   .address {
     /* margin: 15px 0 10px; */
@@ -1260,59 +1264,59 @@ export default {
     align-items: center;
     padding: 44rpx 38rpx 45rpx;
     border-bottom: 20rpx solid #f8f8f8;
-
+    
     .add_msg {
       flex: 1;
       font-size: 28rpx;
     }
-
+    
     .right {
       width: 18rpx;
       height: 27rpx;
       margin-left: 34rpx;
     }
   }
-
+  
   .container {
     padding-bottom: 60rpx;
-
+    
     .section-box {
       margin: 0 20rpx 30rpx;
       border-radius: 8rpx;
       overflow: hidden;
     }
-
+    
     .store-item {
-
+    
     }
   }
-
+  
   .loc_icon {
     width: 41rpx;
     height: 51rpx;
     margin-right: 31rpx;
   }
-
+  
   .name {
     margin-bottom: 30rpx;
     font-size: 28rpx;
     color: #333;
     line-height: 22rpx;
   }
-
+  
   .name > span {
     margin-left: 10rpx;
   }
-
+  
   .location {
     font-size: 24rpx;
     color: #333;
     line-height: 32rpx;
   }
-
+  
   /* 收货地址 end */
   /* 订单信息 start */
-
+  
   .biz-info {
     display: flex;
     align-items: center;
@@ -1320,33 +1324,33 @@ export default {
     margin-bottom: 30rpx;
     padding: 20rpx 30rpx;
   }
-
+  
   .biz_logo {
     width: 70rpx;
     height: 70rpx;
     margin-right: 20rpx;
     border-radius: 35rpx;
   }
-
+  
   .biz_name {
     font-size: 28rpx;
     color: #333;
     line-height: 30rpx;
   }
-
+  
   .pro {
     display: flex;
-
+    
   }
-
+  
   .biz-goods-list {
-
+    
     padding: 0 40rpx 0 30rpx;
-
+    
     .pro:last-child {
       margin-bottom: 17rpx
     }
-
+    
     .store-box {
       padding: 15px 0 0;
       display: flex;
@@ -1354,31 +1358,31 @@ export default {
       align-items: center;
       font-size: 14px;
       color: #555;
-
+      
       .store-name {
-
+      
       }
-
+      
       .icon-fanhui {
         font-size: 14px;
         transform: rotate(180deg);
       }
-
+      
     }
-
+    
     .goods-hr {
       margin: 15px 0;
       height: 1px;
       //background: #eee;
     }
   }
-
+  
   .pro-img {
     width: 200rpx;
     height: 200rpx;
     margin-right: 28rpx;
   }
-
+  
   .pro-name {
     font-size: 26rpx;
     display: -webkit-box;
@@ -1389,19 +1393,19 @@ export default {
     line-height: 30rpx;
     height: 61rpx
   }
-
+  
   .pro-msg {
     flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
   }
-
+  
   .attr {
     display: inline-block;
     height: 50rpx;
     line-height: 50rpx;
-
+    
     color: #666;
     font-size: 24rpx;
     // padding: 0 20rpx;
@@ -1412,90 +1416,90 @@ export default {
       background: #FFF5F5;
     }
   }
-
+  
   .pro-price {
     color: #F43131;
     font-size: 36rpx;
-
+    
     span {
       font-size: 24rpx;
       font-style: normal;
     }
-
+    
     .amount {
       float: right;
       color: #333;
       font-size: 22rpx;
-
+      
       .num {
         font-size: 30rpx;
       }
     }
   }
-
+  
   /* 订单信息 end */
   /* 订单其他信息 start */
   .other {
     /*padding: 0 40rpx 0 30rpx;*/
     font-size: 22rpx;
-
+    
     .right {
       margin-left: 18rpx;
       width: 15rpx;
       height: 23rpx;
     }
   }
-
+  
   .other .bd {
     /*margin-top: 30rpx;*/
     /*padding-bottom: 30rpx;*/
     padding: 30rpx 40rpx 30rpx 30rpx;
     border-bottom: 2rpx solid #efefef;
-
+    
     &:last-child {
       border-bottom: none;
     }
   }
-
+  
   .o_title {
     display: flex;
     align-items: center;
     justify-content: space-between;
     font-size: 28rpx;
-
+    
     .inputs {
       font-size: 24rpx;
     }
   }
-
+  
   .o_title .van-switch {
     float: right;
   }
-
+  
   .o_desc,
   .o_de {
     font-size: 22rpx;
     margin-top: 10rpx;
-
+    
     text {
       color: #F43131;
     }
   }
-
+  
   .o_de {
     color: #999;
   }
-
+  
   .words {
     justify-content: flex-start;
   }
-
+  
   .words .inputs {
     border: 0;
     margin-left: 20rpx;
     flex: 1;
   }
-
+  
   .total {
     display: flex;
     justify-content: flex-end;
@@ -1504,12 +1508,12 @@ export default {
     font-size: 24rpx;
     padding-right: 30rpx;
   }
-
+  
   .total .money {
     font-size: 30rpx;
     color: #F43131;
   }
-
+  
   /* 订单其他信息 end */
   /* 提交订单 */
   .order_total {
@@ -1524,23 +1528,23 @@ export default {
     display: flex;
     align-items: center;
     background: #fff;
-
+    
     .mx {
       font-size: 22rpx;
       margin-right: 10rpx;
-
+      
       .image {
         width: 20rpx;
         height: 20rpx;
         margin-left: 10rpx;
       }
-
+      
       .slidedown {
         transform: rotate(180deg);
       }
     }
   }
-
+  
   .submit {
     width: 270rpx;
     background: #F43131;
@@ -1551,42 +1555,42 @@ export default {
     border-radius: 0;
     border: none;
   }
-
+  
   .totalinfo {
     flex: 1;
     text-align: center;
     line-height: 30rpx;
   }
-
+  
   .info {
     font-size: 24rpx;
-
+    
     .money {
       color: #F43131;
       font-size: 30rpx;
-
+      
       .m_icon {
         font-size: 24rpx;
       }
     }
   }
-
+  
   .tips {
     font-size: 20rpx;
     color: #979797;
   }
-
+  
   .popup-wrap {
     width: 750rpx;
-
+    
     .row {
       border-bottom: 1px solid $fun-border-color;
-
+      
       &:last-child {
         border-bottom: none;
       }
     }
-
+    
     .submit-btn {
       height: 90rpx;
       width: 100%;
@@ -1598,11 +1602,11 @@ export default {
       text-align: center;
     }
   }
-
+  
   .bMbx {
     padding: 0rpx 20rpx;
     width: 710rpx;
-
+    
     .fMbx {
       font-size: 32rpx;
       height: 30rpx;
@@ -1610,7 +1614,7 @@ export default {
       text-align: center;
       padding: 36rpx 0rpx;
     }
-
+    
     .iMbx {
       display: flex;
       justify-content: space-between;
@@ -1620,7 +1624,7 @@ export default {
       font-size: 28rpx;
     }
   }
-
+  
   .sure {
     height: 90rpx;
     width: 100%;
@@ -1631,7 +1635,7 @@ export default {
     line-height: 90rpx;
     text-align: center;
   }
-
+  
   // 提醒用户添加收货地址信息
   .remind-wrap {
     position: fixed;
@@ -1644,38 +1648,38 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-
+    
     .remind-add {
       background: #fff;
       width: 90%;
       padding: 50rpx 0 0;
       border-radius: 20rpx;
       overflow: hidden;
-
+      
       .text-align-center {
         text-align: center;
       }
-
+      
       .mb20 {
         margin-bottom: 20rpx;
       }
-
+      
       .remind_desc {
         padding: 0 20rpx;
         font-size: 30rpx;
         margin: 40rpx 0;
         color: #666;
       }
-
+      
       .remind_btns {
         display: flex;
         border-top: 1rpx solid #efefef;
         line-height: 90rpx;
-
+        
         .fl1 {
           flex: 1;
         }
-
+        
         .confirm {
           background: #F43131;
           color: #fff;
@@ -1683,7 +1687,7 @@ export default {
       }
     }
   }
-
+  
   .over {
     position: fixed;
     width: 750rpx;
@@ -1691,10 +1695,12 @@ export default {
     height: 100%;
     overflow: hidden;
   }
-  .bg-f8{
+  
+  .bg-f8 {
     background-color: #F8F8F8 !important;
   }
-  .checked{
+  
+  .checked {
     width: 32rpx;
     height: 32rpx;
     border-radius: 50%;
@@ -1703,13 +1709,15 @@ export default {
     justify-content: center;
     align-items: center;
   }
-  .checked-radio{
+  
+  .checked-radio {
     width: 14rpx;
     height: 14rpx;
     border-radius: 50%;
     background-color: #F43131;
   }
-  .unchecked{
+  
+  .unchecked {
     width: 32rpx;
     height: 32rpx;
     border-radius: 50%;

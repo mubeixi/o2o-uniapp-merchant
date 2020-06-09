@@ -1,10 +1,10 @@
 <template>
-  <view class="all" @click="commonClick">
+  <view @click="commonClick" class="all">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <div class="defaults" v-if="data.length<=0">
       <image :src="'/static/client/defaultImg.png'|domain"></image>
     </div>
-    <view class="main" v-for="(item,ind) of data" :key="ind">
+    <view :key="ind" class="main" v-for="(item,ind) of data">
       <block v-if="index==1">
         <view class="fir">
           <view class="left">
@@ -83,7 +83,7 @@ export default {
       pageSize: 10,
       data: [],
       totalCount: 0,
-      index: 1
+      index: 1,
     }
   },
   onLoad (options) {
@@ -92,7 +92,7 @@ export default {
     uni.getSystemInfo({
       success: function (res) {
         that.height = res.screenHeight - 68
-      }
+      },
     })
   },
   onShow () {
@@ -117,14 +117,14 @@ export default {
       } catch (e) {
         return {}
       }
-    }
+    },
   },
   methods: {
     // 获取提现记录
     getWithdrawRecordList () {
       const data = {
         page: this.page,
-        pageSize: this.pageSize
+        pageSize: this.pageSize,
       }
       if (this.index === 1) {
         getAgentApply(data).then(res => {
@@ -133,7 +133,7 @@ export default {
             this.data.push(item)
           }
         }).catch(e => {
-
+        
         })
       } else {
         getShaApply(data).then(res => {
@@ -142,11 +142,11 @@ export default {
             this.data.push(item)
           }
         }).catch(e => {
-
+        
         })
       }
-    }
-  }
+    },
+  },
 }
 </script>
 
@@ -155,7 +155,7 @@ export default {
     background-color: #f8f8f8;
     min-height: 100vh;
   }
-
+  
   .main {
     width: 710rpx;
     margin: 0 auto;
@@ -163,33 +163,33 @@ export default {
     background-color: #FFFFFF;
     box-sizing: border-box;
     padding: 28rpx 0rpx 32rpx 27rpx;
-
+    
     .fir {
       height: 48rpx;
       display: flex;
       font-size: 26rpx;
       align-items: center;
-
+      
       .left {
         color: #333333;
         margin-right: 20rpx;
       }
-
+      
       .right {
         color: #888888;
       }
-
+      
       .rightt {
         color: #888888;
         margin-left: 20rpx;
       }
-
+      
       .rights {
         color: #F43131;
       }
     }
   }
-
+  
   .defaults {
     margin: 0 auto;
     width: 640rpx;

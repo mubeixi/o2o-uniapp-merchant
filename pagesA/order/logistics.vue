@@ -1,5 +1,5 @@
 <template>
-  <view :style="{'height':systemInfo.windowHeight+'px'}" class="all"  @click="commonClick">
+  <view :style="{'height':systemInfo.windowHeight+'px'}" @click="commonClick" class="all">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view class="wuliu box-sizing" v-if="pro.list">
       <image :src="pro.imgpath" class="image"></image>
@@ -46,7 +46,7 @@
               <view class="views"></view>
             </view>
             <view class="bottoms" v-if="(index+1)<pro.list.length">
-
+            
             </view>
           </view>
           <view class="rights">
@@ -64,7 +64,7 @@
               <view class="views"></view>
             </view>
             <view class="bottoms" v-if="(index+1)<pro.list.length">
-
+            
             </view>
           </view>
           <view class="rights">
@@ -96,7 +96,7 @@ export default {
       express: null,
       prod_img: '',
       shipping_id: '',
-      order_id: ''
+      order_id: '',
     }
   },
   onLoad (options) {
@@ -104,7 +104,7 @@ export default {
       express,
       prod_img,
       shipping_id,
-      order_id
+      order_id,
     } = options
     this.express = express
     this.order_id = order_id
@@ -117,27 +117,27 @@ export default {
   methods: {
     call () {
       uni.makePhoneCall({
-        phoneNumber: this.pro.delivery_man_phone
+        phoneNumber: this.pro.delivery_man_phone,
       })
     },
     getOrderExpress () {
-		let that=this
+      let that = this
       const data = {
         shipping_id: this.shipping_id,
         express: this.express,
         prod_img: this.prod_img,
-        order_id: this.order_id
+        order_id: this.order_id,
       }
       getOrderExpress(data).then(res => {
         this.pro = res.data
       }).catch(e => {
         error(e.msg)
-		setTimeout(function(){
-			that.$back()
-		},1000)
+        setTimeout(function () {
+          that.$back()
+        }, 1000)
       })
-    }
-  }
+    },
+  },
 }
 </script>
 
@@ -145,7 +145,7 @@ export default {
   .all {
     background-color: #f8f8f8;
   }
-
+  
   .wuliu {
     width: 710rpx;
     height: 200rpx;
@@ -157,30 +157,30 @@ export default {
     padding-left: 32rpx;
     display: flex;
     padding-bottom: 10rpx;
-
+    
     .image {
       width: 72rpx;
       height: 72rpx;
       margin-right: 30rpx;
     }
-
+    
     .fonts {
       font-size: 24rpx;
       color: #999999;
       display: flex;
       height: 40rpx;
       line-height: 30rpx;
-
+      
       .left {
         margin-right: 10rpx;
       }
-
+      
       .right {
         color: #F43131;
       }
     }
   }
-
+  
   .xiangxi {
     margin-top: 25rpx;
     width: 710rpx;
@@ -188,16 +188,16 @@ export default {
     border-radius: 20rpx;
     padding: 45rpx 0rpx 0rpx 42rpx;
     margin: 0 auto;
-
+    
     .center {
       padding: 10px 0px;
       width: 626rpx;
       display: flex;
-
+      
       .lefts {
         width: 32rpx;
         position: relative;
-
+        
         .tops {
           width: 32rpx;
           height: 32rpx;
@@ -206,7 +206,7 @@ export default {
           display: flex;
           align-items: center;
           justify-content: center;
-
+          
           .views {
             width: 16rpx;
             height: 16rpx;
@@ -214,7 +214,7 @@ export default {
             border-radius: 50%;
           }
         }
-
+        
         .bottoms {
           width: 4rpx;
           height: 100%;
@@ -224,17 +224,17 @@ export default {
           left: 14rpx;
         }
       }
-
+      
       .rights {
         margin-left: 28rpx;
-
+        
         .tops {
           font-size: 28rpx;
           color: #F43131;
           // height: 30rpx;
           line-height: 30rpx;
         }
-
+        
         .bottoms {
           margin-top: 19rpx;
           font-size: 24rpx;
@@ -243,19 +243,19 @@ export default {
           line-height: 30rpx;
         }
       }
-
+      
       .unColor {
         color: #777777 !important;
       }
-
+      
       .unBgcolor {
         background-color: #ECECEC !important;
-
+        
         .views {
           background-color: #AFAFAF !important;
         }
       }
-
+      
     }
   }
 

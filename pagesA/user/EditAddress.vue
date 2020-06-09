@@ -1,16 +1,16 @@
 <template>
-  <view class="myall" @click="commonClick">
+  <view @click="commonClick" class="myall">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <form report-submit="true">
       <view class='xinxi'>
         <text class="text">收货人</text>
-        <input type="text" class="input" name="Address_Name" v-model="MyAddress.Address_Name" maxlength='20'
-               placeholder="请输入收货人姓名" />
+        <input class="input" maxlength='20' name="Address_Name" placeholder="请输入收货人姓名" type="text"
+               v-model="MyAddress.Address_Name" />
       </view>
       <view class='xinxi'>
         <text class="text">联系电话</text>
-        <input type="number" class="input" name="Address_Mobile" v-model="MyAddress.Address_Mobile" maxlength="11"
-               placeholder="请输入联系电话" />
+        <input class="input" maxlength="11" name="Address_Mobile" placeholder="请输入联系电话" type="number"
+               v-model="MyAddress.Address_Mobile" />
       </view>
       <view @click="$openPop('address')" class="area-item">
         <text class="area-label">地址</text>
@@ -20,24 +20,24 @@
       </view>
       <view class='xinxi'>
         <text class="text">详细地址</text>
-        <input type="text" class="input" name="Address_Detailed" v-model="MyAddress.Address_Detailed" maxlength='30'
-               placeholder="请输入详细地址" />
+        <input class="input" maxlength='30' name="Address_Detailed" placeholder="请输入详细地址" type="text"
+               v-model="MyAddress.Address_Detailed" />
       </view>
-
+      
       <wzw-address :area="selectAreaId[2]" :city="selectAreaId[1]" :province="selectAreaId[0]" :town="selectAreaId[3]"
                    @up="updateAddress" class="address m-l-10 flex flex-vertical-center" ref="address">
       </wzw-address>
-
+      
       <view class='xinxi set_default'>
-        <checkbox-group name="Address_Is_Default" @change="changeCheck">
+        <checkbox-group @change="changeCheck" name="Address_Is_Default">
           <label class="checkbox label">
-            <checkbox class="checkbox" value="1" :checked="MyAddress.Address_Is_Default === 1" />
+            <checkbox :checked="MyAddress.Address_Is_Default === 1" class="checkbox" value="1" />
             设置默认地址
           </label>
         </checkbox-group>
       </view>
-
-      <button class="tianjia-btn" @click="formSubmit">确定</button>
+      
+      <button @click="formSubmit" class="tianjia-btn">确定</button>
     </form>
   </view>
 </template>
@@ -53,7 +53,10 @@ import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
   mixins: [BaseMixin],
-  components: { WzwImTip, WzwAddress },
+  components: {
+    WzwImTip,
+    WzwAddress,
+  },
   data () {
     return {
       Address_ID: '',//是否是编辑还是新增
@@ -74,7 +77,7 @@ export default {
       this.is_first_add = false
     },
     async formSubmit () {
-
+      
       if (!this.MyAddress.Address_Name) {
         uni.showToast({
           title: '请输入收货人名称',
@@ -96,7 +99,7 @@ export default {
         })
         return
       }
-
+      
       if (!this.MyAddress.Address_Detailed) {
         uni.showToast({
           title: '请填写详细的地址',
@@ -123,7 +126,7 @@ export default {
       if (this.is_first_add) {
         data.Address_Is_Default = 1
       }
-
+      
       let that = this
       if (this.Address_ID) {
         data.Address_ID = this.Address_ID
@@ -143,7 +146,7 @@ export default {
           that.$back()
         }, 1000)
       }
-
+      
     },
     updateAddress (data) {
       this.selectArea = data.str
@@ -175,22 +178,22 @@ export default {
       this.Address_ID = options.addressid
       this.load()
     }
-
+    
   },
-
+  
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
   .myall {
     background-color: #FFFFFF !important;
     min-height: 100vh;
   }
-
+  
   div, view {
     box-sizing: content-box;
   }
-
+  
   .xinxi {
     width: 710rpx;
     padding: 0 20rpx;
@@ -198,14 +201,14 @@ export default {
     overflow: hidden;
     margin-bottom: 20rpx;
   }
-
+  
   .xinxi .text {
     float: left;
     width: 140rpx;
     font-size: 28rpx;
     line-height: 90rpx;
   }
-
+  
   .xinxi .input {
     width: 570rpx;
     float: left;
@@ -213,7 +216,7 @@ export default {
     line-height: 90rpx;
     height: 90rpx;
   }
-
+  
   .tianjia-btn {
     width: 710rpx;
     margin: 50rpx 20rpx 20rpx;
@@ -221,7 +224,7 @@ export default {
     background: #F43131;
     border-radius: 8rpx;
   }
-
+  
   .dizhi {
     width: 710rpx;
     padding: 0 20rpx;
@@ -229,7 +232,7 @@ export default {
     overflow: hidden;
     margin-bottom: 20rpx;
   }
-
+  
   .dizhi, .xiangzhen {
     width: 710rpx;
     padding: 0 20rpx;
@@ -237,21 +240,21 @@ export default {
     overflow: hidden;
     margin-bottom: 20rpx;
   }
-
+  
   .xiangzhen .text {
     float: left;
     width: 140rpx;
     font-size: 28rpx;
     line-height: 90rpx;
   }
-
+  
   .dizhi .text {
     float: left;
     width: 140rpx;
     font-size: 28rpx;
     line-height: 90rpx;
   }
-
+  
   .dizhi .input {
     width: 180rpx;
     float: left;
@@ -260,7 +263,7 @@ export default {
     height: 90rpx;
     margin-right: 10rpx;
   }
-
+  
   .picker .view {
     width: 180rpx;
     float: left;
@@ -269,36 +272,36 @@ export default {
     height: 90rpx;
     margin-right: 10rpx;
   }
-
-
+  
+  
   .set_default {
     border-bottom: none;
   }
-
+  
   .set_default .label {
     font-size: 28rpx;
   }
-
+  
   .set_default .label .checkbox {
     transform: scale(.7);
     position: relative;
     top: -2px;
   }
-
+  
   .area-item {
     display: flex;
     align-items: center;
     padding: 30rpx 20rpx;
     border-bottom: 1px solid #f4f4f4;
     font-size: 28rpx;
-
+    
     .area-label {
       display: inline-block;
       width: 140rpx;
       margin-right: 10rpx;
     }
   }
-
+  
   .area-text {
     width: 600rpx;
     overflow: hidden;

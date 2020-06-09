@@ -1,34 +1,30 @@
 <template>
-<layout-loading type="type"></layout-loading>
+  <layout-loading type="type"></layout-loading>
 </template>
 
 <script>
 
 import LayoutLoading from '@/componets/layout-loading/layout-loading'
+
 export default {
   mixins: [],
   components: {
     LayoutLoading,
   },
   data () {
-    return {
-
-    }
+    return {}
   },
-  computed: {
-  },
-  methods: {
-
-  },
+  computed: {},
+  methods: {},
   onLoad (options) {
-
+  
   },
   created () {
-
+  
   },
   onShow () {
-
-  }
+  
+  },
 }
 </script>
 <style lang="scss" scoped>

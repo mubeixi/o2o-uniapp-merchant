@@ -1,20 +1,20 @@
 <template>
-  <view class="page-wrap" @click="commonClick">
+  <view @click="commonClick" class="page-wrap">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
-    <image v-show="drawPosterDone" class="preview" @click="preFn" :src="current_url" mode="widthFix" />
-
-    <canvas class="myCanvas" id="myCanvas" canvas-id="myCanvas"/>
-
+    <image :src="current_url" @click="preFn" class="preview" mode="widthFix" v-show="drawPosterDone" />
+    
+    <canvas canvas-id="myCanvas" class="myCanvas" id="myCanvas" />
+    
     <div class="handle-box">
       <div class="remind-title fz-13 c3 text-center">选择海报模板</div>
       <div class="swiper">
-        <div class="swiper-item" @click="setSelect(idx)" v-for="(poster,idx) in poster_list" :key="idx">
-          <image class="swiper-itm-img" :src="poster.thumb_bg_img"></image>
+        <div :key="idx" @click="setSelect(idx)" class="swiper-item" v-for="(poster,idx) in poster_list">
+          <image :src="poster.thumb_bg_img" class="swiper-itm-img"></image>
         </div>
       </div>
-      <div class="share-btn" @click="saveImg">保存海报</div>
+      <div @click="saveImg" class="share-btn">保存海报</div>
     </div>
-    <layout-modal ref="commentModal" :autoClose="false">
+    <layout-modal :autoClose="false" ref="commentModal">
       <div class="refuseApplyDialog">
         <div class="c3 fz-14 modal-title">
           是否开启相册权限
@@ -24,11 +24,11 @@
         </div>
         <div class="control">
           <button @click="backSetting" class="action-btn btn-cancel">取消</button>
-          <button open-type='openSetting' bindopensetting="openSetting" class="btn-sub action-btn">确定</button>
+          <button bindopensetting="openSetting" class="btn-sub action-btn" open-type='openSetting'>确定</button>
         </div>
       </div>
     </layout-modal>
-
+  
   </view>
 </template>
 <script>
@@ -43,7 +43,10 @@ import LayoutModal from '@/componets/layout-modal/layout-modal'
 
 let canvasInstance = null
 export default {
-  components: { WzwImTip, LayoutModal },
+  components: {
+    WzwImTip,
+    LayoutModal,
+  },
   mixins: [BaseMixin],
   data () {
     return {
@@ -64,14 +67,14 @@ export default {
         dis_config: {},
         total_sales: '',
         total_income: '',
-        balance: ''
-      }//
+        balance: '',
+      },//
     }
   },
   computed: {
     userInfo () {
       return this.$store.getters['user/getUserInfo']()
-    }
+    },
   },
   onReady () {
     if (!this.biz_id) {
@@ -85,7 +88,7 @@ export default {
     // context.draw()
   },
   onShow () {
-
+    
     this.$refs.commentModal.close()
   },
   onLoad (options) {
@@ -93,7 +96,7 @@ export default {
       error('biz_id参数必传')
       return
     }
-
+    
     this.biz_id = options.biz_id
     // const { type, again } = options
     // this.type = type
@@ -115,7 +118,7 @@ export default {
         fail () {
           _self.$refs.commentModal.show()
           error('拒绝相册授权,保存失败')
-        }
+        },
       })
     },
     saveImg () {
@@ -128,13 +131,13 @@ export default {
           } else { // 用户已经授权过了
             _self.saveFn()
           }
-        }
+        },
       })
     },
     async saveFn () {
       const handleRT = await saveImageToDisk({
         fileUrl: this.current_url,
-        type: 'online'
+        type: 'online',
       })
       if (handleRT === false) {
         error('保存失败')
@@ -151,7 +154,7 @@ export default {
         return
       }
       uni.previewImage({
-        urls: [this.current_url]
+        urls: [this.current_url],
       })
     },
     // async shareFn () {
@@ -167,60 +170,66 @@ export default {
       try {
         this.drawPosterDone = false
         showLoading('生成中')
-
+        
         const posterInfo = this.poster_list[idx]
-
+        
         if (!posterInfo) throw Error('模板信息有误')
-
+        
         const itemInfo = {}
         for (var i in posterInfo.position) {
           itemInfo[i] = { ...posterInfo.position[i], ...posterInfo.size[i] }
         }
         console.log(itemInfo)
-
+        
         const wrapHeight = 1500
         const wrapWidth = 1100
         const ctx = canvasInstance
-
+        
         const userInfo = {
           avatar: getDomain(this.bizInfo.biz_logo),
           nickname: this.bizInfo.biz_shop_name,
-          qrcode: getDomain(this.qrcode)
+          qrcode: getDomain(this.qrcode),
         }
         console.log(userInfo)
-
+        
         ctx.fillRect(wrapWidth, wrapHeight, 0, 0)
-
-        const wrapTempFile = await Promisify('getImageInfo', { src: getDomain(posterInfo.bg_img) }).catch(e => { throw Error(e.errMsg || '缓存海报背景失败') })
+        
+        const wrapTempFile = await Promisify('getImageInfo', { src: getDomain(posterInfo.bg_img) }).catch(e => {
+          throw Error(e.errMsg || '缓存海报背景失败')
+        })
         ctx.drawImage(wrapTempFile.path, 0, 0, wrapWidth, wrapHeight)
-
-        const qrcodeTempFile = await Promisify('getImageInfo', { src: userInfo.qrcode }).catch(e => { throw Error(e.errMsg || '缓存二维码失败') })
+        
+        const qrcodeTempFile = await Promisify('getImageInfo', { src: userInfo.qrcode }).catch(e => {
+          throw Error(e.errMsg || '缓存二维码失败')
+        })
         ctx.drawImage(qrcodeTempFile.path, itemInfo.qrcode.left, itemInfo.qrcode.top, itemInfo.qrcode.width, itemInfo.qrcode.height)
-
-        const avatarTempFile = await Promisify('getImageInfo', { src: userInfo.avatar }).catch(e => { throw Error(e.errMsg || '缓存二维码失败') })
+        
+        const avatarTempFile = await Promisify('getImageInfo', { src: userInfo.avatar }).catch(e => {
+          throw Error(e.errMsg || '缓存二维码失败')
+        })
         ctx.drawImage(avatarTempFile.path, itemInfo.avatar.left, itemInfo.avatar.top, itemInfo.avatar.width, itemInfo.avatar.height)
-
+        
         ctx.setFontSize(itemInfo.nickname.size)
         ctx.setFillStyle('#333333')
         ctx.fillText(userInfo.nickname, itemInfo.nickname.left, itemInfo.nickname.top)
-
+        
         ctx.setFontSize(itemInfo.follow.size)
         ctx.setFillStyle('#333333')
         ctx.fillText(this.bizInfo.follow, itemInfo.follow.left, itemInfo.follow.top)
-
+        
         await new Promise(resolve => {
           ctx.draw(false, function () {
             console.log('draw done')
             resolve()
           })
         })
-
+        
         const { tempFilePath } = await Promisify('canvasToTempFilePath', { canvasId: 'myCanvas' })
         console.log(tempFilePath)
-
+        
         this.current_url = tempFilePath
         this.drawPosterDone = true
-
+        
         // 绘制底部白色
         // ctx.setFillStyle('#f2f2f2')
       } catch (e) {
@@ -235,24 +244,30 @@ export default {
         // 先获取二维码
         // let qrRet = await getDistributeWxQrcode({type,again,owner_id:this.userInfo.User_ID},{tip:'生成中'})
         // this.qrimg = qrRet.data.img_url;
-
-        this.bizInfo = await getBizInfo({ biz_id: this.biz_id }).then(res => res.data[0]).catch((err) => { throw Error(err.msg || '获取商家信息失败') })
-
-        const { bg_img: lists, qrcode } = await getBizShare({ pageSize: 999, qrcode_type: 'wx_lp', biz_id: this.biz_id })
+        
+        this.bizInfo = await getBizInfo({ biz_id: this.biz_id }).then(res => res.data[0]).catch((err) => {
+          throw Error(err.msg || '获取商家信息失败')
+        })
+        
+        const { bg_img: lists, qrcode } = await getBizShare({
+          pageSize: 999,
+          qrcode_type: 'wx_lp',
+          biz_id: this.biz_id,
+        })
           .then(res => {
             return res.data
           })
           .catch((err) => {
             throw Error(err.msg)
           })
-
+        
         this.poster_list = lists.map(row => {
           row.thumb_bg_img = getDomain(row.thumb_bg_img)
           return row
         })
-
+        
         if (qrcode) this.qrcode = qrcode
-
+        
         if (this.poster_list.length > 0) {
           this.drawPoster(0)
           // getDistributeWxQrcode({
@@ -270,8 +285,8 @@ export default {
     },
     goBack () {
       this.$back()
-    }
-  }
+    },
+  },
 }
 </script>
 <style lang="scss" scoped>
@@ -283,6 +298,7 @@ export default {
     width: 1100px;
     height: 1500px;
   }
+  
   .preview {
     position: absolute;
     top: 20rpx;
@@ -292,7 +308,7 @@ export default {
     height: auto;
     max-width: 550rpx;
   }
-
+  
   .handle-box {
     z-index: 9;
     bottom: 0px;
@@ -302,35 +318,35 @@ export default {
     height: 284rpx;
     padding-bottom: 90rpx;
     background: white;
-
+    
     .remind-title {
       height: 90rpx;
       line-height: 90rpx;
     }
-
+    
     .swiper {
       margin-bottom: 40rpx;
-
+      
       white-space: nowrap;
       overflow-x: scroll;
       overflow-y: hidden;
       z-index: 3;
       height: 150rpx;
-
+      
       .swiper-item {
         display: inline-block;
         width: 110rpx;
         height: 150rpx;
         margin-left: 20rpx;
         position: relative;
-
+        
         .swiper-itm-img {
           width: 110rpx;
           height: 150rpx;
         }
       }
     }
-
+    
     .share-btn {
       position: absolute;
       bottom: 0;
@@ -341,14 +357,15 @@ export default {
       background: $fun-primary-color;
       color: white;
     }
-
+    
   }
-
-  .control{
+  
+  .control {
     display: flex;
     width: 100%;
     align-items: center;
-    .action-btn{
+    
+    .action-btn {
       flex: 1;
       text-align: center;
       height: 80rpx;
@@ -357,30 +374,33 @@ export default {
       background-color: #FFFFFF;
       border: 0px;
     }
-    button::after{
+    
+    button::after {
       width: 0;
       height: 0;
     }
   }
-
-  .refuseApplyDialog{
+  
+  .refuseApplyDialog {
     width: 560rpx;
     box-sizing: border-box;
     padding-left: 40rpx;
     padding-right: 40rpx;
-    .modal-title{
+    
+    .modal-title {
       height: 80rpx;
       line-height: 80rpx;
       text-align: center;
       font-weight: bold;
     }
-    .btn-sub{
+    
+    .btn-sub {
       color: #1aac19;
     }
-
+    
   }
-
+  
   .page-wrap {
-
+  
   }
 </style>
