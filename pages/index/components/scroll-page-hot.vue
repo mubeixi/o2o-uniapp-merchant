@@ -206,7 +206,7 @@ export default {
     DiyVideo,
     DiySwiper,
     DiyBase,
-    LayoutCopyright,
+    LayoutCopyright
   },
   data () {
     return {
@@ -218,8 +218,8 @@ export default {
       killList: [],
       livePaginate: {
         pageSize: 10,
-        page: 1,
-      },
+        page: 1
+      }
     }
   },
   watch: {
@@ -229,8 +229,8 @@ export default {
           this.livePaginate.page = 1
           this.loadLiveGoodsList(idx)
         }
-      },
-    },
+      }
+    }
   },
   methods: {
     bindReachBottom () {
@@ -245,11 +245,11 @@ export default {
         const { Home_Json: resultData } = await getSkinConfig({}, { onlyData: true }).catch(e => {
           throw Error(e.msg || '获取首页模板失败')
         })
-        
+
         const mixinData = typeof resultData === 'string' ? JSON.parse(resultData) : resultData
-        
+
         const { plugin: templateData, system } = mixinData
-        
+
         // 存储页面数据
         this.templateData = [] // 页面数据的二维数组。
         this.templateList = [] // 页面组件的二维数组。
@@ -281,7 +281,7 @@ export default {
             })
           }
         }
-        
+
         return true
       } catch (e) {
         return e
@@ -293,11 +293,11 @@ export default {
         return
       }
       const cateId = this.liveNav[idx].Category_ID
-      
+
       const { data: liveGoodsList, totalCount } = await getProductList({
         Cate_ID: cateId,
         page: this.liveNav[idx].page,
-        pageSize: this.liveNav[idx].pageSize,
+        pageSize: this.liveNav[idx].pageSize
       }).catch(e => {
         throw Error(e.msg || '刷新直播商品列表失败')
       })
@@ -311,15 +311,20 @@ export default {
       try {
         const handleRT = await this.get_tmpl_data()
         if (handleRT !== true) throw handleRT // hanldeRT不是true就是一个Error实例，直接抛出
-        
+
         this.killList = await getFlashsaleList({}, { onlyData: true }).catch(err => {
           throw Error(err.msg || '初始化秒杀商品失败')
         })
-        
+        if (this.killList.length > 0) {
+          this.killList.map(item => {
+            item.discount = (item.price / item.Products_PriceX * 10).toFixed(1)
+          })
+        }
+
         this.firstCateList = await getProductCategory({}, { onlyData: true }).catch(() => {
           throw Error('获取商品分类失败')
         })
-        
+
         this.liveNav = this.firstCateList.map(row => {
           row.goodsList = []
           row.totalCount = 999
@@ -334,45 +339,45 @@ export default {
         hideLoading()
       }
     },
-    $toGoodsDetail: toGoodsDetail,
+    $toGoodsDetail: toGoodsDetail
   },
   created () {
     this._init_func()
-  },
+  }
 }
 </script>
 <style lang="scss" scoped>
-  
+
   .live-box {
     padding: 0 25rpx;
-    
+
     .block-title {
       padding: 20px 0 10px 0;
-      
+
       .block-title-text {
         font-weight: bold;
       }
     }
-    
+
     .nav-box {
       color: #666666;
       margin-bottom: 10px;
-      
+
       .nav-list {
         overflow-y: hidden;
         overflow-x: scroll;
-        
+
         &::-webkit-scrollbar {
           display: none;
         }
-        
+
         .nav-item {
           padding: 0;
           margin-right: 30rpx;
           height: 30px;
           line-height: 30px;
           display: inline-block;
-          
+
           &.active {
             color: $fun-green-color;
             border-bottom: 2px solid $fun-green-color;
@@ -380,9 +385,9 @@ export default {
         }
       }
     }
-    
+
     .live-list {
-      
+
       .live-item {
         background: white;
         width: 700rpx;
@@ -391,15 +396,15 @@ export default {
         display: flex;
         border-radius: 20rpx;
         overflow: hidden;
-        
+
         &:last-child {
           margin-bottom: 0;
           border-bottom: none;
         }
-        
+
         .left {
           width: 300rpx;
-          
+
           .cover {
             width: 300rpx;
             height: 300rpx;
@@ -408,14 +413,14 @@ export default {
             border-bottom-left-radius: 10rpx;
             overflow: hidden;
           }
-          
+
         }
-        
+
         .right {
           margin-left: 10px;
           padding-top: 10px;
           font-size: 12px;
-          
+
           .title {
             font-size: 13px;
             max-height: 36px;
@@ -423,14 +428,14 @@ export default {
             margin-top: 10px;
             color: #333;
             overflow: hidden;
-            
+
             .text {
               white-space: normal;
               overflow: hidden;
               text-overflow: ellipsis;
               margin-right: 3px;
             }
-            
+
             .live-status {
               display: inline-block;
               margin-right: 4px;
@@ -444,36 +449,36 @@ export default {
               border-bottom-right-radius: 8px;
             }
           }
-          
+
           .price-box {
             display: flex;
             margin-bottom: 6px;
-            
+
             .selling-price {
               color: $fun-red-color;
-              
+
               .num {
                 font-size: 14px;
               }
             }
-            
+
             .market-price {
               display: flex;
               align-items: flex-end;
               text-decoration: line-through;
               color: #999;
-              
+
             }
           }
-          
+
           .sale-count {
             margin-bottom: 6px;
             color: #999;
           }
-          
+
           .tags {
             margin-bottom: 6px;
-            
+
             .tag {
               display: inline-block;
               margin-right: 4px;
@@ -484,16 +489,16 @@ export default {
               font-size: 10px;
               height: 16px;
               line-height: 16px;
-              
+
             }
           }
-          
+
           .action {
             margin-top: 44rpx;
             position: relative;
             width: 370rpx;
             height: 68rpx;
-            
+
             .bgimg {
               position: absolute;
               width: 370rpx;
@@ -502,7 +507,7 @@ export default {
               top: 0;
               z-index: 1;
             }
-            
+
             .price-box {
               height: 68rpx;
               padding: 0 10rpx 0 16rpx;
@@ -512,45 +517,45 @@ export default {
               align-items: center;
               justify-content: space-between;
             }
-            
+
           }
         }
       }
     }
   }
-  
+
   .kill-box {
     padding: 0 25rpx;
     background: white;
-    
+
     .block-title {
       padding: 20px 0 10px 0;
-      
+
       .block-title-text {
         font-weight: bold;
       }
     }
-    
+
     .goods-list {
       display: flex;
       flex-wrap: wrap;
-      
+
       .goods-item {
         width: 220rpx;
         margin-right: 20rpx;
         margin-bottom: 20rpx;
         font-size: 12px;
-        
+
         &:nth-child(3n+0) {
           margin-right: 0;
         }
-        
+
         .cover {
           width: 220rpx;
           height: 220rpx;
           @include cover-img();
           position: relative;
-          
+
           .tip {
             position: absolute;
             left: 0;
@@ -564,7 +569,7 @@ export default {
             background: rgba(30, 146, 104, .6);
           }
         }
-        
+
         .title {
           margin: 4px 0;
           color: #333;
@@ -573,20 +578,20 @@ export default {
           overflow: hidden;
           text-overflow: ellipsis;
         }
-        
+
         .price-box {
           display: flex;
-          
+
           .sign {
             color: $fun-red-color;
           }
-          
+
           .num {
             color: $fun-red-color;
             font-size: 14px;
           }
         }
-        
+
         .tags {
           .tag {
             display: inline-block;
