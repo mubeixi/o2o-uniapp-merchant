@@ -1,5 +1,5 @@
 <template>
-  <view class="bgColor-white" @click="commonClick">
+  <view @click="commonClick" class="bgColor-white">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <input class="v_input" placeholder="修改用户名" type="text" v-if="type === 0" v-model="userInfo.User_Name" />
     <input class="v_input" placeholder="修改昵称" type="text" v-if="type === 1" v-model="userInfo.User_NickName" />
@@ -14,7 +14,7 @@
     </block>
     <input class="v_input" placeholder="修改邮箱" type="text" v-if="type === 3" v-model="userInfo.User_Email" />
     <block v-if="type === 4">
-
+      
       <wzw-address :area="selectAreaId[2]" :city="selectAreaId[1]" :province="selectAreaId[0]" :town="selectAreaId[3]"
                    @up="updateAddress" class="address m-l-10 flex flex-vertical-center" ref="address">
       </wzw-address>
@@ -43,7 +43,10 @@ import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
   mixins: [BaseMixin],
-  components: { WzwImTip, WzwAddress },
+  components: {
+    WzwImTip,
+    WzwAddress,
+  },
   data () {
     return {
       dateValue: '',
@@ -51,13 +54,13 @@ export default {
       userInfo: {},
       selectArea: '', // 选择的地址
       User_Address: '',
-      selectAreaId: []
+      selectAreaId: [],
     }
   },
   computed: {},
   methods: {
     ...mapActions({
-      setUserInfo: 'user/setUserInfo'
+      setUserInfo: 'user/setUserInfo',
     }),
     updateAddress (data) {
       // data.str  data.id []
@@ -71,7 +74,7 @@ export default {
       if (this.selectAreaId.length <= 1) {
         uni.showToast({
           title: '请选择地址',
-          icon: 'none'
+          icon: 'none',
         })
         return
       }
@@ -80,7 +83,7 @@ export default {
         User_City: this.selectAreaId[1],
         User_Area: this.selectAreaId[2],
         User_Tow: this.selectAreaId[3],
-        User_Address: this.User_Address
+        User_Address: this.User_Address,
       }).then(res => {
         this.userInfo.User_Province = res.data.User_Province
         this.userInfo.User_City = res.data.User_City
@@ -88,7 +91,7 @@ export default {
         this.userInfo.User_Tow = res.data.User_Tow
         this.userInfo.User_Address = res.data.User_Address
         uni.showToast({
-          title: '修改成功'
+          title: '修改成功',
         })
         this.setUserInfo(this.userInfo)
         setTimeout(() => {
@@ -105,13 +108,13 @@ export default {
         this.saveAddress()
         return
       }
-
+      
       if (this.loading) return
       if (this.type === 0) {
         if (!this.userInfo.User_Name) {
           uni.showToast({
             title: '请输入用户名',
-            icon: 'none'
+            icon: 'none',
           })
           return
         }
@@ -120,7 +123,7 @@ export default {
         if (!this.userInfo.User_NickName) {
           uni.showToast({
             title: '请输入昵称',
-            icon: 'none'
+            icon: 'none',
           })
           return
         }
@@ -129,7 +132,7 @@ export default {
         if (!this.userInfo.User_Email) {
           uni.showToast({
             title: '请输入邮箱',
-            icon: 'none'
+            icon: 'none',
           })
           return
         }
@@ -138,12 +141,11 @@ export default {
         if (!this.dateValue) {
           uni.showToast({
             title: '请填写生日',
-            icon: 'none'
+            icon: 'none',
           })
           return
         }
-
-
+        
         uni.showModal({
           title: '提示',
           content: '生日信息一旦修改，不可再次更改',
@@ -154,7 +156,7 @@ export default {
                 User_Name: that.userInfo.User_Name,
                 User_NickName: that.userInfo.User_NickName,
                 User_Email: that.userInfo.User_Email,
-                User_Birthday: that.dateValue
+                User_Birthday: that.dateValue,
               }).then(res => {
                 that.userInfo.User_Name = res.data.User_Name
                 that.userInfo.User_NickName = res.data.User_NickName
@@ -162,7 +164,7 @@ export default {
                 that.userInfo.User_Birthday = res.data.User_Birthday
                 that.dateValue = res.data.User_Birthday
                 uni.showToast({
-                  title: '修改成功'
+                  title: '修改成功',
                 })
                 that.setUserInfo(that.userInfo)
                 setTimeout(() => {
@@ -173,9 +175,9 @@ export default {
                 that.loading = false
               })
             } else if (res.cancel) {
-
+            
             }
-          }
+          },
         })
         return
       }
@@ -183,14 +185,14 @@ export default {
       updateUserInfo({
         User_Name: this.userInfo.User_Name,
         User_NickName: this.userInfo.User_NickName,
-        User_Email: this.userInfo.User_Email
+        User_Email: this.userInfo.User_Email,
       }).then(res => {
         this.userInfo.User_Name = res.data.User_Name
         this.userInfo.User_NickName = res.data.User_NickName
         this.userInfo.User_Email = res.data.User_Email
         this.dateValue = res.data.User_Birthday
         uni.showToast({
-          title: '修改成功'
+          title: '修改成功',
         })
         this.setUserInfo(this.userInfo)
         setTimeout(() => {
@@ -217,19 +219,19 @@ export default {
           this.title = '修改地址'
           break
       }
-
+      
       uni.setNavigationBarTitle({
-        title: this.title
+        title: this.title,
       })
     },
     async init () {
       this.userInfo = await getUserInfo({}, {
         onlyData: true,
-        tip: '加载中'
+        tip: '加载中',
       }).catch(e => {
         error(e.msg || '获取信息失败')
       })
-
+      
       this.dateValue = this.userInfo.User_Birthday
       this.User_Address = this.userInfo.User_Address
       this.selectArea = this.userInfo.User_Province_name + this.userInfo.User_City_name + this.userInfo.User_Area_name + this.userInfo.User_Tow_name
@@ -239,7 +241,7 @@ export default {
         this.selectAreaId.push(Number(this.userInfo.User_Area))
         this.selectAreaId.push(Number(this.userInfo.User_Tow))
       }
-    }
+    },
   },
   onLoad (option) {
     if (option.type) {
@@ -251,8 +253,8 @@ export default {
   },
   onShow () {
     this.init()
-  }
-
+  },
+  
 }
 </script>
 
@@ -262,7 +264,7 @@ export default {
     padding-top: 20px;
     box-sizing: border-box;
   }
-
+  
   .v_input {
     border: 1px solid #efefef;
     width: 90%;
@@ -274,7 +276,7 @@ export default {
     box-sizing: border-box;
     border-radius: 10rpx;
   }
-
+  
   .save {
     height: 80rpx;
     width: 90%;
@@ -285,30 +287,30 @@ export default {
     text-align: center;
     border-radius: 10rpx;
   }
-
+  
   .area-item {
     display: flex;
     align-items: center;
     padding: 30rpx 20rpx;
     border-bottom: 1px solid #e3e3e3;
     font-size: 28rpx;
-
+    
     .area-label {
       display: inline-block;
       width: 180rpx;
       margin-right: 10rpx;
     }
   }
-
+  
   .picker {
     display: flex;
-
+    
     .p_item {
       flex: 1;
       // text-align: center;
     }
   }
-
+  
   .area-text {
     width: 600rpx;
     overflow: hidden;

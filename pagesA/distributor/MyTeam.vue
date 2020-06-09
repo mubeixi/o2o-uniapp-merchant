@@ -1,10 +1,10 @@
 <template>
-  <view class="team" @click="commonClick">
+  <view @click="commonClick" class="team">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view style="width: 100%;height: 20rpx;"></view>
     <view class="teamName" v-if="pro.disInfo">
       <view class="teamImg">
-        <image class="image" :src="pro.disInfo.Shop_Logo"></image>
+        <image :src="pro.disInfo.Shop_Logo" class="image"></image>
       </view>
       <view class="teamInfo">
         <view class="nickName">
@@ -20,16 +20,16 @@
         <image class="image" src="/static/red-people.png"></image>
         <view class="viewq">团队总人数</view>
       </view>
-      <view class="teamGrade" v-for="(item,index) of pro.team_level_count" :key="index" @click="goMyNumber(index)">
+      <view :key="index" @click="goMyNumber(index)" class="teamGrade" v-for="(item,index) of pro.team_level_count">
         <view class="views">
           {{item.title}}
         </view>
         <view class="views">
           <text>{{item.count}}</text>
-          <image class="img" :src="'/static/client/distributor/right.png'|domain"></image>
+          <image :src="'/static/client/distributor/right.png'|domain" class="img"></image>
         </view>
       </view>
-
+    
     </view>
   </view>
 </template>
@@ -58,7 +58,7 @@ export default {
     this.getDisTeamCount()
   },
   onShow () {
-
+  
   },
   methods: {
     goMyNumber (item) {
@@ -71,7 +71,7 @@ export default {
       getDisTeamCount().then(res => {
         this.pro = res.data
       }).catch(e => {
-
+      
       })
     },
   },
@@ -83,36 +83,36 @@ export default {
     background-color: #F8F8F8;
     min-height: 100vh;
     box-sizing: border-box;
-
+    
     .teamName {
       margin: 30rpx 0rpx 30rpx 20rpx;
       margin-top: 0rpx;
       display: flex;
-
+      
       .teamImg {
         width: 90rpx;
         height: 90rpx;
         border-radius: 50%;
         overflow: hidden;
-
+        
         .image {
           width: 100%;
           height: 100%;
         }
       }
-
+      
       .teamInfo {
         margin-left: 18rpx;
         padding-top: 11rpx;
         padding-bottom: 18rpx;
-
+        
         .nickName {
           height: 28rpx;
           font-size: 30rpx;
           line-height: 28rpx;
           color: #333333;
         }
-
+        
         .tuijianren {
           height: 23rpx;
           line-height: 23rpx;
@@ -122,23 +122,23 @@ export default {
         }
       }
     }
-
+    
     .teamContent {
       width: 710rpx;
       margin: 0 auto;
       background-color: #FFFFFF;
-
+      
       .teamNumber {
         height: 93rpx;
         padding-left: 23rpx;
         display: flex;
         align-items: center;
-
+        
         .image {
           width: 35rpx;
           height: 33rpx;
         }
-
+        
         .viewq {
           margin-left: 16rpx;
           font-size: 28rpx;
@@ -146,7 +146,7 @@ export default {
           font-weight: bold;
         }
       }
-
+      
       .teamGrade {
         width: 690rpx;
         margin-left: 10rpx;
@@ -156,22 +156,22 @@ export default {
         display: flex;
         justify-content: space-between;
         align-items: center;
-
+        
         .img {
           width: 15rpx;
           height: 23rpx;
           margin-right: 8rpx;
           margin-left: 16rpx;
         }
-
+        
         .views {
           font-size: 26rpx;
           color: #666666;
           margin-left: 19rpx;
         }
-
+        
       }
-
+      
       & view.teamGrade:last-child {
         border-bottom: 0rpx;
       }

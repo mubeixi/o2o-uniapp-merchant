@@ -1,47 +1,53 @@
 <template>
   <div class="page-wrap">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
-    <div class="head-box" :style="{height:diyHeadHeight+'px',backgroundColor:primaryColor}">
-      <div class="head" :style="{height:menuButtonInfo.height+'px',paddingRight:diyHeadRight+'px',marginTop:menuButtonInfo.top+'px'}">
+    <div :style="{height:diyHeadHeight+'px',backgroundColor:primaryColor}" class="head-box">
+      <div :style="{height:menuButtonInfo.height+'px',paddingRight:diyHeadRight+'px',marginTop:menuButtonInfo.top+'px'}"
+           class="head">
         <ul class="tab-box">
-          <li @click="setHeadTabIndex(0)" id="headTabItem0" class="tab-item" :class="[headTabIndex === 0?'active':'']">
+          <li :class="[headTabIndex === 0?'active':'']" @click="setHeadTabIndex(0)" class="tab-item" id="headTabItem0">
             <div :animation="tabAnimationData[0]">特价</div>
-            <div id="tabItemTip0" class="tab-item-tip"></div>
+            <div class="tab-item-tip" id="tabItemTip0"></div>
           </li>
-          <li @click="setHeadTabIndex(1)" id="headTabItem1" class="tab-item" :class="[headTabIndex === 1?'active':'']">
+          <li :class="[headTabIndex === 1?'active':'']" @click="setHeadTabIndex(1)" class="tab-item" id="headTabItem1">
             <div :animation="tabAnimationData[1]">同城闪送</div>
-            <div id="tabItemTip1" class="tab-item-tip"></div>
+            <div class="tab-item-tip" id="tabItemTip1"></div>
           </li>
-          <li @click="setHeadTabIndex(2)" id="headTabItem2" class="tab-item" :class="[headTabIndex === 2?'active':'']">
+          <li :class="[headTabIndex === 2?'active':'']" @click="setHeadTabIndex(2)" class="tab-item" id="headTabItem2">
             <div :animation="tabAnimationData[2]">好店</div>
-            <div id="tabItemTip2" class="tab-item-tip"></div>
+            <div class="tab-item-tip" id="tabItemTip2"></div>
           </li>
-          <span v-show="showUnderLine" class="page-tab-underline" :style="{marginLeft:defaultUnderlineLeft+'px'}" :animation="tabUnderlineAnimationData"></span>
+          <span :animation="tabUnderlineAnimationData" :style="{marginLeft:defaultUnderlineLeft+'px'}" class="page-tab-underline"
+                v-show="showUnderLine"></span>
         </ul>
-        <div class="search-box" @click="$linkTo('/pages/search/index')" :style="{borderRadius: menuButtonInfo.height/2+'px',height:menuButtonInfo.height+'px',}">
-          <layout-icon class="iconsearch" type="iconicon-search" size="16" color="#fff"></layout-icon>
+        <div :style="{borderRadius: menuButtonInfo.height/2+'px',height:menuButtonInfo.height+'px',}" @click="$linkTo('/pages/search/index')"
+             class="search-box">
+          <layout-icon class="iconsearch" color="#fff" size="16" type="iconicon-search"></layout-icon>
         </div>
       </div>
     </div>
     <!--占位-->
     <div :style="{height:diyHeadHeight+'px'}"></div>
-    <div class="main tab-container" :style="{top:diyHeadHeight+'px'}">
-      <scroll-view lower-threshold="1" @scrolltolower="bindGetMore(0)" class="tab-page-wrap" scroll-y v-show="headTabIndex===0">
+    <div :style="{top:diyHeadHeight+'px'}" class="main tab-container">
+      <scroll-view @scrolltolower="bindGetMore(0)" class="tab-page-wrap" lower-threshold="1" scroll-y
+                   v-show="headTabIndex===0">
         <scroll-page-hot ref="page0"></scroll-page-hot>
       </scroll-view>
-      <scroll-view lower-threshold="1" @scrolltolower="bindGetMore(1)" class="tab-page-wrap" scroll-y v-show="headTabIndex===1">
+      <scroll-view @scrolltolower="bindGetMore(1)" class="tab-page-wrap" lower-threshold="1" scroll-y
+                   v-show="headTabIndex===1">
         <scroll-page-local ref="page1"></scroll-page-local>
       </scroll-view>
-      <scroll-view lower-threshold="1" @scrolltolower="bindGetMore(2)" class="tab-page-wrap" scroll-y v-show="headTabIndex===2">
+      <scroll-view @scrolltolower="bindGetMore(2)" class="tab-page-wrap" lower-threshold="1" scroll-y
+                   v-show="headTabIndex===2">
         <scroll-page-merchat ref="page2"></scroll-page-merchat>
       </scroll-view>
     </div>
-    <div class="publish-btn" @click="toMerchant">
-      <layout-icon size="18" display="inline" color="#fff" type="iconfabu"></layout-icon>
+    <div @click="toMerchant" class="publish-btn">
+      <layout-icon color="#fff" display="inline" size="18" type="iconfabu"></layout-icon>
       <div class="fz-10 color-white">发布活动</div>
     </div>
 
-    <layout-modal ref="openLocalSettingModal" :autoClose="false">
+    <layout-modal :autoClose="false" ref="openLocalSettingModal">
       <div class="refuseApplyDialog">
         <div class="c3 fz-16 modal-title">
           是否开启定位
@@ -50,8 +56,9 @@
           很抱歉，该功能必须基于地理位置提供商品检索，您需开启地理位置授权才可以使用该功能
         </div>
         <div class="control flex flex-justify-between flex-justify-c">
-          <button size="mini" @click="$closePop('openLocalSettingModal')" class="action-btn btn-cancel">取消</button>
-          <button size="mini" open-type='openSetting' bindopensetting="bindOpenSetting" class="btn-sub action-btn">确定</button>
+          <button @click="$closePop('openLocalSettingModal')" class="action-btn btn-cancel" size="mini">取消</button>
+          <button bindopensetting="bindOpenSetting" class="btn-sub action-btn" open-type='openSetting' size="mini">确定
+          </button>
         </div>
       </div>
     </layout-modal>
@@ -60,9 +67,9 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { modal } from '@/common/fun'
-import BaseMixin from '@/mixins/BaseMixin'
+import BaseMixin, { tabbarMixin } from '@/mixins/BaseMixin'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import ScrollPageHot from '@/pages/index/components/scroll-page-hot'
 import ScrollPageLocal from '@/pages/index/components/scroll-page-local'
@@ -71,9 +78,12 @@ import Promisify from '@/common/Promisify'
 import LayoutModal from '@/componets/layout-modal/layout-modal'
 import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
+import eventHub from '@/common/eventHub'
+
 export default {
-  mixins: [BaseMixin],
+  mixins: [BaseMixin, tabbarMixin],
   components: {
+
     WzwImTip,
     LayoutModal,
     ScrollPageMerchat,
@@ -205,6 +215,12 @@ export default {
     console.log(this.$store.getters['theme/pimaryColor'])
   },
   onShow () {
+    this.setTabBarIndex(0)
+
+    // 底部tabbar
+    this.$store.dispatch('system/setTabActiveIdx', 0)
+    this.refreshTabTag()
+
     this.$refs.openLocalSettingModal.close()
     if (this.headTabIndex > 0) {
       Promisify('authorize', { scope: 'scope.userLocation' }).then(() => {
@@ -237,25 +253,29 @@ export default {
   .page-wrap {
     background: #f8f8f8;
   }
-  .publish-btn{
+
+  .publish-btn {
     position: fixed;
-    bottom: 30rpx;
+    bottom: 128rpx;
+    margin-bottom: env(safe-area-inset-bottom);
     right: 30rpx;
     z-index: 99;
     box-sizing: border-box;
     padding-top: 8rpx;
-    width:98rpx;
-    height:98rpx;
-    background:rgba(38,199,141,1);
-    box-shadow:0rpx 2rpx 12rpx 0rpx rgba(35,183,130,0.4);
-    border-radius:50%;
+    width: 98rpx;
+    height: 98rpx;
+    background: rgba(38, 199, 141, 1);
+    box-shadow: 0rpx 2rpx 12rpx 0rpx rgba(35, 183, 130, 0.4);
+    border-radius: 50%;
     text-align: center;
   }
 
   .tab-container {
     position: absolute;
-    bottom: 0;
+    bottom: 0rpx;
+    padding-bottom: env(safe-area-inset-bottom);
     width: 750rpx;
+
     .tab-page-wrap {
       position: absolute;
       top: 0;
@@ -279,11 +299,13 @@ export default {
     align-items: center;
     color: white;
     justify-content: space-between;
+
     .tab-box {
       position: relative;
       display: flex;
       align-items: flex-end;
       padding-bottom: 8px;
+
       .page-tab-underline {
         position: absolute;
         bottom: 0;
@@ -292,6 +314,7 @@ export default {
         background: #fff;
         left: 0;
       }
+
       .tab-item {
         margin-right: 15px;
         position: relative;
@@ -300,7 +323,7 @@ export default {
           margin-right: 0;
         }
 
-        .tab-item-tip{
+        .tab-item-tip {
           position: absolute;
           width: 1px;
           height: 1px;
@@ -314,6 +337,7 @@ export default {
         }
       }
     }
+
     .search-box {
       position: relative;
       margin-right: 20rpx;
@@ -331,18 +355,20 @@ export default {
     }
   }
 
-  .refuseApplyDialog{
+  .refuseApplyDialog {
     width: 400rpx;
     box-sizing: border-box;
     padding-left: 30rpx;
     padding-right: 30rpx;
-    .modal-title{
+
+    .modal-title {
       height: 80rpx;
       line-height: 80rpx;
       text-align: center;
       font-weight: bold;
     }
-    .btn-sub{
+
+    .btn-sub {
       color: #1aac19;
     }
 

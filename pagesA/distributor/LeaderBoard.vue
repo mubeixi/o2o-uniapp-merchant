@@ -1,16 +1,16 @@
 <template>
-  <view class="wrap"  @click="commonClick">
+  <view @click="commonClick" class="wrap">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view class="all">
-      <view class="hahas" :class="index==0?'checked':''" @click="change(0)">
+      <view :class="index==0?'checked':''" @click="change(0)" class="hahas">
         总部{{commi_rename.commi}}
       </view>
-      <view class="hahas" :class="index==1?'checked':''" @click="change(1)">
+      <view :class="index==1?'checked':''" @click="change(1)" class="hahas">
         我的好友
       </view>
     </view>
     <!--		<view style="height: 95rpx;">-->
-
+    
     <!--		</view>-->
     <view class="mains">
       <view class="paiming">
@@ -24,13 +24,13 @@
           佣金
         </view>
       </view>
-      <view class="content" v-for="(item,index) of pro " :key="index" v-if="index==0">
+      <view :key="index" class="content" v-for="(item,index) of pro " v-if="index==0">
         <view class="contentLeft">
           <view class="ming">
             <image class='image' src="/static/first.png"></image>
           </view>
           <view class="info">
-            <image class="image" :src="item.Shop_Logo"></image>
+            <image :src="item.Shop_Logo" class="image"></image>
           </view>
           <view class="nickName">
             {{item.Shop_Name}}
@@ -104,7 +104,7 @@
           <text>{{item.Total_Income}}</text>
         </view>
       </view>
-
+      
       <view class="contents" v-if="rank_config==0&&index==0">总部排行未公开</view>
     </view>
   </view>
@@ -181,7 +181,7 @@ export default {
         this.myInfo = res.data.my_rank
         this.rank_config = res.data.rank_config.HIncomelist_Open
       }).catch(e => {
-
+      
       })
     },
   },
@@ -192,13 +192,13 @@ export default {
   view, div {
     box-sizing: border-box;
   }
-
+  
   .wrap {
     padding-top: 95rpx;
     background: white !important;
     min-height: 100vh;
   }
-
+  
   .all {
     height: 95rpx;
     width: 750rpx;
@@ -212,7 +212,7 @@ export default {
     left: 0rpx;
     background-color: #FFFFFF;
     z-index: 999;
-
+    
     .hahas {
       width: 202rpx;
       height: 95rpx;
@@ -222,11 +222,11 @@ export default {
       font-size: 30rpx;
       color: #333333;
     }
-
+    
     .checked {
       color: #F43131 !important;
     }
-
+    
     .checked:after {
       content: '';
       position: absolute;
@@ -237,48 +237,48 @@ export default {
       background-color: #F43131;
     }
   }
-
+  
   .mains {
     width: 710rpx;
     margin: 0 auto;
     margin-top: 40rpx;
     box-shadow: 0px 0px 18rpx 0px rgba(0, 0, 0, 0.18);
     border-radius: 10rpx;
-
+    
     .paiming {
       padding-top: 38rpx;
       padding-bottom: 38rpx;
       padding-left: 33rpx;
       display: flex;
-
+      
       .pai1, .pai2, .pai3 {
         font-size: 28rpx;
         height: 26rpx;
         line-height: 26rpx;
         color: #333333;
       }
-
+      
       .pai1 {
         width: 320rpx;
       }
-
+      
       .pai2 {
         width: 150rpx;
       }
-
+      
       .pai3 {
         width: 207rpx;
         text-align: center;
       }
     }
-
+    
     .contents {
       height: 52px;
       line-height: 52px;
       font-size: 16px;
       text-align: center;
     }
-
+    
     .content {
       width: 690rpx;
       height: 103rpx;
@@ -287,13 +287,13 @@ export default {
       border-bottom: 1rpx solid #ECE8E8;
       display: flex;
       align-items: center;
-
+      
       .contentLeft {
         width: 326rpx;
         margin-left: 17rpx;
         display: flex;
         align-items: center;
-
+        
         .ming {
           width: 41rpx;
           height: 56rpx;
@@ -302,26 +302,26 @@ export default {
           text-align: center;
           color: #777777;
           font-size: 32rpx;
-
+          
           .image {
             width: 100%;
             height: 100%;
           }
         }
-
+        
         .info {
           width: 53rpx;
           height: 53rpx;
           border-radius: 50%;
           margin-right: 14rpx;
           overflow: hidden;
-
+          
           .image {
             width: 100%;
             height: 100%;
           }
         }
-
+        
         .nickName {
           height: 53rpx;
           width: 180rpx;
@@ -331,19 +331,19 @@ export default {
           color: #777777;
         }
       }
-
+      
       .contentCenter {
         width: 150rpx;
         font-size: 24rpx;
         color: #777777;
       }
-
+      
       .contentRight {
         width: 207rpx;
         text-align: center;
         font-size: 22rpx;
         color: #F43131;
-
+        
         text {
           font-size: 26rpx;
         }

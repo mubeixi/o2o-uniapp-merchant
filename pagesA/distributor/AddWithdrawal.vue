@@ -1,5 +1,5 @@
 <template>
-  <view class="myall" @click="commonClick">
+  <view @click="commonClick" class="myall">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view class="center">
       <view class="left">
@@ -7,28 +7,28 @@
       </view>
       <view class="right">
         <!-- 中国银行 <image :src="'/static/client/right.png'|domain"></image> -->
-        <picker @change="bindPickerChange" :value="index" :range="array" range-key="Method_Name">
+        <picker :range="array" :value="index" @change="bindPickerChange" range-key="Method_Name">
           <view class="uni-input">{{array[index].Method_Name}}</view>
         </picker>
         <layout-icon type="iconicon-arrow-right"></layout-icon>
       </view>
     </view>
-
-    <form report-submit @submit="addInfo">
-
+    
+    <form @submit="addInfo" report-submit>
+      
       <block v-if="data.Method_Type=='bank_card'">
         <view class="centers">
           <view class="left">
             户名
           </view>
-          <input class="inputs" type="text" placeholder="请输入您的户名" placeholder-style="places"
+          <input class="inputs" placeholder="请输入您的户名" placeholder-style="places" type="text"
                  v-model="data.Account_Name">
         </view>
         <view class="centers">
           <view class="left">
             账号
           </view>
-          <input class="inputs" type="text" placeholder="请输入您的银行卡卡号" placeholder-style="places"
+          <input class="inputs" placeholder="请输入您的银行卡卡号" placeholder-style="places" type="text"
                  v-model="data.Account_Val">
         </view>
         <!-- <view class="centers">
@@ -43,18 +43,18 @@
           <view class="left">
             昵称
           </view>
-          <input class="inputs" type="text" placeholder="请输入您的昵称" placeholder-style="places"
+          <input class="inputs" placeholder="请输入您的昵称" placeholder-style="places" type="text"
                  v-model="data.Account_Name">
         </view>
         <view class="centers">
           <view class="left">
             账号
           </view>
-          <input class="inputs" type="text" placeholder="请输入您的支付宝账号" placeholder-style="places"
+          <input class="inputs" placeholder="请输入您的支付宝账号" placeholder-style="places" type="text"
                  v-model="data.Account_Val">
         </view>
       </block>
-      <button formType="submit" class="addInfo">
+      <button class="addInfo" formType="submit">
         添加
       </button>
     </form>
@@ -64,14 +64,17 @@
 <script>
 
 import { addUserWithdrawMethod, getShopWithdrawMethod } from '@/api/customer'
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 import BaseMixin from '@/mixins/BaseMixin'
 import { backFunc } from '@/common/fun'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
-  components: { WzwImTip, LayoutIcon },
+  components: {
+    WzwImTip,
+    LayoutIcon,
+  },
   mixins: [BaseMixin],
   data () {
     return {
@@ -83,10 +86,10 @@ export default {
         Method_Name: '', // 提现方式名称
         Account_Name: '', // 户名
         Account_Val: '', // 账号
-        Bank_Position: ''// 开户行
+        Bank_Position: '',// 开户行
       },
-      withdraw_from: 1
-
+      withdraw_from: 1,
+      
     }
   },
   onLoad (options) {
@@ -99,7 +102,7 @@ export default {
   computed: {
     userInfo () {
       return this.$store.getters['user/getUserInfo']()
-    }
+    },
   },
   methods: {
     ...mapActions(['getInitData', 'setUserInfo']),
@@ -112,18 +115,18 @@ export default {
           // Method_Name:this.data.Method_Name,//提现方式名称
           Account_Name: this.data.Account_Name, // 户名
           Account_Val: this.data.Account_Val, // 账号
-          Bank_Position: this.data.Bank_Position // 开户行
+          Bank_Position: this.data.Bank_Position, // 开户行
         }
       } else if (this.data.Method_Type === 'alipay') {
         data = {
           Method_ID: this.data.Method_ID, // 提现方式类型
           // Method_Name:this.data.Method_Name,//提现方式名称
           Account_Name: this.data.Account_Name, // 户名
-          Account_Val: this.data.Account_Val// 账号
+          Account_Val: this.data.Account_Val,// 账号
         }
       } else {
         data = {
-          Method_ID: this.data.Method_ID// 提现方式类型
+          Method_ID: this.data.Method_ID,// 提现方式类型
           // Method_Name:this.data.Method_Name//提现方式名称
         }
       }
@@ -132,7 +135,7 @@ export default {
         const User_Method_ID = res.data.User_Method_ID
         uni.showToast({
           title: res.msg,
-          icon: 'success'
+          icon: 'success',
         })
         setTimeout(function () {
           uni.$emit('fir', User_Method_ID)
@@ -140,7 +143,7 @@ export default {
           backFunc()
         }, 1000)
       }).catch(e => {
-
+      
       })
     },
     // 获取商城提现方式
@@ -152,7 +155,7 @@ export default {
         this.data.Method_Name = this.array[0].Method_Name
         this.data.Method_ID = this.array[0].Method_ID
       }).catch(err => {
-
+      
       })
     },
     bindPickerChange (e) {
@@ -160,8 +163,8 @@ export default {
       this.data.Method_Type = this.array[this.index].Method_Type
       this.data.Method_Name = this.array[this.index].Method_Name
       this.data.Method_ID = this.array[this.index].Method_ID
-    }
-  }
+    },
+  },
 }
 </script>
 
@@ -170,7 +173,7 @@ export default {
     background-color: #FFFFFF !important;
     min-height: 100vh;
   }
-
+  
   .center {
     margin-top: 19rpx;
     width: 710rpx;
@@ -180,19 +183,19 @@ export default {
     align-items: center;
     border-bottom: 1rpx solid #E3E3E3;
     justify-content: space-between;
-
+    
     .left {
       font-size: 28rpx;
       color: #333333;
       width: 125rpx;
     }
-
+    
     .right {
       font-size: 26rpx;
       color: #888888;
       display: flex;
       align-items: center;
-
+      
       .image {
         width: 15rpx;
         height: 23rpx;
@@ -200,7 +203,7 @@ export default {
       }
     }
   }
-
+  
   .centers {
     margin-top: 19rpx;
     width: 710rpx;
@@ -210,25 +213,25 @@ export default {
     align-items: center;
     border-bottom: 1rpx solid #E3E3E3;
     position: relative;
-
+    
     .left {
       width: 125rpx;
       font-size: 28rpx;
       color: #333333;
     }
-
+    
     .inputs {
       width: 570rpx;
       color: #333333;
       font-size: 24rpx;
     }
   }
-
+  
   .places {
     color: #B8B8B8;
     font-size: 24rpx;
   }
-
+  
   .addInfo {
     width: 580rpx;
     height: 76rpx;

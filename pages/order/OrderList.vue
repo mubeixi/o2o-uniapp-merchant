@@ -1,38 +1,38 @@
 <template>
-  <div class="page-wrap"  @click="commonClick">
+  <div @click="commonClick" class="page-wrap">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <div style="height: 100rpx;width: 750rpx"></div>
     <div class="navs">
-      <div class="nav-item" :class="index==0?'active':''" @click="changIndex(0)">全部</div>
-      <div class="nav-item" :class="index==1?'active':''" @click="changIndex(1)">
+      <div :class="index==0?'active':''" @click="changIndex(0)" class="nav-item">全部</div>
+      <div :class="index==1?'active':''" @click="changIndex(1)" class="nav-item">
         待付款
         <div class="jiaobiao" v-if="orderNum.waitpay">{{orderNum.waitpay}}</div>
       </div>
-      <div class="nav-item" :class="index==2?'active':''" @click="changIndex(2)">
+      <div :class="index==2?'active':''" @click="changIndex(2)" class="nav-item">
         待发货
         <div class="jiaobiao" v-if="orderNum.waitsend">{{orderNum.waitsend}}</div>
       </div>
-      <div class="nav-item" :class="index==3?'active':''" @click="changIndex(3)">
+      <div :class="index==3?'active':''" @click="changIndex(3)" class="nav-item">
         待收货
         <div class="jiaobiao" v-if="orderNum.waitconfirm">{{orderNum.waitconfirm}}</div>
       </div>
-      <div class="nav-item" :class="index==4?'active':''" @click="changIndex(4)">
+      <div :class="index==4?'active':''" @click="changIndex(4)" class="nav-item">
         待评价
         <div class="jiaobiao" v-if="orderNum.waitcomment">{{orderNum.waitcomment}}</div>
       </div>
     </div>
     <block v-if="orderList.length>0">
-      <div class="order" v-for="(order,index) of orderList" @click="goDetail(order)" :key="index">
+      <div :key="index" @click="goDetail(order)" class="order" v-for="(order,index) of orderList">
         <div style="background-color: #F3F3F3;height: 20rpx;width: 100%;position: absolute;left: 0rpx;"></div>
         <div style="height: 20rpx;"></div>
         <div class="bizinfo">
-          <img class="img" :src="order.ShopLogo" alt="" />
+          <img :src="order.ShopLogo" alt="" class="img" />
           <span class="bizname">{{order.ShopName}}</span>
           <span class="status">{{order.Order_Status_desc}}</span>
         </div>
-        <div class="pro" v-for="(pro,ind) of order.prod_list" :key="ind">
+        <div :key="ind" class="pro" v-for="(pro,ind) of order.prod_list">
           <div class="pro-div">
-            <img class="pro-img" :src="pro.prod_img" />
+            <img :src="pro.prod_img" class="pro-img" />
           </div>
           <div class="pro-msg">
             <div class="pro-name">{{pro.prod_name}}</div>
@@ -41,18 +41,22 @@
             <div class="pro-price fz-12">
               <span>￥</span>
               {{pro.prod_price}}
-              <span class="m-l-10 fz-14"  v-if="order.Order_Status==2&&order.Order_Type !== 'gift'"  @click.stop="goPay(order,pro)">申请退款</span>
-              <span class="m-l-10 fz-14"  v-else-if="order.Order_Status==3&&order.Order_Shipping.shipping_id!==2"  @click.stop="goPay(order,pro)">申请退货退款</span>
+              <span @click.stop="goPay(order,pro)" class="m-l-10 fz-14"
+                    v-if="order.Order_Status==2&&order.Order_Type !== 'gift'">申请退款</span>
+              <span @click.stop="goPay(order,pro)" class="m-l-10 fz-14"
+                    v-else-if="order.Order_Status==3&&order.Order_Shipping.shipping_id!==2">申请退货退款</span>
               <span class="amount">x{{pro.prod_count}}</span></div>
-            <div class="fz-14 c7" v-if="(Number(pro.prod_count)-Number(pro.is_back_num))*Number(pro.single_free_money)>0">
+            <div class="fz-14 c7"
+                 v-if="(Number(pro.prod_count)-Number(pro.is_back_num))*Number(pro.single_free_money)>0">
               免单金额({{(Number(pro.prod_count)-Number(pro.is_back_num))*Number(pro.single_free_money)}}元)
             </div>
           </div>
         </div>
         <div class="total flex flex-justify-between">
-          <view class="ptdesc" @click.stop="goPintuan(order)" v-if="order.Order_Type ==='pintuan' && order.teamstatus_desc">
+          <view @click.stop="goPintuan(order)" class="ptdesc"
+                v-if="order.Order_Type ==='pintuan' && order.teamstatus_desc">
             <span>{{order.teamstatus_desc}}</span>
-            <layout-icon type="iconicon-arrow-right m-l-4" size="13" color="#fff" display="inline"></layout-icon>
+            <layout-icon color="#fff" display="inline" size="13" type="iconicon-arrow-right m-l-4"></layout-icon>
           </view>
           <div class="text-right flex1">
             共{{order.prod_list.length}}件商品 实付：<span class="price"><span>￥</span> {{order.Order_TotalPrice}} <block
@@ -67,33 +71,33 @@
         </div>
         <div class="btn-group" v-if="order.Order_Status==1">
           <span @click.stop="cancelOrder(order.prod_list,index)">取消订单</span>
-          <span class="active" @click.stop="goPay(order)">立即付款</span>
+          <span @click.stop="goPay(order)" class="active">立即付款</span>
         </div>
         <div class="btn-group" v-else-if="order.Order_Status==2&&order.Order_Type !== 'gift'">
-          <span class="active" @click.stop="goPay(order)">申请退款</span>
+          <span @click.stop="goPay(order)" class="active">申请退款</span>
         </div>
         <div class="btn-group" v-else-if="order.Order_Status==3">
-          <div v-if="order.allow_extend_receipt" @click.stop="openExtendReceiptFn(order)" class="extend_receipt">
+          <div @click.stop="openExtendReceiptFn(order)" class="extend_receipt" v-if="order.allow_extend_receipt">
             <div class="funicon icon-more1 icon font22 " style="color: #777;"></div>
-            <div @click.stop="extendReceiptFn(order)" v-if="item.extend" class="tooltip">确认延迟</div>
+            <div @click.stop="extendReceiptFn(order)" class="tooltip" v-if="item.extend">确认延迟</div>
           </div>
           <span @click.stop="goLogistics(order)" v-if="order.Order_Shipping.shipping_id!==2">查看物流</span>
           <span @click.stop="goLogisticsByLocal(order)" v-if="order.Order_Shipping.shipping_id==2">配送进度</span>
           <span @click.stop="goPay(order)" style="margin-left: 15rpx;"
                 v-if="order.Order_Shipping.shipping_id!==2">申请退款退货</span>
-          <span class="active" @click.stop="confirmOrder(order,index)">确认收货</span>
+          <span @click.stop="confirmOrder(order,index)" class="active">确认收货</span>
           <!-- @click="goPay(item)"跳转退款 -->
         </div>
         <div class="btn-group" v-else-if="order.Order_Status==4 && order.Is_Commit === 0 && order.Is_Backup === 0">
-          <span class="active" @click.stop="goPay(order)">立即评价</span>
+          <span @click.stop="goPay(order)" class="active">立即评价</span>
         </div>
       </div>
     </block>
-
+    
     <div class="defaults" v-else>
       <image :src="'/static/client/empty.png'|domain"></image>
     </div>
-
+    
     <layout-modal ref="sureReason">
       <div class="refuseApplyDialog">
         <div style="width: 110px;height: 110px;margin: 0 auto;">
@@ -113,12 +117,12 @@
         <div @click="sureReason" class="action-btn" style="color: #F43131;">确定</div>
       </div>
     </layout-modal>
-
+  
   </div>
 
 </template>
 <script>
-import { cancelOrder, delOrder, getOrderList, getOrderNum, confirmOrder } from '@/api/order'
+import { cancelOrder, confirmOrder, delOrder, getOrderList, getOrderNum } from '@/api/order'
 import BaseMixin from '@/mixins/BaseMixin'
 import { error } from '@/common/fun'
 import LayoutModal from '@/componets/layout-modal/layout-modal'
@@ -126,7 +130,11 @@ import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 
 export default {
-  components: { LayoutIcon, WzwImTip, LayoutModal },
+  components: {
+    LayoutIcon,
+    WzwImTip,
+    LayoutModal,
+  },
   mixins: [BaseMixin],
   data () {
     return {
@@ -137,7 +145,7 @@ export default {
       pageSize: 5,
       totalCount: 0,
       orderList: [],
-      orderNum: {}
+      orderNum: {},
     }
   },
   methods: {
@@ -151,7 +159,7 @@ export default {
       }
       console.log(express)
       uni.navigateTo({
-        url: '/pagesA/order/logisticsByLocation?order_id=' + item.Order_ID
+        url: '/pagesA/order/logisticsByLocation?order_id=' + item.Order_ID,
       })
     },
     goLogistics (item) {
@@ -165,12 +173,12 @@ export default {
       console.log(item)
       // 跳转物流追踪
       uni.navigateTo({
-        url: '/pagesA/order/logistics?shipping_id=' + item.Order_ShippingID + '&express=' + express + '&prod_img=' + item.prod_list[0].prod_img + '&order_id=' + item.Order_ID
+        url: '/pagesA/order/logistics?shipping_id=' + item.Order_ShippingID + '&express=' + express + '&prod_img=' + item.prod_list[0].prod_img + '&order_id=' + item.Order_ID,
       })
     },
     sureReason () {
       const data = {
-        Order_ID: this.Order_ID
+        Order_ID: this.Order_ID,
       }
       const that = this
       confirmOrder(data).then(res => {
@@ -179,7 +187,7 @@ export default {
         that.getOrderNum()
         uni.showToast({
           title: res.msg,
-          icon: 'none'
+          icon: 'none',
         })
       }).catch(e => {
         this.$refs.sureReason.close()
@@ -198,7 +206,7 @@ export default {
     goPintuan (item) {
       if (item.teamstatus === 0) {
         uni.navigateTo({
-          url: '/pages/order/GroupSuccess?Team_ID=' + item.teamid + '&Products_ID=' + item.prod_list[0].prod_id + '&OrderId=' + item.Order_ID
+          url: '/pages/order/GroupSuccess?Team_ID=' + item.teamid + '&Products_ID=' + item.prod_list[0].prod_id + '&OrderId=' + item.Order_ID,
         })
       }
     },
@@ -206,7 +214,7 @@ export default {
     goPay (item, pro) {
       if (item.Order_Status === 1) {
         uni.navigateTo({
-          url: '/pages/order/OrderPay?Order_ID=' + item.Order_ID
+          url: '/pages/order/OrderPay?Order_ID=' + item.Order_ID,
         })
       } else if (item.Order_Status === 2 || item.Order_Status === 3) {
         let url = '/pagesA/order/Refund?Order_ID=' + item.Order_ID
@@ -214,11 +222,11 @@ export default {
           url += '&prod_id=' + pro.prod_id + '&attr_id=' + pro.attr_id
         }
         uni.navigateTo({
-          url
+          url,
         })
       } else if (item.Order_Status === 4) {
         uni.navigateTo({
-          url: '/pagesA/order/PublishComment?Order_ID=' + item.Order_ID
+          url: '/pagesA/order/PublishComment?Order_ID=' + item.Order_ID,
         })
       }
     },
@@ -240,7 +248,7 @@ export default {
           this.getOrderNum()
           uni.showToast({
             title: res.msg,
-            icon: 'none'
+            icon: 'none',
           })
         }).catch(e => {
           this.isLoading = false
@@ -263,7 +271,7 @@ export default {
           this.getOrderNum()
           uni.showToast({
             title: res.msg,
-            icon: 'none'
+            icon: 'none',
           })
         }).catch(e => {
           this.isLoading = false
@@ -287,7 +295,7 @@ export default {
       const data = {
         page: this.page,
         pageSize: this.pageSize,
-        Order_Type: this.type
+        Order_Type: this.type,
       }
       if (this.index > 0) {
         data.Order_Status = this.index
@@ -301,7 +309,7 @@ export default {
       orderLsit.data.map(item => {
         item.Order_Shipping = JSON.parse(item.Order_Shipping)
       })
-
+      
       this.totalCount = orderLsit.totalCount
       if (item === 'init') {
         this.orderList = orderLsit.data
@@ -313,7 +321,7 @@ export default {
     },
     goDetail (item) {
       this.$linkTo('/pages/order/OrderDetail?Order_ID=' + item.Order_ID + '&pagefrom=order')
-    }
+    },
   },
   onShow () {
     this.page = 1
@@ -341,7 +349,7 @@ export default {
         break
     }
     uni.setNavigationBarTitle({
-      title: pageTitle
+      title: pageTitle,
     })
   },
   onReachBottom () {
@@ -349,10 +357,10 @@ export default {
       this.page++
       this.getOrder()
     }
-  }
+  },
 }
 </script>
-<style scoped lang="scss">
+<style lang="scss" scoped>
   .extend_receipt {
     flex: 1;
     display: inline-block;
@@ -362,7 +370,7 @@ export default {
     margin-right: 10px;
     /*position:relative;*/
     z-index: 3;
-
+    
     .tooltip {
       position: absolute;
       background: #fff;
@@ -377,9 +385,9 @@ export default {
       border-radius: 5px;
       color: #444;
       font-size: 15px;
-
+      
       &::after {
-
+        
         content: " ";
         position: absolute;
         bottom: 100%; /* 提示工具头部 */
@@ -392,13 +400,13 @@ export default {
       }
     }
   }
-
+  
   .page-wrap {
     background-color: #ffffff !important;
     min-height: 100vh;
     padding-bottom: 50px;
   }
-
+  
   .titless {
     position: fixed;
     top: 0rpx;
@@ -406,7 +414,7 @@ export default {
     width: 100%;
     z-index: 999;
   }
-
+  
   .navs {
     z-index: 999;
     position: fixed;
@@ -424,13 +432,13 @@ export default {
     background: #fff;
     font-size: 28rpx;
     padding: 0 10px;
-
+    
     .nav-item {
       flex: 1;
       box-sizing: border-box;
       text-align: center;
       position: relative;
-
+      
       .jiaobiao {
         position: absolute;
         top: 24rpx;
@@ -447,64 +455,64 @@ export default {
         color: #F43131;
       }
     }
-
+    
     .nav-item.active {
       color: red;
       border-bottom: 2px solid red;
     }
   }
-
+  
   .order {
     padding: 0rpx 20rpx;
     background: #fff;
     position: relative;
-
+    
     .bizinfo {
       margin-top: 20rpx;
       display: flex;
       align-items: center;
       justify-content: space-between;
       width: 100%;
-
+      
       .img {
         width: 70rpx;
         height: 70rpx;
         border-radius: 50%;
         margin-right: 21rpx;
       }
-
+      
       .bizname {
         flex: 1;
         font-size: 28rpx;
       }
-
+      
       .status {
         color: red;
         font-size: 26rpx;
       }
     }
-
+    
     .pro {
       display: flex;
       margin-bottom: 50rpx;
       margin-top: 30rpx;
     }
-
+    
     .pro-msg {
       margin-left: 27rpx;
       width: 476rpx;
     }
-
+    
     .pro-div {
       width: 200rpx;
       height: 200rpx;
     }
-
+    
     .pro-img {
       width: 100%;
       height: 100%;
     }
-
+    
     .pro-name {
       font-size: 26rpx;
       margin-bottom: 20rpx;
@@ -515,7 +523,7 @@ export default {
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
     }
-
+    
     .attr {
       display: inline-block;
       height: 50rpx;
@@ -526,7 +534,7 @@ export default {
       padding: 0 20rpx;
       margin-bottom: 20rpx;
     }
-
+    
     .attrs {
       display: inline-block;
       height: 50rpx;
@@ -536,22 +544,23 @@ export default {
       padding: 0 20rpx;
       margin-bottom: 20rpx;
     }
-
+    
     .pro-price {
       color: #F43131;
       font-size: 36rpx;
     }
-
+    
     .amount {
       font-size: 30rpx;
       float: right;
       color: #333;
     }
-
+    
     .total {
       font-size: 24rpx;
       padding: 40rpx 0rpx;
       margin-right: 15rpx;
+      
       .ptdesc {
         background: #F43131;
         padding: 10rpx;
@@ -561,23 +570,24 @@ export default {
         padding-left: 20rpx;
         padding-right: 20rpx;
       }
+      
       .price {
         color: red;
         font-size: 30rpx;
-
+        
         span {
           font-size: 24rpx;
         }
       }
     }
-
+    
     .btn-group {
       display: flex;
       /*text-align: right;*/
       justify-content: flex-end;
       align-items: center;
       margin-bottom: 30rpx;
-
+      
       span {
         display: inline-block;
         //width: 150rpx;
@@ -589,11 +599,11 @@ export default {
         border-radius: 10rpx;
         color: #999;
         font-size: 26rpx;
-
+        
         &:last-child {
           margin-left: 14rpx;
         }
-
+        
         &.active {
           color: #fff;
           background: #F43131;
@@ -602,24 +612,24 @@ export default {
       }
     }
   }
-
+  
   .text-right {
     text-align: right;
   }
-
+  
   .defaults {
     margin: 0 auto;
     width: 640rpx;
     height: 480rpx;
     margin-top: 100rpx;
   }
-
+  
   .refuseApplyDialog {
     width: 560rpx;
     box-sizing: border-box;
     padding: 15px;
     font-size: 14px;
-
+    
     .reason {
       font-size: 14px;
       min-height: 200px;
@@ -629,7 +639,7 @@ export default {
       width: auto;
       padding: 10px;
     }
-
+    
     .inputs {
       font-size: 14px;
       border: 1px solid #E3E3E3;
@@ -639,19 +649,19 @@ export default {
       width: auto;
       margin-bottom: 10px;
     }
-
+    
     .reasons {
       min-height: 20px;
     }
-
+    
   }
-
+  
   .control {
     width: 100%;
     margin-top: 15px;
     display: flex;
     border-top: 1px solid #e4e4e4;
-
+    
     .action-btn {
       flex: 1;
       font-size: 16px;
@@ -660,9 +670,9 @@ export default {
       line-height: 40px;
       text-align: center;
     }
-
+    
   }
-
+  
   .my-huo {
     margin-top: 20px;
     margin-bottom: 10px;
@@ -672,14 +682,14 @@ export default {
     width: 100%;
     text-align: center;
   }
-
+  
   .my-content {
     font-size: 14px;
     width: 100%;
     text-align: center;
     color: #a1a1a1;
   }
-
+  
   .page-wrap /deep/ .popup-content {
     padding: 0px;
   }

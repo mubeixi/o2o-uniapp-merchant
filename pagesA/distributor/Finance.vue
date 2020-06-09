@@ -1,26 +1,26 @@
 <template>
-  <view class="team"  @click="commonClick">
+  <view @click="commonClick" class="team">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view class="nav">
-      <view class="views" :class="index==0?'checked':''" @click="change(0)">
+      <view :class="index==0?'checked':''" @click="change(0)" class="views">
         分销
       </view>
-      <view class="views" :class="index==1?'checked':''" @click="change(1)">
+      <view :class="index==1?'checked':''" @click="change(1)" class="views">
         爵位
       </view>
-      <view class="views" :class="index==4?'checked':''" @click="change(4)">
+      <view :class="index==4?'checked':''" @click="change(4)" class="views">
         管理
       </view>
-      <view class="views" :class="index==2?'checked':''" @click="change(2)">
+      <view :class="index==2?'checked':''" @click="change(2)" class="views">
         股东
       </view>
-      <view class="views" :class="index==3?'checked':''" @click="change(3)">
+      <view :class="index==3?'checked':''" @click="change(3)" class="views">
         区域代理
       </view>
     </view>
     <view style="width: 100%;height: 105rpx;background-color: #FFFFFF;"></view>
     <block v-if="pro.length > 0">
-      <view class="order" v-for="(item,i) of pro " :key="i">
+      <view :key="i" class="order" v-for="(item,i) of pro ">
         <view>
           订单号：
           <text>{{index === 4 ? item.order_id : item.Order_ID}}</text>
@@ -116,7 +116,7 @@ export default {
           }
           this.totalCount = res.totalCount
         }).catch(e => {
-
+        
         })
       } else if (this.index === 1) {
         getNobiRecordList(data).then(res => {
@@ -125,7 +125,7 @@ export default {
           }
           this.totalCount = res.totalCount
         }).catch(e => {
-
+        
         })
       } else if (this.index === 2) {
         getShaRecordList(data).then(res => {
@@ -134,7 +134,7 @@ export default {
           }
           this.totalCount = res.totalCount
         }).catch(e => {
-
+        
         })
       } else if (this.index === 4) {
         getManageRecordList(data).then(res => {
@@ -150,7 +150,7 @@ export default {
           }
           this.totalCount = res.totalCount
         }).catch(e => {
-
+        
         })
       }
     },
@@ -163,7 +163,7 @@ export default {
     background-color: #F8F8F8 !important;
     min-height: 100vh;
     box-sizing: border-box;
-
+    
     .nav {
       padding: 0rpx 70rpx;
       padding-left: 0rpx;
@@ -180,7 +180,7 @@ export default {
       z-index: 999;
       top: 0rpx;
       left: 0rpx;
-
+      
       .views {
         width: 150rpx;
         height: 65rpx;
@@ -190,7 +190,7 @@ export default {
         text-align: center;
         position: relative;
       }
-
+      
       .checked {
         &:after {
           content: '';
@@ -202,13 +202,13 @@ export default {
           background-color: #F43131;
         }
       }
-
+      
       .marginLeft {
         margin-left: 107rpx;
         margin-right: 107rpx;
       }
     }
-
+    
     .order {
       width: 710rpx;
       margin: 0 auto;
@@ -220,22 +220,22 @@ export default {
       border-radius: 20rpx;
       padding-bottom: 30rpx;
       margin-bottom: 10px;
-
+      
       & > view {
         //height: 50rpx;
         line-height: 50rpx;
-
+        
         text {
           color: #666666;
         }
-
+        
         .price {
           color: #F43131;
         }
       }
     }
   }
-
+  
   .defaults {
     margin: 0 auto;
     width: 640rpx;

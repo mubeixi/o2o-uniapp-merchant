@@ -12,7 +12,7 @@
           <view class="views times">
             <image :src="'/static/client/check/time.png'|domain" class="imgs"></image>
             {{item.Orders_CreateTime*1000 | formatTime}}
-<!--             | formatTime-->
+            <!--             | formatTime-->
           </view>
         </view>
         <view class="last">
@@ -37,9 +37,10 @@
               <view @click.stop="cancelJifenProdOrder(item)" class="rightM complated" v-if="item.Orders_Status == 1">
                 取消兑换
               </view>
-			  <view @click.stop="lookItem(item)" class="rightM complated payed" v-if="item.Orders_Status == 4||item.Orders_Status == 3">
-					查看物流
-			  </view>
+              <view @click.stop="lookItem(item)" class="rightM complated payed"
+                    v-if="item.Orders_Status == 4||item.Orders_Status == 3">
+                查看物流
+              </view>
             </view>
             
             <view @click.stop="confirmJifenProdOrder(item)" class="rty confirm" v-if="item.Orders_Status == 3">
@@ -47,7 +48,7 @@
             </view>
           </view>
         </view>
-
+      
       </view>
     </template>
     <template v-else>
@@ -70,7 +71,7 @@ export default {
   data () {
     return {
       prod_list: [],
-      hasMore: false
+      hasMore: false,
     }
   },
   onShow () {
@@ -93,7 +94,7 @@ export default {
           return '已完成'
           break
       }
-    }
+    },
     // formatTime: formatTime
   },
   methods: {
@@ -107,7 +108,7 @@ export default {
       }).catch(err => {
         uni.showToast({
           title: err.msg,
-          icon: 'none'
+          icon: 'none',
         })
       })
     },
@@ -115,14 +116,14 @@ export default {
     toBuy (item) {
       if (item.Orders_Status == 1) {
         uni.navigateTo({
-          url: '/pagesA/user/IntegralCheck?gift_id=' + item.Gift_ID + '&Order_ID=' + item.Orders_ID
+          url: '/pagesA/user/IntegralCheck?gift_id=' + item.Gift_ID + '&Order_ID=' + item.Orders_ID,
         })
       }
-
+      
       // 已发货物流追踪
       if (item.Orders_Status == 3) {
         uni.navigateTo({
-          url: '/pages/order/logistics?shipping_id=' + item.Orders_ShippingID + '&express=' + item.Orders_Shipping + '&prod_img=' + item.Gift_Info.Gift_ImgPath
+          url: '/pages/order/logistics?shipping_id=' + item.Orders_ShippingID + '&express=' + item.Orders_Shipping + '&prod_img=' + item.Gift_Info.Gift_ImgPath,
         })
       }
     },
@@ -130,7 +131,7 @@ export default {
     cancelJifenProdOrder (item) {
       cancelJifenProdOrder({ Order_ID: item.Orders_ID }).then(res => {
         uni.showToast({
-          title: res.msg
+          title: res.msg,
         })
         this.prod_list = []
         this.get_jifen_order()
@@ -145,16 +146,16 @@ export default {
     confirmJifenProdOrder (item) {
       confirmJifenProdOrder({ Order_ID: item.Orders_ID }).then(res => {
         uni.showToast({
-          title: res.msg
+          title: res.msg,
         })
         this.prod_list = []
         this.get_jifen_order()
       }).catch(() => {
         modal('操作失败')
       })
-    }
-  }
-
+    },
+  },
+  
 }
 </script>
 
@@ -162,13 +163,13 @@ export default {
   view {
     box-sizing: border-box;
   }
-
+  
   .all {
     background-color: #F8F8F8;
     min-height: 100vh;
     text-align: center;
   }
-
+  
   .myHa {
     width: 700rpx;
     height: 340rpx;
@@ -176,7 +177,7 @@ export default {
     border-radius: 40rpx;
     margin: 0 auto;
     margin-top: 25rpx;
-
+    
     .tops {
       padding: 34rpx 22rpx 0rpx 21rpx;
       height: 60rpx;
@@ -184,65 +185,65 @@ export default {
       justify-content: space-between;
       font-size: 26rpx;
       color: #888888;
-
+      
       .views {
         height: 25rpx;
         line-height: 25rpx;
       }
-
+      
       .times {
         height: 19rpx;
         line-height: 19rpx;
         margin-top: 6rpx;
       }
-
+      
       .imgs {
         width: 17rpx;
         height: 17rpx;
         margin-right: 10rpx;
       }
     }
-
+    
     .last {
       margin-top: 59rpx;
       margin-left: 20rpx;
       width: 680rpx;
       height: 176rpx;
       display: flex;
-
+      
       .image {
         width: 176rpx;
         height: 176rpx;
       }
-
+      
       .myRight {
         width: 504rpx;
         padding-left: 15rpx;
         padding-top: 16rpx;
-
+        
         .rty {
           margin-top: 30rpx;
           text-align: left;
           display: flex;
           align-items: center;
           justify-content: space-between;
-
+          
           .image {
             width: 16rpx;
             height: 17rpx;
           }
-
+          
           .texts {
             margin-left: 6rpx;
             color: #FE6444;
             font-size: 32rpx;
           }
         }
-
+        
         .rty.confirm {
           justify-content: flex-end;
         }
-
+        
         .titles {
           height: 42rpx;
           width: 100%;
@@ -250,7 +251,7 @@ export default {
           align-items: center;
           justify-content: space-between;
         }
-
+        
         .leftM {
           height: 27rpx;
           overflow: hidden;
@@ -259,7 +260,7 @@ export default {
           color: #333333;
           font-weight: 300;
         }
-
+        
         .rightM {
           width: 114rpx;
           height: 42rpx;
@@ -271,25 +272,25 @@ export default {
           border-top-left-radius: 114rpx;
           border-bottom-left-radius: 114rpx;
         }
-
+        
         .payed {
           background-color: #FF5C33 !important;
         }
-
+        
         .complated {
           background-color: #f8e9e8;
         }
-
+        
       }
     }
   }
-
+  
   .nodata {
     text-align: center;
     color: #666;
     font-size: 28rpx;
   }
-
+  
   .defaults {
     margin: 0 auto;
     width: 640rpx;

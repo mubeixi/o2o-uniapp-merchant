@@ -1,8 +1,8 @@
 <template>
-  <view :style="{'height':systemInfo.windowHeight+'px'}" class="all"  @click="commonClick">
+  <view :style="{'height':systemInfo.windowHeight+'px'}" @click="commonClick" class="all">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view class="wuliu box-sizing" v-if="logList.length>0">
-    
+      
       <view>
         <view class="fonts">
           <view class="left">
@@ -20,22 +20,22 @@
             {{logList[0].provider_text}}
           </view>
         </view>
-<!--        <view class="fonts" v-if="pro.shipping_no">-->
-<!--          <view class="left">-->
-<!--            物流单号:-->
-<!--          </view>-->
-<!--          <view>-->
-<!--            {{pro.shipping_no}}-->
-<!--          </view>-->
-<!--        </view>-->
-<!--        <view class="fonts" v-if="pro.delivery_man_phone">-->
-<!--          <view class="left">-->
-<!--            派送员电话:-->
-<!--          </view>-->
-<!--          <view @click="call">-->
-<!--            {{pro.delivery_man_phone}}-->
-<!--          </view>-->
-<!--        </view>-->
+        <!--        <view class="fonts" v-if="pro.shipping_no">-->
+        <!--          <view class="left">-->
+        <!--            物流单号:-->
+        <!--          </view>-->
+        <!--          <view>-->
+        <!--            {{pro.shipping_no}}-->
+        <!--          </view>-->
+        <!--        </view>-->
+        <!--        <view class="fonts" v-if="pro.delivery_man_phone">-->
+        <!--          <view class="left">-->
+        <!--            派送员电话:-->
+        <!--          </view>-->
+        <!--          <view @click="call">-->
+        <!--            {{pro.delivery_man_phone}}-->
+        <!--          </view>-->
+        <!--        </view>-->
       </view>
     </view>
     <view class="box-sizing xiangxi">
@@ -46,7 +46,7 @@
               <view class="views"></view>
             </view>
             <view class="bottoms" v-if="(index+1)<logList.length">
-
+            
             </view>
           </view>
           <view class="rights">
@@ -64,7 +64,7 @@
               <view class="views"></view>
             </view>
             <view class="bottoms" v-if="(index+1)<logList.length">
-
+            
             </view>
           </view>
           <view class="rights">
@@ -83,7 +83,7 @@
 
 <script>
 import BaseMixin from '@/mixins/BaseMixin'
-import { cityOrderExpress, getOrderExpress } from '@/api/order'
+import { cityOrderExpress } from '@/api/order'
 import { error } from '@/common/fun'
 import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
@@ -96,7 +96,7 @@ export default {
       express: null,
       prod_img: '',
       shipping_id: '',
-      order_id: ''
+      order_id: '',
     }
   },
   onLoad (options) {
@@ -104,7 +104,7 @@ export default {
       express,
       prod_img,
       shipping_id,
-      order_id
+      order_id,
     } = options
     this.express = express
     this.order_id = order_id
@@ -117,20 +117,20 @@ export default {
   methods: {
     call () {
       uni.makePhoneCall({
-        phoneNumber: this.pro.delivery_man_phone
+        phoneNumber: this.pro.delivery_man_phone,
       })
     },
     getOrderExpress () {
       const data = {
-        order_id: this.order_id
+        order_id: this.order_id,
       }
       cityOrderExpress(data).then(res => {
         this.logList = res.data
       }).catch(e => {
         error(e.msg)
       })
-    }
-  }
+    },
+  },
 }
 </script>
 
@@ -138,7 +138,7 @@ export default {
   .all {
     background-color: #f8f8f8;
   }
-
+  
   .wuliu {
     width: 710rpx;
     box-sizing: border-box;
@@ -150,30 +150,30 @@ export default {
     padding-left: 32rpx;
     display: flex;
     padding-bottom: 10rpx;
-
+    
     .image {
       width: 72rpx;
       height: 72rpx;
       margin-right: 30rpx;
     }
-
+    
     .fonts {
       font-size: 24rpx;
       color: #999999;
       display: flex;
       height: 40rpx;
       line-height: 30rpx;
-
+      
       .left {
         margin-right: 10rpx;
       }
-
+      
       .right {
         color: #F43131;
       }
     }
   }
-
+  
   .xiangxi {
     width: 710rpx;
     box-sizing: border-box;
@@ -181,16 +181,16 @@ export default {
     border-radius: 20rpx;
     padding: 45rpx 0rpx 0rpx 42rpx;
     margin: 0 auto;
-
+    
     .center {
       padding: 10px 0px;
       width: 626rpx;
       display: flex;
-
+      
       .lefts {
         width: 32rpx;
         position: relative;
-
+        
         .tops {
           width: 32rpx;
           height: 32rpx;
@@ -199,7 +199,7 @@ export default {
           display: flex;
           align-items: center;
           justify-content: center;
-
+          
           .views {
             width: 16rpx;
             height: 16rpx;
@@ -207,7 +207,7 @@ export default {
             border-radius: 50%;
           }
         }
-
+        
         .bottoms {
           width: 4rpx;
           height: 100%;
@@ -217,17 +217,17 @@ export default {
           left: 14rpx;
         }
       }
-
+      
       .rights {
         margin-left: 28rpx;
-
+        
         .tops {
           font-size: 28rpx;
           color: #F43131;
           // height: 30rpx;
           line-height: 30rpx;
         }
-
+        
         .bottoms {
           margin-top: 19rpx;
           font-size: 24rpx;
@@ -236,19 +236,19 @@ export default {
           line-height: 30rpx;
         }
       }
-
+      
       .unColor {
         color: #777777 !important;
       }
-
+      
       .unBgcolor {
         background-color: #ECECEC !important;
-
+        
         .views {
           background-color: #AFAFAF !important;
         }
       }
-
+      
     }
   }
 

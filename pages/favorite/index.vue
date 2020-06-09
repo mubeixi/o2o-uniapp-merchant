@@ -1,81 +1,81 @@
 <template>
-  <div class="page-wrap"  @click="commonClick">
+  <div @click="commonClick" class="page-wrap">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <div
-      class="flex flex-vertical-c navigator"
       :style="{paddingTop:menuButtonInfo.top+'px',paddingBottom:10+'px',height:menuButtonInfo.height+'px'}"
+      class="flex flex-vertical-c navigator"
       style="background: #F8F8F8;">
-      <layout-icon class="p-l-10 p-r-15" type="iconicon-arrow-left" @click="$back()"></layout-icon>
+      <layout-icon @click="$back()" class="p-l-10 p-r-15" type="iconicon-arrow-left"></layout-icon>
       <span @click="openMuliti">管理</span>
       <span class="title">收藏</span>
     </div>
-    <div class="bg-white" :style="{height:menuButtonInfo.top+10+menuButtonInfo.height+50+'px'}"></div>
-    <div class="tab bg-white" :style="{top:menuButtonInfo.top+10+menuButtonInfo.height+'px'}">
-      <div class="tab-item" :class="{active:activeIndex===0}" @click="changeActive(0)">收藏商品</div>
-      <div class="tab-item" :class="{active:activeIndex===1}" @click="changeActive(1)">收藏店铺</div>
+    <div :style="{height:menuButtonInfo.top+10+menuButtonInfo.height+50+'px'}" class="bg-white"></div>
+    <div :style="{top:menuButtonInfo.top+10+menuButtonInfo.height+'px'}" class="tab bg-white">
+      <div :class="{active:activeIndex===0}" @click="changeActive(0)" class="tab-item">收藏商品</div>
+      <div :class="{active:activeIndex===1}" @click="changeActive(1)" class="tab-item">收藏店铺</div>
     </div>
     <div class="bg-white container">
       <div class="list" v-show="activeIndex===0">
-        <label class="item" v-for="(goods,idx) in goodsFavoriteList" :key="idx">
+        <label :key="idx" class="item" v-for="(goods,idx) in goodsFavoriteList">
           <div class="p-r-10" v-if="multiGoods">
-            <LayoutIcon :type="goods.is_check ? 'iconicon-check' :'iconradio'" size="20"
-                        :color="goods.is_check ? '#25C790' : '#999'" @click="changeState(goods)"></LayoutIcon>
+            <LayoutIcon :color="goods.is_check ? '#25C790' : '#999'" :type="goods.is_check ? 'iconicon-check' :'iconradio'"
+                        @click="changeState(goods)" size="20"></LayoutIcon>
             <!--            <radio class="checkbox" style="transform: scale(0.8)" :value="goods.prod_id"></radio>-->
           </div>
-          <image class="cover" :src="goods.ImgPath"></image>
+          <image :src="goods.ImgPath" class="cover"></image>
           <div class="info">
             <div class="title">{{goods.Products_Name}}</div>
             <div class="c8 m-t-15">{{goods.favourite_count}}人收藏</div>
             <div class="bottom">
               <div class="price-selling"><span class="fz-12">￥</span><span
                 class="fz-14">{{goods.Products_PriceX}}</span></div>
-              <div class="gobuy" @click="$toGoodsDetail(goods)">立即购买</div>
+              <div @click="$toGoodsDetail(goods)" class="gobuy">立即购买</div>
             </div>
           </div>
         </label>
       </div>
-      <div v-show="activeIndex===1" class="storeList">
-        <div class="store-item" v-for="(store,idx) in storeFavoriteList" :key="idx">
+      <div class="storeList" v-show="activeIndex===1">
+        <div :key="idx" class="store-item" v-for="(store,idx) in storeFavoriteList">
           <div class="p-r-10" v-if="multiStore">
-            <LayoutIcon :type="store.is_check ? 'iconicon-check' :'iconradio'" size="20"
-                        :color="store.is_check ? '#25C790' : '#999'" @click="changeState(store)"></LayoutIcon>
+            <LayoutIcon :color="store.is_check ? '#25C790' : '#999'" :type="store.is_check ? 'iconicon-check' :'iconradio'"
+                        @click="changeState(store)" size="20"></LayoutIcon>
             <!--              <radio class="checkbox" style="transform: scale(0.8)" :value="store.id"></radio>-->
           </div>
           <div class="flex1 box">
-            <div class="top flex flex-vertical-c flex-justify-between" @click="goStore(store.biz_id)">
+            <div @click="goStore(store.biz_id)" class="top flex flex-vertical-c flex-justify-between">
               <div class="flex flex-vertical-c">
-                <image class="logo"
-                       :src="(store.biz_logo) | domain"></image>
+                <image :src="(store.biz_logo) | domain"
+                       class="logo"></image>
                 <div class="p-l-10 c3">{{store.biz_shop_name}}</div>
               </div>
               <layout-icon type="iconicon-arrow-right"></layout-icon>
             </div>
             <div class="content p-10 c8">
               <div class="fz-14 ">电话：{{store.biz_mobile}}
-                <layout-icon size="18" class="p-l-10" weight="bold" color="#26C78D" display="inline"
-                             type="iconicon-phone" @click="call(store.biz_mobile)"></layout-icon>
+                <layout-icon @click="call(store.biz_mobile)" class="p-l-10" color="#26C78D" display="inline" size="18"
+                             type="iconicon-phone" weight="bold"></layout-icon>
               </div>
               <div class="m-t-18 fz-14 ">地址：{{store.biz_address}}
-                <layout-icon size="18" class="p-l-10" weight="bold" type="iconicon-address" display="inline"
-                             color="#26C78D" @click="openMap(store)"></layout-icon>
+                <layout-icon @click="openMap(store)" class="p-l-10" color="#26C78D" display="inline" size="18"
+                             type="iconicon-address" weight="bold"></layout-icon>
               </div>
             </div>
           </div>
-
+        
         </div>
       </div>
     </div>
-
+    
     <div class="handle-box" v-if="multiGoods||multiStore">
       <div @click="taggleAllCheck">
-        <radio style="transform: scale(0.8)" :checked="allCheck"></radio>
+        <radio :checked="allCheck" style="transform: scale(0.8)"></radio>
         <span class="p-l-8">切换全选</span>
       </div>
-      <div class="btn-list" @click="cancel">
+      <div @click="cancel" class="btn-list">
         <div class="btn">删除({{selectes.length}})</div>
       </div>
     </div>
-
+  
   </div>
 </template>
 
@@ -90,7 +90,10 @@ import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 export default {
   name: 'FavoriteIndex',
   mixins: [BaseMixin],
-  components: { WzwImTip, LayoutIcon },
+  components: {
+    WzwImTip,
+    LayoutIcon,
+  },
   watch: {
     allCheck: function (val) {
       if (val) {
@@ -98,7 +101,7 @@ export default {
       } else {
         this.isSelectAll = false
       }
-    }
+    },
   },
   computed: {
     selectes () {
@@ -116,7 +119,7 @@ export default {
       } else {
         return this.storeFavoriteList && this.storeFavoriteList.filter(item => item.is_check).length === this.storeFavoriteList.length || false
       }
-    }
+    },
   },
   data () {
     return {
@@ -131,20 +134,20 @@ export default {
       param: {
         type: 1,
         pageSize: 4,
-        page: 1
+        page: 1,
       },
       isSelectAll: false,
       is_biz_more: true, // 是否还有更多商家
       is_pro_more: true, // 是否还有更多产品
       store_total: 0,
-      pro_total: 0
+      pro_total: 0,
     }
   },
   methods: {
     goStore (bid) {
       linkToEasy('/pages/store/index?biz_id=' + bid)
     },
-
+    
     changeActive (index) {
       this.activeIndex = index
       this.multiStore = false
@@ -155,7 +158,7 @@ export default {
     },
     call (phone) {
       uni.makePhoneCall({
-        phoneNumber: phone
+        phoneNumber: phone,
       })
     },
     openMap (store) {
@@ -165,7 +168,7 @@ export default {
         name: store.biz_shop_name,
         success: function () {
           console.log('success')
-        }
+        },
       })
     },
     // 取消收藏
@@ -237,7 +240,7 @@ export default {
               item.is_check = false
             })
           }
-
+          
           resolve(this.goodsFavoriteList.concat(res.data))
         }).catch(err => {
           reject(err)
@@ -260,7 +263,7 @@ export default {
               item.is_check = false
             })
           }
-
+          
           resolve(this.storeFavoriteList.concat(res.data))
         }).catch(err => {
           reject(err)
@@ -272,14 +275,14 @@ export default {
         this.storeFavoriteList = await this.getStoreList().catch(e => {
           throw Error(e.msg || '获取商家列表失败')
         })
-
+        
         this.goodsFavoriteList = await this.getProList().catch(e => {
           throw Error(e.msg || '获取收藏列表失败')
         })
       } catch (e) {
         modal(e.message)
       }
-    }
+    },
   },
   created () {
     this.param.User_ID = Storage.get('User_ID')
@@ -300,7 +303,7 @@ export default {
         throw Error(e.msg || '获取商家列表失败')
       })
     }
-  }
+  },
 }
 </script>
 <style lang="scss" scoped>
@@ -308,20 +311,20 @@ export default {
     background: #fff;
     min-height: 100vh;
   }
-
+  
   .navigator {
     position: fixed;
     top: 0;
     width: 750rpx;
     z-index: 3;
-
+    
     .title {
       position: absolute;
       left: 50%;
       transform: translateX(-50%);
     }
   }
-
+  
   .tab {
     position: fixed;
     z-index: 3;
@@ -336,47 +339,47 @@ export default {
       text-align: center;
       padding: 24rpx 0;
       box-sizing: border-box;
-
+      
       &.active {
         color: $fun-primary-color;
         border-bottom: 2px solid $fun-primary-color;
       }
-
+      
       &:first-child {
         margin-right: 30rpx;
       }
     }
   }
-
+  
   .container {
     padding-bottom: 90rpx;
   }
-
+  
   .list {
     margin: 40rpx 20rpx;
-
+    
     .item {
       display: flex;
       margin-bottom: 30rpx;
       align-items: center;
-
+      
       .cover {
         width: 280rpx;
         height: 280rpx;
         background: #f2f2f2;
       }
-
+      
       .info {
         position: relative;
         height: 280rpx;
         margin-left: 20rpx;
         flex: 1;
-
+        
         .title {
           line-height: 42rpx;
           color: #333;
         }
-
+        
         .bottom {
           position: absolute;
           bottom: 0;
@@ -385,7 +388,7 @@ export default {
           display: flex;
           align-items: center;
           justify-content: space-between;
-
+          
           .gobuy {
             background: #FF0000;
             color: #fff;
@@ -398,18 +401,18 @@ export default {
           }
         }
       }
-
+      
     }
   }
-
+  
   .storeList {
     padding: 40rpx 20rpx;
   }
-
+  
   .store-item {
     display: flex;
     align-items: center;
-
+    
     .box {
       height: 300rpx;
       width: 710rpx;
@@ -417,24 +420,24 @@ export default {
       border-radius: 10rpx;
       margin-bottom: 18px;
       box-shadow: 0px 0px 18px 0px rgba(0, 0, 0, 0.1);
-
+      
       .top {
         padding: 25rpx;
         border-bottom: 1px solid #e7e7e7;
-
+        
         .logo {
           width: 80rpx;
           height: 80rpx;
         }
       }
-
+      
       .content {
-
+      
       }
     }
-
+    
   }
-
+  
   /* 底部的操作栏start */
   .handle-box {
     position: fixed;
@@ -450,11 +453,11 @@ export default {
     font-size: 14px;
     padding: 0 20rpx;
     box-sizing: border-box;
-
+    
     .btn-list {
       display: flex;
       align-items: center;
-
+      
       .btn {
         display: block;
         height: 54rpx;
@@ -466,7 +469,7 @@ export default {
         color: $fun-red-color;
         background: white;
         margin-left: 20rpx;
-
+        
         &.btn-up {
           color: white;
           background: $fun-red-color;
@@ -474,6 +477,6 @@ export default {
       }
     }
   }
-
+  
   /*底部操作栏 end*/
 </style>

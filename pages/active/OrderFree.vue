@@ -1,37 +1,39 @@
 <template>
-  <div class="free"  @click="commonClick">
+  <div @click="commonClick" class="free">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
-    <div class="top-box" :style="{height:menuButtonInfo.height+menuButtonInfo.top+'px',backgroundImage:'url('+$getDomain('/static/client/active/bg.png')+')'}">
+    <div :style="{height:menuButtonInfo.height+menuButtonInfo.top+'px',backgroundImage:'url('+$getDomain('/static/client/active/bg.png')+')'}"
+         class="top-box">
       <div :style="{paddingTop:menuButtonInfo.top+'px'}"></div>
-      <div class="flex flex-vertical-c" :style="{height:menuButtonInfo.height+'px'}" style="position: relative">
-        <layoutIcon style="position: relative;z-index: 3" @click="$back" class="m-l-15" color="#fff" type="iconicon-arrow-left"></layoutIcon>
+      <div :style="{height:menuButtonInfo.height+'px'}" class="flex flex-vertical-c" style="position: relative">
+        <layoutIcon @click="$back" class="m-l-15" color="#fff" style="position: relative;z-index: 3"
+                    type="iconicon-arrow-left"></layoutIcon>
         <div class="title fz-b">免单专区</div>
       </div>
     </div>
-    <scroll-view scroll-y class="container-wrap" :style="{top:0+'px'}">
-      <image class="free-top-bg" mode="widthFix" :src="'/static/client/active/bg.png'|domain"></image>
+    <scroll-view :style="{top:0+'px'}" class="container-wrap" scroll-y>
+      <image :src="'/static/client/active/bg.png'|domain" class="free-top-bg" mode="widthFix"></image>
       <div :style="{height:menuButtonInfo.height+menuButtonInfo.top+10+30+'px'}"></div>
       <div class="free-top-time fz-12">
         活动时间：{{start_time}}-{{end_time}}
       </div>
       <div class="free-top-active">
         <div class="flex flex-vertical-c fz-14 c3  fz-b m-b-13">
-          <layout-icon type="iconshuji" size="17" color="#ff2f32" class="m-r-8"></layout-icon>
+          <layout-icon class="m-r-8" color="#ff2f32" size="17" type="iconshuji"></layout-icon>
           活动须知
         </div>
         <div class="free-top-active-content fz-12 c8">
           {{activeInfo.descr||'暂无填写'}}
         </div>
       </div>
-
-      <div v-if="recommendProdList.length>0" class="free-title m-b-18">
+      
+      <div class="free-title m-b-18" v-if="recommendProdList.length>0">
         <div class="free-line"></div>
         <span class="fz-16 c3 m-l-10 m-r-10">推荐商品</span>
         <div class="free-line"></div>
       </div>
-
-      <scroll-view v-if="recommendProdList.length>0" class="scroll-view_H" scroll-x="true" scroll-left="120">
-        <div class=" uni-bg-red m-r-10" v-for="(pro,ind) of recommendProdList" :key="ind"  @click="$toGoodsDetail(pro)">
+      
+      <scroll-view class="scroll-view_H" scroll-left="120" scroll-x="true" v-if="recommendProdList.length>0">
+        <div :key="ind" @click="$toGoodsDetail(pro)" class=" uni-bg-red m-r-10" v-for="(pro,ind) of recommendProdList">
           <div class="img-div">
             <image :src="pro.ImgPath" class="img-full"></image>
           </div>
@@ -47,17 +49,17 @@
             </div>
           </div>
         </div>
-
+      
       </scroll-view>
-
+      
       <div class="free-title m-b-18" v-if="prodList.length>0">
         <div class="free-line"></div>
         <span class="fz-16 c3 m-l-10 m-r-10">全部商品</span>
         <div class="free-line"></div>
       </div>
-
+      
       <div class="free-list flex " v-if="prodList.length>0">
-        <div class="free-list-item " v-for="(item,index) of prodList" :key="index" @click="$toGoodsDetail(item)">
+        <div :key="index" @click="$toGoodsDetail(item)" class="free-list-item " v-for="(item,index) of prodList">
           <div class="free-list-item-img m-b-9">
             <image :src="item.ImgPath" class="img-full"></image>
           </div>
@@ -73,13 +75,13 @@
             </div>
           </div>
         </div>
-
+      
       </div>
-
+      
       <block v-if="prodList.length<1 && recommendProdList.length<1">
         <wzw-empty-img></wzw-empty-img>
       </block>
-
+    
     </scroll-view>
   </div>
 </template>
@@ -89,18 +91,18 @@
 import BaseMixin from '@/mixins/BaseMixin'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import { getActiveInfo } from '@/api/common'
-import {
-  getProductList
-} from '@/api/product'
-import { getBizInfo } from '@/api/store'
-import { error, hideLoading, modal, showLoading, toast } from '@/common/fun'
-import { Exception } from '@/common/Exception'
+import { getProductList } from '@/api/product'
+import { error, hideLoading, showLoading } from '@/common/fun'
 import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 import WzwEmptyImg from '@/componets/wzw-empyt-img/wzw-empty-img'
 
 export default {
   name: 'OrderFree',
-  components: { WzwEmptyImg, WzwImTip, LayoutIcon },
+  components: {
+    WzwEmptyImg,
+    WzwImTip,
+    LayoutIcon,
+  },
   mixins: [BaseMixin],
   data () {
     return {
@@ -108,7 +110,7 @@ export default {
       // bizInfo: {},
       postData: {
         page: 1,
-        pageSize: 999
+        pageSize: 999,
       },
       activeId: null,
       start_time: '',
@@ -118,7 +120,7 @@ export default {
       page: 1,
       pageSize: 4,
       totalCount: 0,
-      prodList: []
+      prodList: [],
     }
   },
   methods: {
@@ -126,7 +128,7 @@ export default {
       const data = {
         free_order: 1,
         page: this.page,
-        pageSize: this.pageSize
+        pageSize: this.pageSize,
       }
       const arr = await getProductList(data, { tip: '加载中' }).catch(e => {
         throw Error(e.msg || '获取推荐商品失败')
@@ -149,9 +151,9 @@ export default {
         //   throw Error(e.msg || '获取商家信息错误')
         // })
         const that = this
-
+        
         this.activeInfo = await getActiveInfo({ type: 'freeorder', ...this.postData }, {
-          onlyData: true
+          onlyData: true,
         }).catch(e => {
           throw Error(e.msg || '获取活动失败')
         })
@@ -162,26 +164,26 @@ export default {
           }, 1000)
           return
         }
-
+        
         // php时间戳
         this.start_time = uni.$moment(this.activeInfo.start_time * 1000).format('YYYY.MM.DD')
         this.end_time = uni.$moment(this.activeInfo.end_time * 1000).format('YYYY.MM.DD')
-
+        
         if (this.activeInfo.active_info.recommend_prod_id) {
           this.recommendProdList = await getProductList({
-            Products_ID: this.activeInfo.active_info.recommend_prod_id
+            Products_ID: this.activeInfo.active_info.recommend_prod_id,
           }, {
-            onlyData: true
+            onlyData: true,
           }).catch(e => {
             throw Error(e.msg || '获取推荐商品失败')
           })
         }
-
+        
         if (this.activeInfo.active_info.prod_id) {
           this.prodList = await getProductList({
-            Products_ID: this.activeInfo.active_info.prod_id
+            Products_ID: this.activeInfo.active_info.prod_id,
           }, {
-            onlyData: true
+            onlyData: true,
           }).catch(e => {
             throw Error(e.msg || '获取推荐商品失败')
           })
@@ -195,7 +197,7 @@ export default {
       } finally {
         hideLoading()
       }
-    }
+    },
   },
   onLoad (options) {
     const { activeId, biz_id } = options
@@ -221,16 +223,16 @@ export default {
     //   this.page++
     //   this.getList(1)
     // }
-  }
+  },
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
   .free {
     width: 750rpx;
     overflow-x: hidden;
   }
-
+  
   .top-box {
     z-index: 1;
     width: 750rpx;
@@ -241,7 +243,8 @@ export default {
     background-repeat: no-repeat;
     background-size: 100% auto;
     padding-bottom: 10px;
-    .title{
+    
+    .title {
       font-size: 40rpx;
       width: 750rpx;
       position: absolute;
@@ -250,16 +253,16 @@ export default {
       transform: translateY(-50%);
     }
   }
-
+  
   .free-top {
-
-    &-bg{
+    
+    &-bg {
       position: absolute;
       top: 0;
       left: 0;
       width: 750rpx;
     }
-
+    
     &-title {
       font-size: 21px;
       color: #FFFFFF;
@@ -268,7 +271,7 @@ export default {
       top: 40rpx;
       left: 292rpx;
     }
-
+    
     &-time {
       width: 458rpx;
       height: 60rpx;
@@ -279,7 +282,7 @@ export default {
       margin: 0 auto;
       color: #FFFFFF;
     }
-
+    
     &-active {
       width: 710rpx;
       position: relative;
@@ -290,34 +293,34 @@ export default {
       padding: 30rpx;
       box-sizing: border-box;
       margin: 40rpx 20rpx;
-
+      
       &-content {
         line-height: 40rpx;
         word-break: break-all;
       }
     }
   }
-
-  .container-wrap{
+  
+  .container-wrap {
     position: fixed;
     width: 750rpx;
     bottom: 0;
   }
-
+  
   .free-title {
     height: 30rpx;
     line-height: 30rpx;
     display: flex;
     justify-content: center;
     align-items: center;
-
+    
     .free-line {
       width: 46rpx;
       height: 4rpx;
       background: rgba(255, 0, 0, 1);
     }
   }
-
+  
   .scroll-view_H {
     width: 750rpx;
     height: 330rpx;
@@ -325,17 +328,17 @@ export default {
     box-sizing: border-box;
     margin-bottom: 70rpx;
     white-space: nowrap;
-
+    
     .uni-bg-red {
       width: 240rpx;
       height: 330rpx;
       display: inline-block;
-
+      
       .img-div {
         width: 240rpx;
         height: 240rpx;
       }
-
+      
       .pro-title {
         width: 240rpx;
         height: 24rpx;
@@ -345,33 +348,33 @@ export default {
         text-overflow: ellipsis;
         white-space: nowrap;
       }
-
+      
       .price {
         color: #f00;
-
+        
         .fz-11 {
           text-decoration: line-through;
         }
       }
-
+      
     }
   }
-
+  
   .free-list {
     width: 750rpx;
     padding-left: 20rpx;
     flex-wrap: wrap;
-
+    
     &-item {
       width: 344rpx;
       margin-right: 20rpx;
       margin-bottom: 40rpx;
-
+      
       &-img {
         width: 344rpx;
         height: 344rpx;
       }
-
+      
       &-title {
         width: 344rpx;
         overflow: hidden;
@@ -382,16 +385,16 @@ export default {
         height: 56rpx;
         line-height: 28rpx;
       }
-
+      
       &-price {
         color: #f00;
-
+        
         .c9 {
           text-decoration: line-through;
         }
       }
     }
-
+    
   }
 
 </style>

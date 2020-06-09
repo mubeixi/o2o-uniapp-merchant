@@ -1,18 +1,18 @@
 <template>
-  <view class="page-wrap" @click="commonClick">
+  <view @click="commonClick" class="page-wrap">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
-    <image @click="preFn(current_url)" :src="current_url|domain" style="width: 750rpx" mode="widthFix" />
-
+    <image :src="current_url|domain" @click="preFn(current_url)" mode="widthFix" style="width: 750rpx" />
+    
     <div class="swiper">
-      <div class="swiper-item" @click="setSelect(poster)" v-for="(poster,idx) in poster_list">
-        <image class="swiper-itm-img" :src="poster.img|domain" mode="widthFix"></image>
+      <div @click="setSelect(poster)" class="swiper-item" v-for="(poster,idx) in poster_list">
+        <image :src="poster.img|domain" class="swiper-itm-img" mode="widthFix"></image>
       </div>
     </div>
-
+    
     <!--		<div class="share-btn" @click="shareFn">-->
     <!--			分享-->
     <!--		</div>-->
-
+    
     <!--		<canvas style="width: 404px; height: 718px;" canvas-id="firstCanvas"></canvas>-->
   </view>
 </template>
@@ -46,7 +46,7 @@ export default {
         total_income: '',
         balance: '',
       },//
-
+      
     }
   },
   computed: {
@@ -59,13 +59,13 @@ export default {
   },
   onReady () {
     var context = uni.createCanvasContext('firstCanvas')
-
+    
     context.arc(120, 80, 5, 0, 2 * Math.PI, true)
     context.stroke()
     context.draw()
   },
   onShow () {
-
+  
   },
   onLoad (options) {
     const { type, again } = options
@@ -110,14 +110,14 @@ export default {
         // 先获取二维码
         // let qrRet = await getDistributeWxQrcode({type,again,owner_id:this.userInfo.User_ID},{tip:'生成中'})
         // this.qrimg = qrRet.data.img_url;
-
+        
         const getPosterListResult = await getPosterList({ pageSize: 999 })
         const lists = getPosterListResult.data
         this.poster_list = lists.map(item => {
           item.img += '-r200'
           return item
         })
-
+        
         if (this.poster_list.length > 0) {
           getDistributeWxQrcode({
             type,
@@ -139,7 +139,7 @@ export default {
 
 <style lang="scss" scoped>
   .page-wrap {
-
+    
     .swiper {
       z-index: 9;
       width: 750rpx;
@@ -152,14 +152,14 @@ export default {
       overflow-x: scroll;
       overflow-y: hidden;
       z-index: 3;
-
+      
       .swiper-item {
         display: inline-block;
         width: 116rpx;
         height: 244rpx;
         margin-left: 30rpx;
         position: relative;
-
+        
         .swiper-itm-img {
           width: 116rpx;
           height: 116rpx;
@@ -171,7 +171,7 @@ export default {
         }
       }
     }
-
+    
     .share-btn {
       position: absolute;
       bottom: 0;

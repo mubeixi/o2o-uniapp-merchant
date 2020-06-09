@@ -1,13 +1,13 @@
 <template>
-  <view class="myall" @click="commonClick">
+  <view @click="commonClick" class="myall">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <!-- #ifdef APP-PLUS -->
     <view class="status_bar" style="background:#2e323c;"></view>
     <!-- #endif -->
     <view class="top">
-      <image class="widthTen" :src="'/static/client/taskCenter.png'|domain"></image>
-      <layout-icon class="goBack" @click="goBack" type="iconicon-arrow-left" size="20"></layout-icon>
-
+      <image :src="'/static/client/taskCenter.png'|domain" class="widthTen"></image>
+      <layout-icon @click="goBack" class="goBack" size="20" type="iconicon-arrow-left"></layout-icon>
+      
       <view class="titles">任务中心</view>
       <view class="center">
         <!-- <image class="widthTen" :src="'/static/client/task/center.png" ></image> -->
@@ -45,18 +45,18 @@
     <view style="height: 60rpx;"></view>
     <circle-title title="我的特权"></circle-title>
     <view class="myPrivilege">
-      <view class="view" v-for="(i,j) of pro.basic" :key="j">
+      <view :key="j" class="view" v-for="(i,j) of pro.basic">
         {{j+1}}、{{i.name}}
       </view>
     </view>
     <view style="height: 20rpx;width: 100%;background-color: #F8F8F8;">
-
+    
     </view>
     <circle-title title="如何升级"></circle-title>
-
+    
     <view class="ruhe">
-      <view class="td" v-for="(it,ind) of pro.obtain" :key="ind">
-        <image class="image" :src="it.img_url"></image>
+      <view :key="ind" class="td" v-for="(it,ind) of pro.obtain">
+        <image :src="it.img_url" class="image"></image>
         <view class="mbx">
           <view class="tops">
             {{it.name}}
@@ -65,11 +65,11 @@
             {{it.desc}}
           </view>
         </view>
-
-        <view class="submit" @click="yulan(it)" v-if="it.done==0&&ind=='focus'">
+        
+        <view @click="yulan(it)" class="submit" v-if="it.done==0&&ind=='focus'">
           去完成
         </view>
-        <view class="submit" @click="goJump(it)" v-else-if="it.done==0">
+        <view @click="goJump(it)" class="submit" v-else-if="it.done==0">
           去完成
         </view>
         <view class="submit submitMbx" v-if="it.done==1">
@@ -98,7 +98,7 @@ export default {
   components: {
     WzwImTip,
     CircleTitle,
-
+    
     LayoutIcon,
   },
   computed: {
@@ -122,7 +122,7 @@ export default {
       } else {
         this.goJump(item)
       }
-
+      
     },
     getTaskCenter () {
       getTaskCenter().then(res => {
@@ -141,7 +141,7 @@ export default {
       //     url: item.jump_url,
       //   })
       // }
-
+      
     },
     goBack () {
       this.$back()
@@ -155,28 +155,28 @@ export default {
     min-height: 100vh;
     background-color: #FFFFFF !important;
   }
-
+  
   .top {
     width: 750rpx;
     height: 404rpx;
     position: relative;
-
+    
     .widthTen {
       width: 100%;
       height: 100%;
     }
-
+    
     .goBack {
       width: 20rpx;
       height: 30rpx;
-
+      
       position: absolute;
       top: 30rpx;
       left: 20rpx;
     }
-
+    
     .titles {
-
+      
       color: #FFFFFF;
       font-size: 32rpx;
       position: absolute;
@@ -185,14 +185,14 @@ export default {
       height: 31rpx;
       line-height: 31rpx;
     }
-
+    
     .center {
       width: 727rpx;
       height: 344rpx;
       position: absolute;
       left: 12rpx;
       top: 110rpx;
-
+      
       .info {
         width: 93rpx;
         height: 92rpx;
@@ -202,7 +202,7 @@ export default {
         top: 64rpx;
         border-radius: 50%;
       }
-
+      
       .nickName {
         height: 29rpx;
         line-height: 29rpx;
@@ -213,7 +213,7 @@ export default {
         top: 74rpx;
         left: 165rpx;
       }
-
+      
       .vip {
         width: 121rpx;
         height: 35rpx;
@@ -226,14 +226,14 @@ export default {
         font-size: 20rpx;
         color: #FFFFFF;
         text-align: center;
-
+        
         .image {
           width: 10rpx;
           height: 17rpx;
           margin-left: 6rpx;
         }
       }
-
+      
       .zhangValue {
         width: 138rpx;
         height: 10rpx;
@@ -242,13 +242,13 @@ export default {
         position: absolute;
         top: 115rpx;
         left: 302rpx;
-
+        
         .view {
           background-color: #FFFFFF;
           height: 10rpx;
         }
       }
-
+      
       .myValue {
         height: 17rpx;
         line-height: 17rpx;
@@ -259,7 +259,7 @@ export default {
         top: 134rpx;
         left: 304rpx;
       }
-
+      
       .shengji {
         //width:38rpx;
         height: 22rpx;
@@ -275,7 +275,7 @@ export default {
         padding-left: 4px;
         padding-right: 4px;
       }
-
+      
       .numberValue {
         height: 32rpx;
         font-size: 42rpx;
@@ -286,7 +286,7 @@ export default {
         top: 196rpx;
         left: 63rpx;
       }
-
+      
       .valueM {
         height: 20rpx;
         font-size: 20rpx;
@@ -296,7 +296,7 @@ export default {
         position: absolute;
         top: 240rpx;
         left: 61rpx;
-
+        
         .image {
           width: 8rpx;
           height: 12rpx;
@@ -305,12 +305,12 @@ export default {
       }
     }
   }
-
+  
   .myPrivilege {
     margin: 0 auto;
     width: 710rpx;
     margin-bottom: 30rpx;
-
+    
     .view {
       font-size: 24rpx;
       color: #666666;
@@ -318,7 +318,7 @@ export default {
       line-height: 50rpx;
     }
   }
-
+  
   .ruhe {
     width: 710rpx;
     background: rgba(255, 255, 255, 1);
@@ -326,7 +326,7 @@ export default {
     border-radius: 10rpx;
     margin: 0 auto;
     margin-top: 10rpx;
-
+    
     .td {
       width: 690rpx;
       margin: 0 auto;
@@ -334,21 +334,21 @@ export default {
       border-bottom: 1rpx solid #ECE8E8;
       display: flex;
       align-items: center;
-
+      
       &:last-child {
         border-bottom: 0rpx;
       }
-
+      
       .image {
         width: 65rpx;
         height: 65rpx;
         margin-left: 21rpx;
       }
-
+      
       .mbx {
         height: 65rpx;
         margin-left: 24rpx;
-
+        
         .tops {
           height: 27rpx;
           line-height: 27rpx;
@@ -356,7 +356,7 @@ export default {
           font-weight: bold;
           font-size: 28rpx;
         }
-
+        
         .bottoms {
           margin-top: 15rpx;
           height: 23rpx;
@@ -365,7 +365,7 @@ export default {
           color: #999999;
         }
       }
-
+      
       .submit {
         width: 110rpx;
         height: 45rpx;
@@ -378,7 +378,7 @@ export default {
         margin-left: auto;
         margin-right: 20rpx;
       }
-
+      
       .submitMbx {
         background-color: #dedede !important;
       }

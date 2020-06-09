@@ -1,26 +1,26 @@
 <template>
-  <view class="myall"  @click="commonClick">
+  <view @click="commonClick" class="myall">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view style="height: 10px;width: 100%;"></view>
     <view class="three">
       <view class="haha">
         姓名
       </view>
-      <input class="inputs" type="text" placeholder="请输入您的姓名" placeholder-class="place" v-model="arr.apply_name">
+      <input class="inputs" placeholder="请输入您的姓名" placeholder-class="place" type="text" v-model="arr.apply_name">
     </view>
     <view class="three">
       <view class="haha">
         电话
       </view>
-      <input class="inputs" type="number" placeholder="请输入您的电话" placeholder-class="place" v-model="arr.apply_mobile"
-             @blur="isTell">
+      <input @blur="isTell" class="inputs" placeholder="请输入您的电话" placeholder-class="place" type="number"
+             v-model="arr.apply_mobile">
     </view>
-    <view class="four" @click="submit">
+    <view @click="submit" class="four">
       提交申请
     </view>
-    <view class="five" @click="goRecord">
+    <view @click="goRecord" class="five">
       查看申请记录
-      <image class="image" :src="'/static/client/distributor/chakan.png'|domain"></image>
+      <image :src="'/static/client/distributor/chakan.png'|domain" class="image"></image>
     </view>
   </view>
 </template>
@@ -75,7 +75,7 @@ export default {
           })
         }, 1000)
       }).catch(e => {
-
+      
       })
     },
     isTell () {
@@ -95,7 +95,7 @@ export default {
     background-color: #FFFFFF !important;
     min-height: 100vh;
   }
-
+  
   .three {
     height: 88rpx;
     line-height: 88rpx;
@@ -104,38 +104,38 @@ export default {
     border-bottom: 1px solid #E7E7E7;
     display: flex;
     align-items: center;
-
+    
     .haha {
       font-size: 30rpx;
       color: #333333;
       margin-right: 42rpx;
     }
-
+    
     .inputs {
       height: 88rpx;
       line-height: 88rpx;
       font-size: 28rpx;
       color: #333333;
     }
-
+    
     .place {
       font-size: 28rpx;
       color: #CAC8C8;
     }
-
+    
     .myRadio {
       height: 88rpx;
       display: flex;
-
+      
       .myRadioQ {
         height: 88rpx;
         display: flex;
         margin-right: 17rpx;
-
+        
         .radio {
           transform: scale(0.7);
         }
-
+        
         .mbx {
           font-size: 28rpx;
           color: #777777;
@@ -143,9 +143,9 @@ export default {
         }
       }
     }
-
+    
   }
-
+  
   .four {
     width: 490rpx;
     height: 75rpx;
@@ -158,7 +158,7 @@ export default {
     font-size: 30rpx;
     color: #FFFFFF;
   }
-
+  
   .five {
     height: 23rpx;
     line-height: 23rpx;
@@ -168,7 +168,7 @@ export default {
     font-size: 24rpx;
     font-weight: 500;
     color: rgba(153, 153, 153, 1);
-
+    
     .image {
       width: 12rpx;
       height: 20rpx;

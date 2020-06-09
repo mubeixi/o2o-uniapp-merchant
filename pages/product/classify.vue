@@ -1,46 +1,46 @@
 <template>
-  <div class="wrap" @click="commonClick">
+  <div @click="commonClick" class="wrap">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
-    <view class="search-wrap" @click="goSearch">
-      <icon type="search" size="34rpx" class="search_icon" />
-      <input type="text" class="search-input" name="search" placeholder="请输入商品关键词"
-             placeholder-style="font-size:26rpx;color:#ADADAD;">
+    <view @click="goSearch" class="search-wrap">
+      <icon class="search_icon" size="34rpx" type="search" />
+      <input class="search-input" name="search" placeholder="请输入商品关键词" placeholder-style="font-size:26rpx;color:#ADADAD;"
+             type="text">
     </view>
-    <view class="page-body" :style="'height:'+height+'px'">
-      <scroll-view class="nav-left" scroll-y :style="'height:'+height+'px'" :scroll-top="scrollLeftTop"
-                   scroll-with-animation>
-        <view class="nav-left-item" @click="categoryClickMain(index)" :key="index"
-              :class="index==categoryActive?'active':''"
+    <view :style="'height:'+height+'px'" class="page-body">
+      <scroll-view :scroll-top="scrollLeftTop" :style="'height:'+height+'px'" class="nav-left" scroll-with-animation
+                   scroll-y>
+        <view :class="index==categoryActive?'active':''" :key="index" @click="categoryClickMain(index)"
+              class="nav-left-item"
               v-for="(item,index) in classifyData">
           <view class="leftBac" style="position: absolute;"></view>
           {{item.Category_Name}}
         </view>
       </scroll-view>
-      <scroll-view v-if="is_has_child" class="nav-right" scroll-y :style="'height:'+height+'px'" scroll-with-animation>
-        <view v-for="(first,index) in classifyData" :key="index" class="box">
+      <scroll-view :style="'height:'+height+'px'" class="nav-right" scroll-with-animation scroll-y v-if="is_has_child">
+        <view :key="index" class="box" v-for="(first,index) in classifyData">
           <block v-if="categoryActive === index">
-            <block v-for="(second,j) in first.child" :key="j">
-
+            <block :key="j" v-for="(second,j) in first.child">
+              
               <!--<block v-if="is_has_child(classifyData)">-->
               <block v-if="j==0">
-                <view v-if="first.Category_Img" class="imgTop">
-                  <img class="imgs" :src="first.Category_Img">
+                <view class="imgTop" v-if="first.Category_Img">
+                  <img :src="first.Category_Img" class="imgs">
                 </view>
               </block>
               <view class="titles">
                 <view class="titleSum">{{second.Category_Name}}</view>
                 <!-- 	<view class="gengduo">查看更多></view> -->
               </view>
-              <view :id="i==0?'first':''" class="nav-right-item" v-for="(item,i) in second.child" :key="i"
-                    @click="cart(item)">
+              <view :id="i==0?'first':''" :key="i" @click="cart(item)" class="nav-right-item"
+                    v-for="(item,i) in second.child">
                 <image :src="item.Category_Img" />
                 <view class="nav-right-txt">{{item.Category_Name}}</view>
               </view>
-
+              
               <!--</block>-->
-
+              
               <!--<block v-else>-->
-
+              
               <!--<block v-if="j==0">-->
               <!--<view class="titles">-->
               <!--<view class="titleSum">{{first.Category_Name}}</view>-->
@@ -50,34 +50,34 @@
               <!--<img  class="imgs" :src="first.Category_Img">-->
               <!--</view>-->
               <!--</block>-->
-
+              
               <!--<view :id="j==0?'first':''" class="nav-right-item"  @click="cart(second)">-->
               <!--<image :src="second.Category_Img" />-->
               <!--<view class="nav-right-txt">{{second.Category_Name}}</view>-->
               <!--</view>-->
               <!--</block>-->
-
+            
             </block>
-
+            
             <!--<view class="bottomBorder">-->
-
+            
             <!--</view>-->
           </block>
-
+        
         </view>
       </scroll-view>
-      <scroll-view v-if="!is_has_child" class="nav-right" scroll-y :scroll-top="scrollTop" @scroll="scroll"
-                   :style="'height:'+height+'px'" scroll-with-animation>
-        <view v-for="(foods,index) in classifyData" :key="index" class="box">
+      <scroll-view :scroll-top="scrollTop" :style="'height:'+height+'px'" @scroll="scroll" class="nav-right" scroll-with-animation
+                   scroll-y v-if="!is_has_child">
+        <view :key="index" class="box" v-for="(foods,index) in classifyData">
           <view class="titles">
             <view class="titleSum">{{classifyData[index].Category_Name}}</view>
             <!-- 	<view class="gengduo">查看更多></view> -->
           </view>
-          <view v-if="foods.Category_Img" class="imgTop">
-            <img class="imgs" :src="foods.Category_Img">
+          <view class="imgTop" v-if="foods.Category_Img">
+            <img :src="foods.Category_Img" class="imgs">
           </view>
-          <view :id="i==0?'first':''" class="nav-right-item" v-for="(item,i) in foods.child" :key="i"
-                @click="cart(item)">
+          <view :id="i==0?'first':''" :key="i" @click="cart(item)" class="nav-right-item"
+                v-for="(item,i) in foods.child">
             <image :src="item.Category_Img" />
             <view class="nav-right-txt">{{item.Category_Name}}</view>
           </view>
@@ -130,7 +130,7 @@ export default {
           break
         }
       }
-
+      
       return rt
     },
   },

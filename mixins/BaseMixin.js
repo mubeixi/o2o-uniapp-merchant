@@ -2,10 +2,12 @@ import { backFunc, cellPhone, error, linkToEasy, modal, openLocation, toast } fr
 import T from '../common/langue/i18n'
 import Storage from '@/common/Storage'
 import { checkIsLogin, getDomain, toGoodsDetail, emptyObject } from '@/common/helper'
+import eventHub from '@/common/eventHub'
 // #ifdef H5
 import { WX_JSSDK_INIT } from '@/common/env'
 // #endif
 import { sendAnalysisData } from '@/api/common'
+
 const Analysis = {
   data () {
     return {
@@ -205,7 +207,7 @@ export default {
         Storage.set('users_id', users_id)
       }
     },
-    getCurrentPageRoute() {
+    getCurrentPageRoute () {
       const pageInstanceList = getCurrentPages()
       const currentPagePath = pageInstanceList[pageInstanceList.length - 1].route
       return currentPagePath
@@ -214,22 +216,24 @@ export default {
     WX_JSSDK_INIT
     // #endif
   },
-  onShow() {
+  onShow () {
     // 这个机制还是要onShow 兼容返回的情况
     Storage.set('currentPagePath', this.getCurrentPageRoute())// 标记当前的页面，这样就不会每个事件都响应了
     this.currentPagePath = this.getCurrentPageRoute()
   },
-  onReady() {
+  onReady () {
     uni.$on('IM_EVENT', (res) => {
       console.log(res)
     })
-  
-    uni.$on('IM_TAKE_MSG', (res) => {
+
+    uni.$on('IM_TAKE_MSG', async (res) => {
       // 只有当前页面响应
       console.log(Storage.get('currentPagePath'), this.currentPagePath)
       if (Storage.get('currentPagePath') === this.currentPagePath) {
-        console.log(res, this.$refs,this.$refs.hasOwnProperty('wzwImTip'))
+        console.log(res, this.$refs, this.$refs.hasOwnProperty('wzwImTip'))
         if (this.$refs.hasOwnProperty('wzwImTip')) this.$refs.wzwImTip.show(res)
+
+        if (typeof this.refreshTabTag === 'function') this.refreshTabTag()
       }
     })
   },
@@ -259,6 +263,33 @@ export default {
   // 自定义小程序分享
   onShareAppMessage () {
 
+  }
+}
+
+/**
+ * tabbar页面专用
+ * @type {{methods: {setTabBarIndex(*=): void}}}
+ */
+export const tabbarMixin = {
+  methods: {
+    async refreshTabTag () {
+      console.log(this.$mp)
+      if (!eventHub.imInstance) return
+      const count = await eventHub.imInstance.getNoReadMsgCount()
+      if (typeof this.$mp.page.getTabBar === 'function' && this.$mp.page.getTabBar()) {
+        console.log('更新IM下标数量' + count)
+        this.$mp.page.getTabBar().setData({
+          tags: [0, count, 0, 0, 0]
+        })
+      }
+    },
+    setTabBarIndex (index) {
+      if (typeof this.$mp.page.getTabBar === 'function' && this.$mp.page.getTabBar()) {
+        this.$mp.page.getTabBar().setData({
+          selected: index
+        })
+      }
+    }
   }
 }
 

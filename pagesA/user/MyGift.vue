@@ -1,27 +1,27 @@
 <template>
-  <view class="all" @click="commonClick">
+  <view @click="commonClick" class="all">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view class="nav">
-      <view class="ins" :class="checked==0?'checked':''" @click="change(0)">
+      <view :class="checked==0?'checked':''" @click="change(0)" class="ins">
         未领取
       </view>
-      <view class="ins" :class="checked==1?'checked':''" @click="change(1)">
+      <view :class="checked==1?'checked':''" @click="change(1)" class="ins">
         已领取
       </view>
-      <view class="ins" :class="checked==2?'checked':''" @click="change(2)">
+      <view :class="checked==2?'checked':''" @click="change(2)" class="ins">
         已过期
       </view>
     </view>
     <view style="height: 102rpx;width: 100%;">
-
+    
     </view>
-    <view class="center" v-for="(item,index) of data" :key="index" @click="handleClick(item)">
+    <view :key="index" @click="handleClick(item)" class="center" v-for="(item,index) of data">
       <view class="tops">
         {{item.gift_name}}
       </view>
       <view class="bottoms">
         <view class="tupian">
-          <image class="image" :src="item.img_url"></image>
+          <image :src="item.img_url" class="image"></image>
         </view>
         <view class="neirong">
           <view class="titles">
@@ -123,11 +123,11 @@ export default {
     background-color: #ffffff !important;
     min-height: 100vh;
   }
-
+  
   view {
     box-sizing: border-box;
   }
-
+  
   .titless {
     position: fixed;
     top: 0rpx;
@@ -135,7 +135,7 @@ export default {
     width: 100%;
     z-index: 999;
   }
-
+  
   .nav {
     z-index: 999;
     position: fixed;
@@ -150,17 +150,17 @@ export default {
     font-size: 30rpx;
     color: #333333;
     background: #f8f8f8;
-
+    
     .ins {
       width: 236rpx;
       height: 72rpx;
       line-height: 72rpx;
       text-align: center;
       position: relative;
-
+      
       &.checked {
         color: #F43131;
-
+        
         &:after {
           content: '';
           display: flex;
@@ -174,14 +174,14 @@ export default {
       }
     }
   }
-
+  
   .center {
     margin: 0 auto;
     margin-bottom: 25rpx;
     width: 710rpx;
     height: 288rpx;
     background-color: #FFFFFF;
-
+    
     .tops {
       width: 710rpx;
       height: 64rpx;
@@ -191,29 +191,29 @@ export default {
       color: #333333;
       border-bottom: 1rpx solid #ECE8E8;
     }
-
+    
     .bottoms {
       height: 224rpx;
       width: 710rpx;
       padding: 20rpx;
       display: flex;
-
+      
       .tupian {
         width: 184rpx;
         height: 184rpx;
-
+        
         .image {
           width: 100%;
           height: 100%;
         }
       }
-
+      
       .neirong {
         margin-left: 23rpx;
         height: 184rpx;
         width: 463rpx;
         position: relative;
-
+        
         .titles {
           font-size: 26rpx;
           color: #333333;
@@ -228,20 +228,20 @@ export default {
           text-overflow: ellipsis;
           -webkit-box-orient: vertical;
         }
-
+        
         .button {
           width: 463rpx;
           margin-top: 15rpx;
           height: 55rpx;
           display: flex;
-
+          
           .sku {
             font-size: 24rpx;
             color: #888888;
             height: 23rpx;
             line-height: 23rpx;
           }
-
+          
           .chakan {
             width: 155rpx;
             height: 55rpx;
@@ -257,14 +257,14 @@ export default {
       }
     }
   }
-
+  
   .defaults {
     margin: 0 auto;
     width: 640rpx;
     height: 480rpx;
     margin-top: 100rpx;
   }
-
+  
   .youxiao {
     font-size: 20rpx;
     color: #888888;
