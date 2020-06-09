@@ -51,6 +51,13 @@ const getters = {
   },
   addressInfo: (state) => state.addressInfo || Storage.get('userAddressInfo'),
   userInfo: (state) => state.userInfo || Storage.get('userInfo'),
+  getUserId: (state) => () => {
+    const userInfo = state.userInfo || Storage.get('userInfo')
+    if (userInfo && userInfo.hasOwnProperty('User_ID')) {
+      return userInfo.User_ID
+    }
+    return 0
+  },
   // 利用方法的方式去获取
   getUserInfo: (state) => () => {
     try {
