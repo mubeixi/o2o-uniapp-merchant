@@ -344,6 +344,11 @@ export default {
         this.killList = await getFlashsaleList({}, { onlyData: true }).catch(err => {
           throw Error(err.msg || '初始化秒杀商品失败')
         })
+        if (this.killList.length > 0) {
+          this.killList.map(item => {
+            item.discount = (item.price / item.Products_PriceX * 10).toFixed(1)
+          })
+        }
 
         this.firstCateList = await getProductCategory({}, { onlyData: true }).catch(() => {
           throw Error('获取商品分类失败')
