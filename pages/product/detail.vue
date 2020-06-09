@@ -1299,10 +1299,6 @@ export default {
   },
   methods: {
     toRoom () {
-<<<<<<< HEAD
-
-=======
->>>>>>> remotes/origin/develop
       let path = '/pages/product/detail?prod_id=' + this.prod_id
 
       // 限时抢购
