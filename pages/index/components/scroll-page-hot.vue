@@ -134,8 +134,15 @@
               </div>
               <div class="right">
                 <div class="title">
-                  <span class="live-status"><layout-icon color="#fff" display="inline" size="14"
-                                                         type="iconicon-count"></layout-icon>直播中</span>
+                  <span class="live-status" @click="$toRoom(item.room_id)" v-if="item.liveStatus ===101 || item.liveStatus ===102 || item.liveStatus ===105">
+                    <layout-icon color="#fff" display="inline" size="14" type="iconicon-count"></layout-icon>
+                    <block v-if="liveStatus ==101 || liveStatus ==105">
+                      直播中
+                    </block>
+                    <block v-else>
+                      直播预告
+                    </block>
+                  </span>
                   <span class="text">{{item.Products_Name}}</span>
                 </div>
                 <div class="tags" v-if="item.tags">
@@ -159,6 +166,7 @@
     </div>
     <layout-copyright></layout-copyright>
     <div class="h20"></div>
+    <div class="safearea-box"></div>
   </div>
 </template>
 
@@ -187,7 +195,7 @@ import { Exception } from '@/common/Exception'
 import { getSkinConfig } from '@/api/common'
 import { componetMixin } from '@/mixins/BaseMixin'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
-
+const livePlayer = requirePlugin('live-player-plugin')
 export default {
   name: 'scroll-page-hot',
   mixins: [componetMixin],
@@ -233,6 +241,7 @@ export default {
     }
   },
   methods: {
+
     bindReachBottom () {
       console.log('bindReachBottom')
       this.loadLiveGoodsList(this.liveNavIndex)
@@ -302,9 +311,29 @@ export default {
         throw Error(e.msg || '刷新直播商品列表失败')
       })
       this.liveNav[idx].page++
+      const tempLen = this.liveNav[idx].goodsList.length
       this.$set(this.liveNav[idx], 'goodsList', this.liveNav[idx].goodsList.concat(liveGoodsList))
       this.$set(this.liveNav[idx], 'totalCount', totalCount)
       console.log(this.liveNav[idx])
+      // 遍历
+      for (var i = tempLen;i < this.liveNav[idx].goodsList.length - 1; i++) {
+        const { room_id = 0 } = this.liveNav[idx].goodsList[i]
+        if (room_id) {
+          // 首次获取立马返回直播状态
+          const roomId = room_id // 房间 id
+          console.log('roomid is ' + roomId)
+          livePlayer.getLiveStatus({ room_id: roomId })
+            .then(res => {
+              // 101: 直播中, 102: 未开始, 103: 已结束, 104: 禁播, 105: 暂停中, 106: 异常，107：已过期
+              this.$set(this.liveNav[idx].goodsList[i], 'liveStatus', res.liveStatus)
+
+              console.log('get live status', res.liveStatus)
+            })
+            .catch(err => {
+              console.log('get live status', err)
+            })
+        }
+      }
     },
     async _init_func () {
       showLoading('初始化数据')
@@ -442,9 +471,7 @@ export default {
               background: linear-gradient(#F53636, #FF5539);
               color: #fff;
               font-size: 10px;
-              height: 10px;
-              line-height: 10px;
-              padding: 4px;
+              padding: 0 4px;
               border-top-right-radius: 8px;
               border-bottom-right-radius: 8px;
             }

@@ -6,8 +6,8 @@
     bottom: 75px;
     margin-bottom: constant(safe-area-inset-bottom);
     margin-bottom: env(safe-area-inset-bottom);
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
     overflow: hidden;
     background: #fff;
@@ -15,8 +15,8 @@
 
     .icon {
       margin: 7px;
-      width: 36px;
-      height: 36px;
+      width: 46px;
+      height: 46px;
     }
   }
 
@@ -1160,7 +1160,7 @@
     <!--101: 直播中, 102: 未开始, 103: 已结束, 104: 禁播, 105: 暂停中, 106: 异常，107：已过期-->
     <div @click="toRoom" class="live-status-box" v-if="liveStatus == 101 || liveStatus == 105 || liveStatus == 102">
       <image class="icon" src="/static/live/live-pre.png" v-if="liveStatus ==102"></image>
-      <image class="icon" src="/static/live/live-pre.png" v-if="liveStatus ==101 || liveStatus ==105"></image>
+      <image class="icon" src="/static/live/live-ing.png" v-if="liveStatus ==101 || liveStatus ==105"></image>
     </div>
 
   </div>
@@ -1174,7 +1174,7 @@ import {
   getProductSharePic,
   getStoreList,
   judgeReceiveGift,
-  spikeProdDetail,
+  spikeProdDetail
 } from '@/api/product'
 import { getActiveInfo, getCommitList, getCouponList, getUserLevel } from '@/api/common'
 import { getBizInfo } from '@/api/store'
@@ -1215,7 +1215,7 @@ export default {
     ProductSku,
     WzwGoodsAction,
     uParse,
-    LayoutPopup,
+    LayoutPopup
   },
   data () {
     return {
@@ -1230,14 +1230,14 @@ export default {
       // 倒计时
       activeInfo: {
         start_time: '',
-        end_time: '',
+        end_time: ''
       },
       countdown: {
         h: 0,
         s: 0,
         m: 0,
         d: 0,
-        is_end: true,
+        is_end: true
       },
       mode: 'default',
       commentModalShow: false,
@@ -1267,7 +1267,7 @@ export default {
         Products_PriceY: '0',
         Products_JSON: {},
         Products_Description: '',
-        Products_Promise: [],
+        Products_Promise: []
       }, // 商品数据
       active: [], // 满减活动列表
       store: [{ biz_go: '' }], // 门店
@@ -1279,10 +1279,10 @@ export default {
       checkfrom: '',
       postData: {
         prod_id: '',
-        qty: 1, // 购买数量
+        qty: 1 // 购买数量
       },
       commentItem: {}, // 要评论的对象
-      isFavorite: false,
+      isFavorite: false
     }
   },
   computed: {
@@ -1295,11 +1295,14 @@ export default {
     },
     initData () {
       return this.$store.state.system.initData
-    },
+    }
   },
   methods: {
     toRoom () {
+<<<<<<< HEAD
 
+=======
+>>>>>>> remotes/origin/develop
       let path = '/pages/product/detail?prod_id=' + this.prod_id
 
       // 限时抢购
@@ -1318,7 +1321,7 @@ export default {
       // 开发者在直播间页面路径上携带自定义参数（如示例中的path和pid参数），后续可以在分享卡片链接和跳转至商详页时获取，
       // 详见【获取自定义参数】、【直播间到商详页面携带参数】章节（上限600个字符，超过部分会被截断）
       wx.navigateTo({
-        url: `plugin-private://wx2b03c6e691cd7370/pages/live-player-plugin?room_id=${roomId}&custom_params=${customParams}`,
+        url: `plugin-private://wx2b03c6e691cd7370/pages/live-player-plugin?room_id=${roomId}&custom_params=${customParams}`
       })
     },
     // 收藏
@@ -1351,7 +1354,7 @@ export default {
       this.commentDrawerOpen = true
       var animation = uni.createAnimation({
         duration: 400,
-        timingFunction: 'ease',
+        timingFunction: 'ease'
       })
       animation.translateX(0).step()
       this.commentAnimationData = animation.export()
@@ -1360,7 +1363,7 @@ export default {
       this.commentDrawerOpen = false
       var animation = uni.createAnimation({
         duration: 400,
-        timingFunction: 'ease',
+        timingFunction: 'ease'
       })
       animation.translateX(this.systemInfo.windowWidth).step()
       this.commentAnimationData = animation.export()
@@ -1429,7 +1432,7 @@ export default {
 
       var underlineAnimation = uni.createAnimation({
         duration: 200,
-        timingFunction: 'ease',
+        timingFunction: 'ease'
       })
 
       const left = this.systemInfo.windowWidth / 4 * idx + this.systemInfo.windowWidth / 4 / 2 - 10 + 'px'
@@ -1450,15 +1453,15 @@ export default {
       if (this.isLoading === true) return
       this.isLoading = true
       const data = {
-        coupon_id: item,
+        coupon_id: item
       }
       getUserCoupon(data, {
         tip: '领取中',
-        mask: true,
+        mask: true
       }).then(res => {
         uni.showToast({
           title: res.msg,
-          icon: 'none',
+          icon: 'none'
         })
         this.isLoading = false
         this.page = 1
@@ -1502,7 +1505,7 @@ export default {
       const data = {
         touserid: this.commentItem.User_ID,
         commit_id: this.commentItem.Item_ID,
-        content: this.commentValue,
+        content: this.commentValue
       }
       if (this.commentItem.groupid) {
         data.groupid = this.commentItem.groupid
@@ -1523,9 +1526,9 @@ export default {
       this.comments = await getCommitList({
         Products_ID: this.productInfo.Products_ID,
         pageSize: 999,
-        page: 1,
+        page: 1
       }, {
-        onlyData: true,
+        onlyData: true
       }).catch((e) => {
         throw Error('获取评论数据失败')
       })
@@ -1618,7 +1621,7 @@ export default {
           attr_id: sku.id, // 选择属性id
           // count: sku.count, // 选择属性的库存
           qty: sku.qty, // 购买数量
-          cart_key: 'DirectBuy', // 购物车类型   CartList（加入购物车）、DirectBuy（立即购买）、PTCartList（不能加入购物车）
+          cart_key: 'DirectBuy' // 购物车类型   CartList（加入购物车）、DirectBuy（立即购买）、PTCartList（不能加入购物车）
           // productDetail_price: sku.price
         }
         // 拼团用的
@@ -1660,7 +1663,7 @@ export default {
         cart_key: 'CartList',
         prod_id: this.productInfo.Products_ID,
         qty: sku.qty,
-        attr_id: sku.id,
+        attr_id: sku.id
       }
 
       // 限时抢购
@@ -1696,7 +1699,7 @@ export default {
           count: sku.count, // 选择属性的库存
           qty: sku.qty, // 购买数量
           cart_key: 'DirectBuy', // 购物车类型   CartList（加入购物车）、DirectBuy（立即购买）、PTCartList（不能加入购物车）
-          productDetail_price: sku.price,
+          productDetail_price: sku.price
         }
 
         // 限时抢购
@@ -1756,7 +1759,7 @@ export default {
         title: this.productInfo.Products_Name,
         desc: this.productInfo.Products_BriefDescription,
         imageUrl: getProductThumb(this.productInfo.ImgPath),
-        path: buildSharePath(path),
+        path: buildSharePath(path)
       }
 
       switch (channel) {
@@ -1772,7 +1775,7 @@ export default {
             success: function (res) {
             },
             fail: function (err) {
-            },
+            }
           })
           break
         case 'wxtimeline':
@@ -1787,7 +1790,7 @@ export default {
             success: function (res) {
             },
             fail: function (err) {
-            },
+            }
           })
           break
         case 'wxmini':
@@ -1801,17 +1804,17 @@ export default {
               id: _self.wxMiniOriginId,
               path: '/' + shareObj.path,
               type: 0,
-              webUrl: 'http://uniapp.dcloud.io',
+              webUrl: 'http://uniapp.dcloud.io'
             },
             success: ret => {
-            },
+            }
           })
           break
         case 'pic':
           // this.$toast('comming soon')
           const res = await getProductSharePic({ product_id: this.prod_id }, {
             tip: '努力加载中',
-            mask: true,
+            mask: true
           })
           Storage.set('temp_sharepic_info', res.data)
           const sharePic = res.data.img_url
@@ -1821,7 +1824,7 @@ export default {
           }
           setTimeout(function () {
             uni.navigateTo({
-              url: '/pages/product/SharePic/SharePic',
+              url: '/pages/product/SharePic/SharePic'
             })
           }, 200)
           // uni.previewImage({
@@ -1838,13 +1841,13 @@ export default {
       uni.previewImage({
         urls: imgs,
         indicator: 'default',
-        current: index,
+        current: index
       })
     },
     stampFunc () {
       const data = getCountdownFunc({
         start_timeStamp: this.activeInfo.start_time,
-        end_timeStamp: this.activeInfo.end_time,
+        end_timeStamp: this.activeInfo.end_time
       })
       if (data) {
         this.countdown = data
@@ -1875,7 +1878,7 @@ export default {
         // 获取优惠券
         this.page = 1
         const data = {
-          prod_id: this.prod_id,
+          prod_id: this.prod_id
         }
 
         const productInfo = await getProductDetail(data, { onlyData: true }).catch(e => {
@@ -1892,22 +1895,19 @@ export default {
               // 101: 直播中, 102: 未开始, 103: 已结束, 104: 禁播, 105: 暂停中, 106: 异常，107：已过期
               this.liveStatus = res.liveStatus
 
-              console.log('get live status', liveStatus)
+              console.log('get live status', res.liveStatus)
             })
             .catch(err => {
               console.log('get live status', err)
             })
         }
 
-
-        if(checkIsLogin(0,0)){
-          const is_favourite =await checkFavourite(data, { onlyData: true }).catch(e => {
+        if (checkIsLogin(0, 0)) {
+          const is_favourite = await checkFavourite(data, { onlyData: true }).catch(e => {
             throw Error(e.msg || '检查商品是否收藏失败')
           })
           this.isFavorite = Number(is_favourite.is_favourite) === 1
-
         }
-
 
         this.analysisExt.options.biz_id = productInfo.biz_id
 
@@ -1972,7 +1972,7 @@ export default {
           page: 1,
           status: 3,
           front_show: 1,
-          biz_id: this.productInfo.biz_id,
+          biz_id: this.productInfo.biz_id
         }
 
         this.couponList = await getCouponList(couponParam, { onlyData: true }).catch(e => {
@@ -1982,9 +1982,9 @@ export default {
         this.comments = await getCommitList({
           Products_ID: this.productInfo.Products_ID,
           pageSize: 999,
-          page: 1,
+          page: 1
         }, {
-          onlyData: true,
+          onlyData: true
         }).catch((e) => {
           throw Error('获取评论数据失败')
         })
@@ -1996,14 +1996,14 @@ export default {
         this.bizInfo = this.store[0]
 
         this.storeList = await getStoreList({ biz_id: this.productInfo.biz_id }, {
-          onlyData: true,
+          onlyData: true
         }).catch(e => {
           throw Error(e.msg || '获取店铺列表失败')
         })
 
         const res = await getActiveInfo({
           biz_id: this.productInfo.biz_id,
-          type: 'manjian',
+          type: 'manjian'
         }, { onlyData: true }).catch(e => {
         })
         if (res !== null && res.active_info) {
@@ -2057,7 +2057,7 @@ export default {
       } finally {
         hideLoading()
       }
-    },
+    }
   },
   onReady () {
     this.setAcitveTabIndx(0)
@@ -2108,9 +2108,9 @@ export default {
       title: this.productInfo.Products_Name,
       desc: this.productInfo.Products_BriefDescription,
       imageUrl: this.productInfo.ImgPath,
-      path: buildSharePath(path),
+      path: buildSharePath(path)
     }
     return shareObj
-  },
+  }
 }
 </script>

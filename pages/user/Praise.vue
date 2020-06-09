@@ -15,7 +15,7 @@
         <block :key="ind" v-for="(it,ind) of item.ImgPath">
           <image :src="it" class="coment-img"></image>
         </block>
-      
+
       </div>
       <div @click="toDetail(item)" class="pro-comment flex flex-vertical-c">
         <image :src="item.Prod_ImgPath" class="m-r-8 pro-img"></image>
@@ -29,15 +29,17 @@
             <span class="fz-10 linethrow m-r-2">¥</span>
             <span class="fz-11 linethrow">{{item.Products_PriceY}}</span>
           </div>
-        
+
         </div>
         <layout-icon color="#999" size="16" style="margin-left: auto;margin-right: 20rpx;"
                      type="iconicon-arrow-right"></layout-icon>
-      
+
       </div>
-    
+
     </div>
-  
+
+    <div class="safearea-box"></div>
+
   </div>
 </template>
 
@@ -54,7 +56,7 @@ export default {
   mixins: [BaseMixin, tabbarMixin],
   components: {
     WzwImTip,
-    LayoutIcon,
+    LayoutIcon
   },
   data () {
     return {
@@ -62,9 +64,9 @@ export default {
       postData: {
         page: 1,
         pageSize: 6,
-        has_img: 1,
+        has_img: 1
       },
-      totalCount: 0,
+      totalCount: 0
     }
   },
   methods: {
@@ -83,7 +85,7 @@ export default {
         })
       }
       this.totalCount = list.totalCount
-    },
+    }
   },
   onReachBottom () {
     if (this.totalCount > this.praise.length) {
@@ -98,20 +100,20 @@ export default {
   },
   onLoad () {
     this.init('isInit')
-  },
+  }
 }
 </script>
 
 <style lang="scss" scoped>
-  
+
   .page-wrap {
-  
+    padding-bottom: 48px;
   }
-  
+
   .praise {
     padding-top: 30rpx;
   }
-  
+
   .praise-item {
     margin: 0 auto 20rpx;
     width: 710rpx;
@@ -121,36 +123,35 @@ export default {
     border-radius: 20rpx;
     overflow: hidden;
   }
-  
+
   .praise-item-title {
     height: 64rpx;
     margin-bottom: 18rpx;
     width: 100%;
     line-height: 64rpx;
     overflow: hidden;
-    
+
     .user-img {
       width: 64rpx;
       height: 64rpx;
       border-radius: 50%;
       overflow: hidden;
     }
-    
+
     .user-name {
       height: 64rpx;
       line-height: 64rpx;
     }
-    
-    
+
   }
-  
+
   .user-content {
     width: 670rpx;
     padding-left: 6rpx;
     padding-right: 4px;
     line-height: 36rpx;
   }
-  
+
   .coment-img {
     width: 220rpx;
     height: 220rpx;
@@ -161,7 +162,7 @@ export default {
     border-radius: 6rpx;
     overflow: hidden;
   }
-  
+
   .pro-comment {
     margin-left: 4rpx;
     width: 672rpx;
@@ -170,12 +171,12 @@ export default {
     border-radius: 10rpx;
     overflow: hidden;
   }
-  
+
   .pro-img {
     width: 84rpx;
     height: 84rpx;
   }
-  
+
   .pro-title {
     height: 24rpx;
     line-height: 24rpx;
@@ -185,19 +186,19 @@ export default {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    
+
     margin-bottom: 19rpx;
   }
-  
+
   .pro-price {
     height: 20rpx;
     line-height: 20rpx;
     color: #B1B1B1;
-    
+
     .color-r {
       color: #F53636;
     }
-    
+
     .linethrow {
       text-decoration: line-through;
     }

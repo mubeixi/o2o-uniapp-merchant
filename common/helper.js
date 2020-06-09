@@ -706,6 +706,9 @@ export const toGoodsDetail = async (productInfo) => {
 
 export const setNavigationBarTitle = (title) => uni.setNavigationBarTitle({ title })
 
+
+
+
 const Helper = {
   Object: {
     mapList: (list, fn) => {

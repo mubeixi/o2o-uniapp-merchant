@@ -272,8 +272,7 @@ export default {
 
   .tab-container {
     position: absolute;
-    bottom: 0rpx;
-    padding-bottom: env(safe-area-inset-bottom);
+    bottom: 48px;
     width: 750rpx;
 
     .tab-page-wrap {
