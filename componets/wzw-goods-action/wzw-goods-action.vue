@@ -10,14 +10,14 @@
             进店
           </div>
         </div>
-        <div class="bottom-q" @click="goShare">
-          <div style="display: flex;justify-content: center;margin-bottom: 6rpx">
-            <layout-icon type="iconicon-share" size="20" color="#666666"></layout-icon>
-          </div>
-          <div>
-            分享
-          </div>
-        </div>
+<!--        <div class="bottom-q" @click="goShare">-->
+<!--          <div style="display: flex;justify-content: center;margin-bottom: 6rpx">-->
+<!--            <layout-icon type="iconicon-share" size="20" color="#666666"></layout-icon>-->
+<!--          </div>-->
+<!--          <div>-->
+<!--            分享-->
+<!--          </div>-->
+<!--        </div>-->
         <div class="bottom-q" @click="toIm">
           <div style="display: flex;justify-content: center;margin-bottom: 6rpx">
             <layout-icon weight="bold" type="iconicon-test1" size="20" color="#666666"></layout-icon>

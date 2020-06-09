@@ -1156,6 +1156,7 @@
       </view>
     </layout-popup>
 
+
     <!--101: 直播中, 102: 未开始, 103: 已结束, 104: 禁播, 105: 暂停中, 106: 异常，107：已过期-->
     <div @click="toRoom" class="live-status-box" v-if="liveStatus == 101 || liveStatus == 105 || liveStatus == 102">
       <image class="icon" src="/static/live/live-pre.png" v-if="liveStatus ==102"></image>
@@ -1298,6 +1299,10 @@ export default {
   },
   methods: {
     toRoom () {
+<<<<<<< HEAD
+
+=======
+>>>>>>> remotes/origin/develop
       let path = '/pages/product/detail?prod_id=' + this.prod_id
 
       // 限时抢购
