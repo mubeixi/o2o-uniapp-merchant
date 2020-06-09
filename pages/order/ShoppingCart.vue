@@ -740,11 +740,8 @@ export default {
 
   // #ifdef  MP
   .checkout {
-<<<<<<< HEAD
-=======
     margin-bottom: constant(safe-area-inset-bottom);
     margin-bottom: env(safe-area-inset-bottom);
->>>>>>> remotes/origin/develop
     bottom: 48px;
   }
 
