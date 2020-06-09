@@ -67,10 +67,13 @@
           </div>
           
           <div class="h20"></div>
+  
+          <div class="safearea-box"></div>
         
         </scroll-view>
       </swiper-item>
     </swiper>
+    
   </div>
 </template>
 
@@ -104,7 +107,7 @@ export default {
     }),
     cateViewHeight () {
       try {
-        return this.systemInfo.windowHeight - this.diyHeadHeight - this.firstCateHeight
+        return this.systemInfo.windowHeight - this.diyHeadHeight - this.firstCateHeight-48
       } catch (e) {
         return 'auto'
       }

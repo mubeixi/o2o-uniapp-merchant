@@ -166,6 +166,7 @@
     </div>
     <layout-copyright></layout-copyright>
     <div class="h20"></div>
+    <div class="safearea-box"></div>
   </div>
 </template>
 

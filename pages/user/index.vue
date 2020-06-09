@@ -77,6 +77,8 @@
       />
 
     </div>
+  
+    <div class="safearea-box"></div>
 
   </div>
 </template>
@@ -266,7 +268,7 @@ export default {
 </script>
 <style lang="scss" scoped>
   .wrap {
-    padding: 0rpx 30rpx 30rpx 30rpx;
+    padding: 0rpx 30rpx 48px 30rpx;
     background: #EDF0F5;
     width: 750rpx;
     box-sizing: border-box;
