@@ -77,7 +77,7 @@ import ScrollPageMerchat from '@/pages/index/components/scroll-page-merchat'
 import Promisify from '@/common/Promisify'
 import LayoutModal from '@/componets/layout-modal/layout-modal'
 import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
-
+import Storage from '@/common/Storage'
 import eventHub from '@/common/eventHub'
 
 export default {
@@ -137,9 +137,10 @@ export default {
   },
   methods: {
     toMerchant () {
+      const users_id = Storage.get('users_id')
       uni.navigateToMiniProgram({
         appId: 'wx3d24c565489e305b',
-        path: 'pages/product/form?origin_type=client',
+        path: 'pages/product/form?origin_type=client&users_id=' + users_id,
         extraData: {
           origin: 'client'
         },
