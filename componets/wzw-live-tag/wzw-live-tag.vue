@@ -12,7 +12,7 @@
 
 <script>
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
-import moment from 'moment'
+
 const livePlayer = requirePlugin('live-player-plugin')
 export default {
   name: 'wzw-live-tag',
@@ -52,7 +52,7 @@ export default {
       }
 
       const { live_end_time, live_start_time } = this.productInfo
-      const nowTimeStamp = moment().unix()
+      const nowTimeStamp = uni.$moment().unix()
       // console.log(nowTimeStamp)
       if (live_end_time && live_start_time) {
         if (nowTimeStamp > live_start_time && nowTimeStamp < live_end_time) {
