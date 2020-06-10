@@ -24,7 +24,7 @@
             </div>
             <div class="info" :style="{width:itemw}" :class="{empyInfo:isEmpeyInfo}">
               <div class="left">
-                <div v-show="tab.config.attr.title.show" class="title">{{item.Products_Name}}</div>
+                <div v-show="tab.config.attr.title.show" class="title"><wzw-live-tag :room_id="item.room_id" :product-info="item" />{{item.Products_Name}}</div>
                 <div v-show="tab.config.attr.desc.show" class="font12 graytext desc">
                   {{item.Products_BriefDescription||'暂无介绍'}}
                 </div>
@@ -84,6 +84,7 @@ import { getProductList } from '@/api/product'
 import { getDomain, toGoodsDetail } from '@/common/helper'
 import { lazyImgUrl } from '../../common'
 import { linkTo } from '@/common/fun'
+import WzwLiveTag from '@/componets/wzw-live-tag/wzw-live-tag'
 
 export default {
   name: 'DiyTab',
@@ -236,7 +237,7 @@ export default {
       }
     }
   },
-  components: {},
+  components: { WzwLiveTag },
   methods: {
     goDetail (goods) {
       

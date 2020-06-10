@@ -72,7 +72,7 @@
         <div :key="i" @click="$toGoodsDetail(item)" class="pro" v-for="(item,i) of pro">
           <image :src="item.ImgPath" class="pro-img"></image>
           <div class="pro_desc">
-            <div class="title">{{item.Products_Name}}</div>
+            <div class="title"><wzw-live-tag :room_id="item.room_id" :product-info="item" />{{item.Products_Name}}</div>
             <div class="price">
               <span class="n_price"><text>￥</text>{{item.Products_PriceX}}</span>
               <span class="o_price" v-if="item.Products_PriceY!==item.Products_PriceX"><text>￥</text>{{item.Products_PriceY}}</span>
@@ -127,11 +127,13 @@ import Storage from '@/common/Storage'
 import { getLocation } from '@/common/tool/location'
 import { LayoutModal } from '@/componets/layout-modal/layout-modal'
 import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import WzwLiveTag from '@/componets/wzw-live-tag/wzw-live-tag'
 
 export default {
   mixins: [BaseMixin],
   name: 'SearchResult',
   components: {
+    WzwLiveTag,
     WzwImTip,
     LayoutModal,
   },

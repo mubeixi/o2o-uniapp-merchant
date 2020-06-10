@@ -16,7 +16,7 @@
           <block :key="idx" v-for="(goods,idx) in productList">
             <div @click="$toGoodsDetail(goods)" class="pro" v-if="idx<4">
               <div :style="{backgroundImage:'url('+goods.ImgPath+')'}" class="pro-img"></div>
-              <div class="pro-name">{{goods.Products_Name}}</div>
+              <div class="pro-name"><wzw-live-tag :room_id="goods.room_id" :product-info="goods" />{{goods.Products_Name}}</div>
               <div class="pro-price">￥{{goods.Products_PriceX}}</div>
             </div>
           
@@ -69,10 +69,12 @@ import layoutIcon from '@/componets/layout-icon/layout-icon'
 import BaseMixin from '@/mixins/BaseMixin'
 import LayoutAd from '@/componets/layout-ad/layout-ad'
 import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import WzwLiveTag from '@/componets/wzw-live-tag/wzw-live-tag'
 
 export default {
   mixins: [BaseMixin],
   components: {
+    WzwLiveTag,
     WzwImTip,
     LayoutAd,
     layoutIcon,

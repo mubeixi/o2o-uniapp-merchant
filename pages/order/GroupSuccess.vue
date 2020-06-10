@@ -108,7 +108,7 @@
     <div class="prolist">
       <div :key="index" @click="$toGoodsDetail(item)" class="pro-item" v-for="(item,index) in prodList">
         <img :src="item.ImgPath" alt="" class="img">
-        <div class="item-name">{{item.Products_Name}}</div>
+        <div class="item-name"><wzw-live-tag  :room_id="item.room_id" :product-info="item" />{{item.Products_Name}}</div>
         <div class="price">
           <span class="n_price"><span class="pricem">￥</span>{{item.Products_PriceX}}</span>
           <span class="o_price">已团{{item.Products_Sales}}件</span>
@@ -166,6 +166,7 @@ import LayoutLayer from '@/componets/layout-layer/layout-layer'
 import { Exception } from '@/common/Exception'
 import { mapActions } from 'vuex'
 import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import WzwLiveTag from '@/componets/wzw-live-tag/wzw-live-tag'
 
 const groupStam = null
 const getGroupCountdown = ({ end_timeStamp = 1571221631, current = (new Date()).getTime() } = {}) => {
@@ -193,6 +194,7 @@ const getGroupCountdown = ({ end_timeStamp = 1571221631, current = (new Date()).
 
 export default {
   components: {
+    WzwLiveTag,
     WzwImTip,
     LayoutLayer,
   },
