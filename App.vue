@@ -16,6 +16,8 @@ export default {
   },
   onLaunch: function () {
     console.log('App Launch')
+    
+    eventHub.livePlayer = livePlayer
     // #ifdef MP-WEIXIN
     let _users_id = ''
     if (isCustom) {

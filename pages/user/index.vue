@@ -68,6 +68,7 @@
       <pro-tag
         :index="idx"
         :key="idx"
+        :room_id="item.room_id"
         :pro_name="item.Products_Name"
         :pro_price="item.Products_PriceX"
         :pro_price_old="item.Products_PriceY"
@@ -77,7 +78,7 @@
       />
 
     </div>
-  
+
     <div class="safearea-box"></div>
 
   </div>
@@ -95,7 +96,8 @@ import { getRightsCard, getUserInfo } from '@/api/customer'
 import { mapActions } from 'vuex'
 import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 import eventHub from '@/common/eventHub'
-
+import { error } from '@/common/fun'
+const livePlayer = requirePlugin('live-player-plugin')
 export default {
   mixins: [BaseMixin, tabbarMixin],
   components: {
@@ -110,6 +112,8 @@ export default {
       cardList: [],
       activeHeadOpacity: 0,
       orderNum: {},
+      productTotal: 0,
+      page: 1,
       iconList: [
         {
           className: 'iconpintuan',
@@ -226,9 +230,13 @@ export default {
       this.$linkTo(url)
     },
     async _init_func () {
-      this.proList = await getProductList({}, { onlyData: true }).catch(e => {
+      const { data, totalCount } = await getProductList({}).catch(e => {
         throw Error(e.msg || '获取推荐商品信息失败')
       })
+
+      this.proList = data
+      this.productTotal = totalCount
+      this.page++
     },
     // 获取订单角标数
     getOrderNum () {
@@ -260,6 +268,18 @@ export default {
       })
       this.getOrderNum()
     }
+  },
+  async onReachBottom () {
+    if (this.proList.length >= this.productTotal) {
+      error('到底了')
+      return
+    }
+    const proList = await getProductList({ page: this.page }, { onlyData: true }).catch(e => {
+      throw Error(e.msg || '获取推荐商品信息失败')
+    })
+
+    this.page++
+    this.proList = this.proList.concat(proList)
   },
   created () {
     this._init_func()
