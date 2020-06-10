@@ -30,6 +30,7 @@ export default {
   },
   methods: {
     commentMethod(){
+      console.log(this.comment,"sss")
       this.$emit('comment', this.comment)
     },
     tap () {

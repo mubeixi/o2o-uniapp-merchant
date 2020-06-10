@@ -1,5 +1,5 @@
 <template>
-  <view :style="{height: height + 'px', background:bgcolor}" @click="commonClick" class="wrap">
+  <view  @click="commonClick" class="wrap">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <block v-if="type != 3">
       <form @submit="save" report-submit>
@@ -15,10 +15,29 @@
         </view>
         <button class="save" formType="submit">保存</button>
       </form>
-    
+
     </block>
     <block v-else>
-      <form @submit="confirm" report-submit>
+
+      <div class="form pwd-wrap  wxGetPhone" v-if="!showCode">
+        <image :src="userInfo.User_HeadImg" class="store-logo m-b-20"></image>
+        <div class="wxGetPhoneName">
+          Hi,{{userInfo.User_NickName}}
+        </div>
+        <div class="wxGetPhoneText">
+          你可以使用微信手机号绑定，也可以使用其他手机号加验证码绑定哦
+        </div>
+
+        <button form-type="submit" class="sub-btn wxGetPhoneBtn  m-b-22" type="primary"   open-type="getPhoneNumber" @getphonenumber="getPhoneNumberAll">
+          <icon size="24" class="iconwx" color="#ffffff" type="iconwx"></icon><span class="text fz-14">微信手机号一键绑定</span>
+        </button>
+
+        <button form-type="submit" class="sub-btn wxGetPhoneBtn OtherPhoneBtn" @click="showCode=true" type="primary" >
+          <span class="text fz-14 c3" >其他手机号绑定</span>
+        </button>
+
+      </div>
+      <form @submit="confirm" report-submit v-if="showCode">
         <view class="other">
           <view class="other-item">
             您现在的手机号是： {{userInfo.User_Mobile}}
@@ -41,9 +60,9 @@
 
 <script>
 import { getUserInfo, updateMobileSms, updateUserLoginPsw, updateUserMobile, updateUserPayPsw } from '@/api/customer'
-
+import Promisify from '@/common/Promisify'
 import { mapActions } from 'vuex'
-
+import { error } from '@/common/fun'
 import BaseMixin from '@/mixins/BaseMixin'
 import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
@@ -64,17 +83,35 @@ export default {
       code: '',
       countdownStatus: false, // 是否开启倒计时了
       countdownNum: 60,
+      showCode: false
     }
   },
   computed: {
     userInfo () {
       return this.$store.getters['user/getUserInfo']()
-    },
+    }
   },
   methods: {
     ...mapActions({
-      setUserInfo: 'user/setUserInfo',
+      setUserInfo: 'user/setUserInfo'
     }),
+    async getPhoneNumberAll (e) {
+      const loginData = e.detail
+      if (!loginData.iv) return
+      const wxLoginRt = await Promisify('login').catch(() => { throw Error('微信login错误') })
+      const { code: lp_code } = wxLoginRt
+      const postData = {
+        lp_code,
+        phone_data: loginData.encryptedData,
+        iv: loginData.iv
+      }
+      updateUserMobile(postData, { reqHeader: true, tip: '绑定中' }).then(res => {
+        this.toast('修改成功', 'success')
+        this.goBack()
+      }).catch((e) => {
+        error(e.msg || '绑定手机号失败')
+      })
+    },
     // 返回上一页
     goBack () {
       setTimeout(() => {
@@ -89,28 +126,28 @@ export default {
       if (!(/^1[3456789]\d{9}$/.test(this.mobile))) {
         uni.showToast({
           title: '手机号输入错误，请重新输入',
-          icon: 'none',
+          icon: 'none'
         })
         return
       }
       if (!this.code) {
         uni.showToast({
           title: '验证码不能为空',
-          icon: 'none',
+          icon: 'none'
         })
         return
       }
       updateUserMobile({
         mobile: this.mobile,
-        code: this.code,
+        code: this.code
       }).then(res => {
         uni.showToast({
-          title: res.msg,
+          title: res.msg
         })
-        
+
         getUserInfo({}, {
           tip: '',
-          errtip: false,
+          errtip: false
         }).then(res => {
           this.setUserInfo(res.data)
           this.goBack()
@@ -119,14 +156,14 @@ export default {
       }).catch(err => {
         uni.showToast({
           title: err.msg,
-          icon: 'none',
+          icon: 'none'
         })
       })
     },
     toast (title, icon = 'none') {
       uni.showToast({
         title: title,
-        icon: icon,
+        icon: icon
       })
     },
     startCountdown () {
@@ -151,26 +188,25 @@ export default {
       if (!isMobileOK) {
         uni.showToast({
           title: '手机号格式不正确',
-          icon: 'none',
+          icon: 'none'
         })
         return
       }
       updateMobileSms({
-        mobile: this.mobile,
+        mobile: this.mobile
       }).then(res => {
         uni.showToast({
           title: '验证码已发送',
-          icon: 'success',
+          icon: 'success'
         })
         this.startCountdown()
       })
     },
     save (e) {
-      
       const arg = {
         curr_psw: this.curr_psw,
         new_psw: this.new_psw,
-        check_psw: this.check_psw,
+        check_psw: this.check_psw
       }
       if (this.type === 1) {
         // 原始密码默认为空
@@ -192,7 +228,7 @@ export default {
         // 	return;
         // }
       }
-      
+
       if (arg.new_psw === '') {
         this.toast('新密码不能为空')
         return
@@ -220,7 +256,7 @@ export default {
             // 更新信息
             getUserInfo({}, {
               tip: '',
-              errtip: false,
+              errtip: false
             }).then(res => {
               this.setUserInfo(res.data)
               setTimeout(() => {
@@ -233,7 +269,7 @@ export default {
           this.toast(err.msg)
         })
       }
-    },
+    }
   },
   onLoad (options) {
     if (options.type == 0) {
@@ -251,14 +287,14 @@ export default {
       this.bgcolor = '#fff'
     }
     uni.setNavigationBarTitle({
-      title: this.title,
+      title: this.title
     })
     uni.getSystemInfo({
       success: res => {
         this.height = res.screenHeight
-      },
+      }
     })
-  },
+  }
 }
 </script>
 
@@ -267,10 +303,10 @@ export default {
     width: 100%;
     background: #efefef;
   }
-  
+
   .content {
     padding: 20rpx 0;
-    
+
     .item {
       background: #fff;
       padding-left: 20rpx;
@@ -280,7 +316,7 @@ export default {
       font-size: 30rpx;
     }
   }
-  
+
   .save {
     width: 90%;
     background: #F43131;
@@ -291,23 +327,24 @@ export default {
     line-height: 80rpx;
     border-radius: 10rpx;
   }
-  
+
   .other {
     padding: 14rpx 20rpx 0;
-    
+
     .other-item {
       display: flex;
       align-items: center;
       line-height: 98rpx;
       font-size: 28rpx;
       border-bottom: 1px solid #E3E3E3;
-      
+
       .input {
         flex: 1;
         font-size: 24rpx;
         margin-left: 42rpx;
+        text-align: left;
       }
-      
+
       .get-msg {
         height: 50rpx;
         line-height: 50rpx;
@@ -319,7 +356,7 @@ export default {
         border-radius: 5rpx;
       }
     }
-    
+
     .confirm {
       height: 76rpx;
       line-height: 76rpx;
@@ -330,4 +367,93 @@ export default {
       margin: 157rpx auto 0;
     }
   }
+
+  .pwd-wrap{
+    width: 750rpx;
+    box-sizing: border-box;
+    background: white;
+  }
+  .wxGetPhone{
+    padding-top: 80px !important;
+  }
+  .wxGetPhoneName{
+    width: 750rpx;
+    height: 100rpx;
+    line-height: 100rpx;
+    text-align: center;
+    font-weight: bold;
+    font-size: 16px;
+  }
+  .wxGetPhoneText{
+    width: 400rpx;
+    color: #333333;
+    line-height: 20px;
+    text-align: left;
+    font-size: 12px;
+    margin: 0 auto 140rpx;
+  }
+  .wxGetPhoneBtn{
+    width: 500rpx !important;
+    height: 80rpx !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 500rpx !important;
+  }
+  .OtherPhoneBtn{
+    background-color: #FFFFff !important;
+    color: #333333;
+    font-weight: normal;
+    border: 1px solid #333333;
+  }
+  .iconwx{
+    margin-right: 10px;
+  }
+
+  .wrap{
+    text-align: center;
+    height: 100vh;
+    color: #333;
+    box-sizing: border-box;
+    background: #fff;
+  }
+  .img{
+
+    width: 70px;
+    margin: 50rpx 0 100rpx;
+
+  }
+  .form{
+    .form-item{
+      margin: 0 50rpx;
+      border-bottom: 1px solid #e7e7e7;
+      height: 80rpx;
+      display: flex;
+      margin-bottom: 30rpx;
+      align-items: center;
+      .fun-input{
+        flex: 1;
+        height: 80rpx;
+        line-height: 80rpx;
+        font-size: 14px;
+        color: #444;
+        text-align: left;
+
+      }
+
+    }
+    .action{
+      margin: 50rpx 50rpx 30rpx;
+      display: block;
+    }
+
+  }
+  .store-logo{
+    width: 90rpx;
+    height: 90rpx;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 auto;
+  }
+
 </style>

@@ -165,7 +165,7 @@ export default {
       this.$emit('submitSure', this.postData)
     },
     buyNow () {
-      if (this.productInfo.skuvaljosn) {
+      if (this.productInfo.skuvaljosn && JSON.stringify(this.productInfo.skuvaljosn) !== '{}') {
         if (!this.submitFlag) {
           uni.showToast({
             title: '请选择正确的规格和数量',
@@ -310,7 +310,7 @@ export default {
       this.isShow = true
     },
     closePro () {
-      this.submitFlag=false
+      this.submitFlag = false
       this.postData.id = ''
       this.check_attr = {}
       this.isShow = false
