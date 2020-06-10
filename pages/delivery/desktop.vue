@@ -714,7 +714,7 @@ export default {
       width: 85rpx;
       height: 85rpx;
       border-radius: 50%;
-      overflow: hidden;
+      //overflow: hidden;
       background: #5B5B5B;
       z-index: 4;
       
@@ -723,7 +723,7 @@ export default {
         left: 50%;
         top: 50%;
         transform: translate(-50%, -50%);
-        
+        z-index: 10;
         .tag {
           position: absolute;
           right: -10px;
@@ -736,6 +736,7 @@ export default {
           font-size: 10px;
           line-height: 20px;
           text-align: center;
+		  z-index: 11;
         }
       }
       
