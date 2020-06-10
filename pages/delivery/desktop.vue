@@ -37,7 +37,7 @@
           <div :style="{backgroundImage:'url('+$getDomain(goods.ImgPath)+')'}" @click="toDetail(goods)"
                class="cover"></div>
           <div @click="toDetail(goods)" class="info">
-            <div class="title">{{goods.Products_Name}}</div>
+            <div class="title"><wzw-live-tag :room_id="goods.room_id" :product-info="goods" />{{goods.Products_Name}}</div>
             <div class="fz-12 c9 p-t-6 p-b-6">销量：{{goods.Products_Sales}}</div>
             <div><span class="price-selling fz-12">￥</span><span
               class="price-selling fz-14">{{goods.Products_PriceX}}</span></div>
@@ -174,6 +174,7 @@ import { Exception } from '@/common/Exception'
 import { getBizInfo } from '@/api/store'
 import { checkIsLogin, mergeObject, numberSort } from '@/common/helper'
 import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import WzwLiveTag from '@/componets/wzw-live-tag/wzw-live-tag'
 
 const attrInfoTmpl = {
   num: 0,
@@ -186,6 +187,7 @@ export default {
   name: 'DeliveryDesktop',
   mixins: [BaseMixin],
   components: {
+    WzwLiveTag,
     WzwImTip,
     LayoutLayer,
     LayoutIcon,

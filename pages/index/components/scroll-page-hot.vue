@@ -134,15 +134,7 @@
               </div>
               <div class="right">
                 <div class="title">
-                  <span class="live-status" @click="$toRoom(item.room_id)" v-if="item.liveStatus ===101 || item.liveStatus ===102 || item.liveStatus ===105">
-                    <layout-icon color="#fff" display="inline" size="14" type="iconicon-count"></layout-icon>
-                    <block v-if="liveStatus ==101 || liveStatus ==105">
-                      直播中
-                    </block>
-                    <block v-else>
-                      直播预告
-                    </block>
-                  </span>
+                  <wzw-live-tag :room_id="item.room_id" :product-info="item"></wzw-live-tag>
                   <span class="text">{{item.Products_Name}}</span>
                 </div>
                 <div class="tags" v-if="item.tags">
@@ -195,11 +187,13 @@ import { Exception } from '@/common/Exception'
 import { getSkinConfig } from '@/api/common'
 import { componetMixin } from '@/mixins/BaseMixin'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
-const livePlayer = requirePlugin('live-player-plugin')
+import WzwLiveTag from '@/componets/wzw-live-tag/wzw-live-tag'
+// const livePlayer = requirePlugin('live-player-plugin')
 export default {
   name: 'scroll-page-hot',
   mixins: [componetMixin],
   components: {
+    WzwLiveTag,
     LayoutIcon,
     DiyNav,
     DiyFlash,
@@ -315,25 +309,25 @@ export default {
       this.$set(this.liveNav[idx], 'goodsList', this.liveNav[idx].goodsList.concat(liveGoodsList))
       this.$set(this.liveNav[idx], 'totalCount', totalCount)
       console.log(this.liveNav[idx])
-      // 遍历
-      for (var i = tempLen;i < this.liveNav[idx].goodsList.length - 1; i++) {
-        const { room_id = 0 } = this.liveNav[idx].goodsList[i]
-        if (room_id) {
-          // 首次获取立马返回直播状态
-          const roomId = room_id // 房间 id
-          console.log('roomid is ' + roomId)
-          livePlayer.getLiveStatus({ room_id: roomId })
-            .then(res => {
-              // 101: 直播中, 102: 未开始, 103: 已结束, 104: 禁播, 105: 暂停中, 106: 异常，107：已过期
-              this.$set(this.liveNav[idx].goodsList[i], 'liveStatus', res.liveStatus)
-
-              console.log('get live status', res.liveStatus)
-            })
-            .catch(err => {
-              console.log('get live status', err)
-            })
-        }
-      }
+      // // 遍历
+      // for (var i = tempLen;i < this.liveNav[idx].goodsList.length - 1; i++) {
+      //   const { room_id = 0 } = this.liveNav[idx].goodsList[i]
+      //   if (room_id) {
+      //     // 首次获取立马返回直播状态
+      //     const roomId = room_id // 房间 id
+      //     console.log('roomid is ' + roomId)
+      //     livePlayer.getLiveStatus({ room_id: roomId })
+      //       .then(res => {
+      //         // 101: 直播中, 102: 未开始, 103: 已结束, 104: 禁播, 105: 暂停中, 106: 异常，107：已过期
+      //         this.$set(this.liveNav[idx].goodsList[i], 'liveStatus', res.liveStatus)
+      //
+      //         console.log('get live status', res.liveStatus)
+      //       })
+      //       .catch(err => {
+      //         console.log('get live status', err)
+      //       })
+      //   }
+      // }
     },
     async _init_func () {
       showLoading('初始化数据')

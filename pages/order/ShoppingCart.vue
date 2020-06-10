@@ -85,6 +85,7 @@
       <pro-tag
         :index="idx"
         :key="idx"
+        :product-info="item"
         :pro_name="item.Products_Name"
         :pro_price="item.Products_PriceX"
         :pro_price_old="item.Products_PriceY"
@@ -135,7 +136,9 @@ export default {
       fan: false,
       qty: 0,
       proList: [],
-      isHavCheck: false
+      isHavCheck: false,
+      productTotal: 0,
+      page: 1
     }
   },
   computed: {
@@ -144,9 +147,6 @@ export default {
     },
     manage () {
       return this.CartList.length === 0
-    },
-    userInfo () {
-      return this.$store.getters['user/getUserInfo']()
     }
   },
   watch: {
@@ -390,9 +390,13 @@ export default {
       this.totalPrice = Number(total).toFixed(2)
     },
     async init () {
-      this.proList = await getProductList({}, { onlyData: true }).catch(e => {
+      const { data, totalCount } = await getProductList({ page: this.page }).catch(e => {
         throw Error(e.msg || '获取推荐商品信息失败')
       })
+
+      this.proList = data
+      this.productTotal = totalCount
+      this.page++
 
       if (this.$checkIsLogin(0)) {
         const cart = await CartList({ cart_key: 'CartList' }, {
@@ -408,6 +412,18 @@ export default {
         this.initCheck()
       }
     }
+  },
+  async onReachBottom () {
+    if (this.proList.length >= this.productTotal){
+      error('到底了')
+      return
+    }
+    const proList = await getProductList({ page: this.page }, { onlyData: true }).catch(e => {
+      throw Error(e.msg || '获取推荐商品信息失败')
+    })
+
+    this.page++
+    this.proList = this.proList.concat(proList)
   },
   onShow () {
     this.setTabBarIndex(3)

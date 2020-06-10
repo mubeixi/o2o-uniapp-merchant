@@ -18,7 +18,7 @@
           <div @click="$toGoodsDetail(item)" class="pro">
             <image :src="item.ImgPath" class="pro-img"></image>
             <div class="pro_desc">
-              <div class="title">{{item.Products_Name}}</div>
+              <div class="title"><wzw-live-tag  :room_id="item.room_id" :product-info="item" />{{item.Products_Name}}</div>
               <div class="price">
                 <span class="n_price"><text>￥</text>{{item.Products_PriceX}}</span>
                 <span class="o_price" v-if="item.Products_PriceY!==item.Products_PriceX"><text>￥</text>{{item.Products_PriceY}}</span>
@@ -60,11 +60,13 @@ import { hideLoading, modal, showLoading } from '@/common/fun'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import ProductSku from '@/componets/product-sku/product-sku'
 import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import WzwLiveTag from '@/componets/wzw-live-tag/wzw-live-tag'
 
 export default {
   mixins: [BaseMixin],
   name: 'ProductApply',
   components: {
+    WzwLiveTag,
     WzwImTip,
     LayoutIcon,
     ProductSku,

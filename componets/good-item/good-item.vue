@@ -32,7 +32,7 @@
       <div class="product-cover" :style="{backgroundImage:'url('+getDomainUrl(vo.ImgPath)+')',borderRadius:coverRadius}" ></div>
     </slot>
     <div class="product-info">
-      <slot name="title"><div class="product-title c3 p-t-10 p-b-10" :style="{FontSize:titleFontSize,height:titleBoxHeight}">{{vo.Products_Name}}</div></slot>
+      <slot name="title"><div class="product-title c3 p-t-10 p-b-10" :style="{FontSize:titleFontSize,height:titleBoxHeight}"><wzw-live-tag :room_id="vo.room_id" :product-info="vo" />{{vo.Products_Name}}</div></slot>
       <slot name="sales"><div v-if="sales" class="sales c9 fz-14">已售{{vo.Products_Sales}}件</div></slot>
       <div class="price-box">
         <slot name="sellingPrice">
@@ -48,9 +48,11 @@
 </template>
 <script>
 import { getDomain, toGoodsDetail } from '@/common/helper'
+import WzwLiveTag from '@/componets/wzw-live-tag/wzw-live-tag'
 
 export default {
   name: 'GoodsItem',
+  components: { WzwLiveTag },
   props: {
     titleFontSize: {
       type: String,

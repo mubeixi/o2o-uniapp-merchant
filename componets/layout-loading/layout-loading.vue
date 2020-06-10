@@ -84,7 +84,7 @@ export default {
   },
   methods: {
     _computedStyle (show, animated) {
-      console.log(show, animated)
+      // console.log(show, animated)
       if (!show) {
         if (!animated) {
           this.displayStyle = 'none'
@@ -104,7 +104,7 @@ export default {
     }
   },
   created () {
-    console.log(this.show)
+    // console.log(this.show)
     const animationInstance = uni.createAnimation({
       duration: this.duration,
       timingFunction: 'ease'

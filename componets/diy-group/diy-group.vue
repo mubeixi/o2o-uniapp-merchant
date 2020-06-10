@@ -29,7 +29,7 @@
           </div>
           <div class="info" :style="{width:goods.config.style==2?itemw:''}" :class="{empyInfo:isEmpeyInfo}">
             <div class="left">
-              <div v-show="goods.config.attr.title.show" class="title">{{item.Products_Name}}</div>
+              <div v-show="goods.config.attr.title.show" class="title"><wzw-live-tag :room_id="item.room_id" :product-info="item" />{{item.Products_Name}}</div>
               <div v-show="goods.config.attr.desc.show" class="font12 graytext desc">
                 {{item.Products_BriefDescription||'暂无介绍'}}
               </div>
@@ -68,6 +68,7 @@ import { createEmptyArray, getCountdownFunc, getDomain } from '@/common/helper'
 import {toGoodsDetail} from '@/common/helper'
 import { lazyImgUrl } from '../../common'
 import { linkTo } from '@/common/fun'
+import WzwLiveTag from '@/componets/wzw-live-tag/wzw-live-tag'
 
 export default {
   name: 'DiyGroup',
@@ -227,7 +228,7 @@ export default {
     }
 
   },
-  components: {},
+  components: { WzwLiveTag },
   methods: {
     stampFunc () {
       for (var item of this.goodsList) {
