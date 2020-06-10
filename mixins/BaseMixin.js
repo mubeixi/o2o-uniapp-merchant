@@ -223,14 +223,14 @@ export default {
   },
   onReady () {
     uni.$on('IM_EVENT', (res) => {
-      console.log(res)
+      // console.log(res)
     })
 
     uni.$on('IM_TAKE_MSG', async (res) => {
       // 只有当前页面响应
       console.log(Storage.get('currentPagePath'), this.currentPagePath)
       if (Storage.get('currentPagePath') === this.currentPagePath) {
-        console.log(res, this.$refs, this.$refs.hasOwnProperty('wzwImTip'))
+        // console.log(res, this.$refs, this.$refs.hasOwnProperty('wzwImTip'))
         if (this.$refs.hasOwnProperty('wzwImTip')) this.$refs.wzwImTip.show(res)
 
         if (typeof this.refreshTabTag === 'function') this.refreshTabTag()
@@ -273,11 +273,11 @@ export default {
 export const tabbarMixin = {
   methods: {
     async refreshTabTag () {
-      console.log(this.$mp)
+      // console.log(this.$mp)
       if (!eventHub.imInstance) return
       const count = await eventHub.imInstance.getNoReadMsgCount()
       if (typeof this.$mp.page.getTabBar === 'function' && this.$mp.page.getTabBar()) {
-        console.log('更新IM下标数量' + count)
+        // console.log('更新IM下标数量' + count)
         this.$mp.page.getTabBar().setData({
           tags: [0, count, 0, 0, 0]
         })

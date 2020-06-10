@@ -85,7 +85,7 @@
       <pro-tag
         :index="idx"
         :key="idx"
-        :room_id="item.room_id"
+        :product-info="item"
         :pro_name="item.Products_Name"
         :pro_price="item.Products_PriceX"
         :pro_price_old="item.Products_PriceY"

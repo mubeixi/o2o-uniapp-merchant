@@ -12,7 +12,7 @@ else
     touch CHANGELOG.md
 fi
 
-function printFeat(){  
+function printFeat(){
     for i in ${feat[@]}
     do
         echo "- "$i >> CHANGELOG.md
@@ -20,7 +20,7 @@ function printFeat(){
     echo >> CHANGELOG.md
 }
 
-function printFix(){  
+function printFix(){
     for i in ${fix[@]}
     do
         echo "- "$i >> CHANGELOG.md
@@ -28,7 +28,7 @@ function printFix(){
     echo >> CHANGELOG.md
 }
 
-function printOther(){  
+function printOther(){
     for i in ${other[@]}
     do
         echo "- "$i >> CHANGELOG.md
@@ -48,7 +48,7 @@ function checkLog(){
     else
         other[otherIndex]=$1
         let otherIndex++
-    fi 
+    fi
 }
 
 function printLog(){
@@ -56,23 +56,23 @@ function printLog(){
         echo "### Features" >> CHANGELOG.md
         printFeat
     fi
-    
+
     if [[ $fixIndex -ne 0 ]]; then
         echo "### Bug Fixes" >> CHANGELOG.md
         printFix
     fi
-    
+
     if [[ $otherIndex -ne 0 ]]; then
         echo "### Other Changes" >> CHANGELOG.md
         printOther
     fi
-    
+
     feat=()
     featIndex=0
-    
+
     fix=()
     fixIndex=0
-    
+
     other=()
     otherIndex=0
 }
@@ -84,9 +84,9 @@ function checkDate()
         return
     fi
     curDate=$1
-    
+
     printLog
-    
+
     echo >> CHANGELOG.md
     echo "## "$curDate >> CHANGELOG.md
 }

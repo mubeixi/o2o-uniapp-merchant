@@ -52,7 +52,7 @@
           <div class="prolist">
             <div :key="idx" @click="goPro(prod)" class="pro-item" v-for="(prod,idx) in prodList">
               <img :src="prod.ImgPath" alt="" class="pro-cover">
-              <div class="item-name">{{prod.Products_Name}}</div>
+              <div class="item-name"><wzw-live-tag  :room_id="prod.room_id" :product-info="prod" />{{prod.Products_Name}}</div>
               <div class="price">
                 <span class="n_price"><span>￥</span>{{prod.Products_PriceX}}</span>
                 <span class="o_price"><span>￥</span>{{prod.Products_PriceX}}</span>
@@ -95,10 +95,12 @@ import { getProductList } from '@/api/product'
 import { getPayCoupons } from '@/api/order'
 import { toHome } from '@/common/fun'
 import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import WzwLiveTag from '@/componets/wzw-live-tag/wzw-live-tag'
 
 export default {
   mixins: [BaseMixin],
   components: {
+    WzwLiveTag,
     WzwImTip,
     LayoutIcon,
   },

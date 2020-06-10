@@ -38,6 +38,7 @@
             <image :src="pro.ImgPath" class="img-full"></image>
           </div>
           <div class="pro-title c3 m-t-10 m-b-8">
+            <wzw-live-tag :room_id="pro.room_id" :product-info="pro" />
             {{pro.Products_Name}}
           </div>
           <div class="price flex flex-vertical-c">
@@ -64,6 +65,7 @@
             <image :src="item.ImgPath" class="img-full"></image>
           </div>
           <div class="fz-13 c3 free-list-item-title m-b-10">
+            <wzw-live-tag  :room_id="item.room_id" :product-info="item"></wzw-live-tag>
             {{item.Products_Name}}
           </div>
           <div class="free-list-item-price flex flex-vertical-c">
@@ -92,10 +94,12 @@ import { getBizInfo } from '@/api/store'
 import { hideLoading, modal, showLoading } from '@/common/fun'
 import { Exception } from '@/common/Exception'
 import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import WzwLiveTag from '@/componets/wzw-live-tag/wzw-live-tag'
 
 export default {
   name: 'OrderFree',
   components: {
+    WzwLiveTag,
     WzwImTip,
     LayoutIcon,
   },
