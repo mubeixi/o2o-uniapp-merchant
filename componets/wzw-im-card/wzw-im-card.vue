@@ -1,5 +1,5 @@
 <template>
-  <div class="card-item" :id="msgId">
+  <div class="card-item" :id="msgId" @click="emitClick">
     <div class="time"></div>
 
     <div class="goods-tip-box flex" v-if="message.type==='prod' && message.isTip">
@@ -8,7 +8,7 @@
         <div class="goods-title fz-14 c4">{{message.content.Products_Name}}</div>
         <div class="flex flex-justify-between flex-vertical-c">
           <div class="fz-14 price-selling"><span class="fz-12">￥</span>{{message.content.Products_PriceX}}</div>
-          <div @click="bindProductSend" class="action-btn fz-14">发给商家</div>
+          <div @click.stop="bindProductSend" class="action-btn fz-14">发给商家</div>
         </div>
 
       </div>
@@ -26,8 +26,8 @@
               <div class="arrow-icon"></div>
             </block>
           </div>
-          <div class="headimg" :style="{backgroundImage:'url('+(message.avatar||message.from_avatar)+')'}"></div>
-          <div v-if="message.direction!=='to'" class="content-arrow" @click="bindClickLeft(message)">
+          <div  @click.stop="bindClickLeft(message)" class="headimg" :style="{backgroundImage:'url('+(message.avatar||message.from_avatar)+')'}"></div>
+          <div v-if="message.direction!=='to'" class="content-arrow">
             <block v-if="message.type==='text'">
               <image mode="widthFix" class="arrow-icon" src="/static/im/chat-arrow-left.png"></image>
             </block>
@@ -43,10 +43,10 @@
 
         <div v-if="message.type==='image'" class="content-img-wrap">
           <block v-if="message.tempPath">
-            <image @click="previewImg" :style="{width:message.styleObj.width+'px',height:message.styleObj.height+'px'}"  class="content-img" :src="message.tempPath||message.content" ></image>
+            <image @click.stop="previewImg" :style="{width:message.styleObj.width+'px',height:message.styleObj.height+'px'}"  class="content-img" :src="message.tempPath||message.content" ></image>
           </block>
           <block v-else>
-            <image mode="widthFix" @click="previewImg" class="content-img" :src="message.content" ></image>
+            <image mode="widthFix" @click.stop="previewImg" class="content-img" :src="message.content" ></image>
           </block>
 
           <div class="progress-box" v-if="message.taskList[0].progress<100">
@@ -58,7 +58,7 @@
           </div>
         </div>
 
-        <div v-if="message.type==='prod' && !message.isTip" class="goods-info-box" @click="toGoods(message.content)">
+        <div v-if="message.type==='prod' && !message.isTip" class="goods-info-box" @click.stop="toGoods(message.content)">
           <div class="cover" :style="{backgroundImage: 'url('+message.content.img+')'}"></div>
           <div class="info">
             <div class="fz-16 price-selling"><span class="fz-14">￥</span>{{message.content.price}}</div>
@@ -75,7 +75,7 @@
 // 消息卡片组件
 
 import { objTranslate } from '@/common/helper'
-import { linkToEasy, modal } from '@/common/fun'
+import { linkToEasy, modal, error } from '@/common/fun'
 
 export default {
   name: 'wzw-im-card',
@@ -97,7 +97,12 @@ export default {
     return {}
   },
   methods: {
+    emitClick () {
+      this.$emit('itemClick')
+    },
     bindClickLeft (chatItem) {
+      if (chatItem.direction === 'to') return
+      console.log(chatItem)
       // 客户得找商家聊
       const str = chatItem.from_uid
       const breakStrIdx = str.indexOf('_')
@@ -118,6 +123,10 @@ export default {
       this.$emit('bindProductSend', objTranslate(this.message.content))
     },
     previewImg () {
+      // if (this.message.content.indexOf('.gif') !== -1) {
+      //   error('gif暂不支持全屏预览')
+      //   return
+      // }
       const urls = [this.message.content]
       uni.previewImage({
         urls: urls

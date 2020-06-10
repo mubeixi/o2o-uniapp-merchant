@@ -1,9 +1,8 @@
 <template>
   <div class="page-wrap">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
-    <div :style="{height:diyHeadHeight+'px',backgroundColor:primaryColor}" class="head-box">
-      <div :style="{height:menuButtonInfo.height+'px',paddingRight:diyHeadRight+'px',marginTop:menuButtonInfo.top+'px'}"
-           class="head">
+    <div :style="{backgroundColor:primaryColor,paddingTop:menuButtonInfo.top+'px',paddingBottom:menuButtonInfo.top+'px'}" class="head-box">
+      <div style="height: 50px;" :style="{paddingRight:diyHeadRight+'px'}" class="head">
         <ul class="tab-box">
           <li :class="[headTabIndex === 0?'active':'']" @click="setHeadTabIndex(0)" class="tab-item" id="headTabItem0">
             <div :animation="tabAnimationData[0]">特价</div>
@@ -27,8 +26,8 @@
       </div>
     </div>
     <!--占位-->
-    <div :style="{height:diyHeadHeight+'px'}"></div>
-    <div :style="{top:diyHeadHeight+'px'}" class="main tab-container">
+    <div :style="{height:menuButtonInfo.top*2+50+'px'}"></div>
+    <div :style="{top:menuButtonInfo.top*2+50+'px'}" class="main tab-container">
       <scroll-view @scrolltolower="bindGetMore(0)" class="tab-page-wrap" lower-threshold="1" scroll-y
                    v-show="headTabIndex===0">
         <scroll-page-hot ref="page0"></scroll-page-hot>
@@ -318,6 +317,7 @@ export default {
       .tab-item {
         margin-right: 15px;
         position: relative;
+        font-size: 34rpx;
         //animation: all 0.4s ease;
         &:last-child {
           margin-right: 0;
@@ -333,7 +333,7 @@ export default {
         }
 
         &.active {
-          font-size: 40rpx;
+          font-size: 50rpx;
         }
       }
     }

@@ -5,7 +5,6 @@
       :refresher-threshold="100"
       :refresher-triggered="triggered"
       :scroll-into-view="toViewIdx"
-      :style="{paddingBottom:'110rpx'}"
       @refresherrefresh="onRefresh"
       @refresherrestore="onRestore"
       @scroll="bindScroll"
@@ -16,15 +15,16 @@
       <block :key="idx" v-for="(chat,idx) in chatList">
         <div class="im-item-box">
           <wzw-im-card
+            @itemClick="bindItemClick"
             :message="chat"
             :msg-id="'msg-'+idx"
             @bindProductSend="handleProductSend"
           />
           <!--用来搞事的-->
-          <div :id="'msg-'+idx" class="div-line h10"></div>
+          <div :id="'msg-'+idx" class="div-line h1"></div>
         </div>
       </block>
-      <div :style="{height:'426rpx'}" v-if="showOnther"></div>
+
     </scroll-view>
     <div :style="{marginBottom:showOnther?'130px':'0px'}" @click="showNewMsgFun" class="show-new-tip"
          v-if="showNewMsg && !isToLower">
@@ -38,7 +38,8 @@
                  type="text" v-model="tempText" />
         </div>
         <div @click="taggleMore" class="submit-btn">
-          <image class="img-btn" src="/static/im/im-action-more.png"></image>
+          <div  v-if="mode=='text' && tempText" class="text-btn">发送</div>
+          <image class="img-btn" v-else  src="/static/im/im-action-more.png"></image>
         </div>
       </div>
       <div class="onther" v-if="showOnther">
@@ -51,7 +52,6 @@
           <div class="label">拍照</div>
         </div>
       </div>
-      <div class="safearea-space"></div>
     </div>
   </div>
 </template>
@@ -77,7 +77,7 @@ export default {
   components: {
     LayoutIcon,
     // LayoutIcon,
-    WzwImCard,
+    WzwImCard
   },
   data () {
     return {
@@ -92,7 +92,7 @@ export default {
       showOnther: false,
       imInstance: null,
       imReady: false,
-      tempText: '',
+      tempText: ''
     }
   },
   computed: {
@@ -122,16 +122,34 @@ export default {
       } catch (e) {
         return []
       }
-    },
+    }
   },
   methods: {
+    bindItemClick () {
+      this.showOnther = false
+    },
     showNewMsgFun () {
       this.setViewIdx()
       this.refreshScrollBottomPostion()
       this.showNewMsg = false
     },
     bindScroll (e) {
-      this.isToLower = false
+      console.log(e)
+      const {
+        scrollHeight,
+        scrollLeft,
+        scrollTop,
+        deltaY
+      } = e.detail
+
+      // 向上滑，就不可能为true
+      console.log(scrollHeight - scrollTop - this.systemInfo.windowHeight)
+      // 给60的区间
+      if (scrollHeight - scrollTop > this.systemInfo.windowHeight + 60) {
+        this.isToLower = false
+      } else {
+        this.isToLower = true
+      }
     },
     bindScrolltolower () {
       this.isToLower = true
@@ -155,7 +173,7 @@ export default {
       await imInstance.sendImMessage({
         content: productInfo,
         type: 'prod',
-        isTip: 0,
+        isTip: 0
       })
       this.setViewIdx()
     },
@@ -169,7 +187,7 @@ export default {
       this.isFreshing = true
       // 界面下拉触发，triggered可能不是true，要设为true
       if (!this.triggered) this.triggered = true
-      
+
       // 不论成功还是失败
       this.imInstance.getHistory().then(() => {
         this.triggered = false
@@ -185,16 +203,16 @@ export default {
       try {
         const files = await chooseImageByPromise({
           sizeType: 1,
-          sourceType: ['album'],
+          sourceType: ['album']
         }).catch(err => {
           throw Error(err.errMsg || '选择照片失败')
         })
         const imgs = getArrColumn(files, 'path')
-        
+
         await imInstance.sendImMessage({
           content: '',
           type: 'image',
-          tempPath: imgs[0],
+          tempPath: imgs[0]
         })
         this.setViewIdx()
       } catch (e) {
@@ -205,7 +223,7 @@ export default {
       try {
         const files = await chooseImageByPromise({
           sizeType: 1,
-          sourceType: ['camera'],
+          sourceType: ['camera']
         }).catch(err => {
           throw Error(err.errMsg || '选择照片失败')
         })
@@ -213,7 +231,7 @@ export default {
         await imInstance.sendImMessage({
           content: '',
           type: 'image',
-          tempPath: imgs[0],
+          tempPath: imgs[0]
         })
         this.setViewIdx()
       } catch (e) {
@@ -226,31 +244,37 @@ export default {
       }
     },
     taggleMore () {
-      this.showOnther = !this.showOnther
-      if (this.showOnther) this.refreshScrollBottomPostion()
+      if (!this.tempText) {
+        this.showOnther = !this.showOnther
+        if (this.showOnther) this.refreshScrollBottomPostion()
+      }
+
+      if (this.tempText) {
+        this.sendMsg()
+      }
     },
     async _init_func (options) {
       const { productId, orderId, origin } = options
-      
+
       if (eventHub.imInstance) {
         this.imInstance = imInstance = eventHub.imInstance
       } else {
         this.imInstance = imInstance = new IM({ origin })
       }
-      
+
       // 设置本地用户信息
       imInstance.setSendInfo({
         type: 'user',
         id: Storage.get('user_id'),
         name: this.userInfo.User_NickName,
-        avatar: this.userInfo.User_HeadImg,
+        avatar: this.userInfo.User_HeadImg
       })
       // 设置接收人的信息
       imInstance.setReceiveInfo({
         type: this.totype,
-        id: this.toid,
+        id: this.toid
       })
-      
+
       // 如果没有start过,就start
       if (!imInstance.intervalInstance) {
         await imInstance.start() // 等拿token
@@ -258,23 +282,23 @@ export default {
         // 清空聊天记录
         imInstance.clearHistory() // 等拿token
       }
-      
+
       // 先加载一下最近消息
       await imInstance.getHistory()
-      
+
       // 将最后一个设置为已读
       if (this.chatList.length > 0) {
         await readMsg({
           msg_id: this.chatList[this.chatList.length - 1].id,
           to: imInstance.getToUid(),
-          out_uid: imInstance.getOutUid(),
+          out_uid: imInstance.getOutUid()
         }).catch(err => {
           console.log(err.msg || '消息设置已读失败')
         })
       }
-      
+
       // productId, orderId,
-      
+
       // 如果有商品的话，需要加一个商品提示信息
       if (productId) {
         console.log(`有商品${productId}`)
@@ -289,10 +313,10 @@ export default {
         imInstance.sendImMessage({
           content: productInfo,
           type: 'prod',
-          isTip: 1,
+          isTip: 1
         })
       }
-      
+
       this.setViewIdx()
       this.imReady = true
     },
@@ -307,11 +331,11 @@ export default {
     },
     bindInputChange (e) {
       this.tempText = e.detail.value
-    },
+    }
   },
   onLoad (options) {
     if (!checkIsLogin(1, 0)) return
-    
+
     const { tid, type, room_title = 'IM' } = options
     if (!tid || !type) {
       modal('参数错误')
@@ -321,7 +345,7 @@ export default {
     this.toid = tid
     this.totype = type
     this._init_func(options)
-    
+
     uni.$on('getMsg', (res) => {
       console.log(res)
       if (this.isToLower) {
@@ -333,89 +357,73 @@ export default {
     })
   },
   created () {
-  
+
   },
   onShow () {
-  
-  },
+
+  }
 }
 </script>
 <style lang="scss" scoped>
+  .page-wrap{
+    position: absolute;
+    width: 750rpx;
+    top:0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: constant(safe-area-inset-bottom);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
   .im-card-box {
-    position: fixed;
-    top: 0;
-    bottom: constant(safe-area-inset-bottom);
-    bottom: env(safe-area-inset-bottom);
+    flex:1;
     overflow-y: scroll;
     width: 750rpx;
     background: #e5e5e5;
   }
-  
-  .show-new-tip {
-    position: fixed;
-    transform: translateY(-80px);
-    bottom: constant(safe-area-inset-bottom);
-    bottom: env(safe-area-inset-bottom);
-    right: 20px;
-    padding: 4px 10px;
-    border-radius: 4px;
-    border: 1px solid #e7e7e7;
-    font-size: 12px;
-    color: $fun-blue-color;
-    background: #fff;
-    z-index: 9;
-  }
-  
+
   .im-bottom-action {
-    position: fixed;
     width: 750rpx;
-    left: 0;
-    bottom: 0;
     background: #f2f2f2;
-    
-    .safearea-space {
-      height: constant(safe-area-inset-bottom);
-      height: env(safe-area-inset-bottom);
-    }
-    
+
     .onther {
+      border-top: 1px solid #E2E2E2;
       padding: 40rpx 0;
       display: flex;
-      
+
       .onther-item {
         width: 96rpx;
         height: 126rpx;
         margin-left: 70rpx;
         text-align: center;
-        
+
         .label {
           font-size: 28rpx;
           height: 30rpx;
           line-height: 30rpx;
           color: #666;
         }
-        
+
         .icon-box {
           width: 96rpx;
           height: 96rpx;
         }
-        
+
       }
     }
-    
+
     .text {
       display: flex;
       align-items: center;
       width: 750rpx;
       height: 110rpx;
-      border-bottom: 1px solid #E2E2E2;
-      
+
       .input-box {
         margin-left: 20rpx;
         flex: 1;
         display: flex;
         align-items: center;
-        
+
         .input-ele {
           flex: 1;
           margin-right: 20rpx;
@@ -428,17 +436,26 @@ export default {
           font-size: 28rpx;
         }
       }
-      
+
       .submit-btn {
         padding-right: 20rpx;
         height: 110rpx;
-        
+        .text-btn{
+          background: linear-gradient(to right, #FF0006, #FF8417);
+          line-height: 48rpx;
+          margin-top: 31rpx;
+          height: 48rpx;
+          padding: 0 10px;
+          text-align: center;
+          color: #fff;
+          font-size: 12px;
+        }
         .img-btn {
           margin-top: 31rpx;
           width: 48rpx;
           height: 48rpx;
         }
-        
+
         .btn {
           width: 120rpx;
           text-align: center;
@@ -451,6 +468,21 @@ export default {
         }
       }
     }
-    
+
+  }
+
+  .show-new-tip{
+    position: fixed;
+    transform: translateY(-80px);
+    bottom: constant(safe-area-inset-bottom);
+    bottom: env(safe-area-inset-bottom);
+    right: 20px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    border: 1px solid #e7e7e7;
+    font-size: 12px;
+    color: $fun-blue-color;
+    background: #fff;
+    z-index: 9;
   }
 </style>

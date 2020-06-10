@@ -26,7 +26,7 @@
               <block v-if="chat.type==='prod'">
                 商品:[{{chat.content.prod_name}}]
               </block>
-              <block v-if="chat.type==='img'">
+              <block v-if="chat.type==='img' || chat.type==='image'">
                 发送了一张图片
               </block>
             </div>
@@ -67,7 +67,7 @@ export default {
       chatList: [],
       paginate: {
         page: 1,
-        page_size: 20,
+        page_size: 999,
         totalCount: 0
       }
     }
@@ -180,39 +180,64 @@ export default {
         })
         console.log(list)
         return list
-        // const _list = res.data.map(chat => {
-        //   chat.timeText = uni.$moment(chat.created_at * 1000).startOf('day').fromNow()
-        //   return chat
-        // })
-        // return _list
       }).catch(err => {
         modal(err.msg || '获取消息列表失败')
       })
-      this.paginate.page++
-      this.chatList = this.chatList.concat(chatList)
+      // this.paginate.page++
+      this.chatList = chatList //this.chatList.concat()
     }
   },
-  onReachBottom () {
-    if (this.chatList.length < this.totalCount) {
-      getChatList({
-        page: this.paginate.page,
-        page_size: this.paginate.page_size,
-        out_uid: this.out_uid
-      }).then(res => {
-        this.paginate.page++
-        // const _list = res.data.map(chat => {
-        //   chat.timeText = uni.$moment(chat.created_at * 1000).startOf('day').fromNow()
-        //   return chat
-        // })
-
-        this.chatList = this.chatList.concat(res.data)
-        this.paginate.totalCount = res.totalCount
-      }).catch(err => {
-        modal(err.msg || '获取消息列表失败')
-      })
-    }
-  },
+  // onReachBottom () {
+  //   if (this.chatList.length < this.totalCount) {
+  //     getChatList({
+  //       page: this.paginate.page,
+  //       page_size: this.paginate.page_size,
+  //       out_uid: this.out_uid
+  //     }).then(res => {
+  //       this.paginate.page++
+  //       // const _list = res.data.map(chat => {
+  //       //   chat.timeText = uni.$moment(chat.created_at * 1000).startOf('day').fromNow()
+  //       //   return chat
+  //       // })
+  //
+  //       this.chatList = this.chatList.concat(res.data)
+  //       this.paginate.totalCount = res.totalCount
+  //     }).catch(err => {
+  //       modal(err.msg || '获取消息列表失败')
+  //     })
+  //   }
+  // },
   onLoad () {
+
+  },
+  onReady () {
+    this.delBtnWidth = this.getEleWidth(180)
+    // 给单个的行记录也累加数量
+    uni.$on('IM_TAKE_MSG', async (res) => {
+      // 只有当前页面响应
+
+      console.log(res)
+
+      if (eventHub.imInstance) {
+        const chatList = await getChatList({ page: this.paginate.page, page_size: this.paginate.page_size, out_uid: this.out_uid }).then(res => {
+          this.paginate.totalCount = res.totalCount
+          const list = res.data.map(row => {
+            return { ...row, txtStyle: '' }
+          })
+          console.log(list)
+          return list
+        }).catch(err => {
+          modal(err.msg || '获取消息列表失败')
+        })
+        console.log(chatList)
+        // this.paginate.page++
+        this.chatList = chatList // this.chatList.concat()
+
+        await this.refreshTabTag()
+      }
+    })
+  },
+  onShow () {
     if (!checkIsLogin(0, 0)) return
 
     if (eventHub.imInstance) {
@@ -229,31 +254,7 @@ export default {
     this.out_uid = imInstance.getOutUid()
 
     this._init_func()
-  },
-  onReady () {
-    this.delBtnWidth = this.getEleWidth(180)
-    // 给单个的行记录也累加数量
-    eventHub.$on('IM_TAKE_MSG', (res) => {
-      // 只有当前页面响应
 
-      console.log(res)
-
-      if (eventHub.imInstance) {
-        const idx = findArrayIdx(this.chatList, { uid: res.from_uid })
-        console.log(idx)
-        if (idx !== false) {
-          const tempNoReadCount = this.chatList[idx].no_read
-          // 得自己拼接，不容易啊
-          res.no_read = tempNoReadCount + 1
-          res.uid = res.from_uid
-          res.to_uid = this.out_uid
-          res.time = uni.$moment().format('YYYY-MM-DD hh:mm')
-          this.$set(this.chatList, idx, res)
-        }
-      }
-    })
-  },
-  onShow () {
     this.setTabBarIndex(1)
     this.$store.dispatch('system/setTabActiveIdx', 1)
     this.refreshTabTag()
