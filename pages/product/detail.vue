@@ -747,6 +747,9 @@
     border-radius: 42rpx;
     background: #26C78D; //行内可以覆盖
   }
+  .comment-send-item{
+    overflow-x: hidden;
+  }
 
 </style>
 <template>
@@ -952,15 +955,19 @@
               <div class="comment-send" v-if="item.child.length>0">
                 <block :key="ind" v-for="(com,ind) of item.child">
                   <block :key="indx" v-for="(co,indx) of com">
-                    <div @click.stop="clickCommentSend(item,co.groupid,co.userid)" class="fz-12 c3 comment-send-item">
+
                       <block v-if="co.touserid==item.User_ID">
+                        <div @click.stop="clickCommentSend(item,co.groupid,co.userid)" class="fz-12 c3 comment-send-item">
                         <span class="color-comment p-r-5">{{co.user_nickname}}:</span> {{co.content}}
+                        </div>
                       </block>
                       <block v-else>
+                        <div @click.stop="clickCommentSend(item,co.groupid,co.userid)" class="fz-12 c3 comment-send-item p-l-24">
                         <span class="color-comment p-r-2">{{co.user_nickname}}</span>回复<span
                         class="color-comment p-r-5">{{co.to_user_nickname}}</span>{{co.content}}
+                        </div>
                       </block>
-                    </div>
+
                   </block>
 
                 </block>
@@ -1530,13 +1537,13 @@ export default {
       })
     },
     clickComment (item) {
-      this.commentItem = item
+      this.commentItem =Object.assign({}, item)
       this.$refs.commentModal.show()
       this.commentModalShow = true
       this.commentItem.groupid = ''
     },
     clickCommentSend (item, goupId, userId) {
-      this.commentItem = JSON.parse(JSON.stringify(item))
+      this.commentItem = Object.assign({}, item)
       this.commentItem.groupid = JSON.parse(JSON.stringify(goupId))
       this.commentItem.User_ID = JSON.parse(JSON.stringify(userId))
       this.$refs.commentModal.show()

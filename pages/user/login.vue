@@ -61,7 +61,7 @@
       </div>
 
       <div @click="setMode('code')" class="channel-item phoneIcon" open-type="getUserInfo" >
-        <layout-icon class="icon" color="#333333" size="24" type="iconphoneLogin"></layout-icon>
+        <layout-icon class="icon" color="#333333" size="24" type="iconshouji"></layout-icon>
       </div>
     </block>
 

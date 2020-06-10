@@ -1,7 +1,6 @@
 import { fetch } from '@/common/request'
 
 
-
 // 统计
 export const sendAnalysisData = (param, options) => fetch({
   act: 'clickRecord',

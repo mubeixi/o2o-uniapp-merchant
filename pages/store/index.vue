@@ -229,16 +229,21 @@
                   <div class="comment-send" v-if="item.child.length>0">
                     <block :key="ind" v-for="(com,ind) of item.child">
                       <block :key="indx" v-for="(co,indx) of com">
-                        <div @click.stop="clickCommentSend(item,co.groupid,co.userid)"
-                             class="fz-12 c3 comment-send-item">
+
                           <block v-if="co.touserid==item.User_ID">
+                            <div @click.stop="clickCommentSend(item,co.groupid,co.userid)"
+                                 class="fz-12 c3 comment-send-item">
                             <span class="color-comment p-r-5">{{co.user_nickname}}:</span> {{co.content}}
+                            </div>
                           </block>
                           <block v-else>
+                            <div @click.stop="clickCommentSend(item,co.groupid,co.userid)"
+                                 class="fz-12 c3 comment-send-item p-l-14">
                             <span class="color-comment p-r-2">{{co.user_nickname}}</span>回复<span
                             class="color-comment p-r-5">{{co.to_user_nickname}}</span>{{co.content}}
+                            </div>
                           </block>
-                        </div>
+
                       </block>
 
                     </block>
@@ -334,15 +339,19 @@
                 <div class="comment-send" v-if="item.child.length>0">
                   <block :key="ind" v-for="(com,ind) of item.child">
                     <block :key="indx" v-for="(co,indx) of com">
-                      <div @click.stop="clickCommentSend(item,co.groupid,co.userid)" class="fz-12 c3 comment-send-item">
+
                         <block v-if="co.touserid==item.User_ID">
+                          <div @click.stop="clickCommentSend(item,co.groupid,co.userid)" class="fz-12 c3 comment-send-item">
                           <span class="color-comment p-r-5">{{co.user_nickname}}:</span> {{co.content}}
+                          </div>
                         </block>
                         <block v-else>
+                          <div @click.stop="clickCommentSend(item,co.groupid,co.userid)" class="fz-12 c3 comment-send-item p-l-24">
                           <span class="color-comment p-r-2">{{co.user_nickname}}</span>回复<span
                           class="color-comment p-r-5">{{co.to_user_nickname}}</span>{{co.content}}
+                          </div>
                         </block>
-                      </div>
+
                     </block>
 
                   </block>
@@ -406,6 +415,7 @@ export default {
   computed: {},
   data () {
     return {
+      commentItem: {},
       commentValue: '',
       childSwiperHeight: 'auto',
       isFavourite: false,
@@ -542,6 +552,7 @@ export default {
       this.commentValue = e.detail.value
     },
     cancelComent () {
+      this.commentItem = {}
       this.commentValue = ''
       this.$closePop('commentModal')
     },
@@ -572,6 +583,8 @@ export default {
         this.$closePop('commentModal')
       }).catch(e => {
         error(e.msg || '评论失败')
+        this.commentItem = {}
+        this.commentValue = ''
         this.$closePop('commentModal')
       })
     },
@@ -586,13 +599,13 @@ export default {
     },
     clickComment (item) {
       if (!checkIsLogin(1, 1)) return
-      this.commentItem = item
+      this.commentItem = Object.assign({}, item)
       this.$refs.commentModal.show()
       this.commentItem.groupid = ''
     },
     clickCommentSend (item, goupId, userId) {
       if (!checkIsLogin(1, 1)) return
-      this.commentItem = item
+      this.commentItem = Object.assign({}, item)
       this.commentItem.groupid = goupId
       this.commentItem.User_ID = userId
       this.$refs.commentModal.show()
@@ -639,7 +652,7 @@ export default {
         if (room_id) {
           // 首次获取立马返回直播状态
           const roomId = room_id // 房间 id
-          console.log('roomid is ' + roomId,livePlayer)
+          console.log('roomid is ' + roomId, livePlayer)
           livePlayer.getLiveStatus({ room_id: roomId })
             .then(res => {
               // 101: 直播中, 102: 未开始, 103: 已结束, 104: 禁播, 105: 暂停中, 106: 异常，107：已过期
@@ -1550,4 +1563,8 @@ export default {
     height: 60rpx;
     line-height: 60rpx;
   }
+  .comment-send-item{
+    overflow-x: hidden;
+  }
+
 </style>
