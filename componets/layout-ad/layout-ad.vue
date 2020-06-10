@@ -190,6 +190,7 @@ export default {
   },
   methods: {
     async _init_func () {
+      console.log('layout-ad init_func')
       if (this.imgs.length < 1) {
         try {
           if (!this.code && !this.cateId && !this.position) throw Error('广告位的imgs长度为0是，请传入code或者（cateId+position的搭配）')

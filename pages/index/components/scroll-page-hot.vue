@@ -1,5 +1,6 @@
 <template>
   <div>
+<!--    <layout-ad code="index_top" paddingStr="20px 0 20px 0"></layout-ad>-->
     <view class="home-diy-wrap">
       <section
         :class="[item]"
@@ -188,11 +189,13 @@ import { getSkinConfig } from '@/api/common'
 import { componetMixin } from '@/mixins/BaseMixin'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import WzwLiveTag from '@/componets/wzw-live-tag/wzw-live-tag'
+import LayoutAd from '@/componets/layout-ad/layout-ad'
 // const livePlayer = requirePlugin('live-player-plugin')
 export default {
   name: 'scroll-page-hot',
   mixins: [componetMixin],
   components: {
+    LayoutAd,
     WzwLiveTag,
     LayoutIcon,
     DiyNav,

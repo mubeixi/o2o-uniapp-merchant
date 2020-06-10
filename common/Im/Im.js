@@ -393,7 +393,7 @@ class IM {
       // 为了预防有需要异步上传的情况
       const content = await message.getContent(chatIdx, this.chatList)
 
-      checkOnline({ out_uid: this.getOutUid() })
+      // checkOnline({ out_uid: this.getOutUid() })
 
       sendMsg({ type, content, out_uid: this.getOutUid(), to: this.getToUid() }).then(res => {
         console.log('发送成功', res)
@@ -402,6 +402,18 @@ class IM {
       }).catch(err => {
         console.log('消息发送失败')
         this.chatList[chatIdx].sendStatus = -1 // 标记失败
+        // 重连啊
+        if (err.errorCode === 66000) {
+          this._getAccessToken().then(res => {
+            sendMsg({ type, content, out_uid: this.getOutUid(), to: this.getToUid() }).then(res => {
+              console.log('发送成功', res)
+              this.chatList[chatIdx].sendStatus = 1 // 标记成功
+              return res.data
+            }).catch(() => {
+              console.log('消息重发失败')
+            })
+          }).catch(() => {})
+        }
         Exception.handle(Error(err.msg))
       })
     } else {
@@ -459,7 +471,11 @@ class IM {
 
     // 只允许限定的类别
     if (this.allowMsgType.includes(type)) {
-      this.chatList.push({ ...messageObj, direction: 'from' })
+      // 只有IM详情页才需要
+      if (this.receiveIdentity && this.receiveId && messageObj.from_uid === this.getToUid()) {
+        this.chatList.push({ ...messageObj, direction: 'from' })
+      }
+      
       uni.$emit('getMsg', { ...messageObj })
       if (this.listenStatus) {
         uni.$emit('IM_TAKE_MSG', { ...messageObj })

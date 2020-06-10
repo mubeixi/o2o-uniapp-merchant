@@ -31,7 +31,7 @@ export default {
     room_id: {
       immediate: true,
       handler (roomId) {
-        console.log('room_id value change', roomId)
+        // console.log('room_id value change', roomId)
         if (!roomId) return
 
         this.refreshLiveStatus(roomId)
@@ -46,14 +46,14 @@ export default {
   },
   methods: {
     async refreshLiveStatus (roomId) {
-      console.log('roomid is ' + roomId)
+      // console.log('roomid is ' + roomId)
       if (!livePlayer) {
         throw Error('直播的运行换件创建失败')
       }
 
       const { live_end_time, live_start_time } = this.productInfo
       const nowTimeStamp = moment().unix()
-      console.log(nowTimeStamp)
+      // console.log(nowTimeStamp)
       if (live_end_time && live_start_time) {
         if (nowTimeStamp > live_start_time && nowTimeStamp < live_end_time) {
           this.liveStatus = 101
@@ -64,7 +64,7 @@ export default {
         }
       }
 
-      //如果有结果就覆盖
+      // 如果有结果就覆盖
       livePlayer.getLiveStatus({ room_id: roomId })
         .then(res => {
           // 101: 直播中, 102: 未开始, 103: 已结束, 104: 禁播, 105: 暂停中, 106: 异常，107：已过期

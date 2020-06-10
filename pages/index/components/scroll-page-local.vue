@@ -1,23 +1,23 @@
 <template>
   <div>
-    <div :style="{top:diyHeadHeight+'px'}" @touchmove.stop.prevent="$noop"
+    <div :style="{top:menuButtonInfo.top*2+50+'px'}" @touchmove.stop.prevent="$noop"
          class="section scroll-box first-cate-list  bg-white">
       <li :key="idx" @click="changeQuickCateNav(idx)" class="scroll-item fz-15 c3" v-for="(cate,idx) in firstCateList">
         {{cate.Category_Name}}
         <span class="underline" v-show="quickFirstCateIdx === idx"></span>
       </li>
     </div>
-    
+
     <swiper
       :current="quickFirstCateIdx"
-      :style="{top:diyHeadHeight+firstCateHeight+'px',height:(cateViewHeight+'px')}"
+      :style="{top:menuButtonInfo.top*2+50+firstCateHeight+'px',height:(cateViewHeight+'px')}"
       @change="quickCateIndexChange"
       class="quick-cate-swiper"
       duration="300"
     >
       <swiper-item :key="idx1" class="quick-cate-swiper-item" v-for="(first,idx1) in firstCateList">
         <scroll-view class="bg-white scroll-view-wrap" scroll-y>
-          
+
           <div class="grid-box">
             <div
               :key="idx2"
@@ -33,22 +33,23 @@
             </div>
           </div>
           <div class="hr h10"></div>
-          
+
           <div class="bg-white">
+
             <layout-ad :cate-id="first.Category_ID" :lazy-load="true" :ready="quickFirstCateIdx===idx1"
                        code="city_under_nav" paddingStr="20px 0 20px 0" position="city"></layout-ad>
           </div>
-          
+
           <div v-if="quickGoodsList.length<1">
             <layout-loading></layout-loading>
           </div>
-          
+
           <div class="page-section-title" v-if="quickGoodsList.length>0">
             <span :style="{backgroundColor: primaryColor}" class="before"></span>
             <span class="text">钜惠推荐</span>
             <span :style="{backgroundColor: primaryColor}" class="after"></span>
           </div>
-          
+
           <div class="fun-goods-list bg-white b-radius-5 m-t-10" style="width: 710rpx;margin-left: 20rpx;"
                v-if="quickGoodsList.length>0">
             <div class="fun-goods-col" style="padding: 0 15rpx 0 30rpx">
@@ -61,19 +62,19 @@
               <block :key="idx" v-for="(goods,idx) in quickGoodsList">
                 <goods-item :marketPrice="true" :vo="goods" coverRadius="8rpx" mode="top-bottom"
                             v-if="idx%2===1"></goods-item>
-              
+
               </block>
             </div>
           </div>
-          
+
           <div class="h20"></div>
-  
+
           <div class="safearea-box"></div>
-        
+
         </scroll-view>
       </swiper-item>
     </swiper>
-    
+
   </div>
 </template>
 
@@ -85,12 +86,14 @@ import { componetMixin } from '@/mixins/BaseMixin'
 import GoodsItem from '@/componets/good-item/good-item'
 import { mapGetters } from 'vuex'
 import LayoutLoading from '@/componets/layout-loading/layout-loading'
+import LayoutAd from '@/componets/layout-ad/layout-ad'
 
 export default {
   name: 'scroll-page-local',
   components: {
+    LayoutAd,
     LayoutLoading,
-    GoodsItem,
+    GoodsItem
   },
   mixins: [componetMixin],
   data () {
@@ -98,20 +101,20 @@ export default {
       firstCateHeight: 44,
       firstCateList: [],
       quickFirstCateIdx: 0, // 同城闪送
-      quickGoodsList: [], // 钜惠推荐商品
+      quickGoodsList: [] // 钜惠推荐商品
     }
   },
   computed: {
     ...mapGetters({
-      primaryColor: 'theme/pimaryColor',
+      primaryColor: 'theme/pimaryColor'
     }),
     cateViewHeight () {
       try {
-        return this.systemInfo.windowHeight - this.diyHeadHeight - this.firstCateHeight-48
+        return this.systemInfo.windowHeight - this.diyHeadHeight - this.firstCateHeight - 48
       } catch (e) {
         return 'auto'
       }
-    },
+    }
   },
   watch: {
     quickFirstCateIdx: {
@@ -119,8 +122,8 @@ export default {
         if (idx !== oldIdx) {
           this.loadQuickGoodsList(idx)
         }
-      },
-    },
+      }
+    }
   },
   methods: {
     refreshByLocal () {
@@ -166,28 +169,28 @@ export default {
         // showLoading()
         const cateId = this.firstCateList[idx].Category_ID
         if (!cateId) return
-        
+
         var postData = { Cate_ID: cateId }
         this.userAddressInfo = this.$store.getters['user/getUserAddressInfo']()
         if (this.userAddressInfo && this.userAddressInfo.hasOwnProperty('latitude') && this.userAddressInfo.hasOwnProperty('longitude')) {
           Object.assign(postData, {
             lat: this.userAddressInfo.latitude,
-            lng: this.userAddressInfo.longitude,
+            lng: this.userAddressInfo.longitude
           })
         }
         // 需要刷新页面
         const list = await this.loadGoodsList(postData)
         this.quickGoodsList = list
       } catch (e) {
-      
+
       } finally {
         // hideLoading()
       }
-    },
+    }
   },
   created () {
     this._init_func()
-  },
+  }
 }
 </script>
 <style lang="scss" scoped>
@@ -198,12 +201,12 @@ export default {
     padding: 2px 8px;
     box-sizing: border-box;
     border-bottom: 1px solid #eee;
-    
+
     .scroll-item {
       position: relative;
       line-height: 40px;
       padding: 0 8px;
-      
+
       .underline {
         position: absolute;
         bottom: 0px;
@@ -215,12 +218,12 @@ export default {
       }
     }
   }
-  
+
   .quick-cate-swiper {
     position: fixed;
     width: 750rpx;
     overflow: hidden;
-    
+
     .quick-cate-swiper-item {
       .scroll-view-wrap {
         position: absolute;
