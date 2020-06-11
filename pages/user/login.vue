@@ -598,6 +598,7 @@ export default {
   }
   .imgWx{
     width: 100px;
+    height: 100px;
     margin: 180rpx 0 180rpx;
   }
   .otherLogin-top-item {

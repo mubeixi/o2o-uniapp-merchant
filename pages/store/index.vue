@@ -238,7 +238,7 @@
                           </block>
                           <block v-else>
                             <div @click.stop="clickCommentSend(item,co.groupid,co.userid)"
-                                 class="fz-12 c3 comment-send-item p-l-14">
+                                 class="fz-12 c3 comment-send-item p-l-10">
                             <span class="color-comment p-r-2">{{co.user_nickname}}</span>回复<span
                             class="color-comment p-r-5">{{co.to_user_nickname}}</span>{{co.content}}
                             </div>
@@ -346,7 +346,7 @@
                           </div>
                         </block>
                         <block v-else>
-                          <div @click.stop="clickCommentSend(item,co.groupid,co.userid)" class="fz-12 c3 comment-send-item p-l-24">
+                          <div @click.stop="clickCommentSend(item,co.groupid,co.userid)" class="fz-12 c3 comment-send-item p-l-10">
                           <span class="color-comment p-r-2">{{co.user_nickname}}</span>回复<span
                           class="color-comment p-r-5">{{co.to_user_nickname}}</span>{{co.content}}
                           </div>
@@ -916,6 +916,7 @@ export default {
 
   .color-comment {
     color: #476DB9;
+	line-height: 50rpx;
   }
 
   .comment-item {
