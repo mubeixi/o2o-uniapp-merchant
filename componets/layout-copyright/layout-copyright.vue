@@ -18,7 +18,7 @@
 <template>
   <div class="wrap">
     <img class="logo" :src="'/static/client/copyright.png'|domain" />
-    <p class="text">真产品聚划算就在网中网</p>
+<!--    <p class="text">真产品聚划算就在网中网</p>-->
   </div>
 </template>
 <script>

@@ -65,7 +65,7 @@ export default {
       default: false
     },
     autoplay: {
-      default: false
+      default: true
     },
     dotsColor: {
       default: 'rgba(0,0,0,.3)'
@@ -74,7 +74,7 @@ export default {
       default: '#26C78D'
     },
     interval: {
-      default: 2000
+      default: 5000
     },
     duration: {
       default: 500

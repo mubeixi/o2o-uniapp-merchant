@@ -1,12 +1,15 @@
 <template>
   <div class="live-status" @click="bindToRoom" v-if="liveStatus ==101 || liveStatus ==102 || liveStatus ==105">
-    <layout-icon color="#fff" display="inline" size="14" type="iconicon-count"></layout-icon>
-    <block v-if="liveStatus ==101 || liveStatus ==105">
+<!--    <layout-icon color="#fff" display="inline" size="14" type="iconicon-count"></layout-icon>-->
+    <div class="flex flex-vertical-c">
+      <image src="/static/loading3.gif" class="live-icon-img" />
+      <span class="text" v-if="liveStatus ==101 || liveStatus ==105">
       直播
-    </block>
-    <block v-else>
+    </span>
+      <span class="text" v-else>
       直播预告
-    </block>
+    </span>
+    </div>
   </div>
 </template>
 
@@ -108,13 +111,21 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+  .live-icon-img{
+    width: 12px;
+    height: 12px;
+    top: 2px;
+  }
+  .text{
+    font-size: 10px;
+  }
   .live-status {
+    height: 16px;
     display: inline-block;
     margin-right: 4px;
     background: linear-gradient(#F53636, #FF5539);
     color: #fff;
-    font-size: 10px;
-    padding: 0 4px;
+    padding: 0 8px 0 4px;
     border-top-right-radius: 8px;
     border-bottom-right-radius: 8px;
   }

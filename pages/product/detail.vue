@@ -674,9 +674,10 @@
   }
 
   .t_content {
-    position: relative;
+    /*position: relative;*/
+    display: flex;
     width: 720rpx;
-    height: 160rpx;
+    /*height: 160rpx;*/
     background-color: #FDF1E5;
     background-size: cover;
     margin: 0 auto 30rpx;
@@ -687,7 +688,8 @@
   }
 
   .t_left {
-    float: left;
+    /*float: left;*/
+    flex: 1;
   }
 
   .t_left .t_left_t .money {
@@ -714,7 +716,7 @@
   }
 
   .t_right {
-    float: right;
+    /*float: right;*/
     height: 116rpx;
     line-height: 116rpx;
     padding: 0 36rpx;
@@ -1163,7 +1165,6 @@
       </view>
     </layout-popup>
 
-
     <!--101: 直播中, 102: 未开始, 103: 已结束, 104: 禁播, 105: 暂停中, 106: 异常，107：已过期-->
     <div @click="toRoom" class="live-status-box" v-if="liveStatus == 101 || liveStatus == 105 || liveStatus == 102">
       <image class="icon" src="/static/live/live-pre.png" v-if="liveStatus ==102"></image>
@@ -1537,7 +1538,7 @@ export default {
       })
     },
     clickComment (item) {
-      this.commentItem =Object.assign({}, item)
+      this.commentItem = Object.assign({}, item)
       this.$refs.commentModal.show()
       this.commentModalShow = true
       this.commentItem.groupid = ''
@@ -1889,8 +1890,19 @@ export default {
         })
         Object.assign(this.productInfo, productInfo)
 
-        const { room_id } = productInfo
+        const { room_id, live_end_time, live_start_time } = productInfo
         if (room_id) {
+          const nowTimeStamp = uni.$moment().unix()
+          // console.log(nowTimeStamp)
+          if (live_end_time && live_start_time) {
+            if (nowTimeStamp > live_start_time && nowTimeStamp < live_end_time) {
+              this.liveStatus = 101
+            }
+
+            if (nowTimeStamp < live_start_time) {
+              this.liveStatus = 102
+            }
+          }
           // 首次获取立马返回直播状态
           const roomId = room_id // 房间 id
           livePlayer.getLiveStatus({ room_id: roomId })

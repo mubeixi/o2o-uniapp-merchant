@@ -216,6 +216,12 @@
       "name": "onther",
       "pages": [
         {
+          "path": "live/liveList",
+          "style": {
+            "navigationBarTitleText": "直播"
+          }
+        },
+        {
           "path": "delivery/detail",
           "style": {
             "navigationBarTitleText": "外卖详情",

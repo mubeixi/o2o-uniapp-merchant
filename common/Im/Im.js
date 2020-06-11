@@ -1,7 +1,7 @@
 import {
   IM_APPID, IM_APPSECRET, IM_WSS_URL
 } from '@/common/env'
-import { bindUid, getAccessToken, getMsgList, sendMsg, checkOnline,getNoReadMsg } from '@/common/Im/Fetch'
+import { bindUid, getAccessToken, getMsgList, sendMsg, checkOnline, getNoReadMsg, readMsg } from '@/common/Im/Fetch'
 import Promisify from '@/common/Promisify'
 import { Exception } from '@/common/Exception'
 import Storage from '@/common/Storage'
@@ -473,6 +473,14 @@ class IM {
     if (this.allowMsgType.includes(type)) {
       // 只有IM详情页才需要
       if (this.receiveIdentity && this.receiveId && messageObj.from_uid === this.getToUid()) {
+        // 标记为已读
+        // readMsg({
+        //   msg_id: messageObj.id,
+        //   to: this.getToUid(),
+        //   out_uid: this.getOutUid()
+        // }).catch(err => {
+        //   console.log(err.msg || '消息设置已读失败')
+        // })
         this.chatList.push({ ...messageObj, direction: 'from' })
       }
       
