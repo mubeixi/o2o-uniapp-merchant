@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div :style="{top:menuButtonInfo.top*2+50+'px'}" @touchmove.stop.prevent="$noop"
+    <div :style="{top:menuButtonInfo.top+50+'px'}" @touchmove.stop.prevent="$noop"
          class="section scroll-box first-cate-list  bg-white">
       <li :key="idx" @click="changeQuickCateNav(idx)" class="scroll-item fz-15 c3" v-for="(cate,idx) in firstCateList">
         {{cate.Category_Name}}
@@ -10,7 +10,7 @@
 
     <swiper
       :current="quickFirstCateIdx"
-      :style="{top:menuButtonInfo.top*2+50+firstCateHeight+'px',height:(cateViewHeight+'px')}"
+      :style="{top:menuButtonInfo.top+50+firstCateHeight+'px',height:(cateViewHeight+'px')}"
       @change="quickCateIndexChange"
       class="quick-cate-swiper"
       duration="300"
@@ -40,7 +40,7 @@
                        code="city_under_nav" paddingStr="20px 0 20px 0" position="city"></layout-ad>
           </div>
 
-          <div v-if="quickGoodsList.length<1">
+          <div v-if="areaLoading">
             <layout-loading></layout-loading>
           </div>
 
@@ -98,6 +98,7 @@ export default {
   mixins: [componetMixin],
   data () {
     return {
+      areaLoading:false,
       firstCateHeight: 44,
       firstCateList: [],
       quickFirstCateIdx: 0, // 同城闪送
@@ -110,7 +111,7 @@ export default {
     }),
     cateViewHeight () {
       try {
-        return this.systemInfo.windowHeight - this.diyHeadHeight - this.firstCateHeight - 48
+        return this.systemInfo.windowHeight - this.firstCateHeight - (this.menuButtonInfo.top+50)
       } catch (e) {
         return 'auto'
       }
@@ -141,7 +142,7 @@ export default {
       this.quickFirstCateIdx = idx
     },
     async _init_func () {
-      showLoading('初始化数据')
+      // showLoading('初始化数据')
       try {
         this.firstCateList = await getProductCategory({}, { onlyData: true }).catch(() => {
           throw Error('获取商品分类失败')
@@ -150,7 +151,7 @@ export default {
       } catch (e) {
         Exception.handle(e)
       } finally {
-        hideLoading()
+        // hideLoading()
       }
     },
     /**
@@ -170,6 +171,7 @@ export default {
         const cateId = this.firstCateList[idx].Category_ID
         if (!cateId) return
 
+        this.areaLoading = true
         var postData = { Cate_ID: cateId }
         this.userAddressInfo = this.$store.getters['user/getUserAddressInfo']()
         if (this.userAddressInfo && this.userAddressInfo.hasOwnProperty('latitude') && this.userAddressInfo.hasOwnProperty('longitude')) {
@@ -184,6 +186,7 @@ export default {
       } catch (e) {
 
       } finally {
+        this.areaLoading = false
         // hideLoading()
       }
     }

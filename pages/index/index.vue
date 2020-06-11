@@ -1,8 +1,11 @@
 <template>
   <div class="page-wrap">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
-    <div :style="{backgroundColor:primaryColor,paddingTop:menuButtonInfo.top+'px',paddingBottom:menuButtonInfo.top+'px'}" class="head-box">
-      <div style="height: 50px;" :style="{paddingRight:diyHeadRight+'px'}" class="head">
+    <div @touchmove.stop.prevent :style="{height:menuButtonInfo.height+'px',width:menuButtonInfo.height+'px',paddingLeft:menuButtonInfo.height/2+'px',paddingRight:menuButtonInfo.height/3+'px',top:menuButtonInfo.top+menuButtonInfo.height/3+'px',right:diyHeadRight+10+'px'}" @click="$linkTo('/pages/search/index')" class="search-box">
+      <layout-icon display="inline" class="iconsearch" color="#fff" size="18" weight="bold" type="iconicon-search"></layout-icon>
+    </div>
+    <div @touchmove.stop.prevent :style="{backgroundColor:primaryColor,paddingTop:menuButtonInfo.top+'px'}" class="head-box" style="height: 50px;">
+      <div style="height: 36px;" :style="{marginRight:diyHeadRight+menuButtonInfo.height+'px'}" class="head">
         <ul class="tab-box">
           <li :class="[headTabIndex === 0?'active':'']" @click="setHeadTabIndex(0)" class="tab-item" id="headTabItem0">
             <div :animation="tabAnimationData[0]">特价</div>
@@ -19,15 +22,12 @@
           <span :animation="tabUnderlineAnimationData" :style="{marginLeft:defaultUnderlineLeft+'px'}" class="page-tab-underline"
                 v-show="showUnderLine"></span>
         </ul>
-        <div :style="{borderRadius: menuButtonInfo.height/2+'px',height:menuButtonInfo.height+'px',}" @click="$linkTo('/pages/search/index')"
-             class="search-box">
-          <layout-icon class="iconsearch" color="#fff" size="16" type="iconicon-search"></layout-icon>
-        </div>
+        
       </div>
     </div>
     <!--占位-->
-    <div :style="{height:menuButtonInfo.top*2+50+'px'}"></div>
-    <div :style="{top:menuButtonInfo.top*2+50+'px'}" class="main tab-container">
+    <div @touchmove.stop.prevent :style="{height:menuButtonInfo.top+50+'px'}" style="background-color: #26C78D"></div>
+    <div :style="{top:menuButtonInfo.top+50+'px'}" class="main tab-container">
       <scroll-view @scrolltolower="bindGetMore(0)" class="tab-page-wrap" lower-threshold="1" scroll-y
                    v-show="headTabIndex===0">
         <scroll-page-hot ref="page0"></scroll-page-hot>
@@ -44,6 +44,12 @@
     <div @click="toMerchant" class="publish-btn">
       <layout-icon color="#fff" display="inline" size="18" type="iconfabu"></layout-icon>
       <div class="fz-10 color-white">发布活动</div>
+    </div>
+  
+  
+    <div @click="toLiveList" class="live-btn">
+      <layout-icon class="m-t-6" color="#fff" display="inline" size="20" type="icon15"></layout-icon>
+      <div class="fz-10 color-white">直播</div>
     </div>
 
     <layout-modal :autoClose="false" ref="openLocalSettingModal">
@@ -135,6 +141,9 @@ export default {
     }
   },
   methods: {
+    toLiveList(){
+      this.$linkTo('/pagesA/live/liveList')
+    },
     toMerchant () {
       const users_id = Storage.get('users_id')
       uni.navigateToMiniProgram({
@@ -252,6 +261,26 @@ export default {
 <style lang="scss" scoped>
   .page-wrap {
     background: #f8f8f8;
+    height: 100vh;
+    position: fixed;
+    width: 750rpx;
+    left: 0;
+    top: 0;
+  }
+  .live-btn{
+    position: fixed;
+    bottom: 256rpx;
+    margin-bottom: env(safe-area-inset-bottom);
+    right: 30rpx;
+    z-index: 99;
+    box-sizing: border-box;
+    padding-top: 8rpx;
+    width: 98rpx;
+    height: 98rpx;
+    background: rgba(38, 199, 141, 1);
+    box-shadow: 0rpx 2rpx 12rpx 0rpx rgba(35, 183, 130, 0.4);
+    border-radius: 50%;
+    text-align: center;
   }
 
   .publish-btn {
@@ -288,7 +317,6 @@ export default {
     position: fixed;
     top: 0;
     width: 750rpx;
-    box-sizing: border-box;
     z-index: 22;
   }
 
@@ -303,11 +331,10 @@ export default {
       position: relative;
       display: flex;
       align-items: flex-end;
-      padding-bottom: 8px;
-
+      height: 36px;
       .page-tab-underline {
         position: absolute;
-        bottom: 0;
+        bottom: -6px;
         height: 2px;
         width: 8px;
         background: #fff;
@@ -317,7 +344,7 @@ export default {
       .tab-item {
         margin-right: 15px;
         position: relative;
-        font-size: 34rpx;
+        font-size: 18px;
         //animation: all 0.4s ease;
         &:last-child {
           margin-right: 0;
@@ -333,28 +360,32 @@ export default {
         }
 
         &.active {
-          font-size: 50rpx;
+          font-size: 25px;
         }
       }
     }
 
-    .search-box {
-      position: relative;
-      margin-right: 20rpx;
-      width: 120rpx;
-      text-align: right;
-      background: rgba(255, 255, 255, .5);
-
-      .iconsearch {
-        color: white;
-        position: absolute;
-        right: 10px;
-        top: 50%;
-        transform: translateY(-50%);
-      }
-    }
+    
   }
 
+  .search-box {
+    position: absolute;
+    /*margin-right: 20rpx;*/
+    /*width: 120rpx;*/
+    border-radius: 13px;
+    text-align: right;
+    z-index: 33;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, .5);
+    display: flex;
+    align-items: center;
+    /*justify-content: center;*/
+    justify-content: flex-end;
+    .iconsearch {
+    
+    }
+  }
+  
   .refuseApplyDialog {
     width: 400rpx;
     box-sizing: border-box;

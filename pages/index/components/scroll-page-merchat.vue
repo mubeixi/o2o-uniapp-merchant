@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div :style="{top:menuButtonInfo.top*2+50+'px'}" @touchmove.stop.prevent="$noop"
+    <div :style="{top:menuButtonInfo.top+50+'px'}" @touchmove.stop.prevent="$noop"
          class="section scroll-box first-cate-list  bg-white">
       <li :key="idx" @click="changeStoreCateNav(idx)" class="scroll-item fz-15 c3"
           v-for="(cate,idx) in firstCateList">
@@ -10,7 +10,7 @@
     </div>
     <swiper
       :current="storeFirstCateIdx"
-      :style="{top:menuButtonInfo.top*2+50+firstCateHeight+'px',height:(cateViewHeight+'px')}"
+      :style="{top:menuButtonInfo.top+50+firstCateHeight+'px',height:(cateViewHeight+'px')}"
       @change="storeCateIndexChange"
       class="quick-cate-swiper"
       duration="300"
@@ -39,7 +39,7 @@
                        code="good_shop_under_nav" paddingStr="20px 0 20px 0" position="hot"></layout-ad>
           </div>
 
-          <div v-if="merchantList.length<1">
+          <div v-if="areaLoading">
             <layout-loading></layout-loading>
           </div>
 
@@ -87,8 +87,8 @@
 
           </div>
 
-          <div class="h20" style="background: #f8f8f8;"></div>
-          <div class="safearea-box" style="background: #f8f8f8;"></div>
+          <div class="h20" v-if="merchantList.length>0" style="background: #f8f8f8;"></div>
+          <div class="safearea-box" v-if="merchantList.length>0" style="background: #f8f8f8;"></div>
 
         </scroll-view>
       </swiper-item>
@@ -113,6 +113,7 @@ export default {
   mixins: [componetMixin],
   data () {
     return {
+      areaLoading:false,
       firstCateHeight: 44,
       storeFirstCateIdx: 0, // 好店
       firstCateList: [],
@@ -120,17 +121,16 @@ export default {
     }
   },
   computed: {
-
-    ...mapGetters({
-      primaryColor: 'theme/pimaryColor'
-    }),
     cateViewHeight () {
       try {
-        return this.systemInfo.windowHeight - this.diyHeadHeight - this.firstCateHeight - 48
+        return this.systemInfo.windowHeight - this.firstCateHeight - (this.menuButtonInfo.top+50)
       } catch (e) {
         return 'auto'
       }
-    }
+    },
+    ...mapGetters({
+      primaryColor: 'theme/pimaryColor'
+    }),
   },
   watch: {
     storeFirstCateIdx: {
@@ -157,7 +157,7 @@ export default {
       this.$linkTo(`/pages/search/result?Cate_ID=${cate.Category_ID}`)
     },
     async _init_func () {
-      showLoading('初始化数据')
+      // showLoading('初始化数据')
       try {
         this.firstCateList = await getProductCategory({}, { onlyData: true }).catch(() => {
           throw Error('获取商品分类失败')
@@ -167,7 +167,7 @@ export default {
       } catch (e) {
         Exception.handle(e)
       } finally {
-        hideLoading()
+        // hideLoading()
       }
     },
     async loadMerchantList (idx) {
@@ -183,6 +183,7 @@ export default {
           get_active: 1,
           pageSize: 999
         }
+        this.areaLoading = true
         this.userAddressInfo = this.$store.getters['user/getUserAddressInfo']()
         if (this.userAddressInfo && this.userAddressInfo.hasOwnProperty('latitude') && this.userAddressInfo.hasOwnProperty('longitude')) {
           Object.assign(postData, {
@@ -197,6 +198,7 @@ export default {
       } catch (e) {
         Exception.handle(e)
       } finally {
+        this.areaLoading = false
         // hideLoading()
       }
     }
