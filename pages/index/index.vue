@@ -136,10 +136,16 @@ export default {
   },
   methods: {
     toMerchant () {
-      const users_id = Storage.get('users_id')
+      const users_id = Storage.get('users_id')||''
+	  let url=''
+	  if(users_id){
+		  url='pages/product/form?origin_type=client'
+	  }else{
+		  url='pages/product/form?origin_type=client&users_id=' + users_id
+	  }
       uni.navigateToMiniProgram({
         appId: 'wx3d24c565489e305b',
-        path: 'pages/product/form?origin_type=client&users_id=' + users_id,
+        path: url,
         extraData: {
           origin: 'client'
         },
