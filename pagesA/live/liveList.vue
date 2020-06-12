@@ -3,7 +3,13 @@
     <layout-loading v-if="paginate.load"></layout-loading>
     <div class="container live-list" v-else>
       <div class="live-item" v-for="(live,idx) in liveList" :key="idx" :style="{marginRight:idx%2===0?'20rpx':'0rpx'}">
-        <div class="live-item-cover" :style="{backgroundImage:'url('+live.start_live_img+')'}"></div>
+        <div class="live-item-cover" :style="{backgroundImage:'url('+live.start_live_img+')'}">
+          <div class="mask"></div>
+          <div class="live-status-bar">
+            <div>直播预告</div>
+            <div>7月8日14:14开播</div>
+          </div>
+        </div>
         <div class="live-item-info">{{live.anchor_name}}</div>
       </div>
     </div>

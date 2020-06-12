@@ -84,7 +84,7 @@
     <div class="block kill-box">
       <div class="block-title flex-vertical-c">
         <div class="block-title-text">今日秒杀</div>
-        <div @click="$linkTo('/pages/active/SeckillByBiz')" class="block-title-more flex flex-ver-c c9 fz-12">
+        <div @click="$linkTo('/pagesA/active/SeckillByBiz')" class="block-title-more flex flex-ver-c c9 fz-12">
           <span>查看全部</span>
           <layout-icon color="#999" display="inline" size="14" type="iconicon-arrow-right"></layout-icon>
         </div>

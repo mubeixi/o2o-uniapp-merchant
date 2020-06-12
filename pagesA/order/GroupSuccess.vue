@@ -349,7 +349,7 @@ export default {
     },
     async shareFunc (channel) {
       const _self = this
-      const path = 'pages/active/GroupJoin?Team_ID=' + this.Team_ID + '&Products_ID=' + this.Prod_ID
+      const path = 'pagesA/active/GroupJoin?Team_ID=' + this.Team_ID + '&Products_ID=' + this.Prod_ID
       const front_url = this.initData.front_url
       
       const shareObj = {
@@ -455,7 +455,7 @@ export default {
   // 我为啥要给他注释？？多一个函数而已。。
   onShareAppMessage () {
     // 分享的是Team_ID
-    const path = 'pages/active/GroupJoin?Team_ID=' + this.Team_ID + '&Products_ID=' + this.Prod_ID
+    const path = 'pagesA/active/GroupJoin?Team_ID=' + this.Team_ID + '&Products_ID=' + this.Prod_ID
     const shareObj = {
       title: this.product.Products_Name,
       desc: this.product.Products_BriefDescription,

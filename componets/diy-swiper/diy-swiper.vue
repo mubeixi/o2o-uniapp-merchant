@@ -139,7 +139,7 @@ export default {
       // img_src: "https://newo2o.bafangka.com/uploadfiles/wkbq6nc2kc/image/202006101709465178.jpg"
       // link: ""
       // linkType: null
-      this.imgList = getArrColumn(this.lists, 'img_src')
+      this.imgList = getArrColumn(this.lists, 'img_src').map(url=>getDomain(url))
       this.urls = getArrColumn(this.lists, 'link')
     },
     bindClick (idx) {

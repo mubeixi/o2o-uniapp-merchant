@@ -664,7 +664,7 @@ export default {
       //       if (res.confirm) {
       //         if (Order_Type === 'pintuan') {
       //           uni.redirectTo({
-      //             url: '/pages/order/GroupSuccess?Order_Type=' + Order_Type + '&OrderId=' + _that.Order_ID
+      //             url: '/pagesA/order/GroupSuccess?Order_Type=' + Order_Type + '&OrderId=' + _that.Order_ID
       //           })
       //         } else {
       //           if (pagefrom === 'check') {
@@ -711,7 +711,7 @@ export default {
       console.log(Order_Type, Order_ID)
       if (Order_Type === 'pintuan') {
         // uni.redirectTo({
-        //   url: '/pages/order/GroupSuccess?Order_Type=' + Order_Type + '&OrderId=' + Order_ID
+        //   url: '/pagesA/order/GroupSuccess?Order_Type=' + Order_Type + '&OrderId=' + Order_ID
         // })
         uni.redirectTo({
           url: '/pages/order/OrderPaySuccess?Order_Type=' + Order_Type + '&OrderId=' + Order_ID,

@@ -209,7 +209,7 @@ export default {
     goPintuan (item) {
       if (item.teamstatus === 0) {
         uni.navigateTo({
-          url: '/pages/order/GroupSuccess?Team_ID=' + item.teamid + '&Products_ID=' + item.prod_list[0].prod_id + '&OrderId=' + item.Order_ID,
+          url: '/pagesA/order/GroupSuccess?Team_ID=' + item.teamid + '&Products_ID=' + item.prod_list[0].prod_id + '&OrderId=' + item.Order_ID,
         })
       }
     },

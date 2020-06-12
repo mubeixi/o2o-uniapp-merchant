@@ -77,7 +77,7 @@
 
           <!--限时抢购-->
           <div class="activity-list  flex flex-justify-c" v-if="activityList.length>0">
-            <div :key="idx" @click="$linkTo('/pages/active/FlashSaleByBiz?biz_id='+bid+'&spike_id='+item.id)" class="activity-item"
+            <div :key="idx" @click="$linkTo('/pagesA/active/FlashSaleByBiz?biz_id='+bid+'&spike_id='+item.id)" class="activity-item"
                  v-for="(item,idx) in activityList">{{item.name}}
             </div>
           </div>
