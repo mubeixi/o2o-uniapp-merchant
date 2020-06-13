@@ -178,6 +178,12 @@
           }
         },
         {
+          "path": "user/history",
+          "style": {
+            "navigationBarTitleText": "您的轨迹"
+          }
+        },
+        {
           "path": "active/FlashSale",
           "style": {
             "navigationBarTitleText": "限时抢购",

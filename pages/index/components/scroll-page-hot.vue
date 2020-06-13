@@ -128,8 +128,7 @@
         </ul>
       </div>
       <div class="block-content">
-        <layout-loading v-if="loadingByLiveList"></layout-loading>
-        <div class="live-list" v-else>
+        <div class="live-list">
           <block :key="idx" v-for="(item,idx) in liveNav[liveNavIndex].goodsList">
             <div @click="$toGoodsDetail(item)" class="live-item">
               <div class="left">
@@ -156,6 +155,7 @@
               </div>
             </div>
           </block>
+          <layout-loading v-if="loadingByLiveList"></layout-loading>
         </div>
       </div>
     </div>
@@ -219,7 +219,6 @@ export default {
   },
   data () {
     return {
-  
       loadingByTmpl: false, // 标记是否请求完结
       templateList: [],
       templateData: [],
@@ -229,18 +228,18 @@ export default {
       liveNavIndex: 0,
       liveNav: [],
       loadingByKillList: false, // 标记是否请求完结
-      killList: [],
-      livePaginate: {
-        pageSize: 10,
-        page: 1
-      }
+      killList: []
+      // livePaginate: {
+      //   pageSize: 10,
+      //   page: 1
+      // }
     }
   },
   watch: {
     liveNavIndex: {
       handler (idx, oldIdx) {
         if (idx !== oldIdx) {
-          this.livePaginate.page = 1
+          // this.livePaginate.page = 1
           this.loadLiveGoodsList(idx)
         }
       }
@@ -249,7 +248,7 @@ export default {
   methods: {
 
     bindReachBottom () {
-      console.log('bindReachBottom')
+      console.log('emit bindReachBottom event',objTranslate(this.liveNav),this.liveNavIndex)
       this.loadLiveGoodsList(this.liveNavIndex)
     },
     changeLiveNav (idx) {
@@ -307,7 +306,11 @@ export default {
         // toast('已经到底了', 'none')
         return
       }
+      if (this.liveNav[idx].isAjax) return// 防止请求和到底的一起生效
+      
+      this.liveNav[idx].isAjax = true
       this.loadingByLiveList = true
+      
       const cateId = this.liveNav[idx].Category_ID
 
       const { data: liveGoodsList, totalCount } = await getProductList({
@@ -317,11 +320,12 @@ export default {
       }).catch(e => {
         throw Error(e.msg || '刷新直播商品列表失败')
       })
-      this.liveNav[idx].page++
-      const tempLen = this.liveNav[idx].goodsList.length
+
       this.$set(this.liveNav[idx], 'goodsList', this.liveNav[idx].goodsList.concat(liveGoodsList))
       this.$set(this.liveNav[idx], 'totalCount', totalCount)
-      console.log(this.liveNav[idx])
+      this.$set(this.liveNav[idx], 'page', this.liveNav[idx].page+1)
+      this.$set(this.liveNav[idx], 'isAjax', false)
+     
       this.loadingByLiveList = false
       // // 遍历
       // for (var i = tempLen;i < this.liveNav[idx].goodsList.length - 1; i++) {
@@ -372,6 +376,7 @@ export default {
           row.totalCount = 999
           row.pageSize = 10
           row.page = 1
+          row.isAjax = false
           return objTranslate(row)
         }) // 也是一级分类
 

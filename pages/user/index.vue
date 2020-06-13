@@ -56,7 +56,7 @@
         <LayoutIcon color="#DA8E4B" display="inline-block" size="12" type="iconicon-arrow-right"></LayoutIcon>
       </div>
     </div>
-    <div class="functions flex flex-justify-between">
+    <div class="functions flex">
       <block :key="index" v-for="(item,index) of  iconList">
         <LayoutFun :color="item.color" :index="index" :name="item.name" :type="item.className" @openNext="openNext"
                    width="150rpx"></LayoutFun>
@@ -192,6 +192,12 @@ export default {
           name: '分销中心',
           color: '#69C276',
           link: '/pagesA/distributor/Main'
+        },
+        {
+          className: 'iconguiji',
+          name: '轨迹',
+          color: '#69C276',
+          link: '/pagesA/user/history'
         }
       ],
       proList: []

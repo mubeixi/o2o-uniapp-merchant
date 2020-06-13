@@ -1,28 +1,28 @@
 <template>
   <div class="page-wrap">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
-    <div @touchmove.stop.prevent :style="{height:menuButtonInfo.height+'px',width:menuButtonInfo.height+'px',paddingLeft:menuButtonInfo.height/2+'px',paddingRight:menuButtonInfo.height/3+'px',top:menuButtonInfo.top+menuButtonInfo.height/3+'px',right:diyHeadRight+10+'px'}" @click="$linkTo('/pages/search/index')" class="search-box">
+    <div @touchmove.stop.prevent :style="{height:menuButtonInfo.height+'px',width:menuButtonInfo.height+'px',paddingLeft:menuButtonInfo.height/2+'px',paddingRight:menuButtonInfo.height/3+'px',top:menuButtonInfo.top+'px',right:diyHeadRight+10+'px'}" @click="$linkTo('/pages/search/index')" class="search-box">
       <layout-icon display="inline" class="iconsearch" color="#fff" size="18" weight="bold" type="iconicon-search"></layout-icon>
     </div>
     <div @touchmove.stop.prevent :style="{backgroundColor:primaryColor,paddingTop:menuButtonInfo.top+'px'}" class="head-box" style="height: 50px;">
       <div style="height: 36px;" :style="{marginRight:diyHeadRight+menuButtonInfo.height+'px'}" class="head">
         <ul class="tab-box">
           <li :class="[headTabIndex === 0?'active':'']" @click="setHeadTabIndex(0)" class="tab-item" id="headTabItem0">
-            <div :animation="tabAnimationData[0]">特价</div>
+            <div class="tab-item-text" :animation="tabAnimationData[0]">特价</div>
             <div class="tab-item-tip" id="tabItemTip0"></div>
           </li>
           <li :class="[headTabIndex === 1?'active':'']" @click="setHeadTabIndex(1)" class="tab-item" id="headTabItem1">
-            <div :animation="tabAnimationData[1]">同城闪送</div>
+            <div class="tab-item-text" :animation="tabAnimationData[1]">同城闪送</div>
             <div class="tab-item-tip" id="tabItemTip1"></div>
           </li>
           <li :class="[headTabIndex === 2?'active':'']" @click="setHeadTabIndex(2)" class="tab-item" id="headTabItem2">
-            <div :animation="tabAnimationData[2]">好店</div>
+            <div class="tab-item-text" :animation="tabAnimationData[2]">好店</div>
             <div class="tab-item-tip" id="tabItemTip2"></div>
           </li>
           <span :animation="tabUnderlineAnimationData" :style="{marginLeft:defaultUnderlineLeft+'px'}" class="page-tab-underline"
                 v-show="showUnderLine"></span>
         </ul>
-        
+
       </div>
     </div>
     <!--占位-->
@@ -42,13 +42,12 @@
       </scroll-view>
     </div>
     <div @click="toMerchant" class="publish-btn">
-      <layout-icon color="#fff" display="inline" size="18" type="iconfabu"></layout-icon>
+      <layout-icon  color="#fff" display="inline" size="18" type="iconfabu"></layout-icon>
       <div class="fz-10 color-white">发布活动</div>
     </div>
-  
-  
-    <div @click="toLiveList" class="live-btn">
-      <layout-icon class="m-t-6" color="#fff" display="inline" size="20" type="icon15"></layout-icon>
+
+    <div @click="toLiveList" class="live-btn" v-if="initData.live_flag">
+      <div class="live-icon"><layout-icon color="#fff" display="inline" size="20" type="icon15"></layout-icon></div>
       <div class="fz-10 color-white">直播</div>
     </div>
 
@@ -97,6 +96,9 @@ export default {
     LayoutIcon
   },
   computed: {
+    initData () {
+      return this.$store.getters['system/initData']
+    },
     userAddressInfo () {
       return this.$store.getters['user/getUserAddressInfo']()
     },
@@ -141,16 +143,16 @@ export default {
     }
   },
   methods: {
-    toLiveList(){
+    toLiveList () {
       this.$linkTo('/pagesA/live/liveList')
     },
     toMerchant () {
-      const users_id = Storage.get('users_id')||''
-	  let url=''
-	  if(users_id){
-		  url='pages/product/form?origin_type=client'
-	  }else{
-		  url='pages/product/form?origin_type=client&users_id=' + users_id
+      const users_id = Storage.get('users_id') || ''
+	  let url = ''
+	  if (users_id) {
+		  url = 'pages/product/form?origin_type=client'
+	  } else {
+		  url = 'pages/product/form?origin_type=client&users_id=' + users_id
 	  }
       uni.navigateToMiniProgram({
         appId: 'wx3d24c565489e305b',
@@ -160,7 +162,7 @@ export default {
         },
         envVersion: 'release',
         fail (err) {
-          modal(`跳转失败${err.errMsg}`)
+          console.log(`跳转失败${err.errMsg}`)
         },
         success (res) {
           // 打开成功
@@ -265,6 +267,11 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+
+  .live-icon{
+    animation: zy 2.5s .15s linear infinite;
+  }
+
   .page-wrap {
     background: #f8f8f8;
     height: 100vh;
@@ -283,8 +290,8 @@ export default {
     padding-top: 8rpx;
     width: 98rpx;
     height: 98rpx;
-    background: rgba(38, 199, 141, 1);
-    box-shadow: 0rpx 2rpx 12rpx 0rpx rgba(35, 183, 130, 0.4);
+    background: $fun-orange-color;
+    box-shadow: 0rpx 2rpx 12rpx 0rpx rgba(255,120, 0, 0.4);
     border-radius: 50%;
     text-align: center;
   }
@@ -327,7 +334,7 @@ export default {
   }
 
   .head {
-    padding-left: 10px;
+    padding-left: 2px;
     display: flex;
     align-items: center;
     color: white;
@@ -348,12 +355,19 @@ export default {
       }
 
       .tab-item {
-        margin-right: 15px;
+        height: 36px;
+        padding: 0 8px;
         position: relative;
         font-size: 18px;
-        //animation: all 0.4s ease;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
         &:last-child {
           margin-right: 0;
+        }
+        
+        .tab-item-text{
+        
         }
 
         .tab-item-tip {
@@ -371,7 +385,6 @@ export default {
       }
     }
 
-    
   }
 
   .search-box {
@@ -381,17 +394,17 @@ export default {
     border-radius: 13px;
     text-align: right;
     z-index: 33;
-    transform: translateY(-50%);
+    
     background: rgba(255, 255, 255, .5);
     display: flex;
     align-items: center;
     /*justify-content: center;*/
     justify-content: flex-end;
     .iconsearch {
-    
+
     }
   }
-  
+
   .refuseApplyDialog {
     width: 400rpx;
     box-sizing: border-box;
