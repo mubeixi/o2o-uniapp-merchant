@@ -6,7 +6,10 @@
                  ref="refMsg"></fun-err-msg>
 
     <block v-if="mode!=='wxLogin'">
-      <image :src="initData.ShopLogo+'-r100'" class="img m-t-25" mode="widthFix"></image>
+      <block v-if="initData.ShopLogo">
+        <image :src="initData.ShopLogo+'-r100'" class="img m-t-25" mode="widthFix"></image>
+      </block>
+      
       <div class="form">
         <form @reset="formReset" @submit="formSubmit" style="display: block">
           <div class="form-item uni-column">

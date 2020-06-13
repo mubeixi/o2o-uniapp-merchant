@@ -17,7 +17,7 @@
           <layout-icon color="#26C78D" size="26" type="iconicon-phone"></layout-icon>
         </div>
         <div @click="taggleFavorite" class="action-item">
-          <layout-icon :color="isFavourite?'#26C78D':'#999'" size="26" type="iconicon-favorite"></layout-icon>
+          <layout-icon :color="isFavourite?'#F53636':'#26C78D'" size="26" type="iconicon-favorite"></layout-icon>
         </div>
         <div @click="toShare" class="action-item">
           <layout-icon color="#26C78D" size="26" type="iconicon-timeline"></layout-icon>
@@ -77,7 +77,7 @@
 
           <!--限时抢购-->
           <div class="activity-list  flex flex-justify-c" v-if="activityList.length>0">
-            <div :key="idx" @click="$linkTo('/pages/active/FlashSaleByBiz?biz_id='+bid+'&spike_id='+item.id)" class="activity-item"
+            <div :key="idx" @click="$linkTo('/pagesA/active/FlashSaleByBiz?biz_id='+bid+'&spike_id='+item.id)" class="activity-item"
                  v-for="(item,idx) in activityList">{{item.name}}
             </div>
           </div>
@@ -648,8 +648,20 @@ export default {
         })
         this.storeInfo = storeInfoData[0]
 
-        const { room_id } = this.storeInfo
+        const { room_id, live_end_time, live_start_time } = this.storeInfo
         if (room_id) {
+          const nowTimeStamp = uni.$moment().unix()
+          // console.log(nowTimeStamp)
+          if (live_end_time && live_start_time) {
+            if (nowTimeStamp > live_start_time && nowTimeStamp < live_end_time) {
+              this.liveStatus = 101
+            }
+
+            if (nowTimeStamp < live_start_time) {
+              this.liveStatus = 102
+            }
+          }
+
           // 首次获取立马返回直播状态
           const roomId = room_id // 房间 id
           console.log('roomid is ' + roomId, livePlayer)

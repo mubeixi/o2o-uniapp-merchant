@@ -10,13 +10,6 @@
       }
     },
     {
-      "path": "pages/message/index",
-      "style": {
-        "navigationBarTitleText": "消息",
-        "navigationBarBackgroundColor": "#F6F6F6"
-      }
-    },
-    {
       "path": "pages/demo",
       "style": {
 
@@ -86,36 +79,12 @@
       }
     },
     {
-      "path": "pages/active/OrderFree",
-      "style": {
-        "navigationBarTitleText": "免单专区",
-        "navigationStyle": "custom"
-      }
-    },
-    {
       "path": "pages/order/OrderPaySuccess",
       "style": {
         "navigationBarTitleText": "付款成功"
       }
     },
-    {
-      "path": "pages/order/OrderFreeSuccess",
-      "style": {
-        "navigationBarTitleText": "享免单成功"
-      }
-    },
-    {
-      "path": "pages/order/GroupSuccess",
-      "style": {
-        "navigationBarTitleText": "参与拼团成功"
-      }
-    },
-    {
-      "path": "pages/active/GroupJoin",
-      "style": {
-        "navigationBarTitleText": "拼团详情"
-      }
-    },
+
     {
       "path": "pages/user/login",
       "style": {
@@ -182,27 +151,7 @@
         "navigationStyle": "custom"
       }
     },
-    {
-      "path": "pages/active/FlashSale",
-      "style": {
-        "navigationBarTitleText": "限时抢购",
-        "navigationStyle": "custom"
-      }
-    },
-    {
-      "path": "pages/active/SeckillByBiz",
-      "style": {
-        "navigationBarTitleText": "秒杀",
-        "navigationStyle": "custom"
-      }
-    },
-    {
-      "path": "pages/active/FlashSaleByBiz",
-      "style": {
-        "navigationBarTitleText": "限时抢购",
-        "navigationStyle": "custom"
-      }
-    },
+
     {
       "path": "pages/user/Praise",
       "style": {
@@ -215,6 +164,64 @@
       "root": "pagesA",
       "name": "onther",
       "pages": [
+        {
+          "path": "active/OrderFree",
+          "style": {
+            "navigationBarTitleText": "免单专区",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "active/GroupJoin",
+          "style": {
+            "navigationBarTitleText": "拼团详情"
+          }
+        },
+        {
+          "path": "user/history",
+          "style": {
+            "navigationBarTitleText": "您的轨迹"
+          }
+        },
+        {
+          "path": "active/FlashSale",
+          "style": {
+            "navigationBarTitleText": "限时抢购",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "active/SeckillByBiz",
+          "style": {
+            "navigationBarTitleText": "秒杀",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "active/FlashSaleByBiz",
+          "style": {
+            "navigationBarTitleText": "限时抢购",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "order/OrderFreeSuccess",
+          "style": {
+            "navigationBarTitleText": "享免单成功"
+          }
+        },
+        {
+          "path": "order/GroupSuccess",
+          "style": {
+            "navigationBarTitleText": "参与拼团成功"
+          }
+        },
+        {
+          "path": "live/liveList",
+          "style": {
+            "navigationBarTitleText": "直播"
+          }
+        },
         {
           "path": "delivery/detail",
           "style": {

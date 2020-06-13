@@ -301,3 +301,6 @@ export const getTeamSalesList = (param, options) => fetch({ act: 'getTeamSalesLi
 
 // 获取分享赚和浏览量
 export const getShareView = (param, options) => fetch({ act: 'getShareView', param, options })
+
+// 用户浏览商家历史
+export const userBizView = (param, options) => fetch({ act: 'userBizView', param, options })

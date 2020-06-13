@@ -65,7 +65,7 @@ export default {
       default: false
     },
     autoplay: {
-      default: false
+      default: true
     },
     dotsColor: {
       default: 'rgba(0,0,0,.3)'
@@ -74,7 +74,7 @@ export default {
       default: '#26C78D'
     },
     interval: {
-      default: 2000
+      default: 5000
     },
     duration: {
       default: 500
@@ -139,7 +139,7 @@ export default {
       // img_src: "https://newo2o.bafangka.com/uploadfiles/wkbq6nc2kc/image/202006101709465178.jpg"
       // link: ""
       // linkType: null
-      this.imgList = getArrColumn(this.lists, 'img_src')
+      this.imgList = getArrColumn(this.lists, 'img_src').map(url=>getDomain(url))
       this.urls = getArrColumn(this.lists, 'link')
     },
     bindClick (idx) {

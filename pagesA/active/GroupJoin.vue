@@ -46,38 +46,21 @@
       <image :src="'/static/client/tuan/time.png'|domain" class="img" />
       <span class="my">拼团中，还差<span class="spans">{{product.pintuan_people-product.teamnum}}</span>人</span>
     </div>
-    <!--    <div class="times" v-if="product.teamstatus!=1">-->
-    <!--      <div class="line"></div>-->
-    <!--      <div class="text">-->
-    <!--        剩余-->
-    <!--        <div class="myTime">-->
-    <!--          <span class="num">{{countdown.h}}</span>-->
-    <!--          <span class="lines">:</span>-->
-    <!--          <span class="num">{{countdown.m}}</span>-->
-    <!--          <span class="lines">:</span>-->
-    <!--          <span class="num">{{countdown.s}}</span>-->
-    <!--        </div>-->
-    <!--        结束-->
-    <!--      </div>-->
-    <!--      <div class="line"></div>-->
-    <!--    </div>-->
-    <!--查看订单 -->
-    <div class="dingdan" v-if="product.teamstatus!=1">
-      <button @click="goOrderDetail" class="vanButton">查看订单</button>
-      <!-- #ifdef MP -->
-      <button class="vanButton invi" open-type="share">邀请好友</button>
-      <!-- #endif -->
-      
-      <!-- #ifdef H5 || APP-PLUS -->
-      <span @click="inviteFunc" class="vanButton invi">邀请好友</span>
-      <!-- #endif -->
+    
+    <!--参团-->
+    <!-- #ifdef MP-WEIXIN || MP-ALIPAY || MP-BAIDU || MP-TOUTIAO -->
+    <div class="liji">
+      <button class="vanButton invi" open-type="share" v-if="joined">邀请好友</button>
+      <div @click="joinFunc" class="vanButton" v-else>立即参团</div>
     </div>
-    <div class="dingdan" v-if="product.teamstatus==1">
-      <button @click="goOrderDetail" class="vanButton" style="margin-left: 125rpx;">查看订单</button>
+    <!-- #endif -->
+    
+    <!-- #ifdef H5 || APP-PLUS -->
+    <div class="liji">
+      <view @click="inviteFunc" class="vanButton" v-if="joined">去分享</view>
+      <div @click="joinFunc" class="vanButton" v-else>立即参团</div>
     </div>
-    <!--        <div class="liji">-->
-    <!--            <div class="vanButton">立即参团</div>-->
-    <!--        </div>-->
+    <!-- #endif -->
     
     <!-- 间隙 -->
     <div class="mbxline"></div>
@@ -108,7 +91,7 @@
     <div class="prolist">
       <div :key="index" @click="$toGoodsDetail(item)" class="pro-item" v-for="(item,index) in prodList">
         <img :src="item.ImgPath" alt="" class="img">
-        <div class="item-name"><wzw-live-tag  :room_id="item.room_id" :product-info="item" />{{item.Products_Name}}</div>
+        <div class="item-name"><wzw-live-tag :room_id="item.room_id" :product-info="item" />{{item.Products_Name}}</div>
         <div class="price">
           <span class="n_price"><span class="pricem">￥</span>{{item.Products_PriceX}}</span>
           <span class="o_price">已团{{item.Products_Sales}}件</span>
@@ -148,23 +131,26 @@
       </div>
     </div>
     <!--分享引导框结束-->
+    <product-sku
+      :product-info="product"
+      @submitSure="skuSub"
+      ref="cartPopu"
+    ></product-sku>
   
   </div>
 </template>
 
 <script>
 import BaseMixin from '@/mixins/BaseMixin'
-
 import { getProductDetail, getProductList, getProductSharePicByWap } from '@/api/product'
-import { getOrderDetail } from '@/api/order'
-// import { getGroupCountdown, buildSharePath, getProductThumb, ls } from '../../common/tool'
+import { updateCart } from '@/api/order'
 import { buildSharePath, checkIsLogin, getProductThumb } from '@/common/helper'
 import Storage from '@/common/Storage'
-
-import { error, hideLoading, showLoading } from '@/common/fun'
+import { error, hideLoading, modal, showLoading } from '@/common/fun'
 import LayoutLayer from '@/componets/layout-layer/layout-layer'
 import { Exception } from '@/common/Exception'
 import { mapActions } from 'vuex'
+import ProductSku from '@/componets/product-sku/product-sku'
 import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 import WzwLiveTag from '@/componets/wzw-live-tag/wzw-live-tag'
 
@@ -196,6 +182,7 @@ export default {
   components: {
     WzwLiveTag,
     WzwImTip,
+    ProductSku,
     LayoutLayer,
   },
   mixins: [BaseMixin],
@@ -209,23 +196,33 @@ export default {
       type: '',
       join_team_list: [],
       Team_ID: null,
-      orderInfo: {},
-      product: {},
+      product: {
+        minPrice: '0', // sku选择框专用
+        Products_Name: '',
+        Products_PriceX: '0',
+        Products_PriceY: '0',
+        Products_JSON: {},
+        Products_Description: '',
+        Products_Promise: [],
+      },
       teamList: [],
       Prod_ID: null,
       prodList: [],
-      Order_ID: null,
-      countdown: {
-        d: 0,
-        h: 0,
-        m: 0,
-        s: 0,
-      },
       msg: '开团成功', // 立即参团
       prod_arg: {
         page: 1,
         pintuan_flag: 1,
         pageSize: 999,
+      },
+      postData: {
+        prod_id: 0, // 产品ID  在 onLoad中赋值
+        atrid_str: '', // 选择属性  1；2   数字从小到大
+        atr_str: '', // 选择属性名称
+        count: 0, // 选择属性的库存
+        showimg: '', // 选择属性的图片(用产品图片代替)
+        qty: 1, // 购买数量
+        cart_key: 'DirectBuy', // 购物车类型   CartList（加入购物车）、DirectBuy（立即购买）、PTCartList（不能加入购物车）
+        active: 'pintuan', // 拼团时候选，不是拼团不选
       },
       hasMore: true, // 是否还有产品
     }
@@ -239,6 +236,27 @@ export default {
     },
   },
   methods: {
+    skuSub (sku) {
+      console.log(sku)
+
+      this.$refs.cartPopu.close()
+      this.postData.attr_id = sku.id
+      this.postData.active_id = this.Team_ID
+      this.postData.prod_id = this.Prod_ID
+      
+      updateCart(this.postData).then(res => {
+        uni.navigateTo({
+          url: '/pages/order/OrderBooking?cart_key=DirectBuy&checkfrom=group',
+        })
+      }).catch(e => {
+        modal(e.msg)
+      })
+    },
+    joinFunc () {
+      if (!checkIsLogin(1)) return
+      this.postData.active = 'pintuan'
+      this.$refs.cartPopu.show()
+    },
     showTick (type, e) {
       this.type = type
       this.$refs.popupLayer.show()
@@ -264,46 +282,25 @@ export default {
     },
     goOrderDetail () {
       // 这里应该需要跳转到订单详情页
-      this.$linkTo(`/pages/order/OrderDetail?Order_ID=${this.orderInfo.Order_ID}`)
-      // uni.navigateTo({
-      //   url: '/pages/order/OrderList?type=pintuan&index=' + 2
-      // })
+      uni.navigateTo({
+        url: '/pages/order/pintuanOrderlist?index=' + 2,
+      })
     },
     async _init_func () {
       try {
         showLoading()
         // 这里要设置Prod_ID
-        const orderInfo = await getOrderDetail({ Order_ID: this.Order_ID }, { onlyData: 1 }).catch((e) => {
-          throw Error(e.msg || '获取订单详情失败')
-        })
-        
-        for (var i in orderInfo) {
-          if (i === 'Order_Shipping' && typeof orderInfo[i] === 'string') {
-            orderInfo[i] = JSON.parse(orderInfo[i])
-          }
-          if (i === 'prod_list') {
-            for (var j in orderInfo[i]) {
-              for (var k in orderInfo[i][j]) {
-                if (k === 'attr_info' && typeof orderInfo[i][j][k] === 'string') {
-                  orderInfo[i][j][k] = orderInfo[i][j][k] && JSON.parse(orderInfo[i][j][k])
-                }
-              }
-            }
-          }
-        }
-        
-        this.orderInfo = orderInfo
-        this.Prod_ID = orderInfo.prod_list[0].prod_id
-        this.Team_ID = orderInfo.teamid
-        
-        const productInfo = await getProductDetail({
+        let productInfo = await getProductDetail({
           prod_id: this.Prod_ID,
           teamid: this.Team_ID,
         }, { onlyData: 1 }).catch((e) => {
           throw Error(e.msg || '获取产品详情失败')
         })
+        productInfo.minPrice = productInfo.pintuan_pricex
+        
         this.product = productInfo
         this.join_team_list = productInfo.join_team_list
+        
         // 获取开团的时间
         for (var team of this.join_team_list) {
           if (team.team_head) {
@@ -311,10 +308,10 @@ export default {
             break
           }
         }
+        
         if (productInfo.skujosn) {
           this.product.skujosn = typeof productInfo.skujosn === 'string' ? JSON.parse(productInfo.skujosn) : productInfo.skujosn
-          this.product.skuvaljosn = typeof productInfo.skuvaljosn === 'string' ? JSON.parse(productInfo.skuvaljosn)
-            : productInfo.skuvaljosn
+          this.product.skuvaljosn = typeof productInfo.skuvaljosn === 'string' ? JSON.parse(productInfo.skuvaljosn) : productInfo.skuvaljosn
         }
         
         // this.stampCount()
@@ -325,6 +322,7 @@ export default {
         this.prodList = await getProductList({ ...this.prod_arg }, { onlyData: 1 }).catch(e => {
           throw Error(e.msg || '获取产品推荐列表失败')
         })
+        
       } catch (e) {
         Exception.handle(e)
       } finally {
@@ -349,7 +347,7 @@ export default {
     },
     async shareFunc (channel) {
       const _self = this
-      const path = 'pages/active/GroupJoin?Team_ID=' + this.Team_ID + '&Products_ID=' + this.Prod_ID
+      const path = 'pages/detail/groupJoin?Team_ID=' + this.Team_ID + '&Products_ID=' + this.Prod_ID
       const front_url = this.initData.front_url
       
       const shareObj = {
@@ -442,11 +440,8 @@ export default {
     this.wxMiniOriginId = WX_MINI_ORIGIN_ID
   },
   onLoad (options) {
-    if (!checkIsLogin(1)) return
-    
-    if (options.OrderId) {
-      this.Order_ID = options.OrderId
-    }
+    this.Prod_ID = options.Products_ID
+    this.Team_ID = options.Team_ID
   },
   onShow () {
     this._init_func()
@@ -455,7 +450,7 @@ export default {
   // 我为啥要给他注释？？多一个函数而已。。
   onShareAppMessage () {
     // 分享的是Team_ID
-    const path = 'pages/active/GroupJoin?Team_ID=' + this.Team_ID + '&Products_ID=' + this.Prod_ID
+    const path = '/pages/detail/groupJoin?Team_ID=' + this.Team_ID + '&Products_ID=' + this.Prod_ID
     const shareObj = {
       title: this.product.Products_Name,
       desc: this.product.Products_BriefDescription,

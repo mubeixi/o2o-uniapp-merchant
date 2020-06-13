@@ -1,7 +1,8 @@
 <template>
   <div>
 <!--    <layout-ad code="index_top" paddingStr="20px 0 20px 0"></layout-ad>-->
-    <view class="home-diy-wrap">
+    <layout-loading v-if="loadingByTmpl"></layout-loading>
+    <view class="home-diy-wrap" v-else>
       <section
         :class="[item]"
         :data-name="item"
@@ -81,19 +82,19 @@
       </section>
     </view>
     <div class="block kill-box">
-      <div class="block-title flex-ver-c">
+      <div class="block-title flex-vertical-c">
         <div class="block-title-text">今日秒杀</div>
-        <div @click="$linkTo('/pages/active/SeckillByBiz')" class="block-title-more flex flex-ver-c c9 fz-12">
+        <div @click="$linkTo('/pagesA/active/SeckillByBiz')" class="block-title-more flex flex-ver-c c9 fz-12">
           <span>查看全部</span>
           <layout-icon color="#999" display="inline" size="14" type="iconicon-arrow-right"></layout-icon>
         </div>
       </div>
       <div class="block-content">
-        <div class="goods-list">
+        <layout-loading v-if="loadingByKillList"></layout-loading>
+        <div class="goods-list" v-else>
           <div :key="idx" @click="$toGoodsDetail(item)" class="goods-item" v-for="(item,idx) in killList">
             <block v-if="idx<6">
               <div :style="{backgroundImage:'url('+item.ImgPath+')'}" class="cover">
-                <!--<div class="tip" style="background: #185e44;">同城配送</div>-->
               </div>
               <h5 class="title">{{item.Products_Name}}</h5>
               <div class="price-box">
@@ -154,6 +155,7 @@
               </div>
             </div>
           </block>
+          <layout-loading v-if="loadingByLiveList"></layout-loading>
         </div>
       </div>
     </div>
@@ -190,11 +192,13 @@ import { componetMixin } from '@/mixins/BaseMixin'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import WzwLiveTag from '@/componets/wzw-live-tag/wzw-live-tag'
 import LayoutAd from '@/componets/layout-ad/layout-ad'
+import LayoutLoading from '@/componets/layout-loading/layout-loading'
 // const livePlayer = requirePlugin('live-player-plugin')
 export default {
   name: 'scroll-page-hot',
   mixins: [componetMixin],
   components: {
+    LayoutLoading,
     LayoutAd,
     WzwLiveTag,
     LayoutIcon,
@@ -215,23 +219,27 @@ export default {
   },
   data () {
     return {
+      loadingByTmpl: false, // 标记是否请求完结
       templateList: [],
       templateData: [],
       tagIndex: 0,
+
+      loadingByLiveList: false, // 标记是否请求完结
       liveNavIndex: 0,
       liveNav: [],
-      killList: [],
-      livePaginate: {
-        pageSize: 10,
-        page: 1
-      }
+      loadingByKillList: false, // 标记是否请求完结
+      killList: []
+      // livePaginate: {
+      //   pageSize: 10,
+      //   page: 1
+      // }
     }
   },
   watch: {
     liveNavIndex: {
       handler (idx, oldIdx) {
         if (idx !== oldIdx) {
-          this.livePaginate.page = 1
+          // this.livePaginate.page = 1
           this.loadLiveGoodsList(idx)
         }
       }
@@ -240,7 +248,7 @@ export default {
   methods: {
 
     bindReachBottom () {
-      console.log('bindReachBottom')
+      console.log('emit bindReachBottom event',objTranslate(this.liveNav),this.liveNavIndex)
       this.loadLiveGoodsList(this.liveNavIndex)
     },
     changeLiveNav (idx) {
@@ -298,6 +306,11 @@ export default {
         // toast('已经到底了', 'none')
         return
       }
+      if (this.liveNav[idx].isAjax) return// 防止请求和到底的一起生效
+      
+      this.liveNav[idx].isAjax = true
+      this.loadingByLiveList = true
+      
       const cateId = this.liveNav[idx].Category_ID
 
       const { data: liveGoodsList, totalCount } = await getProductList({
@@ -307,11 +320,13 @@ export default {
       }).catch(e => {
         throw Error(e.msg || '刷新直播商品列表失败')
       })
-      this.liveNav[idx].page++
-      const tempLen = this.liveNav[idx].goodsList.length
+
       this.$set(this.liveNav[idx], 'goodsList', this.liveNav[idx].goodsList.concat(liveGoodsList))
       this.$set(this.liveNav[idx], 'totalCount', totalCount)
-      console.log(this.liveNav[idx])
+      this.$set(this.liveNav[idx], 'page', this.liveNav[idx].page+1)
+      this.$set(this.liveNav[idx], 'isAjax', false)
+     
+      this.loadingByLiveList = false
       // // 遍历
       // for (var i = tempLen;i < this.liveNav[idx].goodsList.length - 1; i++) {
       //   const { room_id = 0 } = this.liveNav[idx].goodsList[i]
@@ -333,19 +348,24 @@ export default {
       // }
     },
     async _init_func () {
-      showLoading('初始化数据')
+      this.loadingByKillList = true
+      // showLoading('初始化数据')
       try {
+        this.loadingByTmpl = true
         const handleRT = await this.get_tmpl_data()
+        this.loadingByTmpl = false
         if (handleRT !== true) throw handleRT // hanldeRT不是true就是一个Error实例，直接抛出
 
         this.killList = await getFlashsaleList({}, { onlyData: true }).catch(err => {
           throw Error(err.msg || '初始化秒杀商品失败')
         })
+
         if (this.killList.length > 0) {
           this.killList.map(item => {
             item.discount = (item.price / item.Products_PriceX * 10).toFixed(1)
           })
         }
+        this.loadingByKillList = false
 
         this.firstCateList = await getProductCategory({}, { onlyData: true }).catch(() => {
           throw Error('获取商品分类失败')
@@ -356,13 +376,15 @@ export default {
           row.totalCount = 999
           row.pageSize = 10
           row.page = 1
+          row.isAjax = false
           return objTranslate(row)
         }) // 也是一级分类
+
         this.loadLiveGoodsList(0) // 加载第一个分类的商品
       } catch (e) {
         Exception.handle(e)
       } finally {
-        hideLoading()
+        // hideLoading()
       }
     },
     $toGoodsDetail: toGoodsDetail
@@ -553,7 +575,7 @@ export default {
     background: white;
 
     .block-title {
-      padding: 20px 0 10px 0;
+      padding: 15px 0 15px 0;
 
       .block-title-text {
         font-weight: bold;

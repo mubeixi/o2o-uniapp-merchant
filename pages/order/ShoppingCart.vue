@@ -18,42 +18,40 @@
     </div>
 
     <div class="content">
-      <div class="cartbox" v-if="total_count>0">
-        <div :key="index" class="order_msg" v-for="(biz,index) in CartList">
-          <div @click="selectBiz(index)" class="biz_msg">
+      <div class="cartbox" v-if="pageInitDone && total_count>0">
+        <div :key="biz_id" class="order_msg" v-for="(biz,biz_id) in CartList">
+          <div @click="selectBiz(bizList[biz_id].id)" class="biz_msg">
             <div class="item-cart">
-              <layout-icon color="#F43131" size="20" type="iconicon-check" v-if="bizCheck[index]"></layout-icon>
+              <layout-icon color="#F43131" size="20" type="iconicon-check" v-if="bizCheck[biz_id]"></layout-icon>
               <layout-icon color="#ccc" size="20" type="iconradio" v-else></layout-icon>
             </div>
-            <img :src="bizList[index].biz_logo" class="biz_logo" />
-            <text class="biz_name">{{bizList[index].biz_name}}</text>
+            <img :src="bizList[biz_id].biz_logo" class="biz_logo" />
+            <text class="biz_name">{{bizList[biz_id].biz_name}}{{biz_id}}</text>
           </div>
-          <block :key="ind" v-for="(proList,ind) in biz">
-            <block>
-              <div :key="indx" class="pro" v-for="(item,indx) in proList">
-                <div @click="selectItem(index,ind,indx)" class="item-cart">
-                  <layout-icon color="#F43131" size="20" type="iconicon-check" v-if="item.checked"></layout-icon>
-                  <layout-icon color="#ccc" size="20" type="iconradio" v-else></layout-icon>
+          <block :key="prod_id" v-for="(proList,prod_id) in biz">
+            <div :key="attr_id" class="pro" v-for="(item,attr_id) in proList">
+              <div @click="selectItem(biz_id,prod_id,attr_id)" class="item-cart">
+                <layout-icon color="#F43131" size="20" type="iconicon-check" v-if="item.checked"></layout-icon>
+                <layout-icon color="#ccc" size="20" type="iconradio" v-else></layout-icon>
+              </div>
+              <img :src="item.ImgPath" class="pro-img" />
+              <div class="pro-msg">
+                <div class="pro-name">{{item.ProductsName}}</div>
+                <div class="attr" v-if="item.Productsattrstrval">
+                  <span>{{item.Productsattrstrval}}</span>
                 </div>
-                <img :src="item.ImgPath" class="pro-img" />
-                <div class="pro-msg">
-                  <div class="pro-name">{{item.ProductsName}}</div>
-                  <div class="attr" v-if="item.Productsattrstrval">
-                    <span>{{item.Productsattrstrval}}</span>
-                  </div>
-                  <div class="pro-price">
-                    <span class="span">￥</span>{{item.ProductsPriceX}}
-                    <span class="amount">
-                      <span :class="item.Qty===1?'disabled':''" @click="updateCart(ind,indx,-1,index)"
+                <div class="pro-price">
+                  <span class="span">￥</span>{{item.ProductsPriceX}}
+                  <span class="amount">
+                      <span :class="item.Qty===1?'disabled':''" @click="updateCartFn(biz_id,prod_id,attr_id,-1)"
                             class="plus">-</span>
-                      <input @blur="inputQty(ind,indx,$event,index,item.Qty)" @focus="getQty(item.Qty)" class="attr_num"
+                      <input @blur="inputQty($event,biz_id,prod_id,attr_id)" @focus="getQty(item.Qty)" class="attr_num"
                              min="1" type="number" v-model="item.Qty" />
-                      <span @click="updateCart(ind,indx,1,index)" class="plus">+</span>
+                      <span @click="updateCartFn(biz_id,prod_id,attr_id,1)" class="plus">+</span>
                     </span>
-                  </div>
                 </div>
               </div>
-            </block>
+            </div>
           </block>
         </div>
       </div>
@@ -96,6 +94,7 @@
 
     </div>
 
+    <div class="h50"></div>
     <div class="safearea-box"></div>
 
   </div>
@@ -103,17 +102,14 @@
 
 <script>
 import BaseMixin, { tabbarMixin } from '@/mixins/BaseMixin'
-import { CartList, DelCart } from '@/api/customer'
-import { updateCart } from '@/api/order'
+import { mapActions } from 'vuex'
+import { CartList as getCartList, DelCart } from '@/api/customer'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import Storage from '@/common/Storage'
 import { getProductList } from '@/api/product'
 import { error } from '@/common/fun'
 import ProTag from '@/componets/pro-tag/pro-tag'
-import { objTranslate } from '@/common/helper'
 import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
-
-import eventHub from '@/common/eventHub'
 
 export default {
   mixins: [BaseMixin, tabbarMixin],
@@ -125,15 +121,16 @@ export default {
   },
   data () {
     return {
+      isAjax: false,
       CartList: [],
       bizList: [],
-      total_count: '',
+      total_count: 0,
       total_price: '',
       allCheck: false,
+      pageInitDone:false,
       bizCheck: {}, // 商家的选择
       totalPrice: 0, // 选中总计
       isDel: false,
-      fan: false,
       qty: 0,
       proList: [],
       isHavCheck: false,
@@ -142,6 +139,14 @@ export default {
     }
   },
   computed: {
+    shopCartList: {
+      get () {
+        return this.$store.state.cart.cartList
+      },
+      set (val) {
+        this.$store.commit('cart/ASYNC_DATA', val)
+      }
+    },
     userInfo () {
       return this.$store.getters['user/getUserInfo']()
     },
@@ -150,234 +155,207 @@ export default {
     }
   },
   watch: {
-    // CartList: {
-    //   handler (newValue, oldValue) {
-    //     console.log(oldValue, newValue, 'ss')
-    //   },
-    //   deep: true
-    // }
   },
   methods: {
     gotoBuy () {
       this.$linkTo('/pages/search/result')
     },
-    submit () {
+    async submit () {
       this.SumPrice()
       if (!this.isHavCheck) {
         error('请选择商品')
         return
       }
       const obj = {}
+      const attrList = []
       // 删除
-      for (const i in this.CartList) {
-        Storage.remove(i)
-        obj[i] = {}
-        for (const j in this.CartList[i]) {
-          obj[i][j] = []
-          for (const k in this.CartList[i][j]) {
-            if (this.CartList[i][j][k].checked) {
-              obj[i][j].push(k)
-              Storage.remove(j + ';' + k)
+      for (const biz_id in this.CartList) {
+        for (const prod_id in this.CartList[biz_id]) {
+          for (const attr_id in this.CartList[biz_id][prod_id]) {
+            if (this.CartList[biz_id][prod_id][attr_id].checked) {
+              // 有需需要才创建
+              if (!obj.hasOwnProperty(biz_id))obj[biz_id] = {}
+              if (!obj[biz_id].hasOwnProperty(prod_id))obj[biz_id][prod_id] = []
+
+              obj[biz_id][prod_id].push(attr_id)
+
+              const attr_value = this.CartList[biz_id][prod_id][attr_id]
+              attrList.push({
+                // ...attr_value,
+                biz_id: Number(biz_id),
+                prod_id: Number(prod_id),
+                attr_id: Number(attr_id),
+                checked: attr_value.checked, // 能保留上次的结果
+                num: attr_value.Qty
+              })
             }
           }
         }
       }
-      Storage.remove('allCheck')
-      // const cart_buy = JSON.stringify(obj)
+
+      // 先重置本地的，然后可以防止状态没了
+      this.shopCartList = attrList
+
       const url = '/pages/order/OrderBooking?cart_key=CartList'
       this.$store.state.cart_buy = obj
 
       this.isDel = false
       this.$linkTo(url)
     },
-    DelCart () {
+    async DelCart () {
       const obj = {}
+      const attrList = []
       // 删除
-      for (const i in this.CartList) {
-        Storage.remove(i)
-        obj[i] = {}
-        for (const j in this.CartList[i]) {
-          obj[i][j] = []
-          for (const k in this.CartList[i][j]) {
-            if (this.CartList[i][j][k].checked) {
-              obj[i][j].push(k)
-              Storage.remove(j + ';' + k)
+      for (const biz_id in this.CartList) {
+        for (const prod_id in this.CartList[biz_id]) {
+          for (const attr_id in this.CartList[biz_id][prod_id]) {
+            if (this.CartList[biz_id][prod_id][attr_id].checked) {
+              // 有需需要才创建
+              if (!obj.hasOwnProperty(biz_id))obj[biz_id] = {}
+              if (!obj[biz_id].hasOwnProperty(prod_id))obj[biz_id][prod_id] = []
+              obj[biz_id][prod_id].push(attr_id)
+
+              const attr_value = this.CartList[biz_id][prod_id][attr_id]
+              attrList.push({
+                // ...attr_value,
+                biz_id: Number(biz_id),
+                prod_id: Number(prod_id),
+                attr_id: Number(attr_id),
+                checked: attr_value.checked, // 能保留上次的结果
+                num: attr_value.Qty
+              })
             }
           }
         }
       }
-      Storage.remove('allCheck')
+
       const data = {
         cart_key: 'CartList',
         prod_attr: JSON.stringify(obj)
       }
-      DelCart(data).then(res => {
-        this.init()
-      }).catch(e => {
-      })
+      await DelCart(data).catch(e => {})
+
+      // 先重置本地的，然后可以防止状态没了
+      this.shopCartList = attrList
+      this.isDel = false
+      this._int_func()
     },
     getQty (qty) {
       this.qty = qty
     },
-    inputQty (pid, attrId, e, bizId, qty) {
-      const num = e.detail.value
-      if (num <= 1) {
-        this.CartList[bizId][pid][attrId].Qty = this.qty
+    async inputQty (e, biz_id, prod_id, attr_id) {
+      const qty = this.qty
+      console.log(e, biz_id, prod_id, attr_id, qty)
+      const inputNum = e.detail.value
+      if (isNaN(inputNum)) {
+        error('数量必须为数量')
+        return
+      }
+      if (inputNum <= 1) {
+        this.CartList[biz_id][prod_id][attr_id].Qty = this.qty
         error('数量最少为1件')
         return
       }
-      this.updateCart(pid, attrId, qty - num, bizId)
+      if ((qty - inputNum) === 0) return
+      const num = inputNum - qty
+
+      if (this.isAjax) return
+      this.isAjax = true
+      const product = { prod_id: Number(prod_id), attr_id: Number(attr_id), biz_id: Number(biz_id) }
+      const cart = await this.$store.dispatch('cart/addNum', { product, num })
+      console.log(cart)
+      if (cart !== false) {
+        this.total_count = cart.total_count
+        this.total_price = cart.total_price
+        // 更新数量
+        const { CartList } = cart
+        for (const biz_id in CartList) {
+          for (const prod_id in CartList[biz_id]) {
+            for (const attr_id in CartList[biz_id][prod_id]) {
+              this.CartList[biz_id][prod_id][attr_id].Qty = CartList[biz_id][prod_id][attr_id].Qty
+            }
+          }
+        }
+      } else {
+        // 需要更正数字
+        this.CartList[biz_id][prod_id][attr_id].Qty = this.qty
+      }
+      this.isAjax = false
     },
     // 全选
-    selectAll () {
-      let boo = true
-      if (this.allCheck) {
-        boo = false
-      }
-      for (const i in this.CartList) {
-        for (const j in this.CartList[i]) {
-          for (const k in this.CartList[i][j]) {
-            this.CartList[i][j][k].checked = boo
-            Storage.set((j + ';' + k), boo)
-          }
-        }
-      }
-
-      for (const it in this.bizCheck) {
-        this.bizCheck[it] = boo
-        Storage.set(it, boo)
-      }
-      this.allCheck = boo
-      Storage.set('allCheck', boo)
-
+    async selectAll () {
+      this.allCheck = await this.$store.dispatch('cart/taggleCheckStatus')
+      this.initCheck()
       this.SumPrice()
-      this.fan = !this.fan
     },
-    selectBiz (bizId) {
-      const rt = !this.bizCheck[bizId]
-
-      this.$set(this.bizCheck, bizId, rt)
-      // this.bizCheck[bizId] = rt
-      console.log(objTranslate(this.bizCheck))
-
-      for (const it in this.bizCheck) {
-        Storage.set(it, this.bizCheck[it])
-      }
-
-      for (var goods_idx in this.CartList[bizId]) {
-        for (var sku_idx in this.CartList[bizId][goods_idx]) {
-          console.log(bizId, goods_idx, sku_idx)
-          // 把所有产品checked都为true
-          Storage.set((goods_idx + ';' + sku_idx), rt)
-          this.CartList[bizId][goods_idx][sku_idx].checked = rt
-        }
-      }
+    // 单个商家
+    async selectBiz (biz_id) {
+      console.log(biz_id)
+      await this.$store.dispatch('cart/taggleCheckStatus', { biz_id: Number(biz_id) })
+      this.initCheck()
       this.SumPrice()
-      // 判断是否所有商家全选
-      let isAllCheck = true
-      for (const item in this.bizCheck) {
-        if (!this.bizCheck[item]) {
-          isAllCheck = false
-          break
-        }
-      }
-      this.allCheck = isAllCheck
-      Storage.set('allCheck', this.allCheck)
     },
-    async updateCart (pid, attrId, skuQty, bizId) {
-      if (this.CartList[bizId][pid][attrId].Qty === 1 && skuQty <= 0) {
+    // 单行
+    async selectItem (biz_id, prod_id, attr_id) {
+      await this.$store.dispatch('cart/taggleCheckStatus', { attr_id: Number(attr_id), prod_id: Number(prod_id) })
+      this.initCheck()
+      this.SumPrice()
+    },
+    async updateCartFn (biz_id, prod_id, attr_id, num) {
+      if (this.CartList[biz_id][prod_id][attr_id].Qty === 1 && num <= 0) {
         error('数量最少为1件')
         return
       }
 
-      const data = {
-        cart_key: 'CartList',
-        prod_id: pid,
-        attr_id: attrId,
-        qty: skuQty
-      }
-      const cart = await updateCart(data, {
-        onlyData: true,
-        tip: '加载中'
-      }).catch(e => {
-        throw Error(e.msg || '修改失败')
-      })
-      this.total_count = cart.total_count
-      this.total_price = cart.total_price
-      this.CartList = cart.CartList
-      this.bizList = cart.biz_list
-      this.initCheck()
-    },
-    selectItem (bizId, pid, attr_id) {
-      console.log(!Storage.get((pid + ';' + attr_id)), 'ss')
+      if (this.isAjax) return
 
-      Storage.set((pid + ';' + attr_id), !Storage.get((pid + ';' + attr_id)))
-      this.CartList[bizId][pid][attr_id].checked = Storage.get((pid + ';' + attr_id))
-
-      // 商家的选择
-      this.bizCheck[bizId] = true
-
-      for (const j in this.CartList[bizId]) {
-        for (const k in this.CartList[bizId][j]) {
-          if (!this.CartList[bizId][j][k].checked) {
-            this.bizCheck[bizId] = false
-          }
-        }
-      }
-
-      for (const it in this.bizCheck) {
-        Storage.set(it, this.bizCheck[it])
-      }
-
-      // 每次来改变全选
-      this.allCheck = true
-      for (const i in this.CartList) {
-        for (const j in this.CartList[i]) {
-          for (const k in this.CartList[i][j]) {
-            if (!this.CartList[i][j][k].checked) {
-              this.allCheck = false
+      this.isAjax = true
+      const product = { prod_id: Number(prod_id), attr_id: Number(attr_id), biz_id: Number(biz_id) }
+      const cart = await this.$store.dispatch('cart/addNum', { product, num })
+      console.log(cart)
+      if (cart !== false) {
+        this.total_count = cart.total_count
+        this.total_price = cart.total_price
+        // 更新数量
+        const { CartList } = cart
+        for (const biz_id in CartList) {
+          for (const prod_id in CartList[biz_id]) {
+            for (const attr_id in CartList[biz_id][prod_id]) {
+              this.CartList[biz_id][prod_id][attr_id].Qty = CartList[biz_id][prod_id][attr_id].Qty
             }
           }
         }
       }
-      Storage.set('allCheck', this.allCheck)
 
-      this.SumPrice()
-      this.fan = !this.fan
+      this.isAjax = false
     },
     // 初始化 选中状态
     initCheck () {
-      this.allCheck = true
-      for (const i in this.CartList) {
-        const biz_check = Storage.get(i)
-        const itemCheck = biz_check || false
-        this.$set(this.bizCheck, i, itemCheck)
-        for (const j in this.CartList[i]) {
-          for (const k in this.CartList[i][j]) {
-            const attr_id = Storage.get((j + ';' + k))
-            this.CartList[i][j][k].checked = attr_id || false
-            if (!this.CartList[i][j][k].checked) {
-              this.allCheck = false
-            }
+      var noCheckCount = 0
+
+      for (const biz_id in this.CartList) {
+        const bizCheckStatus = this.$store.getters['cart/getListCheckStatus'](Number(biz_id))
+        this.$set(this.bizCheck, biz_id, bizCheckStatus)
+
+        for (const prod_id in this.CartList[biz_id]) {
+          for (const attr_id in this.CartList[biz_id][prod_id]) {
+            const checkStatus = this.$store.getters['cart/getRowCheckStatus']({ attr_id: Number(attr_id), prod_id: Number(prod_id) })
+            this.$set(this.CartList[biz_id][prod_id][attr_id], 'checked', checkStatus)
+            if (!checkStatus)noCheckCount++
           }
         }
       }
-      const all = Storage.get('allCheck')
-      this.allCheck = all || false
-      this.SumPrice()
+      this.allCheck = noCheckCount === 0
     },
     // 计算总价格
     SumPrice () {
       let total = 0
       this.totalPrice = 0
-      for (const i in this.CartList) {
-        for (const j in this.CartList[i]) {
-          for (const k in this.CartList[i][j]) {
-            const attr_id = Storage.get((j + ';' + k))
-            const result = attr_id || false
-            this.CartList[i][j][k].checked = result
-            if (this.CartList[i][j][k].checked) {
-              total += this.CartList[i][j][k].ProductsPriceX * this.CartList[i][j][k].Qty
+      for (const biz_id in this.CartList) {
+        for (const prod_id in this.CartList[biz_id]) {
+          for (const attr_id in this.CartList[biz_id][prod_id]) {
+            if (this.CartList[biz_id][prod_id][attr_id].checked) {
+              total += this.CartList[biz_id][prod_id][attr_id].ProductsPriceX * this.CartList[biz_id][prod_id][attr_id].Qty
             }
           }
         }
@@ -389,32 +367,61 @@ export default {
       }
       this.totalPrice = Number(total).toFixed(2)
     },
-    async init () {
-      const { data, totalCount } = await getProductList({ page: this.page }).catch(e => {
-        throw Error(e.msg || '获取推荐商品信息失败')
+    async _int_func () {
+      this.pageInitDone = false
+      if (!this.$checkIsLogin(0)) return
+      const cart = await getCartList({ cart_key: 'CartList' }, {
+        onlyData: true,
+        tip: '加载中'
+      }).catch(e => {
+        throw Error(e.msg || '获取购物车产品失败')
       })
+      const { total_count, total_price, CartList, biz_list } = cart
 
-      this.proList = data
-      this.productTotal = totalCount
-      this.page++
-
-      if (this.$checkIsLogin(0)) {
-        const cart = await CartList({ cart_key: 'CartList' }, {
-          onlyData: true,
-          tip: '加载中'
-        }).catch(e => {
-          throw Error(e.msg || '获取购物车产品失败')
-        })
-        this.total_count = cart.total_count
-        this.total_price = cart.total_price
-        this.CartList = cart.CartList
-        this.bizList = cart.biz_list
-        this.initCheck()
+      const attrList = []
+      for (const biz_id in CartList) {
+        for (const prod_id in CartList[biz_id]) {
+          for (const attr_id in CartList[biz_id][prod_id]) {
+            // 初始化为false，方便后面触发响应
+            CartList[biz_id][prod_id][attr_id].checked = this.$store.getters['cart/getRowCheckStatus']({ attr_id: Number(attr_id), prod_id: Number(prod_id) })
+            const attr_value = CartList[biz_id][prod_id][attr_id]
+            attrList.push({
+              // ...attr_value,
+              biz_id: Number(biz_id),
+              prod_id: Number(prod_id),
+              attr_id: Number(attr_id),
+              checked: attr_value.checked, // 能保留上次的结果
+              num: attr_value.Qty
+            })
+          }
+        }
       }
-    }
+      this.shopCartList = attrList // computed set
+
+      this.total_count = total_count
+      this.total_price = total_price
+      this.$set(this, 'CartList', CartList)
+      this.$set(this, 'bizList', biz_list)
+      
+      
+
+      this.initCheck()
+      this.SumPrice()
+      this.pageInitDone = true
+    },
+    ...mapActions({
+    })
+  },
+  async created () {
+    const { data, totalCount } = await getProductList({ page: this.page }).catch(e => {
+      throw Error(e.msg || '获取推荐商品信息失败')
+    })
+    this.proList = data
+    this.productTotal = totalCount
+    this.page++
   },
   async onReachBottom () {
-    if (this.proList.length >= this.productTotal){
+    if (this.proList.length >= this.productTotal) {
       error('到底了')
       return
     }
@@ -429,7 +436,8 @@ export default {
     this.setTabBarIndex(3)
     this.$store.dispatch('system/setTabActiveIdx', 3)
     this.refreshTabTag()
-    this.init()
+
+    this._int_func()
   }
 
 }

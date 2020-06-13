@@ -43,7 +43,7 @@ export default {
 <style lang="scss" scoped>
   .commtent-item {
     padding: 30rpx 0;
-    border-bottom: 1px solid #eee;
+    /*border-bottom: 1px solid #eee;*/
 
     .info {
       padding-bottom: 20rpx;

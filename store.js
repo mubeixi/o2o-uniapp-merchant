@@ -8,11 +8,13 @@ import system from './store/modules/system'
 import theme from './store/modules/theme'
 import user from './store/modules/user'
 import delivery from '@/store/modules/delivery'
+import cart from '@/store/modules/cart'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   modules: {
+    cart,
     system,
     theme,
     user,
