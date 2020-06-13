@@ -34,26 +34,32 @@
           <div class="pro-div">
             <img :src="pro.prod_img" class="pro-img" />
           </div>
-          <div class="pro-msg">
-            <div class="pro-name">{{pro.prod_name}}</div>
-            <div class="attr" v-if="pro.attr_info.attr_name"><span>{{pro.attr_info.attr_name}}</span></div>
-            <div class="attrs" v-else></div>
-            <div class="pro-price fz-12">
-              <span>￥</span>
-              {{pro.prod_price}}
+          <div class="pro-msg flex flex-column">
+            <div class="flex1">
+              <div class="pro-msg-row fz-14 c3 flex flex-justify-between">
+                <div style="width: 380rpx;word-break: break-all;">{{pro.prod_name}}</div>
+                <div>￥{{pro.prod_price}}</div>
+              </div>
+              <div class="pro-msg-row fz-12 c9 flex flex-justify-between">
+                <div>{{pro.attr_info.attr_name||''}}</div>
+                <div>x{{pro.prod_count}}</div>
+              </div>
+            </div>
+            <div class="pro-price fz-12" style="margin-top: 10px">
               <span v-if="pro.is_back_num>0" class="m-l-10 fz-14">
                 (申请退{{pro.is_back_num}}件)
               </span>
-              <span @click.stop="goPay(order,pro)" class="m-l-10 fz-14"
-                    v-if="order.Order_Status==2&&order.Order_Type !== 'gift'">申请退款</span>
-              <span @click.stop="goPay(order,pro)" class="m-l-10 fz-14"
-                    v-else-if="order.Order_Status==3&&order.Order_Shipping.shipping_id!==2">申请退货退款</span>
-              <span class="amount">x{{pro.prod_count}}</span></div>
+              <div class="btn-group" style="margin-bottom: 0;">
+                <span @click.stop="goPay(order,pro)" class="btn-group-item" v-if="order.Order_Status==2&&order.Order_Type !== 'gift'">退款</span>
+                <span @click.stop="goPay(order,pro)" class="btn-group-item" v-else-if="order.Order_Status==3&&order.Order_Shipping.shipping_id!==2">退货退款</span>
+              </div>
+              
             <div class="fz-14 c7"
                  v-if="(Number(pro.prod_count)-Number(pro.is_back_num))*Number(pro.single_free_money)>0">
               免单金额({{(Number(pro.prod_count)-Number(pro.is_back_num))*Number(pro.single_free_money)}}元)
             </div>
           </div>
+        </div>
         </div>
         <div class="total flex flex-justify-between">
           <view @click.stop="goPintuan(order)" class="ptdesc"
@@ -67,32 +73,31 @@
           </div>
         </div>
         <div class="btn-group" v-if="order.Order_Status==-1">
-          <span @click.stop="delOrder(order.prod_list,index)">删除订单</span>
+          <span class="btn-group-item" @click.stop="delOrder(order.prod_list,index)">删除订单</span>
         </div>
         <div class="btn-group" v-if="order.Order_Status==0">
-          <span @click.stop="cancelOrder(order.prod_list,index)">取消订单</span>
+          <span class="btn-group-item" @click.stop="cancelOrder(order.prod_list,index)">取消订单</span>
         </div>
         <div class="btn-group" v-if="order.Order_Status==1">
-          <span @click.stop="cancelOrder(order.prod_list,index)">取消订单</span>
-          <span @click.stop="goPay(order)" class="active">立即付款</span>
+          <span class="btn-group-item" @click.stop="cancelOrder(order.prod_list,index)">取消订单</span>
+          <span class="btn-group-item active" @click.stop="goPay(order)">立即付款</span>
         </div>
         <div class="btn-group" v-else-if="order.Order_Status==2&&order.Order_Type !== 'gift'">
-          <span @click.stop="goPay(order)" class="active">申请退款</span>
+          <span class="btn-group-item active" @click.stop="goPay(order)">申请退款</span>
         </div>
         <div class="btn-group" v-else-if="order.Order_Status==3">
           <div @click.stop="openExtendReceiptFn(order)" class="extend_receipt" v-if="order.allow_extend_receipt">
             <div class="funicon icon-more1 icon font22 " style="color: #777;"></div>
             <div @click.stop="extendReceiptFn(order)" class="tooltip" v-if="item.extend">确认延迟</div>
           </div>
-          <span @click.stop="goLogistics(order)" v-if="order.Order_Shipping.shipping_id!==2">查看物流</span>
-          <span @click.stop="goLogisticsByLocal(order)" v-if="order.Order_Shipping.shipping_id==2">配送进度</span>
-          <span @click.stop="goPay(order)" style="margin-left: 15rpx;"
-                v-if="order.Order_Shipping.shipping_id!==2">申请退款退货</span>
-          <span @click.stop="confirmOrder(order,index)" class="active">确认收货</span>
+          <span class="btn-group-item" @click.stop="goLogistics(order)" v-if="order.Order_Shipping.shipping_id!=2">查看物流</span>
+          <span class="btn-group-item" @click.stop="goLogisticsByLocal(order)" v-if="order.Order_Shipping.shipping_id==2">配送进度</span>
+          <span class="btn-group-item" @click.stop="goPay(order)" style="margin-left: 15rpx;" v-if="order.Order_Shipping.shipping_id!==2">退款退货</span>
+          <span class="btn-group-item active" @click.stop="confirmOrder(order,index)">确认收货</span>
           <!-- @click="goPay(item)"跳转退款 -->
         </div>
         <div class="btn-group" v-else-if="order.Order_Status==4 && order.Is_Commit === 0 && order.Is_Backup === 0">
-          <span @click.stop="goPay(order)" class="active">立即评价</span>
+          <span @click.stop="goPay(order)" class="btn-group-item active">立即评价</span>
         </div>
       </div>
     </block>
@@ -120,7 +125,7 @@
         <div @click="sureReason" class="action-btn" style="color: #F43131;">确定</div>
       </div>
     </layout-modal>
-
+    <div class="h50" style="background: #f8f8f8;"></div>
   </div>
 
 </template>
@@ -136,7 +141,7 @@ export default {
   components: {
     LayoutIcon,
     WzwImTip,
-    LayoutModal,
+    LayoutModal
   },
   mixins: [BaseMixin],
   data () {
@@ -148,7 +153,7 @@ export default {
       pageSize: 5,
       totalCount: 0,
       orderList: [],
-      orderNum: {},
+      orderNum: {}
     }
   },
   methods: {
@@ -162,7 +167,7 @@ export default {
       }
       console.log(express)
       uni.navigateTo({
-        url: '/pagesA/order/logisticsByLocation?order_id=' + item.Order_ID,
+        url: '/pagesA/order/logisticsByLocation?order_id=' + item.Order_ID
       })
     },
     goLogistics (item) {
@@ -176,12 +181,12 @@ export default {
       console.log(item)
       // 跳转物流追踪
       uni.navigateTo({
-        url: '/pagesA/order/logistics?shipping_id=' + item.Order_ShippingID + '&express=' + express + '&prod_img=' + item.prod_list[0].prod_img + '&order_id=' + item.Order_ID,
+        url: '/pagesA/order/logistics?shipping_id=' + item.Order_ShippingID + '&express=' + express + '&prod_img=' + item.prod_list[0].prod_img + '&order_id=' + item.Order_ID
       })
     },
     sureReason () {
       const data = {
-        Order_ID: this.Order_ID,
+        Order_ID: this.Order_ID
       }
       const that = this
       confirmOrder(data).then(res => {
@@ -190,7 +195,7 @@ export default {
         that.getOrderNum()
         uni.showToast({
           title: res.msg,
-          icon: 'none',
+          icon: 'none'
         })
       }).catch(e => {
         this.$refs.sureReason.close()
@@ -209,7 +214,7 @@ export default {
     goPintuan (item) {
       if (item.teamstatus === 0) {
         uni.navigateTo({
-          url: '/pagesA/order/GroupSuccess?Team_ID=' + item.teamid + '&Products_ID=' + item.prod_list[0].prod_id + '&OrderId=' + item.Order_ID,
+          url: '/pagesA/order/GroupSuccess?Team_ID=' + item.teamid + '&Products_ID=' + item.prod_list[0].prod_id + '&OrderId=' + item.Order_ID
         })
       }
     },
@@ -217,7 +222,7 @@ export default {
     goPay (item, pro) {
       if (item.Order_Status === 1) {
         uni.navigateTo({
-          url: '/pages/order/OrderPay?Order_ID=' + item.Order_ID,
+          url: '/pages/order/OrderPay?Order_ID=' + item.Order_ID
         })
       } else if (item.Order_Status === 2 || item.Order_Status === 3) {
         let url = '/pagesA/order/Refund?Order_ID=' + item.Order_ID
@@ -225,11 +230,11 @@ export default {
           url += '&prod_id=' + pro.prod_id + '&attr_id=' + pro.attr_id
         }
         uni.navigateTo({
-          url,
+          url
         })
       } else if (item.Order_Status === 4) {
         uni.navigateTo({
-          url: '/pagesA/order/PublishComment?Order_ID=' + item.Order_ID,
+          url: '/pagesA/order/PublishComment?Order_ID=' + item.Order_ID
         })
       }
     },
@@ -251,7 +256,7 @@ export default {
           this.getOrderNum()
           uni.showToast({
             title: res.msg,
-            icon: 'none',
+            icon: 'none'
           })
         }).catch(e => {
           this.isLoading = false
@@ -274,7 +279,7 @@ export default {
           this.getOrderNum()
           uni.showToast({
             title: res.msg,
-            icon: 'none',
+            icon: 'none'
           })
         }).catch(e => {
           this.isLoading = false
@@ -298,7 +303,7 @@ export default {
       const data = {
         page: this.page,
         pageSize: this.pageSize,
-        Order_Type: this.type,
+        Order_Type: this.type
       }
       if (this.index > 0) {
         data.Order_Status = this.index
@@ -324,7 +329,7 @@ export default {
     },
     goDetail (item) {
       this.$linkTo('/pages/order/OrderDetail?Order_ID=' + item.Order_ID + '&pagefrom=order')
-    },
+    }
   },
   onShow () {
     this.page = 1
@@ -352,7 +357,7 @@ export default {
         break
     }
     uni.setNavigationBarTitle({
-      title: pageTitle,
+      title: pageTitle
     })
   },
   onReachBottom () {
@@ -360,7 +365,7 @@ export default {
       this.page++
       this.getOrder()
     }
-  },
+  }
 }
 </script>
 <style lang="scss" scoped>
@@ -407,7 +412,6 @@ export default {
   .page-wrap {
     background-color: #ffffff !important;
     min-height: 100vh;
-    padding-bottom: 50px;
   }
 
   .titless {
@@ -497,18 +501,18 @@ export default {
 
     .pro {
       display: flex;
-      margin-bottom: 50rpx;
+      margin-bottom: 0rpx;
       margin-top: 30rpx;
     }
 
     .pro-msg {
-      margin-left: 27rpx;
-      width: 476rpx;
+      margin-left: 24rpx;
+      width: 520rpx;
     }
 
     .pro-div {
-      width: 200rpx;
-      height: 200rpx;
+      width: 166rpx;
+      height: 166rpx;
     }
 
     .pro-img {
@@ -591,26 +595,25 @@ export default {
       align-items: center;
       margin-bottom: 30rpx;
 
-      span {
+      .btn-group-item {
         display: inline-block;
-        //width: 150rpx;
-        padding: 0rpx 24rpx;
-        height: 60rpx;
-        line-height: 60rpx;
+        padding: 0px 10px;
+        height: 28px;
+        line-height: 28px;
         text-align: center;
-        border: 1px solid #999;
-        border-radius: 10rpx;
-        color: #999;
-        font-size: 26rpx;
+        border: 1px solid #eee;
+        border-radius: 14px;
+        color: #777;
+        font-size: 13px;
 
         &:last-child {
           margin-left: 14rpx;
         }
 
         &.active {
-          color: #fff;
-          background: #F43131;
-          border: none;
+          /*color: #fff;*/
+          /*background: #F43131;*/
+          /*border: none;*/
         }
       }
     }

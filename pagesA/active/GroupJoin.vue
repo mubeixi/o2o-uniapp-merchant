@@ -236,9 +236,11 @@ export default {
     },
   },
   methods: {
-    skuSub () {
+    skuSub (sku) {
+      console.log(sku)
+
       this.$refs.cartPopu.close()
-      this.postData.prod_id = this.Products_ID
+      this.postData.attr_id = sku.id
       this.postData.active_id = this.Team_ID
       this.postData.prod_id = this.Prod_ID
       

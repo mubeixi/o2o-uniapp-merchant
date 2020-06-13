@@ -1,5 +1,5 @@
 // 太多了占空间，常见尺寸就这么多
-@for $i from 1 through 30 {
+@for $i from 0 through 30 {
   .m-#{$i} {
     margin: ($i)+px;
   }
