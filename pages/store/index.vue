@@ -192,7 +192,7 @@
                     v-for="(item,idx) in goodsList">
                     <div :style="{backgroundImage:'url('+item.ImgPath+')'}" class="img-cover"
                          style="width: 345rpx;height: 345rpx"></div>
-                    <div class="c3 fz-13" style="line-height: 36rpx;height: 72rpx;">{{item.Products_Name}}</div>
+                    <div class="c3 fz-13" style="line-height: 36rpx;height: 72rpx;overflow-x: hidden">{{item.Products_Name}}</div>
                     <div class="flex flex-vertical-c" style="height: 32rpx;">
                       <div class="price-selling"><span class="fz-10">￥</span><span class="fz-12">{{item.Products_PriceX}}</span>
                       </div>
