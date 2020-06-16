@@ -193,7 +193,7 @@ import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import WzwLiveTag from '@/componets/wzw-live-tag/wzw-live-tag'
 import LayoutAd from '@/componets/layout-ad/layout-ad'
 import LayoutLoading from '@/componets/layout-loading/layout-loading'
-// const livePlayer = requirePlugin('live-player-plugin')
+
 export default {
   name: 'scroll-page-hot',
   mixins: [componetMixin],
@@ -327,25 +327,7 @@ export default {
       this.$set(this.liveNav[idx], 'isAjax', false)
      
       this.loadingByLiveList = false
-      // // 遍历
-      // for (var i = tempLen;i < this.liveNav[idx].goodsList.length - 1; i++) {
-      //   const { room_id = 0 } = this.liveNav[idx].goodsList[i]
-      //   if (room_id) {
-      //     // 首次获取立马返回直播状态
-      //     const roomId = room_id // 房间 id
-      //     console.log('roomid is ' + roomId)
-      //     livePlayer.getLiveStatus({ room_id: roomId })
-      //       .then(res => {
-      //         // 101: 直播中, 102: 未开始, 103: 已结束, 104: 禁播, 105: 暂停中, 106: 异常，107：已过期
-      //         this.$set(this.liveNav[idx].goodsList[i], 'liveStatus', res.liveStatus)
-      //
-      //         console.log('get live status', res.liveStatus)
-      //       })
-      //       .catch(err => {
-      //         console.log('get live status', err)
-      //       })
-      //   }
-      // }
+
     },
     async _init_func () {
       this.loadingByKillList = true

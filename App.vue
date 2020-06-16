@@ -8,7 +8,7 @@ import Storage from '@/common/Storage'
 import eventHub from '@/common/eventHub'
 import IM from '@/common/Im/Im'
 import { modal } from '@/common/fun'
-const livePlayer = requirePlugin('live-player-plugin')
+// const livePlayer = requirePlugin('live-player-plugin')
 
 export default {
   globalData: {
@@ -17,7 +17,7 @@ export default {
   onLaunch: function () {
     console.log('App Launch')
     
-    eventHub.livePlayer = livePlayer
+    // eventHub.livePlayer = livePlayer
     // #ifdef MP-WEIXIN
     let _users_id = ''
     if (isCustom) {
@@ -57,24 +57,24 @@ export default {
   },
   onShow: function (options) {
     // 分享卡片入口场景才调用getShareParams接口获取以下参数
-    if (options.scene === 1007 || options.scene === 1008 || options.scene === 1044) {
-      livePlayer.getShareParams()
-        .then(res => {
-          // 房间号
-          console.log('get room id', res.room_id)
-          // 用户openid
-          console.log('get openid', res.openid)
-          // 分享者openid，分享卡片进入场景才有
-          console.log('get share openid', res.share_openid)
-          // 开发者在跳转进入直播间页面时，页面路径上携带的自定义参数，这里传回给开发者
-          console.log('get custom params', res.custom_params)
-          const custom_params = typeof res.custom_params === 'string' ? JSON.parse(res.custom_params) : res.custom_params
-          const { owner_id = 0 } = custom_params
-          if (owner_id)Storage.set('owner_id', owner_id)
-        }).catch(err => {
-          console.log('get share params', err)
-        })
-    }
+    // if (options.scene === 1007 || options.scene === 1008 || options.scene === 1044) {
+    //   livePlayer.getShareParams()
+    //     .then(res => {
+    //       // 房间号
+    //       console.log('get room id', res.room_id)
+    //       // 用户openid
+    //       console.log('get openid', res.openid)
+    //       // 分享者openid，分享卡片进入场景才有
+    //       console.log('get share openid', res.share_openid)
+    //       // 开发者在跳转进入直播间页面时，页面路径上携带的自定义参数，这里传回给开发者
+    //       console.log('get custom params', res.custom_params)
+    //       const custom_params = typeof res.custom_params === 'string' ? JSON.parse(res.custom_params) : res.custom_params
+    //       const { owner_id = 0 } = custom_params
+    //       if (owner_id)Storage.set('owner_id', owner_id)
+    //     }).catch(err => {
+    //       console.log('get share params', err)
+    //     })
+    // }
 
     console.log('App Show')
   },

@@ -46,10 +46,10 @@
       <div class="fz-10 color-white">发布活动</div>
     </div>
 
-    <div @click="toLiveList" class="live-btn" v-if="initData.live_flag">
-      <div class="live-icon"><layout-icon color="#fff" display="inline" size="20" type="icon15"></layout-icon></div>
-      <div class="fz-10 color-white">直播</div>
-    </div>
+<!--    <div @click="toLiveList" class="live-btn" v-if="initData.live_flag">-->
+<!--      <div class="live-icon"><layout-icon color="#fff" display="inline" size="20" type="icon15"></layout-icon></div>-->
+<!--      <div class="fz-10 color-white">直播</div>-->
+<!--    </div>-->
 
     <layout-modal :autoClose="false" ref="openLocalSettingModal">
       <div class="refuseApplyDialog">
@@ -109,6 +109,7 @@ export default {
   data () {
     return {
       /** 疯狂hack **/
+      getLocationDone: false,
       showUnderLine: false,
       defaultUnderlineLeft: 0,
       tabDom: [{}, {}, {}],
@@ -190,14 +191,16 @@ export default {
       }
     },
     getUserLocation () {
+      
       uni.getLocation({
         type: 'wgs84',
         success: (res) => {
           console.log('当前位置的经度：' + res.longitude)
           console.log('当前位置的纬度：' + res.latitude)
 
+          this.getLocationDone = true
           this.setUserAddressInfo(res)
-
+          if (this.getLocationDone) return
           // 另外两个组件，刷新数据
           if (this.headTabIndex === 1) {
             this.$refs.page1.refreshByLocal()
@@ -262,6 +265,7 @@ export default {
     }).exec()
   },
   created () {
+    this.getLocationDone = false
     this._init_func()
   }
 }
@@ -365,9 +369,9 @@ export default {
         &:last-child {
           margin-right: 0;
         }
-        
+
         .tab-item-text{
-        
+
         }
 
         .tab-item-tip {
@@ -394,7 +398,7 @@ export default {
     border-radius: 13px;
     text-align: right;
     z-index: 33;
-    
+
     background: rgba(255, 255, 255, .5);
     display: flex;
     align-items: center;
