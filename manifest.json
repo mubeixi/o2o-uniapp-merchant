@@ -73,13 +73,13 @@
             "urlCheck" : false,
             "minified" : false
         },
-        "usingComponents" : true,
-        "plugins" : {
-//            "live-player-plugin" : {
-//                "version" : "1.0.15",
-//                "provider" : "wx2b03c6e691cd7370"
-//            }
-        },
+        // "usingComponents" : true,
+        // "plugins" : {
+        //    "live-player-plugin" : {
+        //        "version" : "1.0.15",
+        //        "provider" : "wx2b03c6e691cd7370"
+        //    }
+        // },
         "permission" : {
             "scope.userLocation" : {
                 "desc" : "为了更好的为您推荐精准服务信息，需要获取您当前所在的位置。"
