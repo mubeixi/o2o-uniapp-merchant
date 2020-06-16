@@ -377,10 +377,10 @@
     </layout-modal>
 
     <!--101: 直播中, 102: 未开始, 103: 已结束, 104: 禁播, 105: 暂停中, 106: 异常，107：已过期-->
-    <div @click="toRoom" class="live-status-box" v-if="liveStatus == 101 || liveStatus == 105 || liveStatus == 102">
-      <image class="icon" src="/static/live/live-pre.png" v-if="liveStatus ==102"></image>
-      <image class="icon" src="/static/live/live-ing.png" v-if="liveStatus ==101 || liveStatus ==105"></image>
-    </div>
+<!--    <div @click="toRoom" class="live-status-box" v-if="liveStatus == 101 || liveStatus == 105 || liveStatus == 102">-->
+<!--      <image class="icon" src="/static/live/live-pre.png" v-if="liveStatus ==102"></image>-->
+<!--      <image class="icon" src="/static/live/live-ing.png" v-if="liveStatus ==101 || liveStatus ==105"></image>-->
+<!--    </div>-->
 
   </div>
 </template>
@@ -400,7 +400,7 @@ import { addFavourite, cancelFavourite, checkFavourite, commentReply, getUserCou
 import { Exception } from '@/common/Exception'
 import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 // #ifdef MP-WEIXIN
-const livePlayer = requirePlugin('live-player-plugin')
+// const livePlayer = requirePlugin('live-player-plugin')
 // #endif
 export default {
   name: 'StoreIndex',
@@ -502,17 +502,16 @@ export default {
   },
   methods: {
     toRoom () {
-      const roomId = this.storeInfo.room_id // 填写具体的房间号，可通过下面【获取直播房间列表】 API 获取
-      const customParams = encodeURIComponent(JSON.stringify({
-        path: 'pages/store/index?biz_id=' + this.bid,
-        owner_id: this.$store.getters['user/getUserId']()// 公共参数
-      }))
-      console.log(`plugin-private://wx2b03c6e691cd7370/pages/live-player-plugin?room_id=${roomId}&custom_params=${customParams}`)
-      // 开发者在直播间页面路径上携带自定义参数（如示例中的path和pid参数），后续可以在分享卡片链接和跳转至商详页时获取，
-      // 详见【获取自定义参数】、【直播间到商详页面携带参数】章节（上限600个字符，超过部分会被截断）
-      wx.navigateTo({
-        url: `plugin-private://wx2b03c6e691cd7370/pages/live-player-plugin?room_id=${roomId}&custom_params=${customParams}`
-      })
+      // const roomId = this.storeInfo.room_id // 填写具体的房间号，可通过下面【获取直播房间列表】 API 获取
+      // const customParams = encodeURIComponent(JSON.stringify({
+      //   path: 'pages/store/index?biz_id=' + this.bid,
+      //   owner_id: this.$store.getters['user/getUserId']()// 公共参数
+      // }))
+      // // 开发者在直播间页面路径上携带自定义参数（如示例中的path和pid参数），后续可以在分享卡片链接和跳转至商详页时获取，
+      // // 详见【获取自定义参数】、【直播间到商详页面携带参数】章节（上限600个字符，超过部分会被截断）
+      // wx.navigateTo({
+      //   url: `plugin-private://wx2b03c6e691cd7370/pages/live-player-plugin?room_id=${roomId}&custom_params=${customParams}`
+      // })
     },
     toShare () {
       if (checkIsLogin(1, 1)) {
@@ -649,33 +648,32 @@ export default {
         this.storeInfo = storeInfoData[0]
 
         const { room_id, live_end_time, live_start_time } = this.storeInfo
-        if (room_id) {
-          const nowTimeStamp = uni.$moment().unix()
-          // console.log(nowTimeStamp)
-          if (live_end_time && live_start_time) {
-            if (nowTimeStamp > live_start_time && nowTimeStamp < live_end_time) {
-              this.liveStatus = 101
-            }
-
-            if (nowTimeStamp < live_start_time) {
-              this.liveStatus = 102
-            }
-          }
-
-          // 首次获取立马返回直播状态
-          const roomId = room_id // 房间 id
-          console.log('roomid is ' + roomId, livePlayer)
-          livePlayer.getLiveStatus({ room_id: roomId })
-            .then(res => {
-              // 101: 直播中, 102: 未开始, 103: 已结束, 104: 禁播, 105: 暂停中, 106: 异常，107：已过期
-              this.liveStatus = res.liveStatus
-
-              console.log('get live status', res.liveStatus)
-            })
-            .catch(err => {
-              console.log('get live status', err)
-            })
-        }
+        // if (room_id) {
+        //   const nowTimeStamp = uni.$moment().unix()
+        //   // console.log(nowTimeStamp)
+        //   if (live_end_time && live_start_time) {
+        //     if (nowTimeStamp > live_start_time && nowTimeStamp < live_end_time) {
+        //       this.liveStatus = 101
+        //     }
+        //
+        //     if (nowTimeStamp < live_start_time) {
+        //       this.liveStatus = 102
+        //     }
+        //   }
+        //
+        //   // 首次获取立马返回直播状态
+        //   const roomId = room_id // 房间 id
+        //   livePlayer.getLiveStatus({ room_id: roomId })
+        //     .then(res => {
+        //       // 101: 直播中, 102: 未开始, 103: 已结束, 104: 禁播, 105: 暂停中, 106: 异常，107：已过期
+        //       this.liveStatus = res.liveStatus
+        //
+        //       console.log('get live status', res.liveStatus)
+        //     })
+        //     .catch(err => {
+        //       console.log('get live status', err)
+        //     })
+        // }
 
         const base = { biz_ids: this.bid }
         this.recommends = await getProductList({

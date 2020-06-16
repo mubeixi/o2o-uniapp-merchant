@@ -97,7 +97,7 @@ import { mapActions } from 'vuex'
 import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 import eventHub from '@/common/eventHub'
 import { error } from '@/common/fun'
-const livePlayer = requirePlugin('live-player-plugin')
+
 export default {
   mixins: [BaseMixin, tabbarMixin],
   components: {

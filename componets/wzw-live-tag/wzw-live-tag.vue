@@ -1,6 +1,5 @@
 <template>
   <div class="live-status" @click="bindToRoom" v-if="liveStatus ==101 || liveStatus ==102 || liveStatus ==105">
-<!--    <layout-icon color="#fff" display="inline" size="14" type="iconicon-count"></layout-icon>-->
     <div class="flex flex-vertical-c">
       <image src="/static/loading3.gif" class="live-icon-img" />
       <span class="text" v-if="liveStatus ==101 || liveStatus ==105">
@@ -14,12 +13,11 @@
 </template>
 
 <script>
-import LayoutIcon from '@/componets/layout-icon/layout-icon'
 
 const livePlayer = requirePlugin('live-player-plugin')
 export default {
   name: 'wzw-live-tag',
-  components: { LayoutIcon },
+  components: {  },
   props: {
     productInfo: {
       required: true,
@@ -77,29 +75,7 @@ export default {
         .catch(err => {
           console.log('get live status', err)
         })
-
-      // 往后间隔1分钟或更慢的频率去轮询获取直播状态
-      // this.intervalInstance = setInterval(() => {
-      //   console.log('check live status：@room_id '+roomId)
-      //   livePlayer.getLiveStatus({ room_id: roomId })
-      //     .then(res => {
-      //       // 101: 直播中, 102: 未开始, 103: 已结束, 104: 禁播, 105: 暂停中, 106: 异常，107：已过期
-      //       this.liveStatus = res.liveStatus
-      //       console.log('get live status', res.liveStatus)
-      //     })
-      //     .catch(err => {
-      //       console.log('get live status', err)
-      //     })
-      // }, 70000)
-
-      // const { liveStatus } = await livePlayer.getLiveStatus({ room_id: roomId })
-      //   .catch(err => {
-      //     console.log('get live status fail', err)
-      //     return -1
-      //   })
-      // // 101: 直播中, 102: 未开始, 103: 已结束, 104: 禁播, 105: 暂停中, 106: 异常，107：已过期
-      // this.liveStatus = liveStatus
-      // console.log('get live status success', liveStatus)
+      
     },
     bindToRoom () {
       this.$toRoom(this.room_id)

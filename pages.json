@@ -216,12 +216,12 @@
             "navigationBarTitleText": "参与拼团成功"
           }
         },
-        {
-          "path": "live/liveList",
-          "style": {
-            "navigationBarTitleText": "直播"
-          }
-        },
+//        {
+//          "path": "live/liveList",
+//          "style": {
+//            "navigationBarTitleText": "直播"
+//          }
+//        },
         {
           "path": "delivery/detail",
           "style": {
