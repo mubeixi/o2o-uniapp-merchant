@@ -265,11 +265,11 @@
       </swiper-item>
       <swiper-item class="tab-page">
         <div class="tab-page-wrap p-t-15" id="scrollView2">
-          <div class="p-10">地址:<span class="p-l-10">{{storeInfo.biz_address}}</span></div>
+          <div class="p-10">地址:<span @click="$openLocation(storeInfo.biz_lat,storeInfo.biz_lon)" class="p-l-10">{{storeInfo.biz_address}}</span></div>
           <div class="hr h15"></div>
-          <div class="p-10">电话:<span class="p-l-10">{{storeInfo.biz_mobile}}</span></div>
+          <div class="p-10">电话:<span class="p-l-10" @click="$cellPhone(storeInfo.biz_mobile)">{{storeInfo.biz_mobile}}</span></div>
           <div class="hr h15"></div>
-          <div class="p-10">简介:<span class="p-l-10 fz-14 c6">{{storeInfo.intro}}</span></div>
+          <div class="p-10">简介:<span class="p-l-10 fz-14 c6">{{storeInfo.intro||'暂无简介'}}</span></div>
         </div>
       </swiper-item>
       <swiper-item class="tab-page">
