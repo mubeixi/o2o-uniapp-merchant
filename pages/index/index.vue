@@ -72,7 +72,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import { modal } from '@/common/fun'
+import { modal,error } from '@/common/fun'
 import BaseMixin, { tabbarMixin } from '@/mixins/BaseMixin'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import ScrollPageHot from '@/pages/index/components/scroll-page-hot'
@@ -150,8 +150,9 @@ export default {
     toMerchant () {
       const users_id = Storage.get('users_id') || ''
 	  let url = ''
-	  if (users_id) {
-		  url = 'pages/product/form?origin_type=client'
+	  if (!users_id) {
+		  error('缺少users_id')
+		  return;
 	  } else {
 		  url = 'pages/product/form?origin_type=client&users_id=' + users_id
 	  }
