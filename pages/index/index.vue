@@ -46,10 +46,10 @@
       <div class="fz-10 color-white">发布活动</div>
     </div>
 
-    <div @click="toLiveList" class="live-btn" v-if="initData.live_flag">
-      <div class="live-icon"><layout-icon color="#fff" display="inline" size="20" type="icon15"></layout-icon></div>
-      <div class="fz-10 color-white">直播</div>
-    </div>
+<!--    <div @click="toLiveList" class="live-btn" v-if="initData.live_flag">-->
+<!--      <div class="live-icon"><layout-icon color="#fff" display="inline" size="20" type="icon15"></layout-icon></div>-->
+<!--      <div class="fz-10 color-white">直播</div>-->
+<!--    </div>-->
 
     <layout-modal :autoClose="false" ref="openLocalSettingModal">
       <div class="refuseApplyDialog">
