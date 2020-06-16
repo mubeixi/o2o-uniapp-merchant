@@ -14,7 +14,7 @@
 
 <script>
 
-const livePlayer = requirePlugin('live-player-plugin')
+// const livePlayer = requirePlugin('live-player-plugin')
 export default {
   name: 'wzw-live-tag',
   components: {  },
@@ -48,41 +48,41 @@ export default {
   methods: {
     async refreshLiveStatus (roomId) {
       // console.log('roomid is ' + roomId)
-      if (!livePlayer) {
-        throw Error('直播的运行换件创建失败')
-      }
+      // if (!livePlayer) {
+      //   throw Error('直播的运行换件创建失败')
+      // }
 
-      const { live_end_time, live_start_time } = this.productInfo
-      const nowTimeStamp = uni.$moment().unix()
-      // console.log(nowTimeStamp)
-      if (live_end_time && live_start_time) {
-        if (nowTimeStamp > live_start_time && nowTimeStamp < live_end_time) {
-          this.liveStatus = 101
-        }
-
-        if (nowTimeStamp < live_start_time) {
-          this.liveStatus = 102
-        }
-      }
+      // const { live_end_time, live_start_time } = this.productInfo
+      // const nowTimeStamp = uni.$moment().unix()
+      // // console.log(nowTimeStamp)
+      // if (live_end_time && live_start_time) {
+      //   if (nowTimeStamp > live_start_time && nowTimeStamp < live_end_time) {
+      //     this.liveStatus = 101
+      //   }
+      //
+      //   if (nowTimeStamp < live_start_time) {
+      //     this.liveStatus = 102
+      //   }
+      // }
 
       // 如果有结果就覆盖
-      livePlayer.getLiveStatus({ room_id: roomId })
-        .then(res => {
-          // 101: 直播中, 102: 未开始, 103: 已结束, 104: 禁播, 105: 暂停中, 106: 异常，107：已过期
-          this.liveStatus = res.liveStatus
-          console.log('get live status', res.liveStatus)
-        })
-        .catch(err => {
-          console.log('get live status', err)
-        })
+      // livePlayer.getLiveStatus({ room_id: roomId })
+      //   .then(res => {
+      //     // 101: 直播中, 102: 未开始, 103: 已结束, 104: 禁播, 105: 暂停中, 106: 异常，107：已过期
+      //     this.liveStatus = res.liveStatus
+      //     console.log('get live status', res.liveStatus)
+      //   })
+      //   .catch(err => {
+      //     console.log('get live status', err)
+      //   })
       
     },
     bindToRoom () {
-      this.$toRoom(this.room_id)
+      // this.$toRoom(this.room_id)
     }
   },
   beforeDestroy () {
-    clearInterval(this.intervalInstance)
+    // clearInterval(this.intervalInstance)
   }
 }
 </script>
