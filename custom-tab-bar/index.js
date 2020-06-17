@@ -42,7 +42,7 @@ Component({
 
   },
   ready () {
-    console.log(this.data.tags)
+    // console.log(this.data.tags)
   },
   methods: {
     switchTab (e) {
