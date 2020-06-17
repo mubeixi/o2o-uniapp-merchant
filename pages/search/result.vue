@@ -90,7 +90,7 @@
         <div :key="i" @click="$toGoodsDetail(item)" class="pro" v-for="(item,i) of pro">
           <image :src="item.ImgPath" alt="" class="pro-img"></image>
           <div class="pro_desc">
-            <div class="title">{{item.Products_Name}}</div>
+            <div class="title"><wzw-live-tag :room_id="item.room_id" :product-info="item" />{{item.Products_Name}}</div>
             <div class="price">
               <span class="n_price"><text class="text">￥</text>{{item.Products_PriceX}}</span>
               <span class="o_price"><text class="text" v-if="item.Products_PriceY!==item.Products_PriceX">￥</text>{{item.Products_PriceY}}</span>

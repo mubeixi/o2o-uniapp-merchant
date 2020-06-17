@@ -260,6 +260,12 @@
           }
         },
         {
+          "path": "store/virtualGoods",
+          "style": {
+            "navigationBarTitleText": "到店券"
+          }
+        },
+        {
           "path": "store/offlinePay",
           "style": {
             "navigationBarTitleText": "线下支付"

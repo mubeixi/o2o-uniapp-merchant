@@ -99,7 +99,7 @@
           <div class="block coupon-goods-list" v-if="virtuaGoodsLsit.length>0">
             <div class="block-title">
               <div class="block-title-text">到店券</div>
-              <div class="block-title-more flex flex-vertical-center c9 fz-12">
+              <div class="block-title-more flex flex-vertical-center c9 fz-12" @click="$linkTo('/pagesA/store/virtualGoods?biz_id='+bid)">
                 <span>查看全部</span>
                 <icon class="iconright" color="#999" size="14" type="iconright"></icon>
               </div>
@@ -533,9 +533,10 @@ export default {
       }
     },
     toOffinePay () {
-      if (checkIsLogin(1, 1)) {
-        this.$linkTo(`/pagesA/store/offlinePay?biz_id=${this.bid}`)
-      }
+      this.$linkTo(`/pagesA/store/offlinePay?biz_id=${this.bid}`)
+      // if (checkIsLogin(1, 1)) {
+      //   this.$linkTo(`/pagesA/store/offlinePay?biz_id=${this.bid}`)
+      // }
     },
     taggleFavorite () {
       if (!checkIsLogin(1, 1)) return

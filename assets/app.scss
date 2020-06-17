@@ -73,6 +73,21 @@ page {
     left: 0;
   }
 }
+/** 安全区域 **/
+.p-b-safe-area{
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.m-b-safe-area{
+  margin-bottom: constant(safe-area-inset-bottom);
+  margin-bottom: env(safe-area-inset-bottom);
+}
+
+.p-b-safe-area{
+  bottom: constant(safe-area-inset-bottom);
+  bottom: env(safe-area-inset-bottom);
+}
 
 .hr {
   background: #f2f2f2;

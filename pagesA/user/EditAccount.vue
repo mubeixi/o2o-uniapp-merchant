@@ -16,7 +16,10 @@
       </view>
     
     </view>
-    <view @click="logoutFunc" class="btn">退出登录</view>
+    <div class="action p-b-safe-area">
+      <view @click="logoutFunc" class="btn">退出登录</view>
+    </div>
+    
   </view>
 </template>
 
@@ -109,6 +112,13 @@ export default {
     }
   }
   
+  .action{
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 86rpx;
+  }
+  
   .btn {
     width: 100%;
     height: 86rpx;
@@ -117,7 +127,6 @@ export default {
     color: #fff;
     font-size: 32rpx;
     text-align: center;
-    position: fixed;
-    bottom: 0;
+    
   }
 </style>
