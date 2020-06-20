@@ -32,7 +32,8 @@ const updateCartFn = ({ prod_id, attr_id, qty, bizId }) => {
 }
 
 const state = {
-  cartList: []
+  cartList: [],
+  bizList:{}
 }
 
 /**
@@ -53,6 +54,9 @@ const state = {
  */
 
 const mutations = {
+  SET_BIZLIST(state,data){
+    state.bizList = Object.assign({},data)
+  },
   /* async data */
   ASYNC_DATA (state, data) {
     state.cartList = data

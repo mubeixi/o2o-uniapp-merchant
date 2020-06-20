@@ -953,8 +953,10 @@
         <div class="block-content">
           <div class="comment-list" v-if="comments.length>0">
             <div :key="idx" class="comment-item" v-for="(item,idx) in comments">
-              <layout-comment :comment="item" :isLast="comments.length-1===idx"
-                              @comment="clickComment"></layout-comment>
+              <div class="p-t-15 p-b-15">
+                <layout-comment :comment="item" :isLast="comments.length-1===idx"
+                                @comment="clickComment"></layout-comment>
+              </div>
               <div class="comment-send" v-if="item.child.length>0">
                 <block :key="ind" v-for="(com,ind) of item.child">
                   <block :key="indx" v-for="(co,indx) of com">
@@ -1568,7 +1570,13 @@ export default {
     },
     onePay () {
       if (!checkIsLogin(1, 1)) return
-
+      if (!this.checkStoreStatus()) {
+        uni.showModal({
+          title: '操作提醒',
+          content: '该商家已打烊，请明日再来'
+        })
+        return
+      }
       // 赠品
       if (this.mode === 'gift') {
         this.lingqu()
@@ -1604,8 +1612,25 @@ export default {
 
       this.$refs.mySku.show()
     },
+    /**
+     * 检查店铺的状态
+     * 1.要么在营业时间内
+     * 2.要么不在营业时间内，但是开启了非营业时间可以下单
+     * 3.不在营业时间内，不允许下单
+     */
+    checkStoreStatus () {
+      const { business_status = 0, business_time_status = 0 } = this.bizInfo
+      return business_status || business_time_status
+    },
     allPay () {
       if (!checkIsLogin(1, 1)) return
+      if (!this.checkStoreStatus()) {
+        uni.showModal({
+          title: '操作提醒',
+          content: '该商家已打烊，请明日再来'
+        })
+        return
+      }
       this.hasCart = false
       this.postData.active = 'pintuan' // 标记为是拼团
       this.checkfrom = 'group'

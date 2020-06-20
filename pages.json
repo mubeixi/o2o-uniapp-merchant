@@ -18,6 +18,8 @@
     {
       "path": "pages/store/index",
       "style": {
+        "navigationBarTextStyle": "light",
+        "navigationStyle": "custom",
         "navigationBarTitleText": "店铺首页"
 //        "mp-weixin": {
 //          "usingComponents": {

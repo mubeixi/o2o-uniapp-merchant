@@ -17,14 +17,14 @@
 // const livePlayer = requirePlugin('live-player-plugin')
 export default {
   name: 'wzw-live-tag',
-  components: {  },
+  components: { },
   props: {
     productInfo: {
       required: true,
       type: Object
     },
     room_id: {
-      required: true,
+      default: '',
       type: [Number, String]
     }
   },
@@ -75,7 +75,7 @@ export default {
       //   .catch(err => {
       //     console.log('get live status', err)
       //   })
-      
+
     },
     bindToRoom () {
       // this.$toRoom(this.room_id)
