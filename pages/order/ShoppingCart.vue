@@ -20,17 +20,22 @@
     <div class="content">
       <div class="cartbox" v-if="pageInitDone && total_count>0">
         <div :key="biz_id" class="order_msg" v-for="(biz,biz_id) in CartList">
-          <div @click="selectBiz(bizList[biz_id].id)" class="biz_msg">
-            <div class="item-cart">
-              <layout-icon color="#F43131" size="20" type="iconicon-check" v-if="bizCheck[biz_id]"></layout-icon>
-              <layout-icon color="#ccc" size="20" type="iconradio" v-else></layout-icon>
+          <div @click="selectBiz(bizList[biz_id].id,bizList[biz_id].isSaleTime)" class="biz_msg flex">
+            <div class="flex1 flex flex-vertical-c">
+              <div class="item-cart">
+                <layout-icon color="#F43131" size="20" type="iconicon-check" v-if="bizCheck[biz_id]"></layout-icon>
+                <layout-icon color="#ccc" size="20" type="iconradio" v-else></layout-icon>
+              </div>
+              <img :src="bizList[biz_id].biz_logo" class="biz_logo" />
+              <span class="biz_name">{{bizList[biz_id].biz_name}}{{biz_id}}</span>
             </div>
-            <img :src="bizList[biz_id].biz_logo" class="biz_logo" />
-            <text class="biz_name">{{bizList[biz_id].biz_name}}{{biz_id}}</text>
+            <span class="is-sale-time" v-if="!bizList[biz_id].isSaleTime">
+              该商家已打烊
+            </span>
           </div>
           <block :key="prod_id" v-for="(proList,prod_id) in biz">
             <div :key="attr_id" class="pro" v-for="(item,attr_id) in proList">
-              <div @click="selectItem(biz_id,prod_id,attr_id)" class="item-cart">
+              <div @click="selectItem(biz_id,prod_id,attr_id,bizList[biz_id].isSaleTime)" class="item-cart">
                 <layout-icon color="#F43131" size="20" type="iconicon-check" v-if="item.checked"></layout-icon>
                 <layout-icon color="#ccc" size="20" type="iconradio" v-else></layout-icon>
               </div>
@@ -43,11 +48,11 @@
                 <div class="pro-price">
                   <span class="span">￥</span>{{item.ProductsPriceX}}
                   <span class="amount">
-                      <span :class="item.Qty===1?'disabled':''" @click="updateCartFn(biz_id,prod_id,attr_id,-1)"
+                      <span :class="item.Qty===1?'disabled':''" @click="updateCartFn(biz_id,prod_id,attr_id,-1,bizList[biz_id].isSaleTime)"
                             class="plus">-</span>
-                      <input @blur="inputQty($event,biz_id,prod_id,attr_id)" @focus="getQty(item.Qty)" class="attr_num"
+                      <input @blur="inputQty($event,biz_id,prod_id,attr_id,bizList[biz_id].isSaleTime)" @focus="getQty(item.Qty)" class="attr_num"
                              min="1" type="number" v-model="item.Qty" />
-                      <span @click="updateCartFn(biz_id,prod_id,attr_id,1)" class="plus">+</span>
+                      <span @click="updateCartFn(biz_id,prod_id,attr_id,1,bizList[biz_id].isSaleTime)" class="plus">+</span>
                     </span>
                 </div>
               </div>
@@ -110,7 +115,16 @@ import { getProductList } from '@/api/product'
 import { error } from '@/common/fun'
 import ProTag from '@/componets/pro-tag/pro-tag'
 import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
-
+/**
+ * 检查店铺的状态
+ * 1.要么在营业时间内
+ * 2.要么不在营业时间内，但是开启了非营业时间可以下单
+ * 3.不在营业时间内，不允许下单
+ */
+const checkStoreStatus = (bizInfo) => {
+  const { business_status = 0, business_time_status = 0 } = bizInfo
+  return business_status || business_time_status
+}
 export default {
   mixins: [BaseMixin, tabbarMixin],
   components: {
@@ -127,7 +141,7 @@ export default {
       total_count: 0,
       total_price: '',
       allCheck: false,
-      pageInitDone:false,
+      pageInitDone: false,
       bizCheck: {}, // 商家的选择
       totalPrice: 0, // 选中总计
       isDel: false,
@@ -243,7 +257,11 @@ export default {
     getQty (qty) {
       this.qty = qty
     },
-    async inputQty (e, biz_id, prod_id, attr_id) {
+    async inputQty (e, biz_id, prod_id, attr_id, storeIsSaleTime) {
+      if (!storeIsSaleTime) {
+        error('该商家已打烊')
+        return
+      }
       const qty = this.qty
       console.log(e, biz_id, prod_id, attr_id, qty)
       const inputNum = e.detail.value
@@ -284,24 +302,46 @@ export default {
     },
     // 全选
     async selectAll () {
+      var isNoSaleTimeStoreCount = 0
+      for (var i in this.bizList) {
+        if (!this.bizList[i].isSaleTime)isNoSaleTimeStoreCount++
+      }
+      if (isNoSaleTimeStoreCount > 0) {
+        error('有商家打烊无法全选')
+        return
+      }
+
       this.allCheck = await this.$store.dispatch('cart/taggleCheckStatus')
       this.initCheck()
       this.SumPrice()
     },
     // 单个商家
-    async selectBiz (biz_id) {
+    async selectBiz (biz_id, isSaleTime) {
+      if (!isSaleTime) {
+        error('该商家已打烊')
+        return
+      }
+
       console.log(biz_id)
       await this.$store.dispatch('cart/taggleCheckStatus', { biz_id: Number(biz_id) })
       this.initCheck()
       this.SumPrice()
     },
     // 单行
-    async selectItem (biz_id, prod_id, attr_id) {
+    async selectItem (biz_id, prod_id, attr_id, storeIsSaleTime) {
+      if (!storeIsSaleTime) {
+        error('该商家已打烊')
+        return
+      }
       await this.$store.dispatch('cart/taggleCheckStatus', { attr_id: Number(attr_id), prod_id: Number(prod_id) })
       this.initCheck()
       this.SumPrice()
     },
-    async updateCartFn (biz_id, prod_id, attr_id, num) {
+    async updateCartFn (biz_id, prod_id, attr_id, num, storeIsSaleTime) {
+      if (!storeIsSaleTime) {
+        error('该商家已打烊')
+        return
+      }
       if (this.CartList[biz_id][prod_id][attr_id].Qty === 1 && num <= 0) {
         error('数量最少为1件')
         return
@@ -334,12 +374,17 @@ export default {
       var noCheckCount = 0
 
       for (const biz_id in this.CartList) {
-        const bizCheckStatus = this.$store.getters['cart/getListCheckStatus'](Number(biz_id))
+        var bizCheckStatus = this.$store.getters['cart/getListCheckStatus'](Number(biz_id))
+        if (!this.bizList[biz_id].isSaleTime) {
+          bizCheckStatus = false
+        }
         this.$set(this.bizCheck, biz_id, bizCheckStatus)
-
         for (const prod_id in this.CartList[biz_id]) {
           for (const attr_id in this.CartList[biz_id][prod_id]) {
-            const checkStatus = this.$store.getters['cart/getRowCheckStatus']({ attr_id: Number(attr_id), prod_id: Number(prod_id) })
+            var checkStatus = this.$store.getters['cart/getRowCheckStatus']({ attr_id: Number(attr_id), prod_id: Number(prod_id) })
+            if (!this.bizList[biz_id].isSaleTime) {
+              checkStatus = false
+            }
             this.$set(this.CartList[biz_id][prod_id][attr_id], 'checked', checkStatus)
             if (!checkStatus)noCheckCount++
           }
@@ -378,12 +423,24 @@ export default {
       })
       const { total_count, total_price, CartList, biz_list } = cart
 
+      const bizList = {}
+      for (var i in biz_list) {
+        const key = parseInt(i)
+        bizList[key] = Object.assign(biz_list[i], { isSaleTime: checkStoreStatus(biz_list[i]) })
+      }
+
+      this.$store.commit('cart/SET_BIZLIST', bizList)
+      this.$set(this, 'bizList', bizList)
+
       const attrList = []
       for (const biz_id in CartList) {
         for (const prod_id in CartList[biz_id]) {
           for (const attr_id in CartList[biz_id][prod_id]) {
             // 初始化为false，方便后面触发响应
             CartList[biz_id][prod_id][attr_id].checked = this.$store.getters['cart/getRowCheckStatus']({ attr_id: Number(attr_id), prod_id: Number(prod_id) })
+            if (!this.bizList[biz_id].isSaleTime) {
+              CartList[biz_id][prod_id][attr_id].checked = false
+            }
             const attr_value = CartList[biz_id][prod_id][attr_id]
             attrList.push({
               // ...attr_value,
@@ -401,9 +458,6 @@ export default {
       this.total_count = total_count
       this.total_price = total_price
       this.$set(this, 'CartList', CartList)
-      this.$set(this, 'bizList', biz_list)
-      
-      
 
       this.initCheck()
       this.SumPrice()
@@ -540,6 +594,10 @@ export default {
     display: flex;
     align-items: center;
     margin-bottom: 30rpx;
+    .is-sale-time{
+      color: $fun-red-color;
+      font-size: 12px;
+    }
   }
 
   .biz_logo {
@@ -551,6 +609,10 @@ export default {
 
   .biz_name {
     font-size: 28rpx;
+    max-width: 300rpx;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 
   .pro {

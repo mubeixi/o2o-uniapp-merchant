@@ -50,7 +50,7 @@
       </div>
       <!--  占位-->
       <!--    <div class="h50 bg-white" v-if="headTabSticky"></div>-->
-    
+
       <swiper
         :current="headTabIndex"
         :style="{height:childSwiperHeight}"
@@ -58,7 +58,7 @@
         class="tab-container">
         <swiper-item class="tab-page">
           <div class="tab-page-wrap" id="scrollView1">
-          
+
             <!--优惠券-->
             <div class="coupon-section flex flex-justify-c" v-if="couponList.length>0">
               <div :key="idx" @click="getCoupon(coupon,idx)" class="coupon-item" v-for="(coupon,idx) in couponList">
@@ -74,19 +74,19 @@
                 </div>
               </div>
             </div>
-          
+
             <!--限时抢购-->
             <div class="activity-list  flex flex-justify-c" v-if="activityList.length>0">
               <div :key="idx" @click="$linkTo('/pagesA/active/FlashSaleByBiz?biz_id='+bid+'&spike_id='+item.id)" class="activity-item"
                    v-for="(item,idx) in activityList">{{item.name}}
               </div>
             </div>
-          
+
             <!--便捷操作-->
             <div class="feature-list">
               <!--$linkTo()-->
-              <image :src="'/static/client/store/send.png'|domain" @click="toDelivery" class="feature-item"
-                     mode="scaleToFill"></image>
+<!--              <image :src="'/static/client/store/send.png'|domain" @click="toDelivery" class="feature-item"-->
+<!--                     mode="scaleToFill"></image>-->
               <image :src="'/static/client/store/pay.png'|domain" @click="toOffinePay" class="feature-item"
                      mode="scaleToFill"></image>
               <image :src="'/static/client/store/join.png'|domain" @click="$linkTo('/pages/product/apply?bid='+bid)" class="feature-item"
@@ -94,7 +94,7 @@
               <image :src="'/static/client/store/member.png'|domain" @click="toVip" class="feature-item"
                      mode="scaleToFill"></image>
             </div>
-          
+
             <!--虚拟产品-->
             <div class="block coupon-goods-list" v-if="virtualGoodsLsit.length>0">
               <div class="block-title">
@@ -127,13 +127,13 @@
                           <!--<image class="img" :src="'/static/client/store/cart.png'|domain"></image>-->
                         </div>
                       </div>
-                  
+
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          
+
             <!--产品专区-->
             <div class="block goods-box">
               <ul class="nav-list">
@@ -208,12 +208,12 @@
                   </div>
                 </swiper-item>
               </swiper>
-          
+
             </div>
-          
+
             <!--评论列表-->
             <div class="block comment-box" v-if="comments.length>0">
-            
+
               <div class="block-title">
                 <div class="block-title-text">留言评论</div>
                 <div @click="headTabIndex=4" class="block-title-more flex flex-vertical-center c9 fz-12">
@@ -229,7 +229,7 @@
                     <div class="comment-send" v-if="item.child.length>0">
                       <block :key="ind" v-for="(com,ind) of item.child">
                         <block :key="indx" v-for="(co,indx) of com">
-                        
+
                           <block v-if="co.touserid==item.User_ID">
                             <div @click.stop="clickCommentSend(item,co.groupid,co.userid)"
                                  class="fz-12 c3 comment-send-item">
@@ -243,24 +243,24 @@
                               class="color-comment p-r-5">{{co.to_user_nickname}}</span>{{co.content}}
                             </div>
                           </block>
-                      
+
                         </block>
-                    
+
                       </block>
                     </div>
                   </div>
-              
+
                 </div>
               </div>
             </div>
-          
+
             <!--发布评论-->
             <!--          <view class="commtent-add section">-->
             <!--            <textarea class="textarea" @blur="bindTextAreaBlur" auto-height placeholder="发表你的评论..." />-->
             <!--          </view>-->
-          
+
             <layout-copyright></layout-copyright>
-        
+
           </div>
         </swiper-item>
         <swiper-item class="tab-page">
@@ -274,7 +274,7 @@
         </swiper-item>
         <swiper-item class="tab-page">
           <div class="tab-page-wrap" id="scrollView3">
-          
+
             <!--只显示有照片的相册 v-if="imgs.photo && imgs.photo.length>0"-->
             <div :key="idx1" class="photo-section" v-for="(imgs,idx1) in photoList">
               <div class="php-section-title m-b-10 flex flex-vertical-c">
@@ -290,7 +290,7 @@
                      v-for="(img,idx2) in imgs.photo"></div>
               </div>
             </div>
-        
+
           </div>
         </swiper-item>
         <swiper-item class="tab-page">
@@ -330,7 +330,7 @@
         <swiper-item class="tab-page">
           <div class="tab-page-wrap comment-section" id="scrollView5">
             <!--评论列表-->
-          
+
             <div class="block-content">
               <div class="comment-list" v-if="comments.length>0">
                 <div :key="idx" class="comment-item" v-for="(item,idx) in comments">
@@ -339,7 +339,7 @@
                   <div class="comment-send" v-if="item.child.length>0">
                     <block :key="ind" v-for="(com,ind) of item.child">
                       <block :key="indx" v-for="(co,indx) of com">
-                      
+
                         <block v-if="co.touserid==item.User_ID">
                           <div @click.stop="clickCommentSend(item,co.groupid,co.userid)" class="fz-12 c3 comment-send-item">
                             <span class="color-comment p-r-5">{{co.user_nickname}}:</span> {{co.content}}
@@ -351,19 +351,19 @@
                             class="color-comment p-r-5">{{co.to_user_nickname}}</span>{{co.content}}
                           </div>
                         </block>
-                    
+
                       </block>
-                  
+
                     </block>
                   </div>
                 </div>
-            
+
               </div>
             </div>
           </div>
         </swiper-item>
       </swiper>
-    
+
       <layout-modal ref="commentModal">
         <div class="refuseApplyModal">
         <textarea :value="commentValue" @input="bingReasonInput" auto-height class="reason"
@@ -372,7 +372,7 @@
             <div @click="cancelComent" class="action-btn btn-cancel">取消</div>
             <div @click="sureComment" class="btn-sub action-btn">确定</div>
           </div>
-      
+
         </div>
       </layout-modal>
     </scroll-view>
@@ -527,10 +527,7 @@ export default {
       }
     },
     toDelivery () {
-      if (!this.storeInfo.sales_status) {
-        toast('该店铺已打烊', 'none')
-        return
-      }
+
       if (checkIsLogin(1, 1)) {
         this.$linkTo('/pages/delivery/desktop?bid=' + this.bid)
       }
@@ -643,7 +640,7 @@ export default {
         this.storeInfo = storeInfoData[0]
 
         this.$emit('upStoreInfo', this.storeInfo)
-        
+
         const base = { biz_ids: this.bid }
         this.recommends = await getProductList({
           pageSize: 2,

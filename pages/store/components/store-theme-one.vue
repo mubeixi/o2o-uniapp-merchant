@@ -117,10 +117,10 @@
 
       <!--便捷操作-->
       <div class="section-item feature-list">
-        <div class="feature-item"  @click="toDelivery">
-          <image :src="$getDomain('/static/client/store/theme_one/delivery.png')" class="feature-item-img" mode="scaleToFill"></image>
-          <div class="feature-item-title c3 fz-15">外卖</div>
-        </div>
+<!--        <div class="feature-item"  @click="toDelivery">-->
+<!--          <image :src="$getDomain('/static/client/store/theme_one/delivery.png')" class="feature-item-img" mode="scaleToFill"></image>-->
+<!--          <div class="feature-item-title c3 fz-15">外卖</div>-->
+<!--        </div>-->
         <div class="feature-item" @click="toOffinePay">
           <image :src="$getDomain('/static/client/store/theme_one/pay.png')" class="feature-item-img" mode="scaleToFill"></image>
           <div class="feature-item-title c3 fz-15">买单</div>
@@ -571,6 +571,8 @@ export default {
       this.$linkTo(`/pages/product/detail?prod_id=${pro.Products_ID}&mode=spike&spike_good_id=${pro.id}`)
     },
     toDelivery () {
+      error('common soon')
+      return
       this.$linkTo(`/pages/delivery/desktop?bid=${this.bid}`)
     },
 
@@ -918,7 +920,7 @@ export default {
   background: white;
   align-items: center;
   color: #333;
-  padding-top: 15px;
+  padding-top: 20px;
   padding-bottom: 15px;
   border-top-right-radius: 15px;
   border-top-left-radius: 15px;
