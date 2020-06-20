@@ -953,8 +953,10 @@
         <div class="block-content">
           <div class="comment-list" v-if="comments.length>0">
             <div :key="idx" class="comment-item" v-for="(item,idx) in comments">
-              <layout-comment :comment="item" :isLast="comments.length-1===idx"
-                              @comment="clickComment"></layout-comment>
+              <div class="p-t-15 p-b-15">
+                <layout-comment :comment="item" :isLast="comments.length-1===idx"
+                                @comment="clickComment"></layout-comment>
+              </div>
               <div class="comment-send" v-if="item.child.length>0">
                 <block :key="ind" v-for="(com,ind) of item.child">
                   <block :key="indx" v-for="(co,indx) of com">

@@ -1115,45 +1115,47 @@
         </div>
       </div>
       
-      <!--评论列表-->
-      <!--      <div id="section2" class="block section-comment"  v-show="isReady">-->
-      <!--        -->
-      <!--        <div class="block-title" style="padding:40rpx 25rpx">-->
-      <!--          <div class="block-title-text fz-b">留言评论</div>-->
-      <!--          <div class="block-title-more flex flex-vertical-center c9 fz-12">-->
-      <!--            <span>查看全部</span>-->
-      <!--            <icon class="iconright" type="iconright" size="14" color="#999"></icon>-->
-      <!--          </div>-->
-      <!--        </div>-->
-      <!--        <div class="block-content">-->
-      <!--          <div class="comment-list" v-if="comments.length>0">-->
-      <!--            <div v-for="(item,idx) in comments" :key="idx" class="comment-item">-->
-      <!--              <layout-comment :isLast="comments.length-1===idx" :comment="item"-->
-      <!--                              @comment="clickComment"></layout-comment>-->
-      <!--              <div class="comment-send" v-if="item.child.length>0">-->
-      <!--                <block v-for="(com,ind) of item.child" :key="ind">-->
-      <!--                  <block v-for="(co,indx) of com" :key="indx">-->
-      <!--                    <div class="fz-12 c3 comment-send-item" @click.stop="clickCommentSend(item,co.groupid,co.userid)">-->
-      <!--                      <block v-if="co.touserid==item.User_ID">-->
-      <!--                        <span class="color-comment p-r-5">{{co.user_nickname}}:</span> {{co.content}}-->
-      <!--                      </block>-->
-      <!--                      <block v-else>-->
-      <!--                        <span class="color-comment p-r-2">{{co.user_nickname}}</span>回复<span-->
-      <!--                        class="color-comment p-r-5">{{co.to_user_nickname}}</span>{{co.content}}-->
-      <!--                      </block>-->
-      <!--                    </div>-->
-      <!--                  </block>-->
-      <!--                -->
-      <!--                </block>-->
-      <!--              </div>-->
-      <!--            </div>-->
-      <!--          -->
-      <!--          </div>-->
-      <!--          <div v-else class="fz-14 c9 text-center p-10">-->
-      <!--            暂未评论-->
-      <!--          </div>-->
-      <!--        </div>-->
-      <!--      </div>-->
+<!--      评论列表-->
+<!--      <div id="section2" class="block section-comment"  v-show="isReady">-->
+<!--              -->
+<!--              <div class="block-title" style="padding:40rpx 25rpx">-->
+<!--                <div class="block-title-text fz-b">留言评论</div>-->
+<!--                <div class="block-title-more flex flex-vertical-center c9 fz-12">-->
+<!--                  <span>查看全部</span>-->
+<!--                  <icon class="iconright" type="iconright" size="14" color="#999"></icon>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--              <div class="block-content">-->
+<!--                <div class="comment-list" v-if="comments.length>0">-->
+<!--                  <div v-for="(item,idx) in comments" :key="idx" class="comment-item">-->
+<!--                    <div class="p-t-15 p-b-15">-->
+<!--                      <layout-comment :isLast="comments.length-1===idx" :comment="item"-->
+<!--                                      @comment="clickComment"></layout-comment>-->
+<!--                    </div>-->
+<!--                    <div class="comment-send" v-if="item.child.length>0">-->
+<!--                      <block v-for="(com,ind) of item.child" :key="ind">-->
+<!--                        <block v-for="(co,indx) of com" :key="indx">-->
+<!--                          <div class="fz-12 c3 comment-send-item" @click.stop="clickCommentSend(item,co.groupid,co.userid)">-->
+<!--                            <block v-if="co.touserid==item.User_ID">-->
+<!--                              <span class="color-comment p-r-5">{{co.user_nickname}}:</span> {{co.content}}-->
+<!--                            </block>-->
+<!--                            <block v-else>-->
+<!--                              <span class="color-comment p-r-2">{{co.user_nickname}}</span>回复<span-->
+<!--                              class="color-comment p-r-5">{{co.to_user_nickname}}</span>{{co.content}}-->
+<!--                            </block>-->
+<!--                          </div>-->
+<!--                        </block>-->
+<!--                      -->
+<!--                      </block>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                -->
+<!--                </div>-->
+<!--                <div v-else class="fz-14 c9 text-center p-10">-->
+<!--                  暂未评论-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
       
       <div @click="$linkTo('/pages/store/index?biz_id='+productInfo.biz_id)" class="section-store-info flex flex-vertical-c" id="section3"
            v-show="isReady">

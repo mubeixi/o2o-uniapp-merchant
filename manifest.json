@@ -71,9 +71,9 @@
         "appid" : "wxfe5d2621576cf895",
         "setting" : {
             "urlCheck" : false,
-            "minified" : false
+            "minified" : true
         },
-        // "usingComponents" : true,
+        "usingComponents" : true,
         // "plugins" : {
         //    "live-player-plugin" : {
         //        "version" : "1.0.15",
