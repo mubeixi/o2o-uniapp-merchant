@@ -54,6 +54,16 @@
             </div>
           </div>
         </div>
+        <div class="other" v-if="orderItem.city_express_appoint_time_desc">
+          <div class="bd">
+            <div class="o_title">
+              <span>预约送达</span>
+              <span class="c8" style="text-align:right;">
+						{{orderItem.city_express_appoint_time_desc}}
+					</span>
+            </div>
+          </div>
+        </div>
         <div class="other" v-if="pagefrom !== 'gift'">
           <div class="bd">
             <div class="o_title">

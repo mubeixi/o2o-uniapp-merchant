@@ -300,15 +300,16 @@
               <block :key="ind" v-for="(com,ind) of item.child">
                 <block :key="indx" v-for="(co,indx) of com">
                   <block v-if="co.touserid==item.User_ID">
-                    <div @click.stop="clickCommentSend(item,co.groupid,co.userid)" class="fz-12 c3 comment-send-item">
+                    <div @click.stop="clickCommentSend(item,co.groupid,co.userid,co)" class="fz-12 c3 comment-send-item">
                       <span class="color-comment p-r-5">{{co.user_nickname}}:</span> {{co.content}}
                     </div>
                   </block>
                   <block v-else>
-                    <div @click.stop="clickCommentSend(item,co.groupid,co.userid)" class="fz-12 c3 comment-send-item p-l-10">
-                      <span class="color-comment p-r-2">{{co.user_nickname}}</span>
+                    <div  class="fz-12 c3 comment-send-item p-l-10">
+                      <span @click.stop="clickCommentSend(item,co.groupid,co.userid,co)" class="color-comment p-r-2">{{co.user_nickname}}</span>
                       <span class="p-l-3 p-r-3">回复</span>
-                      <span class="color-comment p-r-5">{{co.to_user_nickname}}</span>{{co.content}}
+                      <!--同一行记录里面，点击不同的人名，可以分别回复两个人-->
+                      <span @click.stop="clickCommentSend(item,co.groupid,co.touserid,co,true)" class="color-comment p-r-5">{{co.to_user_nickname}}</span>{{co.content}}
                     </div>
                   </block>
 
@@ -322,9 +323,9 @@
         <layout-loading v-if="commentPaginate.load"></layout-loading>
       </div>
 
-      <layout-modal ref="commentModal">
+      <layout-modal ref="commentModal" @maskClicked="cancelComent">
         <div class="replay-comment-wrap">
-        <textarea :value="commentValue" @input="bindReplyInput" auto-height class="reason" placeholder="请输入内容" placeholder-style="color:#999" />
+        <textarea :value="commentValue" @input="bindReplyInput" auto-height class="reason" :placeholder="commentModalPlaceholder" placeholder-style="color:#999" />
           <div class="control">
             <div @click="cancelComent" class="action-btn btn-cancel">取消</div>
             <div @click="sureComment" class="btn-sub action-btn">确定</div>
@@ -378,6 +379,7 @@ export default {
   },
   data () {
     return {
+      commentModalPlaceholder: '请输入内容',
       anchorTop: 0,
       bizCateList: [],
       bizCateNavIndex: -1,
@@ -636,6 +638,9 @@ export default {
     cancelComent () {
       this.commentItem = {}
       this.commentValue = ''
+      this.commentItem.groupid = ''
+      this.commentItem.User_ID = ''
+      this.commentModalPlaceholder = '请输入内容'
       this.$closePop('commentModal')
     },
     async sureComment () {
@@ -673,14 +678,23 @@ export default {
     clickComment (item) {
       if (!checkIsLogin(1, 1)) return
       this.commentItem = Object.assign({}, item)
-      this.$refs.commentModal.show()
       this.commentItem.groupid = ''
+      this.commentModalPlaceholder = `回复${item.User_NickName}`
+
+      this.$refs.commentModal.show()
     },
-    clickCommentSend (item, goupId, userId) {
+    clickCommentSend (item, goupId, userId, co, secondReply = false) {
+      console.log(co)
       if (!checkIsLogin(1, 1)) return
       this.commentItem = Object.assign({}, item)
       this.commentItem.groupid = goupId
       this.commentItem.User_ID = userId
+      if (!secondReply) {
+        this.commentModalPlaceholder = `回复${co.user_nickname}`
+      } else {
+        this.commentModalPlaceholder = `回复${co.to_user_nickname}`
+      }
+
       this.$refs.commentModal.show()
     },
     async changeCateIdx (idx, more = false) {
