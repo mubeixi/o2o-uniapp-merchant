@@ -189,6 +189,18 @@
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
+    .product-title-tag{
+      margin-right: 12rpx;
+      display: inline-block;
+      text-align: center;
+      padding: 0 10rpx;
+      height:36rpx;
+      line-height: 36rpx;
+      background:$fun-red-color;
+      border-radius:5rpx;
+      font-size:22rpx;
+      color: #fff;
+    }
   }
 
   .line-f8 {
@@ -870,6 +882,7 @@
             </div>
           </div>
           <div class="product-title">
+            <div class="product-title-tag" v-if="titleTag">{{titleTag}}</div>
             {{productInfo.Products_Name}}
           </div>
           <!-- 领券 -->
@@ -1269,6 +1282,7 @@ export default {
       gift: null, // 赠品id
       gift_attr_id: null,
       isVirtual: 0,
+      titleTag: '',
       productInfo: {
         skuvaljosn: {},
         share_commission: 0,
@@ -1916,6 +1930,10 @@ export default {
         })
         Object.assign(this.productInfo, productInfo)
 
+        if (this.productInfo.is_pintuan) {
+          this.titleTag = '拼团'
+        }
+
         const { room_id, live_end_time, live_start_time } = productInfo
         // if (room_id) {
         //   const nowTimeStamp = uni.$moment().unix()
@@ -1958,6 +1976,7 @@ export default {
 
         // 秒杀
         if (this.mode === 'seckill') {
+          this.titleTag = '秒杀'
           const seckillInfo = await getFlashsaleDetail({ flashsale_id: this.flashsale_id }).then(res => {
             return res.data
           }).catch(e => {
@@ -1981,6 +2000,7 @@ export default {
 
         // 限时抢购
         if (this.mode === 'spike') {
+          this.titleTag = '限时抢购'
           const spikeInfo = await spikeProdDetail({ spike_good_id: this.spike_good_id }).then(res => {
             return res.data
           }).catch(e => {
@@ -2056,35 +2076,35 @@ export default {
         await new Promise(resolve => {
           setTimeout(() => {
             resolve(true)
-          }, 1000)
+          }, 2000)
         })
 
-        const query = uni.createSelectorQuery()
         this.$nextTick().then(() => {
+          const query = uni.createSelectorQuery()
           const task0 = new Promise(resolve => {
             query.select('#section0').boundingClientRect(data => {
-              this.$set(this.sectionTops, 0, data.top)
+              if (data && data.hasOwnProperty('top')) this.$set(this.sectionTops, 0, data.top)
               resolve()
             }).exec()
           })
 
           const task1 = new Promise(resolve => {
             query.select('#section1').boundingClientRect(data => {
-              this.$set(this.sectionTops, 1, data.top)
+              if (data && data.hasOwnProperty('top')) this.$set(this.sectionTops, 1, data.top)
               resolve()
             }).exec()
           })
 
           const task2 = new Promise(resolve => {
             query.select('#section2').boundingClientRect(data => {
-              this.$set(this.sectionTops, 2, data.top)
+              if (data && data.hasOwnProperty('top')) this.$set(this.sectionTops, 2, data.top)
               resolve()
             }).exec()
           })
 
           const task3 = new Promise(resolve => {
             query.select('#section3').boundingClientRect(data => {
-              this.$set(this.sectionTops, 3, data.top)
+              if (data && data.hasOwnProperty('top')) this.$set(this.sectionTops, 3, data.top)
               resolve()
             }).exec()
           })
