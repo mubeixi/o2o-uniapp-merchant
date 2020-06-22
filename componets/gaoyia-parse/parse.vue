@@ -193,7 +193,7 @@ export default {
       deep:true,
       immediate:true,
       handler(newVal, oldVal) {
-        console.log(newVal)
+        // console.log(newVal)
         newVal && this.setHtml()
       }
     }
