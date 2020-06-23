@@ -1,18 +1,19 @@
 <template>
-  <view class="profitSum">
+  <view @click="commonClick" class="profitSum">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view style="height: 90rpx;margin-bottom: 10px;font-size: 14px;">
-      <view class="status fixed" :class="[status === 9 ? 'active' : '']" @click="changeStatus(9)">全部</view>
+      <view :class="[status === 99 ? 'active' : '']" @click="changeStatus(99)" class="status fixed">全部</view>
       <scroll-view class="order-status" scroll-x="true" style="width: 612rpx;white-space: nowrap;margin-left: 138rpx;">
         
         <block v-if="Array.isArray(show_type)">
-          <block v-for="(item,index) of show_type" :key="index">
-            <view class="status" :class="[status === index ? 'active' : '']" @click="changeStatus(index)">{{item}}
+          <block :key="index" v-for="(item,index) of show_type">
+            <view :class="[status === index ? 'active' : '']" @click="changeStatus(index)" class="status">{{item}}
             </view>
           </block>
         </block>
         <block v-else>
-          <block v-for="(item,index) in show_type" :key="index">
-            <view class="status" :class="[status === index ? 'active' : '']" @click="changeStatus(index)">{{item}}
+          <block :key="index" v-for="(item,index) in show_type">
+            <view :class="[status === index ? 'active' : '']" @click="changeStatus(index)" class="status">{{item}}
             </view>
           </block>
         </block>
@@ -28,7 +29,7 @@
       </scroll-view>
     </view>
     
-    <view class="order" v-for="(item,i) of resData " :key="i">
+    <view :key="i" class="order" v-for="(item,i) of resData ">
       <view class="view">
         获取时间：
         <text>{{item.Record_CreateTime}}</text>
@@ -61,12 +62,14 @@
 
 import { getBalanceDetail } from '@/api/customer'
 import BaseMixin from '@/mixins/BaseMixin'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
+  components: { WzwImTip },
   mixins: [BaseMixin],
   data () {
     return {
-      status: 9,
+      status: 99,
       totalCount: 0,
       page: 1,
       pageSize: 10,
@@ -92,7 +95,7 @@ export default {
         page: this.page,
         pageSzie: this.pageSize,
       }
-      if (this.status !== 9) {
+      if (this.status !== 99) {
         data.record_type = this.status
       }
       getBalanceDetail(data).then(res => {

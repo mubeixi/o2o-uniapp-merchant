@@ -1,7 +1,7 @@
 {
   "pages": [
     {
-      "path": "pages/index",
+      "path": "pages/index/index",
       "style": {
         "navigationBarTextStyle": "light",
         "backgroundTextStyle": "light",
@@ -10,19 +10,22 @@
       }
     },
     {
-      "path": "pages/message/index",
+      "path": "pages/demo",
       "style": {
-        "navigationBarTitleText": "消息",
-        "navigationBarBackgroundColor": "#F6F6F6"
+
       }
-    },
-    {
-      "path": "pages/demo"
     },
     {
       "path": "pages/store/index",
       "style": {
+        "navigationBarTextStyle": "light",
+        "navigationStyle": "custom",
         "navigationBarTitleText": "店铺首页"
+//        "mp-weixin": {
+//          "usingComponents": {
+//            "subscribe": "plugin-private://wx2b03c6e691cd7370/components/subscribe/subscribe"
+//          }
+//        }
       }
     },
     {
@@ -43,12 +46,7 @@
         "navigationBarTitleText": "商品列表"
       }
     },
-    {
-      "path": "pages/store/photo",
-      "style": {
-        "navigationBarTitleText": "相册"
-      }
-    },
+
     {
       "path": "pages/share/index",
       "style": {
@@ -83,38 +81,12 @@
       }
     },
     {
-      "path": "pages/active/OrderFree",
-      "style": {
-        "navigationBarTitleText": "免单专区",
-        "navigationStyle": "custom"
-      }
-    },
-    {
       "path": "pages/order/OrderPaySuccess",
       "style": {
-        "navigationBarTitleText": "付款成功",
-        "navigationStyle": "custom"
+        "navigationBarTitleText": "付款成功"
       }
     },
-    {
-      "path": "pages/order/OrderFreeSuccess",
-      "style": {
-        "navigationBarTitleText": "享免单成功",
-        "navigationStyle": "custom"
-      }
-    },
-    {
-      "path": "pages/order/GroupSuccess",
-      "style": {
-        "navigationBarTitleText": "参与拼团成功"
-      }
-    },
-    {
-      "path": "pages/active/GroupJoin",
-      "style": {
-        "navigationBarTitleText": "拼团详情"
-      }
-    },
+
     {
       "path": "pages/user/login",
       "style": {
@@ -131,13 +103,6 @@
       }
     },
     {
-      "path": "pages/delivery/detail",
-      "style": {
-        "navigationBarTitleText": "外卖详情",
-        "navigationStyle": "custom"
-      }
-    },
-    {
       "path": "pages/product/classify",
       "style": {
         "navigationBarTitleText": "商品分类",
@@ -145,16 +110,10 @@
       }
     },
     {
-      "path": "pages/user/VipList",
+      "path": "pages/support/ImList",
       "style": {
-        "navigationBarTitleText": "会员等级",
-        "navigationStyle": "custom"
-      }
-    },
-    {
-      "path": "pages/user/Coupon",
-      "style": {
-        "navigationBarTitleText": "优惠券"
+        "navigationBarTitleText": "消息",
+        "enablePullDownRefresh": true
       }
     },
     {
@@ -169,11 +128,16 @@
         "navigationBarTitleText": "订单列表"
       }
     },
+//    {
+//      "path": "pages/order/comments",
+//      "style": {
+//        "navigationBarTitleText": "评论列表"
+//      }
+//    },
     {
       "path": "pages/order/OrderDetail",
       "style": {
-        "navigationBarTitleText": "订单详情",
-        "navigationStyle": "custom"
+        "navigationBarTitleText": "订单详情"
       }
     },
     {
@@ -189,52 +153,7 @@
         "navigationStyle": "custom"
       }
     },
-    {
-      "path": "pages/shareQrcode",
-      "style": {
-        "navigationBarTitleText": "分享海报"
-      }
-    },
-    {
-      "path": "pages/active/FlashSale",
-      "style": {
-        "navigationBarTitleText": "限时抢购",
-        "navigationStyle": "custom"
-      }
-    },
-    {
-      "path": "pages/active/SeckillByBiz",
-      "style": {
-        "navigationBarTitleText": "秒杀",
-        "navigationStyle": "custom"
-      }
-    },
-    {
-      "path": "pages/active/FlashSaleByBiz",
-      "style": {
-        "navigationBarTitleText": "限时抢购",
-        "navigationStyle": "custom"
-      }
-    },
-    {
-      "path": "pages/product/SharePic/SharePic",
-      "style": {
-        "navigationBarTitleText": "分享海报"
-      }
-    },
-    {
-      "path": "pages/user/DailyCheck",
-      "style": {
-        "navigationBarTitleText": "签到"
-      }
-    },
-    {
-      "path": "pages/user/EquityCard",
-      "style": {
-        "navigationBarTitleText": "权益",
-        "navigationBarBackgroundColor": "#3A3731"
-      }
-    },
+
     {
       "path": "pages/user/Praise",
       "style": {
@@ -248,6 +167,137 @@
       "name": "onther",
       "pages": [
         {
+          "path": "active/OrderFree",
+          "style": {
+            "navigationBarTitleText": "免单专区",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "active/GroupJoin",
+          "style": {
+            "navigationBarTitleText": "拼团详情"
+          }
+        },
+        {
+          "path": "user/history",
+          "style": {
+            "navigationBarTitleText": "您的轨迹"
+          }
+        },
+        {
+          "path": "active/FlashSale",
+          "style": {
+            "navigationBarTitleText": "限时抢购",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "active/SeckillByBiz",
+          "style": {
+            "navigationBarTitleText": "秒杀",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "active/FlashSaleByBiz",
+          "style": {
+            "navigationBarTitleText": "限时抢购",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "order/OrderFreeSuccess",
+          "style": {
+            "navigationBarTitleText": "享免单成功"
+          }
+        },
+        {
+          "path": "order/GroupSuccess",
+          "style": {
+            "navigationBarTitleText": "参与拼团成功"
+          }
+        },
+//        {
+//          "path": "live/liveList",
+//          "style": {
+//            "navigationBarTitleText": "直播"
+//          }
+//        },
+        {
+          "path": "delivery/detail",
+          "style": {
+            "navigationBarTitleText": "外卖详情",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "product/SharePic/SharePic",
+          "style": {
+            "navigationBarTitleText": "分享海报"
+          }
+        },
+        {
+          "path": "store/photo",
+          "style": {
+            "navigationBarTitleText": "相册"
+          }
+        },
+        {
+          "path": "order/logistics",
+          "style": {
+            "navigationBarTitleText": "物流追踪"
+          }
+        },
+        {
+          "path": "order/logisticsByLocation",
+          "style": {
+            "navigationBarTitleText": "同城配送进度"
+          }
+        },
+        {
+          "path": "store/shareQrcode",
+          "style": {
+            "navigationBarTitleText": "商家分享"
+          }
+        },
+        {
+          "path": "store/virtualGoods",
+          "style": {
+            "navigationBarTitleText": "到店券"
+          }
+        },
+        {
+          "path": "store/offlinePay",
+          "style": {
+            "navigationBarTitleText": "线下支付"
+          }
+        },
+        {
+          "path": "user/Coupon",
+          "style": {
+            "navigationBarTitleText": "优惠券"
+          }
+        },
+        {
+          "path": "user/EquityCard",
+          "style": {
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "user/DailyCheck",
+          "style": {
+            "navigationBarTitleText": "签到"
+          }
+        },
+        {
+          "path": "user/VipList",
+          "style": {
+            "navigationBarTitleText": "会员等级"
+          }
+        },
+        {
           "path": "user/EditPersonalMsg",
           "style": {
             "navigationBarTitleText": "修改资料"
@@ -256,7 +306,8 @@
         {
           "path": "support/Im",
           "style": {
-            "navigationBarTitleText": "客服"
+            "navigationBarTitleText": "客服",
+            "enablePullDownRefresh": true
           }
         },
         {
@@ -310,6 +361,12 @@
             "navigationBarTitleText": "积分",
             "navigationBarBackgroundColor": "#ff5c33",
             "navigationBarTextStyle": "white"
+          }
+        },
+        {
+          "path": "user/MyRedemption",
+          "style": {
+            "navigationBarTitleText": "我的兑换"
           }
         },
         {
@@ -452,7 +509,10 @@
           }
         },
         {
-          "path": "user/UpdateUserPsw"
+          "path": "user/UpdateUserPsw",
+          "style": {
+            "navigationBarTitleText": "密码设置"
+          }
         },
         {
           "path": "user/SystemMsg",
@@ -525,12 +585,29 @@
           "style": {
             "navigationBarTitleText": "爵位晋升"
           }
+        },
+        {
+          "path": "user/IntegralShop",
+          "style": {
+            "navigationBarTitleText": "积分商城"
+          }
+        },
+        {
+          "path": "user/IntegralCheck",
+          "style": {
+            "navigationBarTitleText": "积分兑换"
+          }
+        },{
+          "path": "user/ExpiredCoupon",
+          "style": {
+            "navigationBarTitleText": "失效优惠券"
+          }
         }
       ]
     }
   ],
   "preloadRule": {
-    "pages/index": {
+    "pages/index/index": {
       "network": "all",
       "packages": [
         "onther"
@@ -544,21 +621,22 @@
     "backgroundColor": "#F8F8F8"
   },
   "tabBar": {
+    "custom": true,
     "borderStyle": "black",
     "color": "#999999",
     "selectedColor": "#26C78D",
     "list": [
       {
-        "pagePath": "pages/index",
+        "pagePath": "pages/index/index",
         "iconPath": "/static/tabbar/find.png",
         "selectedIconPath": "/static/tabbar/find-a.png",
         "text": "发现"
       },
       {
-        "pagePath": "pages/index",
-        "iconPath": "/static/tabbar/live.png",
-        "selectedIconPath": "/static/tabbar/live-a.png",
-        "text": "直播"
+        "pagePath": "pages/support/ImList",
+        "iconPath": "/static/tabbar/notify.png",
+        "selectedIconPath": "/static/tabbar/notify-a.png",
+        "text": "消息"
       },
       {
         "pagePath": "pages/user/Praise",
@@ -568,8 +646,8 @@
       },
       {
         "pagePath": "pages/order/ShoppingCart",
-        "iconPath": "/static/tabbar/notify.png",
-        "selectedIconPath": "/static/tabbar/notify-a.png",
+        "iconPath": "/static/tabbar/cart.png",
+        "selectedIconPath": "/static/tabbar/cart-a.png",
         "text": "购物车"
       },
       {

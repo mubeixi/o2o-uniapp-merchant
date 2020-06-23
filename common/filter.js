@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import { staticUrl } from './env'
-import moment from 'moment'
 
 Vue.filter('domain', function (url) {
   if (!url) return ''
@@ -8,8 +7,11 @@ Vue.filter('domain', function (url) {
   return url
 })
 
-Vue.filter('formatTime', (str, fromatStr = 'YYYY.MM.DD') => {
-  return moment(str).format(fromatStr)
+Vue.filter('formatTime', (str, fromatStr = 'YYYY.MM.dd', timeStamp = 0) => {
+  if (timeStamp) {
+    return uni.$moment(new Date(parseInt(str) * 1000)).format(fromatStr)
+  }
+  return uni.$moment(str).format(fromatStr)
 })
 
 Vue.filter('formatphone', (value) => {
@@ -23,7 +25,7 @@ Vue.filter('formatphone', (value) => {
 })
 
 Vue.filter('formatTimeFromNow', (str) => {
-  return moment(str).startOf('day').fromNow()
+  return uni.$moment(str).startOf('day').fromNow()
 })
 
 Vue.filter('zero', (val) => {
@@ -35,7 +37,7 @@ export const formatNumber = n => {
   return n[1] ? n : '0' + n
 }
 export const formatPirce = (priceStr, idx) => {
-  if(isNaN(priceStr))return '';
+  if (isNaN(priceStr)) return ''
   if (typeof priceStr === 'number')priceStr += ''
   const arr = priceStr.split('.')
   if (idx === 0) return arr[0]

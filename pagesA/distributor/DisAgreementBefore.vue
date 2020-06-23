@@ -1,15 +1,16 @@
 <template>
-  <view>
+  <view @click="commonClick">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <div class="pro_detail">
       <!-- #ifdef H5||APP-PLUS -->
-      <div v-html="formatRichTexts(pro.dis_config.Dis_Agreement)" class="p_detail_des"></div>
+      <div class="p_detail_des" v-html="formatRichTexts(pro.dis_config.Dis_Agreement)"></div>
       <!-- #endif -->
       
       <!-- #ifdef MP -->
       <rich-text :nodes="pro.dis_config.Dis_Agreement|formatRichText" class="p_detail_des"></rich-text>
       <!-- #endif -->
-      <view class="btn" v-if="pro.dis_config.Dis_Agreement_btn.btn_name" @click="goDis"
-            :style="{'color':'#'+pro.dis_config.Dis_Agreement_btn.btn_text_color,'backgroundColor':'#'+pro.dis_config.Dis_Agreement_btn.btn_color}">
+      <view :style="{'color':'#'+pro.dis_config.Dis_Agreement_btn.btn_text_color,'backgroundColor':'#'+pro.dis_config.Dis_Agreement_btn.btn_color}" @click="goDis" class="btn"
+            v-if="pro.dis_config.Dis_Agreement_btn.btn_name">
         {{pro.dis_config.Dis_Agreement_btn.btn_name}}
       </view>
     </div>
@@ -20,8 +21,10 @@
 import { disApplyInit } from '@/api/customer'
 import { mapActions } from 'vuex'
 import BaseMixin from '@/mixins/BaseMixin'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
+  components: { WzwImTip },
   mixins: [BaseMixin],
   data () {
     return {

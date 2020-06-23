@@ -24,6 +24,7 @@ export function Exception () {
  * @constructor
  */
 function handle (e) {
+  if (e === 'nocare' || e.message === 'nocare') return
   let { message = '错误信息', type = 'toast', icon = 'none' } = e
   if (typeof e !== 'object') {
     message = e

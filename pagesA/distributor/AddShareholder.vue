@@ -1,25 +1,26 @@
 <template>
-  <view class="myall">
+  <view @click="commonClick" class="myall">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view style="height: 10px;width: 100%;"></view>
     <view class="three">
       <view class="haha">
         姓名
       </view>
-      <input class="inputs" type="text" placeholder="请输入您的姓名" placeholder-class="place" v-model="arr.apply_name">
+      <input class="inputs" placeholder="请输入您的姓名" placeholder-class="place" type="text" v-model="arr.apply_name">
     </view>
     <view class="three">
       <view class="haha">
         电话
       </view>
-      <input class="inputs" type="number" placeholder="请输入您的电话" placeholder-class="place" v-model="arr.apply_mobile"
-             @blur="isTell">
+      <input @blur="isTell" class="inputs" placeholder="请输入您的电话" placeholder-class="place" type="number"
+             v-model="arr.apply_mobile">
     </view>
-    <view class="four" @click="submit">
+    <view @click="submit" class="four">
       提交申请
     </view>
-    <view class="five" @click="goRecord">
+    <view @click="goRecord" class="five">
       查看申请记录
-      <image class="image" :src="'/static/client/distributor/chakan.png'|domain"></image>
+      <image :src="'/static/client/distributor/chakan.png'|domain" class="image"></image>
     </view>
   </view>
 </template>
@@ -27,8 +28,10 @@
 <script>
 import BaseMixin from '@/mixins/BaseMixin'
 import { shaApply } from '@/api/customer'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
+  components: { WzwImTip },
   mixins: [BaseMixin],
   data () {
     return {

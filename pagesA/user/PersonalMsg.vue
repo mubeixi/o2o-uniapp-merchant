@@ -1,16 +1,17 @@
 <template>
-  <div class="bgColor-white">
+  <div @click="commonClick" class="bgColor-white">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <div class="msg">
-      <div class="item" @click="changeAvator">
+      <div @click="changeAvator" class="item">
         <div class="item-name">头像</div>
         <div class="info">
-          <image class="image" :src="userInfo.User_HeadImg"></image>
+          <image :src="userInfo.User_HeadImg" class="image"></image>
         </div>
         <div class="go">
           <layout-icon size="16" type="iconicon-arrow-right"></layout-icon>
         </div>
       </div>
-      <div class="item" @click="update(0)">
+      <div @click="update(0)" class="item">
         <div class="item-name">用户名</div>
         <div class="info">
           {{userInfo.User_Name}}
@@ -19,7 +20,7 @@
           <layout-icon size="16" type="iconicon-arrow-right"></layout-icon>
         </div>
       </div>
-      <div class="item" @click="update(1)">
+      <div @click="update(1)" class="item">
         <div class="item-name">昵称</div>
         <div class="info">
           {{userInfo.User_NickName}}
@@ -28,7 +29,7 @@
           <layout-icon size="16" type="iconicon-arrow-right"></layout-icon>
         </div>
       </div>
-      <div class="item" @click="update(2)">
+      <div @click="update(2)" class="item">
         <div class="item-name">生日</div>
         <div class="info">
           {{userInfo.User_Birthday==0?'':userInfo.User_Birthday}}
@@ -37,7 +38,7 @@
           <layout-icon size="16" type="iconicon-arrow-right"></layout-icon>
         </div>
       </div>
-      <div class="item" @click="update(3)">
+      <div @click="update(3)" class="item">
         <div class="item-name">邮箱</div>
         <div class="info">
           {{userInfo.User_Email}}
@@ -46,7 +47,7 @@
           <layout-icon size="16" type="iconicon-arrow-right"></layout-icon>
         </div>
       </div>
-      <div class="item" @click="update(4)">
+      <div @click="update(4)" class="item">
         <div class="item-name">详细地址</div>
         <div class="info">
           {{userInfo.User_Province_name}}{{userInfo.User_City_name}}{{userInfo.User_Area_name}}{{userInfo.User_Tow_name}}{{userInfo.User_Address}}
@@ -70,10 +71,14 @@ import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import { chooseImageByPromise, getArrColumn, uploadImages } from '@/common/helper'
 import { hideLoading, showLoading } from '@/common/fun'
 import { mapActions } from 'vuex'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
   mixins: [BaseMixin],
-  components: { LayoutIcon },
+  components: {
+    WzwImTip,
+    LayoutIcon,
+  },
   data () {
     return {
       userInfo: {},
@@ -139,7 +144,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
   .bgColor-white {
     height: 100vh;
   }

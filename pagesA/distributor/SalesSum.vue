@@ -1,31 +1,32 @@
 <template>
-  <view class="profitSum">
+  <view @click="commonClick" class="profitSum">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view class="titleClass">
       <view class="titleLeft">
         时间：
       </view>
       <view class="titleCenter">
-        <picker mode="date" @change="bindDateChange" class="picker">
+        <picker @change="bindDateChange" class="picker" mode="date">
           <view class="uni-input" v-if="beginTime">{{beginTime}}</view>
           <view class="uni-input" v-if="!beginTime">开始时间</view>
-          <image src="/static/salestime.png" class="img"></image>
+          <image class="img" src="/static/salestime.png"></image>
         </picker>
         <view class="centerPicker">
           —
         </view>
-        <picker mode="date" @change="bindDateChanges" class="picker">
+        <picker @change="bindDateChanges" class="picker" mode="date">
           <view class="uni-input" v-if="endTime">{{endTime}}</view>
           <view class="uni-input" v-if="!endTime">结束时间</view>
-          <image src="/static/salestime.png" class="img"></image>
+          <image class="img" src="/static/salestime.png"></image>
         </picker>
       </view>
-      <view class="titleButton" @click="getDetail('search')">
+      <view @click="getDetail('search')" class="titleButton">
         搜索
       </view>
     </view>
     
     <view style="height: 90rpx;"></view>
-    <view class="order" v-for="(item,i) of resData " :key="i">
+    <view :key="i" class="order" v-for="(item,i) of resData ">
       <view class="view">
         订单号：
         <text>{{item.order_id}}</text>
@@ -57,8 +58,10 @@
 
 import { getTeamSalesList } from '@/api/customer'
 import BaseMixin from '@/mixins/BaseMixin'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
+  components: { WzwImTip },
   mixins: [BaseMixin],
   data () {
     return {

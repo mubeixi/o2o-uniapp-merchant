@@ -1,5 +1,6 @@
 <template>
-  <view class="myall">
+  <view @click="commonClick" class="myall">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view class="img-div">
       <image :src="'/static/client/free/paySuccess.png'|domain" style="width: 100%;height: 100%;"></image>
     </view>
@@ -7,18 +8,18 @@
       支付成功
     </view>
     <view class="pay-button">
-      <view @click="$linkTo('/pages/index')" class="button-all button-goon">继续购买</view>
+      <view @click="goHome" class="button-all button-goon">继续购买</view>
       <view @click="goOrder" class="button-all button-next">查看订单</view>
     </view>
     <block>
-      <block>
+      <block v-if="couponList.length>0">
         <view class="pay-succ-last">
           本次购物可享权益
         </view>
-        <view class="youhuijuan" v-for="(item,idx) in couponList">
-          <image class="allImg" :src="'/static/client/free/mbxcoupon.png'|domain"></image>
+        <view :key="idx" class="youhuijuan" v-for="(item,idx) in couponList">
+          <image :src="'/static/client/free/mbxcoupon.png'|domain" class="allImg"></image>
           <view class="infoImg">
-            <image class="image" :src="item.Coupon_PhotoPath"></image>
+            <image :src="item.Coupon_PhotoPath" class="image"></image>
           </view>
           <view class="storeTitle">
             {{item.Coupon_Subject}}
@@ -30,7 +31,8 @@
             {{item.limit_txt}}
           </view>
           <view class="prices" v-if="item.Coupon_Discount<=0">
-            ¥<text>{{item.Coupon_Cash}}</text>
+            ¥
+            <text>{{item.Coupon_Cash}}</text>
           </view>
           <view class="prices" v-else>
             {{item.Coupon_Discount*10}}折优惠
@@ -38,19 +40,19 @@
           <view class="man" v-if="item.Coupon_Subject">
             满{{item.Coupon_Condition}}可用
           </view>
-          <view class="button" @click="goIndex(item.coupon_prod)">
+          <view @click="goIndex(item.coupon_prod)" class="button">
             去使用
           </view>
         </view>
       </block>
-      <block>
+      <block v-else>
         <!-- 猜你喜欢 -->
         <div class=" container">
           <div class="fenge"><span class="red"></span><span class="caini">猜你喜欢</span><span class="red"></span></div>
           <div class="prolist">
-            <div class="pro-item" v-for="(prod,idx) in prodList" :key="idx">
-              <img class="pro-cover" :src="prod.ImgPath" alt="">
-              <div class="item-name">{{prod.Products_Name}}</div>
+            <div :key="idx" @click="goPro(prod)" class="pro-item" v-for="(prod,idx) in prodList">
+              <img :src="prod.ImgPath" alt="" class="pro-cover">
+              <div class="item-name"><wzw-live-tag  :room_id="prod.room_id" :product-info="prod" />{{prod.Products_Name}}</div>
               <div class="price">
                 <span class="n_price"><span>￥</span>{{prod.Products_PriceX}}</span>
                 <span class="o_price"><span>￥</span>{{prod.Products_PriceX}}</span>
@@ -60,7 +62,7 @@
         </div>
       </block>
     </block>
-
+    
     <div v-if="showMain && free_money>0">
       <div class="popup-layer">
       </div>
@@ -72,33 +74,36 @@
         <div class="popup-co fz-10 c3">
           获得<span class="fz-13" style="color: #FE3841;">免单特权!</span>该订单将为您免除{{free_money}}元，免除的金额将直接存入您的会员余额，请注意查收。
         </div>
-        <div class="popup-btn" @click="goOrder">
+        <div @click="goOrder" class="popup-btn">
           立即查看
         </div>
-        <div class="flex flex-justify-c flex-vertical-c popup-del" @click="showMain=false">
-          <layout-icon type="icondel" size="20" color="#c4bfbf"></layout-icon>
+        <div @click="showMain=false" class="flex flex-justify-c flex-vertical-c popup-del">
+          <layout-icon color="#c4bfbf" size="20" type="icondel"></layout-icon>
         </div>
-
+      
       </div>
-
+    
     </div>
-
+  
   </view>
 </template>
 
 <script>
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import BaseMixin from '@/mixins/BaseMixin'
-import {
-  getProductList
-} from '@/api/product'
-import {
-  getPayCoupons
-} from '@/api/order'
+import { getProductList } from '@/api/product'
+import { getPayCoupons } from '@/api/order'
+import { toHome } from '@/common/fun'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import WzwLiveTag from '@/componets/wzw-live-tag/wzw-live-tag'
 
 export default {
   mixins: [BaseMixin],
-  components: { LayoutIcon },
+  components: {
+    WzwLiveTag,
+    WzwImTip,
+    LayoutIcon,
+  },
   data () {
     return {
       free_money: 0,
@@ -109,21 +114,21 @@ export default {
       prodList: [],
       prod_arg: {
         page: 1,
-        pageSize: 4
+        pageSize: 4,
       },
-      showMain: false
+      showMain: false,
     }
   },
   onLoad (option) {
     this.pro = []
     this.Order_Type = option.Order_Type
     this.OrderId = option.OrderId
-
+    
     this.getUserReceivedCoupon()
     this.getProd()
   },
   onShow () {
-
+  
   },
   // 上拉触底
   onReachBottom () {
@@ -132,13 +137,19 @@ export default {
     }
   },
   methods: {
+    goPro (prod) {
+      const id = prod.Products_ID
+      uni.redirectTo({
+        url: '/pages/product/detail?prod_id=' + id,
+      })
+    },
     goIndex (i) {
       if (parseInt(i) === 0) {
-        uni.switchTab({
-          url: '/pages/index'
-        })
+        toHome()
       } else {
-        this.$linkTo('/pages/search/result?pid=' + i)
+        uni.redirectTo({
+          url: '/pages/search/result?pid=' + i,
+        })
       }
     },
     getProd () {
@@ -148,18 +159,22 @@ export default {
         this.prodList = oldlist.concat(res.data)
         this.hasMore = (res.totalCount / this.prod_arg.pageSize) > this.prod_arg.page
         this.prod_arg.page += 1
-      }).catch(e => {})
+      }).catch(e => {
+      })
+    },
+    goHome () {
+      toHome()
     },
     goOrder () {
       // 去订单列表
       uni.redirectTo({
-        url: '/pages/order/OrderList?index=2&type=' + this.Order_Type
+        url: '/pages/order/OrderList?index=2&type=' + this.Order_Type,
       })
     },
     // 获取用户已领取可使用的优惠券
     getUserReceivedCoupon () {
       const data = {
-        order_id: this.OrderId
+        order_id: this.OrderId,
       }
       getPayCoupons(data).then(res => {
         // for (const item of res.data) {
@@ -170,8 +185,8 @@ export default {
         this.showMain = true
       }).catch(e => {
       })
-    }
-  }
+    },
+  },
 }
 </script>
 
@@ -183,7 +198,7 @@ export default {
     left: 40rpx;
     width: 710rpx;
     height: 600rpx;
-
+    
     .popup-title {
       font-size: 72rpx;
       color: #FE3841;
@@ -192,14 +207,14 @@ export default {
       top: 54rpx;
       left: 196rpx;
     }
-
+    
     .popup-co {
       width: 298rpx;
       position: absolute;
       top: 146rpx;
       left: 180rpx;
     }
-
+    
     .popup-btn {
       width: 280rpx;
       height: 74rpx;
@@ -214,7 +229,7 @@ export default {
       top: 356rpx;
       left: 180rpx;
     }
-
+    
     .popup-del {
       width: 690rpx;
       position: absolute;
@@ -222,7 +237,7 @@ export default {
       left: 0rpx;
     }
   }
-
+  
   .popup-layer {
     position: fixed;
     z-index: 99;
@@ -233,7 +248,7 @@ export default {
     left: 0px;
     overflow: hidden;
   }
-
+  
   .img-div {
     width: 132px;
     height: 132px;
@@ -241,7 +256,7 @@ export default {
     margin-bottom: 12px;
     box-sizing: border-box;
   }
-
+  
   .pay-succ {
     height: 36rpx;
     font-size: 18px;
@@ -251,7 +266,7 @@ export default {
     text-align: center;
     margin-bottom: 18px;
   }
-
+  
   .pay-succ-last {
     height: 26rpx;
     font-size: 13px;
@@ -261,7 +276,7 @@ export default {
     text-align: center;
     margin-bottom: 18px;
   }
-
+  
   .pay-button {
     display: flex;
     height: 35px;
@@ -271,7 +286,7 @@ export default {
     box-sizing: border-box;
     margin-bottom: 18px;
   }
-
+  
   .button-all {
     width: 290rpx;
     height: 35px;
@@ -280,24 +295,24 @@ export default {
     line-height: 35px;
     border-radius: 35px;
   }
-
+  
   .button-goon {
     background: linear-gradient(90deg, rgba(255, 150, 87, 1), rgba(253, 84, 90, 1));
     color: #FFFFFF;
     margin-right: 40rpx;
   }
-
+  
   .button-next {
     border: 1px solid rgba(245, 54, 54, 1);
     color: #F53636;
   }
-
+  
   .myall {
     background-color: #FFFFFF !important;
     min-height: 100vh;
     padding-top: 18px;
   }
-
+  
   .titless {
     position: fixed;
     top: 0rpx;
@@ -305,7 +320,7 @@ export default {
     width: 100%;
     z-index: 999;
   }
-
+  
   .nav {
     z-index: 999;
     position: fixed;
@@ -319,17 +334,17 @@ export default {
     align-items: center;
     font-size: 30rpx;
     color: #333333;
-
+    
     .views {
       width: 236rpx;
       height: 72rpx;
       line-height: 72rpx;
       text-align: center;
       position: relative;
-
+      
       &.checked {
         color: #F43131;
-
+        
         &:after {
           content: '';
           display: flex;
@@ -343,19 +358,19 @@ export default {
       }
     }
   }
-
+  
   .youhuijuan {
     width: 709rpx;
     height: 206rpx;
     margin-left: 20rpx;
     margin-bottom: 30rpx;
     position: relative;
-
+    
     .allImg {
       width: 100%;
       height: 100%;
     }
-
+    
     .infoImg {
       width: 89rpx;
       height: 89rpx;
@@ -364,13 +379,13 @@ export default {
       top: 56rpx;
       left: 44rpx;
       overflow: hidden;
-
+      
       .image {
         width: 100%;
         height: 100%;
       }
     }
-
+    
     .storeTitle {
       font-size: 28rpx;
       color: #333333;
@@ -379,7 +394,7 @@ export default {
       top: 62rpx;
       left: 150rpx;
     }
-
+    
     .times {
       font-size: 20rpx;
       color: #666666;
@@ -387,7 +402,7 @@ export default {
       top: 105rpx;
       left: 148rpx;
     }
-
+    
     .limit {
       font-size: 16rpx;
       color: #FF565F;
@@ -395,7 +410,7 @@ export default {
       left: 148rpx;
       top: 140rpx;
     }
-
+    
     .all-coupon {
       font-size: 10px;
       color: #FF565F;
@@ -403,7 +418,7 @@ export default {
       top: 140rpx;
       left: 148rpx;
     }
-
+    
     .prices {
       width: 110rpx;
       height: 40rpx;
@@ -415,13 +430,13 @@ export default {
       position: absolute;
       top: 41rpx;
       left: 534rpx;
-
+      
       text {
         margin-left: 11rpx;
         font-size: 52rpx;
       }
     }
-
+    
     .man {
       height: 19rpx;
       font-size: 20rpx;
@@ -430,7 +445,7 @@ export default {
       top: 95rpx;
       left: 534rpx;
     }
-
+    
     .button {
       width: 125rpx;
       height: 44rpx;
@@ -444,7 +459,7 @@ export default {
       top: 133rpx;
       left: 527rpx;
     }
-
+    
     .yishiyong {
       position: absolute;
       width: 106rpx;
@@ -453,7 +468,7 @@ export default {
       left: 455rpx;
     }
   }
-
+  
   .lasts {
     font-size: 14px;
     padding-top: 30rpx;
@@ -461,30 +476,30 @@ export default {
     text-align: center;
     display: flex;
     justify-content: center;
-
+    
     .lefts {
       color: #666666;
     }
-
+    
     .rights {
       margin-left: 10rpx;
       color: #F43131;
     }
   }
-
+  
   .defaults {
     margin: 0 auto;
     width: 640rpx;
     height: 480rpx;
     padding-top: 100rpx;
   }
-
+  
   /* 猜你喜欢 */
   .container {
     margin-top: 30rpx;
     padding: 0 20rpx;
   }
-
+  
   .fenge {
     text-align: center;
     padding: 30rpx 0;
@@ -492,30 +507,30 @@ export default {
     justify-content: center;
     align-items: center;
   }
-
+  
   .caini {
     font-size: 30rpx;
     margin-left: 13rpx;
     margin-right: 13rpx;
   }
-
+  
   .prolist {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
   }
-
+  
   .pro-item {
     width: 48%;
     margin-bottom: 15px;
     background: #fff;
   }
-
+  
   .pro-item img {
     width: 345rpx;
     height: 345rpx;
   }
-
+  
   .item-name {
     font-size: 24rpx;
     padding: 0 10rpx;
@@ -526,28 +541,28 @@ export default {
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
   }
-
+  
   .red {
     background-color: #F43131;
     display: inline-block;
     height: 3rpx;
     width: 44rpx;
   }
-
+  
   .price {
     margin-top: 20rpx;
     padding: 0 10rpx 20rpx;
   }
-
+  
   .n_price {
     color: #ff0000;
     font-size: 34rpx;
-
+    
     span {
       font-size: 24rpx;
     }
   }
-
+  
   .o_price {
     margin-left: 15rpx;
     color: #afafaf;

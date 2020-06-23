@@ -1,8 +1,9 @@
 <template>
-  <view class="overflow">
+  <view @click="commonClick" class="overflow">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view class="tops">
       <view class="imgs box-sizing">
-        <image class="image" :src="prod_list.prod_img"></image>
+        <image :src="prod_list.prod_img" class="image"></image>
       </view>
       <view class="textRight box-sizing">
         <view class="topText">
@@ -21,7 +22,7 @@
     
     <view class="centers" v-if="pro">
       <view class="td">
-        退款编号：{{pro.Back_ID}}
+        退款编号：{{pro.Back_Sn}}
       </view>
       <view class="td">
         退款时间：{{pro.Back_CreateTime}}
@@ -45,14 +46,14 @@
       </view>
       <block v-if="isFahuo">
         <view class="fahuo" v-if="pro.Back_Status==1">
-          <view class="fahuoSubmit" @click="isFahuo=false">
+          <view @click="isFahuo=false" class="fahuoSubmit">
             我要发货
           </view>
         </view>
         <view class="lines">
         
         </view>
-        <block v-for="(item,index) of pro.back_detail" :key="index">
+        <block :key="index" v-for="(item,index) of pro.back_detail">
           <view class="reason">
             <text style="margin-right: 10rpx;">{{item.createtime}}</text>
             {{item.detail}}
@@ -63,12 +64,12 @@
     <block v-if="!isFahuo">
       <view class="orderFa" style="margin-top: 40rpx;">
         <view class="inputs">
-          <input class="input" type="text" placeholder="请输入物流名称" v-model="shipping">
+          <input class="input" placeholder="请输入物流名称" type="text" v-model="shipping">
         </view>
         <view class="inputs" style="margin-top: 30rpx;">
-          <input class="input" type="number" placeholder="请输入物流单号" v-model="shippingID">
+          <input class="input" placeholder="请输入物流单号" type="number" v-model="shippingID">
         </view>
-        <view class="submits" @click="refundSend">
+        <view @click="refundSend" class="submits">
           确认发货
         </view>
       </view>
@@ -80,8 +81,10 @@
 
 import { getBackOrderDetail, refundSend } from '@/api/order'
 import BaseMixin from '@/mixins/BaseMixin'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
+  components: { WzwImTip },
   mixins: [BaseMixin],
   data () {
     return {

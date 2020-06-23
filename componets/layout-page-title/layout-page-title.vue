@@ -5,13 +5,14 @@
     <!--导航栏-->
     <div class="navigation-bar" :style="{height:menuButtonInfo.height+'px',backgroundColor:menuButtonBgColor}">
       <layout-icon @click="bindBack" class="left-icon" size="22" type="iconicon-arrow-left"></layout-icon>
-      <div class="title" :style="{lineHeight:menuButtonInfo.height+'px'}">{{title}}</div>
+      <div class="title" :style="{lineHeight:menuButtonInfo.height+'px'}">{{pageTitle}}</div>
     </div>
   </div>
 </template>
 
 <script>
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
+import { backFunc } from '@/common/fun'
 
 export default {
   name: 'layoutPageTitle',
@@ -26,7 +27,7 @@ export default {
         type: String,
         default: '#fff'
       },
-      title: {
+      pageTitle: {
         type: String,
         default: ''
       },
@@ -49,7 +50,7 @@ export default {
   methods: {
     bindBack () {
       if (this.letfFn) this.$emit('clickLeft')
-      if (!this.letfFn) uni.navigateBack()
+      if (!this.letfFn) backFunc()
     }
   },
   mounted () {
@@ -60,6 +61,7 @@ export default {
     this.diyHeadHeight = top + height + (top - this.systemInfo.statusBarHeight) + 10
     this.diyHeadRight = this.systemInfo.windowWidth - left
     // #endif
+    console.log(this.pageTitle)
   }
 }
 </script>

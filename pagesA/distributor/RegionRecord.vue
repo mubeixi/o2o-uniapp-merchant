@@ -1,9 +1,10 @@
 <template>
-  <view class="all">
+  <view @click="commonClick" class="all">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <div class="defaults" v-if="data.length<=0">
       <image :src="'/static/client/defaultImg.png'|domain"></image>
     </div>
-    <view class="main" v-for="(item,ind) of data" :key="ind">
+    <view :key="ind" class="main" v-for="(item,ind) of data">
       <block v-if="index==1">
         <view class="fir">
           <view class="left">
@@ -70,8 +71,10 @@
 
 import { getAgentApply, getShaApply } from '@/api/customer'
 import BaseMixin from '@/mixins/BaseMixin'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
+  components: { WzwImTip },
   mixins: [BaseMixin],
   data () {
     return {
@@ -85,7 +88,7 @@ export default {
   },
   onLoad (options) {
     const that = this
-    that.index = options.index
+    that.index = Number(options.index)
     uni.getSystemInfo({
       success: function (res) {
         that.height = res.screenHeight - 68

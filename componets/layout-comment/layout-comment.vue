@@ -10,9 +10,8 @@
     <div class="content">{{comment.Note}}</div>
     <div class="actions" @click.stop="commentMethod">
       <image class="icon" :src="'/static/client/comment.png'|domain"></image>
-      <span>{{comment.child.length}}</span>
+      <span class="fz-13">{{comment.child.length}}</span>
     </div>
-
 
   </div>
 </template>
@@ -20,7 +19,7 @@
 
 export default {
   name: 'LayoutComment',
-  components:{},
+  components: {},
   props: {
     isLast: {
       type: Boolean,
@@ -29,11 +28,12 @@ export default {
     comment: {}
   },
   methods: {
-    commentMethod(){
+    commentMethod () {
+      // console.log(this.comment,"sss")
       this.$emit('comment', this.comment)
     },
     tap () {
-      console.log(this.comment)
+      // console.log(this.comment)
       this.$emit('click', this.comment)
     }
   }
@@ -41,8 +41,8 @@ export default {
 </script>
 <style lang="scss" scoped>
   .commtent-item {
-    padding: 30rpx 0;
-    border-bottom: 1px solid #eee;
+
+    /*border-bottom: 1px solid #eee;*/
 
     .info {
       padding-bottom: 20rpx;
@@ -79,10 +79,13 @@ export default {
       text-align: right;
       color: #999;
       font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
 
       .icon {
-        width: 30rpx;
-        height: 26rpx;
+        width: 15px;
+        height: 13px;
         margin-right: 4px;
       }
 

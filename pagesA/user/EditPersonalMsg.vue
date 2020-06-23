@@ -1,6 +1,6 @@
 <template>
-  <view class="bgColor-white">
-    
+  <view @click="commonClick" class="bgColor-white">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <input class="v_input" placeholder="修改用户名" type="text" v-if="type === 0" v-model="userInfo.User_Name" />
     <input class="v_input" placeholder="修改昵称" type="text" v-if="type === 1" v-model="userInfo.User_NickName" />
     <block v-if="type === 2">
@@ -14,7 +14,6 @@
     </block>
     <input class="v_input" placeholder="修改邮箱" type="text" v-if="type === 3" v-model="userInfo.User_Email" />
     <block v-if="type === 4">
-      
       
       <wzw-address :area="selectAreaId[2]" :city="selectAreaId[1]" :province="selectAreaId[0]" :town="selectAreaId[3]"
                    @up="updateAddress" class="address m-l-10 flex flex-vertical-center" ref="address">
@@ -40,16 +39,20 @@ import BaseMixin from '@/mixins/BaseMixin'
 import { mapActions } from 'vuex'
 import { error } from '@/common/fun'
 import WzwAddress from '@/componets/wzw-address/wzw-address'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
   mixins: [BaseMixin],
-  components: { WzwAddress },
+  components: {
+    WzwImTip,
+    WzwAddress,
+  },
   data () {
     return {
       dateValue: '',
       type: 0,
       userInfo: {},
-      selectArea: '',//选择的地址
+      selectArea: '', // 选择的地址
       User_Address: '',
       selectAreaId: [],
     }
@@ -60,7 +63,7 @@ export default {
       setUserInfo: 'user/setUserInfo',
     }),
     updateAddress (data) {
-      //data.str  data.id []
+      // data.str  data.id []
       this.selectArea = data.str
       this.selectAreaId = data.id
     },
@@ -92,9 +95,7 @@ export default {
         })
         this.setUserInfo(this.userInfo)
         setTimeout(() => {
-          uni.navigateBack({
-            delta: 1,
-          })
+          this.$back()
         }, 1500)
       }).catch(e => {
         error(e.msg)
@@ -102,6 +103,7 @@ export default {
       })
     },
     save () {
+      const that = this
       if (this.type === 4) {
         this.saveAddress()
         return
@@ -144,7 +146,6 @@ export default {
           return
         }
         
-        let that = this
         uni.showModal({
           title: '提示',
           content: '生日信息一旦修改，不可再次更改',
@@ -167,17 +168,14 @@ export default {
                 })
                 that.setUserInfo(that.userInfo)
                 setTimeout(() => {
-                  uni.navigateBack({
-                    delta: 1,
-                  })
+                  that.$back()
                 }, 1500)
               }).catch(e => {
                 error(e.msg)
                 that.loading = false
               })
-              
             } else if (res.cancel) {
-              return
+            
             }
           },
         })
@@ -198,17 +196,14 @@ export default {
         })
         this.setUserInfo(this.userInfo)
         setTimeout(() => {
-          uni.navigateBack({
-            delta: 1,
-          })
+          that.$back()
         }, 1500)
       }).catch(e => {
         error(e.msg)
         this.loading = false
       })
-      
     },
-    //修改名字
+    // 修改名字
     getTitle () {
       switch (this.type) {
         case '0' :
@@ -246,7 +241,6 @@ export default {
         this.selectAreaId.push(Number(this.userInfo.User_Area))
         this.selectAreaId.push(Number(this.userInfo.User_Tow))
       }
-      
     },
   },
   onLoad (option) {
@@ -254,9 +248,7 @@ export default {
       this.type = parseInt(option.type)
       this.getTitle()
     } else {
-      uni.navigateBack({
-        delta: 1,
-      })
+      this.$back()
     }
   },
   onShow () {

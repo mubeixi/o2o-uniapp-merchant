@@ -1,11 +1,12 @@
 <template>
-  <view class="myall">
+  <view @click="commonClick" class="myall">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <div class="defaults" v-if="pro.length<=0">
       <image :src="'/static/client/defaultImg.png'|domain"></image>
     </div>
-    <view class="centers" v-for="(item,index) of pro " :key="index">
+    <view :key="index" class="centers" v-for="(item,index) of pro ">
       <view class="imgs">
-        <image class="image" :src="item.User_HeadImg"></image>
+        <image :src="item.User_HeadImg" class="image"></image>
       </view>
       <view class="titles">
         <view class="msg">
@@ -28,8 +29,10 @@
 import { getDisTeamList } from '@/api/customer'
 import { toast } from '@/common/fun'
 import BaseMixin from '@/mixins/BaseMixin'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
+  components: { WzwImTip },
   mixins: [BaseMixin],
   data () {
     return {

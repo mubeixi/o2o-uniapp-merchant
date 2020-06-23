@@ -1,10 +1,10 @@
 <template>
-  <view class="team">
-    
+  <view @click="commonClick" class="team">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view style="width: 100%;height: 20rpx;"></view>
     <view class="teamName" v-if="pro.disInfo">
       <view class="teamImg">
-        <image class="image" :src="pro.disInfo.Shop_Logo"></image>
+        <image :src="pro.disInfo.Shop_Logo" class="image"></image>
       </view>
       <view class="teamInfo">
         <view class="nickName">
@@ -20,13 +20,13 @@
         <image class="image" src="/static/red-people.png"></image>
         <view class="viewq">团队总人数</view>
       </view>
-      <view class="teamGrade" v-for="(item,index) of pro.team_level_count" :key="index" @click="goMyNumber(index)">
+      <view :key="index" @click="goMyNumber(index)" class="teamGrade" v-for="(item,index) of pro.team_level_count">
         <view class="views">
           {{item.title}}
         </view>
         <view class="views">
           <text>{{item.count}}</text>
-          <image class="img" :src="'/static/client/distributor/right.png'|domain"></image>
+          <image :src="'/static/client/distributor/right.png'|domain" class="img"></image>
         </view>
       </view>
     
@@ -37,8 +37,10 @@
 <script>
 import { getDisTeamCount } from '@/api/customer'
 import BaseMixin from '@/mixins/BaseMixin'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
+  components: { WzwImTip },
   mixins: [BaseMixin],
   data () {
     return {

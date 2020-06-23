@@ -68,11 +68,18 @@
     "quickapp" : {},
     /* 小程序特有相关 */
     "mp-weixin" : {
-        "appid" : "wx3d24c565489e305b",
+        "appid" : "wxfe5d2621576cf895",
         "setting" : {
-            "urlCheck" : false
+            "urlCheck" : false,
+            "minified" : true
         },
         "usingComponents" : true,
+        // "plugins" : {
+        //    "live-player-plugin" : {
+        //        "version" : "1.0.15",
+        //        "provider" : "wx2b03c6e691cd7370"
+        //    }
+        // },
         "permission" : {
             "scope.userLocation" : {
                 "desc" : "为了更好的为您推荐精准服务信息，需要获取您当前所在的位置。"

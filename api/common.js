@@ -1,5 +1,12 @@
 import { fetch } from '@/common/request'
 
+
+// 统计
+export const sendAnalysisData = (param, options) => fetch({
+  act: 'clickRecord',
+  param,
+  options
+})
 // 优惠券列表
 export const getCouponList = (param, options) => fetch({
   act: 'getCouponList',

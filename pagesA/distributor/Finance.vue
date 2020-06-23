@@ -1,26 +1,26 @@
 <template>
-  <view class="team">
-    
+  <view @click="commonClick" class="team">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view class="nav">
-      <view class="views" :class="index==0?'checked':''" @click="change(0)">
+      <view :class="index==0?'checked':''" @click="change(0)" class="views">
         分销
       </view>
-      <view class="views" :class="index==1?'checked':''" @click="change(1)">
+      <view :class="index==1?'checked':''" @click="change(1)" class="views">
         爵位
       </view>
-      <view class="views" :class="index==4?'checked':''" @click="change(4)">
+      <view :class="index==4?'checked':''" @click="change(4)" class="views">
         管理
       </view>
-      <view class="views" :class="index==2?'checked':''" @click="change(2)">
+      <view :class="index==2?'checked':''" @click="change(2)" class="views">
         股东
       </view>
-      <view class="views" :class="index==3?'checked':''" @click="change(3)">
+      <view :class="index==3?'checked':''" @click="change(3)" class="views">
         区域代理
       </view>
     </view>
     <view style="width: 100%;height: 105rpx;background-color: #FFFFFF;"></view>
     <block v-if="pro.length > 0">
-      <view class="order" v-for="(item,i) of pro " :key="i">
+      <view :key="i" class="order" v-for="(item,i) of pro ">
         <view>
           订单号：
           <text>{{index === 4 ? item.order_id : item.Order_ID}}</text>
@@ -59,8 +59,10 @@ import {
   getShaRecordList,
 } from '@/api/customer'
 import BaseMixin from '@/mixins/BaseMixin'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
+  components: { WzwImTip },
   mixins: [BaseMixin],
   data () {
     return {

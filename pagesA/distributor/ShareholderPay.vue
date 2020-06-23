@@ -1,5 +1,6 @@
 <template>
-  <view class="all">
+  <view @click="commonClick" class="all">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <!-- #ifdef APP-PLUS -->
     <view class="status_bar" style="background-color: rgb(248, 248, 248);"><!-- 这里是状态栏 --></view>
     <!-- #endif -->
@@ -7,7 +8,7 @@
     <div class="zhezhao" v-if="password_input">
       <div class="input-wrap">
         <div>请输入余额支付密码</div>
-        <input type="password" class="input" placeholder="请输入密码" v-model="user_pay_password" @blur="user_password">
+        <input @blur="user_password" class="input" placeholder="请输入密码" type="password" v-model="user_pay_password">
         <div class="btns">
           <div @click="cancelInput" class="btn">取消</div>
           <div @click="confirmInput" class="btn">确定</div>
@@ -72,17 +73,17 @@
       </view>
     </block>
     
-    <view class="four" @click="showPay">
+    <view @click="showPay" class="four">
       立即支付
     </view>
-    <view class="five" @click="cancelAge">
+    <view @click="cancelAge" class="five">
       取消申请
-      <image class="image" :src="'/static/client/distributor/chakan.png'|domain"></image>
+      <image :src="'/static/client/distributor/chakan.png'|domain" class="image"></image>
     </view>
     
-    <layout-layer ref="popupLayer" :direction="'top'">
+    <layout-layer :direction="'top'" ref="popupLayer">
       <div class="iMbx">
-        <div class="c_method" v-for="(item,index) in initData.pay_arr" @click="chooseType(index)" :key="index">
+        <div :key="index" @click="chooseType(index)" class="c_method" v-for="(item,index) in initData.pay_arr">
           {{item}}
           <text>￥{{proData.Order_TotalPrice}}</text>
         </div>
@@ -98,10 +99,12 @@ import Pay from '@/common/Pay'
 import { confirm, error, toast } from '@/common/fun'
 import BaseMixin from '@/mixins/BaseMixin'
 import LayoutLayer from '@/componets/layout-layer/layout-layer'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
   mixins: [BaseMixin],
   components: {
+    WzwImTip,
     LayoutLayer,
     
   },
@@ -179,7 +182,7 @@ export default {
             cancelText: '暂不设置',
           }).then(res => {
             uni.navigateTo({
-              url: '/pagesA/person/updateUserPsw?type=1&is_back=1',
+              url: '/pagesA/user/UpdateUserPsw?type=1&is_back=1',
             })
           }).catch(err => {
             error('请选择其他支付方式')

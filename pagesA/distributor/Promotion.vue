@@ -1,9 +1,9 @@
 <template>
-  <view class="myall">
-    
+  <view @click="commonClick" class="myall">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view class="top">
       <view class="person">
-        <image class="image" :src="data.disInfo.Shop_Logo"></image>
+        <image :src="data.disInfo.Shop_Logo" class="image"></image>
       </view>
       <view class="nickName">
         {{data.disInfo.Shop_Name}}
@@ -33,9 +33,9 @@
           </view>
         </view>
       </view>
-      <view class="chakan" @click="goFinance">
+      <view @click="goFinance" class="chakan">
         查看明细
-        <image class="image" :src="'/static/client/distributor/chakan.png'|domain"></image>
+        <image :src="'/static/client/distributor/chakan.png'|domain" class="image"></image>
       </view>
     </view>
     <circle-title title="我的数据"></circle-title>
@@ -89,7 +89,7 @@
           奖励百分比
         </view>
       </view>
-      <view class="t1 t2" v-for="(item,index) of pro.Pro_Title_Level" :key="item">
+      <view :key="item" class="t1 t2" v-for="(item,index) of pro.Pro_Title_Level">
         <view class="names">
           {{item.Name}}
         </view>
@@ -109,7 +109,7 @@
     </view>
     <circle-title title="名词解释"></circle-title>
     <view class="noun">
-      <view class="vivi" v-for="(i,j) of pro.noun_desc" :key="j">
+      <view :key="j" class="vivi" v-for="(i,j) of pro.noun_desc">
         {{j+1}}、{{i}}
       </view>
     </view>
@@ -121,6 +121,7 @@
 import { getDisInit, nobiInfo } from '@/api/customer'
 import BaseMixin from '@/mixins/BaseMixin'
 import CircleTitle from '@/componets/circle-title/circle-title'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
   mixins: [BaseMixin],
@@ -131,6 +132,7 @@ export default {
     }
   },
   components: {
+    WzwImTip,
     CircleTitle,
     
   },

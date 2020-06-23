@@ -190,9 +190,10 @@ export const getObjectAttrNum = (obj, stict = true) => {
  * 获取图片
  * @param count
  * @param sizeType
+ * @sourceType
  * @returns {Promise<unknown>}
  */
-export const chooseImageByPromise = ({ count = 1, sizeType = ['original', 'compressed'] } = {}) => {
+export const chooseImageByPromise = ({ count = 1, sourceType = ['camera', 'album'], sizeType = ['original', 'compressed'] } = {}) => {
   return new Promise((resolve, reject) => {
     uni.chooseImage({
       count,
@@ -208,6 +209,19 @@ export const chooseImageByPromise = ({ count = 1, sizeType = ['original', 'compr
       }
     })
   })
+}
+
+/**
+ * 创建配套的task数组
+ * @param len
+ * @returns {*[]}
+ */
+export const createUpTaskArr = (len = 1) => {
+  const arr = []
+  for (var i = 0; i < len; i++) {
+    arr[i] = { }
+  }
+  return arr.concat([])
 }
 
 /**
@@ -313,9 +327,7 @@ export const checkIsDistribute = (redirect, tip) => {
         uni.navigateTo({
           url: '/pages/distributor/DistributorCenter'
         })
-      }).catch(() => {
-
-      })
+      }).catch(() => {})
     }
     return false
   }
@@ -328,7 +340,7 @@ export const checkIsDistribute = (redirect, tip) => {
  * @param redirect
  * @return {boolean}
  */
-export const checkIsLogin = (redirect = 1, tip = 0) => {
+export const checkIsLogin = (redirect = 1, tip = 0, isBack = 0) => {
   const access_token = getAccessToken()
 
   if (!access_token) {
@@ -350,7 +362,12 @@ export const checkIsLogin = (redirect = 1, tip = 0) => {
           url: '/pages/user/login'
         })
       }).catch(() => {
+        if (isBack === 1) {
+          uni.navigateBack()
+        }
       })
+    } else {
+      return false
     }
     return false
   }
@@ -373,7 +390,6 @@ export function sleep (fn, par, time = 3000) {
     setTimeout(() => resolve(fn(par)), time)
   })
 }
-
 
 // 会修改模板对象，将他没有的属性加上
 function addFun (object, newobj) {
@@ -674,21 +690,24 @@ export const toGoodsDetail = async (productInfo) => {
   }
   console.log('产品跳转url:' + url)
 
-  const thumb = productInfo.Products_JSON.ImgPath[0]
+  // const thumb = productInfo.Products_JSON.ImgPath[0]
+  //
+  // if (!thumb) {
+  //   linkToEasy(url)
+  //   return
+  // }
 
-  if (!thumb) {
-    linkToEasy(url)
-    return
-  }
+  // const { path: thumbTempFilePath } = await Promisify('getImageInfo', { src: thumb }).catch(e => { linkToEasy(url) })
 
-  //const { path: thumbTempFilePath } = await Promisify('getImageInfo', { src: thumb }).catch(e => { linkToEasy(url) })
-
-  Storage.set('thumbTempFilePath', productInfo.Products_JSON.ImgPath[0])
+  // Storage.set('thumbTempFilePath', productInfo.Products_JSON.ImgPath[0])
 
   linkToEasy(url)
 }
 
-export const setNavigationBarTitle = (title)=> uni.setNavigationBarTitle({title})
+export const setNavigationBarTitle = (title) => uni.setNavigationBarTitle({ title })
+
+
+
 
 const Helper = {
   Object: {

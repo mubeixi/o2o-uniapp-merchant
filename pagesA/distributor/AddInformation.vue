@@ -1,5 +1,6 @@
 <template>
-  <view class="all">
+  <view @click="commonClick" class="all">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <!-- #ifdef APP-PLUS -->
     <view class="status_bar" style="background-color: rgb(248, 248, 248);"><!-- 这里是状态栏 --></view>
     <!-- #endif -->
@@ -8,16 +9,16 @@
         <view class="circleQ">
           <view></view>
         </view>
-        <view class="lineQ" :class="isNext?'lineW':''">
+        <view :class="isNext?'lineW':''" class="lineQ">
         
         </view>
-        <view class="circleQ" :class="isNext?'':'circleW'">
+        <view :class="isNext?'':'circleW'" class="circleQ">
           <view></view>
         </view>
-        <view class="lineQ" :class="isLast?'lineW':''">
+        <view :class="isLast?'lineW':''" class="lineQ">
         
         </view>
-        <view class="circleQ" :class="isLast?'':'circleW'">
+        <view :class="isLast?'':'circleW'" class="circleQ">
           <view></view>
         </view>
       </view>
@@ -25,10 +26,10 @@
         <view class="secondQ">
           填写信息
         </view>
-        <view class="secondW" :class="isNext?'secondQ':''">
+        <view :class="isNext?'secondQ':''" class="secondW">
           选择区域
         </view>
-        <view class="secondE" :class="isLast?'secondQ':''">
+        <view :class="isLast?'secondQ':''" class="secondE">
           提交审核
         </view>
       </view>
@@ -38,23 +39,23 @@
         <view class="haha">
           姓名
         </view>
-        <input class="inputs" type="text" placeholder="请输入您的姓名" placeholder-class="place" v-model="arr.apply_name">
+        <input class="inputs" placeholder="请输入您的姓名" placeholder-class="place" type="text" v-model="arr.apply_name">
       </view>
       <view class="three">
         <view class="haha">
           电话
         </view>
-        <input class="inputs" type="number" placeholder="请输入您的电话" placeholder-class="place" v-model="arr.apply_mobile"
-               @blur="isTell">
+        <input @blur="isTell" class="inputs" placeholder="请输入您的电话" placeholder-class="place" type="number"
+               v-model="arr.apply_mobile">
       </view>
       <view class="three">
         <view class="haha">
           级别
         </view>
         <radio-group @change="radioChange" class="myRadio">
-          <view v-for="(item, index) in items" :key="item.value" class="myRadioQ">
+          <view :key="item.value" class="myRadioQ" v-for="(item, index) in items">
             <view>
-              <radio class="radio" :value="item.value" :checked="index === currents" />
+              <radio :checked="index === currents" :value="item.value" class="radio" />
             </view>
             <view class="mbx">{{item.name}}</view>
           </view>
@@ -63,47 +64,16 @@
       </view>
     </block>
     <block v-else>
-      <view class="threes">
-        <view class="haha" style="flex: 1;">
-          <!-- 选择区域 -->
-          <picker mode="multiSelector" @change="bindMultiPickerChange" @columnchange="bindMultiPickerColumnChange"
-                  :value="change_multiIndex" :range="change_objectMultiArray" range-key="name">
-            <view style="display: flex;justify-content: space-between;">
-              <view class="picker">
-                <view class="quyu">选择区域</view>
-                <view v-if="!address_info.Address_Province">选择省份</view>
-                <view v-else style="overflow: hidden;">{{objectMultiArray[0][multiIndex[0]]['name']}}</view>
-                <block v-if="current>0">
-                  <view v-if="!address_info.Address_City">选择城市</view>
-                  <view v-else style="overflow: hidden;">{{objectMultiArray[1][multiIndex[1]]['name']}}</view>
-                </block>
-                <block v-if="current>1">
-                  <view v-if="!address_info.Address_Area">选择地区</view>
-                  <view v-else style="overflow: hidden;">{{objectMultiArray[2][multiIndex[2]]['name']}}</view>
-                </block>
-              </view>
-              <view class="images">
-                <image class="image" :src="'/static/client/distributor/chakan.png'|domain"></image>
-              </view>
-            </view>
-          </picker>
-        </view>
       
-      </view>
-      <view class="threes" v-if="current==3">
-        <view class="haha">
-          <picker mode="selector" @change="t_pickerChange" :range="t_arr" range-key="name" :value="t_index">
-            <view class="picker">
-              <text style="font-size: 28rpx;">街道地址</text>
-              <view v-if="!address_info.Address_Town" style="margin-left: 20rpx;width: 300rpx;">选择街道</view>
-              <view v-else style="margin-left: 20rpx;width: 300rpx;">{{t_arr[t_index]['name']}}</view>
-            </view>
-          </picker>
+      <view @click="$openPop('address')" class="three">
+        <view class="haha" style="width: 140rpx;margin-right: 0px">
+          选择地址
         </view>
-        <view class="images">
-          <image class="image" :src="'/static/client/distributor/chakan.png'|domain"></image>
-        </view>
+        <wzw-address :visiable="currents" @up="updateAddress" class="address  " ref="address">
+          {{selectArea?selectArea:'选择地址'}}
+        </wzw-address>
       </view>
+    
     </block>
     
     <block v-if="isLast">
@@ -112,12 +82,12 @@
       </view>
     </block>
     <block v-else>
-      <view class="four" @click="nextStep">
+      <view @click="nextStep" class="four">
         {{isNext?'提交申请':'下一步'}}
       </view>
-      <view class="five" @click="lookJilu">
+      <view @click="lookJilu" class="five">
         {{isNext?'返回修改':'查看申请记录'}}
-        <image class="image" :src="'/static/client/distributor/chakan.png'|domain"></image>
+        <image :src="'/static/client/distributor/chakan.png'|domain" class="image"></image>
       </view>
     </block>
   </view>
@@ -125,35 +95,22 @@
 
 <script>
 
-import area from '@/common/area'
-import { array_change } from '@/common/helper'
-
+import WzwAddress from '@/componets/wzw-address/wzw-address'
 import { agentApply } from '@/api/customer'
-import { getTown } from '@/api/common'
+import { error } from '@/common/fun'
 import BaseMixin from '@/mixins/BaseMixin'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
+  components: {
+    WzwImTip,
+    WzwAddress,
+  },
   mixins: [BaseMixin],
   data () {
     return {
       isNext: false,
-      items: [
-        // {
-        // 	name:'省级',
-        // 	value:'pro'
-        // },{
-        // 	name:'市级',
-        // 	value:'cit'
-        // },
-        // {
-        // 	name:'县/区',
-        // 	value:'cou'
-        // },
-        // {
-        // 	name:'镇',
-        // 	value:'tow'
-        // }
-      ],
+      items: [],
       isLast: false,
       objectMultiArray: [], // 展示数据
       multiIndex: [0, 0, 0], // 选择数据
@@ -172,6 +129,8 @@ export default {
         apply_mobile: '',
       },
       isAgr: false,
+      selectArea: '',
+      selectAreaId: [],
     }
   },
   onShow () {
@@ -179,25 +138,25 @@ export default {
   },
   onLoad (options) {
     this.items = []
-    if (options.pro === 1) {
+    if (Number(options.pro) === 1) {
       this.items.push({
         name: '省级',
         value: 'pro',
       })
     }
-    if (options.cit === 1) {
+    if (Number(options.cit) === 1) {
       this.items.push({
         name: '市级',
         value: 'cit',
       })
     }
-    if (options.cou === 1) {
+    if (Number(options.cou) === 1) {
       this.items.push({
         name: '县/区',
         value: 'cou',
       })
     }
-    if (options.tow === 1) {
+    if (Number(options.tow) === 1) {
       this.items.push({
         name: '镇',
         value: 'tow',
@@ -205,6 +164,11 @@ export default {
     }
   },
   methods: {
+    updateAddress (data) {
+      console.log(data, 'sss')
+      this.selectArea = data.str
+      this.selectAreaId = data.id
+    },
     isTell () {
       if (!(/^1[3456789]\d{9}$/.test(this.arr.apply_mobile))) {
         uni.showToast({
@@ -228,40 +192,29 @@ export default {
           return
         }
         this.isAgr = true
-        if (JSON.stringify(this.address_info) === '{}') {
+        if (this.selectAreaId.length < 1) {
           uni.showToast({
             title: '请选择地区信息',
             icon: 'none',
           })
+          this.isAgr = false
         } else {
           const info = {}
           info.apply_name = this.arr.apply_name
           info.apply_mobile = this.arr.apply_mobile
-          if (this.current === 0) {
-            info.apply_area = 'pro'
-            info.pro_id = this.address_info.Address_Province
-          } else if (this.current === 1) {
+          info.pro_id = this.selectAreaId[0]
+          info.apply_area = 'pro'
+          if (this.currents > 0) {
+            info.city_id = this.selectAreaId[1]
             info.apply_area = 'cit'
-            info.pro_id = this.address_info.Address_Province
-            info.city_id = this.address_info.Address_City
-          } else if (this.current === 2) {
+          }
+          if (this.currents > 1) {
+            info.area_id = this.selectAreaId[2]
             info.apply_area = 'cou'
-            info.pro_id = this.address_info.Address_Province
-            info.city_id = this.address_info.Address_City
-            info.area_id = this.address_info.Address_Area
-          } else if (this.current === 3) {
-            if (this.address_info.Address_Town === 0) {
-              uni.showToast({
-                title: '请选择街道信息',
-                icon: 'none',
-              })
-              return
-            }
+          }
+          if (this.currents > 2) {
+            info.town_id = this.selectAreaId[3]
             info.apply_area = 'tow'
-            info.pro_id = this.address_info.Address_Province
-            info.city_id = this.address_info.Address_City
-            info.area_id = this.address_info.Address_Area
-            info.town_id = this.address_info.Address_Town
           }
           
           agentApply(info).then(res => {
@@ -276,6 +229,7 @@ export default {
               })
             }, 1000)
           }).catch(e => {
+            error(e.msg)
             this.isAgr = false
           })
         }
@@ -293,154 +247,9 @@ export default {
           })
           return
         }
+        this.selectArea = ''
+        this.selectAreaId = []
         this.isNext = true
-        this.multiIndex = [0, 0, 0]
-        this.change_multiIndex = [0, 0, 0]
-        if (this.items[this.currents].value === 'pro') {
-          this.current = 0
-        }
-        if (this.items[this.currents].value === 'cit') {
-          this.current = 1
-        }
-        if (this.items[this.currents].value === 'cou') {
-          this.current = 2
-        }
-        if (this.items[this.currents].value === 'tow') {
-          this.current = 3
-        }
-        
-        if (this.current === 3) {
-          this.objectMultiArray = [
-            array_change(area[0]['0']),
-            array_change(area[0]['0,1']),
-            array_change(area[0]['0,1,35']),
-          ]
-          this.change_objectMultiArray = [
-            array_change(area[0]['0']),
-            array_change(area[0]['0,1']),
-            array_change(area[0]['0,1,35']),
-          ]
-        } else if (this.current === 2) {
-          this.objectMultiArray = [
-            array_change(area[0]['0']),
-            array_change(area[0]['0,1']),
-            array_change(area[0]['0,1,35']),
-          ]
-          this.change_objectMultiArray = [
-            array_change(area[0]['0']),
-            array_change(area[0]['0,1']),
-            array_change(area[0]['0,1,35']),
-          ]
-        } else if (this.current === 1) {
-          this.objectMultiArray = [
-            array_change(area[0]['0']),
-            array_change(area[0]['0,1']),
-          ]
-          this.change_objectMultiArray = [
-            array_change(area[0]['0']),
-            array_change(area[0]['0,1']),
-          ]
-        } else {
-          this.objectMultiArray = [
-            array_change(area[0]['0']),
-          ]
-          this.change_objectMultiArray = [
-            array_change(area[0]['0']),
-          ]
-        }
-      }
-    },
-    // 乡镇地址 点击确定
-    t_pickerChange: function (e) {
-      this.t_index = e.detail.value
-      this.address_info.Address_Town = this.t_arr[e.detail.value].id
-    },
-    address_town: function () {
-      getTown({ a_id: this.address_info.Address_Area }).then(res => {
-        var t_arr = []
-        var t_index = 0
-        var idx = 0
-        for (var i in res.data) {
-          for (var j in res.data[i]) {
-            t_arr.push({
-              id: j,
-              name: res.data[i][j],
-            })
-            if (j === this.address_info.Address_Town) {
-              t_index = idx
-            }
-            idx++
-          }
-        }
-        this.t_arr = t_arr
-        this.t_index = t_index
-      }).catch(() => {
-      })
-    },
-    // 处理省市区联动信息
-    addressChange: function (columnValue) {
-      var p_arr = this.change_objectMultiArray[0]
-      var p_id = p_arr[columnValue[0]].id
-      var c_arr, c_id, a_arr
-      if (this.current > 0) {
-        c_arr = array_change(area[0][0 + ',' + p_id])
-        c_id = c_arr[columnValue[1]].id
-      }
-      if (this.current > 1) {
-        var a_arr = array_change(area[0][0 + ',' + p_id + ',' + c_id])
-      }
-      if (this.current === 0) {
-        this.change_objectMultiArray = [
-          p_arr,
-        ]
-      } else if (this.current === 1) {
-        this.change_objectMultiArray = [
-          p_arr,
-          c_arr,
-        ]
-      } else {
-        this.change_objectMultiArray = [
-          p_arr,
-          c_arr,
-          a_arr,
-        ]
-      }
-      
-      this.change_multiIndex = columnValue
-    },
-    // 选择收货地址
-    bindMultiPickerColumnChange: function (e) {
-      var column = e.detail.column // 修改的列
-      var index = e.detail.value // 选择列的下标（从0开始）
-      var change_multiIndex = 'change_multiIndex[' + column + ']'
-      
-      var columnValue = [
-        column === 0 ? index : this.change_multiIndex[0],
-        column === 0 ? 0 : (column === 1 ? index : this.change_multiIndex[1]),
-        column === 0 || column === 1 ? 0 : index,
-      ]
-      this.addressChange(columnValue)
-    },
-    // 选择收获地址三级联动后确定按钮动作
-    bindMultiPickerChange: function (e) {
-      this.addressChange(e.detail.value)
-      this.objectMultiArray = this.change_objectMultiArray
-      this.multiIndex = e.detail.value
-      this.address_info.Address_Province = this.objectMultiArray[0][this.multiIndex[0]].id
-      if (this.current > 0) {
-        this.address_info.Address_City = this.objectMultiArray[1][this.multiIndex[1]].id
-      }
-      if (this.current > 1) {
-        this.address_info.Address_Area = this.objectMultiArray[2][this.multiIndex[2]].id
-      }
-      if (this.current > 2) {
-        this.address_info.Address_Town = 0
-      }
-      this.t_arr = []
-      this.t_index = 0
-      // 处理街道信息
-      if (this.current > 2) {
-        this.address_town()
       }
     },
     radioChange: function (evt) {
@@ -654,5 +463,12 @@ export default {
   
   .lineW {
     background-color: #F43131 !important;
+  }
+  
+  .address {
+    width: 570rpx;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 </style>

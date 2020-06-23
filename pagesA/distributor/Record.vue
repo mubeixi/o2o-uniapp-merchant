@@ -1,6 +1,7 @@
 <template>
-  <view class="all">
-    <view class="main" v-for="(item,index) of data" :key="index">
+  <view @click="commonClick" class="all">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
+    <view :key="index" class="main" v-for="(item,index) of data">
       <view class="fir">
         <view class="left">
           申请方式：
@@ -56,8 +57,10 @@
 
 import { getWithdrawRecordList } from '@/api/customer'
 import BaseMixin from '@/mixins/BaseMixin'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
+  components: { WzwImTip },
   mixins: [BaseMixin],
   data () {
     return {

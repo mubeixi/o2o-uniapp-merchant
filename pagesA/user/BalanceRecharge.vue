@@ -1,7 +1,8 @@
 <template>
-  <view class="all">
+  <view @click="commonClick" class="all">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view class="yue">
-      <image class="yue-image" :src="'/static/client/blance/recharge.jpg'|domain"></image>
+      <image :src="'/static/client/blance/recharge.jpg'|domain" class="yue-image"></image>
       <view class="yueq">
         余额
       </view>
@@ -10,27 +11,27 @@
       </view>
     </view>
     
-    <input class="inputs" v-model="money" type="digit" placeholder="请输入充值金额">
+    <input class="inputs" placeholder="请输入充值金额" type="digit" v-model="money">
     <view class="line"></view>
     <view class="payMethod">
       支付方式
     </view>
     
-    <view class="selectq" v-for="(channel,idx) in payChannelList" @click="changeChannelIdx(idx)">
+    <view @click="changeChannelIdx(idx)" class="selectq" v-for="(channel,idx) in payChannelList">
       <view>
         {{channel}}
       </view>
       <view class="radio">
-        <view class="el-radio" :class="{check:payChannel==idx}"></view>
+        <view :class="{check:payChannel==idx}" class="el-radio"></view>
       </view>
     </view>
     <div style="height: 10px"></div>
-    <view class="youhui" v-for="(item,index) of pro.gives " :key="index">
+    <view :key="index" class="youhui" v-for="(item,index) of pro.gives ">
       {{index+1}}、充值满{{item.deposit_money}}赠送
       <text class="youhui-text">{{item.present_money}}</text>
       余额
     </view>
-    <view class="queren" @click="confirm">
+    <view @click="confirm" class="queren">
       确认
     </view>
   </view>
@@ -46,8 +47,10 @@ import Pay from '@/common/Pay'
 import { checkIsLogin, GetQueryByString, isWeiXin, urlencode } from '@/common/helper'
 import Storage from '@/common/Storage'
 import BaseMixin from '@/mixins/BaseMixin'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
+  components: { WzwImTip },
   mixins: [BaseMixin],
   data () {
     return {

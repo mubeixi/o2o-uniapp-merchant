@@ -1,27 +1,28 @@
 <template>
-  <view class="all">
+  <view @click="commonClick" class="all">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <!-- #ifdef APP-PLUS -->
     <view class="status_bar" style="background: #fff"><!-- 这里是状态栏 --></view>
     <!-- #endif -->
-    <page-title title="我的提现方式" :rightHidden="false" bgcolor="#ffffff" :right="isShow ? '取消' : '管理'"
-                @rightHandle="handle"></page-title>
+    <page-title :right="isShow ? '取消' : '管理'" :rightHidden="false" @rightHandle="handle" bgcolor="#ffffff"
+                title="我的提现方式"></page-title>
     <view class="content">
-      <block v-for="(item,index) of data " :key="index">
-        <view class="cardInfo" @click="change(item)" v-if="item.Method_Type=='bank_card'||item.Method_Type=='alipay'">
+      <block :key="index" v-for="(item,index) of data ">
+        <view @click="change(item)" class="cardInfo" v-if="item.Method_Type=='bank_card'||item.Method_Type=='alipay'">
           {{item.Method_Name}} （{{item.Account_Val}}）
-          <image class="image" :src="'/static/client/distributor/xuanzhong.png'|domain"
+          <image :src="'/static/client/fenxiao/xuanzhong.png'|domain" class="image"
                  v-if="User_Method_ID==item.User_Method_ID&&!isShow"></image>
-          <image class="image del" src="/static/red-del.png" v-else-if="isShow" @click="del(item)"></image>
+          <image @click="del(item)" class="image del" src="/static/red-del.png" v-else-if="isShow"></image>
         </view>
-        <view class="cardInfo" @click="change(item)" v-else>
+        <view @click="change(item)" class="cardInfo" v-else>
           {{item.Method_Name}}
-          <image class="image" :src="'/static/client/distributor/xuanzhong.png'|domain"
+          <image :src="'/static/client/fenxiao/xuanzhong.png'|domain" class="image"
                  v-if="User_Method_ID==item.User_Method_ID&&!isShow"></image>
-          <image class="image del" src="/static/red-del.png" v-else-if="isShow" @click="del(item)"></image>
+          <image @click="del(item)" class="image del" src="/static/red-del.png" v-else-if="isShow"></image>
         </view>
       </block>
     </view>
-    <view class="addMethod" @click="addMethod">
+    <view @click="addMethod" class="addMethod">
       + 添加提现方式
     </view>
   </view>
@@ -33,9 +34,13 @@ import { delUserWithdrawMethod, getUserWithdrawMethod } from '@/api/customer'
 import BaseMixin from '@/mixins/BaseMixin'
 
 import PageTitle from '@/componets/page-title/page-title'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
-  components: { PageTitle },
+  components: {
+    WzwImTip,
+    PageTitle,
+  },
   mixins: [BaseMixin],
   data () {
     return {
@@ -59,7 +64,7 @@ export default {
     })
   },
   onShow () {
-    this.$vm.$on('fir', (data) => {
+    uni.$on('fir', (data) => {
       this.User_Method_ID = data
     })
     this.getUserWithdrawMethod()
@@ -101,9 +106,7 @@ export default {
       Storage.set('myMethod', this.User_Method_ID)
       
       // 返回上一页
-      uni.navigateBack({
-        delta: 1,
-      })
+      this.$back()
     },
     // 获取用户提现方式
     getUserWithdrawMethod () {
@@ -122,7 +125,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
   .all {
     background-color: #f8f8f8;
     box-sizing: border-box;

@@ -1,8 +1,9 @@
 <template>
-  <view class="myall">
-    <view class="centers" v-for="(item,index) of pro " :key="index">
+  <view @click="commonClick" class="myall">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
+    <view :key="index" class="centers" v-for="(item,index) of pro ">
       <view class="imgs">
-        <image class="image" :src="item.User_HeadImg"></image>
+        <image :src="item.User_HeadImg" class="image"></image>
       </view>
       <view class="titles">
         <view class="msg">
@@ -27,8 +28,10 @@
 <script>
 import { getDisUserList } from '@/api/customer'
 import BaseMixin from '@/mixins/BaseMixin'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
+  components: { WzwImTip },
   mixins: [BaseMixin],
   data () {
     return {

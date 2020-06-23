@@ -1,228 +1,448 @@
-## 0.0.6 (2020-05-08)
 
+## 2020-06-10
+### Features
+- feat(直播): 新增直播状态显示组件
+
+
+## 2020-06-09
+### Features
+- feat(直播): 新增直播自定义参数onwer_id,并且打通分销业务逻辑
 
 ### Bug Fixes
-
-* **filter:** 删除重复错误的formatTime过滤器 ([fae8140](https://git.wzwtec.com/function/o2o-client/commits/fae81405715f37e85b791e43c8a305dfbad403db))
-* **优化交互:** 优化首页、下单页面、详情页的交互 ([5c8d6b7](https://git.wzwtec.com/function/o2o-client/commits/5c8d6b7a1062791c301308cd098d6f550aac4f84))
-* **优化样式:** 解决几个小bug ([56bbd33](https://git.wzwtec.com/function/o2o-client/commits/56bbd333a3110c85281a31412b9be481c45f43bd))
-* **商品规格:** 修复商品规格不能支持多个属性的选择 ([5df7b66](https://git.wzwtec.com/function/o2o-client/commits/5df7b6663248ba963bae6bb4242d172052c07f75))
-* **商品详情:** 修复商品详情的评论和选择规格 ([0082b2a](https://git.wzwtec.com/function/o2o-client/commits/0082b2a42c5aae59ab29310db59d2f4c8288bed1))
-* **商品详情:** 修复商品详情门店页面和接口 ([4c0218c](https://git.wzwtec.com/function/o2o-client/commits/4c0218c41bbadcfdc796b4fe6ac91a5fcedcf495))
-* **商品详情:** 修复商品详情页面规格不能兼容手机和电脑发布的 ([26eb77a](https://git.wzwtec.com/function/o2o-client/commits/26eb77a91c287e984332fc4e0682d65b46e4ef45))
-* **商家会员卡:** 修复商家会员卡接口 ([b4de62f](https://git.wzwtec.com/function/o2o-client/commits/b4de62fbcf8b4affeba0f2aad37f9da84c81cc7c))
-* **好评:** 新增tabber好评页面 ([8dbd1bb](https://git.wzwtec.com/function/o2o-client/commits/8dbd1bb73dc2046da1eaeefc49baf13b01875bec))
+- fix(优化首页的样式): 优化因为底部自定义样式引起的问题
+- fix(直播): 首页钜惠推荐商品列表，新增直播状态检测。
 
 
+## 2020-06-08
+
+## 2020-06-07
+
+## 2020-06-05
+### Bug Fixes
+- fix(订单提交页面): 1.修复预下单接口失败引起的显示的问题（达到限购条件等) 2.外卖订单在提交订单成功后，会自动清空指定商户的外卖购物车数据（localStorage）
+
+
+## 2020-06-04
 ### Features
-
-* **diy-form组件:** 优化事件传值机制 ([24b4fc6](https://git.wzwtec.com/function/o2o-client/commits/24b4fc6434b84a03a26e44ab817e83173d38e045))
-* **helpers.js:** 扩展getArrColumn方法 ([7a353a1](https://git.wzwtec.com/function/o2o-client/commits/7a353a102fc670f0b0e48bdf8707717468af8dee))
-* **layout-ad组件:** 广告组件优化 ([f6a1431](https://git.wzwtec.com/function/o2o-client/commits/f6a14310ad2f0cb28d8f8d8a2ee7b0d7caf8c0f7))
-* **tabbar:** 优化tabbar ([8e4b9c0](https://git.wzwtec.com/function/o2o-client/commits/8e4b9c04f7329e51450801b8207e043b7868dddc))
-* **下单流程:** 1.优化下单校验 2.打通新版的下单流程 ([e7ebd19](https://git.wzwtec.com/function/o2o-client/commits/e7ebd19dfb867b3896a1c5a10ae2ff190bb35dae))
-* **下单流程:** 下单页面，优化初始化机制。 ([2b03ca6](https://git.wzwtec.com/function/o2o-client/commits/2b03ca6c303026ffaa0b7d26f12de308474ff4ef))
-* **个人中心:** 个人中心链接 ([d1542b0](https://git.wzwtec.com/function/o2o-client/commits/d1542b013ef2f640859e7c753ad22861a894b4de))
-* **个人中心（退货退款）:** 1.新增个人中心退货退款列表页面和接口2.新增个人中心退货退款详情页面和接口3.修复购物车的推荐产品 ([842b2e4](https://git.wzwtec.com/function/o2o-client/commits/842b2e4cc36b673bc6fe23f47c3e72490f0d9e66))
-* **个人中心权益卡和支付组件优化:** 1.新增权益卡页面和接口2.修复登录页接口调用参数错误3.新增支付组件可配置项is_use_order_pay ([21c314c](https://git.wzwtec.com/function/o2o-client/commits/21c314c3e737fe32c391e7ca3b77ba9a41af6ce4))
-* **个人中心签到:** 1.新增个人中心签到页面和接口2.新增权益卡（未开始）页面3.新增model组件 ([e4c0ebb](https://git.wzwtec.com/function/o2o-client/commits/e4c0ebb77abcd850aad00fb24ceb7b527300692f))
-* **个人中心页面:** 个人中心页面 ([a9cfff3](https://git.wzwtec.com/function/o2o-client/commits/a9cfff3e76081999c1127368262dacceca373acf))
-* **个人中心页面:** 个人中心页面 ([dbb3eef](https://git.wzwtec.com/function/o2o-client/commits/dbb3eef0cd9a6ef4f0e6e27ebcb86913e76a988c))
-* **个人中心页面:** 优化个人中心页面样式 ([8798fd1](https://git.wzwtec.com/function/o2o-client/commits/8798fd10d297a4f4c6b803b37bbd9a20fcf16300))
-* **享免单:** 新增享免单专区和支付成功享免单 ([53bc64c](https://git.wzwtec.com/function/o2o-client/commits/53bc64c1b94ce92ef50e85658ffde8c6f05cc506))
-* **享免单:** 调通免单活动详情页 ([7de0de0](https://git.wzwtec.com/function/o2o-client/commits/7de0de0185b1a3b17f72be8c8a8f9c0ead1833fc))
-* **余额模块:** 新增余额中和余额充值页面 ([c54fb16](https://git.wzwtec.com/function/o2o-client/commits/c54fb16f7ab0db36a8609b1e1ddcc846a21c828f))
-* **全局主题:** 新增全局主题机制 ([4044b69](https://git.wzwtec.com/function/o2o-client/commits/4044b69566b08832bd3f2a74f8e58546c2785067))
-* **全局机制:** 新增initData相关机制 ([47447b3](https://git.wzwtec.com/function/o2o-client/commits/47447b30342adae3acc2c1d53900d4db3c4f6ce7))
-* **分享赚:** 分享赚详情页面新增唤起分享、生成海报等功能 ([a549af2](https://git.wzwtec.com/function/o2o-client/commits/a549af2c13270459462e0d2e244a333702d43c4e))
-* **分享赚:** 新增分享详情页 ([e375e60](https://git.wzwtec.com/function/o2o-client/commits/e375e608bd229a4bd26c2956f80cd87db582cb2b))
-* **分享赚:** 新增分享赚列表页 ([2424b78](https://git.wzwtec.com/function/o2o-client/commits/2424b7827a515989c3c8555a7c55c95e3b3e797b))
-* **分包机制和商品详情评论:** 1.新增分包机制pagesA包2.修复商品详情的评论回复接口 ([30837e1](https://git.wzwtec.com/function/o2o-client/commits/30837e1930f8e197d37ab7b8018c861f89361041))
-* **分销:** 优化分销-海报分享页面 ([e1ff8e2](https://git.wzwtec.com/function/o2o-client/commits/e1ff8e2e261476459d9e7df4518b36b20e1ac732))
-* **分销:** 新增分享海报页面 ([739434e](https://git.wzwtec.com/function/o2o-client/commits/739434e80acae1ec279f340e08fc46b90ab31014))
-* **分销中心:** 完成迁移分销中心模块 ([db92684](https://git.wzwtec.com/function/o2o-client/commits/db92684c855efd1f5dbf4e148e1f5ff5f22d2244))
-* **商品:** 订单模板 ([ac44a9b](https://git.wzwtec.com/function/o2o-client/commits/ac44a9b3ec5c4d214495759da1480cdfee2231ad))
-* **商品评论:** 1.新增商品评论页面和接口2.修复订单列表的问题 ([805f67a](https://git.wzwtec.com/function/o2o-client/commits/805f67a458335300cd44506914d0ba0ff974e4f2))
-* **商品详情:** 1.修复商品详情的链接跳转2.新增mixins全局方法打电话$cellPhone地址$openLocation ([a05b178](https://git.wzwtec.com/function/o2o-client/commits/a05b178fab4cab71bdea5fa75d9bb3403c0b4c0f))
-* **商品详情:** 修复商品详情的一些问题 ([40269ab](https://git.wzwtec.com/function/o2o-client/commits/40269ab4b03e343ba03f3e45825cef99086d30a9))
-* **商品详情页:** 优化商品详情页（参照淘宝) ([aa712a9](https://git.wzwtec.com/function/o2o-client/commits/aa712a99d0dd7e70c4366d4a7959bf193c670a20))
-* **商家详情:** 商家详情新增显示内容 ([bfbb620](https://git.wzwtec.com/function/o2o-client/commits/bfbb620ffd2486c82bd1a64417a2bb2cf4424b2b))
-* **图标库:** 图标库更新 ([9fa19b2](https://git.wzwtec.com/function/o2o-client/commits/9fa19b23f1315b2d2c2e478b2339779d7f3ed183))
-* **图片路径:** 图片路径过滤 ([3ab8bc5](https://git.wzwtec.com/function/o2o-client/commits/3ab8bc5b3fb8bad1339769da8054602b87c97449))
-* **增加个人中心页面，增加一些组件:** 增加了个人中心页面，增加了产品图组件，增加了标签功能组件 ([257263c](https://git.wzwtec.com/function/o2o-client/commits/257263c9491b0a7cf41679256f87ccd40ded769c))
-* **增加了个人中心页面，增加两个组件:** 增加了个人中心页，增加了一个产品组件，一个展示功能图标的组件 ([0a6df5d](https://git.wzwtec.com/function/o2o-client/commits/0a6df5d20bb38ae23e23bda74b42b51ac540caa7))
-* **增加了消息页:** 增加了消息列表静态列表页 ([9280790](https://git.wzwtec.com/function/o2o-client/commits/9280790bd0eb92013fe57cb61eb08386c308345d))
-* **外卖:** 优化外卖页面 ([d2e410a](https://git.wzwtec.com/function/o2o-client/commits/d2e410af40b94c1a99986b158e906fd591488e40))
-* **外卖:** 完善外卖功能 ([38cbfec](https://git.wzwtec.com/function/o2o-client/commits/38cbfec60f654aa634ae3f9087036730ee252c6d))
-* **外卖:** 新增外卖列表和外卖详情页面 ([d92d4ca](https://git.wzwtec.com/function/o2o-client/commits/d92d4ca74842836b4eb40920bd8eda26422913ed))
-* **完善店铺详情页的逻辑:** 店铺详情页新增评论、门店列表 ([b27acaf](https://git.wzwtec.com/function/o2o-client/commits/b27acaf73e7ed3a5561d9de8bad77689c8c0f7dc))
-* **富文本组件:** 优化富文本组件 ([b375ce8](https://git.wzwtec.com/function/o2o-client/commits/b375ce816be53d4c4eb4c36550ead2c14d6416e8))
-* **店铺:** 店铺详情页新增相册子页面 ([24beeb5](https://git.wzwtec.com/function/o2o-client/commits/24beeb58455597d6bd346fe2622890271a44b0b2))
-* **店铺:** 店铺详情页面优化 ([ce4b630](https://git.wzwtec.com/function/o2o-client/commits/ce4b6307aaaaabbb43a2c4fd5ffb229a3067e61c))
-* **店铺:** 新增店铺相册详情页 ([d67ffa3](https://git.wzwtec.com/function/o2o-client/commits/d67ffa3d9a6c7b78f56b73b86e8d278a3de6c4f8))
-* **店铺详情页:** 对接店铺详情页的接口 ([18fd67a](https://git.wzwtec.com/function/o2o-client/commits/18fd67a50ec2f708089498b0d427d60324de14c4))
-* **拼团模块:** 拼团模块完善 ([9503e16](https://git.wzwtec.com/function/o2o-client/commits/9503e1610c194c9871922903d231fae1abdc92e2))
-* **搜素列表页:** 迁移搜索相关逻辑 ([855da6e](https://git.wzwtec.com/function/o2o-client/commits/855da6eab2a4a37971b31adbe189b57a5c6e530a))
-* **支付:** 打通支付页面和支付组件 ([badfd98](https://git.wzwtec.com/function/o2o-client/commits/badfd98e27c9c40910df417d85c530de6dcc8f83))
-* **支付页面:** 兼容单个订单的情况 ([d6e1f07](https://git.wzwtec.com/function/o2o-client/commits/d6e1f0748474b4f9c38d076690b1aa4e8b309fc7))
-* **收藏:** 完善收藏页面布局 ([afa9d41](https://git.wzwtec.com/function/o2o-client/commits/afa9d41f9fcd8867c2402d6565d9c8f766d4cbd3))
-* **收藏功能:** 收藏增加了分页功能，删除功能 ([290fa4c](https://git.wzwtec.com/function/o2o-client/commits/290fa4c60141ea14a41aeb2f1b08706130356dc1))
-* **收藏功能完成:** 收藏功能已经完成，收藏到购买的跳转未做 ([9a7898d](https://git.wzwtec.com/function/o2o-client/commits/9a7898d75702cf00c8d7a4bf397de584a1ab3fd4))
-* **收藏增加功能:** 收藏功能加入逻辑 ([11a921d](https://git.wzwtec.com/function/o2o-client/commits/11a921d5a057280104309b5fdcda2064a66f3b22))
-* **新增会员卡页面:** 新增会员卡页面 ([4c080f1](https://git.wzwtec.com/function/o2o-client/commits/4c080f111d9a2f5a7759451e57a085a013e80295))
-* **新增商品规格组件product-sku:** 新增商品规格组件product-sku ([34149d4](https://git.wzwtec.com/function/o2o-client/commits/34149d47b6e8655b25bc66cfc293bd6377530cdc))
-* **新增底部购买按钮组件:** 新增底部购买按钮组件 ([e46f938](https://git.wzwtec.com/function/o2o-client/commits/e46f9387f28a334b648940515538b9f1f7cf28d8))
-* **新增限时抢购模式:** 全局限时抢购列表页、详情页、下单流程打通 ([9ec1561](https://git.wzwtec.com/function/o2o-client/commits/9ec156196a2612390265b7fff4314a5c2524fd3d))
-* **用户登录:** 完善登录后将用户信息存入vuex和localstorage中 ([cdbaec6](https://git.wzwtec.com/function/o2o-client/commits/cdbaec65aa31fccef97853daa8193f2a1f93e6c8))
-* **登录:** 新增登录模块 ([ae556c0](https://git.wzwtec.com/function/o2o-client/commits/ae556c04b53d3b568f30954552b30fec39a77f69))
-* **秒杀:** 修复公共toGoodDetail方法对秒杀类商品的支持 ([5dab773](https://git.wzwtec.com/function/o2o-client/commits/5dab7734349cc1901570bfaf042d8347da5e47db))
-* **秒杀:** 调通店铺秒杀主页 ([487100d](https://git.wzwtec.com/function/o2o-client/commits/487100d92c6b54cbd548d3392122b00cd0c6824c))
-* **秒杀预览:** 新增秒杀页面 ([620992e](https://git.wzwtec.com/function/o2o-client/commits/620992e4015b98bf20740fb7b62bbe1f56c4a56f))
-* **精简项目:** 精简static下文件 ([04177f1](https://git.wzwtec.com/function/o2o-client/commits/04177f1e099bf8bb8fe1f90bd337427024a1f524))
-* **组件:** address组件 ([a1bc0d2](https://git.wzwtec.com/function/o2o-client/commits/a1bc0d2adaf7a33915d016a494164a87deb804d3))
-* **组件:** 优化广告组件 ([443fe18](https://git.wzwtec.com/function/o2o-client/commits/443fe18ac058d15727999fd499288cd9e8a1aa43))
-* **组件:** 广告组件 ([76f18ce](https://git.wzwtec.com/function/o2o-client/commits/76f18ce68af8ea89befc778bd99b3241ff9de3d3))
-* **组件:** 新增diy-form组件 ([803f79f](https://git.wzwtec.com/function/o2o-client/commits/803f79f0e5f4e9bcf909e9188b28e2f141a7efbe))
-* **组件:** 新增goods-item组件 ([1b110d1](https://git.wzwtec.com/function/o2o-client/commits/1b110d1488bd4820df30037e104fd6d7aee0321e))
-* **组件:** 新增layout-popup组件 ([612855d](https://git.wzwtec.com/function/o2o-client/commits/612855d58976277906831732f791da903867271d))
-* **组件:** 新增navigator组件，用于沉浸式的页面 ([43ef4b8](https://git.wzwtec.com/function/o2o-client/commits/43ef4b89bc688bc574cf4cba6f5053b9bc2d0f7a))
-* **组件:** 新增表单校验组件 ([e9eea9b](https://git.wzwtec.com/function/o2o-client/commits/e9eea9b8e21d645ce3478b53132a00c18a382627))
-* **组件:** 表单错误提示组件 ([e5e5c83](https://git.wzwtec.com/function/o2o-client/commits/e5e5c834a9675a66e960257c594dad4a6fce2e96))
-* **订单:** 完善订单下单、支付 ([7e25006](https://git.wzwtec.com/function/o2o-client/commits/7e25006f063646b1fda6565b3cd0efba339ccdde))
-* **订单:** 扩展订单确认页面，支持外卖模式下单。 ([554a0e2](https://git.wzwtec.com/function/o2o-client/commits/554a0e208c2c0f652d15b7560a9fa662b3beb43c))
-* **订单:** 海红新增订单列表和订单详情页面 ([a23f25a](https://git.wzwtec.com/function/o2o-client/commits/a23f25aa328e31d5b6195bcff9beebae0dbc027c))
-* **订单列表:** 扩展订单列表，支持各种订单 ([1be4cee](https://git.wzwtec.com/function/o2o-client/commits/1be4cee06315409c048fb123d18a52e63c415e8f))
-* **订单支付页面:** 优化订单支付页面的明细清单显示 ([74d7922](https://git.wzwtec.com/function/o2o-client/commits/74d79226de17f20da8e39ff6c02c9d91f8d86e99))
-* **订单模块:** 订单确认页和订单支付页 ([1997ec4](https://git.wzwtec.com/function/o2o-client/commits/1997ec44c605913298ad24cb90ebd82834c41ccd))
-* **订单流程:** 1.新增购买确认页 2.新增api/order模块 3.将所有个人相关页面，统一放到user目录下 ([816cb8a](https://git.wzwtec.com/function/o2o-client/commits/816cb8a46225a31dd3d0db7b448abf52f59b6a05))
-* **订单相关:** 新增订单列表 ([b803782](https://git.wzwtec.com/function/o2o-client/commits/b803782053a01266fe0aff2eb0da64a56d659b32))
-* **订单确认页面:** 完善订单确认页面 ([288d86d](https://git.wzwtec.com/function/o2o-client/commits/288d86d1553d7777036a2b33cc5592f2bbc62e62))
-* **调通订单支付页面:** 1.支持分单模式  2.单个订单模式稍后 ([85c7196](https://git.wzwtec.com/function/o2o-client/commits/85c7196ca7301a600cb4742bf1df1ce94b45bc1e))
-* **购物车:** 完成购物车页面的操作删除 选择管理 ([ed05c16](https://git.wzwtec.com/function/o2o-client/commits/ed05c1656b7d820988ddc93a958951346d8bb241))
-* **赠品:** 新增赠品逻辑 ([d451cc0](https://git.wzwtec.com/function/o2o-client/commits/d451cc06c8852bdb3be5828e444e4dd069934e4a))
-* **限时抢购:** 1.新增限时抢购的页面和接口 ([e565f02](https://git.wzwtec.com/function/o2o-client/commits/e565f024444b02ccaa57f00e1bfc9bafc3c36dbd))
-* **限时抢购:** 调通限时抢购活动详情页（商家管理端分享的限时抢购链接或者海报) ([f8f4e41](https://git.wzwtec.com/function/o2o-client/commits/f8f4e4176478981f3425f0ed53b03bc3c3945abe))
-* **限时秒杀页面:** 限时秒杀页面制作 ([21f1b23](https://git.wzwtec.com/function/o2o-client/commits/21f1b23c960ce2acd49c81fa4f3a18d3340dc9d8))
-* **页面:** 个人中心页面的图标列表优化 ([5ae0180](https://git.wzwtec.com/function/o2o-client/commits/5ae018074f7b671267f6ca44292c1009eb481626))
-* **首页:** 优化首页数据加载机制 ([e79621b](https://git.wzwtec.com/function/o2o-client/commits/e79621b46e2ff15228aab58fa30276ca7b2719e5))
-* **首页:** 优化首页页面样式 ([009a680](https://git.wzwtec.com/function/o2o-client/commits/009a6804995d609fcee2f35b3f59e508fc70c2fb))
-* **首页:** 完善首页样式 ([a3bf85f](https://git.wzwtec.com/function/o2o-client/commits/a3bf85f8cf23e64c86eb2281f7a96985f7cd6c73))
-* **首页:** 首页优化 ([f9e3e18](https://git.wzwtec.com/function/o2o-client/commits/f9e3e18d5d424ad6744c9c2e26f670870cbb43a4))
-* **首页:** 首页大幅改版 ([b032d1c](https://git.wzwtec.com/function/o2o-client/commits/b032d1c7faa8c942c5e7f4e4497420a3af073b4a))
-* **首页:** 首页样式优化 ([09ee03c](https://git.wzwtec.com/function/o2o-client/commits/09ee03c1f2a31ea53a8290fe048d6e333f019756))
-* **首页:** 首页样式优化 ([27c831a](https://git.wzwtec.com/function/o2o-client/commits/27c831a717c12dadfad27d7ad3468e7474349cca))
-* **首页交互优化:** 1.新增underline动画 2.hack样式错误 ([356f7f0](https://git.wzwtec.com/function/o2o-client/commits/356f7f0215b2c9d154afa8226f12c94f87b91446))
-
-
-
-## 0.0.5 (2020-05-07)
-
+- feat(订单列表): 新增支持同城订单跑腿跟踪
 
 ### Bug Fixes
-
-* **filter:** 删除重复错误的formatTime过滤器 ([fae8140](https://git.wzwtec.com/function/o2o-client/commits/fae81405715f37e85b791e43c8a305dfbad403db))
-* **优化交互:** 优化首页、下单页面、详情页的交互 ([5c8d6b7](https://git.wzwtec.com/function/o2o-client/commits/5c8d6b7a1062791c301308cd098d6f550aac4f84))
-* **优化样式:** 解决几个小bug ([56bbd33](https://git.wzwtec.com/function/o2o-client/commits/56bbd333a3110c85281a31412b9be481c45f43bd))
-* **商品规格:** 修复商品规格不能支持多个属性的选择 ([5df7b66](https://git.wzwtec.com/function/o2o-client/commits/5df7b6663248ba963bae6bb4242d172052c07f75))
-* **商品详情:** 修复商品详情的评论和选择规格 ([0082b2a](https://git.wzwtec.com/function/o2o-client/commits/0082b2a42c5aae59ab29310db59d2f4c8288bed1))
-* **商品详情:** 修复商品详情门店页面和接口 ([4c0218c](https://git.wzwtec.com/function/o2o-client/commits/4c0218c41bbadcfdc796b4fe6ac91a5fcedcf495))
-* **商品详情:** 修复商品详情页面规格不能兼容手机和电脑发布的 ([26eb77a](https://git.wzwtec.com/function/o2o-client/commits/26eb77a91c287e984332fc4e0682d65b46e4ef45))
-* **商家会员卡:** 修复商家会员卡接口 ([b4de62f](https://git.wzwtec.com/function/o2o-client/commits/b4de62fbcf8b4affeba0f2aad37f9da84c81cc7c))
-* **好评:** 新增tabber好评页面 ([8dbd1bb](https://git.wzwtec.com/function/o2o-client/commits/8dbd1bb73dc2046da1eaeefc49baf13b01875bec))
+- fix(优化im): 1.解决进入不同商户，没有清空之前的聊天记录的问题 2.进入直播间刷新直播间名称为对方昵称
+- fix(订单支付): 订单支付页，如果使用系统优惠券导致优惠券金额显示错误的问题。
 
 
+## 2020-06-03
+### Bug Fixes
+- fix(首页): 优化首页交互
+- fix(拼团订单): 修复拼团订单跳转问题
+- fix(分享赚首页): 优化分享赚首页的样式
+
+
+## 2020-06-02
+### Bug Fixes
+- fix(好评): 修复好评页面的bug
+- fix(当面付): 修复门店详情页的当面付功能
+
+
+## 2020-05-31
+
+## 2020-05-30
 ### Features
+- feat(im): iM模块扩展优化
 
-* **diy-form组件:** 优化事件传值机制 ([24b4fc6](https://git.wzwtec.com/function/o2o-client/commits/24b4fc6434b84a03a26e44ab817e83173d38e045))
-* **helpers.js:** 扩展getArrColumn方法 ([7a353a1](https://git.wzwtec.com/function/o2o-client/commits/7a353a102fc670f0b0e48bdf8707717468af8dee))
-* **layout-ad组件:** 广告组件优化 ([f6a1431](https://git.wzwtec.com/function/o2o-client/commits/f6a14310ad2f0cb28d8f8d8a2ee7b0d7caf8c0f7))
-* **tabbar:** 优化tabbar ([8e4b9c0](https://git.wzwtec.com/function/o2o-client/commits/8e4b9c04f7329e51450801b8207e043b7868dddc))
-* **下单流程:** 1.优化下单校验 2.打通新版的下单流程 ([e7ebd19](https://git.wzwtec.com/function/o2o-client/commits/e7ebd19dfb867b3896a1c5a10ae2ff190bb35dae))
-* **下单流程:** 下单页面，优化初始化机制。 ([2b03ca6](https://git.wzwtec.com/function/o2o-client/commits/2b03ca6c303026ffaa0b7d26f12de308474ff4ef))
-* **个人中心:** 个人中心链接 ([d1542b0](https://git.wzwtec.com/function/o2o-client/commits/d1542b013ef2f640859e7c753ad22861a894b4de))
-* **个人中心（退货退款）:** 1.新增个人中心退货退款列表页面和接口2.新增个人中心退货退款详情页面和接口3.修复购物车的推荐产品 ([842b2e4](https://git.wzwtec.com/function/o2o-client/commits/842b2e4cc36b673bc6fe23f47c3e72490f0d9e66))
-* **个人中心权益卡和支付组件优化:** 1.新增权益卡页面和接口2.修复登录页接口调用参数错误3.新增支付组件可配置项is_use_order_pay ([21c314c](https://git.wzwtec.com/function/o2o-client/commits/21c314c3e737fe32c391e7ca3b77ba9a41af6ce4))
-* **个人中心签到:** 1.新增个人中心签到页面和接口2.新增权益卡（未开始）页面3.新增model组件 ([e4c0ebb](https://git.wzwtec.com/function/o2o-client/commits/e4c0ebb77abcd850aad00fb24ceb7b527300692f))
-* **个人中心页面:** 个人中心页面 ([a9cfff3](https://git.wzwtec.com/function/o2o-client/commits/a9cfff3e76081999c1127368262dacceca373acf))
-* **个人中心页面:** 个人中心页面 ([dbb3eef](https://git.wzwtec.com/function/o2o-client/commits/dbb3eef0cd9a6ef4f0e6e27ebcb86913e76a988c))
-* **个人中心页面:** 优化个人中心页面样式 ([8798fd1](https://git.wzwtec.com/function/o2o-client/commits/8798fd10d297a4f4c6b803b37bbd9a20fcf16300))
-* **享免单:** 新增享免单专区和支付成功享免单 ([53bc64c](https://git.wzwtec.com/function/o2o-client/commits/53bc64c1b94ce92ef50e85658ffde8c6f05cc506))
-* **余额模块:** 新增余额中和余额充值页面 ([c54fb16](https://git.wzwtec.com/function/o2o-client/commits/c54fb16f7ab0db36a8609b1e1ddcc846a21c828f))
-* **全局主题:** 新增全局主题机制 ([4044b69](https://git.wzwtec.com/function/o2o-client/commits/4044b69566b08832bd3f2a74f8e58546c2785067))
-* **全局机制:** 新增initData相关机制 ([47447b3](https://git.wzwtec.com/function/o2o-client/commits/47447b30342adae3acc2c1d53900d4db3c4f6ce7))
-* **分享赚:** 分享赚详情页面新增唤起分享、生成海报等功能 ([a549af2](https://git.wzwtec.com/function/o2o-client/commits/a549af2c13270459462e0d2e244a333702d43c4e))
-* **分享赚:** 新增分享详情页 ([e375e60](https://git.wzwtec.com/function/o2o-client/commits/e375e608bd229a4bd26c2956f80cd87db582cb2b))
-* **分享赚:** 新增分享赚列表页 ([2424b78](https://git.wzwtec.com/function/o2o-client/commits/2424b7827a515989c3c8555a7c55c95e3b3e797b))
-* **分包机制和商品详情评论:** 1.新增分包机制pagesA包2.修复商品详情的评论回复接口 ([30837e1](https://git.wzwtec.com/function/o2o-client/commits/30837e1930f8e197d37ab7b8018c861f89361041))
-* **分销:** 优化分销-海报分享页面 ([e1ff8e2](https://git.wzwtec.com/function/o2o-client/commits/e1ff8e2e261476459d9e7df4518b36b20e1ac732))
-* **分销:** 新增分享海报页面 ([739434e](https://git.wzwtec.com/function/o2o-client/commits/739434e80acae1ec279f340e08fc46b90ab31014))
-* **分销中心:** 完成迁移分销中心模块 ([db92684](https://git.wzwtec.com/function/o2o-client/commits/db92684c855efd1f5dbf4e148e1f5ff5f22d2244))
-* **商品:** 订单模板 ([ac44a9b](https://git.wzwtec.com/function/o2o-client/commits/ac44a9b3ec5c4d214495759da1480cdfee2231ad))
-* **商品评论:** 1.新增商品评论页面和接口2.修复订单列表的问题 ([805f67a](https://git.wzwtec.com/function/o2o-client/commits/805f67a458335300cd44506914d0ba0ff974e4f2))
-* **商品详情:** 1.修复商品详情的链接跳转2.新增mixins全局方法打电话$cellPhone地址$openLocation ([a05b178](https://git.wzwtec.com/function/o2o-client/commits/a05b178fab4cab71bdea5fa75d9bb3403c0b4c0f))
-* **商品详情:** 修复商品详情的一些问题 ([40269ab](https://git.wzwtec.com/function/o2o-client/commits/40269ab4b03e343ba03f3e45825cef99086d30a9))
-* **商品详情页:** 优化商品详情页（参照淘宝) ([aa712a9](https://git.wzwtec.com/function/o2o-client/commits/aa712a99d0dd7e70c4366d4a7959bf193c670a20))
-* **商家详情:** 商家详情新增显示内容 ([bfbb620](https://git.wzwtec.com/function/o2o-client/commits/bfbb620ffd2486c82bd1a64417a2bb2cf4424b2b))
-* **图标库:** 图标库更新 ([9fa19b2](https://git.wzwtec.com/function/o2o-client/commits/9fa19b23f1315b2d2c2e478b2339779d7f3ed183))
-* **图片路径:** 图片路径过滤 ([3ab8bc5](https://git.wzwtec.com/function/o2o-client/commits/3ab8bc5b3fb8bad1339769da8054602b87c97449))
-* **增加个人中心页面，增加一些组件:** 增加了个人中心页面，增加了产品图组件，增加了标签功能组件 ([257263c](https://git.wzwtec.com/function/o2o-client/commits/257263c9491b0a7cf41679256f87ccd40ded769c))
-* **增加了个人中心页面，增加两个组件:** 增加了个人中心页，增加了一个产品组件，一个展示功能图标的组件 ([0a6df5d](https://git.wzwtec.com/function/o2o-client/commits/0a6df5d20bb38ae23e23bda74b42b51ac540caa7))
-* **增加了消息页:** 增加了消息列表静态列表页 ([9280790](https://git.wzwtec.com/function/o2o-client/commits/9280790bd0eb92013fe57cb61eb08386c308345d))
-* **外卖:** 优化外卖页面 ([d2e410a](https://git.wzwtec.com/function/o2o-client/commits/d2e410af40b94c1a99986b158e906fd591488e40))
-* **外卖:** 完善外卖功能 ([38cbfec](https://git.wzwtec.com/function/o2o-client/commits/38cbfec60f654aa634ae3f9087036730ee252c6d))
-* **外卖:** 新增外卖列表和外卖详情页面 ([d92d4ca](https://git.wzwtec.com/function/o2o-client/commits/d92d4ca74842836b4eb40920bd8eda26422913ed))
-* **完善店铺详情页的逻辑:** 店铺详情页新增评论、门店列表 ([b27acaf](https://git.wzwtec.com/function/o2o-client/commits/b27acaf73e7ed3a5561d9de8bad77689c8c0f7dc))
-* **富文本组件:** 优化富文本组件 ([b375ce8](https://git.wzwtec.com/function/o2o-client/commits/b375ce816be53d4c4eb4c36550ead2c14d6416e8))
-* **店铺:** 店铺详情页新增相册子页面 ([24beeb5](https://git.wzwtec.com/function/o2o-client/commits/24beeb58455597d6bd346fe2622890271a44b0b2))
-* **店铺:** 店铺详情页面优化 ([ce4b630](https://git.wzwtec.com/function/o2o-client/commits/ce4b6307aaaaabbb43a2c4fd5ffb229a3067e61c))
-* **店铺:** 新增店铺相册详情页 ([d67ffa3](https://git.wzwtec.com/function/o2o-client/commits/d67ffa3d9a6c7b78f56b73b86e8d278a3de6c4f8))
-* **店铺详情页:** 对接店铺详情页的接口 ([18fd67a](https://git.wzwtec.com/function/o2o-client/commits/18fd67a50ec2f708089498b0d427d60324de14c4))
-* **搜素列表页:** 迁移搜索相关逻辑 ([855da6e](https://git.wzwtec.com/function/o2o-client/commits/855da6eab2a4a37971b31adbe189b57a5c6e530a))
-* **支付:** 打通支付页面和支付组件 ([badfd98](https://git.wzwtec.com/function/o2o-client/commits/badfd98e27c9c40910df417d85c530de6dcc8f83))
-* **支付页面:** 兼容单个订单的情况 ([d6e1f07](https://git.wzwtec.com/function/o2o-client/commits/d6e1f0748474b4f9c38d076690b1aa4e8b309fc7))
-* **收藏:** 完善收藏页面布局 ([afa9d41](https://git.wzwtec.com/function/o2o-client/commits/afa9d41f9fcd8867c2402d6565d9c8f766d4cbd3))
-* **收藏功能:** 收藏增加了分页功能，删除功能 ([290fa4c](https://git.wzwtec.com/function/o2o-client/commits/290fa4c60141ea14a41aeb2f1b08706130356dc1))
-* **收藏功能完成:** 收藏功能已经完成，收藏到购买的跳转未做 ([9a7898d](https://git.wzwtec.com/function/o2o-client/commits/9a7898d75702cf00c8d7a4bf397de584a1ab3fd4))
-* **收藏增加功能:** 收藏功能加入逻辑 ([11a921d](https://git.wzwtec.com/function/o2o-client/commits/11a921d5a057280104309b5fdcda2064a66f3b22))
-* **新增会员卡页面:** 新增会员卡页面 ([4c080f1](https://git.wzwtec.com/function/o2o-client/commits/4c080f111d9a2f5a7759451e57a085a013e80295))
-* **新增商品规格组件product-sku:** 新增商品规格组件product-sku ([34149d4](https://git.wzwtec.com/function/o2o-client/commits/34149d47b6e8655b25bc66cfc293bd6377530cdc))
-* **新增底部购买按钮组件:** 新增底部购买按钮组件 ([e46f938](https://git.wzwtec.com/function/o2o-client/commits/e46f9387f28a334b648940515538b9f1f7cf28d8))
-* **新增限时抢购模式:** 全局限时抢购列表页、详情页、下单流程打通 ([9ec1561](https://git.wzwtec.com/function/o2o-client/commits/9ec156196a2612390265b7fff4314a5c2524fd3d))
-* **用户登录:** 完善登录后将用户信息存入vuex和localstorage中 ([cdbaec6](https://git.wzwtec.com/function/o2o-client/commits/cdbaec65aa31fccef97853daa8193f2a1f93e6c8))
-* **登录:** 新增登录模块 ([ae556c0](https://git.wzwtec.com/function/o2o-client/commits/ae556c04b53d3b568f30954552b30fec39a77f69))
-* **秒杀预览:** 新增秒杀页面 ([620992e](https://git.wzwtec.com/function/o2o-client/commits/620992e4015b98bf20740fb7b62bbe1f56c4a56f))
-* **精简项目:** 精简static下文件 ([04177f1](https://git.wzwtec.com/function/o2o-client/commits/04177f1e099bf8bb8fe1f90bd337427024a1f524))
-* **组件:** address组件 ([a1bc0d2](https://git.wzwtec.com/function/o2o-client/commits/a1bc0d2adaf7a33915d016a494164a87deb804d3))
-* **组件:** 优化广告组件 ([443fe18](https://git.wzwtec.com/function/o2o-client/commits/443fe18ac058d15727999fd499288cd9e8a1aa43))
-* **组件:** 广告组件 ([76f18ce](https://git.wzwtec.com/function/o2o-client/commits/76f18ce68af8ea89befc778bd99b3241ff9de3d3))
-* **组件:** 新增diy-form组件 ([803f79f](https://git.wzwtec.com/function/o2o-client/commits/803f79f0e5f4e9bcf909e9188b28e2f141a7efbe))
-* **组件:** 新增goods-item组件 ([1b110d1](https://git.wzwtec.com/function/o2o-client/commits/1b110d1488bd4820df30037e104fd6d7aee0321e))
-* **组件:** 新增layout-popup组件 ([612855d](https://git.wzwtec.com/function/o2o-client/commits/612855d58976277906831732f791da903867271d))
-* **组件:** 新增navigator组件，用于沉浸式的页面 ([43ef4b8](https://git.wzwtec.com/function/o2o-client/commits/43ef4b89bc688bc574cf4cba6f5053b9bc2d0f7a))
-* **组件:** 新增表单校验组件 ([e9eea9b](https://git.wzwtec.com/function/o2o-client/commits/e9eea9b8e21d645ce3478b53132a00c18a382627))
-* **组件:** 表单错误提示组件 ([e5e5c83](https://git.wzwtec.com/function/o2o-client/commits/e5e5c834a9675a66e960257c594dad4a6fce2e96))
-* **订单:** 完善订单下单、支付 ([7e25006](https://git.wzwtec.com/function/o2o-client/commits/7e25006f063646b1fda6565b3cd0efba339ccdde))
-* **订单:** 扩展订单确认页面，支持外卖模式下单。 ([554a0e2](https://git.wzwtec.com/function/o2o-client/commits/554a0e208c2c0f652d15b7560a9fa662b3beb43c))
-* **订单:** 海红新增订单列表和订单详情页面 ([a23f25a](https://git.wzwtec.com/function/o2o-client/commits/a23f25aa328e31d5b6195bcff9beebae0dbc027c))
-* **订单支付页面:** 优化订单支付页面的明细清单显示 ([74d7922](https://git.wzwtec.com/function/o2o-client/commits/74d79226de17f20da8e39ff6c02c9d91f8d86e99))
-* **订单模块:** 订单确认页和订单支付页 ([1997ec4](https://git.wzwtec.com/function/o2o-client/commits/1997ec44c605913298ad24cb90ebd82834c41ccd))
-* **订单流程:** 1.新增购买确认页 2.新增api/order模块 3.将所有个人相关页面，统一放到user目录下 ([816cb8a](https://git.wzwtec.com/function/o2o-client/commits/816cb8a46225a31dd3d0db7b448abf52f59b6a05))
-* **订单相关:** 新增订单列表 ([b803782](https://git.wzwtec.com/function/o2o-client/commits/b803782053a01266fe0aff2eb0da64a56d659b32))
-* **订单确认页面:** 完善订单确认页面 ([288d86d](https://git.wzwtec.com/function/o2o-client/commits/288d86d1553d7777036a2b33cc5592f2bbc62e62))
-* **调通订单支付页面:** 1.支持分单模式  2.单个订单模式稍后 ([85c7196](https://git.wzwtec.com/function/o2o-client/commits/85c7196ca7301a600cb4742bf1df1ce94b45bc1e))
-* **购物车:** 完成购物车页面的操作删除 选择管理 ([ed05c16](https://git.wzwtec.com/function/o2o-client/commits/ed05c1656b7d820988ddc93a958951346d8bb241))
-* **赠品:** 新增赠品逻辑 ([d451cc0](https://git.wzwtec.com/function/o2o-client/commits/d451cc06c8852bdb3be5828e444e4dd069934e4a))
-* **限时抢购:** 1.新增限时抢购的页面和接口 ([e565f02](https://git.wzwtec.com/function/o2o-client/commits/e565f024444b02ccaa57f00e1bfc9bafc3c36dbd))
-* **限时秒杀页面:** 限时秒杀页面制作 ([21f1b23](https://git.wzwtec.com/function/o2o-client/commits/21f1b23c960ce2acd49c81fa4f3a18d3340dc9d8))
-* **页面:** 个人中心页面的图标列表优化 ([5ae0180](https://git.wzwtec.com/function/o2o-client/commits/5ae018074f7b671267f6ca44292c1009eb481626))
-* **首页:** 优化首页数据加载机制 ([e79621b](https://git.wzwtec.com/function/o2o-client/commits/e79621b46e2ff15228aab58fa30276ca7b2719e5))
-* **首页:** 优化首页页面样式 ([009a680](https://git.wzwtec.com/function/o2o-client/commits/009a6804995d609fcee2f35b3f59e508fc70c2fb))
-* **首页:** 完善首页样式 ([a3bf85f](https://git.wzwtec.com/function/o2o-client/commits/a3bf85f8cf23e64c86eb2281f7a96985f7cd6c73))
-* **首页:** 首页优化 ([f9e3e18](https://git.wzwtec.com/function/o2o-client/commits/f9e3e18d5d424ad6744c9c2e26f670870cbb43a4))
-* **首页:** 首页大幅改版 ([b032d1c](https://git.wzwtec.com/function/o2o-client/commits/b032d1c7faa8c942c5e7f4e4497420a3af073b4a))
-* **首页:** 首页样式优化 ([09ee03c](https://git.wzwtec.com/function/o2o-client/commits/09ee03c1f2a31ea53a8290fe048d6e333f019756))
-* **首页:** 首页样式优化 ([27c831a](https://git.wzwtec.com/function/o2o-client/commits/27c831a717c12dadfad27d7ad3468e7474349cca))
-* **首页交互优化:** 1.新增underline动画 2.hack样式错误 ([356f7f0](https://git.wzwtec.com/function/o2o-client/commits/356f7f0215b2c9d154afa8226f12c94f87b91446))
+### Bug Fixes
+- fix(微信登录): 修复微信登录问题
+- fix(微信登录): 修复微信登录签名错误的问题
+- fix(外卖模块): 修复外卖模块下单的问题
+- fix(外卖): 修复外卖购物车的问题
+- fix(集中修复bug): 集中修复bug
 
 
+## 2020-05-29
+### Bug Fixes
+- fix(修改bug): 集中修改bug
+- fix(集中修复): 集中修复tapd的bug
 
+
+## 2020-05-28
+### Bug Fixes
+- fix(集中修改bug): 集中修改bug
+- fix(店铺详情): 修复其他页面跳转店铺详情时bid参数错误
+
+
+## 2020-05-27
+### Bug Fixes
+- fix(修复一波bug): 修复tapdbug
+
+
+## 2020-05-26
+### Features
+- feat(替换tabbar图标): 1.替换购物车的图标
+
+### Bug Fixes
+- fix(线下支付): 优化线下支付的页面
+- fix(订单): 订单详情
+
+
+## 2020-05-25
+### Features
+- feat(线下支付): 新增门店-线下支付功能
+
+### Bug Fixes
+- fix(推荐商品): 优化推荐商品组件
+- fix(首页): 优化首页代码结构
+- fix(backfunc $back): 优化全局的后退方法（后续其他页面不再单独使用uni.navigateBack方法，统一使用this.$back或者引入fun/backFunc方法
+- fix(分享赚详情): 优化分享图片
+- fix(pay.js): 优化统一发起支付的方法
+- fix(layout-layer组件): 修复组件样式异常的bug
+
+
+## 2020-05-24
+
+## 2020-05-23
+
+## 2020-05-22
+### Features
+- feat(物流跟踪): 订单列表页面新增物流跟踪等功能
+- feat(店铺详情页): 店铺详情页新增分享门店入口
+
+### Bug Fixes
+- fix(支付页面): 修复支付页面数据显示的问题
+- fix(商品详情页): 修复商品价格相关问题
+- fix(商品详情页): 修复商品详情页关于mode相关的参数
+
+
+## 2020-05-21
+### Features
+- feat(更新appid): 再也不怕和商户端公共一个appid了
+- feat(mixins): 混合类中加入owner_id机制
+
+### Bug Fixes
+- fix(改进体验): 优化购物车、底部tabbar、店铺详情等页面
+
+
+## 2020-05-20
+### Features
+- feat(im模块): 扩展IM模块并优化
+
+### Bug Fixes
+- fix(request.js): 优化request模块
+- fix(精简文件): 优化moment.js的引入的方式
+- fix(购物车): 解决购物车的bug
+
+
+## 2020-05-19
+### Features
+- feat(im): 大幅优化IM交互体验
+
+### Bug Fixes
+- fix(修复客户端的bug): 修复客户端的bug
+
+
+## 2020-05-18
+### Features
+- feat(分享赚): 分享赚分享页面支持分享语diy
+
+### Bug Fixes
+- fix(个人中心): 优化个人中心样式
+- fix(diy-notice组件): 优化组件样式
+- fix(外卖): 修改外卖首页和外卖详情页的bug
+- fix(支付密码): 修复各种需要设置支付密码时无法正确跳转的问题
+- fix(店铺详情页): 修复店铺详情页的bug
+- fix(商品详情页): 修复商品详情页评论相关的bug
+- fix(购物车): 修复购物车页面无法勾选店铺的bug
+- fix(togoodsdetail方法): 优化toGoodsDetail公共方法
+- fix(好评): 修复好评也点击商品无法跳转到商品详情页的bug
+- fix(购物车): 修复购物车中点击“去逛逛”按钮无效的bug
+- fix(分享赚): 修复分享赚详情页，点击转发按钮转发的不是商品的bug
+
+
+## 2020-05-14
+### Features
+- feat(im): iM功能扩展
+
+
+## 2020-05-13
+### Features
+- feat(im): 扩展IM功能
+
+
+## 2020-05-12
+### Features
+- feat(im): 优化样式
+- feat(im功能完善): 新增收发和优化样式
+- feat(im): 打通IM初始化、发送消息、接收消息流程
+
+### Bug Fixes
+- fix(im): 修复无法发送文本的bug
+
+
+## 2020-05-11
+
+## 2020-05-09
+### Features
+- feat(im): 新增初始化，和事件监听响应机制
+- feat(im): 搭建Im开发环境
+- feat(外卖): 外卖详情页面
+- feat(支付): 完善支付流程
+
+### Bug Fixes
+- fix(订单): 订单支付成功页面优化优惠券显示
+
+
+## 2020-05-08
+### Features
+- feat(订单列表): 扩展订单列表，支持各种订单
+- feat(拼团模块): 拼团模块完善
+- feat(秒杀): 调通店铺秒杀主页
+
+### Bug Fixes
+- fix(商品详情页): 优化商品详情页
+- fix(修复togoodsdetail公共方法): 修复方法适用错误
+- fix(优化跳转到商品详情的方式): 统一方法跳转（适用所有类型的商品)
+
+
+## 2020-05-07
+### Features
+- feat(秒杀): 修复公共toGoodDetail方法对秒杀类商品的支持
+- feat(享免单): 调通免单活动详情页
+- feat(限时抢购): 调通限时抢购活动详情页（商家管理端分享的限时抢购链接或者海报)
+- feat(新增限时抢购模式): 全局限时抢购列表页、详情页、下单流程打通
+
+
+## 2020-05-06
+### Features
+- feat(首页交互优化): 1.新增underline动画 2.hack样式错误
+- feat(订单模块): 订单确认页和订单支付页
+- feat(商品详情页): 优化商品详情页（参照淘宝)
+
+
+## 2020-05-05
+### Features
+- feat(商品评论): 1.新增商品评论页面和接口2.修复订单列表的问题
+- feat(分享赚): 分享赚详情页面新增唤起分享、生成海报等功能
+
+### Bug Fixes
+- fix(filter): 删除重复错误的formatTime过滤器
+
+
+## 2020-05-04
+### Features
+- feat(个人中心页面): 个人中心页面
+- feat(分销中心): 完成迁移分销中心模块
+- feat(首页): 首页优化
+- feat(余额模块): 新增余额中和余额充值页面
+- feat(页面): 个人中心页面的图标列表优化
+- feat(组件): 表单错误提示组件
+- feat(赠品): 新增赠品逻辑
+
+### Bug Fixes
+- fix(优化样式): 解决几个小bug
+
+
+## 2020-04-30
+### Features
+- feat(支付页面): 兼容单个订单的情况
+- feat(富文本组件): 优化富文本组件
+- feat(订单支付页面): 优化订单支付页面的明细清单显示
+- feat(diy-form组件): 优化事件传值机制
+- feat(helpers.js): 扩展getArrColumn方法
+- feat(调通订单支付页面): 1.支持分单模式  2.单个订单模式稍后
+
+### Bug Fixes
+- fix(优化交互): 优化首页、下单页面、详情页的交互
+
+
+## 2020-04-29
+### Features
+- feat(订单): 完善订单下单、支付
+- feat(个人中心): 个人中心链接
+- feat(个人中心（退货退款）): 1.新增个人中心退货退款列表页面和接口2.新增个人中心退货退款详情页面和接口3.修复购物车的推荐产品
+
+
+## 2020-04-28
+### Features
+- feat(订单确认页面): 完善订单确认页面
+- feat(组件): 新增diy-form组件
+- feat(订单): 扩展订单确认页面，支持外卖模式下单。
+- feat(个人中心页面): 个人中心页面
+- feat(外卖): 完善外卖功能
+
+### Bug Fixes
+- fix(商品详情): 修复商品详情页面规格不能兼容手机和电脑发布的
+
+
+## 2020-04-27
+### Features
+- feat(外卖): 优化外卖页面
+- feat(个人中心权益卡和支付组件优化): 1.新增权益卡页面和接口2.修复登录页接口调用参数错误3.新增支付组件可配置项is_use_order_pay
+- feat(商品): 订单模板
+- feat(完善店铺详情页的逻辑): 店铺详情页新增评论、门店列表
+- feat(精简项目): 精简static下文件
+- feat(商品详情): 1.修复商品详情的链接跳转2.新增mixins全局方法打电话$cellPhone地址$openLocation
+- feat(搜素列表页): 迁移搜索相关逻辑
+- feat(收藏功能): 收藏增加了分页功能，删除功能
+- feat(组件): 广告组件
+- feat(首页): 优化首页数据加载机制
+- feat(分包机制和商品详情评论): 1.新增分包机制pagesA包2.修复商品详情的评论回复接口
+
+### Bug Fixes
+- fix(好评): 新增tabber好评页面
+
+
+## 2020-04-26
+### Features
+- feat(组件): 优化广告组件
+- feat(店铺): 店铺详情页面优化
+- feat(个人中心签到): 1.新增个人中心签到页面和接口2.新增权益卡（未开始）页面3.新增model组件
+- feat(分销): 优化分销-海报分享页面
+- feat(分销): 新增分享海报页面
+- feat(tabbar): 优化tabbar
+- feat(店铺): 新增店铺相册详情页
+- feat(商品详情): 修复商品详情的一些问题
+- feat(店铺): 店铺详情页新增相册子页面
+
+### Bug Fixes
+- fix(商品详情): 修复商品详情的评论和选择规格
+
+
+## 2020-04-25
+### Features
+- feat(增加了消息页): 增加了消息列表静态列表页
+- feat(限时抢购): 1.新增限时抢购的页面和接口
+- feat(合并冲突): 限时秒杀页面，并且合并冲突代码
+- feat(限时秒杀页面): 限时秒杀页面制作
+- feat(秒杀预览): 新增秒杀页面
+
+
+## 2020-04-24
+### Features
+- feat(收藏功能完成): 收藏功能已经完成，收藏到购买的跳转未做
+- feat(购物车): 完成购物车页面的操作删除 选择管理
+- feat(合并冲突，收藏功能): 收藏功能增加了逻辑部分
+- feat(收藏增加功能): 收藏功能加入逻辑
+
+
+## 2020-04-23
+### Features
+- feat(图片过滤): 图片都增加了domain过滤
+- feat(图片路径): 图片路径过滤
+- feat(个人中心页面): 优化个人中心页面样式
+- feat(首页): 首页样式优化
+- feat(组件): 新增goods-item组件
+- feat(增加了个人中心页，增加组件): 增加了个人中心页面，增加了产品组件和功能图标组件
+- feat(增加了个人中心页面，增加两个组件): 增加了个人中心页，增加了一个产品组件，一个展示功能图标的组件
+- feat(增加个人中心页面，增加一些组件): 增加了个人中心页面，增加了产品图组件，增加了标签功能组件
+- feat(首页): 优化首页页面样式
+- feat(订单): 海红新增订单列表和订单详情页面
+- feat(全局机制): 新增initData相关机制
+- feat(用户登录): 完善登录后将用户信息存入vuex和localstorage中
+- feat(支付): 打通支付页面和支付组件
+- feat: [C并冲突
+- feat(图标库): 图标库更新
+
+
+## 2020-04-22
+### Features
+- feat(下单流程): 1.优化下单校验 2.打通新版的下单流程
+- feat(订单流程): 下单页面可以设置不同店铺的运费、订单备注
+- feat(新增底部购买按钮组件): 新增底部购买按钮组件
+- feat(下单流程): 下单页面，优化初始化机制。
+- feat(新增商品规格组件product-sku): 新增商品规格组件product-sku
+- feat(订单流程): 1.新增购买确认页 2.新增api/order模块 3.将所有个人相关页面，统一放到user目录下
+
+### Bug Fixes
+- fix(商品规格): 修复商品规格不能支持多个属性的选择
+
+
+## 2020-04-21
+### Features
+- feat(订单相关): 新增订单列表
+- feat(组件): address组件
+- feat(首页): 首页大幅改版
+- feat(全局主题): 新增全局主题机制
+
+
+## 2020-04-20
+### Features
+- feat(外卖): 新增外卖列表和外卖详情页面
+- feat(组件): 新增layout-popup组件
+- feat(组件): 新增navigator组件，用于沉浸式的页面
+- feat(组件): 新增表单校验组件
+- feat(登录): 新增登录模块
+
+### Bug Fixes
+- fix(商家会员卡): 修复商家会员卡接口
+
+
+## 2020-04-19
+### Features
+- feat(新增会员卡页面): 新增会员卡页面
+- feat(收藏): 完善收藏页面布局
+- feat(享免单): 新增享免单专区和支付成功享免单
+- feat(分享赚): 新增分享详情页
+- feat(分享赚): 新增分享赚列表页
+- feat(layout-ad组件): 广告组件优化
+
+
+## 2020-04-18
+### Features
+- feat(商家详情): 商家详情新增显示内容
+- feat(店铺详情页): 对接店铺详情页的接口
+
+### Bug Fixes
+- fix(商品详情): 修复商品详情门店页面和接口
+
+
+## 2020-04-16
+### Features
+- feat(首页): 首页样式优化
+- feat(首页): 完善首页样式
+
+
+## 2020-04-15
+
+## 2020-03-27
+
+## 2020-03-23
+
+## 2020-03-22
+
+## 2020-03-18
+
+## 2020-01-17
+
+## 2020-01-16
+### Features
+- feat 企业认证页面新增选择行业组件
+
+### Bug Fixes
+- fix 优化商户入驻行业选择组件
+- fix 更新apihost
+- fix api接口按照功能模块组织
+
+
+## 2020-01-14
+### Features
+- feat 企业认证页面新增选择行业组件
+- feat 企业认证页面新增选择行业组件
+- feat 新增企业认证页面
+- feat 新增企业认证页面
+- feat 支持选择地区
+
+
+## 2020-01-13
+
+## 2020-01-09
+### Bug Fixes
+- fix 对比代码效率，还是使用新零售的area数据
+- fix 对比代码效率，还是使用新零售的area数据
+
+
+## 2020-01-08
+### Bug Fixes
+- fix 优化脚手架
+- fix 优化脚手架
+
+
+## 2020-01-06

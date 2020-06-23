@@ -10,20 +10,30 @@
             进店
           </div>
         </div>
-        <div class="bottom-q" @click="goShare">
-          <div style="display: flex;justify-content: center;margin-bottom: 6rpx">
-            <layout-icon type="iconicon-share" size="20" color="#666666"></layout-icon>
-          </div>
-          <div>
-            分享
-          </div>
-        </div>
+<!--        <div class="bottom-q" @click="goShare">-->
+<!--          <div style="display: flex;justify-content: center;margin-bottom: 6rpx">-->
+<!--            <layout-icon type="iconicon-share" size="20" color="#666666"></layout-icon>-->
+<!--          </div>-->
+<!--          <div>-->
+<!--            分享-->
+<!--          </div>-->
+<!--        </div>-->
         <div class="bottom-q" @click="toIm">
           <div style="display: flex;justify-content: center;margin-bottom: 6rpx">
             <layout-icon weight="bold" type="iconicon-test1" size="20" color="#666666"></layout-icon>
           </div>
           <div>
             客服
+          </div>
+        </div>
+        <div class="bottom-q" @click="tofavorite">
+          <div style="display: flex;justify-content: center;margin-bottom: 6rpx">
+            <layout-icon v-if="isFavorite" weight="bold" type="iconshoucang18-copy" size="20" color="#ff0000"></layout-icon>
+            <layout-icon v-else weight="bold" type="iconicon-favorite" size="20" color="#666666"></layout-icon>
+
+          </div>
+          <div>
+            收藏
           </div>
         </div>
       </div>
@@ -41,7 +51,10 @@ import { linkToEasy } from '@/common/fun'
 export default {
   components: { LayoutIcon },
   props: {
-
+    isFavorite: {
+      type: Boolean,
+      default: false
+    }
   },
   data () {
     return {}
@@ -54,7 +67,12 @@ export default {
       this.$emit('bindRightClick')
     },
     toIm () {
-      linkToEasy('/pagesA/support/Im')
+      // linkToEasy('/pagesA/support/Im')
+      // linkToEasy('/pages/demo')
+      this.$emit('goIM')
+    },
+    tofavorite () {
+      this.$emit('tofavorite')
     },
     goStore () {
       this.$emit('goStore')
@@ -79,20 +97,18 @@ export default {
   }
 
   .left-bottom {
-    flex:1;
     height: 86rpx;
     display: flex;
     align-items: center;
+    flex:1;
     //padding-left: 54rpx;
   }
 
   .bottom-q {
-    //width: 50rpx;
     font-size: 12px;
     color: #666666;
-    //margin-left: 60rpx;
-	flex: 1;
-	text-align: center;
+    width: 80rpx;
+    text-align: center;
   }
 
   .left-btn {

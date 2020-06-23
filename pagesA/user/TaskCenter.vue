@@ -1,16 +1,17 @@
 <template>
-  <view class="myall">
+  <view @click="commonClick" class="myall">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <!-- #ifdef APP-PLUS -->
     <view class="status_bar" style="background:#2e323c;"></view>
     <!-- #endif -->
     <view class="top">
-      <image class="widthTen" :src="'/static/client/taskCenter.png'|domain"></image>
-      <layout-icon class="goBack" @click="goBack" type="iconicon-arrow-left" size="20"></layout-icon>
+      <image :src="'/static/client/taskCenter.png'|domain" class="widthTen"></image>
+      <layout-icon @click="goBack" class="goBack" size="20" type="iconicon-arrow-left"></layout-icon>
       
       <view class="titles">任务中心</view>
       <view class="center">
         <!-- <image class="widthTen" :src="'/static/client/task/center.png" ></image> -->
-        <image class="widthTen" :src="pro.img_url"></image>
+        <!-- <image class="widthTen" :src="pro.img_url"></image>
         <view class="info">
           <image :src="pro.avatar" class="widthTen"></image>
         </view>
@@ -23,7 +24,7 @@
         </view>
         <view class="zhangValue">
           <view class="view" :style="{width:(pro.growth_value/pro.upper_growth)*100+'%'}">
-          
+
           </view>
         </view>
         <view class="myValue" v-if="pro.growth_value">
@@ -38,13 +39,13 @@
         <view class="valueM">
           成长值
           <image class="image" :src="'/static/client/task/sanjiao.png'|domain"></image>
-        </view>
+        </view> -->
       </view>
     </view>
     <view style="height: 60rpx;"></view>
     <circle-title title="我的特权"></circle-title>
     <view class="myPrivilege">
-      <view class="view" v-for="(i,j) of pro.basic" :key="j">
+      <view :key="j" class="view" v-for="(i,j) of pro.basic">
         {{j+1}}、{{i.name}}
       </view>
     </view>
@@ -54,8 +55,8 @@
     <circle-title title="如何升级"></circle-title>
     
     <view class="ruhe">
-      <view class="td" v-for="(it,ind) of pro.obtain" :key="ind">
-        <image class="image" :src="it.img_url"></image>
+      <view :key="ind" class="td" v-for="(it,ind) of pro.obtain">
+        <image :src="it.img_url" class="image"></image>
         <view class="mbx">
           <view class="tops">
             {{it.name}}
@@ -65,10 +66,10 @@
           </view>
         </view>
         
-        <view class="submit" @click="yulan(it)" v-if="it.done==0&&ind=='focus'">
+        <view @click="yulan(it)" class="submit" v-if="it.done==0&&ind=='focus'">
           去完成
         </view>
-        <view class="submit" @click="goJump(it)" v-else-if="it.done==0">
+        <view @click="goJump(it)" class="submit" v-else-if="it.done==0">
           去完成
         </view>
         <view class="submit submitMbx" v-if="it.done==1">
@@ -85,6 +86,7 @@ import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import BaseMixin from '@/mixins/BaseMixin'
 import { getTaskCenter } from '@/api/customer'
 import CircleTitle from '@/componets/circle-title/circle-title'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
   mixins: [BaseMixin],
@@ -94,6 +96,7 @@ export default {
     }
   },
   components: {
+    WzwImTip,
     CircleTitle,
     
     LayoutIcon,

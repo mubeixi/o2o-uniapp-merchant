@@ -16,23 +16,23 @@
 .product-title{
   overflow: hidden;
   text-overflow: ellipsis;
-  line-height: 1.3;
+  /*line-height: 1.3;*/
 }
 
 //如果父组件要覆盖样式，那么自己用deep就好了
 .product-cover{
   @include cover-img();
-  width: 300rpx;
-  height: 300rpx;
+  /*width: 300rpx;*/
+  /*height: 300rpx;*/
 }
 </style>
 <template>
   <div class="product-panel" :class="[mode]" :style="{marginBottom}" @click="clickFn(vo)">
     <slot name="cover">
-      <div class="product-cover" :style="{backgroundImage:'url('+getDomainUrl(vo.ImgPath)+')',borderRadius:coverRadius}" ></div>
+      <div class="product-cover" :style="{width:coverWidth,height:coverWidth,backgroundImage:'url('+getDomainUrl(vo.ImgPath)+')',borderRadius:coverRadius}" ></div>
     </slot>
     <div class="product-info">
-      <slot name="title"><div class="product-title c3 p-t-10 p-b-10" :style="{FontSize:titleFontSize,height:titleBoxHeight}">{{vo.Products_Name}}</div></slot>
+      <slot name="title"><div class="product-title c3 m-t-10 m-b-10" :style="{FontSize:titleFontSize,height:titleBoxHeight,lineHeight:titleLineHeight}"><wzw-live-tag :room_id="vo.room_id" :product-info="vo" />{{vo.Products_Name}}</div></slot>
       <slot name="sales"><div v-if="sales" class="sales c9 fz-14">已售{{vo.Products_Sales}}件</div></slot>
       <div class="price-box">
         <slot name="sellingPrice">
@@ -48,10 +48,20 @@
 </template>
 <script>
 import { getDomain, toGoodsDetail } from '@/common/helper'
+import WzwLiveTag from '@/componets/wzw-live-tag/wzw-live-tag'
 
 export default {
   name: 'GoodsItem',
+  components: { WzwLiveTag },
   props: {
+    coverWidth: {
+      type: String,
+      default: '300rpx'
+    },
+    titleLineHeight: {
+      type: String,
+      default: '18px'
+    },
     titleFontSize: {
       type: String,
       default: '14px'
@@ -97,8 +107,8 @@ export default {
   },
   computed: {
     titleBoxHeight () {
-      const fontSize = parseInt(this.titleFontSize)
-      return isNaN(fontSize) ? 'auto' : (fontSize * this.titleRowNum + 'px')
+      const titleLineHeight = parseInt(this.titleLineHeight)
+      return isNaN(titleLineHeight) ? 'auto' : (titleLineHeight * this.titleRowNum + 'px')
     }
   },
   methods: {

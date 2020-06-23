@@ -1,11 +1,11 @@
 <template>
-  <view class="wrap">
-    
+  <view @click="commonClick" class="wrap">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view class="all">
-      <view class="hahas" :class="index==0?'checked':''" @click="change(0)">
+      <view :class="index==0?'checked':''" @click="change(0)" class="hahas">
         总部{{commi_rename.commi}}
       </view>
-      <view class="hahas" :class="index==1?'checked':''" @click="change(1)">
+      <view :class="index==1?'checked':''" @click="change(1)" class="hahas">
         我的好友
       </view>
     </view>
@@ -24,13 +24,13 @@
           佣金
         </view>
       </view>
-      <view class="content" v-for="(item,index) of pro " :key="index" v-if="index==0">
+      <view :key="index" class="content" v-for="(item,index) of pro " v-if="index==0">
         <view class="contentLeft">
           <view class="ming">
-            <image class='image' :src="'/static/client/distributor/first.png'|domain"></image>
+            <image class='image' src="/static/first.png"></image>
           </view>
           <view class="info">
-            <image class="image" :src="item.Shop_Logo"></image>
+            <image :src="item.Shop_Logo" class="image"></image>
           </view>
           <view class="nickName">
             {{item.Shop_Name}}
@@ -47,7 +47,7 @@
       <view class="content" v-else-if="index==1">
         <view class="contentLeft">
           <view class="ming">
-            <image class='image' :src="'/static/client/distributor/second.png'|domain"></image>
+            <image class='image' src="/static/second.png"></image>
           </view>
           <view class="info">
             <image :src="item.Shop_Logo"></image>
@@ -67,7 +67,7 @@
       <view class="content" v-else-if="index==2">
         <view class="contentLeft">
           <view class="ming">
-            <image class='image' :src="'/static/client/distributor/three.png'|domain"></image>
+            <image class='image' src="/static/three.png"></image>
           </view>
           <view class="info">
             <image :src="item.Shop_Logo"></image>
@@ -113,8 +113,10 @@
 <script>
 import { getBalanceRank } from '@/api/customer'
 import BaseMixin from '@/mixins/BaseMixin'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
+  components: { WzwImTip },
   mixins: [BaseMixin],
   data () {
     return {

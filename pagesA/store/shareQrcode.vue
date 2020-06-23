@@ -1,0 +1,406 @@
+<template>
+  <view @click="commonClick" class="page-wrap">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
+    <image :src="current_url" @click="preFn" class="preview" mode="widthFix" v-show="drawPosterDone" />
+    
+    <canvas canvas-id="myCanvas" class="myCanvas" id="myCanvas" />
+    
+    <div class="handle-box">
+      <div class="remind-title fz-13 c3 text-center">选择海报模板</div>
+      <div class="swiper">
+        <div :key="idx" @click="setSelect(idx)" class="swiper-item" v-for="(poster,idx) in poster_list">
+          <image :src="poster.thumb_bg_img" class="swiper-itm-img"></image>
+        </div>
+      </div>
+      <div @click="saveImg" class="share-btn">保存海报</div>
+    </div>
+    <layout-modal :autoClose="false" ref="commentModal">
+      <div class="refuseApplyDialog">
+        <div class="c3 fz-14 modal-title">
+          是否开启相册权限
+        </div>
+        <div class="fz-12 m-b-20 m-t-10 c9">
+          很抱歉，该功能您需开启相册授权才能保存
+        </div>
+        <div class="control">
+          <button @click="backSetting" class="action-btn btn-cancel">取消</button>
+          <button bindopensetting="openSetting" class="btn-sub action-btn" open-type='openSetting'>确定</button>
+        </div>
+      </div>
+    </layout-modal>
+  
+  </view>
+</template>
+<script>
+import BaseMixin from '@/mixins/BaseMixin'
+import { getBizShare } from '@/api/common'
+import { error, hideLoading, showLoading, toast } from '@/common/fun'
+import { getDomain, saveImageToDisk } from '@/common/helper'
+import Promisify from '@/common/Promisify'
+import { getBizInfo } from '@/api/store'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import LayoutModal from '@/componets/layout-modal/layout-modal'
+
+let canvasInstance = null
+export default {
+  components: {
+    WzwImTip,
+    LayoutModal,
+  },
+  mixins: [BaseMixin],
+  data () {
+    return {
+      qrcode: '',
+      drawPosterDone: false,
+      type: '',
+      again: '',
+      current_url: '',
+      bizInfo: {},
+      current_poster: null,
+      currentIdx: 0,
+      is_build: false,
+      qrimg: '',
+      poster_list: [],
+      // userInfo:{},
+      disInfo: {},
+      info: {
+        dis_config: {},
+        total_sales: '',
+        total_income: '',
+        balance: '',
+      },//
+    }
+  },
+  computed: {
+    userInfo () {
+      return this.$store.getters['user/getUserInfo']()
+    },
+  },
+  onReady () {
+    if (!this.biz_id) {
+      return
+    }
+    canvasInstance = uni.createCanvasContext('myCanvas')
+    this.initFunc()
+    // var context = uni.createCanvasContext('firstCanvas')
+    // context.arc(120, 80, 5, 0, 2 * Math.PI, true)
+    // context.stroke()
+    // context.draw()
+  },
+  onShow () {
+    
+    this.$refs.commentModal.close()
+  },
+  onLoad (options) {
+    if (!options.hasOwnProperty('biz_id') || !options.biz_id) {
+      error('biz_id参数必传')
+      return
+    }
+    
+    this.biz_id = options.biz_id
+    // const { type, again } = options
+    // this.type = type
+    // this.again = again
+  },
+  methods: {
+    getDomain,
+    backSetting () {
+      this.$refs.commentModal.close()
+    },
+    openSetting () {
+      const _self = this
+      console.log(this)
+      uni.authorize({
+        scope: 'scope.writePhotosAlbum',
+        success () {
+          _self.saveFn()
+        },
+        fail () {
+          _self.$refs.commentModal.show()
+          error('拒绝相册授权,保存失败')
+        },
+      })
+    },
+    saveImg () {
+      const _self = this
+      uni.getSetting({
+        success: (res) => {
+          if (!res.authSetting['scope.writePhotosAlbum']) {
+            // this.$refs.commentModal.show()
+            this.openSetting()
+          } else { // 用户已经授权过了
+            _self.saveFn()
+          }
+        },
+      })
+    },
+    async saveFn () {
+      const handleRT = await saveImageToDisk({
+        fileUrl: this.current_url,
+        type: 'online',
+      })
+      if (handleRT === false) {
+        error('保存失败')
+        return
+      }
+      toast('保存成功')
+    },
+    setSelect (idx) {
+      this.drawPoster(idx)
+    },
+    preFn () {
+      if (!this.current_url) {
+        error('请选择模板')
+        return
+      }
+      uni.previewImage({
+        urls: [this.current_url],
+      })
+    },
+    // async shareFn () {
+    //   if (this.is_build) return// 防止太快点击
+    //   this.is_build = true
+    //   const getPosterDataResult = await getPosterDetail({ id: this.poster_list[this.currentIdx].id })
+    //   const posterConf = JSON.parse(getPosterDataResult.data.data)
+    // },
+    handleChange (e) {
+      this.currentIdx = e.detail.current
+    },
+    async drawPoster (idx) {
+      try {
+        this.drawPosterDone = false
+        showLoading('生成中')
+        
+        const posterInfo = this.poster_list[idx]
+        
+        if (!posterInfo) throw Error('模板信息有误')
+        
+        const itemInfo = {}
+        for (var i in posterInfo.position) {
+          itemInfo[i] = { ...posterInfo.position[i], ...posterInfo.size[i] }
+        }
+        console.log(itemInfo)
+        
+        const wrapHeight = 1500
+        const wrapWidth = 1100
+        const ctx = canvasInstance
+        
+        const userInfo = {
+          avatar: getDomain(this.bizInfo.biz_logo),
+          nickname: this.bizInfo.biz_shop_name,
+          qrcode: getDomain(this.qrcode),
+        }
+        console.log(userInfo)
+        
+        ctx.fillRect(wrapWidth, wrapHeight, 0, 0)
+        
+        const wrapTempFile = await Promisify('getImageInfo', { src: getDomain(posterInfo.bg_img) }).catch(e => {
+          throw Error(e.errMsg || '缓存海报背景失败')
+        })
+        ctx.drawImage(wrapTempFile.path, 0, 0, wrapWidth, wrapHeight)
+        
+        const qrcodeTempFile = await Promisify('getImageInfo', { src: userInfo.qrcode }).catch(e => {
+          throw Error(e.errMsg || '缓存二维码失败')
+        })
+        ctx.drawImage(qrcodeTempFile.path, itemInfo.qrcode.left, itemInfo.qrcode.top, itemInfo.qrcode.width, itemInfo.qrcode.height)
+        
+        const avatarTempFile = await Promisify('getImageInfo', { src: userInfo.avatar }).catch(e => {
+          throw Error(e.errMsg || '缓存二维码失败')
+        })
+        ctx.drawImage(avatarTempFile.path, itemInfo.avatar.left, itemInfo.avatar.top, itemInfo.avatar.width, itemInfo.avatar.height)
+        
+        ctx.setFontSize(itemInfo.nickname.size)
+        ctx.setFillStyle('#333333')
+        ctx.fillText(userInfo.nickname, itemInfo.nickname.left, itemInfo.nickname.top)
+        
+        ctx.setFontSize(itemInfo.follow.size)
+        ctx.setFillStyle('#333333')
+        ctx.fillText(this.bizInfo.follow, itemInfo.follow.left, itemInfo.follow.top)
+        
+        await new Promise(resolve => {
+          ctx.draw(false, function () {
+            console.log('draw done')
+            resolve()
+          })
+        })
+        
+        const { tempFilePath } = await Promisify('canvasToTempFilePath', { canvasId: 'myCanvas' })
+        console.log(tempFilePath)
+        
+        this.current_url = tempFilePath
+        this.drawPosterDone = true
+        
+        // 绘制底部白色
+        // ctx.setFillStyle('#f2f2f2')
+      } catch (e) {
+        console.log(e)
+        error(e.message)
+      } finally {
+        hideLoading()
+      }
+    },
+    async initFunc () {
+      try {
+        // 先获取二维码
+        // let qrRet = await getDistributeWxQrcode({type,again,owner_id:this.userInfo.User_ID},{tip:'生成中'})
+        // this.qrimg = qrRet.data.img_url;
+        
+        this.bizInfo = await getBizInfo({ biz_id: this.biz_id }).then(res => res.data[0]).catch((err) => {
+          throw Error(err.msg || '获取商家信息失败')
+        })
+        
+        const { bg_img: lists, qrcode } = await getBizShare({
+          pageSize: 999,
+          qrcode_type: 'wx_lp',
+          biz_id: this.biz_id,
+        })
+          .then(res => {
+            return res.data
+          })
+          .catch((err) => {
+            throw Error(err.msg)
+          })
+        
+        this.poster_list = lists.map(row => {
+          row.thumb_bg_img = getDomain(row.thumb_bg_img)
+          return row
+        })
+        
+        if (qrcode) this.qrcode = qrcode
+        
+        if (this.poster_list.length > 0) {
+          this.drawPoster(0)
+          // getDistributeWxQrcode({
+          //   type,
+          //   again,
+          //   owner_id: this.userInfo.User_ID,
+          //   poster_id: this.poster_list[0].id
+          // }, { tip: '生成中' }).then(res => {
+          //   this.current_url = res.data.img_url
+          // })
+        }
+      } catch (e) {
+        error(e.msg || '获取海报模板失败')
+      }
+    },
+    goBack () {
+      this.$back()
+    },
+  },
+}
+</script>
+<style lang="scss" scoped>
+  .myCanvas {
+    position: fixed;
+    left: 100%;
+    top: 0;
+    background: white;
+    width: 1100px;
+    height: 1500px;
+  }
+  
+  .preview {
+    position: absolute;
+    top: 20rpx;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 464rpx;
+    height: auto;
+    max-width: 550rpx;
+  }
+  
+  .handle-box {
+    z-index: 9;
+    bottom: 0px;
+    left: 0;
+    position: fixed;
+    width: 750rpx;
+    height: 284rpx;
+    padding-bottom: 90rpx;
+    background: white;
+    
+    .remind-title {
+      height: 90rpx;
+      line-height: 90rpx;
+    }
+    
+    .swiper {
+      margin-bottom: 40rpx;
+      
+      white-space: nowrap;
+      overflow-x: scroll;
+      overflow-y: hidden;
+      z-index: 3;
+      height: 150rpx;
+      
+      .swiper-item {
+        display: inline-block;
+        width: 110rpx;
+        height: 150rpx;
+        margin-left: 20rpx;
+        position: relative;
+        
+        .swiper-itm-img {
+          width: 110rpx;
+          height: 150rpx;
+        }
+      }
+    }
+    
+    .share-btn {
+      position: absolute;
+      bottom: 0;
+      width: 750rpx;
+      text-align: center;
+      height: 90rpx;
+      line-height: 90rpx;
+      background: $fun-primary-color;
+      color: white;
+    }
+    
+  }
+  
+  .control {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    
+    .action-btn {
+      flex: 1;
+      text-align: center;
+      height: 80rpx;
+      line-height: 80rpx;
+      font-size: 16px;
+      background-color: #FFFFFF;
+      border: 0px;
+    }
+    
+    button::after {
+      width: 0;
+      height: 0;
+    }
+  }
+  
+  .refuseApplyDialog {
+    width: 560rpx;
+    box-sizing: border-box;
+    padding-left: 40rpx;
+    padding-right: 40rpx;
+    
+    .modal-title {
+      height: 80rpx;
+      line-height: 80rpx;
+      text-align: center;
+      font-weight: bold;
+    }
+    
+    .btn-sub {
+      color: #1aac19;
+    }
+    
+  }
+  
+  .page-wrap {
+  
+  }
+</style>

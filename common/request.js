@@ -5,8 +5,9 @@ import { emptyObject } from './helper'
 import Storage from '@/common/Storage'
 import { hexMD5 } from './tool/md5'
 import Base64 from './tool/base64.js'
+import Vue from 'vue'
 
-export const getUsersID = () => Storage.get('users_id') ? Storage.get('users_id') : 'wkbq6nc2kc'
+export const getUsersID = () => Storage.get('users_id')
 
 export const getAccessToken = () => Storage.get('access_token')
 
@@ -89,7 +90,7 @@ class XHR {
   static formData = (param) => {
     let _param = {
       access_token: getAccessToken(),
-      biz_id: getBizId(),
+      //biz_id: getBizId(),客户端不需要自动传biz_id的
       env: getEnv(), ...param,
     }
     
@@ -111,7 +112,7 @@ const hookErrorCode = [0, 66001, 88001]
  * @param isAddHost 如果为true,则不需要加host
  * @returns {Promise<unknown>}
  */
-export const ajax = ({ url, method = 'post', data = {}, options = {},isAddHost=true }) => {
+export const ajax = ({ url, method = 'post', data = {}, options = {},isAddHost=true,headerExt={} }) => {
   let {
     tip = '', // loading text
     mask = false,
@@ -133,10 +134,13 @@ export const ajax = ({ url, method = 'post', data = {}, options = {},isAddHost=t
   var header = {
     // 'Authorization': 'Bearer ' + token,
     'content-type': 'application/x-www-form-urlencoded',
+    ...headerExt
   }
   
   const _url = !isAddHost ? url:ENV.apiBaseUrl + url
   
+  // console.log(`请求链接${_url}`)
+  // console.log('请求参数:',data)
   return new Promise((resolve, reject) => {
     uni.request({
       header,
@@ -150,6 +154,8 @@ export const ajax = ({ url, method = 'post', data = {}, options = {},isAddHost=t
           reject(new Error('服务器去旅行了'))
         }
         const { data: res } = ret
+        
+        // console.log('响应',res)
         const { errorCode = 1, msg = '请求未成功' } = res
         
         if (hookErrorCode.includes(errorCode)) {
@@ -174,9 +180,9 @@ export const ajax = ({ url, method = 'post', data = {}, options = {},isAddHost=t
           reject(res)
         }
       },
-      fail: (e) => {
+      fail: (err) => {
         // 标记为http请求出错，而不是业务逻辑返回的错误
-        reject(new Error(false))
+        reject(new Error(err.errMsg))
       },
       complete: () => {
         if (tip) {
@@ -274,15 +280,20 @@ export const upload = ({ filePath, idx = 0, name = 'image', param = {}, progress
       },
     })
     
-    // uploadTask.onProgressUpdate((res) => {
-    //   // console.log('上传进度' + res.progress)
-    //   // console.log('已经上传的数据长度' + res.totalBytesSent)
-    //   // console.log('预期需要上传的数据总长度' + res.totalBytesExpectedToSend)
-    
-    //   if (progressList.length > 0 && progressList[idx] && progressList[idx].hasOwnProperty('task')) {
-    //     progressList[idx].task = res
-    //   }
-    // })
+    uploadTask.onProgressUpdate((res) => {
+      console.log('上传进度' + res.progress)
+      console.log('已经上传的数据长度' + res.totalBytesSent)
+      console.log('预期需要上传的数据总长度' + res.totalBytesExpectedToSend)
+      
+      
+      try{
+        Vue.set(progressList,idx,res)
+        // progressList[idx] = {...res}
+        Storage.set('progress',res)
+      }catch (e) {
+        console.log('上传进度错误'+e.message)
+      }
+    })
   })
 }
 

@@ -22,8 +22,8 @@ export const getStoreList = (param, options) => fetch({
 })
 
 // 获取门店相册
-export const getCategoryList = (param, options) => fetch({
-  act: 'getCategoryList',
+export const getAlbumList = (param, options) => fetch({
+  act: 'getAlbumList',
   param,
   options
 })
@@ -34,3 +34,6 @@ export const getPhotoList = (param, options) => fetch({
   param,
   options
 })
+
+// 获取商家的分享码
+export const getBizShare = (param, options) => fetch({ act: 'getBizShare', param, options })

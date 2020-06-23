@@ -1,34 +1,35 @@
 <template>
-  <view class="all" v-if="pro.agent_rate">
+  <view @click="commonClick" class="all" v-if="pro.agent_rate">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view class="top">
       <view class="person" v-if="pro.disInfo">
-        <image class="image" :src="pro.disInfo.Shop_Logo"></image>
+        <image :src="pro.disInfo.Shop_Logo" class="image"></image>
       </view>
       <view class="nickName">
         <view class="tops" v-if="pro.disInfo">
           {{pro.disInfo.Shop_Name}}
         </view>
         <view class="bottoms" v-if="pro.agent_identity">
-          <image class="image" :src="'/static/client/distributor/vip.png'|domain"></image>
+          <image :src="'/static/client/distributor/vip.png'|domain" class="image"></image>
           <view class="flexMbx">
-            <block v-for="(item,index) of  pro.agent_identity" :key="index">
+            <block :key="index" v-for="(item,index) of  pro.agent_identity">
               <span style="margin-right: 4px;height: 30rpx;line-height: 30rpx;">{{item.area_name}}</span>
             </block>
           </view>
         </view>
       </view>
       <block v-if="pro.waiting_pay_apply">
-        <view v-if="pro.waiting_pay_apply.Order_ID" @click="goPay(pro.waiting_pay_apply.Order_ID)" class="juewei">
+        <view @click="goPay(pro.waiting_pay_apply.Order_ID)" class="juewei" v-if="pro.waiting_pay_apply.Order_ID">
           立即支付
         </view>
       </block>
       
       <view
-        v-else-if="pro.agent_rate.Agentenable==1&&(pro.agent_rate.tow.is_apply||pro.agent_rate.pro.is_apply||pro.agent_rate.cit.is_apply||pro.agent_rate.cou.is_apply)"
-        class="juewei" @click="goAddInfo">
+        @click="goAddInfo"
+        class="juewei" v-else-if="pro.agent_rate.Agentenable==1&&(pro.agent_rate.tow.is_apply||pro.agent_rate.pro.is_apply||pro.agent_rate.cit.is_apply||pro.agent_rate.cou.is_apply)">
         立即申请
       </view>
-      <view v-else class="juewei">
+      <view class="juewei" v-else>
         暂不可申请
       </view>
     </view>
@@ -53,14 +54,14 @@
           </view>
         </view>
       </view>
-      <view class="chakan" @click="goFinance">
+      <view @click="goFinance" class="chakan">
         查看明细
-        <image class="image" :src="'/static/client/distributor/chakan.png'|domain"></image>
+        <image :src="'/static/client/distributor/chakan.png'|domain" class="image"></image>
       </view>
     </view>
     <circle-title title="区域代理条件说明"></circle-title>
     
-    <view class="xiang" v-for="(item,index) of pro.agent_rate" :key="index" v-if="item.title">
+    <view :key="index" class="xiang" v-for="(item,index) of pro.agent_rate" v-if="item.title">
       <view class="xiangTop">
         {{item.title}}
       </view>
@@ -69,10 +70,10 @@
           申请条件:
         </view>
         <view class="xiangRight">
-          <view v-if="item.Level>0" class="view">
+          <view class="view" v-if="item.Level>0">
             {{commi_rename.commi}}等级:{{item.Level_name}}
           </view>
-          <view v-if="item.Protitle>0" class="view">
+          <view class="view" v-if="item.Protitle>0">
             爵位等级:{{item.Level_name}}
           </view>
           <view class="view">
@@ -134,11 +135,11 @@
     <view class="guize">
       <text class="text">*</text>
       当平台设置区域代理发放的总佣金为100元时，
-      <block v-if="item.title" v-for="(item,index) of agent_rate_arr" :key="index">{{item.title}}
+      <block :key="index" v-for="(item,index) of agent_rate_arr" v-if="item.title">{{item.title}}
         <block v-if="index!==agent_rate_arr.length-1">、</block>
       </block>
       分别获得
-      <block v-if="item.title" v-for="(item,index) of agent_rate_arr" :key="index">{{item.Province}}元
+      <block :key="index" v-for="(item,index) of agent_rate_arr" v-if="item.title">{{item.Province}}元
         <block v-if="index!==agent_rate_arr.length-1">、</block>
       </block>
       收益。
@@ -151,6 +152,7 @@ import BaseMixin from '@/mixins/BaseMixin'
 
 import { agentInfo } from '@/api/customer'
 import CircleTitle from '@/componets/circle-title/circle-title'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
   mixins: [BaseMixin],
@@ -175,6 +177,7 @@ export default {
     },
   },
   components: {
+    WzwImTip,
     CircleTitle,
     
   },

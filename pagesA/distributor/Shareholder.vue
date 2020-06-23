@@ -1,9 +1,9 @@
 <template>
-  <view class="myall" v-show="isLoad">
-    
+  <view @click="commonClick" class="myall" v-show="isLoad">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view class="top">
       <view class="person">
-        <image class="headimg" :src="pro.disInfo.Shop_Logo"></image>
+        <image :src="pro.disInfo.Shop_Logo" class="headimg"></image>
       </view>
       <view class="nickName">
         <view class="tops" v-if="pro.disInfo">
@@ -14,13 +14,13 @@
         </view>
       </view>
       
-      <view v-if="pro.waiting_pay_apply" class="juewei" @click="goGudongPay(pro.waiting_pay_apply.Order_ID)">
+      <view @click="goGudongPay(pro.waiting_pay_apply.Order_ID)" class="juewei" v-if="pro.waiting_pay_apply">
         立即支付
       </view>
-      <view v-else-if="pro.sha_config.Sha_Agent_Type==1&&pro.is_apply" class="juewei" @click="goGudong">
+      <view @click="goGudong" class="juewei" v-else-if="pro.sha_config.Sha_Agent_Type==1&&pro.is_apply">
         立即申请
       </view>
-      <view v-else class="juewei">
+      <view class="juewei" v-else>
         暂不可申请
       </view>
       <!-- <view  v-else-if="pro.disInfo.sha_level_id>0" class="juewei">
@@ -53,13 +53,13 @@
           </view>
         </view>
       </view>
-      <view class="chakan" @click="goFinance" v-if="!pro.total_sales && pro.total_sales!==0">
+      <view @click="goFinance" class="chakan" v-if="!pro.total_sales && pro.total_sales!==0">
         查看明细
-        <image class="image" :src="'/static/client/distributor/chakan.png'|domain"></image>
+        <image :src="'/static/client/distributor/chakan.png'|domain" class="image"></image>
       </view>
     </view>
     <circle-title title="股东条件说明"></circle-title>
-    <view class="xiang" v-for="(item,index) of pro.sha_config.Sha_Rate" :key="index" v-if="item.sha_name">
+    <view :key="index" class="xiang" v-for="(item,index) of pro.sha_config.Sha_Rate" v-if="item.sha_name">
       <view class="xiangTop">
         {{item.sha_name}}
       </view>
@@ -99,14 +99,14 @@
     
     <view class="shouyi">
       <view class="tt">
-        <view class="view" :class="{rightZ:index==pro.sha_config.Sha_Rate.length-1}"
-              v-for="(item,index) of pro.sha_config.Sha_Rate" :key="index">
+        <view :class="{rightZ:index==pro.sha_config.Sha_Rate.length-1}" :key="index"
+              class="view" v-for="(item,index) of pro.sha_config.Sha_Rate">
           {{item.sha_name}}
         </view>
       </view>
       <view class="tt ts">
-        <view class="view" :class="{rightZ:index==pro.sha_config.Sha_Rate.length-1}"
-              v-for="(item,index) of pro.sha_config.Sha_Rate" :key="index">
+        <view :class="{rightZ:index==pro.sha_config.Sha_Rate.length-1}" :key="index"
+              class="view" v-for="(item,index) of pro.sha_config.Sha_Rate">
           {{item.sha_commi_scale}}%
         </view>
       </view>
@@ -118,7 +118,7 @@
         <block v-if="index!==pro.sha_config.Sha_Rate.length-1">、</block>
       </block>
       分别获得
-      <block v-for="(item,index) of pro.sha_config.Sha_Rate" :key="index">{{item.sha_commi_scale}}元
+      <block :key="index" v-for="(item,index) of pro.sha_config.Sha_Rate">{{item.sha_commi_scale}}元
         <block v-if="index!==pro.sha_config.Sha_Rate.length-1">、</block>
       </block>
       收益。
@@ -132,6 +132,7 @@
 import { shaInit } from '@/api/customer'
 import BaseMixin from '@/mixins/BaseMixin'
 import CircleTitle from '@/componets/circle-title/circle-title'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
   mixins: [BaseMixin],
@@ -157,6 +158,7 @@ export default {
     },
   },
   components: {
+    WzwImTip,
     CircleTitle,
     
   },

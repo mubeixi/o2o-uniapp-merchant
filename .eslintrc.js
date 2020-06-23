@@ -8,8 +8,12 @@ module.exports = {
     'standard',
   ],
   globals: {
+    getCurrentPages:'readonly',
     plus:'readonly',
     uni: 'readonly',
+    requirePlugin:'readonly',
+    Component:'readonly',
+    wx: 'readonly',
     Atomics: 'readonly',
     SharedArrayBuffer: 'readonly',
   },

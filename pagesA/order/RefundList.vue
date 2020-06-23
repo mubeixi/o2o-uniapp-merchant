@@ -1,23 +1,23 @@
 <template>
-  <div class="myall">
-    
-    <div class="order" v-for="(item,index) of data" :key="index">
+  <div @click="commonClick" class="myall">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
+    <div :key="index" class="order" v-for="(item,index) of data">
       <template v-if="item.prod_list.length>0">
         <div style="background-color: #F3F3F3;height: 20rpx;width: 100%;position: absolute;left: 0rpx;"></div>
         <div style="height: 20rpx;"></div>
         <div class="bizinfo">
-          <span class="bizname">订单编号:</span>
+          <span class="bizname">退款编号:</span>
           <span class="status">{{item.Back_Sn}}</span>
         </div>
-        <block v-for="(i,k) of item.prod_list" :key="k">
-          <div class="pro" @click="goDetail(item)">
+        <block :key="k" v-for="(i,k) of item.prod_list">
+          <div @click="goDetail(item)" class="pro">
             <div class="pro-div">
-              <img class="pro-img" :src="i.prod_img">
+              <img :src="i.prod_img" class="pro-img">
             </div>
             <div class="pro-msg">
               <div class="pro-name">{{i.prod_name}}</div>
-              <div class="attr" v-if="i.attr_info"><span>{{i.attr_info.attr_name}}</span></div>
-              <div class="attr" v-else style="background-color: #FFFFFF;"><span></span></div>
+              <div class="attr" v-if="i.attr_info.attr_name"><span>{{i.attr_info.attr_name}}</span></div>
+              <div class="attr" style="background-color: #FFFFFF;" v-else><span></span></div>
               <div class="pro-price"><span>￥</span>{{i.prod_price}} <span class="amount">x{{i.prod_count}}</span></div>
             </div>
           </div>
@@ -30,8 +30,8 @@
         </div>
         <div class="btn-group">
           <span class="span" style="border: 0rpx;color: red;">{{item.Back_Status_desc}}</span>
-          <span class="span" v-if="item.Back_Status==0" @click="cancelRefund(item,index)">取消退款</span>
-          <span class="span" v-else-if="item.Back_Status==1" @click="goDetail(item)">买家发货</span>
+          <span @click="cancelRefund(item,index)" class="span" v-if="item.Back_Status==0">取消退款</span>
+          <span @click="goDetail(item)" class="span" v-else-if="item.Back_Status==1">买家发货</span>
         </div>
       </template>
     </div>
@@ -46,8 +46,10 @@
 
 import { cancelRefund, getBackOrder } from '@/api/order'
 import BaseMixin from '@/mixins/BaseMixin'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
+  components: { WzwImTip },
   mixins: [BaseMixin],
   data () {
     return {
@@ -122,7 +124,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
   .myall {
     min-height: 100vh;
     background-color: #FFFFFF !important;

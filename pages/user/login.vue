@@ -1,64 +1,83 @@
 <template>
-  <div class="wrap">
-    <layout-page-title :letfFn="true" @clickLeft="bindBackFn" :title="pageTitle"></layout-page-title>
-    <fun-err-msg ref="refMsg" :topStr="menuButtonInfo.height+menuButtonInfo.top+10+'px'"
-                 :errs="formCheckResult"></fun-err-msg>
-    <image class="img m-t-25" mode="widthFix" :src="'/static/client/copyright.png'|domain"></image>
-    
-    <div class="form">
-      <form style="display: block" @submit="formSubmit" @reset="formReset">
+  <div @click="commonClick" class="wrap">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
+    <layout-page-title :letfFn="true" :page-title="pageTitle" @clickLeft="bindBackFn"></layout-page-title>
+    <fun-err-msg :errs="formCheckResult" :topStr="menuButtonInfo.height+menuButtonInfo.top+10+'px'"
+                 ref="refMsg"></fun-err-msg>
+
+    <block v-if="mode!=='wxLogin'">
+      <block v-if="initData.ShopLogo">
+        <image :src="initData.ShopLogo+'-r100'" class="img m-t-25" mode="widthFix"></image>
+      </block>
+      
+      <div class="form">
+        <form @reset="formReset" @submit="formSubmit" style="display: block">
+          <div class="form-item uni-column">
+            <input @input="inputPhone" class="fun-input" name="input" placeholder="请输入手机号码" />
+          </div>
+          <div class="form-item uni-column" v-if="mode==='code'">
+            <input @input="inputCaptcha" class="fun-input" name="captcha" placeholder="请输入短信验证码" />
+            <div class="sendCaptcha">
+              <span @click="sendCaptcha" class="text" v-if="!captchaSend">获取验证码</span><span class="text active" v-else>{{s}}s</span>
+            </div>
+          </div>
+          <div class="form-item uni-column" v-if="mode==='password'">
+            <input @input="inputPassword" class="fun-input" name="password" placeholder="请输入密码" type="password" />
+          </div>
+          <div class="action">
+            <div>
+              <button class="sub-btn m-b-15" form-type="submit" type="primary">立即登录</button>
+            </div>
+            <!--<div><button @click="cancel" class="sub-btn m-b-20" >暂不登录</button></div>-->
+
+            <div class="flex flex-vertical-center flex-justify-between p-t-10">
+              <div class="fz-12 text-right">登录即表示您已阅读并接受<span class="color-primary">《用户服务协议》</span></div>
+              <!--            <span class="c6 fz-12" style="text-decoration: underline" @click="cancel">暂不登录</span>-->
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="channel-list">
+        <div class="channel-item">
+          <button @getuserinfo="weixinlogin" class="btn" open-type="getUserInfo">
+            <layout-icon class="icon" color="#09bb07" size="24" type="iconlogo-wechat"></layout-icon>
+            <span class="text fz-14">微信登录</span></button>
+        </div>
+        <div @click="setMode('code')" class="channel-item" open-type="getUserInfo" v-if="mode==='password'">
+          <layout-icon class="icon" color="#09bb07" size="24" type="iconphone"></layout-icon>
+          <span class="text fz-14">验证码登录</span>
+        </div>
+        <div @click="setMode('password')" class="channel-item" open-type="getUserInfo" v-if="mode==='code'">
+          <layout-icon class="icon" color="#09bb07" size="24" type="iconmimadenglu"></layout-icon>
+          <span class="text fz-14">密码登录</span>
+        </div>
+      </div>
+    </block>
+    <block v-if="mode==='wxLogin'">
+      <image :src="initData.ShopLogo+'-r100'" class="img imgWx m-t-50" mode="widthFix"></image>
+
+      <div  class="otherLogin-top-item" >
+        <button @getuserinfo="weixinlogin" class="btn  wxBtn" open-type="getUserInfo">
+             微信登录
+        </button>
+      </div>
+
+      <div @click="setMode('code')" class="channel-item phoneIcon" open-type="getUserInfo" >
+        <layout-icon class="icon" color="#333333" size="36" type="iconshouji"></layout-icon>
+      </div>
+    </block>
+
+    <layout-popup :autoClose="false" :showMask="false" :topStr="menuButtonInfo.height+menuButtonInfo.top+10+'px'"
+                  ref="phone">
+      <div :style="{top:menuButtonInfo.height+menuButtonInfo.top+10+'px'}" class="form pwd-wrap">
         <div class="form-item uni-column">
           <input @input="inputPhone" class="fun-input" name="input" placeholder="请输入手机号码" />
         </div>
-        <div class="form-item uni-column" v-if="mode==='code'">
-          <input @input="inputCaptcha" class="fun-input" name="captcha" placeholder="请输入短信验证码" />
-          <div class="sendCaptcha">
-            <span class="text" @click="sendCaptcha" v-if="!captchaSend">获取验证码</span><span class="text active" v-else>{{s}}s</span>
-          </div>
-        </div>
-        <div class="form-item uni-column" v-if="mode==='password'">
-          <input @input="inputPassword" type="password" class="fun-input" name="password" placeholder="请输入密码" />
-        </div>
-        <div class="action">
-          <div>
-            <button form-type="submit" class="sub-btn m-b-15" type="primary">立即登录</button>
-          </div>
-          <!--<div><button @click="cancel" class="sub-btn m-b-20" >暂不登录</button></div>-->
-          
-          <div class="flex flex-vertical-center flex-justify-between p-t-10">
-            <div class="fz-12 text-right">登录及表示您已阅读并接受<span class="color-primary">《用户服务协议》</span></div>
-            <!--            <span class="c6 fz-12" style="text-decoration: underline" @click="cancel">暂不登录</span>-->
-          </div>
-        </div>
-      </form>
-    </div>
-    
-    <div class="channel-list">
-      <div class="channel-item">
-        <button class="btn" open-type="getUserInfo" @getuserinfo="weixinlogin">
-          <layout-icon size="24" class="icon" color="#09bb07" type="iconlogo-wechat"></layout-icon>
-          <span class="text fz-14">微信登录</span></button>
-      </div>
-      <div class="channel-item" open-type="getUserInfo" @click="mode='code'" v-if="mode==='password'">
-        <layout-icon size="24" class="icon" color="#09bb07" type="iconphone"></layout-icon>
-        <span class="text fz-14">验证码登录</span>
-      </div>
-      <div class="channel-item" open-type="getUserInfo" @click="mode='password'" v-if="mode==='code'">
-        <layout-icon size="24" class="icon" color="#09bb07" type="iconmimadenglu"></layout-icon>
-        <span class="text fz-14">密码登录</span>
-      </div>
-    </div>
-    
-    <layout-popup ref="phone" :autoClose="false" :topStr="menuButtonInfo.height+menuButtonInfo.top+10+'px'"
-                  :showMask="false">
-      <div class="form pwd-wrap" :style="{top:menuButtonInfo.height+menuButtonInfo.top+10+'px'}">
-        <div class="form-item uni-column">
-          <input @input="inputPhone" class="fun-input" name="input" placeholder="请输入手机号码" />
-        </div>
         <div class="form-item uni-column">
           <input @input="inputCaptcha" class="fun-input" name="captcha" placeholder="请输入短信验证码" />
           <div class="sendCaptcha">
-            <span class="text" @click="sendCaptcha" v-if="!captchaSend">获取验证码</span><span class="text active" v-else>{{s}}s</span>
+            <span @click="sendCaptcha" class="text" v-if="!captchaSend">获取验证码</span><span class="text active" v-else>{{s}}s</span>
           </div>
         </div>
         <div class="action">
@@ -68,15 +87,15 @@
         </div>
       </div>
     </layout-popup>
-    
-    <layout-popup ref="pwd" :autoClose="false" :topStr="menuButtonInfo.height+menuButtonInfo.top+10+'px'"
-                  :showMask="false">
-      <div class="form pwd-wrap" :style="{top:menuButtonInfo.height+menuButtonInfo.top+10+'px'}">
+
+    <layout-popup :autoClose="false" :showMask="false" :topStr="menuButtonInfo.height+menuButtonInfo.top+10+'px'"
+                  ref="pwd">
+      <div :style="{top:menuButtonInfo.height+menuButtonInfo.top+10+'px'}" class="form pwd-wrap">
         <view class="form-item uni-column">
-          <input v-model="pwd" class="fun-input" placeholder="请输入不少于6位的密码" />
+          <input class="fun-input" placeholder="请输入不少于6位的密码" v-model="pwd" />
         </view>
         <view class="form-item uni-column">
-          <input v-model="pwdConfirm" class="fun-input" placeholder="请确认密码" />
+          <input class="fun-input" placeholder="请确认密码" v-model="pwdConfirm" />
         </view>
         <view class="action">
           <button @click="setPwd" class="sub-btn m-b-15" type="primary">设置密码</button>
@@ -84,7 +103,7 @@
         </view>
       </div>
     </layout-popup>
-  
+
   </div>
 </template>
 
@@ -101,19 +120,24 @@ import { regPhone } from '@/common/Regs'
 import { validateFun } from '@/common/helper'
 import Promisify from '@/common/Promisify'
 import Storage from '@/common/Storage'
+import IM from '@/common/Im/Im'
+import eventHub from '@/common/eventHub'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
   name: 'UserLogin',
   mixins: [BaseMixin],
   components: {
+    WzwImTip,
     LayoutIcon,
     LayoutPopup,
     FunErrMsg,
-    LayoutPageTitle,
+    LayoutPageTitle
   },
   data () {
     return {
-      mode: 'password',
+      wx_code: '',
+      mode: 'wxLogin',
       binbPhoneShow: false,
       bindPwdShow: false,
       pageTitle: '登录',
@@ -127,7 +151,7 @@ export default {
       pwd: '',
       pwdConfirm: '',
       captchaSend: false,
-      bindPhoneTempData: null,// 如果需要绑定手机，需要临时储存服务端给的信息
+      bindPhoneTempData: null// 如果需要绑定手机，需要临时储存服务端给的信息
     }
   },
   methods: {
@@ -144,18 +168,18 @@ export default {
           title: '操作提示',
           content: '是否跳过设置密码？',
           success: (res) => {
-            if (res.confirm) uni.navigateBack()
-          },
+            if (res.confirm) this.$back()
+          }
         })
         return
       }
-      uni.navigateBack()
+      this.$back()
     },
     cancel () {
-      uni.navigateBack()
+      this.$back()
     },
     formReset () {
-    
+
     },
     minusFn () {
       console.log(this)
@@ -171,7 +195,7 @@ export default {
         error('发送验证码失败')
         return
       }
-      
+
       getSmsCode({ mobile: this.phone }, { tip: '发送验证码' }).then(res => {
         this.captchaSend = true
         this.s = 120
@@ -194,27 +218,28 @@ export default {
      */
     async bingPhoneFn () {
       try {
-        // 获取暂存的userInfO和code
-        const lp_raw_data = JSON.stringify(this.bindPhoneTempData)
         const wxLoginRt = await Promisify('login').catch(() => {
           throw Error('微信login错误')
         })
         const { code: lp_code } = wxLoginRt
-        
+
+        // 获取暂存的userInfO和code
+        const lp_raw_data = JSON.stringify(this.bindPhoneTempData)
+
         const postData = {
           login_method: 'wx_lp',
           code: lp_code,
           lp_raw_data,
           mobile: this.phone,
-          captcha: this.captcha,
+          captcha: this.captcha
         }
         const rule = {
           login_method: {
             required: true,
             type: String,
             message: {
-              required: '登录方式必填',
-            },
+              required: '登录方式必填'
+            }
           },
           account: {
             type: String,
@@ -224,8 +249,8 @@ export default {
             message: {
               length: '手机号码必须为11位',
               required: '登录方式必填',
-              match: '手机号格式不符',
-            },
+              match: '手机号格式不符'
+            }
           },
           code: {
             type: String,
@@ -233,9 +258,9 @@ export default {
             length: 4,
             message: {
               length: '验证码为4位数字',
-              required: '数字必填',
-            },
-          },
+              required: '数字必填'
+            }
+          }
         }
         const checkRt = validateFun(postData, rule)
         if (checkRt !== true) {
@@ -243,7 +268,7 @@ export default {
           this.$refs.refMsg.show()
           return
         }
-        
+
         const { errorCode, data } = await userLogin(postData).catch(() => {
           throw Error('第三方登录请求错误')
         })
@@ -264,7 +289,7 @@ export default {
         postData.captcha = this.captcha
         postData.login_method = 'sms_login'
       }
-      
+
       const rule = {
         login_method: {
           required: true,
@@ -272,8 +297,8 @@ export default {
           enum: ['mobile_login', 'sms_login', 'wx_lp'],
           message: {
             required: '登录方式必选',
-            enum: '登录方式仅允许是mobile_login、sms_login、wx_lp中的一个',
-          },
+            enum: '登录方式仅允许是mobile_login、sms_login、wx_lp中的一个'
+          }
         },
         mobile: {
           type: String,
@@ -283,8 +308,8 @@ export default {
           message: {
             required: '手机号必填',
             length: '手机号为长11位的字符',
-            match: '手机号格式不符',
-          },
+            match: '手机号格式不符'
+          }
         },
         captcha: mode === 'password' ? { required: false } : {
           type: String,
@@ -292,23 +317,23 @@ export default {
           length: 4,
           message: {
             required: '验证码必填',
-            length: '验证码长度为4',
-          },
+            length: '验证码长度为4'
+          }
         },
         passwd: mode === 'code' ? { required: false } : {
           type: String,
           required: true,
           message: {
-            required: '密码必填',
-          },
-        },
+            required: '密码必填'
+          }
+        }
       }
-      
+
       console.log(postData, rule)
-      
+
       // {mobile:this.mobile, captcha:this.verificationCode,login_method:'sms_login'}
       // {mobile:this.mobile,passwd:this.phone.password,login_method:'mobile_login'}
-      
+
       try {
         const checkRt = validateFun(postData, rule)
         if (checkRt !== true) {
@@ -316,10 +341,10 @@ export default {
           this.$refs.refMsg.show()
           throw Error('请正确填写资料')
         }
-        
+
         const userData = await userLogin(postData, {
           reqHeader: true,
-          onlyData: true,
+          onlyData: true
         }).catch((e) => {
           throw Error(e.msg || '登录失败')
         })
@@ -335,9 +360,9 @@ export default {
         success: (res) => {
           if (res.confirm) {
             this.$refs.pwd.close()
-            uni.navigateBack()
+            this.$back()
           }
-        },
+        }
       })
     },
     async setPwd () {
@@ -366,15 +391,32 @@ export default {
       // }
       // await opBizInfo(postData, { tip: 'loading' }).catch(() => {})
       // this.$refs.pwd.close()
-      // uni.navigateBack()
+      // this.$back()
     },
-    loginCall (userData) {
+    async loginCall (userData) {
       const { access_token, User_ID: user_id } = userData
       Storage.set('access_token', access_token)
       Storage.set('user_id', user_id)
-      
+
       this.$store.commit('user/SET_USER_INFO', userData)
-      
+
+      // 新增全局监听
+      if (!Storage.get('listenStatus')) {
+        // IM全局
+        const imInstance = new IM()
+        // 设置本地用户信息
+        imInstance.setSendInfo({
+          type: 'user',
+          id: user_id,
+          name: userData.User_NickName,
+          avatar: userData.User_HeadImg
+        })
+        await imInstance.start() // 等拿token
+
+        imInstance.openListen()
+        eventHub.imInstance = imInstance // 全局用一个句柄
+      }
+
       // 需要设置密码
       // if (userData.hasOwnProperty('biz_passwd')) {
       //   this.pageTitle = '设置密码'
@@ -382,13 +424,24 @@ export default {
       //   this.$refs.pwd.show()
       //   return
       // }
-      
-      setTimeout(function () {
-        uni.navigateBack()
+
+      setTimeout(() => {
+        this.$back()
       }, 200)
+    },
+    setMode (mode) {
+      this.mode = mode
+      if (mode === 'password') this.pageTitle = '密码登录'
+      if (mode === 'code') this.pageTitle = '验证码登录'
     },
     async weixinlogin (e) {
       try {
+        // 获取code
+        const wxLoginRt = await Promisify('login').catch(() => {
+          throw Error('微信login错误')
+        })
+        const { code: lp_code } = wxLoginRt
+
         const checkSeting = await Promisify('getSetting').catch(() => {
           throw Error('获取配置失败')
         })
@@ -403,59 +456,63 @@ export default {
         })
         console.log(wxUserInfo)
         const { encryptedData, rawData, signature, userInfo, iv } = wxUserInfo
+        console.log(rawData)
         if (!rawData) throw Error('请允许授权')
         const lp_raw_data = JSON.stringify({
           encryptedData,
           rawData: JSON.parse(rawData),
           signature,
           userInfo,
-          iv,
+          rawData1: rawData,
+          iv
         })
-        
-        // 获取code
-        const wxLoginRt = await Promisify('login').catch(() => {
-          throw Error('微信login错误')
-        })
-        const { code: lp_code } = wxLoginRt
-        
+
         // 请求接口
         console.log('snslogin data is', {
           login_method: 'wx_lp',
           lp_code,
-          lp_raw_data,
+          lp_raw_data
         })
         const { errorCode, data } = await userLogin({
           login_method: 'wx_lp',
           code: lp_code,
-          lp_raw_data,
+          lp_raw_data
         }, { tip: '登录中' }).catch((err) => {
           throw Error(err.msg || '第三方登录请求错误')
         })
-        
+
         if (errorCode === 0) {
           this.loginCall(data)
         }
-        
+
         // 需要绑定手机号
-        if (errorCode === 88001) {
-          this.bindPhoneTempData = data
-          this.pageTitle = '绑定手机'
-          this.binbPhoneShow = true // 设置这个之后，无法后退
-          this.$refs.phone.show()
-        }
+        // if (errorCode === 88001) {
+        //   this.bindPhoneTempData = data
+        //   this.pageTitle = '绑定手机'
+        //   this.binbPhoneShow = true // 设置这个之后，无法后退
+        //   this.$refs.phone.show()
+        // }
       } catch (e) {
         console.log(e)
         error(e.message)
       }
-    },
+    }
   },
+  onReady () {
+
+  },
+  computed: {
+    initData () {
+      return this.$store.state.system.initData
+    }
+  }
 }
 </script>
 <style lang="scss" scoped>
   button {
     line-height: 2.3;
   }
-  
+
   .form {
     .form-item {
       margin: 0 50rpx 30rpx;
@@ -463,19 +520,19 @@ export default {
       height: 80rpx;
       display: flex;
       align-items: center;
-      
+
       .sendCaptcha {
-        
+
         .text {
           color: #999;
           opacity: 1;
-          
+
           &.active {
             color: $fun-primary-color;
           }
         }
       }
-      
+
       .fun-input {
         flex: 1;
         height: 80rpx;
@@ -483,26 +540,26 @@ export default {
         font-size: 14px;
         color: #444;
         text-align: left;
-        
+
       }
-      
+
     }
-    
+
     .action {
       margin: 50rpx 50rpx 30rpx;
       display: block;
     }
-    
+
   }
-  
+
   .placeholder {
     color: #fff;
   }
-  
+
   .joinForm {
     width: 500rpx;
     text-align: center;
-    
+
     .input {
       border: 1px solid #e7e7e7;
       line-height: 36px;
@@ -511,13 +568,13 @@ export default {
       text-align: left;
       padding: 0 10px;
     }
-    
+
     .numbox {
       display: flex;
       justify-content: center; //x轴排列
     }
   }
-  
+
   .pwd-wrap {
     width: 750rpx;
     bottom: 0;
@@ -527,7 +584,7 @@ export default {
     background: white;
     z-index: 10;
   }
-  
+
   .wrap {
     text-align: center;
     height: 100vh;
@@ -535,25 +592,39 @@ export default {
     box-sizing: border-box;
     background: #fff;
   }
-  
+
   .img {
-    
-    width: 70px;
+
+    width: 100px;
     margin: 50rpx 0 100rpx;
-    
+
   }
-  
+  .imgWx{
+    width: 100px;
+    height: 100px;
+    margin: 180rpx 0 180rpx;
+  }
+  .otherLogin-top-item {
+    width: 630rpx;
+    height: 88rpx;
+    border-radius: 4px;
+    margin: 0 auto;
+    text-align: center;
+    line-height: 88rpx;
+    color: white;
+  }
+
   .snslogin {
     position: absolute;
     bottom: 60rpx;
     width: 750rpx;
-    
+
     .tip {
       position: relative;
       margin: 0 auto;
       width: 60px;
       text-align: center;
-      
+
       .after, .before {
         position: absolute;
         height: 1px;
@@ -561,26 +632,26 @@ export default {
         width: 40px;
         top: 50%;
       }
-      
+
       .after {
         left: 0;
         transform: translateX(-100%);
       }
-      
+
       .before {
         right: 0;
         transform: translateX(100%);
       }
-      
+
     }
-    
+
     .list {
       margin: 15px auto;
       width: 300px;
       text-align: center;
     }
   }
-  
+
   .channel {
     &-list {
       position: absolute;
@@ -589,16 +660,16 @@ export default {
       display: flex;
       justify-content: center;
       align-items: center;
-      
+
     }
-    
+
     &-item {
       background: none;
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 0 6px;
-      
+
       .btn {
         width: 100%;
         height: 100%;
@@ -607,22 +678,33 @@ export default {
         align-items: center;
         justify-content: center;
       }
-      
+
       .btn::after {
         width: 0px !important;
         height: 0px !important;
         display: none;
         content: ''
       }
-      
+
       .icon {
-      
+
       }
-      
+
       .text {
         padding-left: 6px;
       }
     }
-    
+
+  }
+  .wxBtn{
+    background: #59a228 !important;
+    color: #FFFFFF;
+  }
+  .phoneIcon{
+    position: fixed;
+    bottom: 50px;
+    left: 0;
+    width: 100%;
+    padding: 0px;
   }
 </style>

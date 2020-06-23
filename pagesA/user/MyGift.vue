@@ -1,26 +1,27 @@
 <template>
-  <view class="all">
+  <view @click="commonClick" class="all">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view class="nav">
-      <view class="ins" :class="checked==0?'checked':''" @click="change(0)">
+      <view :class="checked==0?'checked':''" @click="change(0)" class="ins">
         未领取
       </view>
-      <view class="ins" :class="checked==1?'checked':''" @click="change(1)">
+      <view :class="checked==1?'checked':''" @click="change(1)" class="ins">
         已领取
       </view>
-      <view class="ins" :class="checked==2?'checked':''" @click="change(2)">
+      <view :class="checked==2?'checked':''" @click="change(2)" class="ins">
         已过期
       </view>
     </view>
     <view style="height: 102rpx;width: 100%;">
     
     </view>
-    <view class="center" v-for="(item,index) of data" :key="index" @click="handleClick(item)">
+    <view :key="index" @click="handleClick(item)" class="center" v-for="(item,index) of data">
       <view class="tops">
         {{item.gift_name}}
       </view>
       <view class="bottoms">
         <view class="tupian">
-          <image class="image" :src="item.img_url"></image>
+          <image :src="item.img_url" class="image"></image>
         </view>
         <view class="neirong">
           <view class="titles">
@@ -44,8 +45,10 @@
 <script>
 import BaseMixin from '@/mixins/BaseMixin'
 import { getGiftList } from '@/api/product'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
+  components: { WzwImTip },
   mixins: [BaseMixin],
   data () {
     return {
@@ -86,7 +89,7 @@ export default {
         this.$linkTo('/pages/product/detail?mode=gift&gift=' + item.id + '&prod_id=' + item.product_id)
       }
       if (this.checked === 1) {
-        this.$linkTo('/pagesA/order/OrderDetail?Order_ID=' + item.order_id)
+        this.$linkTo('/pages/order/OrderDetail?Order_ID=' + item.order_id)
       }
     },
     // 获取列表

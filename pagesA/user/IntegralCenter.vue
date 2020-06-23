@@ -1,32 +1,33 @@
 <template>
-  <view class="boxSizing">
+  <view @click="commonClick" class="boxSizing">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view class="zhezhao" v-if="isShow">
       <view class="zhezhaoView">
-        <image :src="'/static/client/check/close.png'|domain" class="closeZ" @click="isShow=false"></image>
+        <image :src="'/static/client/check/close.png'|domain" @click="isShow=false" class="closeZ"></image>
         <view class="zhezhaoYue">
           积分互转
         </view>
         <view class="zhezhaoCenter">
           <view class="views">
-            <layout-icon type="iconphone1" class="imgs" size="20" color="#ff5e36"></layout-icon>
-            <input class="inputs" type="text" placeholder="请输入对方会员号" v-model="user_no">
+            <layout-icon class="imgs" color="#ff5e36" size="20" type="iconphone1"></layout-icon>
+            <input class="inputs" placeholder="请输入对方会员号" type="text" v-model="user_no">
           </view>
         </view>
         <view class="zhezhaoCenter">
           <view class="views">
-            <layout-icon type="iconjifen1" class="imgs" size="16" color="#ff5e36"></layout-icon>
-            <input class="inputs" type="text" placeholder="请输入转出积分" v-model="integral">
+            <layout-icon class="imgs" color="#ff5e36" size="16" type="iconjifen1"></layout-icon>
+            <input class="inputs" placeholder="请输入转出积分" type="text" v-model="integral">
           </view>
         </view>
-        <view class="zheButton" @click="confirm">
+        <view @click="confirm" class="zheButton">
           确认转出
         </view>
       </view>
     </view>
     
     <view class="top">
-      <image class="bgImg" :src="'/static/client/jifen.jpg'|domain"></image>
-      <layout-icon type="iconjifen1" class="momo" size="16" color="#fff"></layout-icon>
+      <image :src="'/static/client/jifen.jpg'|domain" class="bgImg"></image>
+      <layout-icon class="momo" color="#fff" size="16" type="iconjifen1"></layout-icon>
       
       <view class="prices">
         {{intergatal}}
@@ -34,34 +35,34 @@
       <view class="duihuan">
         积分可在积分商城里兑换产品
       </view>
-      <view class="zhuanchu" @click="isShow=true">
+      <view @click="isShow=true" class="zhuanchu">
         转出
       </view>
       <view class="bottoms">
-        <view class="lefts qwe" @click="gotojifen">
-          <image class="image" :src="'/static/client/check/t3.png'|domain"></image>
+        <view @click="gotojifen" class="lefts qwe">
+          <image :src="'/static/client/check/t3.png'|domain" class="image"></image>
           <text>积分商城</text>
         </view>
         <view class="line">
         </view>
-        <view class="rights qwe" style="padding-left: 66rpx;" @click="gotoMyExchange">
-          <image class="image" :src="'/static/client/check/t4.png'|domain"></image>
+        <view @click="gotoMyExchange" class="rights qwe" style="padding-left: 66rpx;">
+          <image :src="'/static/client/check/t4.png'|domain" class="image"></image>
           <text>我的兑换</text>
         </view>
       </view>
     </view>
     
     <view class="selects">
-      <image class="image" :src="'/static/client/check/qw.png'|domain"></image>
+      <image :src="'/static/client/check/qw.png'|domain" class="image"></image>
       <view class="vies">
         积分明细
       </view>
-      <image class="image" :src="'/static/client/check/er.png'|domain"></image>
+      <image :src="'/static/client/check/er.png'|domain" class="image"></image>
     </view>
     
     <view class="contents">
       <template v-if="recordList.length > 0">
-        <view class="mingxi" v-for="(item,index) in recordList">
+        <view :key="index" class="mingxi" v-for="(item,index) in recordList">
           <view>
             <view>
               {{item.Record_Description}}
@@ -87,10 +88,14 @@
 import { getUserInfo, transferIntegral, userIntegralRecord } from '@/api/customer'
 import BaseMixin from '@/mixins/BaseMixin'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
-
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+//import '@/common/tool/TweenMax.min'
 export default {
   mixins: [BaseMixin],
-  components: { LayoutIcon },
+  components: {
+    WzwImTip,
+    LayoutIcon,
+  },
   data () {
     return {
       isShow: false,
@@ -113,17 +118,13 @@ export default {
   },
   watch: {
     user_intergatal: function (newVal, oldVal) {
-      TweenLite.to(this.$data, 0.5, { U_intergatal: newVal })
+      this.U_intergatal = newVal
+      //TweenLite.to(this.$data, 0.5, { U_intergatal: newVal })
     },
   },
   onShow () {
-    
     this.reset()
     this.userIntegralRecord()
-  },
-  created () {
-    
-    //this.getUserInfo(true)
     getUserInfo().then(res => {
       this.info = res.data
       this.user_intergatal = res.data.User_Integral
@@ -196,17 +197,17 @@ export default {
     // 去积分商城
     gotojifen () {
       uni.navigateTo({
-        url: '/pagesA/person/jifenExchange',
+        url: '/pagesA/user/IntegralShop',
       })
     },
     // 去我的兑换列表
     gotoMyExchange () {
       uni.navigateTo({
-        url: '/pagesA/person/myRedemption',
+        url: '/pagesA/user/MyRedemption',
       })
     },
     goBack () {
-      uni.navigateBack(1)
+      this.$back()
     },
     userIntegralRecord () {
       userIntegralRecord({

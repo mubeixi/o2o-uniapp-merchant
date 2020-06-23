@@ -1,51 +1,62 @@
 <template>
-  <div>
-    <div class="status-title">
-    </div>
-    <div style="width: 750rpx;height: 86rpx"></div>
-    <div class="cart-title flex flex-vertical-c flex-justify-c fz-16 c3">
-      <div>
-        购物车
+  <div @click="commonClick" class="shopping-cart">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
+    <div :style="{height:diyHeadHeight+'px'}" class="bg-white"></div>
+
+    <div :style="{height:diyHeadHeight+'px'}" class="top-box bg-white">
+      <div :style="{height:menuButtonInfo.top+'px'}" class="bg-white"
+           style="position: fixed;top: 0;width: 750rpx;z-index: 99;"></div>
+      <div :style="{height:menuButtonInfo.height+'px',top:systemInfo.statusBarHeight+'px'}"
+           class="cart-title flex flex-vertical-c flex-justify-c fz-16 c3">
+        <div>
+          购物车
+        </div>
+        <div @click="isDel=!isDel" class="cart-title-right" v-if="!manage">
+          {{isDel?'取消':'管理'}}
+        </div>
       </div>
-      <div @click="isDel=!isDel" class="cart-title-right" v-if="!manage">
-        {{isDel?'取消':'管理'}}
-      </div>
     </div>
-    
+
     <div class="content">
-      <div class="cartbox" v-if="total_count>0">
-        <div :key="index" class="order_msg" v-for="(pro,index) in CartList">
-          <div class="biz_msg">
-            <div @click="selectBiz(index)" class="item-cart">
-              <layout-icon color="#F43131" size="18" type="iconicon-check" v-if="bizCheck[index]"></layout-icon>
-              <layout-icon color="#ccc" size="18" type="iconradio" v-else></layout-icon>
+      <div class="cartbox" v-if="pageInitDone && total_count>0">
+        <div :key="biz_id" class="order_msg" v-for="(biz,biz_id) in CartList">
+          <div @click="selectBiz(bizList[biz_id].id,bizList[biz_id].isSaleTime)" class="biz_msg flex">
+            <div class="flex1 flex flex-vertical-c">
+              <div class="item-cart">
+                <layout-icon color="#F43131" size="20" type="iconicon-check" v-if="bizCheck[biz_id]"></layout-icon>
+                <layout-icon color="#ccc" size="20" type="iconradio" v-else></layout-icon>
+              </div>
+              <img :src="bizList[biz_id].biz_logo" class="biz_logo" />
+              <span class="biz_name">{{bizList[biz_id].biz_name}}{{biz_id}}</span>
             </div>
-            <img :src="bizList[index].biz_logo" class="biz_logo" />
-            <text class="biz_name">{{bizList[index].biz_name}}</text>
+            <span class="is-sale-time" v-if="!bizList[biz_id].isSaleTime">
+              该商家已打烊
+            </span>
           </div>
-          <block :key="ind" v-for="(proList,ind) in pro">
-            <block>
-              <div :key="indx" class="pro" v-for="(item,indx) in proList">
-                <div @click="selectItem(index,ind,indx)" class="item-cart">
-                  <layout-icon color="#F43131" size="18" type="iconicon-check" v-if="item.checked"></layout-icon>
-                  <layout-icon color="#ccc" size="18" type="iconradio" v-else></layout-icon>
+          <block :key="prod_id" v-for="(proList,prod_id) in biz">
+            <div :key="attr_id" class="pro" v-for="(item,attr_id) in proList">
+              <div @click="selectItem(biz_id,prod_id,attr_id,bizList[biz_id].isSaleTime)" class="item-cart">
+                <layout-icon color="#F43131" size="20" type="iconicon-check" v-if="item.checked"></layout-icon>
+                <layout-icon color="#ccc" size="20" type="iconradio" v-else></layout-icon>
+              </div>
+              <img :src="item.ImgPath" class="pro-img" />
+              <div class="pro-msg">
+                <div class="pro-name">{{item.ProductsName}}</div>
+                <div class="attr" v-if="item.Productsattrstrval">
+                  <span>{{item.Productsattrstrval}}</span>
                 </div>
-                <img :src="item.ImgPath" class="pro-img" />
-                <div class="pro-msg">
-                  <div class="pro-name">{{item.ProductsName}}</div>
-                  <div class="attr" v-if="item.Productsattrstrval">
-                    <span>{{item.Productsattrstrval}}</span>
-                  </div>
-                  <div class="pro-price"><span class="span">￥</span>{{item.ProductsPriceX}}<span class="amount"><span
-                    :class="item.Qty===1?'disabled':''" @click="updateCart(ind,indx,-1,index)"
-                    class="plus">-</span><input @blur="inputQty(ind,indx,$event,index,item.Qty)"
-                                                @focus="getQty(item.Qty)" class="attr_num" min="1" type="number"
-                                                v-model="item.Qty" /><span @click="updateCart(ind,indx,1,index)"
-                                                                           class="plus">+</span></span>
-                  </div>
+                <div class="pro-price">
+                  <span class="span">￥</span>{{item.ProductsPriceX}}
+                  <span class="amount">
+                      <span :class="item.Qty===1?'disabled':''" @click="updateCartFn(biz_id,prod_id,attr_id,-1,bizList[biz_id].isSaleTime)"
+                            class="plus">-</span>
+                      <input @blur="inputQty($event,biz_id,prod_id,attr_id,bizList[biz_id].isSaleTime)" @focus="getQty(item.Qty)" class="attr_num"
+                             min="1" type="number" v-model="item.Qty" />
+                      <span @click="updateCartFn(biz_id,prod_id,attr_id,1,bizList[biz_id].isSaleTime)" class="plus">+</span>
+                    </span>
                 </div>
               </div>
-            </block>
+            </div>
           </block>
         </div>
       </div>
@@ -53,13 +64,13 @@
         <image :src="'/static/client/box.png'|domain" class="img" />
         <div><span>购物车空空如也</span><span @click="gotoBuy" class="tobuy">去逛逛</span></div>
       </div>
-    
+
     </div>
-    
+
     <div class="checkout" v-if="!manage">
       <div @click="selectAll" class="item-cart ">
-        <layout-icon class="m-r-5" color="#F43131" size="18" type="iconicon-check" v-if="allCheck"></layout-icon>
-        <layout-icon class="m-r-5" color="#ccc" size="18" type="iconradio" v-else></layout-icon>
+        <layout-icon class="m-r-5" color="#F43131" size="20" type="iconicon-check" v-if="allCheck"></layout-icon>
+        <layout-icon class="m-r-5" color="#ccc" size="20" type="iconradio" v-else></layout-icon>
         <span>全选</span>
       </div>
       <block v-if="!isDel">
@@ -70,287 +81,429 @@
         <div @click="DelCart" class="checkbtn">删除</div>
       </block>
     </div>
-    
-    
+
     <div class="intro">为你推荐</div>
     <div class="product-list flex">
-      
+
       <pro-tag
-        v-for="(item,idx) in proList"
+        :index="idx"
         :key="idx"
-        :prod_id="item.Products_ID"
-        :pro_src="item.ImgPath"
+        :product-info="item"
         :pro_name="item.Products_Name"
         :pro_price="item.Products_PriceX"
         :pro_price_old="item.Products_PriceY"
+        :pro_src="item.ImgPath"
+        :prod_id="item.Products_ID"
+        v-for="(item,idx) in proList"
       />
-    
+
     </div>
-  
+
+    <div class="h50"></div>
+    <div class="safearea-box"></div>
+
   </div>
 </template>
 
 <script>
-import BaseMixin from '@/mixins/BaseMixin'
-import { CartList, DelCart } from '@/api/customer'
-import { updateCart } from '@/api/order'
+import BaseMixin, { tabbarMixin } from '@/mixins/BaseMixin'
+import { mapActions } from 'vuex'
+import { CartList as getCartList, DelCart } from '@/api/customer'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import Storage from '@/common/Storage'
 import { getProductList } from '@/api/product'
 import { error } from '@/common/fun'
 import ProTag from '@/componets/pro-tag/pro-tag'
-
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+/**
+ * 检查店铺的状态
+ * 1.要么在营业时间内
+ * 2.要么不在营业时间内，但是开启了非营业时间可以下单
+ * 3.不在营业时间内，不允许下单
+ */
+const checkStoreStatus = (bizInfo) => {
+  const { business_status = 0, business_time_status = 0 } = bizInfo
+  return business_status || business_time_status
+}
 export default {
-  mixins: [BaseMixin],
+  mixins: [BaseMixin, tabbarMixin],
   components: {
+
+    WzwImTip,
     LayoutIcon,
-    ProTag,
+    ProTag
   },
   data () {
     return {
+      isAjax: false,
       CartList: [],
       bizList: [],
-      total_count: '',
+      total_count: 0,
       total_price: '',
       allCheck: false,
+      pageInitDone: false,
       bizCheck: {}, // 商家的选择
       totalPrice: 0, // 选中总计
       isDel: false,
-      fan: false,
       qty: 0,
       proList: [],
+      isHavCheck: false,
+      productTotal: 0,
+      page: 1
     }
   },
   computed: {
+    shopCartList: {
+      get () {
+        return this.$store.state.cart.cartList
+      },
+      set (val) {
+        this.$store.commit('cart/ASYNC_DATA', val)
+      }
+    },
+    userInfo () {
+      return this.$store.getters['user/getUserInfo']()
+    },
     manage () {
       return this.CartList.length === 0
-    },
+    }
   },
   watch: {
-    CartList: {
-      handler (newValue, oldValue) {
-        console.log(oldValue, newValue, 'ss')
-      },
-      deep: true,
-    },
   },
   methods: {
-    submit () {
+    gotoBuy () {
+      this.$linkTo('/pages/search/result')
+    },
+    async submit () {
+      this.SumPrice()
+      if (!this.isHavCheck) {
+        error('请选择商品')
+        return
+      }
       const obj = {}
+      const attrList = []
       // 删除
-      for (const i in this.CartList) {
-        Storage.remove(i)
-        obj[i] = {}
-        for (const j in this.CartList[i]) {
-          obj[i][j] = []
-          for (const k in this.CartList[i][j]) {
-            if (this.CartList[i][j][k].checked) {
-              obj[i][j].push(k)
-              Storage.remove(j + ';' + k)
+      for (const biz_id in this.CartList) {
+        for (const prod_id in this.CartList[biz_id]) {
+          for (const attr_id in this.CartList[biz_id][prod_id]) {
+            if (this.CartList[biz_id][prod_id][attr_id].checked) {
+              // 有需需要才创建
+              if (!obj.hasOwnProperty(biz_id))obj[biz_id] = {}
+              if (!obj[biz_id].hasOwnProperty(prod_id))obj[biz_id][prod_id] = []
+
+              obj[biz_id][prod_id].push(attr_id)
+
+              const attr_value = this.CartList[biz_id][prod_id][attr_id]
+              attrList.push({
+                // ...attr_value,
+                biz_id: Number(biz_id),
+                prod_id: Number(prod_id),
+                attr_id: Number(attr_id),
+                checked: attr_value.checked, // 能保留上次的结果
+                num: attr_value.Qty
+              })
             }
           }
         }
       }
-      Storage.remove('allCheck')
-      //const cart_buy = JSON.stringify(obj)
+
+      // 先重置本地的，然后可以防止状态没了
+      this.shopCartList = attrList
+
       const url = '/pages/order/OrderBooking?cart_key=CartList'
       this.$store.state.cart_buy = obj
-      
+
       this.isDel = false
       this.$linkTo(url)
     },
-    DelCart () {
+    async DelCart () {
       const obj = {}
+      const attrList = []
       // 删除
-      for (const i in this.CartList) {
-        Storage.remove(i)
-        obj[i] = {}
-        for (const j in this.CartList[i]) {
-          obj[i][j] = []
-          for (const k in this.CartList[i][j]) {
-            if (this.CartList[i][j][k].checked) {
-              obj[i][j].push(k)
-              Storage.remove(j + ';' + k)
+      for (const biz_id in this.CartList) {
+        for (const prod_id in this.CartList[biz_id]) {
+          for (const attr_id in this.CartList[biz_id][prod_id]) {
+            if (this.CartList[biz_id][prod_id][attr_id].checked) {
+              // 有需需要才创建
+              if (!obj.hasOwnProperty(biz_id))obj[biz_id] = {}
+              if (!obj[biz_id].hasOwnProperty(prod_id))obj[biz_id][prod_id] = []
+              obj[biz_id][prod_id].push(attr_id)
+
+              const attr_value = this.CartList[biz_id][prod_id][attr_id]
+              attrList.push({
+                // ...attr_value,
+                biz_id: Number(biz_id),
+                prod_id: Number(prod_id),
+                attr_id: Number(attr_id),
+                checked: attr_value.checked, // 能保留上次的结果
+                num: attr_value.Qty
+              })
             }
           }
         }
       }
-      Storage.remove('allCheck')
+
       const data = {
         cart_key: 'CartList',
-        prod_attr: JSON.stringify(obj),
+        prod_attr: JSON.stringify(obj)
       }
-      DelCart(data).then(res => {
-        this.init()
-      }).catch(e => {
-      })
+      await DelCart(data).catch(e => {})
+
+      // 先重置本地的，然后可以防止状态没了
+      this.shopCartList = attrList
+      this.isDel = false
+      this._int_func()
     },
     getQty (qty) {
       this.qty = qty
     },
-    inputQty (pid, attrId, e, bizId, qty) {
-      const num = e.detail.value
-      if (num <= 1) {
-        this.CartList[bizId][pid][attrId].Qty = this.qty
+    async inputQty (e, biz_id, prod_id, attr_id, storeIsSaleTime) {
+      if (!storeIsSaleTime) {
+        error('该商家已打烊')
+        return
+      }
+      const qty = this.qty
+      console.log(e, biz_id, prod_id, attr_id, qty)
+      const inputNum = e.detail.value
+      if (isNaN(inputNum)) {
+        error('数量必须为数量')
+        return
+      }
+      if (inputNum <= 1) {
+        this.CartList[biz_id][prod_id][attr_id].Qty = this.qty
         error('数量最少为1件')
         return
       }
-      this.updateCart(pid, attrId, qty - num, bizId)
+      if ((qty - inputNum) === 0) return
+      const num = inputNum - qty
+
+      if (this.isAjax) return
+      this.isAjax = true
+      const product = { prod_id: Number(prod_id), attr_id: Number(attr_id), biz_id: Number(biz_id) }
+      const cart = await this.$store.dispatch('cart/addNum', { product, num })
+      console.log(cart)
+      if (cart !== false) {
+        this.total_count = cart.total_count
+        this.total_price = cart.total_price
+        // 更新数量
+        const { CartList } = cart
+        for (const biz_id in CartList) {
+          for (const prod_id in CartList[biz_id]) {
+            for (const attr_id in CartList[biz_id][prod_id]) {
+              this.CartList[biz_id][prod_id][attr_id].Qty = CartList[biz_id][prod_id][attr_id].Qty
+            }
+          }
+        }
+      } else {
+        // 需要更正数字
+        this.CartList[biz_id][prod_id][attr_id].Qty = this.qty
+      }
+      this.isAjax = false
     },
     // 全选
-    selectAll () {
-      let boo = true
-      if (this.allCheck) {
-        boo = false
+    async selectAll () {
+      var isNoSaleTimeStoreCount = 0
+      for (var i in this.bizList) {
+        if (!this.bizList[i].isSaleTime)isNoSaleTimeStoreCount++
       }
-      for (const i in this.CartList) {
-        for (const j in this.CartList[i]) {
-          for (const k in this.CartList[i][j]) {
-            this.CartList[i][j][k].checked = boo
-            Storage.set((j + ';' + k), boo)
-          }
-        }
+      if (isNoSaleTimeStoreCount > 0) {
+        error('有商家打烊无法全选')
+        return
       }
-      
-      for (const it in this.bizCheck) {
-        this.bizCheck[it] = boo
-        Storage.set(it, boo)
-      }
-      this.allCheck = boo
-      Storage.set('allCheck', boo)
-      
+
+      this.allCheck = await this.$store.dispatch('cart/taggleCheckStatus')
+      this.initCheck()
       this.SumPrice()
-      this.fan = !this.fan
     },
-    selectBiz (bizId) {
-    
+    // 单个商家
+    async selectBiz (biz_id, isSaleTime) {
+      if (!isSaleTime) {
+        error('该商家已打烊')
+        return
+      }
+
+      console.log(biz_id)
+      await this.$store.dispatch('cart/taggleCheckStatus', { biz_id: Number(biz_id) })
+      this.initCheck()
+      this.SumPrice()
     },
-    async updateCart (pid, attrId, skuQty, bizId) {
-      if (this.CartList[bizId][pid][attrId].Qty === 1 && skuQty <= 0) {
+    // 单行
+    async selectItem (biz_id, prod_id, attr_id, storeIsSaleTime) {
+      if (!storeIsSaleTime) {
+        error('该商家已打烊')
+        return
+      }
+      await this.$store.dispatch('cart/taggleCheckStatus', { attr_id: Number(attr_id), prod_id: Number(prod_id) })
+      this.initCheck()
+      this.SumPrice()
+    },
+    async updateCartFn (biz_id, prod_id, attr_id, num, storeIsSaleTime) {
+      if (!storeIsSaleTime) {
+        error('该商家已打烊')
+        return
+      }
+      if (this.CartList[biz_id][prod_id][attr_id].Qty === 1 && num <= 0) {
         error('数量最少为1件')
         return
       }
-      
-      const data = {
-        cart_key: 'CartList',
-        prod_id: pid,
-        attr_id: attrId,
-        qty: skuQty,
-      }
-      const cart = await updateCart(data, {
-        onlyData: true,
-        tip: '加载中',
-      }).catch(e => {
-        throw Error(e.msg || '修改失败')
-      })
-      this.total_count = cart.total_count
-      this.total_price = cart.total_price
-      this.CartList = cart.CartList
-      this.bizList = cart.biz_list
-      this.initCheck()
-    },
-    selectItem (bizId, pid, attr_id) {
-      console.log(!Storage.get((pid + ';' + attr_id)), 'ss')
-      
-      Storage.set((pid + ';' + attr_id), !Storage.get((pid + ';' + attr_id)))
-      this.CartList[bizId][pid][attr_id].checked = Storage.get((pid + ';' + attr_id))
-      
-      // 商家的选择
-      this.bizCheck[bizId] = true
-      
-      for (const j in this.CartList[bizId]) {
-        for (const k in this.CartList[bizId][j]) {
-          if (!this.CartList[bizId][j][k].checked) {
-            this.bizCheck[bizId] = false
-          }
-        }
-      }
-      
-      for (const it in this.bizCheck) {
-        Storage.set(it, this.bizCheck[it])
-      }
-      
-      // 每次来改变全选
-      this.allCheck = true
-      for (const i in this.CartList) {
-        for (const j in this.CartList[i]) {
-          for (const k in this.CartList[i][j]) {
-            if (!this.CartList[i][j][k].checked) {
-              this.allCheck = false
+
+      if (this.isAjax) return
+
+      this.isAjax = true
+      const product = { prod_id: Number(prod_id), attr_id: Number(attr_id), biz_id: Number(biz_id) }
+      const cart = await this.$store.dispatch('cart/addNum', { product, num })
+      console.log(cart)
+      if (cart !== false) {
+        this.total_count = cart.total_count
+        this.total_price = cart.total_price
+        // 更新数量
+        const { CartList } = cart
+        for (const biz_id in CartList) {
+          for (const prod_id in CartList[biz_id]) {
+            for (const attr_id in CartList[biz_id][prod_id]) {
+              this.CartList[biz_id][prod_id][attr_id].Qty = CartList[biz_id][prod_id][attr_id].Qty
             }
           }
         }
       }
-      Storage.set('allCheck', this.allCheck)
-      
-      this.SumPrice()
-      this.fan = !this.fan
+
+      this.isAjax = false
     },
     // 初始化 选中状态
     initCheck () {
-      this.allCheck = true
-      for (const i in this.CartList) {
-        const biz_check = Storage.get(i)
-        this.bizCheck[i] = biz_check || false
-        for (const j in this.CartList[i]) {
-          for (const k in this.CartList[i][j]) {
-            const attr_id = Storage.get((j + ';' + k))
-            this.CartList[i][j][k].checked = attr_id || false
-            if (!this.CartList[i][j][k].checked) {
-              this.allCheck = false
+      var noCheckCount = 0
+
+      for (const biz_id in this.CartList) {
+        var bizCheckStatus = this.$store.getters['cart/getListCheckStatus'](Number(biz_id))
+        if (!this.bizList[biz_id].isSaleTime) {
+          bizCheckStatus = false
+        }
+        this.$set(this.bizCheck, biz_id, bizCheckStatus)
+        for (const prod_id in this.CartList[biz_id]) {
+          for (const attr_id in this.CartList[biz_id][prod_id]) {
+            var checkStatus = this.$store.getters['cart/getRowCheckStatus']({ attr_id: Number(attr_id), prod_id: Number(prod_id) })
+            if (!this.bizList[biz_id].isSaleTime) {
+              checkStatus = false
             }
+            this.$set(this.CartList[biz_id][prod_id][attr_id], 'checked', checkStatus)
+            if (!checkStatus)noCheckCount++
           }
         }
       }
-      const all = Storage.get('allCheck')
-      this.allCheck = all || false
-      this.SumPrice()
+      this.allCheck = noCheckCount === 0
     },
     // 计算总价格
     SumPrice () {
       let total = 0
       this.totalPrice = 0
-      for (const i in this.CartList) {
-        for (const j in this.CartList[i]) {
-          for (const k in this.CartList[i][j]) {
-            const attr_id = Storage.get((j + ';' + k))
-            const result = attr_id || false
-            this.CartList[i][j][k].checked = result
-            if (this.CartList[i][j][k].checked) {
-              total += this.CartList[i][j][k].ProductsPriceX * this.CartList[i][j][k].Qty
+      for (const biz_id in this.CartList) {
+        for (const prod_id in this.CartList[biz_id]) {
+          for (const attr_id in this.CartList[biz_id][prod_id]) {
+            if (this.CartList[biz_id][prod_id][attr_id].checked) {
+              total += this.CartList[biz_id][prod_id][attr_id].ProductsPriceX * this.CartList[biz_id][prod_id][attr_id].Qty
             }
           }
         }
       }
-      console.log(total, 'ss')
+      if (total === 0) {
+        this.isHavCheck = false
+      } else {
+        this.isHavCheck = true
+      }
       this.totalPrice = Number(total).toFixed(2)
     },
-    async init () {
-      const cart = await CartList({ cart_key: 'CartList' }, {
+    async _int_func () {
+      this.pageInitDone = false
+      if (!this.$checkIsLogin(0)) return
+      const cart = await getCartList({ cart_key: 'CartList' }, {
         onlyData: true,
-        tip: '加载中',
+        tip: '加载中'
       }).catch(e => {
         throw Error(e.msg || '获取购物车产品失败')
       })
-      this.total_count = cart.total_count
-      this.total_price = cart.total_price
-      this.CartList = cart.CartList
-      this.bizList = cart.biz_list
+      const { total_count, total_price, CartList, biz_list } = cart
+
+      const bizList = {}
+      for (var i in biz_list) {
+        const key = parseInt(i)
+        bizList[key] = Object.assign(biz_list[i], { isSaleTime: checkStoreStatus(biz_list[i]) })
+      }
+
+      this.$store.commit('cart/SET_BIZLIST', bizList)
+      this.$set(this, 'bizList', bizList)
+
+      const attrList = []
+      for (const biz_id in CartList) {
+        for (const prod_id in CartList[biz_id]) {
+          for (const attr_id in CartList[biz_id][prod_id]) {
+            // 初始化为false，方便后面触发响应
+            CartList[biz_id][prod_id][attr_id].checked = this.$store.getters['cart/getRowCheckStatus']({ attr_id: Number(attr_id), prod_id: Number(prod_id) })
+            if (!this.bizList[biz_id].isSaleTime) {
+              CartList[biz_id][prod_id][attr_id].checked = false
+            }
+            const attr_value = CartList[biz_id][prod_id][attr_id]
+            attrList.push({
+              // ...attr_value,
+              biz_id: Number(biz_id),
+              prod_id: Number(prod_id),
+              attr_id: Number(attr_id),
+              checked: attr_value.checked, // 能保留上次的结果
+              num: attr_value.Qty
+            })
+          }
+        }
+      }
+      this.shopCartList = attrList // computed set
+
+      this.total_count = total_count
+      this.total_price = total_price
+      this.$set(this, 'CartList', CartList)
+
       this.initCheck()
-      
-      this.proList = await getProductList({}, { onlyData: true }).catch(e => {
-        throw Error(e.msg || '获取推荐商品信息失败')
-      })
+      this.SumPrice()
+      this.pageInitDone = true
     },
+    ...mapActions({
+    })
+  },
+  async created () {
+    const { data, totalCount } = await getProductList({ page: this.page }).catch(e => {
+      throw Error(e.msg || '获取推荐商品信息失败')
+    })
+    this.proList = data
+    this.productTotal = totalCount
+    this.page++
+  },
+  async onReachBottom () {
+    if (this.proList.length >= this.productTotal) {
+      error('到底了')
+      return
+    }
+    const proList = await getProductList({ page: this.page }, { onlyData: true }).catch(e => {
+      throw Error(e.msg || '获取推荐商品信息失败')
+    })
+
+    this.page++
+    this.proList = this.proList.concat(proList)
   },
   onShow () {
-    this.init()
-  },
-  
+    this.setTabBarIndex(3)
+    this.$store.dispatch('system/setTabActiveIdx', 3)
+    this.refreshTabTag()
+
+    this._int_func()
+  }
+
 }
 </script>
 
 <style lang="scss" scoped>
+  .shopping-cart {
+    width: 750rpx;
+    overflow-x: hidden;
+    padding-bottom: 100rpx;
+  }
+
   .wrap {
     background-color: #F8F8F8 !important;
     min-height: 100%;
@@ -358,16 +511,15 @@ export default {
     //padding-top: var(--status-bar-height);
     /* #endif */
   }
-  
-  .status-title {
-    height: var(--status-bar-height);
+
+  .top-box {
+    position: fixed;
+    top: 0;
+    z-index: 9;
     width: 750rpx;
-    background-color: #FFFFFF;
   }
-  
+
   .cart-title {
-    padding-top: var(--status-bar-height);
-    height: 86rpx;
     width: 750rpx;
     background-color: #FFFFFF;
     position: fixed;
@@ -375,14 +527,14 @@ export default {
     top: 0;
     left: 0;
 
-
     &-right {
       position: absolute;
-      bottom:20rpx;
+      top: 50%;
+      transform: translateY(-50%);
       left: 20rpx;
     }
   }
-  
+
   .status_bar {
     position: fixed;
     top: 0;
@@ -390,7 +542,7 @@ export default {
     width: 750rpx;
     background: white;
   }
-  
+
   .nav-title {
     position: fixed;
     top: 0rpx;
@@ -401,35 +553,35 @@ export default {
     top: var(--status-bar-height);
     /* #endif */
   }
-  
+
   .space-div {
     padding-top: var(--status-bar-height);
     height: 86rpx;
     background: white;
   }
-  
+
   .spaceDiv {
     height: 86rpx;
     background: #f8f8f8;
   }
-  
+
   .content {
     /* #ifndef H5 */
     /*margin-top: 86rpx;*/
     /* #endif */
     padding-top: 30rpx;
     padding-bottom: 160rpx;
-    
+
   }
-  
+
   .cartbox {
     margin: 0 30rpx;
   }
-  
+
   .van-checkbox {
     margin-right: 5px;
   }
-  
+
   /* 订单信息 start */
   .order_msg {
     padding: 20rpx 19rpx 0px;
@@ -437,42 +589,50 @@ export default {
     overflow: hidden;
     margin-bottom: 30rpx;
   }
-  
+
   .biz_msg {
     display: flex;
     align-items: center;
     margin-bottom: 30rpx;
+    .is-sale-time{
+      color: $fun-red-color;
+      font-size: 12px;
+    }
   }
-  
+
   .biz_logo {
     width: 70rpx;
     height: 70rpx;
     margin-right: 20rpx;
     border-radius: 35rpx;
   }
-  
+
   .biz_name {
     font-size: 28rpx;
+    max-width: 300rpx;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
-  
+
   .pro {
     display: flex;
     margin-bottom: 50rpx;
   }
-  
+
   .pro-msg {
     flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
   }
-  
+
   .pro-img {
     width: 200rpx;
     height: 200rpx;
     margin-right: 32rpx;
   }
-  
+
   .pro-name {
     font-size: 26rpx;
     margin-bottom: 18rpx;
@@ -486,7 +646,7 @@ export default {
     text-overflow: ellipsis;
     -webkit-box-orient: vertical;
   }
-  
+
   .attr {
     display: inline-block;
     height: 50rpx;
@@ -501,17 +661,17 @@ export default {
       background: #FFF5F5;
     }
   }
-  
+
   .pro-price {
     color: #F43131;
     font-size: 36rpx;
   }
-  
+
   .pro-price .span {
     font-size: 24rpx;
     font-style: normal;
   }
-  
+
   .amount {
     float: right;
     display: flex;
@@ -519,7 +679,7 @@ export default {
     height: 50rpx;
     width: 168rpx;
   }
-  
+
   .amount {
     .attr_num {
       width: 72rpx;
@@ -535,7 +695,7 @@ export default {
       min-height: 0;
     }
   }
-  
+
   .plus {
     width: 48rpx;
     height: 50rpx;
@@ -543,19 +703,19 @@ export default {
     text-align: center;
     line-height: 50rpx;
     box-sizing: border-box;
-    
+
     &.disabled {
       background: #efefef;
     }
   }
-  
+
   /* 订单信息 end */
   /* 猜你喜欢 */
   .container {
     margin-top: 30rpx;
     padding: 0 20rpx;
   }
-  
+
   .fenge {
     text-align: center;
     padding: 30rpx 0;
@@ -563,30 +723,30 @@ export default {
     justify-content: center;
     align-items: center;
   }
-  
+
   .caini {
     font-size: 30rpx;
     margin-left: 13rpx;
     margin-right: 13rpx;
   }
-  
+
   .prolist {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
   }
-  
+
   .pro-item {
     width: 48%;
     margin-bottom: 15px;
     background: #fff;
   }
-  
+
   .pro-item img {
     width: 345rpx;
     height: 345rpx;
   }
-  
+
   .item-name {
     font-size: 24rpx;
     padding: 0 10rpx;
@@ -597,35 +757,35 @@ export default {
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
   }
-  
+
   .red {
     background-color: #F43131;
     display: inline-block;
     height: 3rpx;
     width: 44rpx;
   }
-  
+
   .price {
     margin-top: 20rpx;
     padding: 0 10rpx 20rpx;
   }
-  
+
   .n_price {
     color: #ff0000;
     font-size: 34rpx;
-    
+
     span {
       font-size: 24rpx;
     }
   }
-  
+
   .o_price {
     margin-left: 15rpx;
     color: #afafaf;
     font-size: 24rpx;
     text-decoration: line-through;
   }
-  
+
   /* 购物车为空 */
   .none {
     text-align: center;
@@ -633,12 +793,12 @@ export default {
     color: #B0B0B0;
     font-size: 26rpx;
   }
-  
+
   .none .img {
     height: 220rpx;
     width: 200rpx;
   }
-  
+
   .tobuy {
     color: #F43131;
     border: 2rpx solid #F43131;
@@ -648,7 +808,7 @@ export default {
     border-radius: 20rpx;
     margin-left: 20rpx;
   }
-  
+
   /* 结算 */
   .checkout {
     position: fixed;
@@ -663,18 +823,21 @@ export default {
     background: #fff;
     box-sizing: border-box;
   }
-  
+
   // #ifdef  MP
   .checkout {
-    bottom: 0;
+    margin-bottom: constant(safe-area-inset-bottom);
+    margin-bottom: env(safe-area-inset-bottom);
+    bottom: 48px;
   }
-  
+
   // #endif
+
   // #ifdef APP-PLUS
   .checkout {
-    bottom: 0;
+    bottom: 0rpx;
   }
-  
+
   // #endif
   .checkbtn {
     background: #F43131;
@@ -686,44 +849,44 @@ export default {
     font-size: 28rpx;
     border-radius: 8px;
   }
-  
+
   .total {
     flex: 1;
     text-align: right;
     margin-right: 40rpx;
     font-size: 26rpx;
   }
-  
+
   .total > span {
     color: #F43131;
     font-size: 26rpx;
   }
-  
+
   .total > span > span {
     font-style: normal;
     font-size: 32rpx;
   }
-  
+
   .item-cart {
     display: flex;
     align-items: center;
     margin-right: 17rpx;
     font-size: 28rpx;
-    
+
     .img {
       width: 34rpx;
       height: 34rpx;
     }
   }
-  
+
   .intro {
     text-align: center;
     margin: 60rpx 0 32rpx;
     font-size: 34rpx;
   }
-  
+
   .product-list {
     flex-wrap: wrap;
-    justify-content: space-around;
+    margin: 0 40rpx;
   }
 </style>

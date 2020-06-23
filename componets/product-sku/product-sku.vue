@@ -1,6 +1,6 @@
 <template>
   <view v-if="isShow">
-    <layout-popup ref="productSku" :showPop="true" @maskClicked="close">
+    <layout-popup ref="productSku" :showPop="true" @maskClicked="closePro">
       <div class="cartSku" @touchmove.prevent.stop="noop">
         <div class="cartTop">
           <image class="image" @click="showImgDetal"
@@ -72,6 +72,10 @@ import { numberSort } from '@/common/helper'
 export default {
   components: { layoutPopup },
   props: {
+    mode: {
+      type: String,
+      default: 'default'
+    },
     hasCart: {
       type: Boolean,
       default: false
@@ -161,7 +165,7 @@ export default {
       this.$emit('submitSure', this.postData)
     },
     buyNow () {
-      if (this.productInfo.skuvaljosn) {
+      if (this.productInfo.skuvaljosn && JSON.stringify(this.productInfo.skuvaljosn) !== '{}') {
         if (!this.submitFlag) {
           uni.showToast({
             title: '请选择正确的规格和数量',
@@ -217,6 +221,7 @@ export default {
 
       // 属性判断
       if (attr_val) {
+        console.log(attr_val)
         this.postData.id = attr_val.Product_Attr_ID // 选择属性的id
         this.postData.count = attr_val.Property_count // 选择属性的库存
         this.postData.price = attr_val.Attr_Price ? attr_val.Attr_Price : this.list.Products_PriceX // 选择属性的价格
@@ -303,6 +308,12 @@ export default {
     },
     show () {
       this.isShow = true
+    },
+    closePro () {
+      this.submitFlag = false
+      this.postData.id = ''
+      this.check_attr = {}
+      this.isShow = false
     },
     close () {
       this.isShow = false

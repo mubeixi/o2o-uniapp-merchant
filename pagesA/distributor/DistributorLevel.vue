@@ -1,15 +1,16 @@
 <template>
-  <view class="all">
+  <view @click="commonClick" class="all">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view class="top">
-      <swiper class="center" :indicator-dots="false" :autoplay="false" :duration="1000" :current="inds"
-              @change="change">
-        <swiper-item class="vipFir" v-for="(item,index) of dis_level" :key="index"
-                     :style="dis_level.length==1?'margin-left:43rpx;':''">
+      <swiper :autoplay="false" :current="inds" :duration="1000" :indicator-dots="false" @change="change"
+              class="center">
+        <swiper-item :key="index" :style="dis_level.length==1?'margin-left:43rpx;':''" class="vipFir"
+                     v-for="(item,index) of dis_level">
           <block v-if="item.Level_BackImg">
             <image :src='item.Level_BackImg' class="allImg"></image>
           </block>
           <block v-else>
-            <image src='/static/vipBgColor.png' class="allImg"></image>
+            <image class="allImg" src='/static/vipBgColor.png'></image>
           </block>
           
           <view class="vipGrade" v-if="item.Level_ID==pro.user_info.Level_ID&&userInfo.Is_Distribute==1">
@@ -57,7 +58,7 @@
                 v-if="dis_level[inds].level_rules_edit.pay_money.user_data>=dis_level[inds].level_rules_edit.pay_money.value.money">
             已完成
           </view>
-          <view class="submit" @click="goIndex" v-else>
+          <view @click="goIndex" class="submit" v-else>
             去消费
           </view>
         
@@ -94,9 +95,9 @@
           </view>
           
           <view class="productList" v-if="dis_level[inds].level_rules_edit.buy_prod.value.type=='2'">
-            <block v-for="(item,index) in dis_level[inds].level_rules_edit.buy_prod.data" :key="index">
-              <view class="myProduct" @click="goDetail(item.Products_ID)">
-                <image class="imgPro" :src="item.ImgPath"></image>
+            <block :key="index" v-for="(item,index) in dis_level[inds].level_rules_edit.buy_prod.data">
+              <view @click="goDetail(item.Products_ID)" class="myProduct">
+                <image :src="item.ImgPath" class="imgPro"></image>
                 <view class="proText">
                   {{item.Products_Name}}
                 </view>
@@ -131,7 +132,7 @@
                 v-if="dis_level[inds].level_rules_edit.buy_times.user_data>=dis_level[inds].level_rules_edit.buy_times.value">
             已完成
           </view>
-          <view class="submit" @click="goIndex" v-else>
+          <view @click="goIndex" class="submit" v-else>
             去购买
           </view>
         
@@ -154,7 +155,7 @@
                 v-if="dis_level[inds].level_rules_edit.team_sales.user_data>=dis_level[inds].level_rules_edit.team_sales.value">
             已完成
           </view>
-          <view class="submit" v-else @click="goFenxiao()">
+          <view @click="goFenxiao()" class="submit" v-else>
             去完成
           </view>
         
@@ -182,7 +183,7 @@
           <view class="submit submitMbx" v-if="dis_level[inds].buy_order.Order_Status==4">
             已完成
           </view>
-          <view class="submit" @click="buyDis(dis_level[inds].Level_ID)" v-else>
+          <view @click="buyDis(dis_level[inds].Level_ID)" class="submit" v-else>
             去购买
           </view>
         </view>
@@ -207,13 +208,13 @@
               <view class="submit submitMbx" v-else-if="dis_level[inds].apply_order.status==1">
                 待审核
               </view>
-              <view class="submit" v-else @click="edit(dis_level[inds].Level_ID)">
+              <view @click="edit(dis_level[inds].Level_ID)" class="submit" v-else>
                 已驳回({{dis_level[inds].apply_order.reason}})
               </view>
             </block>
           </block>
           <block v-else>
-            <view class="submit" @click="edit(dis_level[inds].Level_ID)">
+            <view @click="edit(dis_level[inds].Level_ID)" class="submit">
               去申请
             </view>
           </block>
@@ -224,8 +225,8 @@
         <!-- 直邀请 -->
         <view class="td" style="display: block;height: auto;"
               v-if="dis_level[inds].level_rules_edit.direct_sons.checked=='1'">
-          <view class="td" style="border-bottom: 0px;"
-                v-for="(it,ind) of dis_level[inds].level_rules_edit.direct_sons.value" :key="ind">
+          <view :key="ind" class="td"
+                style="border-bottom: 0px;" v-for="(it,ind) of dis_level[inds].level_rules_edit.direct_sons.value">
             <image class="image" src="/static/distributor/zhiyao.png"></image>
             <view class="mbx">
               <view class="tops">
@@ -240,7 +241,7 @@
                     v-if="dis_level[inds].level_rules_edit.direct_sons.user_data.is_completed==1">
                 已完成
               </view>
-              <view class="submit" @click="goFenxiao">
+              <view @click="goFenxiao" class="submit">
                 去邀请
               </view>
             </block>
@@ -253,8 +254,8 @@
         <!-- 团队 -->
         <view class="td" style="display: block;height: auto;"
               v-if="dis_level[inds].level_rules_edit.team_sons.checked=='1'">
-          <view class="td" style="border-bottom: 0px;"
-                v-for="(it,ind) of dis_level[inds].level_rules_edit.team_sons.value" :key="ind">
+          <view :key="ind" class="td"
+                style="border-bottom: 0px;" v-for="(it,ind) of dis_level[inds].level_rules_edit.team_sons.value">
             <image class="image" src="/static/distributor/teamLast.png"></image>
             <view class="mbx">
               <view class="tops">
@@ -269,7 +270,7 @@
                     v-if="dis_level[inds].level_rules_edit.team_sons.user_data.is_completed==1">
                 已完成
               </view>
-              <view class="submit" @click="goFenxiao">
+              <view @click="goFenxiao" class="submit">
                 去邀请
               </view>
             </block>
@@ -288,6 +289,8 @@ import { disApplyInit } from '@/api/customer'
 import { mapActions } from 'vuex'
 import BaseMixin from '@/mixins/BaseMixin'
 import CircleTitle from '@/componets/circle-title/circle-title'
+import { toHome } from '@/common/fun'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
   mixins: [BaseMixin],
@@ -301,6 +304,7 @@ export default {
     }
   },
   components: {
+    WzwImTip,
     CircleTitle,
     
   },
@@ -344,9 +348,7 @@ export default {
       })
     },
     goIndex () {
-      uni.switchTab({
-        url: '/pages/index/index',
-      })
+      toHome()
     },
     goDetail (id) {
       uni.navigateTo({

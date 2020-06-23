@@ -1,11 +1,11 @@
 <template>
-  <view class="page-wrap">
-    
-    <image @click="preFn(current_url)" :src="current_url|domain" style="width: 750rpx" mode="widthFix" />
+  <view @click="commonClick" class="page-wrap">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
+    <image :src="current_url|domain" @click="preFn(current_url)" mode="widthFix" style="width: 750rpx" />
     
     <div class="swiper">
-      <div class="swiper-item" @click="setSelect(poster)" v-for="(poster,idx) in poster_list">
-        <image class="swiper-itm-img" :src="poster.img|domain" mode="widthFix"></image>
+      <div @click="setSelect(poster)" class="swiper-item" v-for="(poster,idx) in poster_list">
+        <image :src="poster.img|domain" class="swiper-itm-img" mode="widthFix"></image>
       </div>
     </div>
     
@@ -23,8 +23,10 @@ import { mapActions } from 'vuex'
 import { getDistributeWxQrcode, getPosterDetail, getPosterList } from '@/api/common'
 import { error } from '@/common/fun'
 import BaseMixin from '@/mixins/BaseMixin'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
+  components: { WzwImTip },
   mixins: [BaseMixin],
   data () {
     return {

@@ -1,10 +1,11 @@
 <template>
-  <div>
+  <div @click="commonClick">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <form action="/">
       <div class="search-wrap">
-        <icon type="search" size="34rpx" class="search_icon" />
-        <input type="text" class="search-input" name="search" v-model="inputValue" @confirm="success"
-               confirm-type='search' focus="focus" autofocus="autofocus">
+        <icon class="search_icon" size="34rpx" type="search" />
+        <input @confirm="success" autofocus="autofocus" class="search-input" confirm-type='search' focus="focus"
+               name="search" type="text" v-model="inputValue">
         <span @click="close" class="span">取消</span>
       </div>
     </form>
@@ -12,11 +13,11 @@
       <div class="title">
         <div>搜索历史</div>
         <div @click="clear" class="dels">
-          <image class="img" :src="'/static/client/del.png'|domain" />
+          <image :src="'/static/client/del.png'|domain" class="img" />
         </div>
       </div>
       <div class="h_content">
-        <span class="span" v-for="(item,i) of searchAll" :key='i' @click="goSearch(item)">{{item}}</span>
+        <span :key='i' @click="goSearch(item)" class="span" v-for="(item,i) of searchAll">{{item}}</span>
       </div>
     </div>
   </div>
@@ -24,6 +25,7 @@
 
 <script>
 import BaseMixin from '@/mixins/BaseMixin'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
   mixins: [BaseMixin],
@@ -34,7 +36,7 @@ export default {
       searchAll: [],
     }
   },
-  components: {},
+  components: { WzwImTip },
   onLoad (options) {
     if (options.keyword) {
       this.inputValue = options.keyword
@@ -93,7 +95,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
   .search-wrap {
     position: relative;
     display: flex;

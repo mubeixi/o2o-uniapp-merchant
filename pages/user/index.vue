@@ -1,67 +1,86 @@
 <template>
-  <div class="wrap">
+  <div @click="commonClick" class="wrap">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <div :style="{height:systemInfo.statusBarHeight+'px'}"></div>
+    <div :style="{height:diyHeadHeight+'px',opacity:activeHeadOpacity}" class="bg-white" style="position: fixed;z-index: 2;width: 750rpx;left:0;top:0"
+         v-if="activeHeadOpacity">
+      <div :style="{height:systemInfo.statusBarHeight+'px'}"></div>
+      <div :style="{height:menuButtonInfo.height+'px',lineHeight:menuButtonInfo.height+'px'}" class="c3 text-center">
+        个人中心
+      </div>
+    </div>
 
     <div class="header">
-      <div class="left-icon-box">
-        <LayoutIcon type="iconshezhi" size="24" color="#333" @click="goSetting"></LayoutIcon>
-        <LayoutIcon class="p-l-10" type="iconicon" size="24" color="#333" @click="goDailyCheck"></LayoutIcon>
+      <div :style="{top:menuButtonInfo.top+'px',height:menuButtonInfo.height+'px'}" class="left-icon-box">
+        <!--:plain="false" :wrap-bg="activeHeadOpacity===1?'#f2f2f2':'none'" wrap-padding="6px"-->
+        <layout-icon @click="goSetting" color="#333" size="24" type="iconshezhi"></layout-icon>
+        <layout-icon @click="goDailyCheck" class="p-l-10" color="#333" size="24" type="iconicon"></layout-icon>
       </div>
-      <div class="user-msg" v-if="userInfo.Users_ID" @click="$linkTo('/pagesA/user/PersonalMsg')">
+      <div @click="$linkTo('/pagesA/user/PersonalMsg')" class="user-msg" v-if="userInfo.Users_ID">
         <image :src="userInfo.User_HeadImg" class="avatar"></image>
         <div class="name">{{userInfo.User_NickName}}</div>
       </div>
-      <div class="user-msg" v-else @click="$linkTo('/pages/user/login')">
+      <div @click="$linkTo('/pages/user/login')" class="user-msg" v-else>
         <image :src="'/static/client/home/xianshi.png'|domain" class="avatar"></image>
         <div class="name">点击登录</div>
       </div>
     </div>
     <div class="orders flex align-items-center">
-      <div class="order-item" @click="goOrder(1)">
-        <LayoutIcon type="icondaifukuan" color="#9CA2F9" size="26"></LayoutIcon>
+      <div @click="goOrder(1)" class="order-item">
+        <LayoutIcon color="#9CA2F9" size="26" type="icondaifukuan"></LayoutIcon>
         <div class="order-desc">待付款</div>
+        <div class="jiaobiao" v-if="userInfo.Users_ID && orderNum.waitpay">{{orderNum.waitpay}}</div>
       </div>
-      <div class="order-item" @click="goOrder(2)">
-        <LayoutIcon type="iconfahuotixing" color="#88C79A" size="26"></LayoutIcon>
+      <div @click="goOrder(2)" class="order-item">
+        <LayoutIcon color="#88C79A" size="26" type="iconfahuotixing"></LayoutIcon>
         <div class="order-desc">待发货</div>
+        <div class="jiaobiao" v-if="userInfo.Users_ID && orderNum.waitsend">{{orderNum.waitsend}}</div>
       </div>
-      <div class="order-item" @click="goOrder(3)">
-        <LayoutIcon type="icondaishouhuo" color="#FDBB59" size="26"></LayoutIcon>
+      <div @click="goOrder(3)" class="order-item">
+        <LayoutIcon color="#FDBB59" size="26" type="icondaishouhuo"></LayoutIcon>
         <div class="order-desc">待收货</div>
+        <div class="jiaobiao" v-if="userInfo.Users_ID && orderNum.waitconfirm">{{orderNum.waitconfirm}}</div>
       </div>
-      <div class="order-item" @click="goOrder(4)">
-        <LayoutIcon type="iconpingjia" color="#7DCAF7" size="26"></LayoutIcon>
+      <div @click="goOrder(4)" class="order-item">
+        <LayoutIcon color="#7DCAF7" size="26" type="iconpingjia"></LayoutIcon>
         <div class="order-desc">待评价</div>
+        <div class="jiaobiao" v-if="userInfo.Users_ID && orderNum.waitcomment">{{orderNum.waitcomment}}</div>
       </div>
     </div>
-    <div class="quanyi" @click="$linkTo('/pages/user/EquityCard')">
-      <LayoutIcon type="iconquanyi" color="#DA8E4B" size="26" class="v-icon"></LayoutIcon>
+    <div @click="$linkTo('/pagesA/user/EquityCard')" class="quanyi" v-if="cardList.length>0">
+      <LayoutIcon class="v-icon" color="#DA8E4B" size="26" type="iconquanyi"></LayoutIcon>
       <div class="quanyi-title">超值权益卡</div>
       <div class="quanyi-ad">海量积分赠送·满立减优惠券</div>
       <div class="detail">
         <span>查看详情</span>
-        <LayoutIcon type="iconicon-arrow-right" size="12" color="#DA8E4B" display="inline-block"></LayoutIcon>
+        <LayoutIcon color="#DA8E4B" display="inline-block" size="12" type="iconicon-arrow-right"></LayoutIcon>
       </div>
     </div>
-    <div class="functions flex flex-justify-between">
-      <block v-for="(item,index) of  iconList" :key="index">
-        <LayoutFun width="150rpx" :type="item.className" @openNext="openNext" :index="index" :name="item.name" :color="item.color"></LayoutFun>
+    <div class="functions flex">
+      <block :key="index" v-for="(item,index) of  iconList">
+        <LayoutFun :color="item.color" :index="index" :name="item.name" :type="item.className" @openNext="openNext"
+                   width="150rpx"></LayoutFun>
       </block>
     </div>
     <div class="intro">为你推荐</div>
     <div class="product-list flex">
 
       <pro-tag
-        v-for="(item,idx) in proList"
+        :index="idx"
         :key="idx"
-        :prod_id="item.Products_ID"
-        :pro_src="item.ImgPath"
+        :product-info="item"
         :pro_name="item.Products_Name"
         :pro_price="item.Products_PriceX"
         :pro_price_old="item.Products_PriceY"
+        :pro_src="item.ImgPath"
+        :prod_id="item.Products_ID"
+        v-for="(item,idx) in proList"
       />
 
     </div>
+
+    <div class="safearea-box"></div>
+
   </div>
 </template>
 
@@ -69,23 +88,32 @@
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import LayoutFun from '@/componets/layout-fun/layout-fun'
 import ProTag from '@/componets/pro-tag/pro-tag'
-import BaseMixin from '@/mixins/BaseMixin'
+import BaseMixin, { tabbarMixin } from '@/mixins/BaseMixin'
 import { checkIsLogin } from '@/common/helper'
-import {
-  getProductList
-} from '@/api/product'
-import { getUserInfo } from '@/api/customer'
+import { getProductList } from '@/api/product'
+import { getOrderNum } from '@/api/order'
+import { getRightsCard, getUserInfo } from '@/api/customer'
 import { mapActions } from 'vuex'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import eventHub from '@/common/eventHub'
+import { error } from '@/common/fun'
 
 export default {
-  mixins: [BaseMixin],
+  mixins: [BaseMixin, tabbarMixin],
   components: {
+
+    WzwImTip,
     LayoutIcon,
     LayoutFun,
     ProTag
   },
   data () {
     return {
+      cardList: [],
+      activeHeadOpacity: 0,
+      orderNum: {},
+      productTotal: 0,
+      page: 1,
       iconList: [
         {
           className: 'iconpintuan',
@@ -104,6 +132,12 @@ export default {
           name: '秒杀订单',
           color: '#54AEED',
           link: '/pages/order/OrderList?type=flashsale'
+        },
+        {
+          className: 'iconwaimai',
+          name: '外卖订单',
+          color: '#f4ea2a',
+          link: '/pages/order/OrderList?type=waimai'
         },
         {
           className: 'iconzengpin',
@@ -133,7 +167,7 @@ export default {
           className: 'iconyouhuiquan',
           name: '优惠券',
           color: '#D1BE71',
-          link: '/pages/user/Coupon'
+          link: '/pagesA/user/Coupon'
         },
         {
           className: 'iconrenwu',
@@ -158,6 +192,12 @@ export default {
           name: '分销中心',
           color: '#69C276',
           link: '/pagesA/distributor/Main'
+        },
+        {
+          className: 'iconguiji',
+          name: '轨迹',
+          color: '#69C276',
+          link: '/pagesA/user/history'
         }
       ],
       proList: []
@@ -169,9 +209,18 @@ export default {
     }
   },
   methods: {
+    async init () {
+      const arr = await getRightsCard({ status: 1 }, {
+        onlyData: true,
+        tip: '加载中'
+      }).catch(e => {
+        error(e.msg || '获取权益卡错误')
+      })
+      this.cardList = arr
+    },
     goDailyCheck () {
       if (!checkIsLogin(1, 1)) return
-      this.$linkTo('/pages/user/DailyCheck')
+      this.$linkTo('/pagesA/user/DailyCheck')
     },
     goSetting () {
       if (!checkIsLogin(1, 1)) return
@@ -182,23 +231,61 @@ export default {
       this.$linkTo(this.iconList[index].link)
     },
     goOrder (index) {
+      if (!checkIsLogin(1, 1)) return
       const url = '/pages/order/OrderList?type=shop&&index=' + index
       this.$linkTo(url)
     },
     async _init_func () {
-      this.proList = await getProductList({}, { onlyData: true }).catch(e => {
+      const { data, totalCount } = await getProductList({}).catch(e => {
         throw Error(e.msg || '获取推荐商品信息失败')
+      })
+
+      this.proList = data
+      this.productTotal = totalCount
+      this.page++
+    },
+    // 获取订单角标数
+    getOrderNum () {
+      getOrderNum({ Order_Type: 'shop' }).then(res => {
+        this.orderNum = res.data
+      }).catch(e => {
       })
     },
     ...mapActions({
       setUserInfo: 'user/setUserInfo'
     })
   },
+  onPageScroll (e) {
+    const { scrollTop } = e
+    const h = this.diyHeadHeight + 20 // 滑到这里的时候,就透明度为1
+    const opacity = scrollTop / h
+    this.activeHeadOpacity = opacity > 1 ? 1 : opacity
+  },
   onShow () {
-    getUserInfo().then(res => {
-      this.setUserInfo(res.data)
-    }).catch(err => {
+    this.setTabBarIndex(4)
+    this.$store.dispatch('system/setTabActiveIdx', 4)
+    this.refreshTabTag()
+
+    this.init()
+    if (this.userInfo.Users_ID) {
+      getUserInfo().then(res => {
+        this.setUserInfo(res.data)
+      }).catch(err => {
+      })
+      this.getOrderNum()
+    }
+  },
+  async onReachBottom () {
+    if (this.proList.length >= this.productTotal) {
+      error('到底了')
+      return
+    }
+    const proList = await getProductList({ page: this.page }, { onlyData: true }).catch(e => {
+      throw Error(e.msg || '获取推荐商品信息失败')
     })
+
+    this.page++
+    this.proList = this.proList.concat(proList)
   },
   created () {
     this._init_func()
@@ -207,8 +294,11 @@ export default {
 </script>
 <style lang="scss" scoped>
   .wrap {
-    padding: 0rpx 30rpx 0 30rpx;
+    padding: 0rpx 30rpx 48px 30rpx;
     background: #EDF0F5;
+    width: 750rpx;
+    box-sizing: border-box;
+    overflow-x: hidden;
   }
 
   .flex {
@@ -225,9 +315,9 @@ export default {
     .left-icon-box {
       position: fixed;
       left: 30rpx;
-      top: var(--status-bar-height);
       display: flex;
       align-items: center;
+      z-index: 3;
     }
 
     .user-msg {
@@ -259,6 +349,7 @@ export default {
       text-align: center;
       font-size: 28rpx;
       color: #333;
+      position: relative;
 
       .order-desc {
         margin-top: 22rpx;
@@ -327,6 +418,22 @@ export default {
 
   .product-list {
     flex-wrap: wrap;
-    justify-content: space-around;
+    margin: 0 10rpx;
+  }
+
+  .jiaobiao {
+    position: absolute;
+    top: 0rpx;
+    right: 10rpx;
+    width: 20rpx;
+    height: 20rpx;
+    border-radius: 50%;
+    background-color: #FFFFFF;
+    border: 1px solid #F43131;
+    font-size: 15rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #F43131;
   }
 </style>

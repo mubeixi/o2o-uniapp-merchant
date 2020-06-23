@@ -1,7 +1,8 @@
 <template>
-  <view class="all">
+  <view @click="commonClick" class="all">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view class="content">
-      <view class="bank" v-if="isShow" @click="goMethod">
+      <view @click="goMethod" class="bank" v-if="isShow">
         <image :src="initData.ShopLogo|domain" class="bankCard"></image>
         <view class="bankName" v-if="data.Method_Type=='bank_card'||data.Method_Type=='alipay'">
           {{data.Method_Name}}({{data.Account_Val}})
@@ -9,9 +10,9 @@
         <view class="bankName" v-else>
           {{data.Method_Name}}
         </view>
-        <image :src="'/static/client/distributor/right.png'|domain" class="right"></image>
+        <image :src="'/static/client/fenxiao/right.png'|domain" class="right"></image>
       </view>
-      <view class="bank guanli" @click="guanWithdrawal" v-else>
+      <view @click="guanWithdrawal" class="bank guanli" v-else>
         + 管理提现方式
       </view>
       <view class="tiMoney">
@@ -26,7 +27,7 @@
         <view class="canTiMoney">
           可提现金额：{{balance}}元
         </view>
-        <view class="allTi" @click="allTi">
+        <view @click="allTi" class="allTi">
           全部提现
         </view>
       </view>
@@ -34,7 +35,7 @@
       
       </view>
       <view class="tishi">
-        <image class="tishi-image" :src="'/static/client/distributor/tishi.png'|domain"></image>
+        <image :src="'/static/client/fenxiao/tishi.png'|domain" class="tishi-image"></image>
         <view class="tishi-view">
           申请提现后，系统会自动扣除您提现的{{init.Poundage_Ratio}}%的手续费
           <block v-if="withdraw_from==1">
@@ -42,24 +43,25 @@
           </block>
         </view>
       </view>
-      <view class="liji" @click="withdrawApply">
+      <view @click="withdrawApply" class="liji">
         立即提现
       </view>
-      <view class="lishi" @click="goRecord">
+      <view @click="goRecord" class="lishi">
         历史提现
-        <image class="lishi-image" :src="'/static/client/distributor/right.png'|domain"></image>
+        <image :src="'/static/client/fenxiao/right.png'|domain" class="lishi-image"></image>
       </view>
     </view>
   </view>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import Storage from '@/common/Storage'
 import { getUserWithdrawMethod, getWithdrawConfig, withdrawApply } from '@/api/customer'
 import BaseMixin from '@/mixins/BaseMixin'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
+  components: { WzwImTip },
   mixins: [BaseMixin],
   data () {
     return {
@@ -95,7 +97,9 @@ export default {
     })
   },
   computed: {
-    ...mapGetters(['initData']),
+    initData () {
+      return this.$store.state.system.initData
+    },
   },
   onShow () {
     // 获取我的提现方式
@@ -216,7 +220,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
   .all {
     background-color: #f8f8f8;
     width: 750rpx;

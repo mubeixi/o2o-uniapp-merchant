@@ -1,6 +1,6 @@
 <template>
-  <view>
-    
+  <view @click="commonClick">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <!-- <view class="zhezhao" v-if="password_input">
       <view class="input-wrap">
         <view>请输入余额支付密码</view>
@@ -14,7 +14,7 @@
     <div class="zhezhao" v-if="password_input">
       <div class="input-wrap">
         <div>请输入余额支付密码</div>
-        <input type="password" class="input" placeholder="请输入密码" v-model="user_pay_password" @blur="user_password">
+        <input @blur="user_password" class="input" placeholder="请输入密码" type="password" v-model="user_pay_password">
         <div class="btns">
           <div @click="cancelInput" class="btn">取消</div>
           <div @click="confirmInput" class="btn">确定</div>
@@ -22,30 +22,30 @@
       </div>
     </div>
     <view class="titleImg">
-      <image class="image" :src="'/static/client/distributor/join.jpg'|domain" mode=""></image>
+      <image :src="'/static/client/distributor/bedistributor.jpg'|domain" class="image" mode=""></image>
     </view>
     
     <!--  申请逻辑 -->
     <block v-if="type=='edit'">
       <block>
         <block v-if="select_lists.length>0">
-          <view class="center" v-for="(itm,idx2) of select_lists" :key="idx2">
+          <view :key="idx2" class="center" v-for="(itm,idx2) of select_lists">
             <view class="mbx">
               {{itm.name}}
             </view>
             <view class="haha  disMy">
-              <picker :value="itm.index" mode="selector" :range="itm.options" @change="selectS(idx2,$event)"
+              <picker :range="itm.options" :value="itm.index" @change="selectS(idx2,$event)" mode="selector"
                       style="width: 90%;">
                 <view class="picker">
                   {{itm.options[itm.index]}}
                 </view>
               </picker>
-              <image class="disMyImg" :src="'/static/client/person/right.png' | domain"></image>
+              <image :src="'/static/client/person/right.png' | domain" class="disMyImg"></image>
             </view>
           </view>
         </block>
         <block v-if="text_lists.length>0">
-          <view class="center" v-for="(m,n) of text_lists" :key="n">
+          <view :key="n" class="center" v-for="(m,n) of text_lists">
             <view class="mbx">
               {{m.Name}}
             </view>
@@ -57,8 +57,8 @@
             区域选择
           </view>
           <view class="haha">
-            <picker mode="multiSelector" @change="bindMultiPickerChange" @columnchange="bindMultiPickerColumnChange"
-                    :value="change_multiIndex" :range="change_objectMultiArray" range-key="name">
+            <picker :range="change_objectMultiArray" :value="change_multiIndex" @change="bindMultiPickerChange"
+                    @columnchange="bindMultiPickerColumnChange" mode="multiSelector" range-key="name">
               <view class="picker" style="text-align: center;">
                 <view v-if="!address_info.Address_Province">选择省份</view>
                 <view v-else>{{objectMultiArray[0][multiIndex[0]]['name']}}</view>
@@ -75,24 +75,24 @@
             选择街道
           </view>
           <view class="haha">
-            <picker mode="selector" @change="t_pickerChange" :range="t_arr" range-key="name" :value="t_index">
+            <picker :range="t_arr" :value="t_index" @change="t_pickerChange" mode="selector" range-key="name">
               <view class="picker">
-                <view v-if="!address_info.Address_Town" style="margin-left: 20upx;width: 300upx;">选择街道</view>
-                <view v-else style="margin-left: 20upx;width: 300upx;">{{t_arr[t_index]['name']}}</view>
+                <view style="margin-left: 20upx;width: 300upx;" v-if="!address_info.Address_Town">选择街道</view>
+                <view style="margin-left: 20upx;width: 300upx;" v-else>{{t_arr[t_index]['name']}}</view>
               </view>
             </picker>
           </view>
         </view>
       </block>
       
-      <view class="checks" v-if="pro.dis_config.Distribute_AgreementOpen">
-        <radio @click="changes" :checked="isAgree" style="transform:scale(0.7)" />
+      <view class="checks m-t-15" v-if="pro.dis_config.Distribute_AgreementOpen">
+        <radio :checked="isAgree" @click="changes" style="transform:scale(0.7)" />
         <text @click="goDistributeAgreement">同意
           <text class="checkq">{{pro.dis_config.Distribute_AgreementTitle}}</text>
         </text>
       </view>
       
-      <view class="submits" @click="application">
+      <view @click="application" class="submits">
         {{textShen}}
         <!--				立即申请成为分销商-->
       </view>
@@ -104,52 +104,52 @@
           <view class="mbx">
             姓名
           </view>
-          <input class="inputa" type="text" placeholder="请输入您的姓名" placeholder-style="color: #CAC8C8;"
+          <input class="inputa" placeholder="请输入您的姓名" placeholder-style="color: #CAC8C8;" type="text"
                  v-model="shenArr.DisplayName">
         </view>
         <view class="center" v-if="pro.dis_config.Reserve_DisplayTelephone==1">
           <view class="mbx">
             电话
           </view>
-          <input class="inputa" type="text" placeholder="请输入您的电话" placeholder-style="color: #CAC8C8;"
-                 v-model="shenArr.DisplayTelephone" @blur="isTell">
+          <input @blur="isTell" class="inputa" placeholder="请输入您的电话" placeholder-style="color: #CAC8C8;"
+                 type="text" v-model="shenArr.DisplayTelephone">
         </view>
-        <view class="center" v-for="(itm,idx) of select_lists" :key="idx">
+        <view :key="idx" class="center" v-for="(itm,idx) of select_lists">
           <view class="mbx">
             {{itm.name}}
           </view>
           <view class="haha">
-            <picker :value="itm.index" mode="selector" :range="itm.options" @change="selectS(idx,$event)">
+            <picker :range="itm.options" :value="itm.index" @change="selectS(idx,$event)" mode="selector">
               <view class="picker">
                 {{itm.options[itm.index]}}
               </view>
             </picker>
           </view>
         </view>
-        <view class="center" v-for="(m,n1) of text_lists" :key="n1">
+        <view :key="n1" class="center" v-for="(m,n1) of text_lists">
           <view class="mbx">
             {{m.Name}}
           </view>
-          <input class="inputa" type="text" v-model="m.Value" :placeholder="'请输入'+m.Name">
+          <input :placeholder="'请输入'+m.Name" class="inputa" type="text" v-model="m.Value">
         </view>
       </block>
       <view class="disHaihong" v-if="disData.Level_Name">
         {{disData.Level_Name}}({{disData.level_rules_edit.direct_buy.value.money}}元)
       </view>
       <view class="checks" v-if="pro.dis_config.Distribute_AgreementOpen">
-        <radio @click="changes" :checked="isAgree" style="transform:scale(0.7)" />
+        <radio :checked="isAgree" @click="changes" style="transform:scale(0.7)" />
         <text @click="goDistributeAgreement">同意
           <text class="checkq">{{pro.dis_config.Distribute_AgreementTitle}}</text>
         </text>
       </view>
-      <view class="submits" @click="becomeFenxiao">
+      <view @click="becomeFenxiao" class="submits">
         立即购买成为{{commi_rename.commi}}
       </view>
     </block>
     
-    <layout-layer ref="popupLayer" :direction="'top'">
+    <layout-layer :direction="'top'" ref="popupLayer">
       <div class="iMbx">
-        <div class="c_method" v-for="(item,index) in initData.pay_arr" @click="chooseType(index)" :key="index">
+        <div :key="index" @click="chooseType(index)" class="c_method" v-for="(item,index) in initData.pay_arr">
           {{item}}
           <text>￥{{pay_money}}</text>
         </div>
@@ -171,10 +171,12 @@ import Storage from '@/common/Storage'
 import { confirm, error, toast } from '@/common/fun'
 import BaseMixin from '@/mixins/BaseMixin'
 import LayoutLayer from '@/componets/layout-layer/layout-layer'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
   mixins: [BaseMixin],
   components: {
+    WzwImTip,
     LayoutLayer,
     
   },
@@ -218,15 +220,16 @@ export default {
       pay_type: '', // 支付方式
       pay_money: 0, // 支付金额
       level_id: '',
+      textShen: '',
     }
   },
   computed: {
-    textShen () {
-      if (this.commi_rename) {
-        return '立即申请成为' + this.commi_rename.commi
-      }
-      return ''
-    },
+    // textShen () {
+    //   if (this.commi_rename) {
+    //     return '立即申请成为' + this.commi_rename.commi
+    //   }
+    //   return ''
+    // },
     userInfo () {
       return this.$store.getters['user/getUserInfo']()
     },
@@ -242,7 +245,7 @@ export default {
     },
   },
   onLoad (options) {
-    this.level_id = options.id
+    this.level_id = parseInt(options.id)
     this.type = options.type
     const that = this
     
@@ -311,7 +314,7 @@ export default {
             cancelText: '暂不设置',
           }).then(res => {
             uni.navigateTo({
-              url: '/pagesA/person/updateUserPsw?type=1&is_back=1',
+              url: '/pagesA/user/UpdateUserPsw?type=1&is_back=1',
             })
           }).catch(err => {
             error('请选择其他支付方式')
@@ -678,11 +681,8 @@ export default {
             icon: 'none',
           })
           this.submitM = true
-          setTimeout(function () {
-            uni.navigateBack({
-              delta: 1,
-            })
-            
+          setTimeout(() => {
+            this.$back()
           }, 1000)
           
           this.textShen = res.msg
@@ -928,6 +928,7 @@ export default {
       this.disBuy()
     },
     disApplyInit () {
+      let _self = this
       disApplyInit().then(res => {
         this.pro = res.data
         if (this.type === 'edit') {
@@ -938,10 +939,13 @@ export default {
               dislist = item
             }
           }
+          console.log(dislist, this.pro)
           dislist.manual_rules = typeof dislist.manual_rules !== 'object' ? JSON.parse(dislist.manual_rules) : dislist.manual_rules
+          console.log(dislist.manual_rules)
           var select_arrays = []
           var text_arrays = []
           for (var fi in dislist.manual_rules) {
+            console.log(fi)
             if (dislist.manual_rules[fi].type === 'select') {
               dislist.manual_rules[fi].name + '|' + dislist.manual_rules[fi].place
               var select_array = dislist.manual_rules[fi].place.split('|')
@@ -975,15 +979,16 @@ export default {
           if (!((JSON.stringify(dislist.apply_order) === '{}'))) {
             const myInfo = JSON.parse(dislist.apply_order.manual_form)
             
+            console.log(dislist.apply_order, 'ss')
             if (dislist.apply_order.status === 3) {
-              this.textShen = dislist.apply_order.status_desc + '(' + dislist.apply_order.reason + ')'
+              _self.textShen = dislist.apply_order.status_desc + '(' + dislist.apply_order.reason + ')'
             }
             if (dislist.apply_order.status === 1) {
-              this.submitM = true
-              this.textShen = dislist.apply_order.status_desc
+              _self.submitM = true
+              _self.textShen = dislist.apply_order.status_desc
             }
             if (dislist.apply_order.status === 2) {
-              this.textShen = dislist.apply_order.status_desc
+              _self.textShen = dislist.apply_order.status_desc
             }
             for (const item in myInfo) {
               if (myInfo[item].type === 'address') {
@@ -1041,6 +1046,7 @@ export default {
           var select_arrays = []
           var text_arrays = []
           for (var fi in dislist.Distribute_Form) {
+            console.log(fi)
             if (dislist.Distribute_Form[fi].Type === 'select') {
               dislist.Distribute_Form[fi].Name + '|' + dislist.Distribute_Form[fi].Value
               var select_array = dislist.Distribute_Form[fi].Value.split('|')
@@ -1087,6 +1093,8 @@ export default {
     uni.setNavigationBarTitle({
       title: initData.commi_rename.commi + '信息',
     })
+    this.textShen = '立即申请成为' + this.commi_rename.commi
+    
   },
 }
 </script>

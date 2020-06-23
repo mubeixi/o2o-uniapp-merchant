@@ -44,13 +44,13 @@ export const createOrderCheck = (param, options) => fetch({
 // 提交订单
 export const createOrder = (param, options) => {
   // 获取推荐人id
-  let owner_id = Storage.get('owner_id')
-  if (!owner_id) {
-    owner_id = 0
+  let share_user_id = Storage.get('owner_id')
+  if (!share_user_id) {
+    share_user_id = 0
   }
   const _param = {
     ...param,
-    owner_id
+    share_user_id
   }
 
   return fetch({
@@ -164,3 +164,12 @@ export const getPintuanTeam = (param, options) => fetch({ act: 'get_pintuan_team
 
 // 获取订单权益
 export const getPayCoupons = (param, options) => fetch({ act: 'getPayCoupons', param, options })
+
+// 线下支付
+export const offlinePay = (param, options) => fetch({ act: 'offlinePay', param, options })
+
+// 获取订单物流追踪
+export const getOrderExpress = (param, options) => fetch({ act: 'get_order_express', param, options })
+
+// 获取同城配送物流
+export const cityOrderExpress = (param, options) => fetch({ act: 'cityOrderExpress', param, options })

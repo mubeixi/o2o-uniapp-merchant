@@ -1,38 +1,95 @@
 <template>
-  <view class="swiper wrap fun-preview-swiper">
-    <!--      :class="{single:swiper.value.list.length<2}"-->
-    <!-- style="height:375rpx" -->
-    <!--      @load="HandleImgLoad"-->
-    <!--      :style="[getSingleStyle()]"-->
-    <div v-if="swiper.value.list.length==1" @click="go(swiper.value.list[0])" class="single" style="display: flex;">
-      <image mode="widthFix" style="width: 750rpx;vertical-align: top;"
-             :src="domainFunc(swiper.value.list[0].img_src)" />
-      <!-- <div class="cover-full" :style="{backgroundImage:'url('+domainFunc(swiper.value.list[0].img_src)+')'}"></div> -->
-    </div>
-    <!-- style="height:375rpx" -->
-    <swiper v-else class="swiper-box" @change="changeHeightFn" style="width:750rpx;" :style="{height:swipwerH}"
-            indicator-color="rgba(255, 255, 255, .3)"
-            indicator-active-color="rgba(255, 255, 255, .7)"
-            :indicator-dots="swiper.value.list.length>1" :autoplay="swiper.config.autoplay" circular="true"
-            :interval="swiper.config.interval|str2num" :duration="500">
-      <swiper-item @click="go(item)" v-for="(item,idx) in swiper.value.list" :key="idx">
-        <image @load="imgLoad" mode="widthFix" :id="'js-swiper-item'+idx" class="swiper-item "
-               style="width: 750rpx;vertical-align: top;height: 100%;" :src="domainFunc(item.img_src)"></image>
-        <!-- <view class="swiper-item" :style="{backgroundImage:'url('+domainFunc(item.img_src)+')'}"></view> -->
+  <div class="wrap">
+    <swiper
+      v-if="imgList.length>0"
+      :style="{width:w,height:h,padding:config.paddingStr}"
+      class="swiper"
+      @change="indexChangeEvent"
+      :indicator-dots="config.indicatorDots==='circle'"
+      :autoplay="autoplay"
+      :circular="circular"
+      :interval="interval"
+      :duration="duration">
+      <swiper-item class="swiper-item" v-for="(img,idx) in imgList" :key="idx" @click="bindClick(idx)">
+        <image @load="handleImgLoad" :id="'img'+idx" mode="widthFix" class="swiper-item-img" :src="img"></image>
       </swiper-item>
     </swiper>
-
-  </view>
+    <div class="dot-list" v-if="config.indicatorDots==='line'">
+        <span
+          v-for="(img,idx) in imgList"
+          :key="idx"
+          class="dot-item"
+          :class="{active:current===idx}"
+          :style="{backgroundColor:current===idx?dotsActiveColor:dotsColor}"></span>
+    </div>
+  </div>
 </template>
 <script>
-import { getDomain } from '@/common/helper'
-import { linkTo } from '@/common/fun'
+import { getArrColumn, getDomain } from '@/common/helper'
+import { linkTo, linkToEasy } from '@/common/fun'
+import { getAdvertList } from '@/api/common'
+import { Exception } from '@/common/Exception'
 
 export default {
   name: 'DiySwiper',
   props: {
-    index: {
-      required: true
+    // paddingStr: {
+    //   type: String,
+    //   default: '0px'
+    // },
+    boxDidth: {
+      default: 750,
+      type: Number
+    },
+    height: {
+      default: '250rpx',
+      type: String
+    },
+    itemwidth: {
+      default: '750rpx',
+      type: String
+    },
+    itemheight: {
+      default: '250rpx',
+      type: String
+    },
+    // indicatorDots: {
+    //   type: [Boolean, String],
+    //   default: false
+    // },
+    circular: {
+      default: true,
+      type: Boolean
+    },
+    vertical: {
+      default: false
+    },
+    autoplay: {
+      default: true
+    },
+    dotsColor: {
+      default: 'rgba(0,0,0,.3)'
+    },
+    dotsActiveColor: {
+      default: '#26C78D'
+    },
+    interval: {
+      default: 5000
+    },
+    duration: {
+      default: 500
+    },
+    position: {
+      default: '',
+      type: String
+    },
+    cateId: {
+      default: '',
+      type: String
+    },
+    code: {
+      default: '',
+      type: String
     },
     confData: {
       type: Object,
@@ -41,139 +98,120 @@ export default {
   },
   data () {
     return {
-      singleW: null,
-      singleH: null,
-      swipwerH: '150px',
-      fullWidth: null,
-      height_list: [],
-      swiper: {
-        config: {},
-        value: {
-          list: []
-        }
-      }
+      lists: [],
+      config:{
+        paddingStr:'0px',
+        indicatorDots:'none'
+      },
+      boxw: [],
+      boxh: [],
+      urls: [],
+      imgList: [],
+      current: 0
     }
   },
   computed: {
-    style () {
-      // return deepCopyStrict(this.coupon.styleDefault, this.coupon.style);
-    }
-  },
-  filters: {
-    // 保存的是秒
-    str2num (val) {
-      return parseInt(val) * 1000
+    w () {
+      try {
+        return this.boxw[this.current]
+      } catch (e) {
+        return this.width
+      }
+    },
+    h () {
+      try {
+        return this.boxh[this.current]
+      } catch (e) {
+        return this.height
+      }
     }
   },
   watch: {},
   components: {},
   methods: {
-    // 用第一张图片做初始化高度
-    imgLoad (e) {
-      // 只有第一个的时候才改
-      if (e.currentTarget.id = 'js-swiper-item0') {
-        this.swipwerH = e.detail.height + 'rpx'
-      }
-      this.height_list.push(e.detail.height + 'rpx')
+    async _init_func () {
+      console.log('layout-ad init_func',this.confData)
+
+      const { value,config } = this.confData
+      this.lists = value.list
+      this.config = config
+      console.log(this.lists,config)
+      // img_src: "https://newo2o.bafangka.com/uploadfiles/wkbq6nc2kc/image/202006101709465178.jpg"
+      // link: ""
+      // linkType: null
+      this.imgList = getArrColumn(this.lists, 'img_src').map(url=>getDomain(url))
+      this.urls = getArrColumn(this.lists, 'link')
     },
-    // 滚动的时候灵活设置个高度
-    changeHeightFn (e) {
-      const _self = this
-      const idx = e.detail.current
-      _self.swipwerH = this.height_list[idx]
-      // const query = uni.createSelectorQuery().in(this);
-      // query.select(`#js-swiper-item${idx}`).boundingClientRect(style => {
-      //     _self.swipwerH = style.height + 'px'
-      // }).exec();
+    bindClick (idx) {
+      linkTo(this.lists[idx])
     },
-    getSingleStyle () {
-      if (this.singleH && this.singleW) {
-        const h = this.fullWidth * this.singleH / this.singleW
-        const w = this.fullWidth
-        return {
-          height: h + 'px',
-          width: w + 'px'
-        }
-      }
-      return {}
+    handleImgLoad (e) {
+      const { width, height } = e.detail
+
+      const idx = e.target.id.replace('img', '')
+
+      this.$set(this.boxw, idx, this.boxDidth + 'rpx')
+      this.$set(this.boxh, idx, this.boxDidth * height / width + 'rpx')
+
+      // console.log(this.boxh, this.boxw)
     },
-    HandleImgLoad (e) {
-      this.singleW = e.detail.width
-      this.singleH = e.detail.height
-    },
-    go (item) {
-      linkTo(item)
-    },
-    domainFunc (url) {
-      return getDomain(url)
+    indexChangeEvent (event) {
+      const { current } = event.detail
+      this.current = current
     }
-
-    // ...mapActions(),
-  },
-  mounted () {
-    const idx = 0; const _self = this
-
-    // this.$nextTick().then(()=>{
-    //
-    //     const query = uni.createSelectorQuery().in(_self);
-    //     query.select(`#js-swiper-item${idx}`).boundingClientRect(style => {
-    //         // _self.swipwerH = style.height+'px'
-    //     }).exec();
-    // })
   },
   created () {
-    const res = uni.getSystemInfoSync()
-    this.fullWidth = res.screenWidth
-
-    this.swiper = this.confData
+    this._init_func()
   }
 }
 </script>
 
 <style scoped lang="scss">
+  .wrap {
+    position: relative;
+    background: #fff;
 
-  .single {
-    image {
-      // width: auto !important;
-      //height: auto;
-      // position: absolute;
+    .swiper {
+      
+      &-item {
+        position: relative;
+
+        &-img {
+          width: 100%;
+        }
+
+        &-cover {
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+          @include cover-img(contain);
+        }
+      }
+
+    }
+
+    .dot-list {
+      display: flex;
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+
+      .dot-item {
+        width: 30rpx;
+        height: 4rpx;
+        margin-right: 6rpx;
+
+        &:last-child {
+          margin-right: 0;
+        }
+
+        &.active {
+          //background: $fun-primary-color;
+        }
+      }
     }
   }
-
-  .swiper-box {
-    .swiper-item {
-      width: 750rpx;
-      height: 100%;
-      background-repeat: no-repeat;
-      background-size: 100% 100%;
-      background-color: #f8f8f8;
-      background-position: center;
-    }
-  }
-
-  .el-carousel__item h3 {
-    color: #475669;
-    font-size: 14px;
-    opacity: 0.75;
-    line-height: 150px;
-    margin: 0;
-  }
-
-  .el-carousel__item:nth-child(2n) {
-    background-color: #99a9bf;
-  }
-
-  .el-carousel__item:nth-child(2n+1) {
-    background-color: #d3dce6;
-  }
-
-  .cover-full {
-    @include cover-img();
-    /*height: 100%;*/
-  }
-
-  /*swiper {*/
-  /*    height: 100%;*/
-  /*}*/
 
 </style>

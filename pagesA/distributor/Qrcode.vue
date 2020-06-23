@@ -1,13 +1,14 @@
 <template>
-  <view class="myall">
+  <view @click="commonClick" class="myall">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view class="top">
-      <image class="back" :src="'/static/client/distributor/top.png'|domain"></image>
+      <image :src="'/static/client/fenxiao/top.png'|domain" class="back"></image>
       <!-- #ifdef H5 -->
       <layout-icon class="go" color="#fff" size="18" type="iconicon-arrow-left"></layout-icon>
       <!-- #endif -->
       
       <view class="person">
-        <image class="headimg" :src="disInfo.Shop_Logo||disInfo.User_HeadImg"></image>
+        <image :src="disInfo.Shop_Logo||disInfo.User_HeadImg" class="headimg"></image>
         <view class="nickName">
           {{disInfo.Shop_Name}}
         </view>
@@ -21,13 +22,13 @@
     
     <view class="last">
       <view class="first">
-        <block v-for="(item,index) of funcModules.child" :key="index">
-          <view class="left" @click="spreadQr(0,0)" v-if="item.field=='erweima_weixin'">
-            <image class="image" :src="item.img|domain"></image>
+        <block :key="index" v-for="(item,index) of funcModules.child">
+          <view @click="spreadQr(0,0)" class="left" v-if="item.field=='erweima_weixin'">
+            <image :src="item.img|domain" class="image"></image>
             <view class="haha">{{item.name}}</view>
           </view>
-          <view class="right" @click="spreadQr(1,0)" v-if="item.field=='erweima_tuiguang'">
-            <image class="image" :src="item.img|domain"></image>
+          <view @click="spreadQr(1,0)" class="right" v-if="item.field=='erweima_tuiguang'">
+            <image :src="item.img|domain" class="image"></image>
             <view class="haha">{{item.name}}</view>
           </view>
         </block>
@@ -44,9 +45,13 @@ import { mapActions } from 'vuex'
 import { getDisInit, getDistributeWxQrcode, getFuncModule } from '@/api/customer'
 import BaseMixin from '@/mixins/BaseMixin'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
-  components: { LayoutIcon },
+  components: {
+    WzwImTip,
+    LayoutIcon,
+  },
   mixins: [BaseMixin],
   data () {
     return {

@@ -1,10 +1,11 @@
 <template>
-  
-  <view class="myall">
+  <view @click="commonClick" class="myall">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <radio-group @change="radioChange" class="radio-group">
       <label :class="!check_flag ? 'no-redio' : ''" :key="idx" class="radio-item" v-for="(item,idx) in addresslist">
-        <radio style="transform: scale(0.8)" class="radio-ele" :checked="item.Address_ID === check_address_id"
-               :disabled="!check_flag" :value="idx" color="#F43131" v-if="check_flag" />
+        <radio :checked="Number(item.Address_ID) === Number(check_address_id)" :disabled="!check_flag"
+               :value="idx"
+               class="radio-ele" color="#F43131" style="transform: scale(0.8)" v-if="check_flag" />
         <view class="flex-main fz-12">
           <view class='flex-top'>
             <view class='name'>收货人：{{item.Address_Name}}</view>
@@ -18,9 +19,9 @@
           <view class='flex-add default' v-if="item.Address_Is_Default === 1">默认地址</view>
         </view>
         <view class="flex-action">
-          <layout-icon @click="deladdress(item.Address_ID)" class="m-b-6" size="20" color="#999"
+          <layout-icon @click="deladdress(item.Address_ID)" class="m-b-6" color="#999" size="20"
                        type="iconshanchu"></layout-icon>
-          <layout-icon @click="addressAddEdit(item.Address_ID)" size="20" color="#999" type="iconbianji"></layout-icon>
+          <layout-icon @click="addressAddEdit(item.Address_ID)" color="#999" size="20" type="iconbianji"></layout-icon>
         </view>
       </label>
     </radio-group>
@@ -42,10 +43,14 @@
 import { delAddress, getAddressList } from '@/api/customer'
 import BaseMixin from '@/mixins/BaseMixin'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
   mixins: [BaseMixin],
-  components: { LayoutIcon },
+  components: {
+    WzwImTip,
+    LayoutIcon,
+  },
   data () {
     return {
       addresslist: [],
@@ -64,9 +69,7 @@ export default {
       // 其他地方有用到的地方，就自己{address_id}，一样用的。。
       uni.$emit('bind_select_address', addressInfo)
       // 返回上一页
-      uni.navigateBack({
-        delta: 1,
-      })
+      this.$back()
       // return
       // if (this.from_page === 'checkout') {
       //   var pages = getCurrentPages() // 获取页面堆栈

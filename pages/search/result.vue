@@ -1,11 +1,12 @@
 <template>
-  <div class="bd">
+  <div @click="commonClick" class="bd">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     
     <div class="top">
-      <icon type="search" size="34rpx" class="search_icon" />
-      <input type="text" v-model="inputValue" class="searchs" @click="goSearch" disabled />
+      <icon class="search_icon" size="34rpx" type="search" />
+      <input @click="goSearch" class="searchs" disabled type="text" v-model="inputValue" />
       <div class="clear" v-if="inputValue">
-        <icon type="clear" class="clears" size="37rpx" @click="close"></icon>
+        <icon @click="close" class="clears" size="37rpx" type="clear"></icon>
       </div>
     </div>
     <div class="tabs">
@@ -15,26 +16,26 @@
       <div :class="[active === 1 ? 'checked' : '','tab']" @click="getActive(1)">销量
         <div class="line"></div>
       </div>
-      <div class="pricebox" :class="[active === 2 ? 'checked' : '','tab']" @click="getActive(2)"><span
+      <div :class="[active === 2 ? 'checked' : '','tab']" @click="getActive(2)" class="pricebox"><span
         class="padding4-c">价格</span>
         <view class="xiangshang">
-          <image class="image" :src="'/static/client/result/tops.png'|domain" v-if="isSheng==1"></image>
-          <image class="image" :src="'/static/client/result/top.png'|domain" v-else></image>
+          <image :src="'/static/client/result/tops.png'|domain" class="image" v-if="isSheng==1"></image>
+          <image :src="'/static/client/result/top.png'|domain" class="image" v-else></image>
           
-          <image class="image" :src="'/static/client/result/bottoms.png'|domain" v-if="isSheng==2"
-                 style="bottom: 0rpx;"></image>
-          <image class="image" :src="'/static/client/result/bottom.png'|domain" v-else style="bottom: 0rpx;"></image>
+          <image :src="'/static/client/result/bottoms.png'|domain" class="image" style="bottom: 0rpx;"
+                 v-if="isSheng==2"></image>
+          <image :src="'/static/client/result/bottom.png'|domain" class="image" style="bottom: 0rpx;" v-else></image>
         </view>
         <div class="line">
         </div>
       </div>
       
       <div :class="[active === 3 ? 'checked' : '','tab']" class="filterbox">
-        <div class="filter" :style="{color:showShai?'#F43131':''}" @click.stop="change">筛选</div>
+        <div :style="{color:showShai?'#F43131':''}" @click.stop="change" class="filter">筛选</div>
         <template v-show="!showShai">
-          <image :src="'/static/client/result/jx1.png'|domain" @click="changeCate" v-if="cate==2"
-                 class="imgm sorttype"></image>
-          <image :src="'/static/client/result/jx.png'|domain" @click="changeCate" v-else class="imgm sorttype"></image>
+          <image :src="'/static/client/result/jx1.png'|domain" @click="changeCate" class="imgm sorttype"
+                 v-if="cate==2"></image>
+          <image :src="'/static/client/result/jx.png'|domain" @click="changeCate" class="imgm sorttype" v-else></image>
         </template>
         
         <div class="line"></div>
@@ -42,23 +43,23 @@
       <!--position: absolute;top: 25rpx;right: 28rpx;position: absolute;top: 0rpx;right: 0rpx;-->
     
     </div>
-    <div class="shaixuan" v-if="showShai" @click.stop catchtouchmove="false">
+    <div @click.stop catchtouchmove="false" class="shaixuan" v-if="showShai">
       <view class="priceInterval">价格区间(元)</view>
       <view class="inputPrice">
-        <input type="number" placeholder="最低价" placeholder-style="color:#999999;font-size:26rpx;" v-model="minPrice">
+        <input placeholder="最低价" placeholder-style="color:#999999;font-size:26rpx;" type="number" v-model="minPrice">
         <view class="view">—</view>
-        <input type="number" placeholder="最高价" placeholder-style="color:#999999;font-size:26rpx;" v-model="maxPrice">
+        <input placeholder="最高价" placeholder-style="color:#999999;font-size:26rpx;" type="number" v-model="maxPrice">
       </view>
       <view class="priceInterval">是否包邮</view>
       <view class="isShipping">
-        <span class="span" :class="isShipping==1?'checked':''" @click="shipping(0)">是</span>
-        <span class="span" :class="isShipping==2?'checked':''" @click="shipping(1)">否</span>
+        <span :class="isShipping==1?'checked':''" @click="shipping(0)" class="span">是</span>
+        <span :class="isShipping==2?'checked':''" @click="shipping(1)" class="span">否</span>
       </view>
       <view class="submit">
-        <view class="view reset" @click="reset">重置</view>
-        <view class="view sure" @click="sureSearch">确定</view>
+        <view @click="reset" class="view reset">重置</view>
+        <view @click="sureSearch" class="view sure">确定</view>
       </view>
-      <view class="zhao" @click="closeShow" catchtouchmove="false">
+      <view @click="closeShow" catchtouchmove="false" class="zhao">
       
       </view>
     </div>
@@ -68,10 +69,10 @@
     </view>
     <div v-if="cate==1">
       <div class="cate1">
-        <div class="pro" @click="$toGoodsDetail(item)" v-for="(item,i) of pro" :key="i">
+        <div :key="i" @click="$toGoodsDetail(item)" class="pro" v-for="(item,i) of pro">
           <image :src="item.ImgPath" class="pro-img"></image>
           <div class="pro_desc">
-            <div class="title">{{item.Products_Name}}</div>
+            <div class="title"><wzw-live-tag :room_id="item.room_id" :product-info="item" />{{item.Products_Name}}</div>
             <div class="price">
               <span class="n_price"><text>￥</text>{{item.Products_PriceX}}</span>
               <span class="o_price" v-if="item.Products_PriceY!==item.Products_PriceX"><text>￥</text>{{item.Products_PriceY}}</span>
@@ -86,10 +87,10 @@
     </div>
     <div v-else>
       <div class="cate2">
-        <div class="pro" @click="$toGoodsDetail(item)" v-for="(item,i) of pro" :key="i">
+        <div :key="i" @click="$toGoodsDetail(item)" class="pro" v-for="(item,i) of pro">
           <image :src="item.ImgPath" alt="" class="pro-img"></image>
           <div class="pro_desc">
-            <div class="title">{{item.Products_Name}}</div>
+            <div class="title"><wzw-live-tag :room_id="item.room_id" :product-info="item" />{{item.Products_Name}}</div>
             <div class="price">
               <span class="n_price"><text class="text">￥</text>{{item.Products_PriceX}}</span>
               <span class="o_price"><text class="text" v-if="item.Products_PriceY!==item.Products_PriceX">￥</text>{{item.Products_PriceY}}</span>
@@ -101,6 +102,21 @@
         </div>
       </div>
     </div>
+    
+    <layout-modal :autoClose="false" ref="commentModal">
+      <div class="refuseApplyDialog">
+        <div class="c3 fz-14 modal-title">
+          是否开启定位
+        </div>
+        <div class="fz-12 m-b-20 m-t-10 c9">
+          很抱歉，该功能必须基于地理位置提供商品检索，您需开启地理位置授权才可以使用该功能
+        </div>
+        <div class="control">
+          <button @click="backSetting" class="action-btn btn-cancel">取消</button>
+          <button bindopensetting="openSetting" class="btn-sub action-btn" open-type='openSetting'>确定</button>
+        </div>
+      </div>
+    </layout-modal>
   </div>
 </template>
 
@@ -108,10 +124,19 @@
 import { getProductList } from '@/api/product'
 import BaseMixin from '@/mixins/BaseMixin'
 import Storage from '@/common/Storage'
+import { getLocation } from '@/common/tool/location'
+import { LayoutModal } from '@/componets/layout-modal/layout-modal'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import WzwLiveTag from '@/componets/wzw-live-tag/wzw-live-tag'
 
 export default {
   mixins: [BaseMixin],
   name: 'SearchResult',
+  components: {
+    WzwLiveTag,
+    WzwImTip,
+    LayoutModal,
+  },
   data () {
     return {
       active: 0,
@@ -129,19 +154,28 @@ export default {
       Cate_ID: 0, // 列表id
       isSheng: 0, // 是否升序
       Products_ID: '',
-      refer: '',// 来源
+      refer: '', // 来源
+      oneHourSend: 0,
+      lat: '',
+      lng: '',
+      biz_ids: '',
     }
   },
-  onLoad: function (option) {
-    const { refer = '' } = option
+  onLoad (option) {
+    const { refer = '', oneHourSend = 0 } = option
     this.refer = refer
+    // 是否是一小时达
+    this.oneHourSend = Number(oneHourSend)
     this.inputValue = option.inputValue
     if (option.pid) {
       this.Products_ID = option.pid
     }
+    if (option.biz_id) {
+      this.biz_ids = option.biz_id
+    }
     this.Cate_ID = option.Cate_ID
     this.searchAll = Storage.get('searchAll')
-    this.getProd()
+    // this.getProd()
   },
   onPullDownRefresh () {
     this.active = 0
@@ -151,7 +185,10 @@ export default {
     this.getProd(this.orderby)
   },
   onShow () {
-  
+    this.$refs.commentModal.close()
+    this.pro = []
+    this.page = 1
+    this.init()
   },
   onReachBottom () {
     if (this.pro.length < this.count) {
@@ -159,15 +196,47 @@ export default {
       this.getProd(this.orderby)
     }
   },
-  
-  created () {
-  
-  },
   methods: {
+    backSetting () {
+      this.$refs.commentModal.close()
+      this.$back()
+    },
+    openSetting () {
+      this.$refs.commentModal.close()
+      // #ifdef H5
+      uni.openSetting({
+        success (res) {
+          if (res.authSetting['scope.userLocation']) {
+            this.init()
+          } else {
+            this.$back()
+          }
+        },
+      })
+      // #endif
+    },
+    init () {
+      if (this.oneHourSend === 1) {
+        const that = this
+        getLocation(that).then(res => {
+          if (res.code === 0) {
+            const localInfo = res.data
+            
+            this.lat = localInfo.latitude
+            this.lng = localInfo.longitude
+          }
+          this.getProd()
+        }).catch(err => {
+          this.$refs.commentModal.show()
+        })
+      } else {
+        this.getProd()
+      }
+    },
     // 跳转搜索页
     goSearch () {
       if (this.refer === 'searchPage') {
-        uni.navigateBack()
+        this.$back()
         return
       }
       uni.navigateTo({
@@ -305,6 +374,14 @@ export default {
       if (this.Products_ID) {
         data.Products_ID = this.Products_ID
       }
+      if (this.oneHourSend === 1) {
+        data.one_hour_send = 1
+        data.lat = this.lat
+        data.lng = this.lng
+      }
+      if (this.biz_ids) {
+        data.biz_ids = this.biz_ids
+      }
       getProductList(data).then(res => {
         for (var item of res.data) {
           this.pro.push(item)
@@ -354,7 +431,7 @@ export default {
     left: 0rpx;
     top: 0rpx;
     background-color: #FFFFFF;
-    z-index: 999;
+    z-index: 99;
     
     .search_icon {
       position: absolute;
@@ -419,7 +496,7 @@ export default {
     top: 94rpx;
     left: 0rpx;
     background-color: #FFFFFF;
-    z-index: 999;
+    z-index: 99;
     width: 100%;
     box-sizing: border-box;
   }
@@ -739,5 +816,45 @@ export default {
         margin-top: 2px;
       }
     }
+  }
+  
+  .control {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    
+    .action-btn {
+      flex: 1;
+      text-align: center;
+      height: 80rpx;
+      line-height: 80rpx;
+      font-size: 16px;
+      background-color: #FFFFFF;
+      border: 0px;
+    }
+    
+    button::after {
+      width: 0;
+      height: 0;
+    }
+  }
+  
+  .refuseApplyDialog {
+    width: 560rpx;
+    box-sizing: border-box;
+    padding-left: 40rpx;
+    padding-right: 40rpx;
+    
+    .modal-title {
+      height: 80rpx;
+      line-height: 80rpx;
+      text-align: center;
+      font-weight: bold;
+    }
+    
+    .btn-sub {
+      color: #1aac19;
+    }
+    
   }
 </style>

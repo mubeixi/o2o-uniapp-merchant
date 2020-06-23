@@ -1,14 +1,488 @@
 <template>
+  <div class="page-wrap">
+    <scroll-view
+      :refresher-enabled="true"
+      :refresher-threshold="100"
+      :refresher-triggered="triggered"
+      :scroll-into-view="toViewIdx"
+      @refresherrefresh="onRefresh"
+      @refresherrestore="onRestore"
+      @scroll="bindScroll"
+      @scrolltolower="bindScrolltolower"
+      class="im-card-box"
+      scroll-y
+    >
+      <block :key="idx" v-for="(chat,idx) in chatList">
+        <div class="im-item-box">
+          <wzw-im-card
+            @itemClick="bindItemClick"
+            :message="chat"
+            :msg-id="'msg-'+idx"
+            @bindProductSend="handleProductSend"
+          />
+          <!--用来搞事的-->
+          <div :id="'msg-'+idx" class="div-line h1"></div>
+        </div>
+      </block>
 
+    </scroll-view>
+    <div :style="{marginBottom:showOnther?'130px':'0px'}" @click="showNewMsgFun" class="show-new-tip"
+         v-if="showNewMsg && !isToLower">
+      <layout-icon color="#00A8FF" display="inline" size="12" type="iconright1"></layout-icon>
+      有新消息
+    </div>
+    <div class="im-bottom-action">
+      <div class="text">
+        <div class="input-box">
+          <input @blur="inputBlur" @confirm="sendMsg" @focus="mode='text'" class="input-ele" confirm-type="发送"
+                 type="text" v-model="tempText" />
+        </div>
+        <div @click="taggleMore" class="submit-btn">
+          <div  v-if="mode=='text' && tempText" class="text-btn">发送</div>
+          <image class="img-btn" v-else  src="/static/im/im-action-more.png"></image>
+        </div>
+      </div>
+      <div class="onther" v-if="showOnther">
+        <div @click="sendImg" class="onther-item">
+          <image class="icon-box" src="/static/im/im-action-img.png"></image>
+          <div class="label">图片</div>
+        </div>
+        <div @click="sendCamera" class="onther-item">
+          <image class="icon-box" src="/static/im/im-action-camera.png"></image>
+          <div class="label">拍照</div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
+import BaseMixin from '@/mixins/BaseMixin'
+import { checkIsLogin, chooseImageByPromise, getArrColumn, setNavigationBarTitle } from '@/common/helper'
+import IM from '@/common/Im/Im'
+import { error, modal } from '@/common/fun'
+import Storage from '@/common/Storage'
+import WzwImCard from '@/componets/wzw-im-card/wzw-im-card'
+// import LayoutIcon from '@/componets/layout-icon/layout-icon'
+import { Exception } from '@/common/Exception'
+import { getProductDetail } from '@/api/product'
+import eventHub from '@/common/eventHub'
+import LayoutIcon from '@/componets/layout-icon/layout-icon'
+import { readMsg } from '@/common/Im/Fetch'
+
+let imInstance = null
+const progressList = []
 export default {
-  data () {
-    return {}
+  mixins: [BaseMixin],
+  components: {
+    LayoutIcon,
+    // LayoutIcon,
+    WzwImCard
   },
+  data () {
+    return {
+      isToLower: true,
+      showNewMsg: false,
+      toid: '',
+      totype: '',
+      isFreshing: false,
+      triggered: false,
+      mode: '',
+      toViewIdx: '',
+      showOnther: false,
+      imInstance: null,
+      imReady: false,
+      tempText: ''
+    }
+  },
+  computed: {
+    userInfo () {
+      return this.$store.getters['user/getUserInfo']()
+    },
+    toViewPosition () {
+      try {
+        // - 1指向最后一个占位的就好了
+        return this.imInstance.chatList.length * 1000
+      } catch (e) {
+        return 0
+      }
+    },
+    // toViewIdx () {
+    //   try {
+    //     // - 1指向最后一个占位的就好了
+    //     return 'msg-' + (this.imInstance.chatList.length - 1)
+    //   } catch (e) {
+    //     return ''
+    //   }
+    // },
+    chatList () {
+      try {
+        const list = this.imInstance.chatList
+        return list || []
+      } catch (e) {
+        return []
+      }
+    }
+  },
+  methods: {
+    bindItemClick () {
+      this.showOnther = false
+    },
+    showNewMsgFun () {
+      this.setViewIdx()
+      this.refreshScrollBottomPostion()
+      this.showNewMsg = false
+    },
+    bindScroll (e) {
+      console.log(e)
+      const {
+        scrollHeight,
+        scrollLeft,
+        scrollTop,
+        deltaY
+      } = e.detail
+
+      // 向上滑，就不可能为true
+      console.log(scrollHeight - scrollTop - this.systemInfo.windowHeight)
+      // 给60的区间
+      if (scrollHeight - scrollTop > this.systemInfo.windowHeight + 60) {
+        this.isToLower = false
+      } else {
+        this.isToLower = true
+      }
+    },
+    bindScrolltolower () {
+      this.isToLower = true
+    },
+    /**
+     * 手动让视图到底部，适用于高度变化的情况
+     */
+    refreshScrollBottomPostion () {
+      const toViewIdx = this.toViewIdx
+      this.toViewIdx = ''
+      setTimeout(() => {
+        this.toViewIdx = toViewIdx
+      }, 50)
+    },
+    // 更新记录用，用于添加的时候
+    setViewIdx (val) {
+      this.toViewIdx = val || ('msg-' + (this.imInstance.chatList.length - 1))
+    },
+    async handleProductSend (productInfo) {
+      // 发送产品消息
+      await imInstance.sendImMessage({
+        content: productInfo,
+        type: 'prod',
+        isTip: 0
+      })
+      this.setViewIdx()
+    },
+    onPulling () {
+      console.log('onPulling')
+    },
+    onRefresh () {
+      // 无意义，随便的，不让滚动栏滚动到底部而已
+      this.setViewIdx('xxx')
+      if (this.isFreshing) return
+      this.isFreshing = true
+      // 界面下拉触发，triggered可能不是true，要设为true
+      if (!this.triggered) this.triggered = true
+
+      // 不论成功还是失败
+      this.imInstance.getHistory().then(() => {
+        this.triggered = false
+        this.isFreshing = false
+      }).catch(() => {
+        this.triggered = false
+        this.isFreshing = false
+      })
+    },
+    onRestore () {
+    },
+    async sendImg () {
+      try {
+        const files = await chooseImageByPromise({
+          sizeType: 1,
+          sourceType: ['album']
+        }).catch(err => {
+          throw Error(err.errMsg || '选择照片失败')
+        })
+        const imgs = getArrColumn(files, 'path')
+
+        await imInstance.sendImMessage({
+          content: '',
+          type: 'image',
+          tempPath: imgs[0]
+        })
+        this.setViewIdx()
+      } catch (e) {
+        Exception.handle(e)
+      }
+    },
+    async sendCamera () {
+      try {
+        const files = await chooseImageByPromise({
+          sizeType: 1,
+          sourceType: ['camera']
+        }).catch(err => {
+          throw Error(err.errMsg || '选择照片失败')
+        })
+        const imgs = getArrColumn(files, 'path')
+        await imInstance.sendImMessage({
+          content: '',
+          type: 'image',
+          tempPath: imgs[0]
+        })
+        this.setViewIdx()
+      } catch (e) {
+        Exception.handle(e)
+      }
+    },
+    inputBlur () {
+      if (!this.tempText) {
+        this.mode = ''
+      }
+    },
+    taggleMore () {
+      if (!this.tempText) {
+        this.showOnther = !this.showOnther
+        if (this.showOnther) this.refreshScrollBottomPostion()
+      }
+
+      if (this.tempText) {
+        this.sendMsg()
+      }
+    },
+    async _init_func (options) {
+      const { productId, orderId, origin } = options
+
+      if (eventHub.imInstance) {
+        this.imInstance = imInstance = eventHub.imInstance
+      } else {
+        this.imInstance = imInstance = new IM({ origin })
+      }
+
+      // 设置本地用户信息
+      imInstance.setSendInfo({
+        type: 'user',
+        id: Storage.get('user_id'),
+        name: this.userInfo.User_NickName,
+        avatar: this.userInfo.User_HeadImg
+      })
+      // 设置接收人的信息
+      imInstance.setReceiveInfo({
+        type: this.totype,
+        id: this.toid
+      })
+
+      // 如果没有start过,就start
+      if (!imInstance.intervalInstance) {
+        await imInstance.start() // 等拿token
+      } else {
+        // 清空聊天记录
+        imInstance.clearHistory() // 等拿token
+      }
+
+      // 先加载一下最近消息
+      await imInstance.getHistory()
+
+      // 将最后一个设置为已读
+      if (this.chatList.length > 0) {
+        await readMsg({
+          msg_id: this.chatList[this.chatList.length - 1].id,
+          to: imInstance.getToUid(),
+          out_uid: imInstance.getOutUid()
+        }).catch(err => {
+          console.log(err.msg || '消息设置已读失败')
+        })
+      }
+
+      // productId, orderId,
+
+      // 如果有商品的话，需要加一个商品提示信息
+      if (productId) {
+        console.log(`有商品${productId}`)
+        const productInfo = await getProductDetail({ prod_id: productId }).then(res => {
+          // const { Products_Name, ImgPath, Products_ID, Products_Sales,Products_PriceX,pintuan_pricex,price } = res.data
+          delete res.data.Products_Description
+          return res.data // { Products_Name, ImgPath, Products_ID, Products_Sales,Products_PriceX,pintuan_pricex,price }
+        }).catch(err => {
+          throw Error(err.msg || '获取商品信息错误')
+        })
+        // isTip为1代表，是显示产品信息，提醒用户发送而已
+        imInstance.sendImMessage({
+          content: productInfo,
+          type: 'prod',
+          isTip: 1
+        })
+      }
+
+      this.setViewIdx()
+      this.imReady = true
+    },
+    sendMsg () {
+      if (!this.tempText) {
+        error('请输入内容')
+        return
+      }
+      imInstance.sendImMessage({ content: this.tempText })
+      this.setViewIdx()
+      this.tempText = ''
+    },
+    bindInputChange (e) {
+      this.tempText = e.detail.value
+    }
+  },
+  onLoad (options) {
+    if (!checkIsLogin(1, 0)) return
+
+    const { tid, type, room_title = 'IM' } = options
+    if (!tid || !type) {
+      modal('参数错误')
+      return
+    }
+    setNavigationBarTitle(room_title)
+    this.toid = tid
+    this.totype = type
+    this._init_func(options)
+
+    uni.$on('getMsg', (res) => {
+      console.log(res)
+      if (this.isToLower) {
+        this.setViewIdx()
+        this.refreshScrollBottomPostion()
+      } else {
+        this.showNewMsg = true
+      }
+    })
+  },
+  created () {
+
+  },
+  onShow () {
+
+  }
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
+  .page-wrap{
+    position: absolute;
+    width: 750rpx;
+    top:0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: constant(safe-area-inset-bottom);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .im-card-box {
+    flex:1;
+    overflow-y: scroll;
+    width: 750rpx;
+    background: #e5e5e5;
+  }
 
+  .im-bottom-action {
+    width: 750rpx;
+    background: #f2f2f2;
+
+    .onther {
+      border-top: 1px solid #E2E2E2;
+      padding: 40rpx 0;
+      display: flex;
+
+      .onther-item {
+        width: 96rpx;
+        height: 126rpx;
+        margin-left: 70rpx;
+        text-align: center;
+
+        .label {
+          font-size: 28rpx;
+          height: 30rpx;
+          line-height: 30rpx;
+          color: #666;
+        }
+
+        .icon-box {
+          width: 96rpx;
+          height: 96rpx;
+        }
+
+      }
+    }
+
+    .text {
+      display: flex;
+      align-items: center;
+      width: 750rpx;
+      height: 110rpx;
+
+      .input-box {
+        margin-left: 20rpx;
+        flex: 1;
+        display: flex;
+        align-items: center;
+
+        .input-ele {
+          flex: 1;
+          margin-right: 20rpx;
+          padding: 0 20rpx;
+          background: #fff;
+          border: 1px solid #eee;
+          height: 70rpx;
+          line-height: 70rpx;
+          border-radius: 70rpx;
+          font-size: 28rpx;
+        }
+      }
+
+      .submit-btn {
+        padding-right: 20rpx;
+        height: 110rpx;
+        .text-btn{
+          background: linear-gradient(to right, #FF0006, #FF8417);
+          line-height: 48rpx;
+          margin-top: 31rpx;
+          height: 48rpx;
+          padding: 0 10px;
+          text-align: center;
+          color: #fff;
+          font-size: 12px;
+        }
+        .img-btn {
+          margin-top: 31rpx;
+          width: 48rpx;
+          height: 48rpx;
+        }
+
+        .btn {
+          width: 120rpx;
+          text-align: center;
+          line-height: 70rpx;
+          height: 70rpx;
+          border-radius: 70rpx;
+          background: $fun-primary-color;
+          color: #fff;
+          font-size: 28rpx;
+        }
+      }
+    }
+
+  }
+
+  .show-new-tip{
+    position: fixed;
+    transform: translateY(-80px);
+    bottom: constant(safe-area-inset-bottom);
+    bottom: env(safe-area-inset-bottom);
+    right: 20px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    border: 1px solid #e7e7e7;
+    font-size: 12px;
+    color: $fun-blue-color;
+    background: #fff;
+    z-index: 9;
+  }
 </style>

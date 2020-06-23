@@ -1,24 +1,36 @@
 <template>
-  <div class="product" @click="openNext">
-    <image mode="heightFix" :src="pro_src" class="pro-img"></image>
-    <div class="pro-name">{{pro_name}}</div>
+  <div class="product" @click="openNext" :style="{marginRight:index%2===0?'50rpx':'0rpx'}">
+    <div :style="{backgroundImage:'url('+pro_src+')'}" class="pro-img"></div>
+    <div class="pro-name"><wzw-live-tag :room_id="productInfo.room_id" :product-info="productInfo" />{{pro_name}}</div>
     <div class="pro-price flex">
       <div class="new-price">
         <div class="small-font">￥</div>
         {{pro_price}}
       </div>
-      <div class="old-price small-font">￥{{pro_price}}</div>
+      <div class="old-price small-font">￥{{pro_price_old}}</div>
     </div>
   </div>
 </template>
 <script>
 import { linkToEasy } from '@/common/fun'
+import WzwLiveTag from '@/componets/wzw-live-tag/wzw-live-tag'
 
 export default {
+  components: { WzwLiveTag },
   props: {
+    productInfo: {
+      required: true,
+      type: Object,
+      default: () => {
+        return { room_id: 0 }
+      }
+    },
     prod_id: {
       type: String,
       default: ''
+    },
+    index: {
+      type: Number
     },
     pro_src: {
       type: String,
@@ -52,8 +64,9 @@ export default {
 
     .pro-img {
       display: block;
-      width: 100%;
+      width: 310rpx;
       height: 310rpx;
+      @include cover-img();
     }
 
     .pro-name {

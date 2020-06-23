@@ -1,40 +1,35 @@
 <template>
-  <view class="all">
-    <!-- #ifdef APP-PLUS -->
-    <view class="status_bar" style="background: #f81111;"><!-- 这里是状态栏 --></view>
-    <!-- #endif -->
+  <view @click="commonClick" class="all">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view class="top">
-      <image class="image" :src="'/static/client/fenxiao/top.png'|domain"></image>
-      <!-- #ifdef APP-PLUS -->
-      <view class="title">分销中心</view>
-      <!-- #endif -->
+      <image :src="'/static/client/fenxiao/top.png'|domain" class="image"></image>
       <div v-if="userInfo.User_ID&&userInfo.Is_Distribute==1">
-        <image v-if="userInfo.User_ID" class="msg" :src="'/static/client/fenxiao/msg.png'|domain"
-               @click="goMsg"></image>
         <view class="person">
-          <image class="image" style="border-radius: 50%;overflow: hidden"
-                 :src="data.disInfo.Shop_Logo||data.disInfo.User_HeadImg" @click="tofenxiaoshang"></image>
+          <image :src="data.disInfo.Shop_Logo||data.disInfo.User_HeadImg" @click="tofenxiaoshang"
+                 class="image" style="border-radius: 50%;overflow: hidden"></image>
         </view>
-        <view class="nickName" v-if="userInfo.User_ID&&userInfo.Is_Distribute==1" @click="tofenxiaoshang">
-          {{data.disInfo.Shop_Name}}
+        <view @click="tofenxiaoshang" class="nickName" v-if="userInfo.User_ID&&userInfo.Is_Distribute==1">
+          {{data.disInfo.Shop_Name||''}}
         </view>
-        <view class="putong" v-if="userInfo.User_ID&&userInfo.Is_Distribute==1" @click="goDistributor">
-          {{data.disInfo.Level_Name}}
-          <layout-icon display="inline" size="14" v-if="data.disInfo.Level_Name" class="rightMy" type="iconicon-arrow-right" color="#000"></layout-icon>
-         
+        <view @click="goDistributor" class="putong" v-if="userInfo.User_ID&&userInfo.Is_Distribute==1">
+          {{data.disInfo.Level_Name||''}}
+          <layout-icon class="rightMy" color="#000" display="inline" size="14"
+                       type="iconicon-arrow-right" v-if="data.disInfo.Level_Name"></layout-icon>
+        
         </view>
       </div>
       
-      <view class="font14 loginBtn" v-if="!userInfo.User_ID" plain size="mini" @click="goLogin">登录/注册</view>
-      <view class="font14 loginBtn" v-if="userInfo.User_ID && userInfo.Is_Distribute!==1" plain size="mini"
-            @click="goDistributor">成为{{initData.commi_rename.commi}}
+      <view @click="goLogin" class="font14 loginBtn" plain size="mini" v-if="!userInfo.User_ID">登录/注册</view>
+      <view @click="goDistributor" class="font14 loginBtn" plain size="mini"
+            v-if="userInfo.User_ID && userInfo.Is_Distribute!==1">成为{{initData.commi_rename.commi}}
       </view>
       <view class="sales">
-        <view class="left" @click="goSales">
+        <view @click="goSales" class="left">
           <view class="salesSum">
             累计业绩（元）
-            <layout-icon size="14" display="inline" class="rightMys" type="iconicon-arrow-right" color="#000"></layout-icon>
-           
+            <layout-icon class="rightMys" color="#000" display="inline" size="14"
+                         type="iconicon-arrow-right"></layout-icon>
+          
           </view>
           <view class="salesSumPrice" v-if="userInfo.User_ID&&userInfo.Is_Distribute">
             {{data.total_sales}}
@@ -43,10 +38,10 @@
             {{'—'}}
           </view>
         </view>
-        <view class="right" @click="goProfit">
+        <view @click="goProfit" class="right">
           <view class="salesSum">
             累计利润（元）
-            <layout-icon size="14" display="inline" type="iconicon-arrow-right" color="#000"></layout-icon>
+            <layout-icon color="#000" display="inline" size="14" type="iconicon-arrow-right"></layout-icon>
           </view>
           <view class="salesSumPrice" v-if="userInfo.User_ID&&userInfo.Is_Distribute">
             {{data.total_income}}
@@ -67,12 +62,12 @@
         提现
       </view>
     </view>
-    <view v-else style="height: 25px;"></view>
+    <view style="height: 25px;" v-else></view>
     <view class="last">
       <image :src="'/static/client/fenxiao/background.png'|domain" class="back"></image>
       <view class="zhezhao">
-        <view class="td" v-for="(item,index) in funcModules" @click="goOther(item)" :key="index">
-          <image class="imgs" :src="item.img"></image>
+        <view :key="index" @click="goOther(item)" class="td" v-for="(item,index) in funcModules">
+          <image :src="item.img" class="imgs"></image>
           <view class="views">
             {{item.name}}
           </view>
@@ -91,6 +86,7 @@ import { getDisInit, getFuncModule, getUserInfo } from '@/api/customer'
 import { mapActions } from 'vuex'
 import { checkIsDistribute, checkIsLogin } from '@/common/helper'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 const routerList = {
   '/pagesA/fenxiao/erweima': '/pagesA/distributor/Qrcode',
@@ -105,6 +101,7 @@ const routerList = {
 export default {
   mixins: [BaseMixin],
   components: {
+    WzwImTip,
     LayoutIcon,
     // TabbarComponents
   },
@@ -150,7 +147,7 @@ export default {
     goDistributor () {
       // 跳转成为
       uni.navigateTo({
-        url: '/pages/distributor/DistributorLevel',
+        url: '/pagesA/distributor/DistributorLevel',
       })
     },
     goLogin () {
@@ -159,7 +156,7 @@ export default {
     },
     goMsg () {
       uni.navigateTo({
-        url: '/pagesA/systemMsg/systemMsg',
+        url: '/pagesA/user/SystemMsg',
       })
     },
     // 去分销商页面
@@ -172,11 +169,10 @@ export default {
     },
     // 去提现
     tixian () {
+      console.log(222)
       if (!checkIsLogin(1, 1)) return
       if (!checkIsDistribute(1, 1)) return
-      uni.navigateTo({
-        url: '/pagesA/distributor/Dithdrawal?form=1',
-      })
+      this.$linkTo('/pagesA/distributor/Withdrawal?form=1')
     },
     // 跳转其他页面
     goOther (item) {
@@ -432,8 +428,7 @@ export default {
     display: flex;
     align-items: center;
     padding-left: 10px;
-
+    
   }
-  
 
 </style>

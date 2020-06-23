@@ -1,12 +1,13 @@
 <template>
-  <view class="myall">
+  <view @click="commonClick" class="myall">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view class="user-info">
-      <view class="user-avator" @click="changeAvator">
-        <image class="imgs" :src="Shop_Logo" mode=""></image>
-        <view class="xiangji"
-              :style="{backgroundImage:'url('+$fun.domainFn('/static/client/distributor/xj.png')+')'}"></view>
+      <view @click="changeAvator" class="user-avator">
+        <image :src="Shop_Logo" class="imgs" mode=""></image>
+        <view :style="{backgroundImage:'url('+$fun.domainFn('/static/client/distributor/xj.png')+')'}"
+              class="xiangji"></view>
       </view>
-      <view class="change" @click="changeAvator">更换头像</view>
+      <view @click="changeAvator" class="change">更换头像</view>
     </view>
     <view class="content">
       <view class="c_1">
@@ -14,9 +15,9 @@
         <input class="inputs" type="text" v-model="Shop_Name" /></view>
       <view class="c_2">
         <text>公告</text>
-        <textarea v-model="Shop_Announce" class="text-content"></textarea></view>
+        <textarea class="text-content" v-model="Shop_Announce"></textarea></view>
     </view>
-    <view class="submit" @click="save">保存</view>
+    <view @click="save" class="submit">保存</view>
   </view>
 </template>
 
@@ -38,8 +39,10 @@ import { mapActions } from 'vuex'
 import BaseMixin from '@/mixins/BaseMixin'
 import { chooseImageByPromise, getArrColumn, uploadImages } from '@/common/helper'
 import { Exception } from '@/common/Exception'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
+  components: { WzwImTip },
   mixins: [BaseMixin],
   data () {
     return {
@@ -125,7 +128,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
   .myall {
     background-color: #FFFFFF !important;
     min-height: 100vh;

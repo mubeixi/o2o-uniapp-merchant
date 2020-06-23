@@ -1,34 +1,34 @@
 <template>
-  <view class="myall">
-    
+  <view @click="commonClick" class="myall">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view class="center">
       <view class="left">
         提现方式
       </view>
       <view class="right">
         <!-- 中国银行 <image :src="'/static/client/right.png'|domain"></image> -->
-        <picker @change="bindPickerChange" :value="index" :range="array" range-key="Method_Name">
+        <picker :range="array" :value="index" @change="bindPickerChange" range-key="Method_Name">
           <view class="uni-input">{{array[index].Method_Name}}</view>
         </picker>
-        <image class="image" :src="'/static/client/right.png'|domain"></image>
+        <layout-icon type="iconicon-arrow-right"></layout-icon>
       </view>
     </view>
     
-    <form report-submit @submit="addInfo">
+    <form @submit="addInfo" report-submit>
       
       <block v-if="data.Method_Type=='bank_card'">
         <view class="centers">
           <view class="left">
             户名
           </view>
-          <input class="inputs" type="text" placeholder="请输入您的户名" placeholder-style="places"
+          <input class="inputs" placeholder="请输入您的户名" placeholder-style="places" type="text"
                  v-model="data.Account_Name">
         </view>
         <view class="centers">
           <view class="left">
             账号
           </view>
-          <input class="inputs" type="text" placeholder="请输入您的银行卡卡号" placeholder-style="places"
+          <input class="inputs" placeholder="请输入您的银行卡卡号" placeholder-style="places" type="text"
                  v-model="data.Account_Val">
         </view>
         <!-- <view class="centers">
@@ -43,18 +43,18 @@
           <view class="left">
             昵称
           </view>
-          <input class="inputs" type="text" placeholder="请输入您的昵称" placeholder-style="places"
+          <input class="inputs" placeholder="请输入您的昵称" placeholder-style="places" type="text"
                  v-model="data.Account_Name">
         </view>
         <view class="centers">
           <view class="left">
             账号
           </view>
-          <input class="inputs" type="text" placeholder="请输入您的支付宝账号" placeholder-style="places"
+          <input class="inputs" placeholder="请输入您的支付宝账号" placeholder-style="places" type="text"
                  v-model="data.Account_Val">
         </view>
       </block>
-      <button formType="submit" class="addInfo">
+      <button class="addInfo" formType="submit">
         添加
       </button>
     </form>
@@ -64,10 +64,17 @@
 <script>
 
 import { addUserWithdrawMethod, getShopWithdrawMethod } from '@/api/customer'
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 import BaseMixin from '@/mixins/BaseMixin'
+import { backFunc } from '@/common/fun'
+import LayoutIcon from '@/componets/layout-icon/layout-icon'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
+  components: {
+    WzwImTip,
+    LayoutIcon,
+  },
   mixins: [BaseMixin],
   data () {
     return {
@@ -93,7 +100,9 @@ export default {
     this.getShopWithdrawMethod()
   },
   computed: {
-    ...mapGetters(['userInfo']),
+    userInfo () {
+      return this.$store.getters['user/getUserInfo']()
+    },
   },
   methods: {
     ...mapActions(['getInitData', 'setUserInfo']),
@@ -129,11 +138,9 @@ export default {
           icon: 'success',
         })
         setTimeout(function () {
-          that.$vm.$emit('fir', User_Method_ID)
+          uni.$emit('fir', User_Method_ID)
           // 返回上一页
-          uni.navigateBack({
-            delta: 1,
-          })
+          backFunc()
         }, 1000)
       }).catch(e => {
       

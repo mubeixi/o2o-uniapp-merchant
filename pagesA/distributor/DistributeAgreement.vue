@@ -1,8 +1,9 @@
 <template>
-  <view>
+  <view @click="commonClick">
+    <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <div class="pro_detail">
       <!-- #ifdef H5||APP-PLUS -->
-      <div v-html="formatRichTexts(pro.dis_config.Distribute_Agreement)" class="p_detail_des"></div>
+      <div class="p_detail_des" v-html="formatRichTexts(pro.dis_config.Distribute_Agreement)"></div>
       <!-- #endif -->
       
       <!-- #ifdef MP -->
@@ -16,8 +17,10 @@
 <script>
 import { disApplyInit } from '@/api/customer'
 import BaseMixin from '@/mixins/BaseMixin'
+import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
 export default {
+  components: { WzwImTip },
   mixins: [BaseMixin],
   data () {
     return {

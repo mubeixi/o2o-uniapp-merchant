@@ -7,6 +7,9 @@ import locales from './common/langue/locales'
 import './common'
 import store from '@/store'
 
+import moment from './libs/moment.min'
+// moment.locale('zh-cn')
+uni.$moment = moment
 
 Vue.config.productionTip = false
 
