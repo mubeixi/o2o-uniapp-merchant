@@ -28,13 +28,12 @@
           </div>
         </div>
       </block>
-      
+
       <div class="defaults" v-if="pro.length<=0">
         <image :src="'/static/client/defaultImg.png'|domain"></image>
       </div>
     </div>
-    
-    
+
     <div class="safearea-box fixed"></div>
     <product-sku
       :hasCart="hasCart"
@@ -43,12 +42,12 @@
       @submitSure="submitSure"
       ref="mySku"
     ></product-sku>
-    
+
     <div style="width: 750rpx;height: 86rpx"></div>
-    <div @click="nextTemp" class="submit">
+    <div v-if="pro.length>0" @click="nextTemp" class="submit">
       下一步
     </div>
-  
+
   </div>
 </template>
 
@@ -56,7 +55,7 @@
 import { getProductList } from '@/api/product'
 import BaseMixin from '@/mixins/BaseMixin'
 import { updateCart } from '@/api/order'
-import { hideLoading, modal, showLoading } from '@/common/fun'
+import { error, hideLoading, modal, showLoading } from '@/common/fun'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import ProductSku from '@/componets/product-sku/product-sku'
 import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
@@ -69,7 +68,7 @@ export default {
     WzwLiveTag,
     WzwImTip,
     LayoutIcon,
-    ProductSku,
+    ProductSku
   },
   data () {
     return {
@@ -79,7 +78,7 @@ export default {
       pageSize: 6,
       inputValue: '',
       selectId: '', // 选择的产品id
-      selectValue: {},// 选择的产品属性
+      selectValue: {}// 选择的产品属性
     }
   },
   onLoad: function (options) {
@@ -88,11 +87,11 @@ export default {
       return
     }
     this.bid = options.bid
-    
+
     this.getProd()
   },
   onShow () {
-  
+
   },
   onReachBottom () {
     if (this.pro.length < this.count) {
@@ -100,9 +99,9 @@ export default {
       this.getProd(this.orderby)
     }
   },
-  
+
   created () {
-  
+
   },
   methods: {
     async submitSure (sku) {
@@ -114,7 +113,7 @@ export default {
           attr_id: sku.id, // 选择属性id
           // count: sku.count, // 选择属性的库存
           qty: sku.qty, // 购买数量
-          cart_key: 'DirectBuy', // 购物车类型   CartList（加入购物车）、DirectBuy（立即购买）、PTCartList（不能加入购物车）
+          cart_key: 'DirectBuy' // 购物车类型   CartList（加入购物车）、DirectBuy（立即购买）、PTCartList（不能加入购物车）
           // productDetail_price: sku.price
         }
         await updateCart(postData).catch(e => {
@@ -130,6 +129,11 @@ export default {
       }
     },
     nextTemp () {
+      console.log(this.selectId)
+      if (!this.selectId) {
+        error('请选择商品')
+        return
+      }
       this.$refs.mySku.show()
     },
     selectItem (item) {
@@ -148,7 +152,7 @@ export default {
         biz_id: this.bid,
         order_temp: 1, // 下单模板商品
         pageSize: this.pageSize,
-        Products_Name: this.inputValue,
+        Products_Name: this.inputValue
       }
       getProductList(postData).then(res => {
         this.pro = this.pro.concat(res.data)
@@ -156,9 +160,9 @@ export default {
         this.count = res.totalCount
       }).catch(e => {
       })
-    },
-    
-  },
+    }
+
+  }
 }
 </script>
 <style lang="scss" scoped>
@@ -168,31 +172,31 @@ export default {
     overflow: hidden;
     background: white;
   }
-  
+
   .defaults {
     margin: 0 auto;
     width: 640rpx;
     height: 480rpx;
     margin-top: 100rpx;
   }
-  
+
   .cate1 {
     .pro {
       display: flex;
       //padding: 0 20rpx;
       margin-bottom: 20rpx;
-      
+
       .pro-img {
         margin-right: 20rpx;
         width: 270rpx;
         height: 270rpx;
       }
-      
+
       .pro_desc {
         flex: 1;
         padding-top: 29rpx;
         text-align: left;
-        
+
         .title {
           overflow: hidden;
           text-overflow: ellipsis;
@@ -203,28 +207,28 @@ export default {
           line-height: 30rpx;
           height: 60rpx;
         }
-        
+
         .price {
           margin-top: 21rpx;
         }
-        
+
         .price .text {
           font-size: 24rpx;
           font-style: normal;
         }
-        
+
         .n_price {
           color: #F43131;
           font-size: 36rpx;
           margin-right: 10rpx;
         }
-        
+
         .o_price {
           color: #afafaf;
           font-size: 28rpx;
           text-decoration: line-through;
         }
-        
+
         .sold {
           color: #666;
           font-size: 19rpx;
@@ -233,12 +237,12 @@ export default {
       }
     }
   }
-  
+
   .imgm {
     width: 36rpx;
     height: 34rpx;
   }
-  
+
   .search-wrap {
     position: relative;
     display: flex;
@@ -247,7 +251,7 @@ export default {
     font-size: 30rpx;
     padding: 30rpx 22rpx 46rpx 20rpx;
     box-sizing: border-box;
-    
+
     .search-input {
       float: left;
       width: 710rpx;
@@ -260,20 +264,20 @@ export default {
       padding-left: 40rpx;
       box-sizing: border-box;
     }
-    
+
     .search_icon {
       position: absolute;
       top: 46rpx;
       right: 61rpx;
       z-index: 8;
     }
-    
+
     .span {
       font-size: 30rpx;
       color: #333333;
     }
   }
-  
+
   .submit {
     width: 750rpx;
     height: 86rpx;

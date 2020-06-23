@@ -325,7 +325,7 @@
 
       <layout-modal ref="commentModal" @maskClicked="cancelComent">
         <div class="replay-comment-wrap">
-        <textarea :value="commentValue" @input="bindReplyInput" auto-height class="reason" :placeholder="commentModalPlaceholder" placeholder-style="color:#999" />
+        <textarea :disabled="!commentModalShow" :value="commentValue" @input="bindReplyInput" auto-height class="reason" :placeholder="commentModalPlaceholder" placeholder-style="color:#999" />
           <div class="control">
             <div @click="cancelComent" class="action-btn btn-cancel">取消</div>
             <div @click="sureComment" class="btn-sub action-btn">确定</div>
@@ -381,6 +381,7 @@ export default {
     return {
       commentModalPlaceholder: '请输入内容',
       anchorTop: 0,
+      commentModalShow: false,
       bizCateList: [],
       bizCateNavIndex: -1,
       scrollTopNum: 0,
@@ -636,6 +637,7 @@ export default {
       this.commentValue = e.detail.value
     },
     cancelComent () {
+      this.commentModalShow = false
       this.commentItem = {}
       this.commentValue = ''
       this.commentItem.groupid = ''
@@ -667,11 +669,13 @@ export default {
         }).catch((e) => {
           error(e.msg || '获取评论数据失败')
         })
+        this.commentModalShow = false
         this.$closePop('commentModal')
       }).catch(e => {
         error(e.msg || '评论失败')
         this.commentItem = {}
         this.commentValue = ''
+        this.commentModalShow = false
         this.$closePop('commentModal')
       })
     },
@@ -680,7 +684,7 @@ export default {
       this.commentItem = Object.assign({}, item)
       this.commentItem.groupid = ''
       this.commentModalPlaceholder = `回复${item.User_NickName}`
-
+      this.commentModalShow = true
       this.$refs.commentModal.show()
     },
     clickCommentSend (item, goupId, userId, co, secondReply = false) {
@@ -694,7 +698,7 @@ export default {
       } else {
         this.commentModalPlaceholder = `回复${co.to_user_nickname}`
       }
-
+      this.commentModalShow = true
       this.$refs.commentModal.show()
     },
     async changeCateIdx (idx, more = false) {

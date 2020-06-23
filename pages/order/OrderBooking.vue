@@ -135,24 +135,27 @@
             <div class="o_title">
               <span>配送时间</span>
               <div class="flex flex-vertical-c" style="text-align:right; color: #888;">
-                <radio-group @change="citySendTypeChange($event,biz_id)">
+                <radio-group @change="citySendTypeChange($event,biz_id)" v-if="(bizList[biz_id].business_status && bizList[biz_id].business_time_status) || checkfrom!='group'">
                   <div class="flex flex-vertical-c">
                     <label class="row flex flex-justify-between flex-vertical-b m-l-15" v-if="bizList[biz_id].business_status && bizList[biz_id].business_time_status">
                       <radio style="transform: scale(0.8)" :checked="'now'===postData.appoint_time_type[biz_id]" value="now" class="radio" color="#F43131" />
                       <span class="flex1">立即送出</span>
                     </label>
                     <!--需要开关打开才可以-->
-                    <label class="row flex flex-justify-between flex-vertical-b m-l-15">
+                    <label class="row flex flex-justify-between flex-vertical-b m-l-15" v-if="checkfrom!='group'">
                       <radio style="transform: scale(0.8)" :checked="'appoint'===postData.appoint_time_type[biz_id]" value="appoint" class="radio" color="#F43131" />
                       <span class="flex1">预约送达</span>
                     </label>
                   </div>
                 </radio-group>
+                <span v-else>
+                  当前商家打烊或不支持预约配送
+                </span>
 
               </div>
             </div>
           </div>
-          <div class="bd" v-if="bizList[biz_id].is_virtual === 0&&postData.shipping_id[biz_id]!='is_self_get'&&postData.appoint_time_type[biz_id]==='appoint'">
+          <div class="bd" v-if="bizList[biz_id].is_virtual === 0&&postData.shipping_id[biz_id]!='is_self_get' && postData.shipping_name[biz_id]==='同城配送' && postData.appoint_time_type[biz_id]==='appoint' && checkfrom!='group'">
             <div class="o_title">
               <span>预约送达时间</span>
               <div class="flex flex-vertical-c" style="text-align:right; color: #888;" @click="citySendTypeOpen(biz_id)">
@@ -899,7 +902,8 @@ export default {
 
               // 还在预约时间内，这个咋办啊
               // 默认设置成预约时间的
-              this.postData.appoint_time_type[bizId] = 'appoint'
+
+              if (this.checkfrom != 'group') this.postData.appoint_time_type[bizId] = 'appoint'
             }).catch(() => {
               console.log(currentBizInfo, currentBizInfo.Order_Shipping.shipping_id)
               this.$set(this.postData.shipping_id, bizId, currentBizInfo.Order_Shipping.shipping_id)
@@ -923,7 +927,7 @@ export default {
             if (this.bizList[bizId].city_express_appoint_send) {
               this.postData.shipping_id[bizId] = val
               this.postData.shipping_name[bizId] = currentBizInfo.shipping_company[val] // 也要设置下name
-              this.postData.appoint_time_type[bizId] = 'appoint'
+              if (this.checkfrom != 'group') this.postData.appoint_time_type[bizId] = 'appoint'
             } else {
               error('该商家当前时段不支持同城配送')
               this.$set(this.postData.shipping_id, bizId, currentBizInfo.Order_Shipping.shipping_id)
