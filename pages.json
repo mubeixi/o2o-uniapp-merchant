@@ -18,7 +18,7 @@
     {
       "path": "pages/store/index",
       "style": {
-        "navigationBarTextStyle": "light",
+        "navigationBarTextStyle": "black",
         "navigationStyle": "custom",
         "navigationBarTitleText": "店铺首页"
 //        "mp-weixin": {
@@ -166,6 +166,13 @@
       "root": "pagesA",
       "name": "onther",
       "pages": [
+        {
+          "path": "store/productListByMall",
+          "style": {
+            "navigationBarTitleText": "全部商品"
+//            "navigationStyle": "custom"
+          }
+        },
         {
           "path": "active/OrderFree",
           "style": {

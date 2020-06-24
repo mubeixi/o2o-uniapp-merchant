@@ -324,8 +324,9 @@ export const componetMixin = {
       this.$refs[name].close()
     }
   },
-  created () {
+  onReady () {
     this.systemInfo = uni.getSystemInfoSync()
+    
     // #ifdef MP-WEIXIN
     this.menuButtonInfo = uni.getMenuButtonBoundingClientRect()
     const { height, top, left } = this.menuButtonInfo

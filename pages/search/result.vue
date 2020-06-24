@@ -162,7 +162,7 @@ export default {
     }
   },
   onLoad (option) {
-    const { refer = '', oneHourSend = 0 } = option
+    const { refer = '', oneHourSend = 0} = option
     this.refer = refer
     // 是否是一小时达
     this.oneHourSend = Number(oneHourSend)

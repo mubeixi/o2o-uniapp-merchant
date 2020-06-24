@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :style="extStyle">
     <!--状态栏-->
     <div class="status-bar" :style="{height:menuButtonInfo.top+'px',backgroundColor:statusBgColor}"></div>
     <!--导航栏-->
@@ -13,38 +13,38 @@
 <script>
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import { backFunc } from '@/common/fun'
+import {componetMixin} from '@/mixins/BaseMixin'
 
 export default {
   name: 'layoutPageTitle',
+  mixins: [componetMixin],
   components: { LayoutIcon },
   props: {
-    props: {
-      statusBgColor: {
-        type: String,
-        default: '#fff'
-      },
-      menuButtonBgColor: {
-        type: String,
-        default: '#fff'
-      },
-      pageTitle: {
-        type: String,
-        default: ''
-      },
-      // 代表是否emit左侧被点击事件
-      letfFn: {
-        type: Boolean,
-        default: false
-      }
+    extStyle: {
+      type: String,
+      default: ''
+    },
+    statusBgColor: {
+      type: String,
+      default: '#ffffff'
+    },
+    menuButtonBgColor: {
+      type: String,
+      default: '#ffffff'
+    },
+    pageTitle: {
+      type: String,
+      default: ''
+    },
+    // 代表是否emit左侧被点击事件
+    letfFn: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
     return {
-      menuButtonInfo: {},
-      systemInfo: {
-        statusBarHeight: 0,
-        windowHeight: 0
-      }
+    
     }
   },
   methods: {
@@ -53,15 +53,8 @@ export default {
       if (!this.letfFn) backFunc()
     }
   },
-  mounted () {
-    this.systemInfo = uni.getSystemInfoSync()
-    // #ifdef MP-WEIXIN
-    this.menuButtonInfo = uni.getMenuButtonBoundingClientRect()
-    const { height, top, left } = this.menuButtonInfo
-    this.diyHeadHeight = top + height + (top - this.systemInfo.statusBarHeight) + 10
-    this.diyHeadRight = this.systemInfo.windowWidth - left
-    // #endif
-    console.log(this.pageTitle)
+  onReady () {
+  
   }
 }
 </script>
