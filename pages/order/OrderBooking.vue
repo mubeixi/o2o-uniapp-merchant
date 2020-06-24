@@ -1144,6 +1144,15 @@ export default {
           throw Error('每个商家使用余额数值都为大于等于0的数')
         }
 
+        // 是否是预约时间
+        if (JSON.stringify(this.postData.appoint_time_type) !== '{}') {
+          for (const time in this.postData.appoint_time_type) {
+            if (this.postData.appoint_time_type[time] === 'appoint' && !this.postData.appoint_time[time]) {
+              throw Error('请选择预约送达时间')
+            }
+          }
+        }
+
         Object.assign(params, {
           shipping_id: JSON.stringify(shipping_id),
           coupon_id: JSON.stringify(coupon_id),
