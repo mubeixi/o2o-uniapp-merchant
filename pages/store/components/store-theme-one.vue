@@ -148,6 +148,7 @@
             </div>
             <div class="kill-countdown">
               <block v-if="!pro.countdown.is_end">
+  
                 <span class="c3 fz-12">距{{pro.countdown.is_start?'结束':'开始'}}</span>
                 <span class="countdown-tag">{{pro.countdown.h}}</span>
                 <span class="countdown-delimiter">时</span>
@@ -177,7 +178,19 @@
         <div class="flash-act-list">
           <div class="flash-act-item" v-for="(activity,idx1) in flashActivityList" :key="idx1">
             <div class="flash-act-title fz-15 fz-b c3 m-b-15">{{activity.name}}</div>
-            <div class="flash-act-countdown"></div>
+            <div class="flash-act-countdown">
+              <block v-if="!activity.countdown.is_end">
+                <image src="/static/store/theme_one/time.png" mode="widthFix" style="width: 22rpx;height: 25rpx;margin-right: 14rpx;"></image>
+                <span class="c3 fz-12">距{{activity.countdown.is_start?'结束':'开始'}}还有：</span>
+                <span class="countdown-tag">{{activity.countdown.d}}</span>
+                <span class="countdown-delimiter">:</span>
+                <span class="countdown-tag">{{activity.countdown.h}}</span>
+                <span class="countdown-delimiter">:</span>
+                <span class="countdown-tag">{{activity.countdown.m}}</span>
+                <span class="countdown-delimiter">:</span>
+                <span class="countdown-tag">{{activity.countdown.s}}</span>
+              </block>
+            </div>
             <div class="act-goods-list">
               <div class="act-goods-item" v-for="(pro,idx) in activity.spike_goods" :key="idx" @click="toGoodsDetailFn(pro,activity)">
                 <div :style="{backgroundImage:'url('+pro.ImgPath+')'}" class="item-cover"></div>
@@ -325,7 +338,7 @@
 
       <layout-modal ref="commentModal" @maskClicked="cancelComent">
         <div class="replay-comment-wrap">
-        <textarea :value="commentValue" @input="bindReplyInput" auto-height class="reason" :placeholder="commentModalPlaceholder" placeholder-style="color:#999" />
+        <textarea :disabled="!commentModalShow" :value="commentValue" @input="bindReplyInput" auto-height class="reason" :placeholder="commentModalPlaceholder" placeholder-style="color:#999" />
           <div class="control">
             <div @click="cancelComent" class="action-btn btn-cancel">取消</div>
             <div @click="sureComment" class="btn-sub action-btn">确定</div>
@@ -381,6 +394,7 @@ export default {
     return {
       commentModalPlaceholder: '请输入内容',
       anchorTop: 0,
+      commentModalShow: false,
       bizCateList: [],
       bizCateNavIndex: -1,
       scrollTopNum: 0,
@@ -480,7 +494,7 @@ export default {
         })
         console.log(this.virtualGoodsLsit, this.virtualPaginate)
 
-        const killList = await getFlashsaleList({ ...base }, { onlyData: true }).catch(e => {
+        const killList = await getFlashsaleList({ biz_id: this.bid }, { onlyData: true }).catch(e => {
           throw Error(e.msg || '获取秒杀列表失败')
         })
 
@@ -636,6 +650,7 @@ export default {
       this.commentValue = e.detail.value
     },
     cancelComent () {
+      this.commentModalShow = false
       this.commentItem = {}
       this.commentValue = ''
       this.commentItem.groupid = ''
@@ -667,11 +682,13 @@ export default {
         }).catch((e) => {
           error(e.msg || '获取评论数据失败')
         })
+        this.commentModalShow = false
         this.$closePop('commentModal')
       }).catch(e => {
         error(e.msg || '评论失败')
         this.commentItem = {}
         this.commentValue = ''
+        this.commentModalShow = false
         this.$closePop('commentModal')
       })
     },
@@ -680,7 +697,7 @@ export default {
       this.commentItem = Object.assign({}, item)
       this.commentItem.groupid = ''
       this.commentModalPlaceholder = `回复${item.User_NickName}`
-
+      this.commentModalShow = true
       this.$refs.commentModal.show()
     },
     clickCommentSend (item, goupId, userId, co, secondReply = false) {
@@ -694,7 +711,7 @@ export default {
       } else {
         this.commentModalPlaceholder = `回复${co.to_user_nickname}`
       }
-
+      this.commentModalShow = true
       this.$refs.commentModal.show()
     },
     async changeCateIdx (idx, more = false) {
@@ -779,7 +796,8 @@ export default {
       for (var idx in this.killList) {
         const data = getCountdownFunc({
           start_timeStamp: this.killList[idx].start_time,
-          end_timeStamp: this.killList[idx].end_time
+          end_timeStamp: this.killList[idx].end_time,
+          getDay:false
         })
         if (data) {
           this.$set(this.killList[idx], 'countdown', { ...data })
@@ -1178,7 +1196,27 @@ export default {
     .flash-act-title{
     }
     .flash-act-countdown{
-
+      width: 658rpx;
+      height: 70rpx;
+      margin: 0rpx auto 40rpx;
+      background:#ECFFF8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      .countdown-tag{
+        background:#26C78D;
+        color: #fff;
+        font-size: 24rpx;
+        padding: 6rpx;
+        border-radius: 6rpx;
+        text-align: center;
+      }
+      .countdown-delimiter{
+        text-align: center;
+        font-size: 24rpx;
+        color: #26C78D;
+        padding: 0 2rpx;
+      }
     }
   }
   .act-goods-list{

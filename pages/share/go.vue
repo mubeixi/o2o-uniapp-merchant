@@ -377,8 +377,8 @@ export default {
         detailData.end_time_text = uni.$moment(detailData.end_time).format('YYYY-MM-DD h:m:s')
 
         this.detailData = detailData
-        this.shareText = `${detailData.Products_Name},已售${detailData.Products_Sales}件,拼购价:${detailData.Products_PriceX},原价:${detailData.Products_PriceY}`
-
+        // this.shareText = `${detailData.Products_Name},已售${detailData.Products_Sales}件,拼购价:${detailData.Products_PriceX},原价:${detailData.Products_PriceY}`
+        this.shareText = `${detailData.Products_BriefDescription}`
         // 秒杀
         if (this.mode === 'seckill') {
           const seckillInfo = await getFlashsaleDetail({ flashsale_id: this.flashsale_id }).then(res => {
