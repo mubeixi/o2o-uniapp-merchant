@@ -8,8 +8,10 @@
             <div :style="{height:menuButtonInfo.bottom+10-menuButtonInfo.top+'px',backgroundColor:menuButtonBgColor}" class="navigation-bar flex flex-vertical-c">
               <layout-icon @click="$back" class="left-icon" color="#333" size="18"
                            type="iconicon-arrow-left"></layout-icon>
-                  <div class="search-input">
-
+                  <div class="search-input flex-vertical-c flex flex-justify-c" @click="toSearch">
+                    <layout-icon  class="left-icon" color="#333" size="18"
+                                 type="iconicon-search"></layout-icon>
+                      <span class="fz-12 search-text">{{bizSearchKeyWord}}</span>
                   </div>
                   <div class="navigation-title">全部商品</div>
             </div>
@@ -19,6 +21,7 @@
             <div class="cate">
               <div :class="{active:cateActiveIdx===idx}" :key="idx" @click="setCateActuveIdx(idx)" class="cate-item"
                    v-for="(item,idx) in cateList">
+                <div class="avtiveLine"></div>
                 <block v-if="idx===0">
                   <layout-icon color="#FF0000" display="inline" type="iconicon-fire"></layout-icon>
                   <span class="p-l-4">{{item.cate_name}}</span>
@@ -28,33 +31,69 @@
 
             </div>
             <scroll-view class="list" scroll-y="true">
+              <div class="cate-second" v-if="cateList[cateActiveIdx].child.length>0">
+                <block v-for="(item,index) of cateList[cateActiveIdx].child" :key="index">
+                  <div class="cate-second-item"  :class="cateIndex==index?'checkCate':''"  @click="changeCate(index)">
+                    {{item.cate_name}}
+                  </div>
+                </block>
+              </div>
+              <div style="height: 50rpx;"></div>
               <div :key="idx" class="goods-item" v-for="(goods,idx) in showList">
                 <div :style="{backgroundImage:'url('+$getDomain(goods.ImgPath)+')'}" @click="toDetail(goods)"
                      class="cover"></div>
-                <div @click="toDetail(goods)" class="info">
-                  <div class="title"><wzw-live-tag :room_id="goods.room_id" :product-info="goods" />{{goods.Products_Name}}</div>
-                  <div class="fz-12 c9 p-t-6 p-b-6">销量：{{goods.Products_Sales}}</div>
-                  <div><span class="price-selling fz-12">￥</span><span
-                    class="price-selling fz-14">{{goods.Products_PriceX}}</span></div>
-                </div>
-                <div @click.stop="$noop" class="action m-r-10">
-                  <div @click.stop="openAttrLayer(goods.Products_ID)" class="btn-open-attr m-r-10" v-if="goods.skujosn">
-                    选规格
-                    <div class="goods-num-tag" v-if="goods.num>0">{{goods.num}}</div>
+                <div>
+                  <div @click="toDetail(goods)" class="info">
+                    <div class="title"><wzw-live-tag :room_id="goods.room_id" :product-info="goods" />{{goods.Products_Name}}</div>
+                    <div class="title-money">
+                      已省15元
+                    </div>
+                    <div>
+                      <span class="price-selling fz-10">￥</span>
+                      <span class="price-selling fz-15">{{goods.Products_PriceX}}</span>
+                      <span class="product-priceY fz-11">
+                         ￥ {{goods.Products_PriceY}}
+                      </span>
+                    </div>
+                    <div class="number-all">
+                        <div class="fz-11 c9 p-t-6 p-b-6 cA">月销{{goods.Products_Sales}}件</div>
+                        <div @click.stop="$noop" class="action ">
+                          <div @click.stop="openAttrLayer(goods.Products_ID)" class="btn-open-attr " v-if="goods.skujosn">
+                            选规格
+                            <div class="goods-num-tag" v-if="goods.num>0">{{goods.num}}</div>
+                          </div>
+                          <div @click="setActiveGoodsIdx(idx)" class="flex flex-vertical-c" v-else>
+                            <block v-if="CartList[goods.biz_id][goods.Products_ID][0].Qty>0">
+                              <layout-icon @click.stop="updateCartFn(goods.biz_id,goods.Products_ID,0,-1)" color="#e64239" size="20"
+                                           type="iconicon-minus "></layout-icon>
+                              <input :value="CartList[goods.biz_id][goods.Products_ID][0].Qty"  disabled class="input-num text-center fz-12" />
+                              <layout-icon @click.stop="updateCartFn(goods.biz_id,goods.Products_ID,0,1)" color="#e64239" size="20"
+                                           type="iconicon-plus "></layout-icon>
+                            </block>
+                            <block v-else>
+                              <layout-icon @click.stop="updateCartFn(goods.biz_id,goods.Products_ID,0,1)" color="#e64239" size="25"
+                                           type="iconicon-plus "></layout-icon>
+                            </block>
+
+                          </div>
+                        </div>
+                    </div>
+
                   </div>
-                  <div @click="setActiveGoodsIdx(idx)" class="flex flex-vertical-c" v-else>
-                    <block v-if="goods.num>0">
-                      <layout-icon @click.stop="goodsNumMinus(goods)" color="#26C78D" size="24"
-                                   type="iconicon-minus p-10"></layout-icon>
-                      <input :value="goods.num" @input="changeGoodsNum" class="input-num text-center fz-12" />
-                    </block>
-                    <layout-icon @click.stop="goodsNumPlus(goods)" color="#26C78D" size="24"
-                                 type="iconicon-plus p-10"></layout-icon>
-                  </div>
+
+
                 </div>
+
               </div>
             </scroll-view>
           </div>
+
+    <div  class="icon-wrap" @click="goCart">
+      <layout-icon class="cart-icon" color="#fff" size="24" type="iconicon-cart"></layout-icon>
+      <div class="tag">
+        {{totalNum}}
+      </div>
+    </div>
 
     <layout-layer positions="center" ref="attr">
       <div class="attr-form-wrap">
@@ -115,33 +154,54 @@ import { Exception } from '@/common/Exception'
 import { error, modal } from '@/common/fun'
 import { getBizProdCateList, getProductDetail, getProductList } from '@/api/product'
 import { checkIsLogin, mergeObject, numberSort } from '@/common/helper'
+import { CartList as getCartList, DelCart } from '@/api/customer'
 import LayoutLayer from '@/componets/layout-layer/layout-layer'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import { mapActions } from 'vuex'
 const attrInfoTmpl = {
+  Products_ID: 0,
   num: 0,
   attr_id: '', // 规格id
   attr_text: '',
   price: '', // 价格
   count: 0// 库存
 }
+/**
+ * 检查店铺的状态
+ * 1.要么在营业时间内
+ * 2.要么不在营业时间内，但是开启了非营业时间可以下单
+ * 3.不在营业时间内，不允许下单
+ */
+const checkStoreStatus = (bizInfo) => {
+  const { business_status = 0, business_time_status = 0 } = bizInfo
+  return business_status || business_time_status
+}
 export default {
   mixins: [BaseMixin],
   components: { LayoutIcon, LayoutLayer },
   data () {
     return {
+      pageSize:999,
+      cateIndex: 0,
+      bizSearchKeyWord:'酸奶',
+      qty: 0,
       bid: '',
       cateActiveIdx: 0,
       showList: [],
+      CartList: [],
       product: {},
+      check_attr: {},
+      bizList: [],
       submitFlag: false,
       attrInfo: {
+        Products_ID: 0,
         num: 0,
         attr_id: '', // 规格id
         attr_text: '',
         price: '', // 价格
         count: 0// 库存
       },
+      isAjax: false,
       cateList: [
         {
           cate_name: '热销',
@@ -157,14 +217,40 @@ export default {
   methods: {
     ...mapActions({
     }),
-    confirmAdd () {
+    toSearch () {
+      this.$linkTo('/pages/search/result?inputValue=' + this.bizSearchKeyWord + '&biz_id=' + this.bid)
+    },
+    changeCate (index) {
+      this.cateIndex = index
+      this.cateList[this.cateActiveIdx].page = 1
+      this.cateList[this.cateActiveIdx].list = []
+      this.changeTab(this.cateActiveIdx)
+    },
+    toDetail (goodsInfo) {
+      this.$linkTo('/pages/product/detail?prod_id=' + goodsInfo.Products_ID)
+    },
+    goCart () {
+      this.$linkTo('/pages/order/ShoppingCart')
+    },
+    setActiveGoodsIdx (idx) {
+      this.activeGoodsIdx = idx
+    },
+    async confirmAdd () {
       if (!this.submitFlag) return
       this.attrInfo.num++
       this.product.prod_id = this.product.Products_ID
-      this.$store.dispatch('cart/addNum', {
+      const cart = await this.$store.dispatch('cart/addNum', {
         product: { ...this.product, ...this.attrInfo },
         num: 1
       })
+      if (!cart) {
+        this.attrInfo.num = 0
+      }
+      if (cart !== false) {
+        // 更新数量
+        this.initCart()
+      }
+
       // this.$closePop('attr')
     },
     selectAttr (index, i) {
@@ -206,6 +292,7 @@ export default {
       console.log(attr_val)
       // 属性判断
       if (attr_val) {
+        this.attrInfo.Products_ID = attr_val.Products_ID
         this.attrInfo.attr_id = attr_val.Product_Attr_ID // 选择属性的id
         this.attrInfo.attr_text = attr_val.Attr_Value_text
         this.attrInfo.count = attr_val.Property_count // 选择属性的库存
@@ -214,7 +301,7 @@ export default {
         this.submitFlag = !(!this.check_attr)
 
         const atrr_id = attr_val.Product_Attr_ID
-        const isCartHas = this.$store.getters['delivery/getRow'](atrr_id)
+        const isCartHas = this.$store.getters['cart/getRow'](atrr_id)
         console.log(isCartHas, attr_val)
         // 如果已经存在
         if (isCartHas !== false) {
@@ -224,6 +311,9 @@ export default {
         }
       } else {
         this.attrInfo = { ...attrInfoTmpl }
+      }
+      if (this.CartList[this.bid] && this.CartList[this.bid][this.attrInfo.Products_ID] && this.CartList[this.bid][this.attrInfo.Products_ID][this.attrInfo.attr_id]) {
+        this.attrInfo.num = this.CartList[this.bid][this.attrInfo.Products_ID][this.attrInfo.attr_id].Qty
       }
 
       console.log(attr_val)
@@ -240,37 +330,33 @@ export default {
         this.attrInfo.num = this.attrInfo.count
       }
     },
-    goodsNumMinus (goodsInfo) {
-      const num = goodsInfo.num ? goodsInfo.num - 1 : 0
-      this.$set(goodsInfo, 'num', num)
-      this.$store.dispatch('cart/addNum', {
-        product: { prod_id:goodsInfo.Products_ID,biz_id:goodsInfo.biz_id},
-        num: -1
-      })
-    },
-    goodsNumPlus (goodsInfo) {
-      const num = goodsInfo.num ? goodsInfo.num + 1 : 1
-      this.$set(goodsInfo, 'num', num)
-
-      // const attrInfoTmpl = {
-      //   num: 0,
-      //   attr_id: '', // 规格id
-      //   attr_text: '',
-      //   price: '', // 价格
-      //   count: 0// 库存
-      // }
-      // 拼接一下
-      const productInfo = {
-        ...attrInfoTmpl,
-        attr_id: 'noattr_' + goodsInfo.Products_ID,
-        attr_text: '无规格',
-        price: goodsInfo.Products_PriceX,
-        count: goodsInfo.Products_Count,
+    async updateCartFn (biz_id, prod_id, attr_id, num, storeIsSaleTime) {
+      console.log(biz_id, prod_id, attr_id, num, 'ss')
+      if (this.CartList[biz_id] && this.CartList[biz_id][prod_id] && this.CartList[biz_id][prod_id][attr_id] && this.CartList[biz_id][prod_id][attr_id].Qty === 1 && num <= 0) {
+        error('数量最少为1件')
+        return
       }
-      this.$store.dispatch('cart/addNum', {
-        product: { prod_id:goodsInfo.Products_ID,biz_id:goodsInfo.biz_id},
-        num: 1
-      })
+
+      if (this.isAjax) return
+
+      this.isAjax = true
+      const product = { prod_id: Number(prod_id), attr_id: Number(attr_id), biz_id: Number(biz_id) }
+
+      const cart = await this.$store.dispatch('cart/addNum', { product, num })
+      if (cart !== false) {
+        // 更新数量
+        this.initCart()
+        // const { CartList } = cart
+        // for (const biz_id in CartList) {
+        //   for (const prod_id in CartList[biz_id]) {
+        //     for (const attr_id in CartList[biz_id][prod_id]) {
+        //       this.CartList[biz_id][prod_id][attr_id].Qty = CartList[biz_id][prod_id][attr_id].Qty
+        //     }
+        //   }
+        // }
+      }
+
+      this.isAjax = false
     },
     addNum () {
       if (this.attrInfo.num < this.attrInfo.count) {
@@ -282,7 +368,7 @@ export default {
         })
         this.attrInfo.num = this.attrInfo.count
       }
-      this.product.prod_id=this.product.Products_ID
+      this.product.prod_id = this.product.Products_ID
       this.$store.dispatch('cart/addNum', {
         product: { ...this.product, ...this.attrInfo },
         num: 1
@@ -291,7 +377,7 @@ export default {
     delNum () {
       if (this.attrInfo.num > 0) {
         this.attrInfo.num -= 1
-        this.product.prod_id=this.product.Products_ID
+        this.product.prod_id = this.product.Products_ID
         this.$store.dispatch('cart/addNum', {
           product: { ...this.product, ...this.attrInfo },
           num: -1
@@ -340,15 +426,14 @@ export default {
 
       // 实际也是加减的意思
       if (action === 'add') {
-        this.product.prod_id=this.product.Products_ID
+        this.product.prod_id = this.product.Products_ID
         this.$store.dispatch('cart/addNum', {
           product: { ...this.product, ...this.attrInfo },
           num: amount - this.attrInfo.num
         })
       }
       if (action === 'minus') {
-
-        this.product.prod_id=this.product.Products_ID
+        this.product.prod_id = this.product.Products_ID
         this.$store.dispatch('cart/addNum', {
           num: this.attrInfo.num - amount,
           product: { ...this.product, ...this.attrInfo }
@@ -404,9 +489,12 @@ export default {
     },
     async changeTab (idx) {
       try {
-        const { list = [], page = 1, id: biz_cate_id } = this.cateList[idx]
+        let { list = [], page = 1, id: biz_cate_id } = this.cateList[idx]
         const commParam = {
           biz_id: this.bid // 限定商家
+        }
+        if (this.cateList[idx].child && this.cateList[idx].child.length > 0) {
+          biz_cate_id = this.cateList[idx].child[this.cateIndex].id
         }
         // 第一次
         if (list.length === 0 && page === 1) {
@@ -449,6 +537,64 @@ export default {
       } catch (e) {
         Exception.handle(e)
       }
+    },
+    async initCart () {
+      if (!this.$checkIsLogin(0)) return
+      const cart = await getCartList({ cart_key: 'CartList' }, {
+        onlyData: true,
+        tip: '加载中'
+      }).catch(e => {
+        throw Error(e.msg || '获取购物车产品失败')
+      })
+      const { CartList, biz_list } = cart
+
+      const bizList = {}
+      for (var i in biz_list) {
+        const key = parseInt(i)
+        bizList[key] = Object.assign(biz_list[i], { isSaleTime: checkStoreStatus(biz_list[i]) })
+      }
+
+      this.$store.commit('cart/SET_BIZLIST', bizList)
+      this.$set(this, 'bizList', bizList)
+
+      const attrList = []
+      for (const biz_id in CartList) {
+        for (const prod_id in CartList[biz_id]) {
+          for (const attr_id in CartList[biz_id][prod_id]) {
+            // 初始化为false，方便后面触发响应
+            CartList[biz_id][prod_id][attr_id].checked = this.$store.getters['cart/getRowCheckStatus']({ attr_id: Number(attr_id), prod_id: Number(prod_id) })
+            if (!this.bizList[biz_id].isSaleTime) {
+              CartList[biz_id][prod_id][attr_id].checked = false
+            }
+            const attr_value = CartList[biz_id][prod_id][attr_id]
+            attrList.push({
+              // ...attr_value,
+              biz_id: Number(biz_id),
+              prod_id: Number(prod_id),
+              attr_id: Number(attr_id),
+              checked: attr_value.checked, // 能保留上次的结果
+              num: attr_value.Qty
+            })
+          }
+        }
+      }
+      this.shopCartList = attrList // computed set
+
+      this.$set(this, 'CartList', CartList)
+    }
+
+  },
+  computed: {
+    totalNum () {
+      return this.$store.getters['cart/getTotalNum'](this.bid)
+    },
+    shopCartList: {
+      get () {
+        return this.$store.state.cart.cartList
+      },
+      set (val) {
+        this.$store.commit('cart/ASYNC_DATA', val)
+      }
     }
   },
   onLoad (options) {
@@ -459,8 +605,8 @@ export default {
     this.bid = parseInt(options.biz_id)
     this._init_func()
   },
-  created () {
-
+  onShow () {
+    this.initCart()
   }
 }
 </script>
@@ -501,44 +647,62 @@ export default {
     justify-content: space-between;
 
     .cate {
-      width: 150rpx;
+      width: 160rpx;
       height: 100%;
       overflow-x: hidden;
       overflow-y: scroll;
       background: #F8F8F8;
 
       .cate-item {
-        height: 38px;
-        line-height: 38px;
+        height: 100rpx;
+        line-height: 100rpx;
         text-align: center;
         padding: 0 6px;
         overflow: hidden;
         text-overflow: ellipsis;
         border-bottom: 1px solid #fff;
-        font-size: 14px;
+        font-size: 13px;
         color: #333;
+        position: relative;
+        .avtiveLine{
+          display: none;
+          width:6rpx;
+          height:50rpx;
+          background:rgba(230,66,57,1);
+          position: absolute;
+          top: 24rpx;
+          left: 0rpx;
+        }
 
         &.active {
           background: #fff;
+          color: #E64239;
+          .avtiveLine{
+            display: block !important;
+          }
         }
       }
     }
 
     .list {
-      width: 585rpx;
+      width: 590rpx;
       height: 100%;
       overflow-x: hidden;
       overflow-y: scroll;
+      padding: 0rpx 20rpx 140rpx 20rpx;
+      box-sizing: border-box;
+      position: relative;
 
       .goods-item {
         display: flex;
         align-items: center;
         padding: 20rpx 0;
-        border-bottom: 1px solid #E1E1E1;
+        height: 178rpx;
+        margin-bottom: 60rpx;
 
         .cover {
-          width: 118rpx;
-          height: 118rpx;
+          width: 178rpx;
+          height: 178rpx;
           background: #f2f2f2;
           @include cover-img();
         }
@@ -546,10 +710,41 @@ export default {
         .info {
           flex: 1;
           padding-left: 20rpx;
+          height: 178rpx;
 
           .title {
-            font-size: 13px;
+            font-size: 26rpx;
+            width: 340rpx;
+            height: 28rpx;
+            line-height: 28rpx;
+            overflow: hidden;
+            text-overflow:ellipsis;
+            white-space: nowrap;
             color: #333;
+            margin-bottom: 14rpx;
+          }
+          .title-money{
+            width:124rpx;
+            height:44rpx;
+            font-size: 22rpx;
+            color: #E64239;
+            text-align: center;
+            line-height: 44rpx;
+            background:rgba(255,244,244,1);
+            border-radius:6rpx;
+            margin-bottom: 16rpx;
+          }
+          .product-priceY{
+            margin-left: 14rpx;
+            color:#AAAAAA;
+            text-decoration:line-through;
+          }
+          .number-all{
+            height: 50rpx;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
           }
         }
 
@@ -560,7 +755,7 @@ export default {
           }
 
           .btn-open-attr {
-            background: $fun-primary-color;
+            background: #e64239;
             font-size: 10px;
             color: #fff;
             width: 110rpx;
@@ -669,5 +864,62 @@ export default {
       }
     }
   }
-
+  .icon-wrap{
+      position: fixed;
+      width: 86rpx;
+      height: 86rpx;
+      border-radius: 50%;
+      background-color: #666666;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      bottom: 50rpx;
+      right: 12rpx;
+      .tag{
+        width: 30rpx;
+        height: 30rpx;
+        display: flex;
+        background-color: #FF0000;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        font-size: 11px;
+        position: absolute;
+        color: #FFFFff;
+        top: 12rpx;
+        right: 8rpx;
+      }
+  }
+  .cate-second{
+    height: 50rpx;
+    width: 550rpx;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    display:flex;
+    overflow-x: scroll;
+    &-item{
+      width:fit-content;
+      background-color: #F7F8F8;
+      border-radius: 6rpx;
+      height: 50rpx;
+      padding: 0rpx 24rpx;
+      font-size: 24rpx;
+      color: #666666;
+      text-align: center;
+      line-height: 50rpx;
+      margin-right: 14rpx;
+    }
+    .checkCate{
+      background-color: #FFE9E8 !important;
+    }
+  }
+  .search-text{
+    font-style: 12px;
+    color: #ADADAD;
+    margin-left: 24rpx;
+  }
+  .cA{
+    color: #AAAAAA;
+  }
 </style>
