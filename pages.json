@@ -169,8 +169,8 @@
         {
           "path": "store/productListByMall",
           "style": {
-            "navigationBarTitleText": "全部商品"
-//            "navigationStyle": "custom"
+            "navigationBarTitleText": "全部商品",
+            "navigationStyle": "custom"
           }
         },
         {
