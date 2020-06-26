@@ -3,8 +3,8 @@
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
 
 <!--    <store-theme-default @upStoreInfo="bindUpStoreInfo" :bid="bid"></store-theme-default>-->
-<!--    <store-theme-one @upStoreInfo="bindUpStoreInfo" :bid="bid"></store-theme-one>-->
-    <store-theme-two @upStoreInfo="bindUpStoreInfo" :bid="bid"></store-theme-two>
+    <store-theme-one @upStoreInfo="bindUpStoreInfo" :bid="bid"></store-theme-one>
+<!--    <store-theme-two @upStoreInfo="bindUpStoreInfo" :bid="bid"></store-theme-two>-->
 <!--    <store-theme-three @upStoreInfo="bindUpStoreInfo" :bid="bid"></store-theme-three>-->
 
     <!--101: 直播中, 102: 未开始, 103: 已结束, 104: 禁播, 105: 暂停中, 106: 异常，107：已过期-->
