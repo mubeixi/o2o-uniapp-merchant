@@ -127,7 +127,12 @@
             <div class="o_title">
               <span>配送价格</span>
               <div class="flex flex-vertical-c" style="text-align:right; color: #888;">
-                ￥{{bizList[biz_id]['Order_Shipping']['Price']}}
+                <block v-if="bizList[biz_id]['Order_Shipping']['Price']==0">
+                    免运费
+                </block>
+                <block v-else>
+                  ￥{{bizList[biz_id]['Order_Shipping']['Price']}}
+                </block>
               </div>
             </div>
           </div>
@@ -142,7 +147,7 @@
                       <span class="flex1">立即送出</span>
                     </label>
                     <!--需要开关打开才可以-->
-                    <label class="row flex flex-justify-between flex-vertical-b m-l-15" v-if="checkfrom!='group'">
+                    <label class="row flex flex-justify-between flex-vertical-b m-l-15" v-if="checkfrom!='group'&&bizList[biz_id].city_express_appoint_send">
                       <radio style="transform: scale(0.8)" :checked="'appoint'===postData.appoint_time_type[biz_id]" value="appoint" class="radio" color="#F43131" />
                       <span class="flex1">预约送达</span>
                     </label>
@@ -863,10 +868,10 @@ export default {
       this.appointTimeTypes = appointTimeTypes
       this.$openPop('citySendTime')
     },
-    // 取消事件设置，那么就切换回立即配送
+    // 取消事件设置，那么就切换回立即配送 目前需求不要
     cancelCurrentBizSendTime () {
-      this.postData.appoint_time_type[this.activeBizId] = 'now'
-      this.appointTimeTypes = []
+      // this.postData.appoint_time_type[this.activeBizId] = 'now'
+      // this.appointTimeTypes = []
     },
     setCurrentBizSendTime () {
       const selectIdx = this.citySendTimePicker[0]

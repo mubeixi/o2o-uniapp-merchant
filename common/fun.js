@@ -212,7 +212,7 @@ export const confirm = (options) => {
         if (res.confirm) {
           resolve(res)
         } else if (res.cancel) {
-          console.log("cancel")
+          console.log('cancel')
           reject(res)
         }
       },
@@ -231,4 +231,17 @@ export const showLoading = (title = 'loading', mask = true) => {
 }
 export const hideLoading = () => {
   uni.hideLoading()
+}
+
+export const checkIsExpire = (time = 0) => {
+  const timestamp = new Date().getTime()
+  time = time * 1000
+  if (time <= 0 || time <= timestamp) {
+    error('商城已过期')
+    setTimeout(function () {
+      uni.navigateBack()
+    }, 2000)
+    return false
+  }
+  return true
 }

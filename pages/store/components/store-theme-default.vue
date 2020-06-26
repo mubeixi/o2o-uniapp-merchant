@@ -386,7 +386,7 @@ import LayoutComment from '@/componets/layout-comment/layout-comment'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import { componetMixin } from '@/mixins/BaseMixin'
 import { checkIsLogin, getArrColumn } from '@/common/helper'
-import { error, hideLoading, modal, showLoading, toast } from '@/common/fun'
+import { error, hideLoading, modal, showLoading, toast , checkIsExpire } from '@/common/fun'
 import { addFavourite, cancelFavourite, checkFavourite, commentReply, getUserCoupon } from '@/api/customer'
 import { Exception } from '@/common/Exception'
 import { getCommitList, getCouponList } from '@/api/common'
@@ -638,6 +638,7 @@ export default {
           throw Error(e.msg || '商品信息失败')
         })
         this.storeInfo = storeInfoData[0]
+        checkIsExpire(this.storeInfo.biz_expires)
 
         this.$emit('upStoreInfo', this.storeInfo)
 

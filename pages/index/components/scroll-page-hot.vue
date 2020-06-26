@@ -307,10 +307,10 @@ export default {
         return
       }
       if (this.liveNav[idx].isAjax) return// 防止请求和到底的一起生效
-      
+
       this.liveNav[idx].isAjax = true
       this.loadingByLiveList = true
-      
+
       const cateId = this.liveNav[idx].Category_ID
 
       const { data: liveGoodsList, totalCount } = await getProductList({
@@ -325,7 +325,7 @@ export default {
       this.$set(this.liveNav[idx], 'totalCount', totalCount)
       this.$set(this.liveNav[idx], 'page', this.liveNav[idx].page+1)
       this.$set(this.liveNav[idx], 'isAjax', false)
-     
+
       this.loadingByLiveList = false
 
     },
@@ -396,6 +396,7 @@ export default {
       .nav-list {
         overflow-y: hidden;
         overflow-x: scroll;
+        white-space: nowrap;
 
         &::-webkit-scrollbar {
           display: none;
