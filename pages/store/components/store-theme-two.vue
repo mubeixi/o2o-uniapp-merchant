@@ -63,7 +63,7 @@
 
       </div>
       <!--秒杀-->
-      <div class="section-item kill-box bg-white">
+      <div class="section-item kill-box bg-white"  v-if="killList.length>0">
         <div class="title p-t-20 p-l-10 p-r-10 flex flex-vertical-c flex-justify-between">
           <div class="fz-20 c3 fz-b">全民秒杀日</div>
           <div class="more flex flex-vertical-c" @click.stop="$linkTo('/pagesA/active/SeckillByBiz?biz_id='+bid)">
@@ -106,7 +106,7 @@
         </div>
       </div>
       <!--限时抢购-->
-      <div class="section-item flash-box">
+      <div class="section-item flash-box"  v-if="activity.spike_goods.length>0||flashActivityList.length>0">
         <div class="title p-15" style="background: #F6F6F6;text-align: center;">
           <image style="width: 294rpx;height: 34rpx;" src="/static/store/theme_two/spkie-title-bg.png"></image>
         </div>
@@ -282,7 +282,7 @@
 </template>
 <script>
 import { componetMixin } from '@/mixins/BaseMixin'
-import { error, hideLoading, modal, showLoading, toast } from '@/common/fun'
+import { error, hideLoading, modal, showLoading, toast,checkIsExpire } from '@/common/fun'
 import { getAlbumList, getBizInfo, getBizSpikeList, getStoreList } from '@/api/store'
 import { getBizProdCateList, getFlashsaleList, getProductList } from '@/api/product'
 import { getCommitList, getCouponList } from '@/api/common'
@@ -397,6 +397,7 @@ export default {
           throw Error(e.msg || '商品信息失败')
         })
         this.storeInfo = storeInfoData[0]
+        checkIsExpire(this.storeInfo.biz_expires)
         this.$emit('upStoreInfo', this.storeInfo)
 
         const base = { biz_ids: this.bid }

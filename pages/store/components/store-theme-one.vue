@@ -135,8 +135,8 @@
         </div>
       </div>
       <!--秒杀-->
-      <div class="section-item kill-box">
-        <div class="title p-15" style="background: #F6F6F6;text-align: center;">
+      <div class="section-item kill-box"  v-if="killList.length>0">
+        <div class="title p-15" style="background: #F6F6F6;text-align: center;"  >
           <image style="width: 432rpx;height: 37rpx;" :src="$getDomain('/static/client/store/theme_one/kill.png')"></image>
         </div>
         <div class="kill-list">
@@ -148,7 +148,7 @@
             </div>
             <div class="kill-countdown">
               <block v-if="!pro.countdown.is_end">
-  
+
                 <span class="c3 fz-12">距{{pro.countdown.is_start?'结束':'开始'}}</span>
                 <span class="countdown-tag">{{pro.countdown.h}}</span>
                 <span class="countdown-delimiter">时</span>
@@ -171,7 +171,7 @@
         </div>
       </div>
       <!--限时抢购-->
-      <div class="section-item flash-box">
+      <div class="section-item flash-box"  v-if="flashActivityList.length>0">
         <div class="title p-15" style="background: #F6F6F6;text-align: center;">
           <image style="width: 432rpx;height: 37rpx;" :src="$getDomain('/static/client/store/theme_one/flash-sale.png')"></image>
         </div>
@@ -213,7 +213,7 @@
         </div>
       </div>
       <!--到店券-虚拟商品-->
-      <div class="section-item virtual-box"  >
+      <div class="section-item virtual-box"  v-if="virtualGoodsLsit.length>0">
         <div id="section-virtual" class="section-anchor" :style="{top:anchorTop+'px'}"></div>
         <div class="title p-15" style="text-align: center;">
           <image style="width: 359rpx;height: 39rpx;" :src="$getDomain('/static/client/store/theme_one/virtual.png')"></image>
@@ -353,7 +353,7 @@
 
 <script>
 import { componetMixin } from '@/mixins/BaseMixin'
-import { error, hideLoading, modal, showLoading, toast } from '@/common/fun'
+import { error, hideLoading, modal, showLoading, toast,checkIsExpire } from '@/common/fun'
 import { getAlbumList, getBizInfo, getBizSpikeList, getStoreList } from '@/api/store'
 import { getBizProdCateList, getFlashsaleList, getProductList } from '@/api/product'
 import { getCommitList, getCouponList } from '@/api/common'
@@ -452,7 +452,9 @@ export default {
           throw Error(e.msg || '商品信息失败')
         })
         this.storeInfo = storeInfoData[0]
+        checkIsExpire(this.storeInfo.biz_expires)
         this.$emit('upStoreInfo', this.storeInfo)
+
 
         const base = { biz_ids: this.bid }
 

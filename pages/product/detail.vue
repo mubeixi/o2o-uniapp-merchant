@@ -1212,7 +1212,7 @@ import LayoutComment from '@/componets/layout-comment/layout-comment'
 import WzwGoodsAction from '@/componets/wzw-goods-action/wzw-goods-action'
 import LayoutPopup from '@/componets/layout-popup/layout-popup'
 
-import { error, hideLoading, modal, showLoading, toast } from '@/common/fun'
+import { error, hideLoading, modal, showLoading, toast, checkIsExpire } from '@/common/fun'
 import { buildSharePath, checkIsLogin, getCountdownFunc, getProductThumb } from '@/common/helper'
 import uParse from '@/componets/gaoyia-parse/parse'
 import Storage from '@/common/Storage'
@@ -1915,6 +1915,13 @@ export default {
       try {
         showLoading()
 
+        this.store = await getBizInfo({ biz_id: this.productInfo.biz_id }, { onlyData: true }).catch(e => {
+          throw Error(e.msg || '获取店铺信息失败')
+        })
+
+        this.bizInfo = this.store[0]
+        checkIsExpire(this.bizInfo.biz_expires)
+
         if (options.gift) {
           this.gift = options.gift
           this.postData.active_id = options.gift
@@ -2061,12 +2068,6 @@ export default {
         }).catch((e) => {
           throw Error('获取评论数据失败')
         })
-
-        this.store = await getBizInfo({ biz_id: this.productInfo.biz_id }, { onlyData: true }).catch(e => {
-          throw Error(e.msg || '获取店铺信息失败')
-        })
-
-        this.bizInfo = this.store[0]
 
         this.storeList = await getStoreList({ biz_id: this.productInfo.biz_id }, {
           onlyData: true

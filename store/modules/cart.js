@@ -89,7 +89,7 @@ const mutations = {
     const idx = findArrayIdx(cartList, { attr_id, prod_id })
     // 首次加入购物车
     if (idx !== false) {
-      cartList[idx].num -= num
+      cartList[idx].num += num
       // 要先同步，才能继续走
 
       /* async data */
@@ -160,7 +160,7 @@ const mutations = {
 
 const actions = {
   async addNum ({ commit, state }, { product, num = 1 }) {
-    console.log(num)
+
     try {
       const { biz_id, prod_id, attr_id } = product
       const cartNewData = await updateCartFn({ prod_id, attr_id, biz_id, qty: num }).catch(err => { throw Error(err.msg) })

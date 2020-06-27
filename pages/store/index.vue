@@ -2,10 +2,10 @@
   <div @click="commonClick" class="page-wrap">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
 
-<!--    <store-theme-default @upStoreInfo="bindUpStoreInfo" :bid="bid"></store-theme-default>-->
-<!--    <store-theme-one @upStoreInfo="bindUpStoreInfo" :bid="bid"></store-theme-one>-->
-    <store-theme-two @upStoreInfo="bindUpStoreInfo" :bid="bid"></store-theme-two>
-<!--    <store-theme-three @upStoreInfo="bindUpStoreInfo" :bid="bid"></store-theme-three>-->
+    <store-theme-default @upStoreInfo="bindUpStoreInfo" :bid="bid" v-if="skin_id===0"></store-theme-default>
+    <store-theme-one @upStoreInfo="bindUpStoreInfo" :bid="bid" v-if="skin_id===1"></store-theme-one>
+    <store-theme-two @upStoreInfo="bindUpStoreInfo" :bid="bid" v-if="skin_id===2"></store-theme-two>
+    <store-theme-three @upStoreInfo="bindUpStoreInfo" :bid="bid" v-if="skin_id===3"></store-theme-three>
 
     <!--101: 直播中, 102: 未开始, 103: 已结束, 104: 禁播, 105: 暂停中, 106: 异常，107：已过期-->
 <!--    <div @click="toRoom" class="live-status-box" v-if="liveStatus == 101 || liveStatus == 105 || liveStatus == 102">-->
@@ -25,6 +25,7 @@ import StoreThemeDefault from '@/pages/store/components/store-theme-default'
 import StoreThemeOne from '@/pages/store/components/store-theme-one'
 import StoreThemeTwo from '@/pages/store/components/store-theme-two'
 import StoreThemeThree from '@/pages/store/components/store-theme-three'
+import { getBizInfo } from '@/api/store'
 // #ifdef MP-WEIXIN
 // const livePlayer = requirePlugin('live-player-plugin')
 // #endif
@@ -42,10 +43,16 @@ export default {
   data () {
     return {
       bid: '',
+      skin_id:0,
       storeInfo: {}
     }
   },
   methods: {
+    init () {
+      getBizInfo({ biz_id: this.bid }).then(res => {
+          this.skin_id=Number(res.data[0].skin_id)
+      })
+    },
     bindUpStoreInfo (storeInfo) {
       this.storeInfo = storeInfo
       // const { room_id, live_end_time, live_start_time } = this.storeInfo
@@ -84,7 +91,7 @@ export default {
   //   this.headTabSticky = scrollTop > this.headTabTop
   // },
   onShow () {
-
+    this.init()
   },
   mounted () {
 

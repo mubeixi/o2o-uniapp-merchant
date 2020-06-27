@@ -134,7 +134,12 @@
             <div class="o_title">
               <span>配送价格</span>
               <div class="flex flex-vertical-c" style="text-align:right; color: #888;">
-                ￥{{bizList[biz_id]['Order_Shipping']['Price']}}
+                <block v-if="bizList[biz_id]['Order_Shipping']['Price']==0">
+                    免运费
+                </block>
+                <block v-else>
+                  ￥{{bizList[biz_id]['Order_Shipping']['Price']}}
+                </block>
               </div>
             </div>
           </div>
@@ -900,10 +905,10 @@ export default {
       this.appointTimeTypes = appointTimeTypes
       this.$openPop('citySendTime')
     },
-    // 取消事件设置，那么就切换回立即配送
+    // 取消事件设置，那么就切换回立即配送 目前需求不要
     cancelCurrentBizSendTime () {
-      this.postData.appoint_time_type[this.activeBizId] = 'now'
-      this.appointTimeTypes = []
+      // this.postData.appoint_time_type[this.activeBizId] = 'now'
+      // this.appointTimeTypes = []
     },
     setCurrentBizSendTime () {
       const selectIdx = this.citySendTimePicker[0]
@@ -1133,14 +1138,14 @@ export default {
             isNow: false, // 立即配送
             isAppoint: false// 预约诶送
           }
-          const { business_status = 0, business_time_status = 0, out_business_time_order = 0 } = bizInfo
+          const { business_status = 0, business_time_status = 0, out_business_time_order = 0,city_express_appoint_send=0 } = bizInfo
           // 1.营业状态关闭，任何情况，任何物流都不能下单
           if (!business_status) {
 
           }
 
           // 2.营业状态打开，在营业时间，正常下单
-          if (business_status && business_time_status) {
+          if (business_status && business_time_status && city_express_appoint_send) {
             shippingStatus.isOrder = true
             shippingStatus.isSameCity = true
             shippingStatus.isNow = true
@@ -1148,7 +1153,7 @@ export default {
           }
 
           // 3.营业状态打开，不在营业时间，允许营业外下单，同城配送只能预约，不能立即送达，普通物流不受影响
-          if (business_status && !business_time_status && out_business_time_order) {
+          if (business_status && !business_time_status && out_business_time_order && city_express_appoint_send) {
             shippingStatus.isOrder = true
             shippingStatus.isSameCity = true
             shippingStatus.isAppoint = true
