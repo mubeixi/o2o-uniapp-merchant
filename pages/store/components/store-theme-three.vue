@@ -47,7 +47,7 @@
             </div>
           </div>
         </div>
-        <div class="section-item coupon-list">
+        <div class="section-item coupon-list" v-if="couponList.length>0">
           <div v-for="(coupon,idx) in couponList" :key="idx" @click="getCoupon(coupon,idx)" class="coupon-item">
             <div class="flex flex-vertical-c">
               <div class="coupon-item-l">
@@ -98,7 +98,7 @@
             </div>
             <div class="goods-list">
               <div :key="idx" class="goods-item" v-for="(goods,idx) in showList">
-                <div :style="{backgroundImage:'url('+$getDomain(goods.ImgPath)+')'}" class="cover"></div>
+                <div @click="$toGoodsDetail(goods)" :style="{backgroundImage:'url('+$getDomain(goods.ImgPath)+')'}" class="cover"></div>
                 <div class="info">
                   <div class="title fz-13 c3"><wzw-live-tag :room_id="goods.room_id" :product-info="goods" />{{goods.Products_Name}}</div>
                   <div class="flex flex-vertical-c" style="margin: 20rpx 0">
@@ -594,7 +594,8 @@ export default {
   background: #262626;
   height: 96rpx;
   width: 750rpx;
-  bottom:0;
+  bottom: constant(safe-area-inset-bottom);
+  bottom: env(safe-area-inset-bottom);
   left: 0;
   z-index: 6;
   .cart-box{
@@ -772,6 +773,7 @@ export default {
 }
 
 .top-box{
+  position: relative;
   .top-box-bg{
     position: absolute;
     left: 0;
@@ -853,6 +855,7 @@ export default {
   }
 
   .top-search{
+    margin-top: 30rpx;
     padding: 0 20rpx;
     .search-input{
       width:540rpx;
@@ -911,7 +914,7 @@ export default {
 }
 
 .coupon-list{
-  margin:36rpx 0 30rpx 0;
+  margin:36rpx 0 0 0;
   width: 750rpx;
   white-space: nowrap;
   overflow-y: hidden;
