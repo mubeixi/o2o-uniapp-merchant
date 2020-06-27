@@ -250,7 +250,7 @@
           </div>
 
           <div class="text-right fz-14" style="padding: 20rpx 20rpx 50rpx">
-            共xx件商品，小计<span class="price-selling">￥xxx</span>
+            共{{bizList[biz_id].prod_count}}件商品，小计<span class="price-selling">￥{{bizList[biz_id].Order_TotalPrice}}</span>
           </div>
 
           <div class="expired-box" style="padding-bottom: 30rpx" v-if="bizList[biz_id].expired_prod_count>0">
@@ -269,7 +269,7 @@
                         <div class="attr"  style="background-color: #f5f5f5;color: #777;"><span style="background-color: #f5f5f5;color: #777;" v-if="1||attr.Productsattrstrval">测试规格{{attr.Productsattrstrval}}</span></div>
                         <div class="pro-price flex flex-vertical-b fz-18" style="color: #888"><span class="fz-10">￥</span >{{attr.ProductsPriceX}}</div>
                       </div>
-                      <div class="expired-reason fz-12" style="color: #f53333">失效原因:库存不足不能购买</div>
+                      <div class="expired-reason fz-12" style="color: #f53333">失效原因:配送方式不统一，需分开单独结算</div>
                     </div>
                   </div>
                   <div class="goods-hr"></div>

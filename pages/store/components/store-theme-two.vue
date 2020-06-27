@@ -18,7 +18,7 @@
           <span class="m-l-10 color-white fz-12">{{bizSearchKeyWord}}</span>
         </div>
       </div>
-      <image @click="toVip" class="toolbar-vip" src="/static/store/theme_two/vip.png"></image>
+      <image @click="toVip" class="toolbar-vip" :src="$getDomain('/static/client/store/theme_two/vip.png')"></image>
     </div>
     <scroll-view :style="{top:headTabTop+'px'}" class="store-comp-wrap"  @scrolltolower="bindScrolltolower" scroll-y>
 <!--      <layout-page-title></layout-page-title>-->
@@ -43,22 +43,22 @@
       <div class="section-item coupon-list" :class="couponClassName">
         <div v-for="(coupon,idx) in couponList" :key="idx" @click="getCoupon(coupon,idx)" class="coupon-item">
           <div style="height: 70rpx;" class="coupon-item-bg flex" >
-            <image mode="heightFix" style="height: 70rpx;" src="/static/store/theme_two/conpon-l.png"></image>
-            <div style="height: 70rpx;" class="flex1 coupon-item-bg-c">
+            <image mode="heightFix" style="height: 70rpx;" :src="$getDomain('/static/client/store/theme_two/conpon-l.png')"></image>
+            <div style="height: 70rpx;" class="flex1 coupon-item-bg-c" :style="{backgroundImage:'url('+$getDomain('/static/client/store/theme_two/coupon-c.png')+')'}">
               <div class="sign">{{coupon.Coupon_UseType?'￥':'折'}}</div>
               <div class="num">{{coupon.Coupon_UseType?coupon.Coupon_Cash:coupon.Coupon_Discount}}</div>
             </div>
-            <image mode="heightFix" style="height: 70rpx;" src="/static/store/theme_two/coupon-r.png"></image>
+            <image mode="heightFix" style="height: 70rpx;" :src="$getDomain('/static/client/store/theme_two/coupon-r.png')"></image>
           </div>
         </div>
       </div>
       <!--便捷操作-->
       <div class="section-item feature-list">
         <div class="feature-item" @click="toOffinePay">
-          <image src="/static/store/theme_two/pay.png" class="feature-item-img" mode="scaleToFill"></image>
+          <image :src="$getDomain('/static/client/store/theme_two/pay.png')" class="feature-item-img" mode="scaleToFill"></image>
         </div>
         <div class="feature-item" @click="toAllProduct">
-          <image src="/static/store/theme_two/prod.png" class="feature-item-img" mode="scaleToFill"></image>
+          <image :src="$getDomain('/static/client/store/theme_two/prod.png')" class="feature-item-img" mode="scaleToFill"></image>
         </div>
 
       </div>
@@ -89,7 +89,7 @@
             </div>
             <div class="kill-action">
               <div class="kill-action-reduce">已减{{pro.Products_PriceX-pro.price}}元</div>
-              <image src="/static/store/theme_two/go-btn-icon.png" class="kill-action-go"></image>
+              <image :src="$getDomain('/static/client/store/theme_two/go-btn-icon.png')" class="kill-action-go"></image>
             </div>
             <div class="kill-countdown">
               <block v-if="!pro.countdown.is_end">
@@ -108,11 +108,11 @@
       <!--限时抢购-->
       <div class="section-item flash-box"  v-if="activity.spike_goods.length>0||flashActivityList.length>0">
         <div class="title p-15" style="background: #F6F6F6;text-align: center;">
-          <image style="width: 294rpx;height: 34rpx;" src="/static/store/theme_two/spkie-title-bg.png"></image>
+          <image style="width: 294rpx;height: 34rpx;" :src="$getDomain('/static/client/store/theme_two/spkie-title-bg.png')"></image>
         </div>
         <div class="flash-act-list">
           <div class="flash-act-item" v-for="(activity,idx1) in flashActivityList" :key="idx1">
-            <div class="flash-act-title flex flex-vertical-c flex-justify-between">
+            <div class="flash-act-title flex flex-vertical-c flex-justify-between" :style="{backgroundImage:'url('+$getDomain('/static/client/store/theme_two/spkie-item-top-bg.png')+')'}">
               <div class="title-text">{{activity.name}}</div>
               <div class="more flex flex-vertical-c" @click.stop="$linkTo('/pagesA/active/FlashSaleByBiz?biz_id='+bid+'&spike_id='+activity.id)">
                 <span class="fz-12">查看更多</span>
@@ -160,7 +160,7 @@
       <div class="section-item cate-box" >
         <div id="section-sale" class="section-anchor" :style="{top:anchorTop+'px'}"></div>
         <div class="title p-t-20 p-b-0" style="text-align: center;">
-          <image style="width: 258rpx;height: 34rpx;" src="/static/store/theme_two/sale-top-bg.png"></image>
+          <image style="width: 258rpx;height: 34rpx;" :src="$getDomain('/static/client/store/theme_two/sale-top-bg.png')"></image>
         </div>
         <div class="cate-goods-list">
           <div class="fun-goods-col" style="padding: 0 9rpx 0 0rpx">
@@ -177,7 +177,7 @@
                 </div>
                 <div slot="ext" class="goods-action">
                   <div class="goods-action-reduce">已减{{pro.Products_PriceY-pro.Products_PriceX}}元</div>
-                  <image src="/static/store/theme_two/go-btn-icon.png" class="goods-action-go"></image>
+                  <image :src="$getDomain('/static/client/store/theme_two/go-btn-icon.png')" class="goods-action-go"></image>
                 </div>
               </div>
             </block>
@@ -196,7 +196,7 @@
                 </div>
                 <div slot="ext" class="goods-action">
                   <div class="goods-action-reduce">已减{{pro.Products_PriceY-pro.Products_PriceX}}元</div>
-                  <image src="/static/store/theme_two/go-btn-icon.png" class="goods-action-go"></image>
+                  <image :src="$getDomain('/static/client/store/theme_two/go-btn-icon.png')" class="goods-action-go"></image>
                 </div>
               </div>
             </block>
@@ -960,7 +960,6 @@ export default {
         background-size: 100% 100%;
         background-repeat: no-repeat;
         background-color: red;
-        background-image: url("/static/store/theme_two/coupon-c.png");
         display: flex;
         align-items: flex-end;
         .sign{
@@ -1126,7 +1125,6 @@ export default {
         background-repeat: no-repeat;
         background-size: cover;
         background-position: center;
-        background-image: url("/static/store/theme_two/spkie-item-top-bg.png");
         .more{
           margin-right: 20rpx;
         }
