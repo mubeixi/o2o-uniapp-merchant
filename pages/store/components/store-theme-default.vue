@@ -699,7 +699,7 @@ export default {
           throw Error(e.msg || '获取相册信息失败')
         })
 
-        this.activityList = await getBizSpikeList({ biz_id: this.bid }, { onlyData: true }).catch((e) => {
+        this.activityList = await getBizSpikeList({ biz_id: this.bid,status:1 }, { onlyData: true }).catch((e) => {
           throw Error('获取限时抢购数据失败')
         })
 

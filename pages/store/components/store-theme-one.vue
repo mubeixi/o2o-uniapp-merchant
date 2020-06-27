@@ -462,7 +462,7 @@ export default {
           this.storeGoodsTotal = totalCount
         }).catch((err) => { throw Error(err.msg) })
 
-        const flashActivitys = await getBizSpikeList({ biz_id: this.bid }, { onlyData: true }).catch((e) => {
+        const flashActivitys = await getBizSpikeList({ biz_id: this.bid,status:1  }, { onlyData: true }).catch((e) => {
           throw Error('获取限时抢购数据失败')
         })
 
