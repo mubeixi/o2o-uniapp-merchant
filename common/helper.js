@@ -349,7 +349,7 @@ export const checkIsLogin = (redirect = 1, tip = 0, isBack = 0) => {
         uni.navigateTo({
           url: '/pages/user/login'
         })
-        return
+        return false;
       }
 
       confirm({

@@ -65,6 +65,7 @@ import { mapActions } from 'vuex'
 import { error } from '@/common/fun'
 import BaseMixin from '@/mixins/BaseMixin'
 import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import { checkIsLogin } from '@/common/helper'
 
 export default {
   components: { WzwImTip },
@@ -272,6 +273,8 @@ export default {
     }
   },
   onLoad (options) {
+    if (!checkIsLogin(1, 0)) return
+
     if (options.type == 0) {
       this.title = '修改登录密码'
       this.type = 0

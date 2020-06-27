@@ -670,7 +670,8 @@ export default {
         // 不要赠送的优惠券
         this.couponList = await getCouponList({
           biz_id: this.bid,
-          front_show: 1
+          front_show: 1,
+          status: 3
         }, {
           onlyData: true,
           noUid: 1

@@ -180,7 +180,7 @@
             <div class="flash-act-title fz-15 fz-b c3 m-b-15">{{activity.name}}</div>
             <div class="flash-act-countdown">
               <block v-if="!activity.countdown.is_end">
-                <image src="/static/store/theme_one/time.png" mode="widthFix" style="width: 22rpx;height: 25rpx;margin-right: 14rpx;"></image>
+                <image :src="$getDomain('/static/client/store/theme_one/time.png')" mode="widthFix" style="width: 22rpx;height: 25rpx;margin-right: 14rpx;"></image>
                 <span class="c3 fz-12">距{{activity.countdown.is_start?'结束':'开始'}}还有：</span>
                 <span class="countdown-tag">{{activity.countdown.d}}</span>
                 <span class="countdown-delimiter">:</span>

@@ -238,7 +238,7 @@ export default {
     })
   },
   onShow () {
-    if (!checkIsLogin(0, 0)) return
+    if (!checkIsLogin(1, 0)) return
 
     if (eventHub.imInstance) {
       this.imInstance = imInstance = eventHub.imInstance
