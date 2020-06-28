@@ -1,5 +1,10 @@
 <template>
   <div @click="commonClick" class="page-wrap">
+    <div class="flex-message" v-if="userInfo.attention_mp!=1">
+      <div>小提示：关注"及贝"公众号可及时获取商家回复消息，</div>
+      <div >可<span class="c-red" @click="lookCode">点击这里</span>查看公众号二维码</div>
+    </div>
+    <div class="flex-message-occupy" v-if="userInfo.attention_mp!=1"></div>
     <div class="chat-list" v-if="chatList.length>0">
       <div :key="idx"
            @click="toRoom(idx)"
@@ -73,11 +78,19 @@ export default {
     }
   },
   computed: {
+    initData () {
+      return this.$store.state.system.initData
+    },
     userInfo () {
       return this.$store.getters['user/getUserInfo']()
     }
   },
   methods: {
+    lookCode () {
+      uni.previewImage({
+        urls: [this.initData.mp_qrcode]
+      })
+    },
     async delMsgItem (chat, idx) {
       try {
         // showLoading()
@@ -184,7 +197,7 @@ export default {
         modal(err.msg || '获取消息列表失败')
       })
       // this.paginate.page++
-      this.chatList = chatList //this.chatList.concat()
+      this.chatList = chatList // this.chatList.concat()
     }
   },
   // onReachBottom () {
@@ -266,8 +279,34 @@ export default {
     min-height: 100vh;
     background: #fff;
     padding-bottom: 0;
+    box-sizing: border-box;
   }
-
+  .c-red{
+    color: #FFFFff;
+    background-color: #26C78D;
+    display: inline-block;
+    padding: 0px 14rpx;
+    border-radius: 10rpx;
+    margin: 0rpx 14rpx;
+  }
+  .flex-message{
+    text-align: center;
+    width: 750rpx;
+    height: 120rpx;
+    box-sizing: border-box;
+    border-radius: 10rpx;
+    background-color: #effbf9;
+    line-height: 50rpx;
+    font-size: 12px;
+    padding:10rpx 30rpx;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+  }
+  .flex-message-occupy{
+    height: 100rpx;
+    width: 750rpx;
+  }
   .chat-item-box {
     position: relative;
     height: 140rpx;
