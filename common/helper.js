@@ -712,6 +712,30 @@ export const toGoodsDetail = async (productInfo) => {
 
 export const setNavigationBarTitle = (title) => uni.setNavigationBarTitle({ title })
 
+/**
+ * 获取滑动事件的参数
+ * @param event
+ * @returns {{x: number, y: number, type: *}}
+ */
+export function getTouchEventInfo(event) {
+  const type = event.type
+  let x = 0
+  let y = 0
+  const touches = event.changedTouches
+  
+  if (touches && touches.length > 0) {
+    x = touches[0].clientX
+    y = touches[0].clientY
+  }
+  
+  return {
+    type,
+    x,
+    y
+  }
+}
+
+
 const Helper = {
   Object: {
     mapList: (list, fn) => {

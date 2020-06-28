@@ -1,19 +1,24 @@
 <template>
   <div class="page-wrap">
-    <div class="fixed-top-box" v-show="headTabSticky" :style="{height: diyHeadHeight+'px'}">
+    <!--,opacity:headTabOpacity-->
+    <div class="fixed-top-box"  :style="{height: diyHeadHeight+'px',zIndex:headTabSticky?5:-5}">
       <layout-page-title :letf-icon-size="18" :letfFn="true" :pageTitle="'店铺详情'" @clickLeft="$back"></layout-page-title>
       <div class="h10"></div>
-      <div class="fixed-top-search flex flex-vertical-c">
-        <div class="fixed-search-input flex flex-vertical-c">
+      <div v-show="headTabSticky" class="fixed-top-search flex flex-vertical-c">
+        <div class="fixed-search-input flex flex-vertical-c" @click="toSearch">
           <layout-icon size="18" color="#ADADAD" type="iconsearch"></layout-icon>
           <div class="placeholder">请输入商品关键词</div>
         </div>
-        <image class="fixed-top-vip" :src="$getDomain('/static/client/store/theme-three/vip.png')"></image>
+        <image @click="toVip" class="fixed-top-vip" :src="$getDomain('/static/client/store/theme-three/vip.png')"></image>
       </div>
     </div>
 
-    <scroll-view class="store-comp-wrap" @scroll="bindScroll" :scroll-y="!headTabSticky" >
-      <div id="topBox" class="top-box" >
+    <scroll-view class="store-comp-wrap"
+                 @touchstart="touchPageStart"
+                 @touchmove="touchPageMove"
+                 @touchend="touchPageEnd"
+                 @scroll="bindScroll"  :scroll-y="pageScrollEnable" >
+      <div id="topBox" class="top-box">
         <image class="top-box-bg" :src="$getDomain('/static/client/store/theme-three/top-bg.png')"></image>
         <layout-page-title letf-icon-color="#fff" status-bg-color="none" menu-button-bg-color="none" :letf-icon-size="18" :letfFn="true" @clickLeft="$back"></layout-page-title>
         <div class="h10"></div>
@@ -59,15 +64,20 @@
           </div>
         </div>
         <div class="top-search flex flex-vertical-c">
-          <div class="search-input flex flex-vertical-c">
+          <div class="search-input flex flex-vertical-c" @click="toSearch">
             <layout-icon size="18" color="#ADADAD" type="iconsearch"></layout-icon>
             <div class="placeholder">请输入商品关键词</div>
           </div>
-          <image class="top-vip" :src="$getDomain('/static/client/store/theme-three/vip.png')"></image>
+          <image @click="toVip" class="top-vip" :src="$getDomain('/static/client/store/theme-three/vip.png')"></image>
         </div>
       </div>
       <div class="container" :style="{height:systemInfo.windowHeight-diyHeadHeight+'px'}">
-        <scroll-view class="container-l" scroll-y>
+        <scroll-view class="container-l"
+                     @touchstart="touchLeftStart"
+                     @touchmove="touchLeftMove"
+                     @touchend="touchLeftEnd"
+                     @scroll="bindContainerLeftScroll"
+                     :scroll-y="leftScrollEnable">
           <div :class="{active:bizCateNavIndex===-2}" @click="setCateActuveIdx(-2,0)" class="cate-item">
             <div class="cate-underline"></div>
             <div class="cate-title">限时抢购</div>
@@ -76,14 +86,21 @@
             <div class="cate-underline"></div>
             <div class="cate-title">秒杀</div>
           </div>
-
           <div :class="{active:bizCateNavIndex===idx}" :key="idx" @click="setCateActuveIdx(idx,0)" class="cate-item" v-for="(item,idx) in bizCateList">
             <div class="cate-underline"></div>
             <div class="cate-title">{{item.cate_name}}</div>
           </div>
+          <div v-if="bizCateList.length>0" class="p-b-safe-area" style="height: 96rpx"></div>
 
         </scroll-view>
-        <scroll-view class="container-r" scroll-y @scrolltoupper="bindScrollRightTop">
+        <scroll-view
+          :scroll-y="rightScrollEnable"
+          class="container-r"
+          @touchstart="touchRightStart"
+          @touchmove="touchRightMove"
+          @touchend="touchRightEnd"
+          @scroll="bindContainerRightScroll"
+        >
           <div class="goods-box" v-if="showMode==='goods'">
             <div class="cate-child-list">
               <div
@@ -115,65 +132,199 @@
                         选规格
                         <div class="goods-num-tag" v-if="goods.num>0">{{goods.num}}</div>
                       </div>
-                      <div @click="setActiveGoodsIdx(idx)" class="flex flex-vertical-c" v-else>
+                      <div class="flex flex-vertical-c" v-else>
                         <block v-if="goods.num>0">
                           <layout-icon @click.stop="goodsNumMinus(goods)" color="#B2B1B1" size="20" type="iconicon-minus"></layout-icon>
-                          <input :value="goods.num" @input="changeGoodsNum" class="input-num text-center fz-12" />
+                          <input v-model="goods.num" @focus="getQty(goods.num)" @blur="changeGoodsNum($event,idx,goods)" class="input-num text-center fz-12" />
                         </block>
                         <layout-icon @click.stop="goodsNumPlus(goods)" color="#E64239" size="20" type="iconicon-plus"></layout-icon>
                       </div>
                     </div>
                   </div>
                 </div>
-                
+
               </div>
             </div>
+            <div class="p-b-safe-area" style="height: 96rpx"></div>
           </div>
           <div class="spike-box" v-if="showMode==='spike'">
             <div class="spike-list">
-              限时抢购
+              <div class="flash-act-item" v-for="(activity,idx1) in flashActivityList" :key="idx1">
+                <div class="flash-act-title c3 fz-b fz-15" @click.stop="$linkTo('/pagesA/active/FlashSaleByBiz?biz_id='+bid+'&spike_id='+activity.id)">{{activity.name}}</div>
+                <div class="flash-act-countdown">
+                  <block v-if="!activity.countdown.is_end">
+                    <span style="color: #E64239;" class="fz-12 m-r-6">距{{activity.countdown.is_start?'结束':'开始'}}:</span>
+                    <span class="countdown-tag">{{activity.countdown.d}}</span>
+                    <span class="countdown-delimiter">天</span>
+                    <span class="countdown-tag">{{activity.countdown.h}}</span>
+                    <span class="countdown-delimiter">时</span>
+                    <span class="countdown-tag">{{activity.countdown.m}}</span>
+                    <span class="countdown-delimiter">分</span>
+                    <span class="countdown-tag">{{activity.countdown.s}}</span>
+                    <span class="countdown-delimiter">秒</span>
+                  </block>
+                </div>
+
+                <div class="act-goods-list">
+                  <div class="act-goods-item flex" v-for="(pro,idx) in activity.spike_goods" :key="idx" @click.stop="toGoodsDetailFn(pro,activity)">
+                    <div :style="{backgroundImage:'url('+pro.ImgPath+')'}" class="item-cover"></div>
+                    <div class="item-info flex1">
+                      <div class="act-goods-item-title fz-12 c3 m-t-14 m-b-8">
+                        <wzw-live-tag :room_id="pro.room_id" :product-info="pro" />{{pro.Products_Name}}
+                      </div>
+                      <div class="flex flex-vertical-c" style="margin: 20rpx 0">
+                        <div class="price-num">已减{{$filterPrice(pro.Products_PriceX-pro.price)}}元</div>
+                        <div class="c9 fz-12" v-if="activity.limits>0">限购{{activity.limits}}份</div>
+                        <div class="c9 fz-12" v-else>不限购</div>
+                      </div>
+                      <div class="flex flex-vertical-b">
+                        <div class="price-box price-selling ">
+                          <span class="sign fz-10">￥</span><span class="num fz-14">{{pro.price}}</span>
+                        </div>
+                        <div class="m-l-6 fz-11 price-market text-through">
+                          <span class="sign">￥</span><span class="num">{{pro.Products_PriceX}}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
+            <div class="p-b-safe-area" style="height: 96rpx"></div>
           </div>
           <div class="kill-box" v-if="showMode==='kill'">
             <div class="kill-goods-list">
-              秒杀
+              <div class="kill-goods-item flex" v-for="(pro,idx) in killList" :key="idx" @click="$toGoodsDetail(pro)">
+                <div :style="{backgroundImage:'url('+pro.ImgPath+')'}" class="item-cover"></div>
+                <div class="item-info flex1">
+                  <div class="act-goods-item-title fz-12 c3 m-t-14 m-b-8">
+                    <wzw-live-tag :room_id="pro.room_id" :product-info="pro" />{{pro.Products_Name}}
+                  </div>
+                  <div class="flex flex-vertical-c" style="margin: 20rpx 0">
+                    <div class="price-num">已减{{$filterPrice(pro.Products_PriceX-pro.price)}}元</div>
+                    <div class="c9 fz-12" v-if="pro.limits>0">限购{{pro.limits}}份</div>
+                    <div class="c9 fz-12" v-else>不限购</div>
+                  </div>
+                  <div class="flex flex-vertical-b">
+                    <div class="price-box price-selling ">
+                      <span class="sign fz-10">￥</span><span class="num fz-14">{{pro.price}}</span>
+                    </div>
+                    <div class="m-l-6 fz-11 price-market text-through">
+                      <span class="sign">￥</span><span class="num">{{pro.Products_PriceX}}</span>
+                    </div>
+                  </div>
+                  <div class="kill-countdown">
+                    <block v-if="!pro.countdown.is_end">
+                      <!--<span style="color: #E64239;" class="fz-10">距{{pro.countdown.is_start?'结束':'开始'}}:</span>-->
+                      <span class="countdown-tag">{{pro.countdown.h}}</span>
+                      <span class="countdown-delimiter">时</span>
+                      <span class="countdown-tag">{{pro.countdown.m}}</span>
+                      <span class="countdown-delimiter">分</span>
+                      <span class="countdown-tag">{{pro.countdown.s}}</span>
+                      <span class="countdown-delimiter">秒</span>
+                    </block>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="p-b-safe-area" style="height: 96rpx"></div>
+          </div>
+
+        </scroll-view>
+      </div>
+    </scroll-view>
+
+    <layout-layer bottomStr="96rpx" positions="bottom" ref="carts">
+      <div  class="carts-box">
+        <div class="carts-action flex flex-vertical-c flex-justify-between">
+          <div class="check-all flex flex-vertical-c" @click="selectBiz">
+            <layout-icon color="#E64239" size="20" type="iconicon-check" v-if="allCheck"></layout-icon>
+            <layout-icon color="#ccc" size="20" type="iconradio" v-else></layout-icon>
+            <span class="p-l-6 fz-14 c3">全选</span></div>
+          <div class="flex flex-vertical-c" @click="clearCart"><layout-icon size="14" type="iconshanchu"></layout-icon><span class="c6 fz-12 p-l-3">清空购物车</span></div>
+        </div>
+        <scroll-view scroll-y :style="{height:systemInfo.windowHeight*0.6+'px'}" class="carts-list">
+          <div :key="idx" class="carts-item" v-for="(row,idx) in carts">
+            <div class="check-item flex flex-vertical-c" @click="selectItem(row)">
+              <layout-icon color="#E64239" size="20" type="iconicon-check" v-if="row.checked"></layout-icon>
+              <layout-icon color="#ccc" size="20" type="iconradio" v-else></layout-icon>
+            </div>
+            <div :style="{backgroundImage:'url('+row.pic+')'}" class="carts-item-cover"></div>
+            <div class="carts-item-info">
+              <div class="title">{{row.name}}</div>
+              <!--<div class="attr-text">{{row.attr_text}}</div>-->
+              <div class="actions">
+                <div class="price-box fz-10 flex1">
+                  <span class="price-selling">￥</span><span class="price-selling fz-15">{{row.price_selling}}</span>
+                  <span class="p-l-7 price-market text-through">￥{{row.price_market}}</span>
+                </div>
+                <div class="action flex flex-vertical-c" >
+                  <block v-if="row.num>0">
+                    <layout-icon @click.stop="attrNumMinus(row)" color="#B2B1B1" size="24" type="iconicon-minus"></layout-icon>
+                    <input style="width: 54rpx;" v-model="row.num" @focus="getQty(row.num)" @blur="changeAttrNum($event,idx,row)" class="input-num text-center fz-13" />
+                  </block>
+                  <layout-icon @click.stop="attrNumPlus(row)" color="#E64239" size="24" type="iconicon-plus"></layout-icon>
+                </div>
+              </div>
             </div>
           </div>
         </scroll-view>
       </div>
-    </scroll-view>
-    
+    </layout-layer>
+
     <div class="store-bottom-action">
-      <div class="cart-box">
+      <div class="cart-box" @click="$openPop('carts')">
         <div class="cart-icon-box">
           <layout-icon type="iconicon-cart" size="22" color="#fff"></layout-icon>
-          <div class="total-num">{{22}}</div>
+          <div class="total-num">{{total_count}}</div>
         </div>
       </div>
       <div class="total-info flex flex-column flex-justify-c">
-        <div class="color-white flex flex-vertical-b"><span class="fz-11">￥</span><span class="fz-16">150</span></div>
+        <div class="color-white flex flex-vertical-b"><span class="fz-11">￥</span><span class="fz-16">{{total_price}}</span></div>
         <div class="c9 fz-10">已减30元</div>
       </div>
-      <div class="go-btn">去结算</div>
+      <div class="go-btn" @click="submit">去结算</div>
     </div>
+
+    <div class="safearea-box fixed" style="z-index: 5"></div>
 
   </div>
 </template>
 
 <script>
 import { componetMixin } from '@/mixins/BaseMixin'
-import { checkIsExpire, error, hideLoading, modal, showLoading, toast } from '@/common/fun'
-import { getAlbumList, getBizInfo, getBizSpikeList, getStoreList } from '@/api/store'
+import { checkIsExpire, confirm, error, hideLoading, showLoading, toast } from '@/common/fun'
+import { getBizInfo, getBizSpikeList } from '@/api/store'
 import { getBizProdCateList, getFlashsaleList, getProductList } from '@/api/product'
-import { getCommitList, getCouponList } from '@/api/common'
-import { checkIsLogin, getCountdownFunc, objTranslate } from '@/common/helper'
-import { addFavourite, cancelFavourite, checkFavourite } from '@/api/customer'
+import { getCouponList } from '@/api/common'
+import { checkIsLogin, findArrayIdx, getCountdownFunc, objTranslate, getTouchEventInfo } from '@/common/helper'
+import { addFavourite, cancelFavourite, CartList as getCartList, checkFavourite, getUserCoupon } from '@/api/customer'
 import { Exception } from '@/common/Exception'
 import LayoutPageTitle from '@/componets/layout-page-title/layout-page-title'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import WzwLiveTag from '@/componets/wzw-live-tag/wzw-live-tag'
+import LayoutLayer from '@/componets/layout-layer/layout-layer'
+
 var countdownInstance = null
 var countdownInstanceByFlash = null
+/**
+ * 检查店铺的状态
+ * 1.要么在营业时间内
+ * 2.要么不在营业时间内，但是开启了非营业时间可以下单
+ * 3.不在营业时间内，不允许下单
+ */
+const checkStoreStatus = (bizInfo) => {
+  const { business_status = 0, business_time_status = 0, out_business_time_order = 0 } = bizInfo
+  // 1.营业状态关闭，任何情况，任何物流都不能下单
+  if (!business_status) return false
+  // 2.营业状态打开，在营业时间，正常下单
+  if (business_status && business_time_status) return true
+  // 3.营业状态打开，不在营业时间，允许营业外下单，同城配送只能预约，不能立即送达，普通物流不受影响
+  if (business_status && !business_time_status && out_business_time_order) return true
+  // 4.营业状态打开，不在营业时间，不允许营业外下单，提交订单不会出现同城配送
+  if (business_status && !business_time_status && !out_business_time_order) return true
+  return business_status || business_time_status
+}
 /**
  * 倒计时的模板
  * @type {{s: number, d: number, h: number, is_end: boolean, m: number}}
@@ -186,9 +337,18 @@ const countdownTpml = {
   is_end: false,
   is_start: false
 }
+
+const attrInfoTmpl = {
+  num: 0,
+  attr_id: '', // 规格id
+  attr_text: '',
+  price: '', // 价格
+  count: 0// 库存
+}
+
 export default {
   name: 'store-theme-three',
-  components: { WzwLiveTag, LayoutIcon, LayoutPageTitle },
+  components: { LayoutLayer, WzwLiveTag, LayoutIcon, LayoutPageTitle },
   mixins: [componetMixin],
   props: {
     bid: {
@@ -198,6 +358,23 @@ export default {
   },
   data () {
     return {
+      scrollTopNum: 0,
+      toViewIdx: '',
+      headTabTop: 100,
+      pageScrollTop: 0,
+      containerRightScrollTop: 0,
+      containerLeftScrollTop: 0,
+      moveStartYByRight: 0,
+      moveStartYByLeft: 0,
+      moveStartYByPage: 0,
+      pageScrollEnable: false,
+      leftScrollEnable: false,
+      rightScrollEnable: false,
+      
+      total_count: 0,
+      total_price: 0,
+      qty: 0,
+      allCheck: false,
       // scrollTopHeight: 0,
       showMode: 'goods',
       commentModalPlaceholder: '请输入内容',
@@ -206,10 +383,6 @@ export default {
       bizCateList: [],
       bizCateNavIndex: 0,
       bizCateChildNavIndex: 0,
-      scrollTopNum: 0,
-      toViewIdx: '',
-      headTabTop: 100,
-      pageScrollTop: 0,
       headTabIndex: 0,
       isFavourite: false,
       headTabOpacity: 0,
@@ -220,25 +393,6 @@ export default {
       storeGoodsTotal: 0,
       killList: [],
       flashActivityList: [],
-      virtualGoodsLsit: [],
-      virtualPaginate: {
-        finish: false,
-        load: false,
-        page: 1,
-        pageSize: 3,
-        total: 0
-      },
-      commentItem: {},
-      commentValue: '',
-      comments: [],
-      commentPaginate: {
-        finish: false,
-        load: false,
-        page: 1,
-        pageSize: 2,
-        total: 0
-      },
-      couponClassName: '',
       couponList: [],
       storeList: [],
       photoList: [],
@@ -249,15 +403,47 @@ export default {
     }
   },
   computed: {
+    totalNum () {
+      return this.$store.getters['cart/getTotalNum'](this.bid)
+    },
+    totalPrice () {
+      return this.$store.getters['cart/getTotalMoney'](this.bid)
+    },
+    carts: {
+      get () {
+        return this.$store.getters['cart/getCartList'](this.bid)
+      },
+      set (val) {
+        this.$store.commit('cart/ASYNC_DATA', val)
+      }
+    },
     showList () {
       try {
-        return this.bizCateList[this.bizCateNavIndex].child[this.bizCateChildNavIndex].productList
+        if (this.bizCateList.length < 1) return []
+        const listData = this.bizCateList[this.bizCateNavIndex].child[this.bizCateChildNavIndex].productList
+        for (var j in listData) {
+          listData[j].num = 0
+          for (var k in this.carts) {
+            // 只管没有规格的，有规格的在后面
+            if (Number(listData[j].Products_ID) === Number(this.carts[k].prod_id) && this.carts[k].attr_id === 0) {
+              listData[j].num = this.carts[k].num
+            }
+          }
+        }
+
+        return listData
       } catch (e) {
         return []
       }
     }
   },
   watch: {
+    headTabSticky: {
+      immediate: true,
+      handler (val) {
+        console.log('headTabSticky value is', val)
+      }
+    },
     bid: {
       immediate: true,
       handler (nval) {
@@ -266,16 +452,338 @@ export default {
     }
   },
   methods: {
+    toSearch () {
+      this.$linkTo('/pages/search/result?inputValue=' + this.bizSearchKeyWord + '&biz_id=' + this.bid)
+    },
+    toVip () {
+      if (checkIsLogin(1, 1)) {
+        this.$linkTo('/pagesA/user/VipList?bid=' + this.bid)
+      }
+    },
+    getCoupon (coupon, idx) {
+      console.log(coupon)
+      getUserCoupon({ coupon_id: coupon.Coupon_ID }).then(() => {
+        toast('领取成功')
+        this.couponList.splice(idx, 1)
+      }).catch((err) => {
+        error(err.msg)
+      })
+    },
+    async submit () {
+      const obj = {}
+      // 删除
+      for (const row of this.carts) {
+        const { biz_id, prod_id, attr_id } = row
+        if (row.checked) {
+          // 有需需要才创建
+          if (!obj.hasOwnProperty(biz_id))obj[biz_id] = {}
+          if (!obj[biz_id].hasOwnProperty(prod_id))obj[biz_id][prod_id] = []
+          obj[biz_id][prod_id].push(attr_id)
+        }
+      }
+      if (JSON.stringify(obj) === '{}') {
+        error('请至少选择一个商品')
+        return
+      }
+      const url = '/pages/order/OrderBooking?cart_key=CartList'
+      this.$store.state.cart_buy = obj
+      this.$linkTo(url)
+    },
+    clearCart () {
+      confirm({
+        title: '操作确认',
+        content: '该操作会清空购物车中当前商家商品，操作不可逆，确认继续操作？'
+      }).then(() => {
+        this.$store.dispatch('cart/removeGoods', this.bid).then(() => {
+          this.allCheck = this.$store.getters['cart/getListCheckStatus'](Number(this.bid))
+        }).catch(() => {})
+      }).catch(() => {})
+    },
+    async changeAttrNum (e, idx, row) {
+      const amount = parseInt(e.detail.value)
+      const qty = parseInt(this.qty)
+      if (isNaN(amount)) {
+        error('数量必须为数量')
+        return
+      }
+      if (amount <= 1) {
+        this.$set(row, 'num', qty)
+        error('数量最少为1件')
+        return
+      }
+      if ((qty - amount) === 0) return
+      var num = amount - qty
+
+      // 拼接一下
+      const productInfo = {
+        ...attrInfoTmpl,
+        prod_id: row.prod_id,
+        attr_id: row.attr_id
+      }
+
+      const cart = await this.$store.dispatch('cart/addNum', {
+        num,
+        product: { ...productInfo }
+      })
+      if (cart !== false) {
+        // 没有规格的商品，直接搞事,同步库存
+        if (row.attr_id === 0) {
+          const idx = findArrayIdx(this.bizCateList[this.bizCateNavIndex].child[this.bizCateChildNavIndex].productList, { Products_ID: row.prod_id })
+          if (idx !== false) {
+            this.$set(this.bizCateList[this.bizCateNavIndex].child[this.bizCateChildNavIndex].productList[idx], 'num', amount)
+          }
+        }
+        this.refreshCount()
+      } else {
+        this.$set(row, 'num', qty)
+      }
+    },
+    refreshCount () {
+      this.total_count = this.$store.getters['cart/getTotalNum'](Number(this.bid))
+      this.total_price = this.$store.getters['cart/getTotalMoney'](Number(this.bid))
+    },
+    async attrNumMinus (row) {
+      const num = row.num ? row.num - 1 : 0
+      // 拼接一下
+      const productInfo = {
+        ...attrInfoTmpl,
+        prod_id: row.prod_id,
+        attr_id: row.attr_id
+      }
+      const cart = await this.$store.dispatch('cart/addNum', {
+        num: -1,
+        product: { ...productInfo }
+      })
+      if (cart !== false) {
+        // 没有规格的商品，直接搞事,同步库存
+        if (row.attr_id === 0) {
+          const idx = findArrayIdx(this.bizCateList[this.bizCateNavIndex].child[this.bizCateChildNavIndex].productList, { Products_ID: row.prod_id })
+          if (idx !== false) {
+            this.$set(this.bizCateList[this.bizCateNavIndex].child[this.bizCateChildNavIndex].productList[idx], 'num', num)
+          }
+        }
+
+        this.refreshCount()
+      }
+    },
+    async attrNumPlus (row) {
+      const num = row.num ? row.num + 1 : 1
+      // 拼接一下
+      const productInfo = {
+        ...attrInfoTmpl,
+        prod_id: row.prod_id,
+        attr_id: row.attr_id
+      }
+      const cart = await this.$store.dispatch('cart/addNum', {
+        num: 1,
+        product: { ...productInfo }
+      })
+      if (cart !== false) {
+        // 没有规格的商品，直接搞事,同步库存
+        if (row.attr_id === 0) {
+          const idx = findArrayIdx(this.bizCateList[this.bizCateNavIndex].child[this.bizCateChildNavIndex].productList, { Products_ID: row.prod_id })
+          if (idx !== false) {
+            this.$set(this.bizCateList[this.bizCateNavIndex].child[this.bizCateChildNavIndex].productList[idx], 'num', num)
+          }
+        }
+
+        this.refreshCount()
+      }
+    },
+    // 商品是没有规格的，所以统一用noattr_xxx，加上商品id来标识attr_id.
+    async goodsNumMinus (goodsInfo) {
+      console.log('goodsNumMinus', goodsInfo)
+      const num = goodsInfo.num ? goodsInfo.num - 1 : 0
+      // 拼接一下
+      const productInfo = {
+        ...attrInfoTmpl,
+        prod_id: goodsInfo.Products_ID,
+        attr_id: 0
+      }
+      const cart = await this.$store.dispatch('cart/addNum', {
+        num: -1,
+        product: { ...productInfo }
+      })
+      if (cart !== false) {
+        this.$set(goodsInfo, 'num', num)
+        this.refreshCount()
+      }
+    },
+    async goodsNumPlus (goodsInfo) {
+      const num = goodsInfo.num ? goodsInfo.num + 1 : 1
+
+      // 拼接一下
+      const productInfo = {
+        ...attrInfoTmpl,
+        prod_id: goodsInfo.Products_ID,
+        attr_id: 0
+      }
+      const cart = await this.$store.dispatch('cart/addNum', {
+        num: 1,
+        product: { ...productInfo }
+      })
+      if (cart !== false) {
+        this.$set(goodsInfo, 'num', num)
+        this.refreshCount()
+      }
+    },
+    getQty (qty) {
+      this.qty = qty
+    },
+    async changeGoodsNum (e, idx, goodsInfo) {
+      this.activeGoodsIdx = idx
+      const amount = parseInt(e.detail.value)
+
+      const qty = parseInt(this.qty)
+      if (isNaN(amount)) {
+        error('数量必须为数量')
+        return
+      }
+      if (amount <= 1) {
+        this.$set(goodsInfo, 'num', qty)
+        error('数量最少为1件')
+        return
+      }
+      if ((qty - amount) === 0) return
+      var num = amount - qty
+
+      // 拼接一下
+      const productInfo = {
+        ...attrInfoTmpl,
+        prod_id: goodsInfo.Products_ID,
+        attr_id: 0
+      }
+
+      const cart = await this.$store.dispatch('cart/addNum', {
+        num,
+        product: { ...productInfo }
+      })
+      if (cart !== false) {
+        this.$set(goodsInfo, 'num', amount)
+        this.refreshCount()
+      }
+    },
+    toGoodsDetailFn (pro, activity) {
+      this.$linkTo(`/pages/product/detail?prod_id=${pro.Products_ID}&mode=spike&spike_good_id=${pro.id}`)
+    },
+    touchPageStart (e) {
+      const { x, y, type } = getTouchEventInfo(e)
+      console.log(x, y, type)
+      this.moveStartYByPage = y
+    },
+    touchPageMove (e) {
+      const { x, y, type } = getTouchEventInfo(e)
+      // console.log('touchPageMove',this.containerRightScrollTop,y,this.moveStartYByPage)
+      // if (y > this.moveStartYByPage && this.containerRightScrollTop <= 10) {
+      //
+      //   this.pageScrollEnable = true
+      //   this.leftScrollEnable = false
+      //   this.rightScrollEnable = false
+      // }
+    },
+    touchPageEnd (e) {
+      console.log('touchPageEnd',this.pageScrollEnable)
+      // 下面可以滑动的时候，他不可以滑动
+      if (this.leftScrollEnable || this.rightScrollEnable) {
+        return
+      }
+
+      const { x, y, type } = getTouchEventInfo(e)
+      // console.log(x, y, type, this.pageScrollTop, this.headTabTop)
+
+      // 向上拖动
+      if (y < this.moveStartYByPage && this.pageScrollTop+20 >= this.headTabTop) {
+        console.log(this.pageScrollTop, this.headTabTop)
+        this.headTabSticky = true
+        
+        this.leftScrollEnable = true
+        this.rightScrollEnable = true
+      }
+
+      // 向下拖动
+      if (y > this.moveStartYByPage && this.pageScrollTop <= this.headTabTop) {
+        this.headTabSticky = false
+      }
+    },
     bindScroll (e) {
+      console.log('bindScroll')
       const { scrollTop } = e.detail
       this.pageScrollTop = scrollTop
-      console.log(scrollTop, this.headTabTop)
-      this.headTabOpacity = scrollTop >= this.headTabTop ? 1 : scrollTop / this.headTabTop
-      this.headTabSticky = scrollTop >= this.headTabTop
+    },
+    touchLeftStart (e) {
+      const { x, y, type } = getTouchEventInfo(e)
+      console.log(x, y, type)
+      this.moveStartYByLeft = y
+      
+      //在右边滚动后，才禁用
+      if(this.pageScrollTop>this.headTabTop && this.pageScrollEnable){
+        // this.pageScrollEnable = false
+      }
+    },
+    touchLeftMove (e) {
+
+    },
+    touchLeftEnd (e) {
+      const { x, y, type } = getTouchEventInfo(e)
+      // 向上滑动,恢复顶部
+      if (y > this.moveStartYByLeft && this.containerLeftScrollTop <= 50) {
+        this.pageScrollEnable = true
+        this.leftScrollEnable = false
+        this.rightScrollEnable = false
+      }
+    },
+    touchRightStart (e) {
+      const { x, y, type } = getTouchEventInfo(e)
+      console.log(x, y, type)
+      this.moveStartYByRight = y
+      //在右边滚动后，才禁用
+      if(this.pageScrollTop>this.headTabTop && this.pageScrollEnable){
+        // this.pageScrollEnable = false
+      }
+      
+    },
+    touchRightMove (e) {
+    
+    },
+    touchRightEnd (e) {
+      console.log('touchRightEnd',this.rightScrollEnable)
+      const { x, y, type } = getTouchEventInfo(e)
+      console.log(x,y)
+      // 向下拖动,恢复顶部
+      if (y > this.moveStartYByRight && this.containerRightScrollTop <= 50) {
+        this.pageScrollEnable = true
+        this.leftScrollEnable = false
+        this.rightScrollEnable = false
+      }
+    },
+    bindContainerLeftScroll (e) {
+      const { scrollTop } = e.detail
+      this.containerLeftScrollTop = scrollTop
+    },
+    bindContainerRightScroll (e) {
+      
+      const { scrollTop } = e.detail
+      this.containerRightScrollTop = scrollTop
     },
     bindScrollRightTop () {
-      console.log('emit event bindScrollRightTop')
       this.headTabSticky = false
+      this.pageScrollEnable = true
+      this.leftScrollEnable = false
+      this.rightScrollEnable = false
+      console.log('emit event bindScrollRightTop')
+      // this.headTabSticky = false
+    },
+    // 单个商家
+    async selectBiz () {
+      await this.$store.dispatch('cart/taggleCheckStatus', { biz_id: Number(this.bid) })
+
+      this.allCheck = this.$store.getters['cart/getListCheckStatus'](Number(this.bid))
+    },
+    // 单行
+    async selectItem (row) {
+      const { prod_id, attr_id } = row
+      await this.$store.dispatch('cart/taggleCheckStatus', { attr_id: Number(attr_id), prod_id: Number(prod_id) })
+      this.allCheck = this.$store.getters['cart/getListCheckStatus'](Number(this.bid))
     },
     async _init_func () {
       try {
@@ -301,6 +809,7 @@ export default {
           // 句柄也加上
           return { ...row, countdown: { ...countdownTpml } }
         })
+        console.log(this.flashActivityList)
         // 启动限时抢购倒计时，牛逼啊霸哥
         countdownInstanceByFlash = setInterval(this.stampFuncByFlash, 1000)
 
@@ -358,7 +867,6 @@ export default {
         }
 
         this.bizCateList = bizCateListData
-        console.log(bizCateListData)
 
         if (this.flashActivityList.length > 0) {
           this.changeCateIdx(-2, 0, true)
@@ -381,14 +889,6 @@ export default {
           throw Error('获取优惠券失败')
         })
         this.$set(this, 'couponList', couponList)
-        this.couponClassName = this.couponList.length > 2 ? 'iswrap' : 'isflex'
-        console.log(this.couponList)
-
-        if (checkIsLogin(0, 0)) {
-          const { is_favourite = 0 } = await checkFavourite({ biz_id: this.bid }, { onlyData: true }).catch(() => {
-          })
-          this.isFavourite = is_favourite
-        }
 
         this.$nextTick().then(() => {
           const query = uni.createSelectorQuery().in(this)
@@ -408,11 +908,66 @@ export default {
           query.exec()
         })
 
+        // 这个就不要等了吧
+        if (!checkIsLogin(0, 0)) {
+          throw Error('nocare')
+        }
+
+        checkFavourite({ biz_id: this.bid }, { onlyData: true }).then(res => {
+          const { is_favourite = 0 } = res
+          this.isFavourite = is_favourite
+        }).catch(() => {})
+
+        const cart = await getCartList({ cart_key: 'CartList' }, {
+          onlyData: true
+        }).catch(e => {
+          throw Error(e.msg || '获取购物车产品失败')
+        })
+        const { total_count, total_price, CartList, biz_list } = cart
+
+        const bizList = {}
+        for (var i in biz_list) {
+          const key = parseInt(i)
+          bizList[key] = Object.assign(biz_list[i], { isSaleTime: checkStoreStatus(biz_list[i]) })
+        }
+
+        this.$store.commit('cart/SET_BIZLIST', bizList)
+
+        const attrList = []
+        for (const biz_id in CartList) {
+          for (const prod_id in CartList[biz_id]) {
+            for (const attr_id in CartList[biz_id][prod_id]) {
+              // 初始化为false，方便后面触发响应
+              CartList[biz_id][prod_id][attr_id].checked = this.$store.getters['cart/getRowCheckStatus']({ attr_id: Number(attr_id), prod_id: Number(prod_id) })
+
+              const attr_value = CartList[biz_id][prod_id][attr_id]
+              const { ImgPath, ProductsName, ProductsPriceX, ProductsPriceY, Qty } = attr_value
+              attrList.push({
+                // ...attr_value,
+                biz_id: Number(biz_id),
+                prod_id: Number(prod_id),
+                attr_id: Number(attr_id),
+                checked: attr_value.checked, // 能保留上次的结果
+                num: Number(Qty),
+                pic: ImgPath,
+                name: ProductsName,
+                price_selling: Number(ProductsPriceX),
+                price_market: Number(ProductsPriceY)
+              })
+            }
+          }
+        }
+
+        this.carts = attrList // computed set
+
+        this.allCheck = this.$store.getters['cart/getListCheckStatus'](Number(this.bid))
+
+        this.refreshCount()
         hideLoading()
       } catch (e) {
         console.log(e)
         hideLoading()
-        modal(e.message)
+        Exception.handle(e)
       }
     },
     taggleFavorite () {
@@ -430,57 +985,6 @@ export default {
     },
     setActiveAttrIdx (idx) {
       this.activeAttrIdx = idx
-    },
-    // 商品是没有规格的，所以同意用noattr_xxx，加上商品id来标识attr_id.
-    goodsNumMinus (goodsInfo) {
-      const num = goodsInfo.num ? goodsInfo.num - 1 : 0
-      this.$set(goodsInfo, 'num', num)
-      this.$store.commit('delivery/MINUS_GOODS', {
-        num: 1,
-        product: { attr_id: 'noattr_' + goodsInfo.Products_ID }
-      })
-    },
-    goodsNumPlus (goodsInfo) {
-      const num = goodsInfo.num ? goodsInfo.num + 1 : 1
-      this.$set(goodsInfo, 'num', num)
-
-      // const attrInfoTmpl = {
-      //   num: 0,
-      //   attr_id: '', // 规格id
-      //   attr_text: '',
-      //   price: '', // 价格
-      //   count: 0// 库存
-      // }
-      // 拼接一下
-      const productInfo = {
-        ...attrInfoTmpl,
-        attr_id: 'noattr_' + goodsInfo.Products_ID,
-        attr_text: '无规格',
-        price: goodsInfo.Products_PriceX,
-        count: goodsInfo.Products_Count
-      }
-      this.$store.commit('delivery/ADD_GOODS', {
-        num: 1,
-        product: { ...goodsInfo, ...productInfo }
-      })
-    },
-    changeGoodsNum (e) {
-      let amount = parseInt(e.detail.value)
-      const currentGoods = this.showList[this.activeGoodsIdx]
-      if (currentGoods.num === amount) return
-      if (amount < 0) {
-        amount = currentGoods.num
-        error('至少购买一件')
-      }
-      if (amount > currentGoods.count) {
-        amount = currentGoods.count
-        error('购买数量不能超过库存量')
-      }
-
-      this.$store.commit('delivery/SET_GOODS_NUM', {
-        num: amount,
-        product: { attr_id: 'noattr_' + currentGoods.Products_ID }
-      })
     },
     toActivity (item) {
       this.$linkTo('/pagesA/active/FlashSaleByBiz?biz_id=' + this.bid + '&spike_id=' + item.id)
@@ -525,8 +1029,6 @@ export default {
         this.bizCateChildNavIndex = cidx
       }
 
-      console.log(this.bizCateList[idx].child[cidx])
-
       if (this.bizCateList[idx].child[cidx].finish) return // 到底了
       const base = { biz_ids: this.bid }
       const ext = { ...this.bizCateList[idx].child[cidx].filterObj } // biz_cate_id: biz_cate.id,
@@ -546,8 +1048,6 @@ export default {
         this.bizCateList[idx].child[cidx].productList = biz_cate.productList.concat(newList)
 
         this.bizCateList[idx].child[cidx].finish = this.bizCateList[idx].child[cidx].productList.length >= totalCount
-        console.log(this.bizCateList)
-        console.log(this.showList)
       } catch (e) {
         Exception.handle(e)
       } finally {
@@ -579,15 +1079,214 @@ export default {
       }
     }
   },
+  // 关闭前要禁止
+  beforeDestroy () {
+    clearInterval(countdownInstanceByFlash)
+    clearInterval(countdownInstance)
+  },
   onReady () {
-
+    this.pageScrollEnable = true
   }
 }
 </script>
 <style lang="scss" scoped>
+/*隐藏滚动条*/
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  color: transparent;
+}
 .page-wrap{
 
 }
+.kill-goods-list{
+  .kill-goods-item{
+    padding: 30rpx 0;
+    width: 550rpx;
+    .item-cover{
+      width: 170rpx;
+      height: 170rpx;
+      @include cover-img();
+      margin-right: 20rpx;
+    }
+    .price-num{
+      background: #FFF4F4;
+      font-size: 22rpx;
+      color: #E64239;
+      font-weight: 500;
+      margin-right: 18rpx;
+      padding: 10rpx 18rpx;
+    }
+    .act-goods-item-title{
+      width: 350rpx;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .kill-countdown{
+      margin-top: 20rpx;
+      display: flex;
+      align-items: center;
+      .countdown-tag{
+        background: #E64239;
+        color: #fff;
+        font-size: 24rpx;
+        padding: 6rpx;
+        border-radius: 6rpx;
+        text-align: center;
+      }
+      .countdown-delimiter{
+        text-align: center;
+        font-size: 24rpx;
+        color: #E64239;
+        padding: 0 8rpx;
+      }
+    }
+  }
+}
+.spike-list{
+  padding-bottom: 20rpx;
+
+  .flash-act-item{
+    width: 550rpx;
+    box-sizing: border-box;
+    margin: 0 auto 30rpx;
+    border-radius: 15rpx;
+    padding: 0rpx  0rpx 30rpx 0rpx;
+    background: #fff;
+    overflow: hidden;
+    &:last-child{
+      margin-bottom: 0;
+    }
+    .flash-act-title{
+      width: 550rpx;
+      padding: 30rpx 0;
+
+    }
+    .flash-act-countdown{
+      width: 550rpx;
+      height: 64rpx;
+
+      background:rgba(255,244,243,1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      .countdown-tag{
+        background:#E64239;
+        color: #fff;
+        font-size: 26rpx;
+        height: 26rpx;
+        line-height: 26rpx;
+        padding: 6rpx;
+        border-radius: 6rpx;
+        text-align: center;
+      }
+      .countdown-delimiter{
+        text-align: center;
+        font-size: 24rpx;
+        color: #E64239;
+        padding: 0 8rpx;
+      }
+    }
+  }
+  .act-goods-list{
+
+  }
+  .act-goods-item{
+    padding: 30rpx 0;
+    width: 550rpx;
+    .item-cover{
+      width: 170rpx;
+      height: 170rpx;
+      @include cover-img();
+      margin-right: 20rpx;
+    }
+    .price-num{
+      background: #FFF4F4;
+      font-size: 22rpx;
+      color: #E64239;
+      font-weight: 500;
+      margin-right: 18rpx;
+      padding: 10rpx 18rpx;
+    }
+    .act-goods-item-title{
+      width: 350rpx;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+}
+
+.carts {
+  &-action{
+    height: 80rpx;
+    padding: 0 20rpx 0 36rpx;
+    border-bottom: 1px solid #EDEDED;
+
+  }
+  &-box {
+    width: 750rpx;
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
+
+  &-list {
+    padding: 20rpx 20rpx 60rpx 0;
+    width: 750rpx;
+    box-sizing: border-box;
+  }
+
+  &-item {
+    height: 160rpx;
+    display: flex;
+    align-items: center;
+    .check-item{
+      padding-left: 36rpx;
+      padding-right: 22rpx;
+    }
+
+    &-cover {
+      @include cover-img();
+      width: 100rpx;
+      height: 100rpx;
+      border-radius: 5rpx;
+      margin-right: 30rpx;
+    }
+
+    &-info {
+      width: 500rpx;
+      height: 160rpx;
+      box-sizing: border-box;
+      padding-top: 40rpx;
+      border-bottom: 1px solid #EDEDED;
+
+      .title {
+        font-size: 14px;
+        color: #333;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 480rpx;
+      }
+
+      .attr-text {
+        font-size: 12px;
+        color: #999;
+        margin-top: 10rpx;
+      }
+
+      .actions {
+        margin: 20rpx 0 0;
+        height: 54rpx;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+    }
+  }
+}
+
 .store-bottom-action{
   position: fixed;
   display: flex;
@@ -666,8 +1365,8 @@ export default {
         overflow: hidden;
         text-overflow: ellipsis;
         font-size: 26rpx;
-        margin: 0 30rpx;
-        width: 100rpx;
+        width: 120rpx;
+        margin: 0 20rpx;
         height:97rpx;
         line-height: 97rpx;
         text-align: center;
@@ -701,7 +1400,7 @@ export default {
     top: 20px;
     overflow-x: hidden;
     overflow-y: scroll;
-    
+
   }
   .goods-box{
     .cate-child-list{
@@ -770,6 +1469,7 @@ export default {
   top: 0;
   width: 750rpx;
   z-index: 4;
+
 }
 
 .top-box{
@@ -807,10 +1507,11 @@ export default {
     }
     .activity-info{
       display: flex;
+      align-items: center;
       margin-top: 25rpx;
       .store-activity{
         margin-left: 20rpx;
-        width: 300rpx;
+        width: 480rpx;
         white-space: nowrap;
         overflow-y: hidden;
         overflow-x: scroll;
@@ -821,6 +1522,7 @@ export default {
           line-height: 20rpx;
           text-align: center;
           padding: 8rpx 10rpx;
+          margin-right: 20rpx;
           height:20rpx;
           border:1px solid rgba(230,66,57,1);
           border-radius:6rpx;
@@ -925,7 +1627,6 @@ export default {
     margin-left: 20rpx;
     height: 40rpx;
     color: #fff;
-    background-color: #E64239;
 
     align-items: center;
     &:last-child{
@@ -934,17 +1635,24 @@ export default {
 
     .coupon-item-r{
       line-height: 40rpx;
+      width: 79rpx;
       text-align: center;
       padding: 0 15rpx;
       font-size: 22rpx;
+      background-image: url("/static/store/theme-three/coupon-r.png");
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
     }
     .coupon-item-l{
+      background-color: #E64239;
       display: flex;
       align-items: center;
       font-size: 22rpx;
       line-height: 40rpx;
       justify-content: center;
       padding: 0 15rpx;
+      border-top-left-radius: 5rpx;
+      border-bottom-left-radius: 5rpx;
       .sign{
 
       }
