@@ -172,7 +172,7 @@
               <span>预约送达时间</span>
               <div class="flex flex-vertical-c" style="text-align:right; color: #888;" @click="citySendTypeOpen(biz_id)">
                 <block v-if="postData.appoint_time[biz_id]">
-                  {{postData.appoint_time[biz_id]}}
+                  {{toDay}} <sapn class="m-l-6">{{postData.appoint_time[biz_id]}}</sapn>
                 </block>
                 <block v-else>
                   请设置时间
@@ -412,6 +412,7 @@ export default {
   },
   data () {
     return {
+      toDay:'',//当前年月日
       delivery_biz_id: '', // 外卖的时候才有
       gift: false,
       bid: null,
@@ -1138,7 +1139,7 @@ export default {
             isNow: false, // 立即配送
             isAppoint: false// 预约诶送
           }
-          const { business_status = 0, business_time_status = 0, out_business_time_order = 0,city_express_appoint_send=0 } = bizInfo
+          const { business_status = 0, business_time_status = 0, out_business_time_order = 0, city_express_appoint_send = 0 } = bizInfo
           // 1.营业状态关闭，任何情况，任何物流都不能下单
           if (!business_status) {
 
@@ -1355,6 +1356,8 @@ export default {
   },
 
   onShow () {
+
+
     this._init_func()
   },
   async created () {
@@ -1364,6 +1367,7 @@ export default {
     console.log(this.initData)
   },
   onLoad (options) {
+    this.toDay = uni.$moment(new Date()).add('year', 0).format('YYYY-MM-DD')
     this.postData.cart_key = options.cart_key
     if (options.cart_buy) {
       this.postData.cart_buy = options.cart_buy

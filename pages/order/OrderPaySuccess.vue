@@ -1,6 +1,11 @@
 <template>
   <view @click="commonClick" class="myall">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
+    <div class="flex-message" v-if="userInfo.attention_mp!=1">
+      <div>小提示：关注"及贝"公众号可及时获取商家回复消息，</div>
+      <div >可<span class="c-red" @click="lookCode">点击这里</span>查看公众号二维码</div>
+    </div>
+    <div class="flex-message-occupy" v-if="userInfo.attention_mp!=1"></div>
     <view class="img-div">
       <image :src="'/static/client/free/paySuccess.png'|domain" style="width: 100%;height: 100%;"></image>
     </view>
@@ -62,7 +67,7 @@
         </div>
       </block>
     </block>
-    
+
     <div v-if="showMain && free_money>0">
       <div class="popup-layer">
       </div>
@@ -80,11 +85,11 @@
         <div @click="showMain=false" class="flex flex-justify-c flex-vertical-c popup-del">
           <layout-icon color="#c4bfbf" size="20" type="icondel"></layout-icon>
         </div>
-      
+
       </div>
-    
+
     </div>
-  
+
   </view>
 </template>
 
@@ -119,16 +124,24 @@ export default {
       showMain: false,
     }
   },
+  computed: {
+    initData () {
+      return this.$store.state.system.initData
+    },
+    userInfo () {
+      return this.$store.getters['user/getUserInfo']()
+    }
+  },
   onLoad (option) {
     this.pro = []
     this.Order_Type = option.Order_Type
     this.OrderId = option.OrderId
-    
+
     this.getUserReceivedCoupon()
     this.getProd()
   },
   onShow () {
-  
+
   },
   // 上拉触底
   onReachBottom () {
@@ -137,6 +150,11 @@ export default {
     }
   },
   methods: {
+    lookCode () {
+      uni.previewImage({
+        urls: [this.initData.mp_qrcode]
+      })
+    },
     goPro (prod) {
       const id = prod.Products_ID
       uni.redirectTo({
@@ -191,6 +209,32 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  .c-red{
+    color: #FFFFff;
+    background-color: #26C78D;
+    display: inline-block;
+    padding: 0px 14rpx;
+    border-radius: 10rpx;
+    margin: 0rpx 14rpx;
+  }
+  .flex-message{
+    text-align: center;
+    width: 750rpx;
+    height: 120rpx;
+    box-sizing: border-box;
+    border-radius: 10rpx;
+    background-color: #effbf9;
+    line-height: 50rpx;
+    font-size: 12px;
+    padding:10rpx 30rpx;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+  }
+  .flex-message-occupy{
+    height: 100rpx;
+    width: 750rpx;
+  }
   .popup-content {
     position: fixed;
     z-index: 100;
@@ -198,7 +242,7 @@ export default {
     left: 40rpx;
     width: 710rpx;
     height: 600rpx;
-    
+
     .popup-title {
       font-size: 72rpx;
       color: #FE3841;
@@ -207,14 +251,14 @@ export default {
       top: 54rpx;
       left: 196rpx;
     }
-    
+
     .popup-co {
       width: 298rpx;
       position: absolute;
       top: 146rpx;
       left: 180rpx;
     }
-    
+
     .popup-btn {
       width: 280rpx;
       height: 74rpx;
@@ -229,7 +273,7 @@ export default {
       top: 356rpx;
       left: 180rpx;
     }
-    
+
     .popup-del {
       width: 690rpx;
       position: absolute;
@@ -237,7 +281,7 @@ export default {
       left: 0rpx;
     }
   }
-  
+
   .popup-layer {
     position: fixed;
     z-index: 99;
@@ -248,7 +292,7 @@ export default {
     left: 0px;
     overflow: hidden;
   }
-  
+
   .img-div {
     width: 132px;
     height: 132px;
@@ -256,7 +300,7 @@ export default {
     margin-bottom: 12px;
     box-sizing: border-box;
   }
-  
+
   .pay-succ {
     height: 36rpx;
     font-size: 18px;
@@ -266,7 +310,7 @@ export default {
     text-align: center;
     margin-bottom: 18px;
   }
-  
+
   .pay-succ-last {
     height: 26rpx;
     font-size: 13px;
@@ -276,7 +320,7 @@ export default {
     text-align: center;
     margin-bottom: 18px;
   }
-  
+
   .pay-button {
     display: flex;
     height: 35px;
@@ -286,7 +330,7 @@ export default {
     box-sizing: border-box;
     margin-bottom: 18px;
   }
-  
+
   .button-all {
     width: 290rpx;
     height: 35px;
@@ -295,24 +339,24 @@ export default {
     line-height: 35px;
     border-radius: 35px;
   }
-  
+
   .button-goon {
     background: linear-gradient(90deg, rgba(255, 150, 87, 1), rgba(253, 84, 90, 1));
     color: #FFFFFF;
     margin-right: 40rpx;
   }
-  
+
   .button-next {
     border: 1px solid rgba(245, 54, 54, 1);
     color: #F53636;
   }
-  
+
   .myall {
     background-color: #FFFFFF !important;
     min-height: 100vh;
     padding-top: 18px;
   }
-  
+
   .titless {
     position: fixed;
     top: 0rpx;
@@ -320,7 +364,7 @@ export default {
     width: 100%;
     z-index: 999;
   }
-  
+
   .nav {
     z-index: 999;
     position: fixed;
@@ -334,17 +378,17 @@ export default {
     align-items: center;
     font-size: 30rpx;
     color: #333333;
-    
+
     .views {
       width: 236rpx;
       height: 72rpx;
       line-height: 72rpx;
       text-align: center;
       position: relative;
-      
+
       &.checked {
         color: #F43131;
-        
+
         &:after {
           content: '';
           display: flex;
@@ -358,19 +402,19 @@ export default {
       }
     }
   }
-  
+
   .youhuijuan {
     width: 709rpx;
     height: 206rpx;
     margin-left: 20rpx;
     margin-bottom: 30rpx;
     position: relative;
-    
+
     .allImg {
       width: 100%;
       height: 100%;
     }
-    
+
     .infoImg {
       width: 89rpx;
       height: 89rpx;
@@ -379,13 +423,13 @@ export default {
       top: 56rpx;
       left: 44rpx;
       overflow: hidden;
-      
+
       .image {
         width: 100%;
         height: 100%;
       }
     }
-    
+
     .storeTitle {
       font-size: 28rpx;
       color: #333333;
@@ -394,7 +438,7 @@ export default {
       top: 62rpx;
       left: 150rpx;
     }
-    
+
     .times {
       font-size: 20rpx;
       color: #666666;
@@ -402,7 +446,7 @@ export default {
       top: 105rpx;
       left: 148rpx;
     }
-    
+
     .limit {
       font-size: 16rpx;
       color: #FF565F;
@@ -410,7 +454,7 @@ export default {
       left: 148rpx;
       top: 140rpx;
     }
-    
+
     .all-coupon {
       font-size: 10px;
       color: #FF565F;
@@ -418,7 +462,7 @@ export default {
       top: 140rpx;
       left: 148rpx;
     }
-    
+
     .prices {
       width: 110rpx;
       height: 40rpx;
@@ -430,13 +474,13 @@ export default {
       position: absolute;
       top: 41rpx;
       left: 534rpx;
-      
+
       text {
         margin-left: 11rpx;
         font-size: 52rpx;
       }
     }
-    
+
     .man {
       height: 19rpx;
       font-size: 20rpx;
@@ -445,7 +489,7 @@ export default {
       top: 95rpx;
       left: 534rpx;
     }
-    
+
     .button {
       width: 125rpx;
       height: 44rpx;
@@ -459,7 +503,7 @@ export default {
       top: 133rpx;
       left: 527rpx;
     }
-    
+
     .yishiyong {
       position: absolute;
       width: 106rpx;
@@ -468,7 +512,7 @@ export default {
       left: 455rpx;
     }
   }
-  
+
   .lasts {
     font-size: 14px;
     padding-top: 30rpx;
@@ -476,30 +520,30 @@ export default {
     text-align: center;
     display: flex;
     justify-content: center;
-    
+
     .lefts {
       color: #666666;
     }
-    
+
     .rights {
       margin-left: 10rpx;
       color: #F43131;
     }
   }
-  
+
   .defaults {
     margin: 0 auto;
     width: 640rpx;
     height: 480rpx;
     padding-top: 100rpx;
   }
-  
+
   /* 猜你喜欢 */
   .container {
     margin-top: 30rpx;
     padding: 0 20rpx;
   }
-  
+
   .fenge {
     text-align: center;
     padding: 30rpx 0;
@@ -507,30 +551,30 @@ export default {
     justify-content: center;
     align-items: center;
   }
-  
+
   .caini {
     font-size: 30rpx;
     margin-left: 13rpx;
     margin-right: 13rpx;
   }
-  
+
   .prolist {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
   }
-  
+
   .pro-item {
     width: 48%;
     margin-bottom: 15px;
     background: #fff;
   }
-  
+
   .pro-item img {
     width: 345rpx;
     height: 345rpx;
   }
-  
+
   .item-name {
     font-size: 24rpx;
     padding: 0 10rpx;
@@ -541,28 +585,28 @@ export default {
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
   }
-  
+
   .red {
     background-color: #F43131;
     display: inline-block;
     height: 3rpx;
     width: 44rpx;
   }
-  
+
   .price {
     margin-top: 20rpx;
     padding: 0 10rpx 20rpx;
   }
-  
+
   .n_price {
     color: #ff0000;
     font-size: 34rpx;
-    
+
     span {
       font-size: 24rpx;
     }
   }
-  
+
   .o_price {
     margin-left: 15rpx;
     color: #afafaf;
