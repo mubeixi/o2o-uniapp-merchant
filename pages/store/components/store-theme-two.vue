@@ -88,7 +88,7 @@
 
             </div>
             <div class="kill-action">
-              <div class="kill-action-reduce">已减{{pro.Products_PriceX-pro.price}}元</div>
+              <div class="kill-action-reduce">已减{{$filterPrice(pro.Products_PriceX-pro.price)}}元</div>
               <image :src="$getDomain('/static/client/store/theme_two/go-btn-icon.png')" class="kill-action-go"></image>
             </div>
             <div class="kill-countdown">
