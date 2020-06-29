@@ -73,12 +73,14 @@
           <image @click="toVip" class="top-vip" :src="$getDomain('/static/client/store/theme-three/vip.png')"></image>
         </div>
       </div>
-      
+
       <div class="container" :style="{height:systemInfo.windowHeight-diyHeadHeight+'px'}" :class="{sticky:headTabSticky==1}">
         <scroll-view class="container-l"
+                     :upper-threshold="5"
                      @touchstart="touchLeftStart"
                      @touchmove="touchLeftMove"
                      @touchend="touchLeftEnd"
+                     @scrolltoupper="bindScrollLeftTop"
                      @scroll="bindContainerLeftScroll"
                      :scroll-y="leftScrollEnable">
           <div :class="{active:bizCateNavIndex===-2}" @click="setCateActuveIdx(-2,0)" class="cate-item">
@@ -99,9 +101,11 @@
         <scroll-view
           :scroll-y="rightScrollEnable"
           class="container-r"
+          :upper-threshold="5"
           @touchstart="touchRightStart"
           @touchmove="touchRightMove"
           @touchend="touchRightEnd"
+          @scrolltoupper="bindScrollRightTop"
           @scroll="bindContainerRightScroll"
         >
           <div class="goods-box" v-if="showMode==='goods'">
@@ -677,7 +681,6 @@ export default {
       this.moveStartYByPage = y
     },
     touchPageMove (e) {
-
       const { x, y, type } = getTouchEventInfo(e)
       // console.log('touchPageMove', y, this.moveStartYByPage)
       // if (y > this.moveStartYByPage && this.containerRightScrollTop <= 10) {
@@ -705,8 +708,8 @@ export default {
 
       const { x, y, type } = getTouchEventInfo(e)
       // console.log(x, y, type, this.pageScrollTop, this.headTabTop)
-      console.log('touchPageEnd', this.pageScrollTop,this.headTabTop)
-  
+      console.log('touchPageEnd', this.pageScrollTop, this.headTabTop)
+
       // 向上拖动,页面向下滚动
       if (y < this.moveStartYByPage) {
         this.moveDirectionByPage = 'top'
@@ -716,10 +719,6 @@ export default {
         // this.headTabSticky = false
         this.moveDirectionByPage = 'bottom'
       }
-  
-     
-      
-      
     },
     bindScroll (e) {
       const { scrollTop } = e.detail
@@ -728,28 +727,26 @@ export default {
       this.pageScrollTop = scrollTop
 
       // 多给20的空间
-      if (this.pageScrollTop+20 >= this.headTabTop) {
+      if (this.pageScrollTop + 20 >= this.headTabTop) {
         this.headTabSticky = true
       }
       if (this.pageScrollTop < this.headTabTop) {
         this.headTabSticky = false
       }
-  
-      if (this.pageScrollTop > this.headTabTop) {
+
+      if (this.pageScrollTop + 20 > this.headTabTop) {
         this.rightScrollEnable = true
         this.leftScrollEnable = true
-        
+
         // this.pageScrollEnable = false
-        
-      }else{
+      }
+
+      if (this.pageScrollTop < this.headTabTop) {
         this.rightScrollEnable = false
         this.leftScrollEnable = false
-        
       }
-      
-      this.headTabOpacity = this.pageScrollTop < this.headTabTop?this.pageScrollTop/this.headTabTop:1
 
-      
+      this.headTabOpacity = this.pageScrollTop < this.headTabTop ? this.pageScrollTop / this.headTabTop : 1
     },
     touchLeftStart (e) {
       const { x, y, type } = getTouchEventInfo(e)
@@ -804,7 +801,11 @@ export default {
       const { scrollTop } = e.detail
       this.containerRightScrollTop = scrollTop
     },
+    bindScrollLeftTop () {
+      this.leftScrollEnable = false
+    },
     bindScrollRightTop () {
+      this.rightScrollEnable = false
       // this.headTabSticky = false
       // this.pageScrollEnable = true
       // this.leftScrollEnable = false
@@ -939,7 +940,7 @@ export default {
 
             // + 60 * pixelRatio
             // 以后不再怕顶部有rpx了
-            this.diyHeadHeight = this.menuButtonInfo.bottom + 10+ 60 * pixelRatio
+            this.diyHeadHeight = this.menuButtonInfo.bottom + 10 + 60 * pixelRatio
             console.log(this.diyHeadHeight, this.systemInfo.windowHeight, this.systemInfo.windowHeight - this.diyHeadHeight)
 
             this.headTabTop = data.height - this.diyHeadHeight
@@ -1396,6 +1397,11 @@ export default {
     overflow-y: scroll;
     width: 160rpx;
     background: #f6f6f6;
+    &::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+      color: transparent;
+    }
     .cate-item{
       width:160rpx;
       height:97rpx;
@@ -1431,6 +1437,11 @@ export default {
     }
   }
   .container-r{
+    &::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+      color: transparent;
+    }
     width: 550rpx;
     padding-left: 20rpx;
     padding-right: 20rpx;
@@ -1509,7 +1520,7 @@ export default {
   bottom: 0;
   width: 750rpx;
   z-index: 4;
- 
+
 }
 
 .top-box{
@@ -1595,8 +1606,6 @@ export default {
       }
     }
   }
-
-  
 
 }
 .top-search-space{
