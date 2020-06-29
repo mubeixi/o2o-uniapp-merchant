@@ -85,11 +85,17 @@ const mutations = {
     let cartList = state.cartList.length > 0 ? state.cartList : Storage.get('shopCartList')
     if (!cartList) cartList = []
     // console.log(product)
-    const { biz_id, prod_id, attr_id } = product
+    // biz_id: Number(this.bid),
+    //   checked: false,
+    //   pic: ImgPath,
+    //   name: Products_Name,
+    //   price_selling: Number(Products_PriceX),
+    //   price_market: Number(Products_PriceY)
+    const { biz_id, prod_id, attr_id, checked, price_selling, price_market, name, pic } = product
     const idx = findArrayIdx(cartList, { attr_id, prod_id })
     // 首次加入购物车
     if (idx === false) {
-      cartList.push({ biz_id, prod_id, attr_id, num })
+      cartList.push({ biz_id, prod_id, attr_id, num, checked, price_selling, price_market, name, pic })
     } else {
       cartList[idx].num += num
     }
@@ -129,7 +135,7 @@ const mutations = {
     let cartList = state.cartList.length > 0 ? state.cartList : Storage.get('shopCartList')
     if (!cartList) cartList = []
 
-    const { attr_id } = product
+    const { attr_id,prod_id } = product
 
     const idx = findArrayIdx(cartList, { attr_id: attr_id })
     // 并非首次加入购物车
@@ -142,13 +148,13 @@ const mutations = {
 
       // 才能继续删除
       if (cartList[idx].num === 0) {
-        this.commit('cart/REMOVE_GOODS', attr_id)
+        this.commit('cart/REMOVE_GOODS', { attr_id,prod_id })
       }
     }
   },
   // 移除指定id商品，不传id就是清空
-  REMOVE_GOODS (state, attr_id) {
-    console.log('remove attr_id is', attr_id)
+  REMOVE_GOODS (state, { attr_id, prod_id }) {
+    console.log('remove prod_info is', { attr_id, prod_id })
     // 不怕页面刷新的获取购物车
     let cartList = state.cartList.length > 0 ? state.cartList : Storage.get('shopCartList')
     if (!cartList) cartList = []
@@ -156,7 +162,7 @@ const mutations = {
     if (!attr_id && attr_id !== 0) {
       cartList = []
     } else {
-      const idx = findArrayIdx(cartList, { attr_id: attr_id })
+      const idx = findArrayIdx(cartList, { attr_id, prod_id })
       cartList.splice(idx, 1)
     }
 
@@ -237,7 +243,7 @@ const actions = {
 
     return false
   },
-  async removeGoods ({ commit, state }, biz_id) {
+  async removeGoods ({ commit, state }, { biz_id, attr_id, prod_id }) {
     // 第一次是在内存里
     let cartList = state.cartList.length > 0 ? state.cartList : Storage.get('shopCartList')
     if (!cartList) cartList = []
@@ -247,14 +253,23 @@ const actions = {
     // 指定商家
     if (biz_id) {
       delList = cartList.filter(item => item.biz_id === biz_id)
+    } else if (attr_id >= 0 && prod_id) {
+      delList = cartList.filter(item => item.prod_id === prod_id && item.attr_id === attr_id)
     } else {
       delList = cartList
     }
+    console.log(delList)
     const obj = {}
     // 删除
     for (const row of delList) {
       const { biz_id, prod_id, attr_id } = row
-      if (row.checked) {
+      // 如果是删除商品的情况下，那么不需要考虑是否check
+      if (attr_id >= 0 && prod_id) {
+        // 有需需要才创建
+        if (!obj.hasOwnProperty(biz_id))obj[biz_id] = {}
+        if (!obj[biz_id].hasOwnProperty(prod_id))obj[biz_id][prod_id] = []
+        obj[biz_id][prod_id].push(attr_id)
+      } else if (row.checked) {
         // 有需需要才创建
         if (!obj.hasOwnProperty(biz_id))obj[biz_id] = {}
         if (!obj[biz_id].hasOwnProperty(prod_id))obj[biz_id][prod_id] = []
@@ -265,7 +280,12 @@ const actions = {
     const handleRT = await deletedCartFn({ prod_attr: JSON.stringify(obj) })
 
     if (handleRT) {
-      commit('REMOVE_GOODS_BY_BIZ', biz_id)
+      if (attr_id >= 0 && prod_id) {
+        commit('REMOVE_GOODS', { attr_id, prod_id })
+      } else {
+        commit('REMOVE_GOODS_BY_BIZ', biz_id)
+      }
+
       return true
     } else {
       return false
@@ -339,6 +359,21 @@ const getters = {
       for (var row of cartList) {
         if (Number(row.biz_id) === Number(bid)) {
           count += row.num * row.price_selling
+        }
+      }
+      return count
+    } catch (e) {
+      return 0
+    }
+  },
+  getTotalMoneyByMarket: (state) => (bid) => {
+    try {
+      const cartList = state.cartList.length > 0 ? state.cartList : Storage.get('shopCartList')
+      if (!Array.isArray(cartList)) throw Error('获取价格失败')
+      let count = 0
+      for (var row of cartList) {
+        if (Number(row.biz_id) === Number(bid)) {
+          count += row.num * row.price_market
         }
       }
       return count

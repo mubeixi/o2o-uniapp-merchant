@@ -30,7 +30,7 @@
                 <div style="max-width: 360rpx;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;" class="store-title c3 fz-b">{{storeInfo.biz_shop_name}}</div>
                 <div class="actions flex flex-vertical-c">
                   <layout-icon :color="isFavourite?'#E64239':'#999'" @click.stop="taggleFavorite" :plain="false" wrap-bg="#FFECEB" wrap-padding="10rpx" type="iconicon-favorite"></layout-icon>
-                  <layout-icon :color="isFavourite?'#E64239':'#999'" @click.stop="$cellPhone(storeInfo.biz_mobile)" style="margin-left: 25rpx" :plain="false" wrap-bg="#FFECEB" wrap-padding="10rpx" type="iconicon-phone"></layout-icon>
+                  <layout-icon color="#E64239" @click.stop="$cellPhone(storeInfo.biz_mobile)" style="margin-left: 25rpx" :plain="false" wrap-bg="#FFECEB" wrap-padding="10rpx" type="iconicon-phone"></layout-icon>
                 </div>
               </div>
               <div class="store-info-row flex-vertical-c" style="margin: 20rpx 0">
@@ -126,7 +126,7 @@
                 <div class="info">
                   <div class="title fz-13 c3"><wzw-live-tag :room_id="goods.room_id" :product-info="goods" />{{goods.Products_Name}}</div>
                   <div class="flex flex-vertical-c" style="margin: 20rpx 0">
-                    <div class="price-num">已减{{goods.Products_PriceY-goods.Products_PriceX}}元</div>
+                    <div class="price-num">已减{{$filterPrice(goods.Products_PriceY-goods.Products_PriceX)}}元</div>
                     <div class="c9 fz-12">已售{{goods.Products_Sales}}份</div>
                   </div>
                   <div class="flex flex-vertical-c flex-justify-between">
@@ -134,7 +134,7 @@
                       <span class="price-selling fz-12">￥</span><span class="price-selling fz-14">{{goods.Products_PriceX}}</span>
                       <div class="text-through price-market fz-12 m-l-6">￥{{goods.Products_PriceY}}</div>
                     </div>
-                    <div @click.stop="$noop" class="action">
+                    <div @click.stop="$noop" class="action goods-item-action">
                       <div @click.stop="openAttrLayer(goods.Products_ID)" class="btn-open-attr m-r-10" v-if="goods.skujosn">
                         选规格
                         <div class="goods-num-tag" v-if="goods.num>0">{{goods.num}}</div>
@@ -283,12 +283,12 @@
       <div class="cart-box" @click="$openPop('carts')">
         <div class="cart-icon-box">
           <layout-icon type="iconicon-cart" size="22" color="#fff"></layout-icon>
-          <div class="total-num">{{total_count}}</div>
+          <div class="total-num" :class="{aircle:total_count<100}">{{total_count}}</div>
         </div>
       </div>
       <div class="total-info flex flex-column flex-justify-c">
         <div class="color-white flex flex-vertical-b"><span class="fz-11">￥</span><span class="fz-16">{{total_price}}</span></div>
-        <div class="c9 fz-10">已减30元</div>
+        <div class="c9 fz-10">已减{{$filterPrice(totalPriceByMarket-totalPrice)}}元</div>
       </div>
       <div class="go-btn" @click="submit">去结算</div>
     </div>
@@ -418,6 +418,9 @@ export default {
     totalPrice () {
       return this.$store.getters['cart/getTotalMoney'](this.bid)
     },
+    totalPriceByMarket () {
+      return this.$store.getters['cart/getTotalMoneyByMarket'](this.bid)
+    },
     carts: {
       get () {
         return this.$store.getters['cart/getCartList'](this.bid)
@@ -462,7 +465,8 @@ export default {
   },
   methods: {
     toSearch () {
-      this.$linkTo('/pages/search/result?inputValue=' + this.bizSearchKeyWord + '&biz_id=' + this.bid)
+      // inputValue=' + this.bizSearchKeyWord + '&
+      this.$linkTo('/pages/search/result?biz_id=' + this.bid)
     },
     toVip () {
       if (checkIsLogin(1, 1)) {
@@ -503,7 +507,7 @@ export default {
         title: '操作确认',
         content: '该操作会清空购物车中当前商家商品，操作不可逆，确认继续操作？'
       }).then(() => {
-        this.$store.dispatch('cart/removeGoods', this.bid).then(() => {
+        this.$store.dispatch('cart/removeGoods', { biz_id: this.bid }).then(() => {
           this.allCheck = this.$store.getters['cart/getListCheckStatus'](Number(this.bid))
         }).catch(() => {})
       }).catch(() => {})
@@ -553,6 +557,27 @@ export default {
     },
     async attrNumMinus (row) {
       const num = row.num ? row.num - 1 : 0
+  
+  
+      if (num === 0) {
+        await this.$store.dispatch('cart/removeGoods', {
+          prod_id: row.prod_id,
+          attr_id: row.attr_id
+        })
+  
+        // 没有规格的商品，直接搞事,同步库存
+        if (row.attr_id === 0) {
+          const idx = findArrayIdx(this.bizCateList[this.bizCateNavIndex].child[this.bizCateChildNavIndex].productList, { Products_ID: row.prod_id })
+          if (idx !== false) {
+            this.$set(this.bizCateList[this.bizCateNavIndex].child[this.bizCateChildNavIndex].productList[idx], 'num', num)
+          }
+        }
+        
+        this.refreshCount()
+        
+        return
+      }
+      
       // 拼接一下
       const productInfo = {
         ...attrInfoTmpl,
@@ -571,6 +596,8 @@ export default {
             this.$set(this.bizCateList[this.bizCateNavIndex].child[this.bizCateChildNavIndex].productList[idx], 'num', num)
           }
         }
+
+        
 
         this.refreshCount()
       }
@@ -603,6 +630,17 @@ export default {
     async goodsNumMinus (goodsInfo) {
       console.log('goodsNumMinus', goodsInfo)
       const num = goodsInfo.num ? goodsInfo.num - 1 : 0
+  
+      if (num === 0) {
+        await this.$store.dispatch('cart/removeGoods', {
+          prod_id: goodsInfo.Products_ID,
+          attr_id: 0
+        })
+        this.$set(goodsInfo, 'num', num)
+        this.refreshCount()
+        return;
+      }
+      
       // 拼接一下
       const productInfo = {
         ...attrInfoTmpl,
@@ -616,17 +654,34 @@ export default {
       if (cart !== false) {
         this.$set(goodsInfo, 'num', num)
         this.refreshCount()
+
+        
       }
     },
     async goodsNumPlus (goodsInfo) {
       const num = goodsInfo.num ? goodsInfo.num + 1 : 1
 
       // 拼接一下
-      const productInfo = {
+      var productInfo = {
         ...attrInfoTmpl,
         prod_id: goodsInfo.Products_ID,
         attr_id: 0
+
       }
+
+      // 兼容第一次添加的情况
+      if (num === 1) {
+        const { ImgPath, Products_Name, Products_PriceX, Products_PriceY } = goodsInfo
+        Object.assign(productInfo, {
+          biz_id: Number(this.bid),
+          checked: false,
+          pic: ImgPath,
+          name: Products_Name,
+          price_selling: Number(Products_PriceX),
+          price_market: Number(Products_PriceY)
+        })
+      }
+
       const cart = await this.$store.dispatch('cart/addNum', {
         num: 1,
         product: { ...productInfo }
@@ -841,7 +896,7 @@ export default {
         //   this.storeGoodsTotal = totalCount
         // }).catch((err) => { throw Error(err.msg) })
 
-        const flashActivitys = await getBizSpikeList({ biz_id: this.bid }, { onlyData: true }).catch((e) => {
+        const flashActivitys = await getBizSpikeList({ biz_id: this.bid, status: 1 }, { onlyData: true }).catch((e) => {
           throw Error('获取限时抢购数据失败')
         })
 
@@ -921,8 +976,6 @@ export default {
           biz_id: this.bid,
           front_show: 1,
           status: 3
-        }, {
-          noUid: 1
         }).then(res => {
           return [...res.data]
         }).catch((e) => {
@@ -1352,14 +1405,20 @@ export default {
        right: 0;
        top: 0;
        transform: translate(50%,-50%);
-       height:34rpx;
        background:#E64239;
        color: #fff;
-       border-radius:17rpx;
+       border-radius:10rpx;
        font-size: 20rpx;
-       padding: 0 7rpx;
+       padding: 4rpx 8rpx;
        text-align: center;
-       line-height: 34rpx;
+
+       &.aircle{
+         border-radius:50%;
+         padding: 0;
+         width: 40rpx;
+         height: 40rpx;
+         line-height: 40rpx;
+       }
      }
     }
   }
@@ -1481,6 +1540,33 @@ export default {
         display: flex;
         align-items: center;
         margin: 30rpx 0;
+        .goods-item-action{
+          .btn-open-attr {
+            background: #E64239;
+            font-size: 10px;
+            color: #fff;
+            width: 110rpx;
+            height: 38rpx;
+            line-height: 38rpx;
+            border-radius: 19rpx;
+            text-align: center;
+            position: relative;
+
+            .goods-num-tag {
+              position: absolute;
+              right: -10px;
+              top: -10px;
+              background: #E64239;
+              border-radius: 50%;
+              overflow: hidden;
+              height: 20px;
+              width: 20px;
+              font-size: 10px;
+              line-height: 20px;
+              text-align: center;
+            }
+          }
+        }
         .cover{
           width: 170rpx;
           height: 170rpx;

@@ -476,8 +476,6 @@ export default {
           biz_id: this.bid,
           front_show: 1,
           status: 3
-        }, {
-          noUid: 1
         }).then(res => {
           return [...res.data]
         }).catch((e) => {
