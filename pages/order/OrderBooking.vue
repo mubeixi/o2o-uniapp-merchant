@@ -83,7 +83,7 @@
             </div>
           </block>
         </div>
-        <div class="bd bg-f8" style="border-bottom: none;width: 680rpx;margin: 0 40rpx;box-sizing: border-box;" v-if="bizList[biz_id].is_virtual === 0 && bizList[biz_id].shipping_company&&bizList[biz_id].shipping_company.is_self_get" >
+        <div class="bd bg-f8" style="border-bottom: none;width: 680rpx;margin: 0 40rpx;box-sizing: border-box;" v-if="bizList[biz_id].is_virtual === 0 && bizList[biz_id].shipping_company" >
           <div class="o_title">
             <span class="fz-16 c3">配送</span>
             <span class="flex flex-vertical-c fz-13" style="text-align:right; color: #888;">
@@ -97,7 +97,7 @@
                           </div>
                           <span>商家发货</span>
                       </div>
-                      <div @click="changeIsSelft(biz_id)" class="flex flex-vertical-c m-l-20 ">
+                      <div @click="changeIsSelft(biz_id)" class="flex flex-vertical-c m-l-20 " v-if="bizList[biz_id].shipping_company.is_self_get">
                           <div class="checked m-r-8" v-if="postData.shipping_id[biz_id]=='is_self_get'">
                             <div class="checked-radio"></div>
                           </div>
@@ -115,10 +115,17 @@
               <span class="">配送方式</span>
               <div class="flex flex-vertical-c" style="text-align:right; color: #888;">
                 <div :key="shipid" v-for="(ship,shipid) in bizList[biz_id].shipping_company">
-                  <div v-if="shipid!='is_self_get'" @click="ShipRadioChange(shipid,biz_id)" class="row flex flex-justify-between flex-vertical-b m-l-15" >
-                    <div class="checked m-r-8" v-if="shipid==postData.shipping_id[biz_id]"><div class="checked-radio"></div></div><div class="unchecked m-r-8" v-else></div>
-                    <span class="flex1">{{ship}}</span>
-                  </div>
+                  <!--要允许显示同城配送-->
+                  <block v-if="shipid!='is_self_get' && (ship!='同城配送' || bizList[biz_id].shippingStatus.isSameCity)">
+                    <div  @click="ShipRadioChange(shipid,biz_id)" class="row flex flex-justify-between flex-vertical-b m-l-15" >
+                      <div class="checked m-r-8" v-if="shipid==postData.shipping_id[biz_id]">
+                        <div class="checked-radio"></div>
+                      </div>
+                      <div class="unchecked m-r-8" v-else></div>
+                      <span class="flex1">{{ship}}</span>
+                    </div>
+                  </block>
+
                 </div>
               </div>
             </div>
@@ -127,7 +134,12 @@
             <div class="o_title">
               <span>配送价格</span>
               <div class="flex flex-vertical-c" style="text-align:right; color: #888;">
-                ￥{{bizList[biz_id]['Order_Shipping']['Price']}}
+                <block v-if="bizList[biz_id]['Order_Shipping']['Price']==0">
+                    免运费
+                </block>
+                <block v-else>
+                  ￥{{bizList[biz_id]['Order_Shipping']['Price']}}
+                </block>
               </div>
             </div>
           </div>
@@ -135,14 +147,14 @@
             <div class="o_title">
               <span>配送时间</span>
               <div class="flex flex-vertical-c" style="text-align:right; color: #888;">
-                <radio-group @change="citySendTypeChange($event,biz_id)" v-if="(bizList[biz_id].business_status && bizList[biz_id].business_time_status) || checkfrom!='group'">
+                <radio-group @change="citySendTypeChange($event,biz_id)" v-if="bizList[biz_id].shippingStatus.isNow || bizList[biz_id].shippingStatus.isAppoint">
                   <div class="flex flex-vertical-c">
-                    <label class="row flex flex-justify-between flex-vertical-b m-l-15" v-if="bizList[biz_id].business_status && bizList[biz_id].business_time_status">
+                    <label class="row flex flex-justify-between flex-vertical-b m-l-15" v-if="bizList[biz_id].shippingStatus.isNow">
                       <radio style="transform: scale(0.8)" :checked="'now'===postData.appoint_time_type[biz_id]" value="now" class="radio" color="#F43131" />
                       <span class="flex1">立即送出</span>
                     </label>
                     <!--需要开关打开才可以-->
-                    <label class="row flex flex-justify-between flex-vertical-b m-l-15" v-if="checkfrom!='group'">
+                    <label class="row flex flex-justify-between flex-vertical-b m-l-15" v-if="bizList[biz_id].shippingStatus.isAppoint">
                       <radio style="transform: scale(0.8)" :checked="'appoint'===postData.appoint_time_type[biz_id]" value="appoint" class="radio" color="#F43131" />
                       <span class="flex1">预约送达</span>
                     </label>
@@ -155,12 +167,12 @@
               </div>
             </div>
           </div>
-          <div class="bd" v-if="bizList[biz_id].is_virtual === 0&&postData.shipping_id[biz_id]!='is_self_get' && postData.shipping_name[biz_id]==='同城配送' && postData.appoint_time_type[biz_id]==='appoint' && checkfrom!='group'">
+          <div class="bd" v-if="bizList[biz_id].is_virtual === 0&&postData.shipping_id[biz_id]!='is_self_get' && postData.shipping_name[biz_id]==='同城配送' && postData.appoint_time_type[biz_id]==='appoint' && bizList[biz_id].shippingStatus.isAppoint">
             <div class="o_title">
               <span>预约送达时间</span>
               <div class="flex flex-vertical-c" style="text-align:right; color: #888;" @click="citySendTypeOpen(biz_id)">
                 <block v-if="postData.appoint_time[biz_id]">
-                  {{postData.appoint_time[biz_id]}}
+                  {{toDay}} <sapn class="m-l-6">{{postData.appoint_time[biz_id]}}</sapn>
                 </block>
                 <block v-else>
                   请设置时间
@@ -230,10 +242,40 @@
               v-model="postData.use_money[biz_id]" />
           </div>
 
-          <div class="bd">
+          <div class="bd" >
             <div class="o_title  words">
               <span>买家留言</span>
               <input @input="remarkConfirm($event,biz_id)" class="inputs" placeholder="点此填写留言内容" type="text">
+            </div>
+          </div>
+
+          <div class="text-right fz-14" style="padding: 20rpx 20rpx 50rpx">
+            共{{bizList[biz_id].prod_count}}件商品，小计<span class="price-selling">￥{{bizList[biz_id].Order_TotalPrice}}</span>
+          </div>
+
+          <div class="expired-box" style="padding-bottom: 30rpx" v-if="bizList[biz_id].expired_prod_count>0">
+            <div class="expired-hr" style="border-top: 1px dashed #e7e7e7;padding: 0rpx 0 40rpx 0"></div>
+            <div class="expired-total c3 fz-18">
+              共失效<span class="price-selling">{{bizList[biz_id].expired_prod_count}}</span>件商品
+            </div>
+            <div class="expired-goods-list bg-white">
+              <block :key="pro_id" v-for="(pro,pro_id) in bizList[biz_id].expired_cart_prod">
+                <div :key="attr_id" v-for="(attr,attr_id) in pro">
+                  <div class="pro">
+                    <img :src="attr.ImgPath" alt="" class="pro-img">
+                    <div class="pro-msg">
+                      <div class="pro-name" style="color: #777;">{{attr.ProductsName}}</div>
+                      <div class="flex flex-vertical-c flex-justify-between" style="margin: 26rpx 0">
+                        <div class="attr"  style="background-color: #f5f5f5;color: #777;"><span style="background-color: #f5f5f5;color: #777;" v-if="1||attr.Productsattrstrval">测试规格{{attr.Productsattrstrval}}</span></div>
+                        <div class="pro-price flex flex-vertical-b fz-18" style="color: #888"><span class="fz-10">￥</span >{{attr.ProductsPriceX}}</div>
+                      </div>
+                      <div class="expired-reason fz-12" style="color: #f53333">失效原因:配送方式不统一，需分开单独结算</div>
+                    </div>
+                  </div>
+                  <div class="goods-hr"></div>
+                </div>
+              </block>
+
             </div>
           </div>
 
@@ -370,6 +412,7 @@ export default {
   },
   data () {
     return {
+      toDay:'',//当前年月日
       delivery_biz_id: '', // 外卖的时候才有
       gift: false,
       bid: null,
@@ -863,10 +906,10 @@ export default {
       this.appointTimeTypes = appointTimeTypes
       this.$openPop('citySendTime')
     },
-    // 取消事件设置，那么就切换回立即配送
+    // 取消事件设置，那么就切换回立即配送 目前需求不要
     cancelCurrentBizSendTime () {
-      this.postData.appoint_time_type[this.activeBizId] = 'now'
-      this.appointTimeTypes = []
+      // this.postData.appoint_time_type[this.activeBizId] = 'now'
+      // this.appointTimeTypes = []
     },
     setCurrentBizSendTime () {
       const selectIdx = this.citySendTimePicker[0]
@@ -887,7 +930,7 @@ export default {
       // this.ship_current = isNaN(val) ? val : parseInt(val)
 
       const currentBizInfo = this.bizList[bizId]
-      const { business_status = 0, business_time_status = 0 } = currentBizInfo
+      const { business_status = 0, business_time_status = 0, out_business_time_order = 0 } = currentBizInfo
       const shippingName = currentBizInfo.shipping_company[val]
       if (shippingName === '同城配送') {
         // 在营业时间内，但店铺状态为关闭
@@ -1079,7 +1122,75 @@ export default {
           }
         }
 
-        this.$set(this, 'bizList', bizList)
+        var bizListUpShiping = {}
+
+        for (var bizId in bizList) {
+          var bizInfo = bizList[bizId]
+          var expired_prod_count = 0
+          for (var i in bizInfo.expired_cart_prod) {
+            expired_prod_count += bizInfo.expired_cart_prod[i].length
+          }
+
+          bizInfo.expired_prod_count = expired_prod_count
+
+          var shippingStatus = {
+            isOrder: false, // 允许下单
+            isSameCity: false, // 同城配送
+            isNow: false, // 立即配送
+            isAppoint: false// 预约诶送
+          }
+          const { business_status = 0, business_time_status = 0, out_business_time_order = 0, city_express_appoint_send = 0 } = bizInfo
+          // 1.营业状态关闭，任何情况，任何物流都不能下单
+          if (!business_status) {
+
+          }
+
+          // 2.营业状态打开，在营业时间，正常下单
+          if (business_status && business_time_status && city_express_appoint_send) {
+            shippingStatus.isOrder = true
+            shippingStatus.isSameCity = true
+            shippingStatus.isNow = true
+            shippingStatus.isAppoint = true
+          }
+
+          // 3.营业状态打开，不在营业时间，允许营业外下单，同城配送只能预约，不能立即送达，普通物流不受影响
+          if (business_status && !business_time_status && out_business_time_order && city_express_appoint_send) {
+            shippingStatus.isOrder = true
+            shippingStatus.isSameCity = true
+            shippingStatus.isAppoint = true
+          }
+
+          // 4.营业状态打开，不在营业时间，不允许营业外下单，提交订单不会出现同城配送
+          if (business_status && !business_time_status && !out_business_time_order) {
+            shippingStatus.isOrder = true
+            shippingStatus.isSameCity = false
+          }
+
+          // 团购无法用同城配送的预约功能
+          if (this.checkfrom === 'group') {
+            shippingStatus.isAppoint = false
+          }
+
+          bizListUpShiping[bizId] = Object.assign({}, { shippingStatus: { ...shippingStatus } }, bizInfo)
+        }
+
+        this.$set(this, 'bizList', bizListUpShiping)
+
+        var tempCartList = {}
+        // for (var biz_id in CartList) {
+        //   var biz_total = 0
+        //   for (var prod_id in CartList[biz_id]) {
+        //     // 同一个产品可能同时多个规格
+        //     for (var attr in CartList[biz_id][prod_id]) {
+        //       biz_total += CartList[biz_id][prod_id][attr].ProductsPriceX * CartList[biz_id][prod_id][attr].Qty
+        //     }
+        //   }
+        //
+        //   var bizInfo = CartList[biz_id]
+        //   bizInfo.biz_total = biz_total
+        //
+        //   tempCartList[bizId] = Object.assign({}, bizInfo)
+        // }
         this.$set(this, 'CartList', CartList)
 
         this.CartListReady = true
@@ -1142,6 +1253,15 @@ export default {
         }
         if (Object.values(use_money).filter(num => (num < 0 || isNaN(num)) && num !== '').length > 0) {
           throw Error('每个商家使用余额数值都为大于等于0的数')
+        }
+
+        // 是否是预约时间
+        if (JSON.stringify(this.postData.appoint_time_type) !== '{}') {
+          for (const time in this.postData.appoint_time_type) {
+            if (this.postData.appoint_time_type[time] === 'appoint' && !this.postData.appoint_time[time]) {
+              throw Error('请选择预约送达时间')
+            }
+          }
         }
 
         Object.assign(params, {
@@ -1236,6 +1356,8 @@ export default {
   },
 
   onShow () {
+
+
     this._init_func()
   },
   async created () {
@@ -1245,6 +1367,7 @@ export default {
     console.log(this.initData)
   },
   onLoad (options) {
+    this.toDay = uni.$moment(new Date()).add('year', 0).format('YYYY-MM-DD')
     this.postData.cart_key = options.cart_key
     if (options.cart_buy) {
       this.postData.cart_buy = options.cart_buy
@@ -1348,6 +1471,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  .nobor{
+    border: none !important;
+  }
   .page-wrap {
     background: #f8f8f8;
     min-height: 100vh;
@@ -1499,6 +1625,32 @@ export default {
 
   }
 
+  .expired-box{
+    padding: 0 30rpx;
+  }
+  .expired-goods-list{
+    padding: 30rpx 40rpx 30rpx 0;
+
+    .pro{
+      .pro-img{
+        width: 200rpx;
+        height: 200rpx;
+      }
+    }
+
+    .pro:last-child {
+      margin-bottom: 17rpx
+    }
+
+    .goods-hr {
+      height: 15px;
+      &:last-child{
+        height: 0;
+      }
+      //background: #eee;
+    }
+  }
+
   .biz-goods-list {
 
     padding: 30rpx 40rpx 30rpx 30rpx;
@@ -1608,14 +1760,16 @@ export default {
     }
   }
 
-  .store-item .bd {
-    /*margin-top: 30rpx;*/
-    /*padding-bottom: 30rpx;*/
-    padding: 30rpx 40rpx 30rpx 30rpx;
-    border-bottom: 2rpx solid #efefef;
+  .store-item{
+    .bd {
+      /*margin-top: 30rpx;*/
+      /*padding-bottom: 30rpx;*/
+      padding: 30rpx 40rpx 30rpx 30rpx;
+      border-bottom: 2rpx solid #efefef;
 
-    &:last-child {
-      border-bottom: none;
+      &:last-child {
+        border-bottom: none;
+      }
     }
   }
 

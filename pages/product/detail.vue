@@ -1212,7 +1212,7 @@ import LayoutComment from '@/componets/layout-comment/layout-comment'
 import WzwGoodsAction from '@/componets/wzw-goods-action/wzw-goods-action'
 import LayoutPopup from '@/componets/layout-popup/layout-popup'
 
-import { error, hideLoading, modal, showLoading, toast } from '@/common/fun'
+import { error, hideLoading, modal, showLoading, toast, checkIsExpire } from '@/common/fun'
 import { buildSharePath, checkIsLogin, getCountdownFunc, getProductThumb } from '@/common/helper'
 import uParse from '@/componets/gaoyia-parse/parse'
 import Storage from '@/common/Storage'
@@ -1633,7 +1633,19 @@ export default {
      * 3.不在营业时间内，不允许下单
      */
     checkStoreStatus () {
-      const { business_status = 0, business_time_status = 0 } = this.bizInfo
+      const { business_status = 0, business_time_status = 0, out_business_time_order = 0 } = this.bizInfo
+      // 1.营业状态关闭，任何情况，任何物流都不能下单
+      if (!business_status) return false
+
+      // 2.营业状态打开，在营业时间，正常下单
+      if (business_status && business_time_status) return true
+
+      // 3.营业状态打开，不在营业时间，允许营业外下单，同城配送只能预约，不能立即送达，普通物流不受影响
+      if (business_status && !business_time_status && out_business_time_order) return true
+
+      // 4.营业状态打开，不在营业时间，不允许营业外下单，提交订单不会出现同城配送
+      if (business_status && !business_time_status && !out_business_time_order) return true
+
       return business_status || business_time_status
     },
     allPay () {
@@ -1903,6 +1915,13 @@ export default {
       try {
         showLoading()
 
+        this.store = await getBizInfo({ biz_id: this.productInfo.biz_id }, { onlyData: true }).catch(e => {
+          throw Error(e.msg || '获取店铺信息失败')
+        })
+
+        this.bizInfo = this.store[0]
+        checkIsExpire(this.bizInfo.biz_expires)
+
         if (options.gift) {
           this.gift = options.gift
           this.postData.active_id = options.gift
@@ -2049,12 +2068,6 @@ export default {
         }).catch((e) => {
           throw Error('获取评论数据失败')
         })
-
-        this.store = await getBizInfo({ biz_id: this.productInfo.biz_id }, { onlyData: true }).catch(e => {
-          throw Error(e.msg || '获取店铺信息失败')
-        })
-
-        this.bizInfo = this.store[0]
 
         this.storeList = await getStoreList({ biz_id: this.productInfo.biz_id }, {
           onlyData: true

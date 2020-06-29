@@ -135,8 +135,8 @@
         </div>
       </div>
       <!--秒杀-->
-      <div class="section-item kill-box">
-        <div class="title p-15" style="background: #F6F6F6;text-align: center;">
+      <div class="section-item kill-box"  v-if="killList.length>0">
+        <div class="title p-15" style="background: #F6F6F6;text-align: center;"  >
           <image style="width: 432rpx;height: 37rpx;" :src="$getDomain('/static/client/store/theme_one/kill.png')"></image>
         </div>
         <div class="kill-list">
@@ -148,6 +148,7 @@
             </div>
             <div class="kill-countdown">
               <block v-if="!pro.countdown.is_end">
+
                 <span class="c3 fz-12">距{{pro.countdown.is_start?'结束':'开始'}}</span>
                 <span class="countdown-tag">{{pro.countdown.h}}</span>
                 <span class="countdown-delimiter">时</span>
@@ -170,14 +171,26 @@
         </div>
       </div>
       <!--限时抢购-->
-      <div class="section-item flash-box">
+      <div class="section-item flash-box"  v-if="flashActivityList.length>0">
         <div class="title p-15" style="background: #F6F6F6;text-align: center;">
           <image style="width: 432rpx;height: 37rpx;" :src="$getDomain('/static/client/store/theme_one/flash-sale.png')"></image>
         </div>
         <div class="flash-act-list">
           <div class="flash-act-item" v-for="(activity,idx1) in flashActivityList" :key="idx1">
             <div class="flash-act-title fz-15 fz-b c3 m-b-15">{{activity.name}}</div>
-            <div class="flash-act-countdown"></div>
+            <div class="flash-act-countdown">
+              <block v-if="!activity.countdown.is_end">
+                <image :src="$getDomain('/static/client/store/theme_one/time.png')" mode="widthFix" style="width: 22rpx;height: 25rpx;margin-right: 14rpx;"></image>
+                <span class="c3 fz-12">距{{activity.countdown.is_start?'结束':'开始'}}还有：</span>
+                <span class="countdown-tag">{{activity.countdown.d}}</span>
+                <span class="countdown-delimiter">:</span>
+                <span class="countdown-tag">{{activity.countdown.h}}</span>
+                <span class="countdown-delimiter">:</span>
+                <span class="countdown-tag">{{activity.countdown.m}}</span>
+                <span class="countdown-delimiter">:</span>
+                <span class="countdown-tag">{{activity.countdown.s}}</span>
+              </block>
+            </div>
             <div class="act-goods-list">
               <div class="act-goods-item" v-for="(pro,idx) in activity.spike_goods" :key="idx" @click="toGoodsDetailFn(pro,activity)">
                 <div :style="{backgroundImage:'url('+pro.ImgPath+')'}" class="item-cover"></div>
@@ -200,7 +213,7 @@
         </div>
       </div>
       <!--到店券-虚拟商品-->
-      <div class="section-item virtual-box"  >
+      <div class="section-item virtual-box"  v-if="virtualGoodsLsit.length>0">
         <div id="section-virtual" class="section-anchor" :style="{top:anchorTop+'px'}"></div>
         <div class="title p-15" style="text-align: center;">
           <image style="width: 359rpx;height: 39rpx;" :src="$getDomain('/static/client/store/theme_one/virtual.png')"></image>
@@ -340,7 +353,7 @@
 
 <script>
 import { componetMixin } from '@/mixins/BaseMixin'
-import { error, hideLoading, modal, showLoading, toast } from '@/common/fun'
+import { error, hideLoading, modal, showLoading, toast,checkIsExpire } from '@/common/fun'
 import { getAlbumList, getBizInfo, getBizSpikeList, getStoreList } from '@/api/store'
 import { getBizProdCateList, getFlashsaleList, getProductList } from '@/api/product'
 import { getCommitList, getCouponList } from '@/api/common'
@@ -439,7 +452,9 @@ export default {
           throw Error(e.msg || '商品信息失败')
         })
         this.storeInfo = storeInfoData[0]
+        checkIsExpire(this.storeInfo.biz_expires)
         this.$emit('upStoreInfo', this.storeInfo)
+
 
         const base = { biz_ids: this.bid }
 
@@ -447,7 +462,7 @@ export default {
           this.storeGoodsTotal = totalCount
         }).catch((err) => { throw Error(err.msg) })
 
-        const flashActivitys = await getBizSpikeList({ biz_id: this.bid }, { onlyData: true }).catch((e) => {
+        const flashActivitys = await getBizSpikeList({ biz_id: this.bid,status:1  }, { onlyData: true }).catch((e) => {
           throw Error('获取限时抢购数据失败')
         })
 
@@ -481,7 +496,7 @@ export default {
         })
         console.log(this.virtualGoodsLsit, this.virtualPaginate)
 
-        const killList = await getFlashsaleList({ ...base }, { onlyData: true }).catch(e => {
+        const killList = await getFlashsaleList({ biz_id: this.bid }, { onlyData: true }).catch(e => {
           throw Error(e.msg || '获取秒杀列表失败')
         })
 
@@ -783,7 +798,8 @@ export default {
       for (var idx in this.killList) {
         const data = getCountdownFunc({
           start_timeStamp: this.killList[idx].start_time,
-          end_timeStamp: this.killList[idx].end_time
+          end_timeStamp: this.killList[idx].end_time,
+          getDay:false
         })
         if (data) {
           this.$set(this.killList[idx], 'countdown', { ...data })
@@ -1182,7 +1198,27 @@ export default {
     .flash-act-title{
     }
     .flash-act-countdown{
-
+      width: 658rpx;
+      height: 70rpx;
+      margin: 0rpx auto 40rpx;
+      background:#ECFFF8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      .countdown-tag{
+        background:#26C78D;
+        color: #fff;
+        font-size: 24rpx;
+        padding: 6rpx;
+        border-radius: 6rpx;
+        text-align: center;
+      }
+      .countdown-delimiter{
+        text-align: center;
+        font-size: 24rpx;
+        color: #26C78D;
+        padding: 0 2rpx;
+      }
     }
   }
   .act-goods-list{

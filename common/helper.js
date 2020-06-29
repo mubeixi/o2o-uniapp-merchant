@@ -349,7 +349,7 @@ export const checkIsLogin = (redirect = 1, tip = 0, isBack = 0) => {
         uni.navigateTo({
           url: '/pages/user/login'
         })
-        return
+        return false;
       }
 
       confirm({
@@ -434,7 +434,7 @@ export const createEmptyArray = (len, item) => {
   return tempArr
 }
 
-export const getCountdownFunc = ({ start_timeStamp, end_timeStamp, current = (new Date()).getTime() } = {}) => {
+export const getCountdownFunc = ({ start_timeStamp, end_timeStamp, current = (new Date()).getTime(), addZero = false, getDay = true } = {}) => {
   let { d = 0, h = 0, m = 0, s = 0 } = {}
 
   // 时间戳格式转换
@@ -458,13 +458,19 @@ export const getCountdownFunc = ({ start_timeStamp, end_timeStamp, current = (ne
     // throw "活动信息无效";
   }
 
-  d = parseInt(countTime / (60 * 60 * 24))
+  if (getDay) {
+    d = parseInt(countTime / (60 * 60 * 24))
+  } else {
+    d = 0
+  }
+
   h = parseInt((countTime - d * 60 * 60 * 24) / (60 * 60))
+
   m = parseInt((countTime - d * 60 * 60 * 24 - h * 60 * 60) / 60)
   s = countTime - d * 60 * 60 * 24 - h * 60 * 60 - m * 60
 
   return {
-    d,
+    d: formatNumber(h),
     h: formatNumber(h),
     m: formatNumber(m),
     s: formatNumber(s),
@@ -706,7 +712,28 @@ export const toGoodsDetail = async (productInfo) => {
 
 export const setNavigationBarTitle = (title) => uni.setNavigationBarTitle({ title })
 
-
+/**
+ * 获取滑动事件的参数
+ * @param event
+ * @returns {{x: number, y: number, type: *}}
+ */
+export function getTouchEventInfo(event) {
+  const type = event.type
+  let x = 0
+  let y = 0
+  const touches = event.changedTouches
+  
+  if (touches && touches.length > 0) {
+    x = touches[0].clientX
+    y = touches[0].clientY
+  }
+  
+  return {
+    type,
+    x,
+    y
+  }
+}
 
 
 const Helper = {

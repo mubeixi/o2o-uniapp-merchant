@@ -113,7 +113,7 @@ export default {
   mixins: [componetMixin],
   data () {
     return {
-      areaLoading:false,
+      areaLoading: false,
       firstCateHeight: 44,
       storeFirstCateIdx: 0, // 好店
       firstCateList: [],
@@ -123,14 +123,14 @@ export default {
   computed: {
     cateViewHeight () {
       try {
-        return this.systemInfo.windowHeight - this.firstCateHeight - (this.menuButtonInfo.top+50)
+        return this.systemInfo.windowHeight - this.firstCateHeight - (this.menuButtonInfo.top + 50)
       } catch (e) {
         return 'auto'
       }
     },
     ...mapGetters({
       primaryColor: 'theme/pimaryColor'
-    }),
+    })
   },
   watch: {
     storeFirstCateIdx: {
@@ -162,7 +162,7 @@ export default {
         this.firstCateList = await getProductCategory({}, { onlyData: true }).catch(() => {
           throw Error('获取商品分类失败')
         })
-
+        this.firstCateList.unshift({ Category_Name: '所有', Category_ID: '-1' })
         this.loadMerchantList(0)
       } catch (e) {
         Exception.handle(e)
@@ -177,11 +177,13 @@ export default {
         const cateId = this.firstCateList[idx].Category_ID
         if (!cateId) return
         var postData = {
-          cate_id: cateId,
           get_prod: 3,
           with_prod: 1,
           get_active: 1,
           pageSize: 999
+        }
+        if (cateId != -1) {
+          postData.cate_id = cateId
         }
         this.areaLoading = true
         this.userAddressInfo = this.$store.getters['user/getUserAddressInfo']()

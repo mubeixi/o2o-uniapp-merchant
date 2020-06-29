@@ -1,8 +1,8 @@
 import Storage from '@/common/Storage'
-import { findArrayIdx, objTranslate } from '@/common/helper'
+import { findArrayIdx } from '@/common/helper'
 import { Exception } from '@/common/Exception'
-import { error } from '@/common/fun'
 import { updateCart } from '@/api/order'
+import { DelCart } from '@/api/customer'
 
 /**
  * 异步更新库存
@@ -31,9 +31,26 @@ const updateCartFn = ({ prod_id, attr_id, qty, bizId }) => {
   })
 }
 
+const deletedCartFn = ({ prod_attr }) => {
+  const data = {
+    cart_key: 'CartList',
+    prod_attr
+  }
+
+  return new Promise((resolve, reject) => {
+    DelCart(data, { tip: 'loading' })
+      .then((res) => {
+        resolve(res.data)
+      })
+      .catch((err) => {
+        reject(Error(err.msg))
+      })
+  })
+}
+
 const state = {
   cartList: [],
-  bizList:{}
+  bizList: {}
 }
 
 /**
@@ -54,8 +71,8 @@ const state = {
  */
 
 const mutations = {
-  SET_BIZLIST(state,data){
-    state.bizList = Object.assign({},data)
+  SET_BIZLIST (state, data) {
+    state.bizList = Object.assign({}, data)
   },
   /* async data */
   ASYNC_DATA (state, data) {
@@ -89,7 +106,7 @@ const mutations = {
     const idx = findArrayIdx(cartList, { attr_id, prod_id })
     // 首次加入购物车
     if (idx !== false) {
-      cartList[idx].num -= num
+      cartList[idx].num = Number(cartList[idx].num) + Number(num)
       // 要先同步，才能继续走
 
       /* async data */
@@ -151,7 +168,6 @@ const mutations = {
     console.log('remove biz_id is', biz_id)
     // 不怕页面刷新的获取购物车
     const cartListData = state.cartList.length > 0 ? state.cartList : Storage.get('shopCartList')
-
     const cartList = cartListData.filter(item => Number(item.biz_id) !== Number(biz_id))
 
     this.commit('cart/ASYNC_DATA', cartList)
@@ -160,14 +176,13 @@ const mutations = {
 
 const actions = {
   async addNum ({ commit, state }, { product, num = 1 }) {
-    console.log(num)
     try {
       const { biz_id, prod_id, attr_id } = product
       const cartNewData = await updateCartFn({ prod_id, attr_id, biz_id, qty: num }).catch(err => { throw Error(err.msg) })
       if (num > 0) {
-        commit('ADD_GOODS', { product, num })
+        commit('ADD_GOODS', { product, num: Number(num) })
       } else {
-        commit('MINUS_GOODS', { product, num })
+        commit('MINUS_GOODS', { product, num: Number(num) })
       }
 
       return cartNewData
@@ -222,8 +237,39 @@ const actions = {
 
     return false
   },
-  removeGoods ({ commit, state }, biz_id) {
-    commit('REMOVE_GOODS_BY_BIZ', biz_id)
+  async removeGoods ({ commit, state }, biz_id) {
+    // 第一次是在内存里
+    let cartList = state.cartList.length > 0 ? state.cartList : Storage.get('shopCartList')
+    if (!cartList) cartList = []
+
+    if (!cartList || !Array.isArray(cartList)) throw Error('获取外卖购物车失败')
+    var delList = []
+    // 指定商家
+    if (biz_id) {
+      delList = cartList.filter(item => item.biz_id === biz_id)
+    } else {
+      delList = cartList
+    }
+    const obj = {}
+    // 删除
+    for (const row of delList) {
+      const { biz_id, prod_id, attr_id } = row
+      if (row.checked) {
+        // 有需需要才创建
+        if (!obj.hasOwnProperty(biz_id))obj[biz_id] = {}
+        if (!obj[biz_id].hasOwnProperty(prod_id))obj[biz_id][prod_id] = []
+        obj[biz_id][prod_id].push(attr_id)
+      }
+    }
+
+    const handleRT = await deletedCartFn({ prod_attr: JSON.stringify(obj) })
+
+    if (handleRT) {
+      commit('REMOVE_GOODS_BY_BIZ', biz_id)
+      return true
+    } else {
+      return false
+    }
   }
 }
 
@@ -250,7 +296,8 @@ const getters = {
       if (biz_id) {
         const bizCartList = cartList.filter(item => item.biz_id === biz_id)
         const checkLen = bizCartList.filter(row => row.checked === true).length // 获取的长度
-        return bizCartList.length === checkLen
+
+        return bizCartList.length === checkLen && checkLen > 0
       } else {
         // 全选呀
         const checkLen = cartList.filter(row => row.checked === true).length // 获取的长度
@@ -291,7 +338,7 @@ const getters = {
       let count = 0
       for (var row of cartList) {
         if (Number(row.biz_id) === Number(bid)) {
-          count += row.num * row.Products_PriceX
+          count += row.num * row.price_selling
         }
       }
       return count
@@ -324,7 +371,7 @@ const getters = {
 
       if (!cartList || !Array.isArray(cartList)) throw Error('获取外卖购物车失败')
 
-      if (!bid) {
+      if (bid) {
         return cartList.filter(item => Number(item.biz_id) === Number(bid))
       } else {
         return cartList

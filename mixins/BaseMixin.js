@@ -310,6 +310,9 @@ export const componetMixin = {
     $openLocation: openLocation,
     $cellPhone: cellPhone,
     $back: backFunc,
+    $filterPrice: (price) => {
+      return parseInt(Number(price) * 100) / 100
+    },
     $noop: () => {},
     $toast: toast,
     $error: error,
@@ -324,8 +327,9 @@ export const componetMixin = {
       this.$refs[name].close()
     }
   },
-  created () {
+  onReady () {
     this.systemInfo = uni.getSystemInfoSync()
+
     // #ifdef MP-WEIXIN
     this.menuButtonInfo = uni.getMenuButtonBoundingClientRect()
     const { height, top, left } = this.menuButtonInfo

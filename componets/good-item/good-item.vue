@@ -36,7 +36,7 @@
       <slot name="sales"><div v-if="sales" class="sales c9 fz-14">已售{{vo.Products_Sales}}件</div></slot>
       <div class="price-box">
         <slot name="sellingPrice">
-          <span class="price-selling fz-12"><span>￥</span><span class="fz-14">{{vo.Products_PriceX}}</span></span>
+          <span class="price-selling" :style="{fontSize:priceSignSize}"><span>￥</span><span class="" :style="{fontSize:priceNumSize}">{{vo.Products_PriceX}}</span></span>
         </slot>
         <slot name="marketPrice">
           <span v-if="marketPrice" class="price-market fz-12 text-through p-l-4"><span>￥</span><span>{{vo.Products_PriceY}}</span></span>
@@ -54,6 +54,14 @@ export default {
   name: 'GoodsItem',
   components: { WzwLiveTag },
   props: {
+    priceSignSize:{
+      type: String,
+      default: '12px'
+    },
+    priceNumSize:{
+      type: String,
+      default: '14px'
+    },
     coverWidth: {
       type: String,
       default: '300rpx'
