@@ -34,7 +34,7 @@ export default {
           this.isShow = true
           setTimeout(() => {
             this.isShow = false
-          }, 2000)
+          }, 4000)
         }
       },
       deep: true

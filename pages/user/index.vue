@@ -133,12 +133,12 @@ export default {
           color: '#54AEED',
           link: '/pages/order/OrderList?type=flashsale'
         },
-        {
-          className: 'iconwaimai',
-          name: '外卖订单',
-          color: '#f4ea2a',
-          link: '/pages/order/OrderList?type=waimai'
-        },
+        // {
+        //   className: 'iconwaimai',
+        //   name: '外卖订单',
+        //   color: '#f4ea2a',
+        //   link: '/pages/order/OrderList?type=waimai'
+        // },
         {
           className: 'iconzengpin',
           name: '我的赠品',

@@ -165,7 +165,7 @@
         <div class="cate-goods-list">
           <div class="fun-goods-col" style="padding: 0 9rpx 0 0rpx">
             <block v-for="(pro,idx) in bizCateList[bizCateNavIndex].productList" :key="idx">
-              <div class="fun-goods-item" v-if="idx%2===0" >
+              <div class="fun-goods-item" v-if="idx%2===0"  @click="$toGoodsDetail(pro)">
                 <div class="product-cover" :style="{backgroundImage:'url('+$getDomain(pro.ImgPath)+')'}" ></div>
                 <div class="price-discount flex flex-vertical-c" style="padding: 20rpx 0 20rpx 20rpx">
                   <div class="price-box" style="color: #FE2C4D">
@@ -184,7 +184,7 @@
           </div>
           <div class="fun-goods-col" style="padding: 0 0rpx 0 9rpx">
             <block v-for="(pro,idx) in bizCateList[bizCateNavIndex].productList" :key="idx">
-              <div class="fun-goods-item" v-if="idx%2===1" >
+              <div class="fun-goods-item" v-if="idx%2===1"  @click="$toGoodsDetail(pro)">
                 <div class="product-cover" :style="{backgroundImage:'url('+$getDomain(pro.ImgPath)+')'}" ></div>
                 <div class="price-discount flex flex-vertical-c" style="padding: 20rpx 0 20rpx 20rpx">
                   <div class="price-box" style="color: #FE2C4D">

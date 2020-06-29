@@ -1347,6 +1347,9 @@ export default {
         console.log(e)
         this.formCheckResult = [e.message]
         this.$refs.refMsg.show()
+        setTimeout(() => {
+          this.formCheckResult = []
+        }, 4000)
         Exception.handle(e)
       } finally {
         hideLoading()
