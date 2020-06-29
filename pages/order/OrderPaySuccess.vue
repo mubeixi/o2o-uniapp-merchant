@@ -99,9 +99,11 @@ import BaseMixin from '@/mixins/BaseMixin'
 import { getProductList } from '@/api/product'
 import { getPayCoupons } from '@/api/order'
 import { toHome } from '@/common/fun'
+import { getUserInfo } from '@/api/customer'
 import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 import WzwLiveTag from '@/componets/wzw-live-tag/wzw-live-tag'
-
+import { mapActions } from 'vuex'
+import { checkIsLogin } from '@/common/helper'
 export default {
   mixins: [BaseMixin],
   components: {
@@ -141,6 +143,12 @@ export default {
     this.getProd()
   },
   onShow () {
+    if (!checkIsLogin(1, 0)) return
+
+    getUserInfo().then(res => {
+      this.setUserInfo(res.data)
+    }).catch(err => {
+    })
 
   },
   // 上拉触底
@@ -150,6 +158,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      setUserInfo: 'user/setUserInfo'
+    }),
     lookCode () {
       uni.previewImage({
         urls: [this.initData.mp_qrcode]
@@ -232,7 +243,7 @@ export default {
     left: 0px;
   }
   .flex-message-occupy{
-    height: 100rpx;
+    height: 120rpx;
     width: 750rpx;
   }
   .popup-content {

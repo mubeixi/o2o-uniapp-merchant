@@ -13,12 +13,12 @@
         <span :style="{width:(menuButtonInfo.left-80)+'px'}" class="seckill-title-text">秒杀活动</span>
       </block>
     </div>
-    
+
     <scroll-view :style="{top:menuButtonInfo.bottom+120+'px'}" class="seckill-list" scroll-y>
       <div :key="index" @click="$toGoodsDetail(item)" class="seckill-list-item  flex m-b-20"
            v-for="(item,index) of seckillList">
         <div class="seckill-item-left">
-          
+
           <div :style="{backgroundImage: 'url('+item.ImgPath+')'}" class="item-cover"></div>
         </div>
         <div class="seckill-item-right">
@@ -41,7 +41,7 @@
         </div>
       </div>
     </scroll-view>
-  
+
   </div>
 </template>
 
@@ -58,7 +58,7 @@ export default {
   mixins: [BaseMixin],
   components: {
     WzwImTip,
-    LayoutIcon,
+    LayoutIcon
   },
   data () {
     return {
@@ -66,7 +66,7 @@ export default {
       bizInfo: {},
       postData: {
         page: 1,
-        pageSize: 999,
+        pageSize: 999
       },
       activeId: null,
       start_time: '',
@@ -75,29 +75,29 @@ export default {
       page: 1,
       pageSize: 5,
       totalCount: 0,
-      seckillList: [],
+      seckillList: []
     }
   },
   methods: {
     // 倒计时
     stampFunc () {
       for (const item of this.seckillList) {
-        let start_time = item.start_time
-        let end_time = item.end_time
-        
-        start_time = start_time.replace(/-/g, '/')
-        start_time = new Date(start_time)
-        start_time = start_time.getTime()
-        start_time = start_time / 1000
-        
-        end_time = end_time.replace(/-/g, '/')
-        end_time = new Date(end_time)
-        end_time = end_time.getTime()
-        end_time = end_time / 1000
-        
+        const start_time = item.start_time
+        const end_time = item.end_time
+
+        // start_time = start_time.replace(/-/g, '/')
+        // start_time = new Date(start_time)
+        // start_time = start_time.getTime()
+        // start_time = start_time / 1000
+        //
+        // end_time = end_time.replace(/-/g, '/')
+        // end_time = new Date(end_time)
+        // end_time = end_time.getTime()
+        // end_time = end_time / 1000
+
         const data = getCountdownFunc({
           start_timeStamp: start_time,
-          end_timeStamp: end_time,
+          end_timeStamp: end_time
         })
         this.$set(item, 'countdown', data)
       }
@@ -112,10 +112,10 @@ export default {
             throw Error(e.msg || '获取商家信息错误')
           })
         }
-        
+
         const data = {
           page: this.page,
-          pageSize: this.pageSize,
+          pageSize: this.pageSize
         }
         if (this.biz_id) {
           data.biz_id = this.biz_id
@@ -123,14 +123,14 @@ export default {
         this.seckillList = await getFlashsaleList(data, { onlyData: true }).catch(e => {
           throw Error(e.msg || '获取秒杀列表失败')
         })
-        
-        // setInterval(this.stampFunc, 1000)
+
+        setInterval(this.stampFunc, 1000)
       } catch (e) {
-      
+
       } finally {
         hideLoading()
       }
-    },
+    }
   },
   onLoad (options) {
     const { activeId, biz_id } = options
@@ -145,7 +145,7 @@ export default {
     this.activeId = activeId
     this.biz_id = biz_id
     this.postData.biz_id = biz_id
-    
+
     this.init()
   },
   onShow () {
@@ -156,7 +156,7 @@ export default {
     // if (this.totalCount <= this.seckillList.length) return
     // this.page++
     // this.init({ isInit: false })
-  },
+  }
 }
 </script>
 
@@ -167,9 +167,9 @@ export default {
     height: auto;
     min-height: 100vh;
     background-size: 100%;
-    
+
   }
-  
+
   .seckill-title {
     padding-left: 5px;
     height: 80rpx;
@@ -177,7 +177,7 @@ export default {
     box-sizing: border-box;
     color: #FFFFFF;
     font-weight: bold;
-    
+
     &-text {
       display: inline-block;
       height: 80rpx;
@@ -186,14 +186,14 @@ export default {
       text-overflow: ellipsis;
       white-space: nowrap;
     }
-    
+
     &-img {
       width: 80rpx;
       height: 80rpx;
       border-radius: 50%;
     }
   }
-  
+
   .seckill-list {
     position: fixed;
     bottom: 0;
@@ -204,23 +204,23 @@ export default {
     padding: 40rpx;
     background-color: #FFFFFF;
   }
-  
+
   .seckill-list-item {
     height: 230rpx;
   }
-  
+
   .seckill-item-left {
     width: 230rpx;
     height: 230rpx;
     margin-right: 26rpx;
-    
+
     .item-cover {
       width: 230rpx;
       height: 230rpx;
       @include cover-img();
     }
   }
-  
+
   .seckill-item-title {
     height: 70rpx;
     width: 446rpx;
@@ -232,23 +232,23 @@ export default {
     overflow: hidden;
     margin-bottom: 38rpx;
   }
-  
+
   .seckill-item-price {
     color: #FF0000;
     height: 26rpx;
     margin-bottom: 34rpx;
-    
+
     .priceY {
       text-decoration: line-through;
       color: #bfbfbf;
       margin-left: 20rpx;
     }
   }
-  
+
   .seckill-item-time {
     height: 38rpx;
     line-height: 38rpx;
-    
+
     .span-time {
       display: inline-block;
       height: 38rpx;

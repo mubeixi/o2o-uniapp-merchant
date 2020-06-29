@@ -308,6 +308,7 @@ export default {
     },
     show () {
       this.isShow = true
+      this.init()
     },
     closePro () {
       this.submitFlag = false

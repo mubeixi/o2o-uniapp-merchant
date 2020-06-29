@@ -52,13 +52,14 @@
 <script>
 import BaseMixin, { tabbarMixin } from '@/mixins/BaseMixin'
 import { delChat, getChatList } from '@/common/Im/Fetch'
+import { getUserInfo } from '@/api/customer'
 import { modal } from '@/common/fun'
 import IM from '@/common/Im/Im'
 import Storage from '@/common/Storage'
 import { checkIsLogin, findArrayIdx } from '@/common/helper'
 import eventHub from '@/common/eventHub'
 import { Exception } from '@/common/Exception'
-
+import { mapActions } from 'vuex'
 let imInstance = null
 export default {
   components: {},
@@ -86,6 +87,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      setUserInfo: 'user/setUserInfo'
+    }),
     lookCode () {
       uni.previewImage({
         urls: [this.initData.mp_qrcode]
@@ -253,6 +257,12 @@ export default {
   onShow () {
     if (!checkIsLogin(1, 0)) return
 
+    getUserInfo().then(res => {
+      this.setUserInfo(res.data)
+    }).catch(err => {
+    })
+
+
     if (eventHub.imInstance) {
       this.imInstance = imInstance = eventHub.imInstance
     } else {
@@ -302,9 +312,10 @@ export default {
     position: fixed;
     top: 0px;
     left: 0px;
+    z-index: 9;
   }
   .flex-message-occupy{
-    height: 100rpx;
+    height: 120rpx;
     width: 750rpx;
   }
   .chat-item-box {
