@@ -1,16 +1,16 @@
 <template>
   <div class="page-wrap">
     <!--,opacity:headTabOpacity-->
-    <div class="fixed-top-box"  :style="{height: diyHeadHeight+'px',zIndex:headTabSticky?5:-5}">
+    <div class="fixed-top-box"  :style="{zIndex:headTabOpacity>0?5:-5,opacity:headTabOpacity}">
       <layout-page-title :letf-icon-size="18" :letfFn="true" :pageTitle="'店铺详情'" @clickLeft="$back"></layout-page-title>
       <div class="h10"></div>
-      <div v-show="headTabSticky" class="fixed-top-search flex flex-vertical-c">
-        <div class="fixed-search-input flex flex-vertical-c" @click="toSearch">
-          <layout-icon size="18" color="#ADADAD" type="iconsearch"></layout-icon>
-          <div class="placeholder">请输入商品关键词</div>
-        </div>
-        <image @click="toVip" class="fixed-top-vip" :src="$getDomain('/static/client/store/theme-three/vip.png')"></image>
-      </div>
+<!--      <div v-show="headTabSticky==1" class="fixed-top-search flex flex-vertical-c">-->
+<!--        <div class="fixed-search-input flex flex-vertical-c" @click="toSearch">-->
+<!--          <layout-icon size="18" color="#ADADAD" type="iconsearch"></layout-icon>-->
+<!--          <div class="placeholder">请输入商品关键词</div>-->
+<!--        </div>-->
+<!--        <image @click="toVip" class="fixed-top-vip" :src="$getDomain('/static/client/store/theme-three/vip.png')"></image>-->
+<!--      </div>-->
     </div>
 
     <scroll-view class="store-comp-wrap"
@@ -63,7 +63,9 @@
             </div>
           </div>
         </div>
-        <div class="top-search flex flex-vertical-c">
+
+        <div v-if="headTabSticky==1" class="top-search-space"></div>
+        <div class="top-search flex flex-vertical-c" :class="{sticky:headTabSticky==1}" :style="{top:headTabSticky==1?(menuButtonInfo.bottom+10+'px'):'0px'}">
           <div class="search-input flex flex-vertical-c" @click="toSearch">
             <layout-icon size="18" color="#ADADAD" type="iconsearch"></layout-icon>
             <div class="placeholder">请输入商品关键词</div>
@@ -71,7 +73,8 @@
           <image @click="toVip" class="top-vip" :src="$getDomain('/static/client/store/theme-three/vip.png')"></image>
         </div>
       </div>
-      <div class="container" :style="{height:systemInfo.windowHeight-diyHeadHeight+'px'}">
+      
+      <div class="container" :style="{height:systemInfo.windowHeight-diyHeadHeight+'px'}" :class="{sticky:headTabSticky==1}">
         <scroll-view class="container-l"
                      @touchstart="touchLeftStart"
                      @touchmove="touchLeftMove"
@@ -360,6 +363,7 @@ export default {
     return {
       scrollTopNum: 0,
       toViewIdx: '',
+      pixelRatio: 1,
       headTabTop: 100,
       pageScrollTop: 0,
       containerRightScrollTop: 0,
@@ -367,10 +371,11 @@ export default {
       moveStartYByRight: 0,
       moveStartYByLeft: 0,
       moveStartYByPage: 0,
+      moveDirectionByPage: '--',
       pageScrollEnable: false,
       leftScrollEnable: false,
       rightScrollEnable: false,
-      
+
       total_count: 0,
       total_price: 0,
       qty: 0,
@@ -672,17 +677,27 @@ export default {
       this.moveStartYByPage = y
     },
     touchPageMove (e) {
+
       const { x, y, type } = getTouchEventInfo(e)
-      // console.log('touchPageMove',this.containerRightScrollTop,y,this.moveStartYByPage)
+      // console.log('touchPageMove', y, this.moveStartYByPage)
       // if (y > this.moveStartYByPage && this.containerRightScrollTop <= 10) {
       //
       //   this.pageScrollEnable = true
       //   this.leftScrollEnable = false
       //   this.rightScrollEnable = false
       // }
+      // 向上拖动,页面向下滚动
+      // if (y < this.moveStartYByPage) {
+      //   this.moveDirectionByPage = 'top to bottom'
+      // }
+      // // 向下拖动
+      // if (y > this.moveStartYByPage) {
+      //   // this.headTabSticky = false
+      //   this.moveDirectionByPage = 'bottom to top'
+      // }
     },
     touchPageEnd (e) {
-      console.log('touchPageEnd',this.pageScrollEnable)
+      console.log('touchPageEnd', this.pageScrollEnable)
       // 下面可以滑动的时候，他不可以滑动
       if (this.leftScrollEnable || this.rightScrollEnable) {
         return
@@ -690,33 +705,59 @@ export default {
 
       const { x, y, type } = getTouchEventInfo(e)
       // console.log(x, y, type, this.pageScrollTop, this.headTabTop)
-
-      // 向上拖动
-      if (y < this.moveStartYByPage && this.pageScrollTop+20 >= this.headTabTop) {
-        console.log(this.pageScrollTop, this.headTabTop)
-        this.headTabSticky = true
-        
-        this.leftScrollEnable = true
-        this.rightScrollEnable = true
+      console.log('touchPageEnd', this.pageScrollTop,this.headTabTop)
+  
+      // 向上拖动,页面向下滚动
+      if (y < this.moveStartYByPage) {
+        this.moveDirectionByPage = 'top'
       }
-
       // 向下拖动
-      if (y > this.moveStartYByPage && this.pageScrollTop <= this.headTabTop) {
-        this.headTabSticky = false
+      if (y > this.moveStartYByPage) {
+        // this.headTabSticky = false
+        this.moveDirectionByPage = 'bottom'
       }
+  
+     
+      
+      
     },
     bindScroll (e) {
-      console.log('bindScroll')
       const { scrollTop } = e.detail
+
+      console.log('wrap bindScroll', scrollTop, this.moveDirectionByPage)
       this.pageScrollTop = scrollTop
+
+      // 多给20的空间
+      if (this.pageScrollTop+20 >= this.headTabTop) {
+        this.headTabSticky = true
+      }
+      if (this.pageScrollTop < this.headTabTop) {
+        this.headTabSticky = false
+      }
+  
+      if (this.pageScrollTop > this.headTabTop) {
+        this.rightScrollEnable = true
+        this.leftScrollEnable = true
+        
+        // this.pageScrollEnable = false
+        
+      }else{
+        this.rightScrollEnable = false
+        this.leftScrollEnable = false
+        
+      }
+      
+      this.headTabOpacity = this.pageScrollTop < this.headTabTop?this.pageScrollTop/this.headTabTop:1
+
+      
     },
     touchLeftStart (e) {
       const { x, y, type } = getTouchEventInfo(e)
       console.log(x, y, type)
       this.moveStartYByLeft = y
-      
-      //在右边滚动后，才禁用
-      if(this.pageScrollTop>this.headTabTop && this.pageScrollEnable){
+
+      // 在右边滚动后，才禁用
+      if (this.pageScrollTop > this.headTabTop && this.pageScrollEnable) {
         // this.pageScrollEnable = false
       }
     },
@@ -727,33 +768,32 @@ export default {
       const { x, y, type } = getTouchEventInfo(e)
       // 向上滑动,恢复顶部
       if (y > this.moveStartYByLeft && this.containerLeftScrollTop <= 50) {
-        this.pageScrollEnable = true
-        this.leftScrollEnable = false
-        this.rightScrollEnable = false
+        // this.pageScrollEnable = true
+        // this.leftScrollEnable = false
+        // this.rightScrollEnable = false
       }
     },
     touchRightStart (e) {
       const { x, y, type } = getTouchEventInfo(e)
       console.log(x, y, type)
       this.moveStartYByRight = y
-      //在右边滚动后，才禁用
-      if(this.pageScrollTop>this.headTabTop && this.pageScrollEnable){
+      // 在右边滚动后，才禁用
+      if (this.pageScrollTop > this.headTabTop && this.pageScrollEnable) {
         // this.pageScrollEnable = false
       }
-      
     },
     touchRightMove (e) {
-    
+
     },
     touchRightEnd (e) {
-      console.log('touchRightEnd',this.rightScrollEnable)
+      console.log('touchRightEnd', this.rightScrollEnable)
       const { x, y, type } = getTouchEventInfo(e)
-      console.log(x,y)
+      console.log(x, y)
       // 向下拖动,恢复顶部
       if (y > this.moveStartYByRight && this.containerRightScrollTop <= 50) {
-        this.pageScrollEnable = true
-        this.leftScrollEnable = false
-        this.rightScrollEnable = false
+        // this.pageScrollEnable = true
+        // this.leftScrollEnable = false
+        // this.rightScrollEnable = false
       }
     },
     bindContainerLeftScroll (e) {
@@ -761,16 +801,15 @@ export default {
       this.containerLeftScrollTop = scrollTop
     },
     bindContainerRightScroll (e) {
-      
       const { scrollTop } = e.detail
       this.containerRightScrollTop = scrollTop
     },
     bindScrollRightTop () {
-      this.headTabSticky = false
-      this.pageScrollEnable = true
-      this.leftScrollEnable = false
-      this.rightScrollEnable = false
-      console.log('emit event bindScrollRightTop')
+      // this.headTabSticky = false
+      // this.pageScrollEnable = true
+      // this.leftScrollEnable = false
+      // this.rightScrollEnable = false
+      // console.log('emit event bindScrollRightTop')
       // this.headTabSticky = false
     },
     // 单个商家
@@ -895,11 +934,12 @@ export default {
           query.select('#topBox').boundingClientRect(data => {
             const { windowWidth } = this.systemInfo
             const pixelRatio = windowWidth / 750
-            console.log(windowWidth / 750)
+
             this.pixelRatio = pixelRatio
 
+            // + 60 * pixelRatio
             // 以后不再怕顶部有rpx了
-            this.diyHeadHeight = this.menuButtonInfo.bottom + 10 + 60 * pixelRatio
+            this.diyHeadHeight = this.menuButtonInfo.bottom + 10+ 60 * pixelRatio
             console.log(this.diyHeadHeight, this.systemInfo.windowHeight, this.systemInfo.windowHeight - this.diyHeadHeight)
 
             this.headTabTop = data.height - this.diyHeadHeight
@@ -1349,7 +1389,7 @@ export default {
 
   .container-l{
     position: absolute;
-    height: 100%;
+    bottom: 0;
     left: 0;
     top: 20px;
     overflow-x: hidden;
@@ -1395,7 +1435,7 @@ export default {
     padding-left: 20rpx;
     padding-right: 20rpx;
     position: absolute;
-    height: 100%;
+    bottom: 0;
     right: 0;
     top: 20px;
     overflow-x: hidden;
@@ -1466,10 +1506,10 @@ export default {
 .container{
   position: relative;
   left: 0;
-  top: 0;
+  bottom: 0;
   width: 750rpx;
   z-index: 4;
-
+ 
 }
 
 .top-box{
@@ -1485,7 +1525,7 @@ export default {
     position: relative;
     z-index: 5;
     width:710rpx;
-    margin: 0 20rpx;
+    margin: 0 20rpx 30rpx;
     background:rgba(255,255,255,1);
     box-shadow:0px 0px 14rpx 0px rgba(0, 0, 0, 0.25);
     border-radius:10px;
@@ -1556,31 +1596,42 @@ export default {
     }
   }
 
-  .top-search{
-    margin-top: 30rpx;
-    padding: 0 20rpx;
-    .search-input{
-      width:540rpx;
-      height:60rpx;
-      background:#f2f2f2;
-      border-radius:10rpx;
-      padding-left: 32rpx;
-      box-sizing: border-box;
-      .placeholder{
-        color: #ADADAD;
-        font-size: 12px;
-        margin-left: 18rpx;
-      }
-    }
-    .top-vip{
-      width:150rpx;
-      height:60rpx;
-      opacity:0.9;
-      border-radius:5rpx;
-      margin-left: 20rpx;
+  
+
+}
+.top-search-space{
+  height:60rpx;
+
+}
+.top-search{
+
+  padding: 0 20rpx;
+  position: relative;
+  &.sticky{
+    position: fixed;
+    z-index: 6;
+    background: #fff;
+  }
+  .search-input{
+    width:540rpx;
+    height:60rpx;
+    background:#f2f2f2;
+    border-radius:10rpx;
+    padding-left: 32rpx;
+    box-sizing: border-box;
+    .placeholder{
+      color: #ADADAD;
+      font-size: 12px;
+      margin-left: 18rpx;
     }
   }
-
+  .top-vip{
+    width:150rpx;
+    height:60rpx;
+    opacity:0.9;
+    border-radius:5rpx;
+    margin-left: 20rpx;
+  }
 }
 
 .fixed-top-box{
@@ -1589,7 +1640,7 @@ export default {
   top: 0;
   left: 0;
   width: 750rpx;
-  z-index: 3;
+
   .fixed-top-search{
     padding: 0 20rpx;
   }
@@ -1616,7 +1667,7 @@ export default {
 }
 
 .coupon-list{
-  margin:36rpx 0 0 0;
+  margin:0 0 30rpx 0;
   width: 750rpx;
   white-space: nowrap;
   overflow-y: hidden;
