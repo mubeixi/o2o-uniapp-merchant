@@ -686,7 +686,7 @@ export default {
   },
   computed: {
     totalNum () {
-      return this.$store.getters['cart/getTotalNum'](this.bid)
+      return this.$store.getters['cart/getTotalNum'](this.bid,false)
     },
     shopCartList: {
       get () {

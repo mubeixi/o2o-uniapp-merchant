@@ -152,7 +152,7 @@
                   <swiper-item style="overflow-y: scroll">
                     <div class="goods-list">
                       <div :key="idx" @click="$toGoodsDetail(item)"
-                           class="goods-item" style="height: 220rpx;margin-bottom: 18rpx;" v-for="(item,idx) in recommends">
+                           class="goods-item" style="margin-bottom: 18rpx;" v-for="(item,idx) in recommends">
                         <image :style="{backgroundImage:'url('+item.ImgPath+')'}" class="goods-item-cover"></image>
                         <div class="goods-item-right">
                           <div class="title">{{item.Products_Name}}</div>
