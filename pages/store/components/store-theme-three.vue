@@ -25,7 +25,9 @@
         <div class="h10"></div>
         <div class="store-info">
           <div class="flex">
-            <div class="store-info-logo" :style="{backgroundImage:'url('+storeInfo.biz_logo+')'}"></div>
+            <div class="store-info-logo" :style="{backgroundImage:'url('+storeInfo.biz_logo+')'}" @click="toPicture">
+              <div class="thumbCount">{{storePhotoTotal}}张照片</div>
+            </div>
             <div class="store-info-more">
               <div class="store-info-row flex-vertical-c flex-justify-between">
                 <div style="max-width: 360rpx;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;"
@@ -402,7 +404,7 @@
 <script>
 import { componetMixin } from '@/mixins/BaseMixin'
 import { checkIsExpire, confirm, error, hideLoading, showLoading, toast } from '@/common/fun'
-import { getBizInfo, getBizSpikeList } from '@/api/store'
+import { getAlbumList, getBizInfo, getBizSpikeList } from '@/api/store'
 import { getBizProdCateList, getFlashsaleList, getProductDetail, getProductList } from '@/api/product'
 import { getCouponList } from '@/api/common'
 import {
@@ -1503,6 +1505,18 @@ export default {
           })
           query.exec()
         })
+  
+  
+        this.photoList = await getAlbumList({
+          biz_id: this.bid,
+          get_photo: 4
+        }).then(res => {
+          const { data, totalCount } = res
+          this.storePhotoTotal = totalCount
+          return data
+        }).catch(e => {
+          throw Error(e.msg || '获取相册信息失败')
+        })
 
         // 这个就不要等了吧
         if (!checkIsLogin(0, 0)) {
@@ -1517,6 +1531,9 @@ export default {
         hideLoading()
         Exception.handle(e)
       }
+    },
+    toPicture () {
+      this.$linkTo('/pagesA/store/photo?bid=' + this.bid)
     },
     taggleFavorite () {
       if (!checkIsLogin(1, 1)) return
@@ -1648,25 +1665,25 @@ export default {
   }
 
   .attr-form-wrap {
-    width: 660 rpx;
+    width: 660rpx;
     background: #fff;
-    border-radius: 10 rpx;
+    border-radius: 10rpx;
 
     .actions {
       display: flex;
-      height: 90 rpx;
+      height: 90rpx;
       background: #EAEAEA;
       align-items: center;
       justify-content: space-between;
-      padding: 0 30 rpx;
+      padding: 0 30rpx;
 
       .confirm-btn {
-        width: 145 rpx;
-        height: 50 rpx;
+        width: 145rpx;
+        height: 50rpx;
         background: $fun-primary-color;
         text-align: center;
-        line-height: 50 rpx;
-        border-radius: 5 rpx;
+        line-height: 50rpx;
+        border-radius: 5rpx;
         border: none;
         font-size: 12px;
         color: #fff;
@@ -1682,7 +1699,7 @@ export default {
       position: relative;
 
       .title {
-        width: 560 rpx;
+        width: 560rpx;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -1721,8 +1738,8 @@ export default {
           font-size: 12px;
           color: #888;
           border: 1px solid #999;
-          margin-right: 20 rpx;
-          margin-bottom: 20 rpx;
+          margin-right: 20rpx;
+          margin-bottom: 20rpx;
           box-sizing: border-box;
 
           &.checked {
@@ -1741,65 +1758,65 @@ export default {
 
   .kill-goods-list {
     .kill-goods-item {
-      padding: 30 rpx 0;
-      width: 550 rpx;
+      padding: 30rpx 0;
+      width: 550rpx;
 
       .item-cover {
-        width: 170 rpx;
-        height: 170 rpx;
+        width: 170rpx;
+        height: 170rpx;
         @include cover-img();
-        margin-right: 20 rpx;
+        margin-right: 20rpx;
       }
 
       .price-num {
         background: #FFF4F4;
-        font-size: 22 rpx;
+        font-size: 22rpx;
         color: #E64239;
         font-weight: 500;
-        margin-right: 18 rpx;
-        padding: 10 rpx 18 rpx;
+        margin-right: 18rpx;
+        padding: 10rpx 18rpx;
       }
 
       .act-goods-item-title {
-        width: 350 rpx;
+        width: 350rpx;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
       }
 
       .kill-countdown {
-        margin-top: 20 rpx;
+        margin-top: 20rpx;
         display: flex;
         align-items: center;
 
         .countdown-tag {
           background: #E64239;
           color: #fff;
-          font-size: 24 rpx;
-          padding: 6 rpx;
-          border-radius: 6 rpx;
+          font-size: 24rpx;
+          padding: 6rpx;
+          border-radius: 6rpx;
           text-align: center;
         }
 
         .countdown-delimiter {
           text-align: center;
-          font-size: 24 rpx;
+          font-size: 24rpx;
           color: #E64239;
-          padding: 0 8 rpx;
+          padding: 0 8rpx;
         }
       }
     }
   }
 
   .spike-list {
-    padding-bottom: 20 rpx;
+    padding-bottom: 20rpx;
 
     .flash-act-item {
-      width: 550 rpx;
+      width: 550rpx;
       box-sizing: border-box;
-      margin: 0 auto 30 rpx;
-      border-radius: 15 rpx;
-      padding: 0 rpx 0 rpx 30 rpx 0 rpx;
+      margin: 0 auto 30rpx;
+      border-radius: 15rpx;
+      padding: 0rpx 0rpx 30rpx 0rpx;
       background: #fff;
       overflow: hidden;
 
@@ -1808,14 +1825,14 @@ export default {
       }
 
       .flash-act-title {
-        width: 550 rpx;
-        padding: 30 rpx 0;
+        width: 550rpx;
+        padding: 30rpx 0;
 
       }
 
       .flash-act-countdown {
-        width: 550 rpx;
-        height: 64 rpx;
+        width: 550rpx;
+        height: 64rpx;
 
         background: rgba(255, 244, 243, 1);
         display: flex;
@@ -1825,19 +1842,19 @@ export default {
         .countdown-tag {
           background: #E64239;
           color: #fff;
-          font-size: 26 rpx;
-          height: 26 rpx;
-          line-height: 26 rpx;
-          padding: 6 rpx;
-          border-radius: 6 rpx;
+          font-size: 26rpx;
+          height: 26rpx;
+          line-height: 26rpx;
+          padding: 6rpx;
+          border-radius: 6rpx;
           text-align: center;
         }
 
         .countdown-delimiter {
           text-align: center;
-          font-size: 24 rpx;
+          font-size: 24rpx;
           color: #E64239;
-          padding: 0 8 rpx;
+          padding: 0 8rpx;
         }
       }
     }
@@ -1847,27 +1864,27 @@ export default {
     }
 
     .act-goods-item {
-      padding: 30 rpx 0;
-      width: 550 rpx;
+      padding: 30rpx 0;
+      width: 550rpx;
 
       .item-cover {
-        width: 170 rpx;
-        height: 170 rpx;
+        width: 170rpx;
+        height: 170rpx;
         @include cover-img();
-        margin-right: 20 rpx;
+        margin-right: 20rpx;
       }
 
       .price-num {
         background: #FFF4F4;
-        font-size: 22 rpx;
+        font-size: 22rpx;
         color: #E64239;
         font-weight: 500;
-        margin-right: 18 rpx;
-        padding: 10 rpx 18 rpx;
+        margin-right: 18rpx;
+        padding: 10rpx 18rpx;
       }
 
       .act-goods-item-title {
-        width: 350 rpx;
+        width: 350rpx;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -1877,47 +1894,47 @@ export default {
 
   .carts {
     &-action {
-      height: 80 rpx;
-      padding: 0 20 rpx 0 36 rpx;
+      height: 80rpx;
+      padding: 0 20rpx 0 36rpx;
       border-bottom: 1px solid #EDEDED;
 
     }
 
     &-box {
-      width: 750 rpx;
+      width: 750rpx;
       overflow-x: hidden;
       overflow-y: scroll;
     }
 
     &-list {
-      padding: 20 rpx 20 rpx 60 rpx 0;
-      width: 750 rpx;
+      padding: 20rpx 20rpx 60rpx 0;
+      width: 750rpx;
       box-sizing: border-box;
     }
 
     &-item {
-      height: 160 rpx;
+      height: 160rpx;
       display: flex;
       align-items: center;
 
       .check-item {
-        padding-left: 36 rpx;
-        padding-right: 22 rpx;
+        padding-left: 36rpx;
+        padding-right: 22rpx;
       }
 
       &-cover {
         @include cover-img();
-        width: 100 rpx;
-        height: 100 rpx;
-        border-radius: 5 rpx;
-        margin-right: 30 rpx;
+        width: 100rpx;
+        height: 100rpx;
+        border-radius: 5rpx;
+        margin-right: 30rpx;
       }
 
       &-info {
-        width: 500 rpx;
-        height: 160 rpx;
+        width: 500rpx;
+        height: 160rpx;
         box-sizing: border-box;
-        padding-top: 40 rpx;
+        padding-top: 40rpx;
         border-bottom: 1px solid #EDEDED;
 
         .title {
@@ -1926,18 +1943,18 @@ export default {
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
-          width: 480 rpx;
+          width: 480rpx;
         }
 
         .attr-text {
           font-size: 12px;
           color: #999;
-          margin-top: 10 rpx;
+          margin-top: 10rpx;
         }
 
         .actions {
-          margin: 20 rpx 0 0;
-          height: 54 rpx;
+          margin: 20rpx 0 0;
+          height: 54rpx;
           display: flex;
           justify-content: space-between;
           align-items: center;
@@ -1950,8 +1967,8 @@ export default {
     position: fixed;
     display: flex;
     background: #262626;
-    height: 96 rpx;
-    width: 750 rpx;
+    height: 96rpx;
+    width: 750rpx;
     bottom: constant(safe-area-inset-bottom);
     bottom: env(safe-area-inset-bottom);
     left: 0;
@@ -1961,8 +1978,8 @@ export default {
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 160 rpx;
-      height: 96 rpx;
+      width: 160rpx;
+      height: 96rpx;
       border-right: 1px solid #656565;
 
       .cart-icon-box {
@@ -1975,17 +1992,17 @@ export default {
           transform: translate(50%, -50%);
           background: #E64239;
           color: #fff;
-          border-radius: 10 rpx;
-          font-size: 20 rpx;
-          padding: 4 rpx 8 rpx;
+          border-radius: 10rpx;
+          font-size: 20rpx;
+          padding: 4rpx 8rpx;
           text-align: center;
 
           &.aircle {
             border-radius: 50%;
             padding: 0;
-            width: 40 rpx;
-            height: 40 rpx;
-            line-height: 40 rpx;
+            width: 40rpx;
+            height: 40rpx;
+            line-height: 40rpx;
           }
         }
       }
@@ -1993,23 +2010,23 @@ export default {
 
     .total-info {
       flex: 1;
-      padding-left: 58 rpx;
+      padding-left: 58rpx;
     }
 
     .go-btn {
-      height: 96 rpx;
-      width: 180 rpx;
+      height: 96rpx;
+      width: 180rpx;
       text-align: center;
-      line-height: 96 rpx;
+      line-height: 96rpx;
       color: #fff;
       background: #E64239;
-      font-size: 32 rpx;
+      font-size: 32rpx;
     }
   }
 
   .store-comp-wrap {
     position: absolute;
-    width: 750 rpx;
+    width: 750rpx;
     left: 0;
     bottom: 0;
     top: 0;
@@ -2025,7 +2042,7 @@ export default {
       top: 20px;
       overflow-x: hidden;
       overflow-y: scroll;
-      width: 160 rpx;
+      width: 160rpx;
       background: #f6f6f6;
 
       &::-webkit-scrollbar {
@@ -2035,25 +2052,25 @@ export default {
       }
 
       .cate-item {
-        width: 160 rpx;
-        height: 97 rpx;
+        width: 160rpx;
+        height: 97rpx;
         position: relative;
 
         .cate-title {
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
-          font-size: 26 rpx;
-          width: 120 rpx;
-          margin: 0 20 rpx;
-          height: 97 rpx;
-          line-height: 97 rpx;
+          font-size: 26rpx;
+          width: 120rpx;
+          margin: 0 20rpx;
+          height: 97rpx;
+          line-height: 97rpx;
           text-align: center;
         }
 
         .cate-underline {
-          width: 5 rpx;
-          height: 50 rpx;
+          width: 5rpx;
+          height: 50rpx;
           background: #E64239;
           position: absolute;
           left: 0;
@@ -2080,9 +2097,9 @@ export default {
         color: transparent;
       }
 
-      width: 550 rpx;
-      padding-left: 20 rpx;
-      padding-right: 20 rpx;
+      width: 550rpx;
+      padding-left: 20rpx;
+      padding-right: 20rpx;
       position: absolute;
       bottom: 0;
       right: 0;
@@ -2096,20 +2113,20 @@ export default {
       .cate-child-list {
         overflow-y: hidden;
         overflow-x: scroll;
-        width: 550 rpx;
-        margin-bottom: 30 rpx;
+        width: 550rpx;
+        margin-bottom: 30rpx;
         white-space: nowrap;
 
         .cate-item {
           display: inline-block;
-          margin-right: 15 rpx;
-          padding: 12 rpx 22 rpx;
-          height: 50 rpx;
+          margin-right: 15rpx;
+          padding: 12rpx 22rpx;
+          height: 50rpx;
           box-sizing: border-box;
           background: #F7F8F8;
-          border-radius: 6 rpx;
+          border-radius: 6rpx;
           color: #666666;
-          font-size: 24 rpx;
+          font-size: 24rpx;
 
           &.active {
             color: #444;
@@ -2122,17 +2139,17 @@ export default {
         .goods-item {
           display: flex;
           align-items: center;
-          margin: 30 rpx 0;
+          margin: 30rpx 0;
 
           .goods-item-action {
             .btn-open-attr {
               background: #E64239;
               font-size: 10px;
               color: #fff;
-              width: 110 rpx;
-              height: 38 rpx;
-              line-height: 38 rpx;
-              border-radius: 19 rpx;
+              width: 110rpx;
+              height: 38rpx;
+              line-height: 38rpx;
+              border-radius: 19rpx;
               text-align: center;
               position: relative;
 
@@ -2153,15 +2170,15 @@ export default {
           }
 
           .cover {
-            width: 170 rpx;
-            height: 170 rpx;
+            width: 170rpx;
+            height: 170rpx;
             @include cover-img();
           }
 
           .info {
-            width: 360 rpx;
+            width: 360rpx;
             overflow-x: hidden;
-            padding-left: 20 rpx;
+            padding-left: 20rpx;
 
             .title {
               line-height: 16px;
@@ -2173,11 +2190,11 @@ export default {
 
             .price-num {
               background: #FFF4F4;
-              font-size: 22 rpx;
+              font-size: 22rpx;
               color: #E64239;
               font-weight: 500;
-              margin-right: 18 rpx;
-              padding: 10 rpx 18 rpx;
+              margin-right: 18rpx;
+              padding: 10rpx 18rpx;
             }
 
             .input-num {
@@ -2193,7 +2210,7 @@ export default {
     position: relative;
     left: 0;
     bottom: 0;
-    width: 750 rpx;
+    width: 750rpx;
     z-index: 4;
 
   }
@@ -2205,31 +2222,44 @@ export default {
       position: absolute;
       left: 0;
       top: 0;
-      width: 750 rpx;
-      height: 230 rpx;
+      width: 750rpx;
+      height: 230rpx;
     }
 
     .store-info {
       position: relative;
       z-index: 5;
-      width: 710 rpx;
-      margin: 0 20 rpx 30 rpx;
+      width: 710rpx;
+      margin: 0 20rpx 30rpx;
       background: rgba(255, 255, 255, 1);
-      box-shadow: 0px 0px 14 rpx 0px rgba(0, 0, 0, 0.25);
+      box-shadow: 0px 0px 14rpx 0px rgba(0, 0, 0, 0.25);
       border-radius: 10px;
       box-sizing: border-box;
-      padding: 30 rpx 20 rpx;
+      padding: 30rpx 20rpx;
 
       .store-info-logo {
-        width: 105 rpx;
-        height: 105 rpx;
-        border-radius: 6 rpx;
+        width: 105rpx;
+        height: 105rpx;
+        border-radius: 6rpx;
+        overflow: hidden;
         @include cover-img();
+        position: relative;
+        .thumbCount{
+          position: absolute;
+          bottom: 0;
+          width: 105rpx;
+          height: 16px;
+          text-align: center;
+          line-height: 16px;
+          font-size: 10px;
+          background: rgba(0,0,0,.6);
+          color: #fff;
+        }
       }
 
       .store-info-more {
-        width: 545 rpx;
-        padding: 0 20 rpx;
+        width: 545rpx;
+        padding: 0 20rpx;
 
         .store-info-row {
           display: flex;
@@ -2239,37 +2269,37 @@ export default {
       .activity-info {
         display: flex;
         align-items: center;
-        margin-top: 25 rpx;
+        margin-top: 25rpx;
 
         .store-activity {
-          margin-left: 20 rpx;
-          width: 480 rpx;
+          margin-left: 20rpx;
+          width: 480rpx;
           white-space: nowrap;
           overflow-y: hidden;
           overflow-x: scroll;
 
           .activity-item {
             display: inline-block;
-            font-size: 20 rpx;
+            font-size: 20rpx;
             color: #E64239;
-            line-height: 20 rpx;
+            line-height: 20rpx;
             text-align: center;
-            padding: 8 rpx 10 rpx;
-            margin-right: 20 rpx;
-            height: 20 rpx;
+            padding: 8rpx 10rpx;
+            margin-right: 20rpx;
+            height: 20rpx;
             border: 1px solid rgba(230, 66, 57, 1);
-            border-radius: 6 rpx;
+            border-radius: 6rpx;
           }
         }
 
         .store-follow {
-          width: 162 rpx;
-          height: 42 rpx;
+          width: 162rpx;
+          height: 42rpx;
           position: relative;
 
           .store-follow-bg {
-            width: 162 rpx;
-            height: 42 rpx;
+            width: 162rpx;
+            height: 42rpx;
             position: absolute;
             left: 0;
             top: 0;
@@ -2278,15 +2308,15 @@ export default {
 
           .store-follow-text {
             z-index: 3;
-            width: 162 rpx;
-            height: 42 rpx;
+            width: 162rpx;
+            height: 42rpx;
             position: absolute;
             left: 0;
             top: 0;
             text-align: center;
-            line-height: 42 rpx;
+            line-height: 42rpx;
             color: #fff;
-            font-size: 22 rpx;
+            font-size: 22rpx;
           }
         }
       }
@@ -2295,13 +2325,13 @@ export default {
   }
 
   .top-search-space {
-    height: 60 rpx;
+    height: 60rpx;
 
   }
 
   .top-search {
 
-    padding: 0 20 rpx;
+    padding: 0 20rpx;
     position: relative;
 
     &.sticky {
@@ -2311,26 +2341,26 @@ export default {
     }
 
     .search-input {
-      width: 540 rpx;
-      height: 60 rpx;
+      width: 540rpx;
+      height: 60rpx;
       background: #f2f2f2;
-      border-radius: 10 rpx;
-      padding-left: 32 rpx;
+      border-radius: 10rpx;
+      padding-left: 32rpx;
       box-sizing: border-box;
 
       .placeholder {
         color: #ADADAD;
         font-size: 12px;
-        margin-left: 18 rpx;
+        margin-left: 18rpx;
       }
     }
 
     .top-vip {
-      width: 150 rpx;
-      height: 60 rpx;
+      width: 150rpx;
+      height: 60rpx;
       opacity: 0.9;
-      border-radius: 5 rpx;
-      margin-left: 20 rpx;
+      border-radius: 5rpx;
+      margin-left: 20rpx;
     }
   }
 
@@ -2339,39 +2369,39 @@ export default {
     background: #fff;
     top: 0;
     left: 0;
-    width: 750 rpx;
+    width: 750rpx;
 
     .fixed-top-search {
-      padding: 0 20 rpx;
+      padding: 0 20rpx;
     }
 
     .fixed-search-input {
-      width: 540 rpx;
-      height: 60 rpx;
+      width: 540rpx;
+      height: 60rpx;
       background: #f2f2f2;
-      border-radius: 10 rpx;
-      padding-left: 32 rpx;
+      border-radius: 10rpx;
+      padding-left: 32rpx;
       box-sizing: border-box;
 
       .placeholder {
         color: #ADADAD;
         font-size: 12px;
-        margin-left: 18 rpx;
+        margin-left: 18rpx;
       }
     }
 
     .fixed-top-vip {
-      width: 150 rpx;
-      height: 60 rpx;
+      width: 150rpx;
+      height: 60rpx;
       opacity: 0.9;
-      border-radius: 5 rpx;
-      margin-left: 20 rpx;
+      border-radius: 5rpx;
+      margin-left: 20rpx;
     }
   }
 
   .coupon-list {
-    margin: 0 0 30 rpx 0;
-    width: 750 rpx;
+    margin: 0 0 30rpx 0;
+    width: 750rpx;
     white-space: nowrap;
     overflow-y: hidden;
     overflow-x: scroll;
@@ -2379,22 +2409,22 @@ export default {
     .coupon-item {
       position: relative;
       display: inline-block;
-      margin-left: 20 rpx;
-      height: 40 rpx;
+      margin-left: 20rpx;
+      height: 40rpx;
       color: #fff;
 
       align-items: center;
 
       &:last-child {
-        margin-right: 20 rpx;
+        margin-right: 20rpx;
       }
 
       .coupon-item-r {
-        line-height: 40 rpx;
-        width: 79 rpx;
+        line-height: 40rpx;
+        width: 79rpx;
         text-align: center;
-        padding: 0 15 rpx;
-        font-size: 22 rpx;
+        padding: 0 15rpx;
+        font-size: 22rpx;
         background-image: url("/static/store/theme-three/coupon-r.png");
         background-size: 100% 100%;
         background-repeat: no-repeat;
@@ -2404,12 +2434,12 @@ export default {
         background-color: #E64239;
         display: flex;
         align-items: center;
-        font-size: 22 rpx;
-        line-height: 40 rpx;
+        font-size: 22rpx;
+        line-height: 40rpx;
         justify-content: center;
-        padding: 0 15 rpx;
-        border-top-left-radius: 5 rpx;
-        border-bottom-left-radius: 5 rpx;
+        padding: 0 15rpx;
+        border-top-left-radius: 5rpx;
+        border-bottom-left-radius: 5rpx;
 
         .sign {
 
