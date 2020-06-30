@@ -1092,7 +1092,7 @@ export default {
         const { ImgPath, Products_Name, Products_PriceX, Products_PriceY } = goodsInfo
         Object.assign(productInfo, {
           biz_id: Number(this.bid),
-          checked: false,
+          checked: true,
           pic: ImgPath,
           name: Products_Name,
           price_selling: Number(Products_PriceX),
@@ -1153,8 +1153,11 @@ export default {
       })
       if (cart !== false) {
         this.$set(goodsInfo, 'num', amount)
-        this.refreshCount()
+      } else {
+        this.$set(goodsInfo, 'num', qty)
       }
+
+      this.refreshCount()
     },
     toGoodsDetailFn (pro, activity) {
       this.$linkTo(`/pages/product/detail?prod_id=${pro.Products_ID}&mode=spike&spike_good_id=${pro.id}`)
@@ -1302,6 +1305,7 @@ export default {
       await this.$store.dispatch('cart/taggleCheckStatus', { biz_id: Number(this.bid) })
 
       this.allCheck = this.$store.getters['cart/getListCheckStatus'](Number(this.bid))
+      this.refreshCount()
     },
     // 单行
     async selectItem (row) {
@@ -1311,6 +1315,7 @@ export default {
         prod_id: Number(prod_id)
       })
       this.allCheck = this.$store.getters['cart/getListCheckStatus'](Number(this.bid))
+      this.refreshCount()
     },
     /**
      * 用来做登陆后的一些数据初始化，和其他数据分开，是为了如果登陆后可以刷新
