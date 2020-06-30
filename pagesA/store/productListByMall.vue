@@ -66,7 +66,7 @@
                             <block v-if="CartList[goods.biz_id][goods.Products_ID][0].Qty>0">
                               <layout-icon @click.stop="updateCartFn(goods.biz_id,goods.Products_ID,0,-1)" color="#e64239" size="20"
                                            type="iconicon-minus "></layout-icon>
-                              <input :value="CartList[goods.biz_id][goods.Products_ID][0].Qty"  disabled class="input-num text-center fz-12" />
+                              <input :value="CartList[goods.biz_id][goods.Products_ID][0].Qty" @blur="changeGoodsNum($event,goods.biz_id,goods.Products_ID,0,1)"   @focus="getQty($event)" class="input-num text-center fz-12" />
                               <layout-icon @click.stop="updateCartFn(goods.biz_id,goods.Products_ID,0,1)" color="#e64239" size="20"
                                            type="iconicon-plus "></layout-icon>
                             </block>
@@ -135,7 +135,7 @@
             <div class="flex flex-vertical-c" style="width: 120px" v-else>
               <block v-if="attrInfo.num>0">
                 <layout-icon @click.stop="delNum" color="#26C78D" size="24" type="iconicon-minus p-10"></layout-icon>
-                <input @input="changeNum" class="input-num text-center fz-12" v-model="attrInfo.num" />
+                <input @blur="changeNum"  @focus="getQty($event)" class="input-num text-center fz-12" :value="attrInfo.num" />
               </block>
               <layout-icon @click.stop="addNum" color="#26C78D" size="24" type="iconicon-plus p-10"></layout-icon>
             </div>
@@ -152,7 +152,7 @@ import BaseMixin from '@/mixins/BaseMixin'
 import { Exception } from '@/common/Exception'
 import { error, modal } from '@/common/fun'
 import { getBizProdCateList, getProductDetail, getProductList } from '@/api/product'
-import { mergeObject, numberSort } from '@/common/helper'
+import { mergeObject, numberSort, findArrayIdx } from '@/common/helper'
 import { CartList as getCartList } from '@/api/customer'
 import LayoutLayer from '@/componets/layout-layer/layout-layer'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
@@ -173,7 +173,7 @@ const attrInfoTmpl = {
  * 3.不在营业时间内，不允许下单
  */
 const checkStoreStatus = (bizInfo) => {
-  const { business_status = 0, business_time_status = 0, out_business_time_order = 0 } = this.bizInfo
+  const { business_status = 0, business_time_status = 0, out_business_time_order = 0 } = bizInfo
   // 1.营业状态关闭，任何情况，任何物流都不能下单
   if (!business_status) return false
 
@@ -191,6 +191,7 @@ export default {
   components: { LayoutIcon, LayoutLayer },
   data () {
     return {
+      oldQty: 0,
       pageSize: 999,
       cateIndex: 0,
       bizSearchKeyWord: '酸奶',
@@ -227,6 +228,50 @@ export default {
   methods: {
     ...mapActions({
     }),
+    async changeGoodsNum (e, biz_id, prod_id, attr_id, num, storeIsSaleTime) {
+      const amount = parseInt(e.detail.value)
+
+      const qty = parseInt(this.oldQty)
+      if (isNaN(amount)) {
+        error('数量必须为数量')
+        return
+      }
+
+      if (amount === 0) {
+        await this.$store.dispatch('cart/removeGoods', {
+          prod_id: prod_id,
+          attr_id: attr_id
+        })
+        this.$set(this.CartList[biz_id][prod_id][attr_id], 'Qty', amount)
+        return
+      }
+
+      if (amount <= 1) {
+        this.$set(this.CartList[biz_id][prod_id][attr_id], 'Qty', amount)
+        error('数量不能小于0')
+        return
+      }
+      if ((qty - amount) === 0) return
+      var nums = amount - qty
+
+      // 拼接一下
+      const productInfo = {
+        biz_id: biz_id,
+        prod_id: prod_id,
+        attr_id: attr_id
+      }
+
+      const cart = await this.$store.dispatch('cart/addNum', {
+        num: nums,
+        product: { ...productInfo }
+      })
+      if (cart !== false) {
+        this.$set(this.CartList[biz_id][prod_id][attr_id], 'Qty', amount)
+      }
+    },
+    getQty (e) {
+      this.oldQty = e.detail.value
+    },
     toSearch () {
       this.$linkTo('/pages/search/result?inputValue=' + this.bizSearchKeyWord + '&biz_id=' + this.bid)
     },
@@ -341,13 +386,19 @@ export default {
       }
     },
     async updateCartFn (biz_id, prod_id, attr_id, num, storeIsSaleTime) {
-      console.log(biz_id, prod_id, attr_id, num, 'ss')
+      if (this.isAjax) return
       if (this.CartList[biz_id] && this.CartList[biz_id][prod_id] && this.CartList[biz_id][prod_id][attr_id] && this.CartList[biz_id][prod_id][attr_id].Qty === 1 && num <= 0) {
-        error('数量最少为1件')
+        await this.$store.dispatch('cart/removeGoods', {
+          prod_id: prod_id,
+          attr_id: attr_id
+        })
+
+        // 没有规格的商品，直接搞事,同步库存
+        if (attr_id === 0) {
+          this.$set(this.CartList[biz_id][prod_id][attr_id], 'Qty', num)
+        }
         return
       }
-
-      if (this.isAjax) return
 
       this.isAjax = true
       const product = { prod_id: Number(prod_id), attr_id: Number(attr_id), biz_id: Number(biz_id) }
@@ -355,7 +406,7 @@ export default {
       const cart = await this.$store.dispatch('cart/addNum', { product, num })
       if (cart !== false) {
         // 更新数量
-        this.initCart()
+        await this.initCart()
         // const { CartList } = cart
         // for (const biz_id in CartList) {
         //   for (const prod_id in CartList[biz_id]) {
@@ -368,7 +419,9 @@ export default {
 
       this.isAjax = false
     },
-    addNum () {
+    async addNum () {
+      if (this.isAjax) return
+      this.isAjax = true
       if (this.attrInfo.num < this.attrInfo.count) {
         this.attrInfo.num = Number(this.attrInfo.num) + 1
       } else {
@@ -379,44 +432,73 @@ export default {
         this.attrInfo.num = this.attrInfo.count
       }
       this.product.prod_id = this.product.Products_ID
-      this.$store.dispatch('cart/addNum', {
+      await this.$store.dispatch('cart/addNum', {
         product: { ...this.product, ...this.attrInfo },
         num: 1
       })
+      this.isAjax = false
     },
-    delNum () {
-      if (this.attrInfo.num > 0) {
+    async delNum () {
+      if (this.isAjax) return
+      this.isAjax = true
+      if (this.attrInfo.num > 1) {
         this.attrInfo.num -= 1
         this.product.prod_id = this.product.Products_ID
-        this.$store.dispatch('cart/addNum', {
+        await this.$store.dispatch('cart/addNum', {
           product: { ...this.product, ...this.attrInfo },
           num: -1
         })
       } else {
-        uni.showToast({
-          title: '购买数量不能小于0',
-          icon: 'none'
+        const cart = await this.$store.dispatch('cart/removeGoods', {
+          prod_id: this.attrInfo.Products_ID,
+          attr_id: this.attrInfo.attr_id
         })
-        // this.attrInfo.num = 0
+        if (cart !== false) {
+          this.$set(this.attrInfo, 'num', 0)
+        }
       }
+      this.isAjax = false
     },
-    changeNum (e) {
-      let amount = parseInt(e.detail.value)
-      const currentAttrInfo = this.attrInfo
-      if (currentAttrInfo.num === amount) return
-      if (amount < 0) {
-        amount = currentAttrInfo.num
-        error('至少购买一件')
-      }
-      if (amount > currentAttrInfo.count) {
-        amount = currentAttrInfo.count
-        error('购买数量不能超过库存量')
+    async changeNum (e) {
+      const amount = parseInt(e.detail.value)
+
+      const qty = parseInt(this.oldQty)
+      if (isNaN(amount)) {
+        error('数量必须为数量')
+        return
       }
 
-      this.$store.commit('cart/SET_GOODS_NUM', {
-        num: amount,
-        product: { attr_id: currentAttrInfo.attr_id }
+      if (amount === 0) {
+        await this.$store.dispatch('cart/removeGoods', {
+          prod_id: this.attrInfo.Products_ID,
+          attr_id: this.attrInfo.attr_id
+        })
+        this.$set(this.attrInfo, 'num', amount)
+        return
+      }
+
+      if (amount <= 1) {
+        this.$set(this.attrInfo, 'num', amount)
+        error('数量不能小于0')
+        return
+      }
+      if ((qty - amount) === 0) return
+      var nums = amount - qty
+
+      // 拼接一下
+      const productInfo = {
+        biz_id: this.bid,
+        prod_id: this.attrInfo.Products_ID,
+        attr_id: this.attrInfo.attr_id
+      }
+
+      const cart = await this.$store.dispatch('cart/addNum', {
+        num: nums,
+        product: { ...productInfo }
       })
+      if (cart !== false) {
+        this.$set(this.attrInfo, 'num', amount)
+      }
     },
     // 用户手动输入数量
     setCount (e) {
