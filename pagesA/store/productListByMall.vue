@@ -71,7 +71,7 @@
                                            type="iconicon-plus "></layout-icon>
                             </block>
                             <block v-else>
-                              <layout-icon @click.stop="updateCartFn(goods.biz_id,goods.Products_ID,0,1)" color="#e64239" size="25"
+                              <layout-icon @click.stop="updateCartFn(goods.biz_id,goods.Products_ID,0,1,goods)" color="#e64239" size="25"
                                            type="iconicon-plus "></layout-icon>
                             </block>
 
@@ -385,7 +385,11 @@ export default {
         this.attrInfo.num = this.attrInfo.count
       }
     },
-    async updateCartFn (biz_id, prod_id, attr_id, num, storeIsSaleTime) {
+    async updateCartFn (biz_id, prod_id, attr_id, num, pro) {
+      if (pro.Products_IsVirtual == 1) {
+        this.toDetail(pro)
+        return
+      }
       if (this.isAjax) return
       if (this.CartList[biz_id] && this.CartList[biz_id][prod_id] && this.CartList[biz_id][prod_id][attr_id] && this.CartList[biz_id][prod_id][attr_id].Qty === 1 && num <= 0) {
         await this.$store.dispatch('cart/removeGoods', {
