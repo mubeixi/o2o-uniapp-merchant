@@ -505,16 +505,16 @@ export default {
         //   throw Error('获取门店列表数据失败')
         // })
         //
-        // this.photoList = await getAlbumList({
-        //   biz_id: this.bid,
-        //   get_photo: 4
-        // }).then(res => {
-        //   const { data, totalCount } = res
-        //   this.storePhotoTotal = totalCount
-        //   return data
-        // }).catch(e => {
-        //   throw Error(e.msg || '获取相册信息失败')
-        // })
+        this.photoList = await getAlbumList({
+          biz_id: this.bid,
+          get_photo: 4
+        }).then(res => {
+          const { data, totalCount } = res
+          this.storePhotoTotal = totalCount
+          return data
+        }).catch(e => {
+          throw Error(e.msg || '获取相册信息失败')
+        })
 
         if (checkIsLogin(0, 0)) {
           const { is_favourite = 0 } = await checkFavourite({ biz_id: this.bid }, { onlyData: true }).catch(() => {
