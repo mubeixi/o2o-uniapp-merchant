@@ -510,7 +510,13 @@ export default {
           get_photo: 4
         }).then(res => {
           const { data, totalCount } = res
-          this.storePhotoTotal = totalCount
+          if (data.length > 0) {
+            var picNum = 0
+            for (var key in data) {
+              picNum += data[key].photo_total
+            }
+          }
+          this.storePhotoTotal = picNum
           return data
         }).catch(e => {
           throw Error(e.msg || '获取相册信息失败')
