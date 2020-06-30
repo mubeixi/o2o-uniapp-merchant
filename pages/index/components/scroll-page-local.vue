@@ -52,7 +52,7 @@
 
           <div class="fun-goods-list bg-white b-radius-5 m-t-10" style="width: 710rpx;margin-left: 20rpx;"
                v-if="quickGoodsList.length>0">
-            <div class="fun-goods-col" style="padding: 0 15rpx 0 30rpx">
+            <div class="fun-goods-col" style="padding: 0 15rpx 48px 30rpx">
               <block :key="idx" v-for="(goods,idx) in quickGoodsList">
                 <goods-item :marketPrice="true" :vo="goods" coverRadius="8rpx" mode="top-bottom"
                             v-if="idx%2===0"></goods-item>

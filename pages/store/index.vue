@@ -5,7 +5,7 @@
     <store-theme-default @upStoreInfo="bindUpStoreInfo" :bid="bid" v-if="skin_id===0"></store-theme-default>
     <store-theme-one @upStoreInfo="bindUpStoreInfo" :bid="bid" v-if="skin_id===1"></store-theme-one>
     <store-theme-two @upStoreInfo="bindUpStoreInfo" :bid="bid" v-if="skin_id===2"></store-theme-two>
-    <store-theme-three @upStoreInfo="bindUpStoreInfo" :bid="bid" v-if="skin_id===3"></store-theme-three>
+    <store-theme-three ref="childThree" @upStoreInfo="bindUpStoreInfo" :bid="bid" v-if="skin_id===3"></store-theme-three>
 
     <!--101: 直播中, 102: 未开始, 103: 已结束, 104: 禁播, 105: 暂停中, 106: 异常，107：已过期-->
 <!--    <div @click="toRoom" class="live-status-box" v-if="liveStatus == 101 || liveStatus == 105 || liveStatus == 102">-->
@@ -19,7 +19,7 @@
 <script>
 import BaseMixin from '@/mixins/BaseMixin'
 import { modal } from '@/common/fun'
-import { buildSharePath } from '@/common/helper'
+import { buildSharePath, checkIsLogin } from '@/common/helper'
 import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 import StoreThemeDefault from '@/pages/store/components/store-theme-default'
 import StoreThemeOne from '@/pages/store/components/store-theme-one'
@@ -50,7 +50,7 @@ export default {
   methods: {
     init () {
       getBizInfo({ biz_id: this.bid }).then(res => {
-        // this.skin_id=Number(res.data[0].skin_id)
+         this.skin_id=Number(res.data[0].skin_id)
       })
     },
     bindUpStoreInfo (storeInfo) {
@@ -92,6 +92,11 @@ export default {
   // },
   onShow () {
     this.init()
+    
+    //登陆后
+    if(checkIsLogin(0,0)){
+      if (this.skin_id === 3) this.$refs.childThree.refreshFn()
+    }
   },
   mounted () {
 

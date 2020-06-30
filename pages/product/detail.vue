@@ -1646,7 +1646,6 @@ export default {
       // 4.营业状态打开，不在营业时间，不允许营业外下单，提交订单不会出现同城配送
       if (business_status && !business_time_status && !out_business_time_order) return true
 
-      return business_status || business_time_status
     },
     allPay () {
       if (!checkIsLogin(1, 1)) return
@@ -1915,12 +1914,7 @@ export default {
       try {
         showLoading()
 
-        this.store = await getBizInfo({ biz_id: this.productInfo.biz_id }, { onlyData: true }).catch(e => {
-          throw Error(e.msg || '获取店铺信息失败')
-        })
-
-        this.bizInfo = this.store[0]
-        checkIsExpire(this.bizInfo.biz_expires)
+        
 
         if (options.gift) {
           this.gift = options.gift
@@ -1948,6 +1942,16 @@ export default {
           throw Error(e.msg || '获取商品详情失败')
         })
         Object.assign(this.productInfo, productInfo)
+  
+        // 要放在后面
+        this.store = await getBizInfo({ biz_id: this.productInfo.biz_id }, { onlyData: true }).catch(e => {
+          throw Error(e.msg || '获取店铺信息失败')
+        })
+  
+  
+        this.bizInfo = this.store[0]
+        checkIsExpire(this.bizInfo.biz_expires)
+        
 
         if (this.productInfo.is_pintuan) {
           this.titleTag = '拼团'

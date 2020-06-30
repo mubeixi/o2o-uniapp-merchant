@@ -165,7 +165,7 @@
         <div class="cate-goods-list">
           <div class="fun-goods-col" style="padding: 0 9rpx 0 0rpx">
             <block v-for="(pro,idx) in bizCateList[bizCateNavIndex].productList" :key="idx">
-              <div class="fun-goods-item" v-if="idx%2===0" >
+              <div class="fun-goods-item" v-if="idx%2===0"  @click="$toGoodsDetail(pro)">
                 <div class="product-cover" :style="{backgroundImage:'url('+$getDomain(pro.ImgPath)+')'}" ></div>
                 <div class="price-discount flex flex-vertical-c" style="padding: 20rpx 0 20rpx 20rpx">
                   <div class="price-box" style="color: #FE2C4D">
@@ -184,7 +184,7 @@
           </div>
           <div class="fun-goods-col" style="padding: 0 0rpx 0 9rpx">
             <block v-for="(pro,idx) in bizCateList[bizCateNavIndex].productList" :key="idx">
-              <div class="fun-goods-item" v-if="idx%2===1" >
+              <div class="fun-goods-item" v-if="idx%2===1"  @click="$toGoodsDetail(pro)">
                 <div class="product-cover" :style="{backgroundImage:'url('+$getDomain(pro.ImgPath)+')'}" ></div>
                 <div class="price-discount flex flex-vertical-c" style="padding: 20rpx 0 20rpx 20rpx">
                   <div class="price-box" style="color: #FE2C4D">
@@ -476,8 +476,6 @@ export default {
           biz_id: this.bid,
           front_show: 1,
           status: 3
-        }, {
-          noUid: 1
         }).then(res => {
           return [...res.data]
         }).catch((e) => {
@@ -507,16 +505,22 @@ export default {
         //   throw Error('获取门店列表数据失败')
         // })
         //
-        // this.photoList = await getAlbumList({
-        //   biz_id: this.bid,
-        //   get_photo: 4
-        // }).then(res => {
-        //   const { data, totalCount } = res
-        //   this.storePhotoTotal = totalCount
-        //   return data
-        // }).catch(e => {
-        //   throw Error(e.msg || '获取相册信息失败')
-        // })
+        this.photoList = await getAlbumList({
+          biz_id: this.bid,
+          get_photo: 4
+        }).then(res => {
+          const { data, totalCount } = res
+          if (data.length > 0) {
+            var picNum = 0
+            for (var key in data) {
+              picNum += data[key].photo_total
+            }
+          }
+          this.storePhotoTotal = picNum
+          return data
+        }).catch(e => {
+          throw Error(e.msg || '获取相册信息失败')
+        })
 
         if (checkIsLogin(0, 0)) {
           const { is_favourite = 0 } = await checkFavourite({ biz_id: this.bid }, { onlyData: true }).catch(() => {

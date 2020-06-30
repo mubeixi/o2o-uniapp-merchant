@@ -17,7 +17,7 @@
         <div class="line"></div>
       </div>
       <div :class="[active === 2 ? 'checked' : '','tab']" @click="getActive(2)" class="pricebox"><span
-        class="padding4-c">价格</span>
+        class="p-l-4 p-r-4">价格</span>
         <view class="xiangshang">
           <image :src="'/static/client/result/tops.png'|domain" class="image" v-if="isSheng==1"></image>
           <image :src="'/static/client/result/top.png'|domain" class="image" v-else></image>
@@ -239,9 +239,7 @@ export default {
         this.$back()
         return
       }
-      uni.navigateTo({
-        url: '/pages/classify/search',
-      })
+     this.$linkTo('/pages/search/index')
     },
     shipping (i) {
       if (i) {

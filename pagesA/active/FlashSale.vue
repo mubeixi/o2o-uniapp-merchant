@@ -19,9 +19,9 @@
               <div class="pro-name"><wzw-live-tag :room_id="goods.room_id" :product-info="goods" />{{goods.Products_Name}}</div>
               <div class="pro-price">￥{{goods.Products_PriceX}}</div>
             </div>
-          
+
           </block>
-        
+
         </div>
         <div class="content-ad">
           <layout-ad :boxDidth="670" code="spike_under_recommend"></layout-ad>
@@ -31,7 +31,7 @@
           <block :key="idx" v-for="(goods,idx) in productList">
             <div @click="$toGoodsDetail(goods)" class="flex pro-item" v-if="idx>=0">
               <div :style="{backgroundImage:'url('+goods.ImgPath+')'}" class="p-item-image"></div>
-              
+
               <div class="p-msg">
                 <div class="p-item-name">{{goods.Products_Name}}</div>
                 <!--              <div class="tags flex">-->
@@ -100,17 +100,17 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-  
+
   .page-wrap {
     min-height: 100vh;
   }
-  
+
   .top {
     z-index: 2;
     position: relative;
     background: none;
     color: #fff;
-    
+
     .title {
       font-size: 40rpx;
       width: 750rpx;
@@ -120,7 +120,7 @@ export default {
       transform: translateY(-50%);
     }
   }
-  
+
   .background-img {
     top: 0;
     left: 0;
@@ -128,13 +128,13 @@ export default {
     height: 100%;
     position: fixed;
     z-index: 1;
-    
+
     .image {
       width: 100%;
       height: 100%;
     }
   }
-  
+
   .container-wrap {
     position: fixed;
     bottom: constant(safe-area-inset-bottom);
@@ -143,7 +143,7 @@ export default {
     z-index: 3;
     overflow-y: scroll;
   }
-  
+
   .content {
     position: absolute;
     bottom: 0;
@@ -154,56 +154,61 @@ export default {
     box-sizing: border-box;
     border-radius: 10rpx;
     background-color: #fff;
-    
+
     .pro {
       flex: 1;
       text-align: center;
-      
+
       .pro-img {
         width: 134rpx;
         height: 134rpx;
         @include cover-img();
         margin: 0 auto;
       }
-      
+
       .pro-name {
         font-size: 22rpx;
         color: #333;
         line-height: 30rpx;
+        height: 60rpx;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
       }
-      
+
       .pro-price {
         font-size: 24rpx;
         color: #ff0000;
       }
     }
   }
-  
+
   .content-ad {
     margin: 35rpx auto;
-    
+
     .ad-image {
       width: 650rpx;
       height: 180rpx;
     }
   }
-  
+
   .content-list {
     width: 670rpx;
-    
+
     padding-bottom: 30rpx;
   }
-  
+
   .pro-item {
     margin-bottom: 30rpx;
     height: 290rpx;
-    
+
     .p-item-image {
       width: 290rpx;
       height: 290rpx;
       @include cover-img();
     }
-    
+
     .p-msg {
       position: relative;
       width: 380rpx;
@@ -213,7 +218,7 @@ export default {
       border: 3px solid rgba(254, 226, 201, 1);
       border-left: 0;
     }
-    
+
     .p-item-name {
       width: 100%;
       overflow: hidden;
@@ -223,12 +228,12 @@ export default {
       white-space: nowrap;
       text-overflow: ellipsis;
     }
-    
+
     .tags {
       margin-top: 28rpx;
       margin-bottom: 15rpx;
     }
-    
+
     .tag {
       font-size: 18rpx;
       color: #F53636;
@@ -237,39 +242,39 @@ export default {
       margin-right: 12rpx;
       border: 1px solid #F53636;
     }
-    
+
     .progress {
       width: 100%;
     }
-    
+
     .progress-img {
       width: 100%;
       height: 62rpx;
     }
-    
+
     .p-item-price {
       align-items: center;
-      
+
       .icon {
         font-size: 24rpx;
       }
-      
+
       .p-item-new-price {
         color: #F53636;
         margin-right: 10rpx;
       }
-      
+
       .p-item-old-price {
         color: #999999;
         font-size: 24rpx;
         text-decoration: line-through;
       }
-      
+
       .icon {
         display: inline;
       }
     }
-    
+
     .flash {
       position: absolute;
       right: 20rpx;
@@ -281,7 +286,7 @@ export default {
       padding: 6rpx;
       box-sizing: border-box;
       border-radius: 50%;
-      
+
       .flash-font {
         width: 68rpx;
         height: 68rpx;

@@ -1,7 +1,7 @@
 <template>
   <div @click="commonClick" class="page-wrap">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
-    
+
     <div :style="{height:diyHeadHeight+'px',opacity:activeHeadOpacity}" class="bg-white" style="position: fixed;z-index: 9;width: 750rpx;left:0;top:0"
          v-if="activeHeadOpacity">
       <div :style="{height:systemInfo.statusBarHeight+'px'}"></div>
@@ -13,7 +13,7 @@
         <div :style="{height:menuButtonInfo.height+'px',lineHeight:menuButtonInfo.height+'px'}">分享赚</div>
       </div>
     </div>
-    
+
     <layout-icon
       :color="immersed?'#666':'#fff'"
       :style="{top:menuButtonInfo.top+'px',opacity:1-activeHeadOpacity}" @click="$back" class="left-icon" size="18"
@@ -125,7 +125,7 @@ export default {
         const list = await getProductList({ pageSize: 999 }, { onlyData: true }).catch(e => {
           throw Error(e.msg || '获取商品列表错误')
         })
-        
+
         this.goodsList = list.filter(row => row.share_commission > 0)
         if (this.userInfo.User_ID) {
           this.info = await getShareView({ user_id: this.userInfo.User_ID }).then(res => {
@@ -134,7 +134,7 @@ export default {
             throw Error('获取分享赚概览信息错误')
           })
         }
-        
+
         hideLoading()
       } catch (e) {
         error(e.message)
@@ -148,23 +148,23 @@ export default {
     },
   },
   created () {
-  
+
   },
 }
 </script>
 <style lang="scss" scoped>
-  
+
   .page-wrap {
     background: #f8f8f8;
     min-height: 100vh;
   }
-  
+
   .left-icon {
     position: fixed;
     z-index: 11;
     left: 15px;
   }
-  
+
   .head {
     width: 750rpx;
     height: 436rpx;
@@ -174,32 +174,32 @@ export default {
     background-size: 100% 100%;
     background-position: center;
   }
-  
+
   .head-bg {
     width: 750rpx;
     height: 436rpx;
   }
-  
+
   .userInfo {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
     text-align: center;
-    
+
     .avatar {
       width: 84rpx;
       height: 84rpx;
       border-radius: 50%;
       overflow: hidden;
     }
-    
+
     .nickname {
       /*background: rgba(255,255,255,.3);*/
       color: #fff;
       padding: 6px 9px;
     }
   }
-  
+
   .count {
     z-index: 2;
     position: absolute;
@@ -215,12 +215,12 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    
+
     .price-selling {
       color: red !important;
     }
   }
-  
+
   .notify {
     position: absolute;
     bottom: 54rpx;
@@ -235,42 +235,47 @@ export default {
     font-size: 12px;
     z-index: 3;
   }
-  
+
   .goods-list {
     padding: 25rpx;
-    
+
     .goods-item {
       display: flex;
       margin-bottom: 40rpx;
       align-items: center;
-      
+
       .goods-item-cover {
         width: 300rpx;
         height: 300rpx;
         background: #f2f2f2;
         @include cover-img();
       }
-      
+
       .goods-item-info {
         flex: 1;
         height: 300rpx;
         padding-left: 20rpx;
         position: relative;
-        
+
         .title {
           line-height: 20px;
           font-size: 14px;
           color: #333;
+          height: 40px;
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 2;
+          overflow: hidden;
         }
-        
+
         .sale {
           margin: 40rpx 0 30rpx;
           color: #666;
           font-size: 12px;
         }
-        
+
         .actions {
-          
+
           .share {
             position: absolute;
             right: 0;

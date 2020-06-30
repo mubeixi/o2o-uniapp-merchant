@@ -56,13 +56,14 @@
         <swiper
           :current="headTabIndex"
           :style="{height:childSwiperHeight}"
+
           @change="indexChangeEvent"
           class="tab-container">
           <swiper-item class="tab-page">
             <div class="tab-page-wrap" id="scrollView1">
 
               <!--优惠券-->
-              <div class="coupon-section flex flex-justify-c" v-if="couponList.length>0">
+              <scroll-view scroll-x class="coupon-section flex flex-justify-c" @touchmove.stop  v-if="couponList.length>0">
                 <div :key="idx" @click="getCoupon(coupon,idx)" class="coupon-item" v-for="(coupon,idx) in couponList">
                   <div class="containier">
                     <div class="price">
@@ -75,7 +76,7 @@
                     </div>
                   </div>
                 </div>
-              </div>
+              </scroll-view>
 
               <!--限时抢购-->
               <div class="activity-list  flex flex-justify-c" v-if="activityList.length>0">
@@ -592,6 +593,7 @@ export default {
       })
     },
     getCoupon (coupon, idx) {
+      if (!checkIsLogin(1, 1)) return
       console.log(coupon)
       getUserCoupon({ coupon_id: coupon.Coupon_ID }).then(() => {
         toast('领取成功')
@@ -679,8 +681,7 @@ export default {
           front_show: 1,
           status: 3
         }, {
-          onlyData: true,
-          noUid: 1
+          onlyData: true
         }).catch((e) => {
           throw Error('获取优惠券失败')
         })
@@ -985,6 +986,8 @@ export default {
     overflow-x: scroll;
     overflow-y: hidden;
     white-space: nowrap;
+    padding: 0rpx 20rpx;
+    box-sizing: border-box;
     height: 123rpx;
     margin-bottom: 20rpx;
     background: white;
@@ -1084,7 +1087,7 @@ export default {
     .actions {
       width: 750rpx;
       box-sizing: border-box;
-      padding: 30rpx 40rpx;
+      padding: 0rpx 40rpx;
       display: flex;
       justify-content: center;
       align-items: center;
