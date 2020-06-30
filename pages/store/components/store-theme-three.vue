@@ -278,7 +278,7 @@
       </div>
     </scroll-view>
 
-    <layout-layer bottomStr="96rpx" positions="bottom" ref="carts">
+    <layout-layer :bottomStr="storeBottomActionHeight" positions="bottom" ref="carts">
       <div class="carts-box">
         <div class="carts-action flex flex-vertical-c flex-justify-between">
           <div class="check-all flex flex-vertical-c" @click="selectBiz">
@@ -321,7 +321,7 @@
       </div>
     </layout-layer>
 
-    <div class="store-bottom-action">
+    <div id="store-bottom-action" class="store-bottom-action">
       <div class="cart-box" @click="$openPop('carts')">
         <div class="cart-icon-box">
           <layout-icon type="iconicon-cart" size="22" color="#fff"></layout-icon>
@@ -492,6 +492,7 @@ export default {
       moveStartYByLeft: 0,
       moveStartYByPage: 0,
       moveDirectionByPage: '--',
+      storeBottomActionHeight: '52px',
       pageScrollEnable: false,
       leftScrollEnable: false,
       rightScrollEnable: false,
@@ -1073,7 +1074,7 @@ export default {
     async goodsNumPlus (goodsInfo) {
       if (!checkIsLogin(1, 1)) return
       // 有订单模板的话，应该直接去购买
-      if (goodsInfo.order_temp_id) {
+      if (goodsInfo.order_temp_id || goodsInfo.Products_IsVirtual == 1) {
         this.$toGoodsDetail(goodsInfo)
         return
       }
@@ -1667,6 +1668,15 @@ export default {
   },
   onReady () {
     this.pageScrollEnable = true
+
+    this.$nextTick().then(() => {
+      const query = uni.createSelectorQuery().in(this)
+      query.select('#store-bottom-action').boundingClientRect(data => {
+        console.log(data)
+        this.storeBottomActionHeight = (this.systemInfo.windowHeight - data.top) + 'px'
+      })
+      query.exec()
+    })
   }
 }
 </script>
