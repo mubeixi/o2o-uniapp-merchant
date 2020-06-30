@@ -866,6 +866,7 @@ export default {
         if (it !== 'is_self_get') {
           this.postData.shipping_id[this.activeBizId] = it
           this.postData.shipping_name[this.activeBizId] = this.popupExpressCompanys[it]
+          break;
         }
       }
 
