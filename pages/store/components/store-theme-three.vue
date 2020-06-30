@@ -150,7 +150,7 @@
                   <div class="flex flex-vertical-c flex-justify-between">
                     <div class="flex flex-vertical-c">
                       <span class="price-selling fz-12">￥</span><span class="price-selling fz-14">{{goods.Products_PriceX}}</span>
-                      <div class="text-through price-market fz-12 m-l-6">￥{{goods.Products_PriceY}}</div>
+                      <!--<div class="text-through price-market fz-12 m-l-6">￥{{goods.Products_PriceY}}</div>-->
                     </div>
                     <div @click.stop="$noop" class="action goods-item-action">
                       <!--有下单模板的-->
@@ -1544,6 +1544,12 @@ export default {
       const Action = this.isFavourite ? addFavourite : cancelFavourite
       Action({ biz_id: this.bid }).then(res => {
         toast(res.msg)
+        // 关注加一
+        if (this.isFavourite) {
+          this.storeInfo.follow++
+        } else {
+          this.storeInfo.follow--
+        }
       }).catch((e) => {
         Exception.handle(e)
       })
