@@ -81,7 +81,6 @@
 
                   </div>
 
-
                 </div>
 
               </div>
@@ -153,11 +152,12 @@ import BaseMixin from '@/mixins/BaseMixin'
 import { Exception } from '@/common/Exception'
 import { error, modal } from '@/common/fun'
 import { getBizProdCateList, getProductDetail, getProductList } from '@/api/product'
-import { checkIsLogin, mergeObject, numberSort } from '@/common/helper'
-import { CartList as getCartList, DelCart } from '@/api/customer'
+import { mergeObject, numberSort } from '@/common/helper'
+import { CartList as getCartList } from '@/api/customer'
 import LayoutLayer from '@/componets/layout-layer/layout-layer'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import { mapActions } from 'vuex'
+
 const attrInfoTmpl = {
   Products_ID: 0,
   num: 0,
@@ -173,17 +173,27 @@ const attrInfoTmpl = {
  * 3.不在营业时间内，不允许下单
  */
 const checkStoreStatus = (bizInfo) => {
-  const { business_status = 0, business_time_status = 0 } = bizInfo
-  return business_status || business_time_status
+  const { business_status = 0, business_time_status = 0, out_business_time_order = 0 } = this.bizInfo
+  // 1.营业状态关闭，任何情况，任何物流都不能下单
+  if (!business_status) return false
+
+  // 2.营业状态打开，在营业时间，正常下单
+  if (business_status && business_time_status) return true
+
+  // 3.营业状态打开，不在营业时间，允许营业外下单，同城配送只能预约，不能立即送达，普通物流不受影响
+  if (business_status && !business_time_status && out_business_time_order) return true
+
+  // 4.营业状态打开，不在营业时间，不允许营业外下单，提交订单不会出现同城配送
+  if (business_status && !business_time_status && !out_business_time_order) return true
 }
 export default {
   mixins: [BaseMixin],
   components: { LayoutIcon, LayoutLayer },
   data () {
     return {
-      pageSize:999,
+      pageSize: 999,
       cateIndex: 0,
-      bizSearchKeyWord:'酸奶',
+      bizSearchKeyWord: '酸奶',
       qty: 0,
       bid: '',
       cateActiveIdx: 0,
