@@ -353,7 +353,7 @@
 
 <script>
 import { componetMixin } from '@/mixins/BaseMixin'
-import { error, hideLoading, modal, showLoading, toast,checkIsExpire } from '@/common/fun'
+import { error, hideLoading, modal, showLoading, toast, checkIsExpire } from '@/common/fun'
 import { getAlbumList, getBizInfo, getBizSpikeList, getStoreList } from '@/api/store'
 import { getBizProdCateList, getFlashsaleList, getProductList } from '@/api/product'
 import { getCommitList, getCouponList } from '@/api/common'
@@ -455,14 +455,13 @@ export default {
         checkIsExpire(this.storeInfo.biz_expires)
         this.$emit('upStoreInfo', this.storeInfo)
 
-
         const base = { biz_ids: this.bid }
 
         getProductList({ ...base, pageSize: 1 }).then(({ totalCount }) => {
           this.storeGoodsTotal = totalCount
         }).catch((err) => { throw Error(err.msg) })
 
-        const flashActivitys = await getBizSpikeList({ biz_id: this.bid,status:1  }, { onlyData: true }).catch((e) => {
+        const flashActivitys = await getBizSpikeList({ biz_id: this.bid, status: 1 }, { onlyData: true }).catch((e) => {
           throw Error('获取限时抢购数据失败')
         })
 
@@ -782,6 +781,8 @@ export default {
       this.isFavourite = !this.isFavourite
       const Action = this.isFavourite ? addFavourite : cancelFavourite
       Action({ biz_id: this.bid }).then(res => {
+        this.storeInfo.follow += this.isFavourite ? 1 : -1
+
         toast(res.msg)
       }).catch((e) => {
         Exception.handle(e)
@@ -804,7 +805,7 @@ export default {
         const data = getCountdownFunc({
           start_timeStamp: this.killList[idx].start_time,
           end_timeStamp: this.killList[idx].end_time,
-          getDay:false
+          getDay: false
         })
         if (data) {
           this.$set(this.killList[idx], 'countdown', { ...data })
