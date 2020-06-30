@@ -121,7 +121,7 @@
         <div class="total">
           <span>共<span>{{orderItem.prod_list.length}}</span>件商品</span>
           <span class="mbx">小计：<span class="money moneys">￥</span><span
-            class="money">{{orderItem.Order_Fyepay}}</span></span>
+            class="money">{{orderItem.Order_Fyepay|formatMoeny}}</span></span>
         </div>
       </div>
     </div>
@@ -132,7 +132,7 @@
     <div :style="{'z-index': zIndex}" class="order_total">
       <div class="totalinfo">
         <div class="info">共{{numTotal}}件商品 总计：<span
-          class="mbxa">￥<span>{{Order_Fyepay}}</span></span></div>
+          class="mbxa">￥<span>{{Order_Fyepay|formatMoeny}}</span></span></div>
         <view class="tips" v-if="orderInfo.obtain_desc">{{orderInfo.obtain_desc}}</view>
       </div>
       <view @click="seeDetail" class="mx">明细

@@ -50,7 +50,7 @@ export default {
   methods: {
     init () {
       getBizInfo({ biz_id: this.bid }).then(res => {
-         // this.skin_id=Number(res.data[0].skin_id)
+         this.skin_id=Number(res.data[0].skin_id)
       })
     },
     bindUpStoreInfo (storeInfo) {

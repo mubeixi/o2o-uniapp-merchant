@@ -37,7 +37,7 @@ export const formatNumber = n => {
   return n[1] ? n : '0' + n
 }
 export const formatPirce = (priceStr, idx) => {
-  if (isNaN(priceStr)) return ''
+  if (isNaN(priceStr)) return '0'
   if (typeof priceStr === 'number')priceStr += ''
   const arr = priceStr.split('.')
   if (idx === 0) return arr[0]
@@ -47,6 +47,12 @@ export const formatPirce = (priceStr, idx) => {
 
 Vue.filter('formatPirce', (val, idx) => {
   return formatPirce(val, idx)
+})
+
+Vue.filter('formatMoeny', (price) => {
+  if (isNaN(price)) return 0
+  if (!price) return 0
+  return parseInt(Number(price) * 100) / 100
 })
 
 export const formatTimeFun = function (date) {
