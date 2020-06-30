@@ -58,24 +58,32 @@
                     <div class="number-all">
                         <div class="fz-11 c9 p-t-6 p-b-6 cA">月销{{goods.Products_Sales}}件</div>
                         <div @click.stop="$noop" class="action ">
-                          <div @click.stop="openAttrLayer(goods.Products_ID)" class="btn-open-attr " v-if="goods.skujosn">
-                            选规格
-                            <div class="goods-num-tag" v-if="goods.num>0">{{goods.num}}</div>
-                          </div>
-                          <div @click="setActiveGoodsIdx(idx)" class="flex flex-vertical-c" v-else>
-                            <block v-if="CartList[goods.biz_id][goods.Products_ID][0].Qty>0">
-                              <layout-icon @click.stop="updateCartFn(goods.biz_id,goods.Products_ID,0,-1)" color="#e64239" size="20"
-                                           type="iconicon-minus "></layout-icon>
-                              <input :value="CartList[goods.biz_id][goods.Products_ID][0].Qty" @blur="changeGoodsNum($event,goods.biz_id,goods.Products_ID,0,1)"   @focus="getQty($event)" class="input-num text-center fz-12" />
-                              <layout-icon @click.stop="updateCartFn(goods.biz_id,goods.Products_ID,0,1)" color="#e64239" size="20"
-                                           type="iconicon-plus "></layout-icon>
-                            </block>
-                            <block v-else>
-                              <layout-icon @click.stop="updateCartFn(goods.biz_id,goods.Products_ID,0,1,goods)" color="#e64239" size="25"
-                                           type="iconicon-plus "></layout-icon>
-                            </block>
 
-                          </div>
+                          <block v-if="goods.order_temp_id||goods.Products_IsVirtual==1">
+                            <div @click.stop="toDetail(goods)" class="btn-open-attr m-r-10">
+                              立即下单
+                            </div>
+                          </block>
+                          <block v-else>
+                            <div @click.stop="openAttrLayer(goods.Products_ID)" class="btn-open-attr " v-if="goods.skujosn">
+                              选规格
+                              <div class="goods-num-tag" v-if="goods.num>0">{{goods.num}}</div>
+                            </div>
+                            <div @click="setActiveGoodsIdx(idx)" class="flex flex-vertical-c" v-else>
+                              <block v-if="CartList[goods.biz_id][goods.Products_ID][0].Qty>0">
+                                <layout-icon @click.stop="updateCartFn(goods.biz_id,goods.Products_ID,0,-1)" color="#e64239" size="20"
+                                             type="iconicon-minus "></layout-icon>
+                                <input :value="CartList[goods.biz_id][goods.Products_ID][0].Qty" @blur="changeGoodsNum($event,goods.biz_id,goods.Products_ID,0,1)"   @focus="getQty($event)" class="input-num text-center fz-12" />
+                                <layout-icon @click.stop="updateCartFn(goods.biz_id,goods.Products_ID,0,1)" color="#e64239" size="20"
+                                             type="iconicon-plus "></layout-icon>
+                              </block>
+                              <block v-else>
+                                <layout-icon @click.stop="updateCartFn(goods.biz_id,goods.Products_ID,0,1,goods)" color="#e64239" size="25"
+                                             type="iconicon-plus "></layout-icon>
+                              </block>
+
+                            </div>
+                          </block>
                         </div>
                     </div>
 
@@ -386,10 +394,6 @@ export default {
       }
     },
     async updateCartFn (biz_id, prod_id, attr_id, num, pro) {
-      if (pro.Products_IsVirtual == 1) {
-        this.toDetail(pro)
-        return
-      }
       if (this.isAjax) return
       if (this.CartList[biz_id] && this.CartList[biz_id][prod_id] && this.CartList[biz_id][prod_id][attr_id] && this.CartList[biz_id][prod_id][attr_id].Qty === 1 && num <= 0) {
         await this.$store.dispatch('cart/removeGoods', {

@@ -154,7 +154,7 @@
                     </div>
                     <div @click.stop="$noop" class="action goods-item-action">
                       <!--有下单模板的-->
-                      <block v-if="goods.order_temp_id">
+                      <block v-if="goods.order_temp_id||goods.Products_IsVirtual==1">
                         <div @click.stop="goodsNumPlus(goods)" class="btn-open-attr m-r-10">
                           立即下单
                         </div>
