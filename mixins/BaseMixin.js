@@ -311,7 +311,8 @@ export const componetMixin = {
     $cellPhone: cellPhone,
     $back: backFunc,
     $filterPrice: (price) => {
-      if(isNaN(price))return 0;
+      if (isNaN(price)) return 0
+      if (!price) return 0
       return parseInt(Number(price) * 100) / 100
     },
     $noop: () => {},

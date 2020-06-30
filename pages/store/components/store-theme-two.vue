@@ -168,6 +168,7 @@
             <block v-for="(pro,idx) in bizCateList[bizCateNavIndex].productList" :key="idx">
               <div class="fun-goods-item" v-if="idx%2===0"  @click="$toGoodsDetail(pro)">
                 <div class="product-cover" :style="{backgroundImage:'url('+$getDomain(pro.ImgPath)+')'}" ></div>
+                <div class="p-t-8 fz-13 c3" style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis">{{pro.Products_Name}}</div>
                 <div class="price-discount flex flex-vertical-c" style="padding: 20rpx 0 20rpx 20rpx">
                   <div class="price-box" style="color: #FE2C4D">
                     <span class="sign" style="font-size: 20rpx;">￥</span><span class="num" style="font-size: 30rpx;">{{pro.Products_PriceX}}</span>
@@ -177,7 +178,7 @@
                   </div>
                 </div>
                 <div slot="ext" class="goods-action">
-                  <div class="goods-action-reduce">已减{{pro.Products_PriceY-pro.Products_PriceX}}元</div>
+                  <div class="goods-action-reduce">已减{{$filterPrice(pro.Products_PriceY-pro.Products_PriceX)}}元</div>
                   <image :src="$getDomain('/static/client/store/theme_two/go-btn-icon.png')" class="goods-action-go"></image>
                 </div>
               </div>
@@ -187,6 +188,7 @@
             <block v-for="(pro,idx) in bizCateList[bizCateNavIndex].productList" :key="idx">
               <div class="fun-goods-item" v-if="idx%2===1"  @click="$toGoodsDetail(pro)">
                 <div class="product-cover" :style="{backgroundImage:'url('+$getDomain(pro.ImgPath)+')'}" ></div>
+                <div class="p-t-8 fz-13 c3" style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis">{{pro.Products_Name}}</div>
                 <div class="price-discount flex flex-vertical-c" style="padding: 20rpx 0 20rpx 20rpx">
                   <div class="price-box" style="color: #FE2C4D">
                     <span class="sign" style="font-size: 20rpx;">￥</span><span class="num" style="font-size: 30rpx;">{{pro.Products_PriceX}}</span>
@@ -196,7 +198,7 @@
                   </div>
                 </div>
                 <div slot="ext" class="goods-action">
-                  <div class="goods-action-reduce">已减{{pro.Products_PriceY-pro.Products_PriceX}}元</div>
+                  <div class="goods-action-reduce">已减{{$filterPrice(pro.Products_PriceY-pro.Products_PriceX)}}元</div>
                   <image :src="$getDomain('/static/client/store/theme_two/go-btn-icon.png')" class="goods-action-go"></image>
                 </div>
               </div>
@@ -1174,7 +1176,12 @@ export default {
       display: inline-block;
       width: 200rpx;
       margin-left: 20rpx;
-
+      .act-goods-item-title{
+        width: 200rpx;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
       .item-cover{
         margin: 0 auto;
         width: 154rpx;
