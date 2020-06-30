@@ -681,8 +681,7 @@ export default {
           front_show: 1,
           status: 3
         }, {
-          onlyData: true,
-          noUid: 1
+          onlyData: true
         }).catch((e) => {
           throw Error('获取优惠券失败')
         })
