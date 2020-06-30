@@ -442,7 +442,7 @@ const checkStoreStatus = (bizInfo) => {
   if (business_status && !business_time_status && out_business_time_order) return true
   // 4.营业状态打开，不在营业时间，不允许营业外下单，提交订单不会出现同城配送
   if (business_status && !business_time_status && !out_business_time_order) return true
-  return business_status || business_time_status
+
 }
 /**
  * 倒计时的模板
