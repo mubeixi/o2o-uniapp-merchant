@@ -409,12 +409,12 @@ import { getBizProdCateList, getFlashsaleList, getProductDetail, getProductList 
 import { getCouponList } from '@/api/common'
 import {
   checkIsLogin,
-  findArrayIdx,
+  findArrayIdx, getArrColumn,
   getCountdownFunc,
   getTouchEventInfo,
   mergeObject,
   numberSort,
-  objTranslate,
+  objTranslate
 } from '@/common/helper'
 import { addFavourite, cancelFavourite, CartList as getCartList, checkFavourite, getUserCoupon } from '@/api/customer'
 import { Exception } from '@/common/Exception'
@@ -422,7 +422,6 @@ import LayoutPageTitle from '@/componets/layout-page-title/layout-page-title'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import WzwLiveTag from '@/componets/wzw-live-tag/wzw-live-tag'
 import LayoutLayer from '@/componets/layout-layer/layout-layer'
-
 
 var countdownInstance = null
 var countdownInstanceByFlash = null
@@ -442,7 +441,6 @@ const checkStoreStatus = (bizInfo) => {
   if (business_status && !business_time_status && out_business_time_order) return true
   // 4.营业状态打开，不在营业时间，不允许营业外下单，提交订单不会出现同城配送
   if (business_status && !business_time_status && !out_business_time_order) return true
-
 }
 /**
  * 倒计时的模板
@@ -1505,14 +1503,19 @@ export default {
           })
           query.exec()
         })
-  
-  
+
         this.photoList = await getAlbumList({
           biz_id: this.bid,
           get_photo: 4
         }).then(res => {
           const { data, totalCount } = res
-          this.storePhotoTotal = totalCount
+          if (data.length > 0) {
+            var picNum = 0
+            for (var key in data) {
+              picNum += data[key].photo_total
+            }
+          }
+          this.storePhotoTotal = picNum
           return data
         }).catch(e => {
           throw Error(e.msg || '获取相册信息失败')
