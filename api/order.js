@@ -1,6 +1,15 @@
 import { fetch } from '@/common/request'
 import Storage from '@/common/Storage'
 
+
+
+
+//激活码购买
+export const buyActiveCode = (param, options) => fetch({
+  act: 'buyActiveCode',
+  param,
+  options
+})
 // 评论
 export const comment = (param, options) => fetch({
   act: 'comment',
