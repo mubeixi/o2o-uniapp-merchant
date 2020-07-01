@@ -81,10 +81,9 @@
 
       </div>
 
-
     </div>
     <div class="flex flex-vertical-c flex-justify-around">
-      <div style="background-image: url('/static/active/system4.png')" class="system-item">
+      <div :style="{backgroundImage: 'url('+$getDomain('/static/client/active/system4.png')+')'}"  class="system-item">
 
         <div class="system-item-text">
           <div>
@@ -96,7 +95,7 @@
         </div>
 
       </div>
-      <div style="background-image: url('/static/active/system5.png')" class="system-item">
+      <div :style="{backgroundImage: 'url('+$getDomain('/static/client/active/system5.png')+')'}"  class="system-item">
 
         <div class="system-item-text">
           <div>
@@ -108,7 +107,7 @@
         </div>
 
       </div>
-      <div style="background-image: url('/static/active/system6.png')" class="system-item">
+      <div :style="{backgroundImage: 'url('+$getDomain('/static/client/active/system6.png')+')'}"  class="system-item">
 
         <div class="system-item-text">
           <div>
@@ -120,7 +119,6 @@
         </div>
 
       </div>
-
 
     </div>
 
@@ -150,16 +148,36 @@
 import layoutIcon from '@/componets/layout-icon/layout-icon'
 import BaseMixin from '@/mixins/BaseMixin'
 import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import { getCodeQrcode } from '@/api/order'
+import { error } from '@/common/fun'
 
 export default {
   mixins: [BaseMixin],
   components: {
     WzwImTip,
-    layoutIcon,
+    layoutIcon
   },
   data () {
-    return {}
+    return {
+      order_id: ''
+    }
   },
+  methods: {
+    async init () {
+      await getCodeQrcode({ order_id: this.order_id }, { tip: '加载中' }).then(res => {
+
+      }).catch(e => {
+        error(e.msg || '获取二维码错误')
+      })
+    }
+  },
+  onLoad (options) {
+    if (options.order_id) {
+      this.order_id = options.order_id
+      this.init()
+    }
+
+  }
 
 }
 </script>
@@ -211,7 +229,6 @@ export default {
     height: 280rpx;
     margin: 0 auto;
     position: relative;
-
 
   }
   .tips-text{
@@ -297,7 +314,6 @@ export default {
     text-align: center;
     font-size: 22rpx;
   }
-
 
   .system-note{
     width: 710rpx;

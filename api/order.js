@@ -3,7 +3,12 @@ import Storage from '@/common/Storage'
 
 
 
-
+//获取激活码
+export const getCodeQrcode = (param, options) => fetch({
+  act: 'getCodeQrcode',
+  param,
+  options
+})
 //激活码购买
 export const buyActiveCode = (param, options) => fetch({
   act: 'buyActiveCode',

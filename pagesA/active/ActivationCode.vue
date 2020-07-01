@@ -32,7 +32,7 @@
     <div class="active-second" :style="{backgroundImage: 'url('+$getDomain('/static/client/active/secondActive.png')+')'}" >
       商家为什么要做自营配送平台？
     </div>
-    <img class="secondActiveContent" src="/static/active/secondActiveContent.png">
+    <img class="secondActiveContent"  :src="$getDomain('/static/client/active/secondActiveContent.png')" >
 
     <div class="active-three"  :style="{backgroundImage: 'url('+$getDomain('/static/client/active/threeActive.png')+')'}"  >
       及贝业务模型
@@ -218,21 +218,27 @@ export default {
     WzwImTip
   },
   data () {
-    return {}
+    return {
+      order_id: ''
+    }
   },
   methods: {
     paySuccessCall () {
       toast('支付成功')
+      const _self = this
+      const url = '/pagesA/active/ActivationCodeSuccess?order_id=' + this.order_id
       setTimeout(function () {
-        this.$linkTo('/pagesA/active/ActivationCodeSuccess')
+        _self.$linkTo(url)
       }, 1000)
     },
     payFailCall (err) {
-      if (err.errMsg == 'requestPayment:fail cancel') {
-        toast({ title: '取消支付', icon: 'none' })
+      const { msg, errMsg } = err
+      if (errMsg === 'requestPayment:fail cancel') {
+        error('用户取消支付')
         return
       }
-      error('支付失败', err)
+
+      error(msg || '支付失败')
     },
     async buyActiveCodeFn () {
       try {
@@ -244,6 +250,7 @@ export default {
         })
         const { code } = wxLoginRt
         await buyActiveCode({ code }, { tip: '加载中' }).then(res => {
+          this.order_id = res.data.order_id
           Pay(_self, pay_type, res)
         }).catch(e => {
           error(e.msg || '获取code错误')
