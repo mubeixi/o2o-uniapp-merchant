@@ -43,7 +43,7 @@ export default {
   data () {
     return {
       bid: '',
-      skin_id: 3,
+      skin_id: '',
       storeInfo: {}
     }
   },
