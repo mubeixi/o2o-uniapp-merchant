@@ -609,6 +609,18 @@
           "style": {
             "navigationBarTitleText": "失效优惠券"
           }
+        },
+		{
+		  "path": "active/ActivationCode",
+		  "style": {
+		    "navigationBarTitleText": "专题页"
+		  }
+		},
+        {
+          "path": "active/ActivationCodeSuccess",
+          "style": {
+            "navigationBarTitleText": "支付成功"
+          }
         }
       ]
     }

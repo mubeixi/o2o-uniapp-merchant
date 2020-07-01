@@ -6,7 +6,7 @@
         <radio :checked="Number(item.Address_ID) === Number(check_address_id)" :disabled="!check_flag"
                :value="idx"
                class="radio-ele" color="#F43131" style="transform: scale(0.8)" v-if="check_flag" />
-        <view class="flex-main fz-12">
+        <view class="flex-main fz-12"  :class="check_flag?'':'p-l-10'">
           <view class='flex-top'>
             <view class='name'>收货人：{{item.Address_Name}}</view>
             <view class='pho'>{{item.Address_Mobile}}</view>
@@ -25,7 +25,7 @@
         </view>
       </label>
     </radio-group>
-    
+
     <view style='height:82rpx;'></view>
     <view @click="addressAddEdit('a')" class='tianjia flex flex-vertical-c'>
       <view class='jia_img'>
@@ -65,7 +65,7 @@ export default {
     radioChange: function (e) {
       const idx = e.detail.value // 选择的地址ID
       const addressInfo = this.addresslist[idx]
-      
+
       // 其他地方有用到的地方，就自己{address_id}，一样用的。。
       uni.$emit('bind_select_address', addressInfo)
       // 返回上一页
@@ -89,7 +89,7 @@ export default {
       //   })
       // }
     },
-    
+
     // 删除收获地址
     deladdress: function (id) {
       const that = this
@@ -111,7 +111,7 @@ export default {
                 // 重置删除收货地址id
                 that.addresslist = addresslist
                 del_address_id = 0
-                
+
                 uni.showToast({
                   title: '删除成功',
                   icon: 'success',
@@ -129,7 +129,7 @@ export default {
         },
       })
     },
-    
+
     // 添加收货地址
     addressAddEdit: function (id) {
       // 判断是添加还是编辑
@@ -137,12 +137,12 @@ export default {
       if (id !== 'a') {
         address_id = id
       }
-      
+
       uni.navigateTo({
         url: '/pagesA/user/EditAddress?from=addresslist' + (address_id ? '&addressid=' + address_id : ''),
       })
     },
-    
+
     // 获取收货地址列表
     getAddressList: function () {
       getAddressList({}).then(res => {
@@ -180,7 +180,7 @@ export default {
     background-color: #FFFFFF !important;
     min-height: 100vh;
   }
-  
+
   .radio-item {
     width: 750rpx;
     padding: 20rpx 0;
@@ -190,12 +190,12 @@ export default {
     align-items: center;
     border-bottom: 15rpx #f4f4f4 solid;
   }
-  
+
   .radio-item .radio-ele {
     width: 80rpx;
     text-align: center;
   }
-  
+
   .flex-main {
     flex: 1;
     color: #666;
@@ -203,56 +203,56 @@ export default {
     display: flex;
     flex-flow: column;
   }
-  
+
   .flex-main .flex-top {
     display: flex;
     flex-flow: row;
     margin-bottom: 10rpx;
   }
-  
+
   .flex-main .flex-top .name {
     width: 65%;
   }
-  
+
   .flex-main .flex-top .pho {
     width: 35%;
     text-align: right;
   }
-  
+
   .flex-main .flex-add {
     width: 100%;
     line-height: 36rpx;
     overflow: hidden;
   }
-  
+
   .flex-main .flex-add.default {
     color: #ff0000;
     margin-top: 10rpx;
   }
-  
+
   .flex-action {
     padding: 0 30rpx;
     display: flex;
     flex-flow: column;
     text-align: center;
   }
-  
+
   .flex-action image {
     width: 46rpx;
     height: 46rpx;
     margin-left: 37rpx;
   }
-  
+
   .flex-action image:nth-child(1) {
     margin-bottom: 20rpx;
   }
-  
+
   /* 没有选择框样式 */
   .radio.no-redio .flex-main {
     width: 86%;
     padding: 0 3%;
   }
-  
+
   .tianjia {
     color: #666;
     line-height: 40rpx;
@@ -265,21 +265,21 @@ export default {
     border-top: 1px #f4f4f4 solid;
     background: #fff;
   }
-  
+
   .tianjia view.jia_img image {
     width: 40rpx;
     height: 40rpx;
   }
-  
+
   .tianjia view.go_img image {
     width: 40rpx;
     height: 40rpx;
   }
-  
+
   .go_img {
     margin-left: auto;
   }
-  
+
   .tianjia text {
     width: 200rpx;
     float: left;
