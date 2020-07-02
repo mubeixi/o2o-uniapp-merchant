@@ -11,6 +11,10 @@ export const apiBaseUrl = 'https://newo2o.bafangka.com'
 export const staticUrl = 'https://newo2o.bafangka.com'
 export const users_id = 'wkbq6nc2kc'
 
+
+//测试appid   wxfe5d2621576cf895  域名 https://newo2o.bafangka.com
+//正式appid   wx28e6e80223bd5f0f  域名 https://newo2o.netcnnet.net
+
 // Im相关配置
 export const IM_WSS_URL = 'wss://newjdtravel.bafangka.com/cus/'
 export const IM_API_URL = 'https://chat.bafangka.com'
