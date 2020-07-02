@@ -15,8 +15,9 @@
     </div>
     <img  :src="$getDomain('/static/client/active/jiantou.png')" class="jiantou-img">
 
-    <div class="block-div">
-      <img   :src="$getDomain('/static/client/active/block.png')" class="block-img full-img">
+    <div class="block-div"  :style="{backgroundImage: 'url('+$getDomain('/static/client/active/block.png')+')'}" @click="yulan" >
+<!--      <img   :src="$getDomain('/static/client/active/block.png')" class="block-img full-img">-->
+      <img :src="initCode" v-if="initCode"  class="init-code">
     </div>
     <div class="tips-text">
       手机扫描二维码立即关注
@@ -145,7 +146,6 @@
   </div>
 </template>
 <script>
-import layoutIcon from '@/componets/layout-icon/layout-icon'
 import BaseMixin from '@/mixins/BaseMixin'
 import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 import { getCodeQrcode } from '@/api/order'
@@ -154,18 +154,23 @@ import { error } from '@/common/fun'
 export default {
   mixins: [BaseMixin],
   components: {
-    WzwImTip,
-    layoutIcon
+    WzwImTip
   },
   data () {
     return {
-      order_id: ''
+      order_id: '',
+      initCode: ''
     }
   },
   methods: {
+    yulan () {
+      uni.previewImage({
+        urls: [this.initCode]
+      })
+    },
     async init () {
       await getCodeQrcode({ order_id: this.order_id }, { tip: '加载中' }).then(res => {
-
+        this.initCode = res.data
       }).catch(e => {
         error(e.msg || '获取二维码错误')
       })
@@ -176,7 +181,6 @@ export default {
       this.order_id = options.order_id
       this.init()
     }
-
   }
 
 }
@@ -229,7 +233,11 @@ export default {
     height: 280rpx;
     margin: 0 auto;
     position: relative;
-
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   .tips-text{
     width: 750rpx;
@@ -351,4 +359,8 @@ export default {
 
   }
 
+  .init-code{
+    width: 230rpx;
+    height: 230rpx;
+  }
 </style>

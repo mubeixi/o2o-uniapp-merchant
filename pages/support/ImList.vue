@@ -255,7 +255,7 @@ export default {
     })
   },
   onShow () {
-    if (!checkIsLogin(1, 0)) return
+    if (!checkIsLogin(1, 1)) return
 
     getUserInfo().then(res => {
       this.setUserInfo(res.data)
