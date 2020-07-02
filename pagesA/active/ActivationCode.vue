@@ -266,10 +266,12 @@ export default {
 </script>
 <style lang="scss" scoped>
   .page-wrap {
-    min-height: 100vh;
+    height: 100vh;
     box-sizing: border-box;
     background-color: #170130;
     padding-top: 70rpx;
+    overflow-y: scroll;
+    overflow-x: hidden;
   }
 
   .c-F7D81B {
@@ -566,5 +568,6 @@ export default {
     background:rgba(83,36,185,1);
     border-radius:6rpx;
   }
+
 
 </style>
