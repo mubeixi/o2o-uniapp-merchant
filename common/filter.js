@@ -7,7 +7,7 @@ Vue.filter('domain', function (url) {
   return url
 })
 
-Vue.filter('formatTime', (str, fromatStr = 'YYYY.MM.dd', timeStamp = 0) => {
+Vue.filter('formatTime', (str, fromatStr = 'YYYY.MM.DD', timeStamp = 0) => {
   if (timeStamp) {
     return uni.$moment(new Date(parseInt(str) * 1000)).format(fromatStr)
   }

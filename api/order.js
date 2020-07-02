@@ -1,6 +1,20 @@
 import { fetch } from '@/common/request'
 import Storage from '@/common/Storage'
 
+
+
+//获取激活码
+export const getCodeQrcode = (param, options) => fetch({
+  act: 'getCodeQrcode',
+  param,
+  options
+})
+//激活码购买
+export const buyActiveCode = (param, options) => fetch({
+  act: 'buyActiveCode',
+  param,
+  options
+})
 // 评论
 export const comment = (param, options) => fetch({
   act: 'comment',
