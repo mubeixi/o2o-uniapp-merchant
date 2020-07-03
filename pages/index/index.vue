@@ -202,16 +202,20 @@ export default {
           console.log('当前位置的经度：' + res.longitude)
           console.log('当前位置的纬度：' + res.latitude)
 
-          this.getLocationDone = true
           this.setUserAddressInfo(res)
-          if (this.getLocationDone) return
-          // 另外两个组件，刷新数据
+          this.getLocationDone = true
+          const isRefresh = Storage.get('isRefresh')
+          if (isRefresh) return
+          Storage.set('isRefresh', true)
           if (this.headTabIndex === 1) {
             this.$refs.page1.refreshByLocal()
           }
           if (this.headTabIndex === 2) {
             this.$refs.page2.refreshByLocal()
           }
+
+          // if (this.getLocationDone) return
+          // 另外两个组件，刷新数据
         }
       })
     },
@@ -270,6 +274,7 @@ export default {
   },
   created () {
     this.getLocationDone = false
+    Storage.set('isRefresh', false)
     this._init_func()
   }
 }
