@@ -145,7 +145,7 @@
                 <div class="action">
                   <image :src="'/static/client/home/capsule.png'|domain" class="bgimg"></image>
                   <div class="fz-12 color-white price-box">
-                    <span style="color: #754827;">爆抢{{item.Products_Sales}}件</span>
+                    <span class="fz-11" style="color: #754827;">爆抢{{item.Products_Sales>9999?'1w+':item.Products_Sales}}件</span>
                     <div class="flex fz-10 flex-vertical-b">
                       <span>￥</span><span class="fz-12">{{item.Products_PriceX}}</span>
                       <span class="text-through p-l-4">￥{{item.Products_PriceY}}</span>
