@@ -1,8 +1,8 @@
 <template>
   <view @click="commonClick" class="myall">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
-    <div class="flex-message" v-if="userInfo.attention_mp!=1">
-      <div>小提示：关注"及贝"公众号可及时获取商家回复消息，</div>
+    <div class="flex-message" v-if="userInfo.attention_mp!=1&&initData.mp_nickname">
+      <div>小提示：关注{{'"'}}{{initData.mp_nickname}}{{'"'}}公众号可及时获取商家回复消息，</div>
       <div >可<span class="c-red" @click="lookCode">点击这里</span>查看公众号二维码</div>
     </div>
     <div class="flex-message-occupy" v-if="userInfo.attention_mp!=1"></div>
