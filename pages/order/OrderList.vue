@@ -68,7 +68,7 @@
             <layout-icon color="#fff" display="inline" size="13" type="iconicon-arrow-right m-l-4"></layout-icon>
           </view>
           <div class="text-right flex1">
-            共{{order.prod_list.length}}件商品 实付：<span class="price"><span>￥</span> {{order.Order_TotalPrice}} <block
+            共{{order.order_total_prod_count}}件商品 实付：<span class="price"><span>￥</span> {{order.Order_TotalPrice}} <block
             v-if="item.Order_Shipping.Price>0">(含运费{{item.Order_Shipping.Price}}元)</block></span>
           </div>
         </div>
@@ -82,7 +82,8 @@
           <span class="btn-group-item" @click.stop="cancelOrder(order.prod_list,index)">取消订单</span>
           <span class="btn-group-item active" @click.stop="goPay(order)">立即付款</span>
         </div>
-        <div class="btn-group" v-else-if="order.Order_Status==2&&order.Order_Type !== 'gift'">
+        <!--订单中只有一个商品的时候，可以不显示退款-->
+        <div class="btn-group" v-else-if="order.prod_list.length>1 && order.Order_Status==2&&order.Order_Type !== 'gift'">
           <span class="btn-group-item active" @click.stop="goPay(order)">申请退款</span>
         </div>
         <div class="btn-group" v-else-if="order.Order_Status==3">

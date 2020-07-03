@@ -7,7 +7,7 @@ Vue.filter('domain', function (url) {
   return url
 })
 
-Vue.filter('formatTime', (str, fromatStr = 'YYYY.MM.dd', timeStamp = 0) => {
+Vue.filter('formatTime', (str, fromatStr = 'YYYY.MM.DD', timeStamp = 0) => {
   if (timeStamp) {
     return uni.$moment(new Date(parseInt(str) * 1000)).format(fromatStr)
   }
@@ -37,7 +37,7 @@ export const formatNumber = n => {
   return n[1] ? n : '0' + n
 }
 export const formatPirce = (priceStr, idx) => {
-  if (isNaN(priceStr)) return ''
+  if (isNaN(priceStr)) return '0'
   if (typeof priceStr === 'number')priceStr += ''
   const arr = priceStr.split('.')
   if (idx === 0) return arr[0]
@@ -47,6 +47,12 @@ export const formatPirce = (priceStr, idx) => {
 
 Vue.filter('formatPirce', (val, idx) => {
   return formatPirce(val, idx)
+})
+
+Vue.filter('formatMoeny', (price) => {
+  if (isNaN(price)) return 0
+  if (!price) return 0
+  return parseInt(Number(price) * 100) / 100
 })
 
 export const formatTimeFun = function (date) {

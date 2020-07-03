@@ -4,15 +4,15 @@
     <div :style="{height:diyHeadHeight+'px'}" class="bg-white"></div>
 
     <div :style="{height:diyHeadHeight+'px'}" class="top-box bg-white">
-      <div :style="{height:menuButtonInfo.top+'px'}" class="bg-white"
-           style="position: fixed;top: 0;width: 750rpx;z-index: 99;"></div>
-      <div :style="{height:menuButtonInfo.height+'px',top:systemInfo.statusBarHeight+'px'}"
-           class="cart-title flex flex-vertical-c flex-justify-c fz-16 c3">
-        <div>
-          购物车
-        </div>
-        <div @click="isDel=!isDel" class="cart-title-right" v-if="!manage">
-          {{isDel?'取消':'管理'}}
+      <div :style="{height:menuButtonInfo.top+'px'}" class="bg-white" style="position: fixed;top: 0;width: 750rpx;z-index: 99;"></div>
+      <div :style="{height:menuButtonInfo.height+'px',top:systemInfo.statusBarHeight+'px'}" class="cart-title fz-16 c3">
+        <div :style="{height:menuButtonInfo.height+'px'}" style="position: relative" class="flex flex-vertical-c flex-justify-c ">
+          <div>
+            购物车
+          </div>
+          <div @click="isDel=!isDel" class="cart-title-right" v-if="!manage">
+            {{isDel?'取消':'管理'}}
+          </div>
         </div>
       </div>
     </div>
@@ -542,7 +542,7 @@ export default {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      left: 20rpx;
+      left: 30rpx;
     }
   }
 

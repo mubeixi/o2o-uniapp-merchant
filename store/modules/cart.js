@@ -91,11 +91,11 @@ const mutations = {
     //   name: Products_Name,
     //   price_selling: Number(Products_PriceX),
     //   price_market: Number(Products_PriceY)
-    const { biz_id, prod_id, attr_id, checked, price_selling, price_market, name, pic } = product
+    const { biz_id, prod_id, attr_id, checked, price_selling, price_market, name, pic,attr_text='' } = product
     const idx = findArrayIdx(cartList, { attr_id, prod_id })
     // 首次加入购物车
     if (idx === false) {
-      cartList.push({ biz_id, prod_id, attr_id, num, checked, price_selling, price_market, name, pic })
+      cartList.push({ biz_id, prod_id, attr_id, num, checked, price_selling, price_market, name, pic,attr_text })
     } else {
       cartList[idx].num += num
     }
@@ -135,7 +135,7 @@ const mutations = {
     let cartList = state.cartList.length > 0 ? state.cartList : Storage.get('shopCartList')
     if (!cartList) cartList = []
 
-    const { attr_id,prod_id } = product
+    const { attr_id, prod_id } = product
 
     const idx = findArrayIdx(cartList, { attr_id: attr_id })
     // 并非首次加入购物车
@@ -148,7 +148,7 @@ const mutations = {
 
       // 才能继续删除
       if (cartList[idx].num === 0) {
-        this.commit('cart/REMOVE_GOODS', { attr_id,prod_id })
+        this.commit('cart/REMOVE_GOODS', { attr_id, prod_id })
       }
     }
   },
@@ -184,7 +184,7 @@ const actions = {
   async addNum ({ commit, state }, { product, num = 1 }) {
     try {
       const { biz_id, prod_id, attr_id } = product
-      const cartNewData = await updateCartFn({ prod_id, attr_id, biz_id, qty: num }).catch(err => { throw Error(err.msg) })
+      const cartNewData = await updateCartFn({ prod_id, attr_id, biz_id, qty: num }).catch(errObj => { throw errObj })
       if (num > 0) {
         commit('ADD_GOODS', { product, num: Number(num) })
       } else {
@@ -336,45 +336,68 @@ const getters = {
     }
     return false
   },
-  getTotalNum: (state) => (bid) => {
+  getTotalNum: (state) => (bid, checked = true) => {
     try {
       const cartList = state.cartList.length > 0 ? state.cartList : Storage.get('shopCartList')
       if (!Array.isArray(cartList)) throw Error('获取价格失败')
       let count = 0
+
       for (var row of cartList) {
-        if (Number(row.biz_id) === Number(bid)) {
-          count += row.num
+        if (checked) {
+          if (Number(row.biz_id) === Number(bid) && row.checked) {
+            count += row.num
+          }
+        } else {
+          if (Number(row.biz_id) === Number(bid)) {
+            count += row.num
+          }
         }
       }
+
       return count
     } catch (e) {
       return 0
     }
   },
-  getTotalMoney: (state) => (bid) => {
+  getTotalMoney: (state) => (bid, checked = true) => {
     try {
       const cartList = state.cartList.length > 0 ? state.cartList : Storage.get('shopCartList')
       if (!Array.isArray(cartList)) throw Error('获取价格失败')
       let count = 0
+
       for (var row of cartList) {
-        if (Number(row.biz_id) === Number(bid)) {
-          count += row.num * row.price_selling
+        if (checked) {
+          if (Number(row.biz_id) === Number(bid) && row.checked) {
+            count += row.num * row.price_selling
+          }
+        } else {
+          if (Number(row.biz_id) === Number(bid)) {
+            count += row.num * row.price_selling
+          }
         }
       }
+
       return count
     } catch (e) {
       return 0
     }
   },
-  getTotalMoneyByMarket: (state) => (bid) => {
+  getTotalMoneyByMarket: (state) => (bid,checked=true) => {
     try {
       const cartList = state.cartList.length > 0 ? state.cartList : Storage.get('shopCartList')
       if (!Array.isArray(cartList)) throw Error('获取价格失败')
       let count = 0
       for (var row of cartList) {
-        if (Number(row.biz_id) === Number(bid)) {
-          count += row.num * row.price_market
+        if(checked){
+          if (Number(row.biz_id) === Number(bid) && row.checked) {
+            count += row.num * row.price_market
+          }
+        }else{
+          if (Number(row.biz_id) === Number(bid)) {
+            count += row.num * row.price_market
+          }
         }
+        
       }
       return count
     } catch (e) {

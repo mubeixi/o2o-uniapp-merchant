@@ -69,7 +69,7 @@
         </div>
         <div class="biz-goods-list bg-white">
           <block :key="pro_id" v-for="(pro,pro_id) in bizData">
-            <div :key="attr_id" v-for="(attr,attr_id) in pro">
+            <div class="pro-box" :key="attr_id" v-for="(attr,attr_id) in pro">
               <div class="pro">
                 <img :src="attr.ImgPath" alt="" class="pro-img">
                 <div class="pro-msg">
@@ -88,15 +88,15 @@
             <span class="fz-16 c3">配送</span>
             <span class="flex flex-vertical-c fz-13" style="text-align:right; color: #888;">
 
-                      <div @click="changeShpping(biz_id)" class="flex flex-vertical-c ">
-
-                          <div class="unchecked m-r-8" v-if="postData.shipping_id[biz_id]=='is_self_get'">
-                          </div>
-                          <div class="checked m-r-8" v-else>
-                            <div class="checked-radio"></div>
-                          </div>
-                          <span>商家发货</span>
+                      <!--只有允许商家发货情况下，才显示-->
+                      <block v-if="bizList[biz_id].bizSendByMerchat">
+                        <div @click="changeShpping(biz_id)" class="flex flex-vertical-c ">
+                          <div class="unchecked m-r-8" v-if="postData.shipping_id[biz_id]=='is_self_get'"></div>
+                          <div class="checked m-r-8" v-else><div class="checked-radio"></div></div>
+                        <span>商家发货</span>
                       </div>
+                      </block>
+
                       <div @click="changeIsSelft(biz_id)" class="flex flex-vertical-c m-l-20 " v-if="bizList[biz_id].shipping_company.is_self_get">
                           <div class="checked m-r-8" v-if="postData.shipping_id[biz_id]=='is_self_get'">
                             <div class="checked-radio"></div>
@@ -253,10 +253,10 @@
             共{{bizList[biz_id].prod_count}}件商品，小计<span class="price-selling">￥{{bizList[biz_id].Order_TotalPrice}}</span>
           </div>
 
-          <div class="expired-box" style="padding-bottom: 30rpx" v-if="bizList[biz_id].expired_prod_count>0">
+          <div class="expired-box" style="padding-bottom: 30rpx" v-if="bizList[biz_id].expired_cart_prod_count>0">
             <div class="expired-hr" style="border-top: 1px dashed #e7e7e7;padding: 0rpx 0 40rpx 0"></div>
             <div class="expired-total c3 fz-18">
-              共失效<span class="price-selling">{{bizList[biz_id].expired_prod_count}}</span>件商品
+              共失效<span class="price-selling">{{bizList[biz_id].expired_cart_prod_count}}</span>件商品
             </div>
             <div class="expired-goods-list bg-white">
               <block :key="pro_id" v-for="(pro,pro_id) in bizList[biz_id].expired_cart_prod">
@@ -266,7 +266,7 @@
                     <div class="pro-msg">
                       <div class="pro-name" style="color: #777;">{{attr.ProductsName}}</div>
                       <div class="flex flex-vertical-c flex-justify-between" style="margin: 26rpx 0">
-                        <div class="attr"  style="background-color: #f5f5f5;color: #777;"><span style="background-color: #f5f5f5;color: #777;" v-if="1||attr.Productsattrstrval">测试规格{{attr.Productsattrstrval}}</span></div>
+                        <div class="attr"  style="background-color: #f5f5f5;color: #777;"><span style="background-color: #f5f5f5;color: #777;" v-if="attr.Productsattrstrval">{{attr.Productsattrstrval}}</span></div>
                         <div class="pro-price flex flex-vertical-b fz-18" style="color: #888"><span class="fz-10">￥</span >{{attr.ProductsPriceX}}</div>
                       </div>
                       <div class="expired-reason fz-12" style="color: #f53333">失效原因:配送方式不统一，需分开单独结算</div>
@@ -293,7 +293,7 @@
         <div class="info">共{{prodCount}}件商品 总计：
           <text class="money">
             <text class="m_icon">￥</text>
-            {{Order_Fyepay}}
+            {{Order_Fyepay|formatMoeny}}
           </text>
         </div>
         <div class="tips" v-if="orderInfo.obtain_desc">{{orderInfo.obtain_desc}}</div>
@@ -311,28 +311,28 @@
     <layout-layer @maskClicked="handClicked" bottomStr="50px" ref="popupMX" title="明细">
       <div class="mxdetail">
         <div class="mxitem" v-if="!checkfrom">产品原价
-          <text class="num">{{allGoodsPrice}}</text>
+          <text class="num">{{allGoodsPrice|formatMoeny}}</text>
         </div>
         <div class="mxitem" v-if="checkfrom">{{active_name}}
-          <text class="num">{{Order_Fyepay}}</text>
+          <text class="num">{{Order_Fyepay|formatMoeny}}</text>
         </div>
         <view class="mxitem" v-if="allUserCuragioMoney > 0">会员折扣
-          <text class="num">-{{allUserCuragioMoney}}</text>
+          <text class="num">-{{allUserCuragioMoney|formatMoeny}}</text>
         </view>
         <view class="mxitem" v-if="allManjianCash > 0">满减
-          <text class="num">-{{allManjianCash}}</text>
+          <text class="num">-{{allManjianCash|formatMoeny}}</text>
         </view>
         <view class="mxitem" v-if="allCouponMoney > 0">优惠券
-          <text class="num">-{{allCouponMoney}}</text>
+          <text class="num">-{{allCouponMoney|formatMoeny}}</text>
         </view>
         <view class="mxitem" v-if="allIntegralMoney > 0">积分抵用
-          <text class="num">-{{allIntegralMoney}}</text>
+          <text class="num">-{{allIntegralMoney|formatMoeny}}</text>
         </view>
         <div class="mxitem" v-if="useMoneyCount > 0">余额
-          <text class="num">-{{useMoneyCount}}</text>
+          <text class="num">-{{useMoneyCount|formatMoeny}}</text>
         </div>
         <div class="mxitem" v-if="allOrderShipping > 0">运费
-          <text class="num">+{{allOrderShipping}}</text>
+          <text class="num">+{{allOrderShipping|formatMoeny}}</text>
         </div>
       </div>
     </layout-layer>
@@ -412,7 +412,7 @@ export default {
   },
   data () {
     return {
-      toDay:'',//当前年月日
+      toDay: '', // 当前年月日
       delivery_biz_id: '', // 外卖的时候才有
       gift: false,
       bid: null,
@@ -866,6 +866,7 @@ export default {
         if (it !== 'is_self_get') {
           this.postData.shipping_id[this.activeBizId] = it
           this.postData.shipping_name[this.activeBizId] = this.popupExpressCompanys[it]
+          break;
         }
       }
 
@@ -1131,6 +1132,12 @@ export default {
             expired_prod_count += bizInfo.expired_cart_prod[i].length
           }
 
+          // 是否允许商家自己发货
+          var bizSendByMerchat = false
+          for (var key in bizInfo.shipping_company) {
+            if (key !== 'is_self_get')bizSendByMerchat = true
+          }
+
           bizInfo.expired_prod_count = expired_prod_count
 
           var shippingStatus = {
@@ -1171,7 +1178,7 @@ export default {
             shippingStatus.isAppoint = false
           }
 
-          bizListUpShiping[bizId] = Object.assign({}, { shippingStatus: { ...shippingStatus } }, bizInfo)
+          bizListUpShiping[bizId] = Object.assign({}, { shippingStatus: { ...shippingStatus }, bizSendByMerchat }, bizInfo)
         }
 
         this.$set(this, 'bizList', bizListUpShiping)
@@ -1359,8 +1366,6 @@ export default {
   },
 
   onShow () {
-
-
     this._init_func()
   },
   async created () {
@@ -1647,9 +1652,7 @@ export default {
 
     .goods-hr {
       height: 15px;
-      &:last-child{
-        height: 0;
-      }
+
       //background: #eee;
     }
   }
@@ -1683,9 +1686,7 @@ export default {
 
     .goods-hr {
       height: 15px;
-      &:last-child{
-        height: 0;
-      }
+
       //background: #eee;
     }
   }

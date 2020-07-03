@@ -8,8 +8,9 @@
           <layout-icon weight="bold" color="#333" size="22" type="iconicon-address"></layout-icon>
         </div>
         <!--        <div class="action-item-space"></div>-->
-        <div @click.stop="$cellPhone(storeInfo.biz_mobile)" class="action-item">
-          <layout-icon weight="bold" color="#333" size="22" type="iconicon-phone"></layout-icon>
+        <div @click.stop="taggleFavorite" class="action-item">
+          <layout-icon :color="isFavourite?'#26C78D':'#333333'" size="22" type="iconicon-favorite"></layout-icon>
+<!--          <layout-icon weight="bold" color="#333" size="22" type="iconicon-phone"></layout-icon>-->
         </div>
       </div>
       <div class="toolbar-search" @click="toSearch">
@@ -35,8 +36,8 @@
           <!--<div class="like fz-11">{{storeInfo.follow}}人关注</div>-->
         </div>
         <div class="activity-go">
-          <span class="c7 fz-14">活动详情</span>
-          <layout-icon class="fz-10 c4" display="inline" type="iconicon-arrow-right"></layout-icon>
+<!--          <span class="c7 fz-14">活动详情</span>-->
+<!--          <layout-icon class="fz-10 c4" display="inline" type="iconicon-arrow-right"></layout-icon>-->
         </div>
       </div>
 
@@ -88,7 +89,7 @@
 
             </div>
             <div class="kill-action">
-              <div class="kill-action-reduce">已减{{$filterPrice(pro.Products_PriceX-pro.price)}}元</div>
+              <div class="kill-action-reduce">已减{{$filterPrice((pro.Products_PriceX-pro.price))}}元</div>
               <image :src="$getDomain('/static/client/store/theme_two/go-btn-icon.png')" class="kill-action-go"></image>
             </div>
             <div class="kill-countdown">
@@ -167,6 +168,7 @@
             <block v-for="(pro,idx) in bizCateList[bizCateNavIndex].productList" :key="idx">
               <div class="fun-goods-item" v-if="idx%2===0"  @click="$toGoodsDetail(pro)">
                 <div class="product-cover" :style="{backgroundImage:'url('+$getDomain(pro.ImgPath)+')'}" ></div>
+                <div class="p-t-8 fz-13 c3" style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis">{{pro.Products_Name}}</div>
                 <div class="price-discount flex flex-vertical-c" style="padding: 20rpx 0 20rpx 20rpx">
                   <div class="price-box" style="color: #FE2C4D">
                     <span class="sign" style="font-size: 20rpx;">￥</span><span class="num" style="font-size: 30rpx;">{{pro.Products_PriceX}}</span>
@@ -176,7 +178,7 @@
                   </div>
                 </div>
                 <div slot="ext" class="goods-action">
-                  <div class="goods-action-reduce">已减{{pro.Products_PriceY-pro.Products_PriceX}}元</div>
+                  <div class="goods-action-reduce">已减{{$filterPrice(pro.Products_PriceY-pro.Products_PriceX)}}元</div>
                   <image :src="$getDomain('/static/client/store/theme_two/go-btn-icon.png')" class="goods-action-go"></image>
                 </div>
               </div>
@@ -186,6 +188,7 @@
             <block v-for="(pro,idx) in bizCateList[bizCateNavIndex].productList" :key="idx">
               <div class="fun-goods-item" v-if="idx%2===1"  @click="$toGoodsDetail(pro)">
                 <div class="product-cover" :style="{backgroundImage:'url('+$getDomain(pro.ImgPath)+')'}" ></div>
+                <div class="p-t-8 fz-13 c3" style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis">{{pro.Products_Name}}</div>
                 <div class="price-discount flex flex-vertical-c" style="padding: 20rpx 0 20rpx 20rpx">
                   <div class="price-box" style="color: #FE2C4D">
                     <span class="sign" style="font-size: 20rpx;">￥</span><span class="num" style="font-size: 30rpx;">{{pro.Products_PriceX}}</span>
@@ -195,7 +198,7 @@
                   </div>
                 </div>
                 <div slot="ext" class="goods-action">
-                  <div class="goods-action-reduce">已减{{pro.Products_PriceY-pro.Products_PriceX}}元</div>
+                  <div class="goods-action-reduce">已减{{$filterPrice(pro.Products_PriceY-pro.Products_PriceX)}}元</div>
                   <image :src="$getDomain('/static/client/store/theme_two/go-btn-icon.png')" class="goods-action-go"></image>
                 </div>
               </div>
@@ -323,6 +326,7 @@ export default {
   },
   data () {
     return {
+      isFavourite:false,
       commentModalPlaceholder: '请输入内容',
       anchorTop: 0,
       commentModalShow: false,
@@ -387,6 +391,7 @@ export default {
     }
   },
   methods: {
+
     bindBackFn () {
       this.$back()
     },
@@ -889,6 +894,7 @@ export default {
         line-height: 16px;
         font-size: 10px;
         background: rgba(0,0,0,.6);
+        color: #FFFFff;
       }
     }
     .info-box {
@@ -901,6 +907,7 @@ export default {
         align-items: center;
       }
       .store-activity-item{
+        overflow: hidden;
         display: inline-block;
         margin-right: 6px;
         height: 18px;
@@ -1169,7 +1176,12 @@ export default {
       display: inline-block;
       width: 200rpx;
       margin-left: 20rpx;
-
+      .act-goods-item-title{
+        width: 200rpx;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
       .item-cover{
         margin: 0 auto;
         width: 154rpx;

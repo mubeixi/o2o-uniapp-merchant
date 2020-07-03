@@ -65,15 +65,15 @@
         <block v-if="couponList.length>2">
           <div v-for="(coupon,idx) in couponList" :key="idx" @click="getCoupon(coupon,idx)" class="coupon-item">
             <image style="width: 282rpx;height: 120rpx;" class="coupon-item-bg" :src="$getDomain('/static/client/store/theme_one/coupon-s.png')"></image>
-            <div class="coupon-item-info flex">
+            <div class="coupon-item-info">
               <div class="flex flex-vertical-b">
                 <div class="sign m-b-4">
                   <span class="sign-text">{{coupon.Coupon_UseType?'￥':'折'}}</span>
                 </div>
                 <div class="num">{{coupon.Coupon_UseType?coupon.Coupon_Cash:coupon.Coupon_Discount}}</div>
               </div>
-              <div class="info">
-                <div class="name">{{coupon.Coupon_Subject}}</div>
+              <div class="info m-t-2">
+                <!--<div class="name">{{coupon.Coupon_Subject}}</div>-->
                 <div class="condition">满{{coupon.Coupon_Condition}}元可使用</div>
               </div>
             </div>
@@ -194,7 +194,7 @@
             <div class="act-goods-list">
               <div class="act-goods-item" v-for="(pro,idx) in activity.spike_goods" :key="idx" @click="toGoodsDetailFn(pro,activity)">
                 <div :style="{backgroundImage:'url('+pro.ImgPath+')'}" class="item-cover"></div>
-                <div class="fz-12 c3 m-t-15 m-b-8">
+                <div class="fz-12 c3 m-t-15 m-b-8" style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">
                   <wzw-live-tag :room_id="pro.room_id" :product-info="pro" />
                   {{pro.Products_Name}}
                 </div>
@@ -353,7 +353,7 @@
 
 <script>
 import { componetMixin } from '@/mixins/BaseMixin'
-import { error, hideLoading, modal, showLoading, toast,checkIsExpire } from '@/common/fun'
+import { error, hideLoading, modal, showLoading, toast, checkIsExpire } from '@/common/fun'
 import { getAlbumList, getBizInfo, getBizSpikeList, getStoreList } from '@/api/store'
 import { getBizProdCateList, getFlashsaleList, getProductList } from '@/api/product'
 import { getCommitList, getCouponList } from '@/api/common'
@@ -455,14 +455,13 @@ export default {
         checkIsExpire(this.storeInfo.biz_expires)
         this.$emit('upStoreInfo', this.storeInfo)
 
-
         const base = { biz_ids: this.bid }
 
         getProductList({ ...base, pageSize: 1 }).then(({ totalCount }) => {
           this.storeGoodsTotal = totalCount
         }).catch((err) => { throw Error(err.msg) })
 
-        const flashActivitys = await getBizSpikeList({ biz_id: this.bid,status:1  }, { onlyData: true }).catch((e) => {
+        const flashActivitys = await getBizSpikeList({ biz_id: this.bid, status: 1 }, { onlyData: true }).catch((e) => {
           throw Error('获取限时抢购数据失败')
         })
 
@@ -782,6 +781,8 @@ export default {
       this.isFavourite = !this.isFavourite
       const Action = this.isFavourite ? addFavourite : cancelFavourite
       Action({ biz_id: this.bid }).then(res => {
+        this.storeInfo.follow += this.isFavourite ? 1 : -1
+
         toast(res.msg)
       }).catch((e) => {
         Exception.handle(e)
@@ -804,7 +805,7 @@ export default {
         const data = getCountdownFunc({
           start_timeStamp: this.killList[idx].start_time,
           end_timeStamp: this.killList[idx].end_time,
-          getDay:false
+          getDay: false
         })
         if (data) {
           this.$set(this.killList[idx], 'countdown', { ...data })
@@ -907,8 +908,13 @@ export default {
     .store-activity-list{
       display: flex;
       align-items: center;
+      width: 360rpx;
+      overflow: hidden;
     }
     .store-activity-item{
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
       display: inline-block;
       margin-right: 6px;
       height: 18px;
@@ -1050,8 +1056,8 @@ export default {
 
       .coupon-item-info{
         bottom:33rpx;
-        left: 16rpx;
-        top: 36rpx;
+        left: 40rpx;
+        top: 14rpx;
         .sign{
           width:16rpx;
           height:16rpx;
@@ -1075,7 +1081,7 @@ export default {
         }
         .info{
           padding-left: 8rpx;
-          max-width: 76rpx;
+          
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;

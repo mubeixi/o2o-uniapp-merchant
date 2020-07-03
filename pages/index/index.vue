@@ -72,7 +72,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import { modal,error } from '@/common/fun'
+import { modal, error } from '@/common/fun'
 import BaseMixin, { tabbarMixin } from '@/mixins/BaseMixin'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import ScrollPageHot from '@/pages/index/components/scroll-page-hot'
@@ -149,15 +149,19 @@ export default {
     },
     toMerchant () {
       const users_id = Storage.get('users_id') || ''
-	  let url = ''
-	  if (!users_id) {
-		  error('缺少users_id')
-		  return;
-	  } else {
-		  url = 'pages/product/form?origin_type=client&users_id=' + users_id
-	  }
+      let url = ''
+      if (!users_id) {
+        error('缺少users_id')
+        return
+      } else {
+        url = 'pages/product/form?origin_type=client&users_id=' + users_id
+      }
+      if (!this.initData.merchant_appid) {
+        error('缺少参数merchant_appid')
+        return
+      }
       uni.navigateToMiniProgram({
-        appId: 'wx3d24c565489e305b',
+        appId: this.initData.merchant_appid,
         path: url,
         extraData: {
           origin: 'client'
@@ -192,23 +196,26 @@ export default {
       }
     },
     getUserLocation () {
-      
       uni.getLocation({
         type: 'wgs84',
         success: (res) => {
           console.log('当前位置的经度：' + res.longitude)
           console.log('当前位置的纬度：' + res.latitude)
 
-          this.getLocationDone = true
           this.setUserAddressInfo(res)
-          if (this.getLocationDone) return
-          // 另外两个组件，刷新数据
+          this.getLocationDone = true
+          const isRefresh = Storage.get('isRefresh')
+          if (isRefresh) return
+          Storage.set('isRefresh', true)
           if (this.headTabIndex === 1) {
             this.$refs.page1.refreshByLocal()
           }
           if (this.headTabIndex === 2) {
             this.$refs.page2.refreshByLocal()
           }
+
+          // if (this.getLocationDone) return
+          // 另外两个组件，刷新数据
         }
       })
     },
@@ -267,6 +274,7 @@ export default {
   },
   created () {
     this.getLocationDone = false
+    Storage.set('isRefresh', false)
     this._init_func()
   }
 }

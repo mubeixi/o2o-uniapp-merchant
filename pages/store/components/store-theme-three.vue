@@ -150,11 +150,11 @@
                   <div class="flex flex-vertical-c flex-justify-between">
                     <div class="flex flex-vertical-c">
                       <span class="price-selling fz-12">￥</span><span class="price-selling fz-14">{{goods.Products_PriceX}}</span>
-                      <div class="text-through price-market fz-12 m-l-6">￥{{goods.Products_PriceY}}</div>
+                      <!--<div class="text-through price-market fz-12 m-l-6">￥{{goods.Products_PriceY}}</div>-->
                     </div>
                     <div @click.stop="$noop" class="action goods-item-action">
                       <!--有下单模板的-->
-                      <block v-if="goods.order_temp_id">
+                      <block v-if="goods.order_temp_id||goods.Products_IsVirtual==1">
                         <div @click.stop="goodsNumPlus(goods)" class="btn-open-attr m-r-10">
                           立即下单
                         </div>
@@ -278,7 +278,7 @@
       </div>
     </scroll-view>
 
-    <layout-layer bottomStr="96rpx" positions="bottom" ref="carts">
+    <layout-layer :bottomStr="storeBottomActionHeight" positions="bottom" ref="carts">
       <div class="carts-box">
         <div class="carts-action flex flex-vertical-c flex-justify-between">
           <div class="check-all flex flex-vertical-c" @click="selectBiz">
@@ -298,7 +298,7 @@
             <div :style="{backgroundImage:'url('+row.pic+')'}" class="carts-item-cover"></div>
             <div class="carts-item-info">
               <div class="title">{{row.name}}</div>
-              <!--<div class="attr-text">{{row.attr_text}}</div>-->
+              <div class="attr-text">{{row.attr_text||''}}</div>
               <div class="actions">
                 <div class="price-box fz-10 flex1">
                   <span class="price-selling">￥</span><span class="price-selling fz-15">{{row.price_selling}}</span>
@@ -321,7 +321,7 @@
       </div>
     </layout-layer>
 
-    <div class="store-bottom-action">
+    <div id="store-bottom-action" class="store-bottom-action">
       <div class="cart-box" @click="$openPop('carts')">
         <div class="cart-icon-box">
           <layout-icon type="iconicon-cart" size="22" color="#fff"></layout-icon>
@@ -492,6 +492,7 @@ export default {
       moveStartYByLeft: 0,
       moveStartYByPage: 0,
       moveDirectionByPage: '--',
+      storeBottomActionHeight: '52px',
       pageScrollEnable: false,
       leftScrollEnable: false,
       rightScrollEnable: false,
@@ -720,6 +721,8 @@ export default {
 
       const cart = await this.$store.dispatch('cart/addNum', {
         product: { ...this.product, ...this.attrInfo },
+        attr_text: this.attrInfo.attr_text,
+        checked: true,
         num: 1
       })
       if (cart !== false) {
@@ -1073,7 +1076,7 @@ export default {
     async goodsNumPlus (goodsInfo) {
       if (!checkIsLogin(1, 1)) return
       // 有订单模板的话，应该直接去购买
-      if (goodsInfo.order_temp_id) {
+      if (goodsInfo.order_temp_id || goodsInfo.Products_IsVirtual == 1) {
         this.$toGoodsDetail(goodsInfo)
         return
       }
@@ -1092,7 +1095,7 @@ export default {
         const { ImgPath, Products_Name, Products_PriceX, Products_PriceY } = goodsInfo
         Object.assign(productInfo, {
           biz_id: Number(this.bid),
-          checked: false,
+          checked: true,
           pic: ImgPath,
           name: Products_Name,
           price_selling: Number(Products_PriceX),
@@ -1153,8 +1156,11 @@ export default {
       })
       if (cart !== false) {
         this.$set(goodsInfo, 'num', amount)
-        this.refreshCount()
+      } else {
+        this.$set(goodsInfo, 'num', qty)
       }
+
+      this.refreshCount()
     },
     toGoodsDetailFn (pro, activity) {
       this.$linkTo(`/pages/product/detail?prod_id=${pro.Products_ID}&mode=spike&spike_good_id=${pro.id}`)
@@ -1302,6 +1308,7 @@ export default {
       await this.$store.dispatch('cart/taggleCheckStatus', { biz_id: Number(this.bid) })
 
       this.allCheck = this.$store.getters['cart/getListCheckStatus'](Number(this.bid))
+      this.refreshCount()
     },
     // 单行
     async selectItem (row) {
@@ -1311,6 +1318,7 @@ export default {
         prod_id: Number(prod_id)
       })
       this.allCheck = this.$store.getters['cart/getListCheckStatus'](Number(this.bid))
+      this.refreshCount()
     },
     /**
      * 用来做登陆后的一些数据初始化，和其他数据分开，是为了如果登陆后可以刷新
@@ -1347,12 +1355,14 @@ export default {
             })
 
             const attr_value = CartList[biz_id][prod_id][attr_id]
-            const { ImgPath, ProductsName, ProductsPriceX, ProductsPriceY, Qty } = attr_value
+            console.log(attr_value)
+            const { ImgPath, ProductsName, ProductsPriceX, ProductsPriceY, Qty, Productsattrstrval } = attr_value
             attrList.push({
               // ...attr_value,
               biz_id: Number(biz_id),
               prod_id: Number(prod_id),
               attr_id: Number(attr_id),
+              attr_text: Productsattrstrval,
               checked: attr_value.checked, // 能保留上次的结果
               num: Number(Qty),
               pic: ImgPath,
@@ -1424,6 +1434,15 @@ export default {
           pageSize: 999
         }, { onlyData: true }).catch((e) => {
           throw Error('获取商家自定义分类失败')
+        })
+
+        // 添加一个全部
+        bizCateList.unshift({
+          cate_img: '',
+          cate_name: '全部分类',
+          child: [],
+          id: '',
+          pid: 0
         })
 
         const bizCateListData = []
@@ -1544,6 +1563,12 @@ export default {
       const Action = this.isFavourite ? addFavourite : cancelFavourite
       Action({ biz_id: this.bid }).then(res => {
         toast(res.msg)
+        // 关注加一
+        if (this.isFavourite) {
+          this.storeInfo.follow++
+        } else {
+          this.storeInfo.follow--
+        }
       }).catch((e) => {
         Exception.handle(e)
       })
@@ -1656,6 +1681,15 @@ export default {
   },
   onReady () {
     this.pageScrollEnable = true
+
+    this.$nextTick().then(() => {
+      const query = uni.createSelectorQuery().in(this)
+      query.select('#store-bottom-action').boundingClientRect(data => {
+        console.log(data)
+        this.storeBottomActionHeight = (this.systemInfo.windowHeight - data.top) + 'px'
+      })
+      query.exec()
+    })
   }
 }
 </script>
@@ -1937,7 +1971,7 @@ export default {
         width: 500rpx;
         height: 160rpx;
         box-sizing: border-box;
-        padding-top: 40rpx;
+
         border-bottom: 1px solid #EDEDED;
 
         .title {
