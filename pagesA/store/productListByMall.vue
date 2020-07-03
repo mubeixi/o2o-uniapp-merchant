@@ -303,7 +303,7 @@ export default {
       this.attrInfo.num++
       this.product.prod_id = this.product.Products_ID
       const cart = await this.$store.dispatch('cart/addNum', {
-        product: { ...this.product, ...this.attrInfo },
+        product: { ...this.product, ...this.attrInfo,attr_text:this.attrInfo.attr_text },
         num: 1
       })
       if (!cart) {
@@ -360,7 +360,7 @@ export default {
         this.attrInfo.attr_text = attr_val.Attr_Value_text
         this.attrInfo.count = attr_val.Property_count // 选择属性的库存
         this.attrInfo.price = attr_val.Attr_Price ? attr_val.Attr_Price : this.product.Products_PriceX // 选择属性的价格
-
+        console.log('attrInfo',this.attrInfo)
         this.submitFlag = !(!this.check_attr)
 
         const atrr_id = attr_val.Product_Attr_ID
@@ -667,8 +667,10 @@ export default {
               CartList[biz_id][prod_id][attr_id].checked = false
             }
             const attr_value = CartList[biz_id][prod_id][attr_id]
+            const {Productsattrstrval} = attr_value
             attrList.push({
               // ...attr_value,
+              attr_text: Productsattrstrval,
               biz_id: Number(biz_id),
               prod_id: Number(prod_id),
               attr_id: Number(attr_id),

@@ -298,7 +298,7 @@
             <div :style="{backgroundImage:'url('+row.pic+')'}" class="carts-item-cover"></div>
             <div class="carts-item-info">
               <div class="title">{{row.name}}</div>
-              <!--<div class="attr-text">{{row.attr_text}}</div>-->
+              <div class="attr-text">{{row.attr_text||''}}</div>
               <div class="actions">
                 <div class="price-box fz-10 flex1">
                   <span class="price-selling">￥</span><span class="price-selling fz-15">{{row.price_selling}}</span>
@@ -721,6 +721,8 @@ export default {
 
       const cart = await this.$store.dispatch('cart/addNum', {
         product: { ...this.product, ...this.attrInfo },
+        attr_text: this.attrInfo.attr_text,
+        checked: true,
         num: 1
       })
       if (cart !== false) {
@@ -1353,12 +1355,14 @@ export default {
             })
 
             const attr_value = CartList[biz_id][prod_id][attr_id]
-            const { ImgPath, ProductsName, ProductsPriceX, ProductsPriceY, Qty } = attr_value
+            console.log(attr_value)
+            const { ImgPath, ProductsName, ProductsPriceX, ProductsPriceY, Qty, Productsattrstrval } = attr_value
             attrList.push({
               // ...attr_value,
               biz_id: Number(biz_id),
               prod_id: Number(prod_id),
               attr_id: Number(attr_id),
+              attr_text: Productsattrstrval,
               checked: attr_value.checked, // 能保留上次的结果
               num: Number(Qty),
               pic: ImgPath,
@@ -1430,6 +1434,15 @@ export default {
           pageSize: 999
         }, { onlyData: true }).catch((e) => {
           throw Error('获取商家自定义分类失败')
+        })
+
+        // 添加一个全部
+        bizCateList.unshift({
+          cate_img: '',
+          cate_name: '全部分类',
+          child: [],
+          id: '',
+          pid: 0
         })
 
         const bizCateListData = []
@@ -1958,7 +1971,7 @@ export default {
         width: 500rpx;
         height: 160rpx;
         box-sizing: border-box;
-        padding-top: 40rpx;
+
         border-bottom: 1px solid #EDEDED;
 
         .title {
