@@ -165,6 +165,7 @@ export default {
       this.$emit('submitSure', this.postData)
     },
     buyNow () {
+      console.log(this.productInfo.skuvaljosn,this.submitFlag)
       if (this.productInfo.skuvaljosn && JSON.stringify(this.productInfo.skuvaljosn) !== '{}') {
         if (!this.submitFlag) {
           uni.showToast({
@@ -280,6 +281,7 @@ export default {
     init () {
       this.postData.price = this.list.minPrice
       this.postData.count = this.list.Products_Count
+      console.log(this.list.skujosn)
       if (this.list.skujosn) {
         let skujosn_new = []
         for (const i in this.list.skujosn) {
@@ -298,7 +300,8 @@ export default {
           }
         }
         // 结束
-
+  
+        this.submitFlag = false
         this.list.skujosn_new = skujosn_new
         this.list.skuvaljosn = this.list.skuvaljosn
       } else {
