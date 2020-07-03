@@ -68,7 +68,7 @@
             <layout-icon color="#fff" display="inline" size="13" type="iconicon-arrow-right m-l-4"></layout-icon>
           </view>
           <div class="text-right flex1">
-            共{{order.prod_list.length}}件商品 实付：<span class="price"><span>￥</span> {{order.Order_TotalPrice}} <block
+            共{{order.order_total_prod_count}}件商品 实付：<span class="price"><span>￥</span> {{order.Order_TotalPrice}} <block
             v-if="item.Order_Shipping.Price>0">(含运费{{item.Order_Shipping.Price}}元)</block></span>
           </div>
         </div>
