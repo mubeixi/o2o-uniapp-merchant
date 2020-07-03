@@ -91,11 +91,11 @@ const mutations = {
     //   name: Products_Name,
     //   price_selling: Number(Products_PriceX),
     //   price_market: Number(Products_PriceY)
-    const { biz_id, prod_id, attr_id, checked, price_selling, price_market, name, pic } = product
+    const { biz_id, prod_id, attr_id, checked, price_selling, price_market, name, pic,attr_text='' } = product
     const idx = findArrayIdx(cartList, { attr_id, prod_id })
     // 首次加入购物车
     if (idx === false) {
-      cartList.push({ biz_id, prod_id, attr_id, num, checked, price_selling, price_market, name, pic })
+      cartList.push({ biz_id, prod_id, attr_id, num, checked, price_selling, price_market, name, pic,attr_text })
     } else {
       cartList[idx].num += num
     }

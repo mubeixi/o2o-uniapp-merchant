@@ -64,6 +64,7 @@
       </div>
     </div>
 
+	<div class="h20"></div>
     <div class="safearea-box"></div>
 
     <layout-modal  ref="commentModal" :autoClose="false" positions="center">

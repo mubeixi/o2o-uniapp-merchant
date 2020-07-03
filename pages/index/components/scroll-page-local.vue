@@ -147,6 +147,7 @@ export default {
         this.firstCateList = await getProductCategory({}, { onlyData: true }).catch(() => {
           throw Error('获取商品分类失败')
         })
+        if (!this.firstCateList) this.firstCateList = []
         this.loadQuickGoodsList(0)
       } catch (e) {
         Exception.handle(e)

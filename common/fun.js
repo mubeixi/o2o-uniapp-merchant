@@ -1,7 +1,7 @@
 export const toast = (title, icon, image, duration) => {
   uni.showToast({
     title,
-    duration: duration || 3000,
+    duration: duration || 1500,
     icon,
     image
   })
@@ -237,10 +237,15 @@ export const checkIsExpire = (time = 0) => {
   const timestamp = new Date().getTime()
   time = time * 1000
   if (time <= 0 || time <= timestamp) {
-    error('商城已过期')
-    setTimeout(function () {
+    confirm({
+      content: '该商城已过期',
+      showCancel: false
+    }).then(() => {
       uni.navigateBack()
-    }, 2000)
+    }).catch(() => {
+      uni.navigateBack()
+    })
+
     return false
   }
   return true

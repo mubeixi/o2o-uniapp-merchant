@@ -43,14 +43,14 @@ export default {
   data () {
     return {
       bid: '',
-      skin_id: 3,
+      skin_id: '',
       storeInfo: {}
     }
   },
   methods: {
     init () {
       getBizInfo({ biz_id: this.bid }).then(res => {
-         this.skin_id=Number(res.data[0].skin_id)
+        this.skin_id = Number(res.data[0].skin_id)
       })
     },
     bindUpStoreInfo (storeInfo) {
@@ -92,9 +92,9 @@ export default {
   // },
   onShow () {
     this.init()
-    
-    //登陆后
-    if(checkIsLogin(0,0)){
+
+    // 登陆后
+    if (checkIsLogin(0, 0)) {
       if (this.skin_id === 3) this.$refs.childThree.refreshFn()
     }
   },

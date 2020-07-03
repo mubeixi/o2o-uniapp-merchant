@@ -253,10 +253,10 @@
             共{{bizList[biz_id].prod_count}}件商品，小计<span class="price-selling">￥{{bizList[biz_id].Order_TotalPrice}}</span>
           </div>
 
-          <div class="expired-box" style="padding-bottom: 30rpx" v-if="bizList[biz_id].expired_prod_count>0">
+          <div class="expired-box" style="padding-bottom: 30rpx" v-if="bizList[biz_id].expired_cart_prod_count>0">
             <div class="expired-hr" style="border-top: 1px dashed #e7e7e7;padding: 0rpx 0 40rpx 0"></div>
             <div class="expired-total c3 fz-18">
-              共失效<span class="price-selling">{{bizList[biz_id].expired_prod_count}}</span>件商品
+              共失效<span class="price-selling">{{bizList[biz_id].expired_cart_prod_count}}</span>件商品
             </div>
             <div class="expired-goods-list bg-white">
               <block :key="pro_id" v-for="(pro,pro_id) in bizList[biz_id].expired_cart_prod">

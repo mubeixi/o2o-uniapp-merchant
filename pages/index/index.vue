@@ -149,15 +149,19 @@ export default {
     },
     toMerchant () {
       const users_id = Storage.get('users_id') || ''
-	  let url = ''
-	  if (!users_id) {
-		  error('缺少users_id')
-		  return
-	  } else {
-		  url = 'pages/product/form?origin_type=client&users_id=' + users_id
-	  }
+      let url = ''
+      if (!users_id) {
+        error('缺少users_id')
+        return
+      } else {
+        url = 'pages/product/form?origin_type=client&users_id=' + users_id
+      }
+      if (!this.initData.merchant_appid) {
+        error('缺少参数merchant_appid')
+        return
+      }
       uni.navigateToMiniProgram({
-        appId: 'wx3d24c565489e305b',
+        appId: this.initData.merchant_appid,
         path: url,
         extraData: {
           origin: 'client'

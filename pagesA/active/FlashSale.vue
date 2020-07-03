@@ -1,5 +1,5 @@
 <template>
-  <div @click="commonClick" class="page-wrap">
+  <div @click="commonClick" class="page-wrap" @touchmove.prevent.stop>
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <div :style="{height:menuButtonInfo.top+'px'}" style="background: none"></div>
     <div :style="{height:menuButtonInfo.height+'px'}" class="top flex flex-vertical-c">
