@@ -162,6 +162,7 @@ export default {
         this.firstCateList = await getProductCategory({}, { onlyData: true }).catch(() => {
           throw Error('获取商品分类失败')
         })
+        if (!this.firstCateList) this.firstCateList = []
         this.firstCateList.unshift({ Category_Name: '所有', Category_ID: '-1' })
         this.loadMerchantList(0)
       } catch (e) {
@@ -171,6 +172,7 @@ export default {
       }
     },
     async loadMerchantList (idx) {
+      if(this.firstCateList.length<1)return;
       try {
         this.merchantList = []
         // showLoading()

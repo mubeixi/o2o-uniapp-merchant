@@ -302,6 +302,7 @@ export default {
       }
     },
     async loadLiveGoodsList (idx) {
+      if(this.liveNav.length<1)return;
       if (this.liveNav[idx].goodsList.length >= this.liveNav[idx].totalCount) {
         // toast('已经到底了', 'none')
         return
@@ -352,7 +353,7 @@ export default {
         this.firstCateList = await getProductCategory({}, { onlyData: true }).catch(() => {
           throw Error('获取商品分类失败')
         })
-
+        if (!this.firstCateList) this.firstCateList = []
         this.liveNav = this.firstCateList.map(row => {
           row.goodsList = []
           row.totalCount = 999
