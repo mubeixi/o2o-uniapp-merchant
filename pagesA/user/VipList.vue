@@ -136,7 +136,7 @@ export default {
         toast('支付成功')
         setTimeout(function () {
           that.$back()
-        }, 1000)
+        }, 1500)
       }
     },
     payFailCall (err) {
