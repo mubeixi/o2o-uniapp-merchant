@@ -130,7 +130,7 @@ export default {
       const payCan = await userLevelPay(data, { tip: '加载中' }).catch(e => {
         error(e.msg || '创建订单失败')
       })
-      if (payCan.data) {
+      if (payCan.msg != '支付成功') {
         Pay(this, item.pay_type, payCan)
       } else {
         toast('支付成功')
