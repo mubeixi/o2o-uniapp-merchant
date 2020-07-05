@@ -61,9 +61,9 @@
           </div>
         </div>
         </div>
+        <div v-if="order.city_express_appoint_time>0" class="text-right fz-14 c9 p-t-15">预约配送:<span class="c4 p-l-3">预计{{order.city_express_appoint_time_desc}}</span></div>
         <div class="total flex flex-justify-between">
-          <view @click.stop="goPintuan(order)" class="ptdesc"
-                v-if="order.Order_Type ==='pintuan' && order.teamstatus_desc">
+          <view @click.stop="goPintuan(order)" class="ptdesc" v-if="order.Order_Type ==='pintuan' && order.teamstatus_desc">
             <span>{{order.teamstatus_desc}}</span>
             <layout-icon color="#fff" display="inline" size="13" type="iconicon-arrow-right m-l-4"></layout-icon>
           </view>

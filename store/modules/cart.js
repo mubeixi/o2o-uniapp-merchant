@@ -181,6 +181,23 @@ const mutations = {
 }
 
 const actions = {
+  updateRowPrice({ commit, state }, { prod_id, attr_id, price_selling}){
+    console.log(prod_id, attr_id, price_selling)
+    if(isNaN(price_selling)||price_selling<0){
+      return false
+    }
+    let cartList = state.cartList.length > 0 ? state.cartList : Storage.get('shopCartList')
+    if (!cartList) cartList = []
+  
+    const idx = findArrayIdx(cartList, { attr_id, prod_id })
+    if (idx !== false){
+      cartList[idx].price_selling = price_selling
+      this.commit('cart/ASYNC_DATA', cartList)
+      return true
+    }
+  
+    return false
+  },
   async addNum ({ commit, state }, { product, num = 1 }) {
     try {
       const { biz_id, prod_id, attr_id } = product
