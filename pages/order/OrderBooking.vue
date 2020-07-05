@@ -230,14 +230,14 @@
                       color="#04B600" style="transform: scale(0.8)" />
             </div>
             <div class="o_de">您当前最多使用余额:
-              <text>{{isAllowUseMoney ? userInfo.User_Money : bizList[biz_id].Order_TotalPrice}}
+              <text>{{userInfo.User_Money>bizList[biz_id].Order_TotalPrice ? bizList[biz_id].Order_TotalPrice : userInfo.User_Money}}
               </text>
             </div>
             <input
               @blur="confirm_user_money($event,biz_id)"
               class="o_desc"
               placeholder="点此输入金额"
-              type="number"
+              type="digit"
               v-if="postData.use_money_conf[biz_id]"
               v-model="postData.use_money[biz_id]" />
           </div>
@@ -290,7 +290,7 @@
 
     <div :style="{'z-index':zIndex}" class="order_total">
       <div class="totalinfo">
-        <div class="info">共{{prodCount}}件商品 总计：
+        <div class="info">共{{prodCount}}件商品 需支付：
           <text class="money">
             <text class="m_icon">￥</text>
             {{Order_Fyepay|formatMoeny}}
@@ -310,12 +310,13 @@
 
     <layout-layer @maskClicked="handClicked" bottomStr="50px" ref="popupMX" title="明细">
       <div class="mxdetail">
-        <div class="mxitem" v-if="!checkfrom">产品原价
+        <!--有问题要搞-->
+        <div class="mxitem">产品
           <text class="num">{{allGoodsPrice|formatMoeny}}</text>
         </div>
-        <div class="mxitem" v-if="checkfrom">{{active_name}}
-          <text class="num">{{Order_Fyepay|formatMoeny}}</text>
-        </div>
+<!--        <div class="mxitem" v-if="checkfrom">{{active_name}}-->
+<!--          <text class="num">{{Order_Fyepay|formatMoeny}}</text>-->
+<!--        </div>-->
         <view class="mxitem" v-if="allUserCuragioMoney > 0">会员折扣
           <text class="num">-{{allUserCuragioMoney|formatMoeny}}</text>
         </view>
@@ -412,6 +413,7 @@ export default {
   },
   data () {
     return {
+      allowUseMoney: 0,
       toDay: '', // 当前年月日
       delivery_biz_id: '', // 外卖的时候才有
       gift: false,
@@ -490,44 +492,73 @@ export default {
   },
   computed: {
     allTotalAmount () {
-      return computeArrayColumnSum(this.bizList, 'Order_TotalAmount')
-    },
-    allGoodsPrice () {
-      try {
-        let count = 0
-        for (var biz_id in this.CartList) {
-          for (var pro_id in this.CartList[biz_id]) {
-            for (var attr_id in this.CartList[biz_id][pro_id]) {
-              count += this.CartList[biz_id][pro_id][attr_id].ProductsPriceX * this.CartList[biz_id][pro_id][attr_id].Qty
-            }
-          }
-        }
-        return parseInt(count * 100) / 100
-      } catch (e) {
-        console.log(e)
+      try{
+        return computeArrayColumnSum(this.bizList, 'Order_TotalAmount')
+      }catch (e) {
         return 0
       }
     },
+    allGoodsPrice () {
+      try{
+        return computeArrayColumnSum(this.bizList, 'Order_ProdAmount')
+      }catch (e) {
+        return 0
+      }
+      // try {
+      //   let count = 0
+      //   for (var biz_id in this.CartList) {
+      //     for (var pro_id in this.CartList[biz_id]) {
+      //       for (var attr_id in this.CartList[biz_id][pro_id]) {
+      //         count += this.CartList[biz_id][pro_id][attr_id].ProductsPriceX * this.CartList[biz_id][pro_id][attr_id].Qty
+      //       }
+      //     }
+      //   }
+      //   return parseInt(count * 100) / 100
+      // } catch (e) {
+      //   console.log(e)
+      //   return 0
+      // }
+    },
     allUserCuragioMoney () {
-      return computeArrayColumnSum(this.bizList, 'user_curagio_money')
+      try{
+        return computeArrayColumnSum(this.bizList, 'user_curagio_money')
+      }catch (e) {
+        return 0
+      }
     },
     allCouponMoney () {
-      return computeArrayColumnSum(this.bizList, 'Coupon_Money')
+      try{
+        return computeArrayColumnSum(this.bizList, 'Coupon_Money')
+      }catch (e) {
+        return 0
+      }
     },
     allManjianCash () {
-      return computeArrayColumnSum(this.bizList, 'Manjian_Cash')
+      try {
+        return computeArrayColumnSum(this.bizList, 'Manjian_Cash')
+      }catch (e) {
+        0
+      }
     },
     allIntegralMoney () {
-      return computeArrayColumnSum(this.bizList, 'Integral_Money')
+      try {
+        return computeArrayColumnSum(this.bizList, 'Integral_Money')
+      }catch (e) {
+        return 0
+      }
     },
     allOrderShipping () {
       // 用...来代表子属性
-      return computeArrayColumnSum(this.bizList, 'Order_Shipping...Price')
+      try {
+        return computeArrayColumnSum(this.bizList, 'Order_Shipping...Price')
+      }catch (e) {
+        return 0
+      }
     },
 
     isAllowUseMoney () {
       try {
-        return parseFloat(this.userInfo.User_Money) < parseFloat(this.bizList[biz_id].Order_TotalPrice)
+        return parseFloat(this.userInfo.User_Money) < parseFloat(this.bizList[this.activeBizId].Order_TotalPrice)
       } catch (e) {
         return false
       }
@@ -805,41 +836,34 @@ export default {
     confirm_user_money (e, biz_id) {
       try {
         const val = e.detail.value
-        if (isNaN(val)) {
-          throw Error('金额不符合格式')
-        }
+
         const input_money = parseFloat(Number(val).toFixed(2))
 
-        if (isNaN(input_money)) {
-          throw Error('金额格式化失败')
-        }
-        // 重置
-        if (input_money <= 0) {
-          this.postData.use_money[biz_id] = ''
-          throw Error('输入的金额不能小于0')
+        if (input_money < 0 || isNaN(input_money)) {
+          throw Error('您输入的金额格式有误')
         }
 
         // 如果价格过大
         if (input_money > parseFloat(this.bizList[biz_id].Order_TotalPrice)) {
-          this.postData.use_money[biz_id] = ''
-          throw Error('输入金额超过订单总价')
+          throw Error('输入金额超过订单总支付金额')
         }
 
         console.log(input_money, input_money + this.useMoneyCount, parseFloat(this.userInfo.User_Money))
 
         if (input_money + this.useMoneyCount > parseFloat(this.userInfo.User_Money)) {
-          throw Error('余额不足抵扣已选商品')
+          throw Error('已超出可用余额范围')
         }
 
         if (input_money + this.useMoneyCount <= parseFloat(this.userInfo.User_Money)) {
           this.postData.use_money[biz_id] = input_money
         }
 
-        this.checkOrderParam()
+        
       } catch (e) {
+        this.postData.use_money[biz_id] = 0
         Exception.handle(e)
       } finally {
-
+        this.checkOrderParam()
       }
     },
     // 留言
@@ -866,7 +890,7 @@ export default {
         if (it !== 'is_self_get') {
           this.postData.shipping_id[this.activeBizId] = it
           this.postData.shipping_name[this.activeBizId] = this.popupExpressCompanys[it]
-          break;
+          break
         }
       }
 
@@ -1124,6 +1148,9 @@ export default {
         }
 
         var bizListUpShiping = {}
+        const allTotalPrice = computeArrayColumnSum(bizList, 'Order_TotalPrice') // computeArrayColumnSum()
+        console.log(allTotalPrice)
+        this.allowUseMoney = Math.min(parseFloat(this.userInfo.User_Money), parseFloat(allTotalPrice))
 
         for (var bizId in bizList) {
           var bizInfo = bizList[bizId]
@@ -1375,7 +1402,7 @@ export default {
     console.log(this.initData)
   },
   onLoad (options) {
-    this.toDay = uni.$moment(new Date()).add('year', 0).format('YYYY-MM-DD')
+    this.toDay = uni.$moment(new Date()).add(0, 'year').format('YYYY-MM-DD')
     this.postData.cart_key = options.cart_key
     if (options.cart_buy) {
       this.postData.cart_buy = options.cart_buy
