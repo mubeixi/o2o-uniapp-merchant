@@ -243,18 +243,20 @@ export default {
     async buyActiveCodeFn () {
       try {
         const pay_type = 'wx_h5'
-        // 获取code
-        const _self = this
-        const wxLoginRt = await Promisify('login').catch(() => {
-          throw Error('微信login错误')
-        })
-        const { code } = wxLoginRt
-        await buyActiveCode({ code }, { tip: '加载中' }).then(res => {
-          this.order_id = res.data.order_id
-          Pay(_self, pay_type, res)
-        }).catch(e => {
-          error(e.msg || '获取code错误')
-        })
+        // #ifdef MP-WEIXIN
+			// 获取code
+			const _self = this
+			const wxLoginRt = await Promisify('login').catch(() => {
+			  throw Error('微信login错误')
+			})
+			const { code } = wxLoginRt
+			await buyActiveCode({ code }, { tip: '加载中' }).then(res => {
+			  this.order_id = res.data.order_id
+			  Pay(_self, pay_type, res)
+			}).catch(e => {
+			  error(e.msg || '获取code错误')
+			})
+        // #endif
       } catch (e) {
         console.log(e)
         error(e.message)
@@ -289,6 +291,9 @@ export default {
     background-color: #FFFFff;
     position: fixed;
     top: 0px;
+	/* #ifdef H5 */
+	top: 44px;
+	/* #endif */
     left: 0px;
     z-index: 10;
 
