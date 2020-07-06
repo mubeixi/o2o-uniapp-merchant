@@ -375,7 +375,7 @@ export default {
       })
     },
     refreshPayMoney () {
-      this.pay_money = parseFloat(this.allTotalPrice) - this.useMoneyCount
+      this.pay_money = (parseFloat(this.allTotalPrice) - this.useMoneyCount).toFixed(2)
     },
     // 发票抬头输入完成
     faPiaoConfirm (e, Order_ID) {
