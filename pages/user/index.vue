@@ -198,6 +198,12 @@ export default {
           name: '轨迹',
           color: '#69C276',
           link: '/pagesA/user/history'
+        },
+        {
+          className: 'iconhuiyuanka',
+          name: '会员卡',
+          color: '#54AEED',
+          link: '/pagesA/user/history'
         }
       ],
       proList: []

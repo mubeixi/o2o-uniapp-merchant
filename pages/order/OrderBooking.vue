@@ -858,7 +858,7 @@ export default {
           this.postData.use_money[biz_id] = input_money
         }
 
-        
+
       } catch (e) {
         this.postData.use_money[biz_id] = 0
         Exception.handle(e)
@@ -995,6 +995,7 @@ export default {
             if (this.bizList[bizId].city_express_appoint_send) {
               this.postData.shipping_id[bizId] = val
               this.postData.shipping_name[bizId] = currentBizInfo.shipping_company[val] // 也要设置下name
+              this.toDay = uni.$moment(new Date()).add(1, 'days').format('YYYY-MM-DD')
               if (this.checkfrom != 'group') this.postData.appoint_time_type[bizId] = 'appoint'
             } else {
               error('该商家当前时段不支持同城配送')
