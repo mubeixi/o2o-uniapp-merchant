@@ -57,7 +57,15 @@
     </view>
 
     <popup-layer :direction="'top'" ref="popMethod">
-      <view class="iMbx">
+      <view class="iMbx"  v-if="initData.cash_from==2">
+        <block :key="index" v-for="(item,index) in pay_arr">
+          <view  @click="chooseType(index)" class="c_method"  v-if="index!='remainder_pay'">
+            {{item}}
+            <text>￥{{shipping_price}}</text>
+          </view>
+        </block>
+      </view>
+      <view class="iMbx"  v-else>
         <view :key="index" @click="chooseType(index)" class="c_method" v-for="(item,index) in pay_arr">
           {{item}}
           <text>￥{{shipping_price}}</text>
