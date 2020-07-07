@@ -79,6 +79,7 @@
 
     <wzw-pay
       :isOpen='false'
+      :is_use_money="initData.cash_from==1?true:false"
       :is_use_order_pay="false"
       :payFailCall="payFailCall"
       :paySuccessCall="paySuccessCall"
@@ -271,6 +272,11 @@ export default {
   },
   onShow () {
     this.init()
+  },
+  computed: {
+    initData () {
+      return this.$store.state.system.initData
+    }
   },
   onLoad (options) {
     this.biz_id = options.bid
