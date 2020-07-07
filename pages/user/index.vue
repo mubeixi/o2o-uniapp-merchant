@@ -157,6 +157,12 @@ export default {
           color: '#69C276',
           link: '/pagesA/user/BalanceCenter'
         },
+		{
+		  className: 'iconhuiyuanka',
+		  name: '会员卡',
+		  color: '#54AEED',
+		  link: '/pagesA/user/StoreVip'
+		},
         {
           className: 'iconjifen',
           name: '积分',
@@ -204,12 +210,6 @@ export default {
           name: '轨迹',
           color: '#69C276',
           link: '/pagesA/user/history'
-        },
-        {
-          className: 'iconhuiyuanka',
-          name: '会员卡',
-          color: '#54AEED',
-          link: '/pagesA/user/StoreVip'
         }
       ],
       proList: []
