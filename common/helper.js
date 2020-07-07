@@ -459,6 +459,7 @@ export const getCountdownFunc = ({ start_timeStamp, end_timeStamp, current = (ne
   }
 
   if (getDay) {
+
     d = parseInt(countTime / (60 * 60 * 24))
   } else {
     d = 0
@@ -470,7 +471,7 @@ export const getCountdownFunc = ({ start_timeStamp, end_timeStamp, current = (ne
   s = countTime - d * 60 * 60 * 24 - h * 60 * 60 - m * 60
 
   return {
-    d: formatNumber(h),
+    d: formatNumber(d),
     h: formatNumber(h),
     m: formatNumber(m),
     s: formatNumber(s),

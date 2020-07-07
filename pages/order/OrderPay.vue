@@ -131,8 +131,8 @@
 
     <div :style="{'z-index': zIndex}" class="order_total">
       <div class="totalinfo">
-        <div class="info">共{{numTotal}}件商品 需支付：<span
-          class="mbxa">￥<span>{{pay_money|formatMoeny}}</span></span></div>
+        <div class="info">共{{numTotal}}件商品 合计：<span
+          class="mbxa">￥<span>{{orderInfo.Order_TotalPrice|formatMoeny}}</span></span></div>
         <view class="tips" v-if="orderInfo.obtain_desc">{{orderInfo.obtain_desc}}</view>
       </div>
       <view @click="seeDetail" class="mx">明细

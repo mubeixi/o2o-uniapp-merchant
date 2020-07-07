@@ -31,8 +31,8 @@
           </div>
           <block v-if="item.countdown">
             <div class="seckill-item-time c3 fz-12" v-if="!item.countdown.is_end">
-              距{{item.countdown.is_start?'结束':'开始'}}还有：{{item.countdown.d}}天 <span class="span-time m-l-4">{{item.countdown.h}}</span>：<span
-              class="span-time">{{item.countdown.m}}</span>：<span class="span-time">{{item.countdown.s}}</span>
+              距{{item.countdown.is_start?'结束':'开始'}}还有：
+              <span class="span-time m-l-4">{{item.countdown.h}}</span>：<span class="span-time">{{item.countdown.m}}</span>：<span class="span-time">{{item.countdown.s}}</span>
             </div>
             <div class="seckill-item-time c3 fz-12" v-else>
               已经结束
@@ -49,7 +49,7 @@
 import BaseMixin from '@/mixins/BaseMixin.js'
 import { getFlashsaleList } from '@/api/product'
 import { getBizInfo } from '@/api/store'
-import { getCountdownFunc } from '@/common/helper'
+import { getCountdownFunc, objTranslate } from '@/common/helper'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import { hideLoading, showLoading } from '@/common/fun'
 import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
@@ -97,8 +97,10 @@ export default {
 
         const data = getCountdownFunc({
           start_timeStamp: start_time,
-          end_timeStamp: end_time
+          end_timeStamp: end_time,
+          getDay: false
         })
+
         this.$set(item, 'countdown', data)
       }
     },
@@ -252,7 +254,7 @@ export default {
     .span-time {
       display: inline-block;
       height: 38rpx;
-      width: 38rpx;
+      padding: 0 4rpx;
       color: #FFFFFF;
       text-align: center;
       line-height: 38rpx;

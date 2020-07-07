@@ -79,6 +79,17 @@
         </div>
       </div>
     </div>
+    <div class="other  bg-white" v-if="orderInfo.city_express_appoint_time>0">
+      <div class="bd">
+        <div class="o_title">
+          <span>预约配送</span>
+          <span class="c8" style="text-align:right;">
+            预计{{orderInfo.city_express_appoint_time_desc}}
+          </span>
+        </div>
+      </div>
+    </div>
+    
     <view class="other bg-white" v-if="orderInfo.Order_IsRecieve == 1">
       <view class="bd">
         <view class="o_title">
@@ -214,8 +225,7 @@
     </layout-layer>
     <div class="order_total">
       <div class="totalinfo" v-if="orderInfo.prod_list">
-        <div class="info">共{{orderInfo.order_total_prod_count-orderInfo.order_total_back_count}}件商品 需支付：<span
-          class="mbxa">￥<span>{{pay_money}}</span></span></div>
+        <div class="info">共{{orderInfo.order_total_prod_count-orderInfo.order_total_back_count}}件商品 合计：<span class="mbxa">￥<span>{{orderInfo.Order_TotalPrice}}</span></span></div>
         <view class="tips" v-if="orderInfo.obtain_desc">{{orderInfo.obtain_desc}}</view>
       </div>
       <view @click="seeDetail" class="mx">明细
