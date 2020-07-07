@@ -1,5 +1,5 @@
 import {
-  IM_APPID, IM_APPSECRET, IM_WSS_URL
+  IM_WSS_URL
 } from '@/common/env'
 import { bindUid, getAccessToken, getMsgList, sendMsg, checkOnline, getNoReadMsg, readMsg } from '@/common/Im/Fetch'
 import Promisify from '@/common/Promisify'
@@ -307,6 +307,7 @@ class IM {
 
   // 启动的
   async start () {
+    await this._getImConfig()
     // 获取token时候阻塞一下，问题不大吧。
     await this._getAccessToken()
 
@@ -556,11 +557,17 @@ class IM {
     Storage.set('IM_ACCESS_TOKEN', tokenRT.token)
     return tokenRT
   }
+
+  async _getImConfig () {
+    const initData = await store.dispatch('system/loadInitData', { isOnline: true })
+    const { im_appid: IM_APPID, im_appsecret: IM_APPSECRET } = initData
+    this.appid = IM_APPID
+    this.appsecret = IM_APPSECRET
+  }
 }
 
 // 还是放到类上面，这样就每个项目用工程文件就好了
-IM.prototype.appid = IM_APPID
-IM.prototype.appsecret = IM_APPSECRET
+
 IM.prototype.heartBeatTimout = 30 * 1000 // 心跳保持时间，默认三十秒
 IM.prototype.heartBeatFailMax = 3 // 最大心跳丢失次数，错误3次重新建立socket请求
 IM.prototype.tryRequestMax = 5 // 最大重连次数，重连超过5次不成功，就直接报错提醒用户洗洗睡
