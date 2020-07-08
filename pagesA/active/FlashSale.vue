@@ -8,7 +8,7 @@
       <div class="title">限时抢购</div>
     </div>
     <div class="background-img">
-      <image class="image" mode="widthFix" src="/static/flashsale-bg.jpg"></image>
+      <image class="image" mode="widthFix"  :src="$getDomain('/static/client/flashsale-bg.jpg')" ></image>
     </div>
     <div :style="{top:diyHeadHeight+43+'px'}" class="container-wrap">
       <scroll-view class="content" scroll-y>

@@ -58,8 +58,14 @@
     </div>
     <div class="functions flex">
       <block :key="index" v-for="(item,index) of  iconList">
-        <LayoutFun :color="item.color" :index="index" :name="item.name" :type="item.className" @openNext="openNext"
+        <block v-if="initData.cash_from==2">
+          <LayoutFun  v-if="item.name!='余额'" :color="item.color" :index="index" :name="item.name" :type="item.className" @openNext="openNext"
+                     width="150rpx"></LayoutFun>
+        </block>
+        <LayoutFun v-else-if="item.name!='会员卡'" :color="item.color" :index="index" :name="item.name" :type="item.className" @openNext="openNext"
                    width="150rpx"></LayoutFun>
+      </block>
+
       </block>
     </div>
     <div class="intro">为你推荐</div>
@@ -151,6 +157,12 @@ export default {
           color: '#69C276',
           link: '/pagesA/user/BalanceCenter'
         },
+		{
+		  className: 'iconhuiyuanka',
+		  name: '会员卡',
+		  color: '#54AEED',
+		  link: '/pagesA/user/StoreVip'
+		},
         {
           className: 'iconjifen',
           name: '积分',
@@ -198,12 +210,6 @@ export default {
           name: '轨迹',
           color: '#69C276',
           link: '/pagesA/user/history'
-        },
-        {
-          className: 'iconhuiyuanka',
-          name: '会员卡',
-          color: '#54AEED',
-          link: '/pagesA/user/history'
         }
       ],
       proList: []
@@ -212,6 +218,9 @@ export default {
   computed: {
     userInfo () {
       return this.$store.getters['user/getUserInfo']()
+    },
+    initData () {
+      return this.$store.state.system.initData
     }
   },
   methods: {
