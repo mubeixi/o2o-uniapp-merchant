@@ -205,7 +205,9 @@ export default {
     padding: 2px 8px;
     box-sizing: border-box;
     border-bottom: 1px solid #eee;
-
+    overflow-y: hidden;
+    overflow-x: scroll;
+    white-space: nowrap;
     .scroll-item {
       position: relative;
       line-height: 40px;

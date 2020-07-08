@@ -84,17 +84,17 @@
           <div class="bd">
             <div class="o_title">
               <span>是否使用余额</span>
-              <switch :checked="postData.use_money_conf[orderItem.Order_ID]" @change="moneyChange($event,orderItem.Order_ID)" color="#04B600"
-                      size='25px' style="transform: scale(0.8)" />
+              <switch :checked="postData.use_money_conf[orderItem.Order_ID]" @change="moneyChange($event,orderItem.Order_ID)" color="#04B600" size='25px' style="transform: scale(0.8)" />
             </div>
-            <!--这里余额可以填写范围还是从0 到订单商品总价，当然如果个人余额不够，那么还是有限制-->
-            <div class="o_de c9">该订单可使用余额:
-              <text>{{userInfo.User_Money>orderItem.Order_TotalPrice ? orderItem.Order_TotalPrice : userInfo.User_Money}}
-              </text>
-            </div>
-            <input @blur="moneyInputHandle($event,orderItem.Order_ID,idx)" class="fz-12" placeholder="点此输入金额"
-                   type="digit" v-if="postData.use_money_conf[orderItem.Order_ID]"
-                   v-model="postData.use_money[orderItem.Order_ID]" />
+            <block v-if="cash_from === 1">
+              <div class="o_de c9">该订单可使用余额:<text>{{userInfo.User_Money>orderItem.Order_TotalPrice ? orderItem.Order_TotalPrice : userInfo.User_Money}}</text></div>
+              <input @blur="moneyInputHandle($event,orderItem.Order_ID,idx)" class="fz-12" placeholder="点此输入金额" type="digit" v-if="postData.use_money_conf[orderItem.Order_ID]" v-model="postData.use_money[orderItem.Order_ID]" />
+            </block>
+            <block v-if="cash_from === 2">
+              <div class="o_de c9">该订单可使用余额:<text>{{orderItem.biz_user_money>orderItem.Order_TotalPrice ? orderItem.Order_TotalPrice : orderItem.biz_user_money}}</text></div>
+              <input @blur="moneyInputHandleByBiz($event,orderItem.Order_ID,idx)" class="fz-12" placeholder="点此输入金额" type="digit" v-if="postData.use_money_conf[orderItem.Order_ID]" v-model="postData.use_money[orderItem.Order_ID]" />
+            </block>
+
           </div>
         </div>
         <div class="other" v-if="pagefrom !== 'gift' && orderItem.invoice_switch">
@@ -132,7 +132,7 @@
     <div :style="{'z-index': zIndex}" class="order_total">
       <div class="totalinfo">
         <div class="info">共{{numTotal}}件商品 合计：<span
-          class="mbxa">￥<span>{{orderInfo.Order_TotalPrice|formatMoeny}}</span></span></div>
+          class="mbxa">￥<span>{{allTotalPrice|formatMoeny}}</span></span></div>
         <view class="tips" v-if="orderInfo.obtain_desc">{{orderInfo.obtain_desc}}</view>
       </div>
       <view @click="seeDetail" class="mx">明细
@@ -191,7 +191,7 @@
 
 import { mapActions, mapGetters } from 'vuex'
 import { getOrderDetail, getPreOrderDetail, orderPay } from '@/api/order'
-import { GetQueryByString, isWeiXin, objTranslate, urlencode } from '@/common/helper'
+import { formatArrayColumn, GetQueryByString, isWeiXin, objTranslate, urlencode } from '@/common/helper'
 import Storage from '@/common/Storage'
 import { error, hideLoading, modal, showLoading, toast } from '@/common/fun'
 import BaseMixin from '@/mixins/BaseMixin'
@@ -298,6 +298,7 @@ export default {
   },
   data () {
     return {
+      cash_from: 1, // 使用余额模式
       allowUseMoney: 0,
       ready: false,
       isOpen: false,
@@ -481,6 +482,8 @@ export default {
           this.orderInfo = info
         }
         console.log(this.orderInfo)
+
+        formatArrayColumn(order_list, 'biz_user_money', (num) => Number(num))
         console.log(order_list)
 
         this.orderList = order_list
@@ -512,6 +515,35 @@ export default {
         modal(e.message)
       } finally {
         hideLoading()
+      }
+    },
+    moneyInputHandleByBiz (e, Order_ID, order_idx) {
+      try {
+        const currentOrderInfo = this.orderList[order_idx]
+        const input_money = parseFloat(Number(e.detail.value).toFixed(2))
+        console.log(input_money)
+        // 重置
+        if (input_money < 0 || isNaN(input_money)) {
+          throw Error('您输入的金额格式有误')
+        }
+
+        // 如果价格过大
+        if (input_money > parseFloat(this.orderList[order_idx].Order_TotalPrice)) {
+          throw Error('输入金额超过订单总支付金额')
+        }
+
+        if (input_money + this.useMoneyCount <= parseFloat(currentOrderInfo.biz_user_money)) {
+          this.$set(this.postData.use_money, Order_ID, input_money)
+        } else {
+          throw Error('已超出可用余额范围')
+        }
+      } catch (e) {
+        // this.postData.use_money[Order_ID] = 0
+        this.$set(this.postData.use_money, Order_ID, 0)
+        Exception.handle(e)
+      } finally {
+        console.log('refreshPayMoney refreshPayMoney')
+        this.refreshPayMoney()
       }
     },
     // 用户重新更改了余额
@@ -977,7 +1009,7 @@ export default {
     this._init_func()
     // this.get_user_info();// 获取用于可用余额
   },
-  created () {
+  async created () {
     this.$store.commit('SET_PAY_TEMP_OBJ', this)
 
     // #ifdef H5
@@ -989,6 +1021,10 @@ export default {
       }
     }
     // #endif
+
+    const initData = await this.$store.dispatch('system/loadInitData')
+    const { cash_from = 1 } = initData
+    this.cash_from = Number(cash_from)
   }
 }
 </script>

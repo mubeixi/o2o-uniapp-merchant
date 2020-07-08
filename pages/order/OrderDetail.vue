@@ -89,7 +89,7 @@
         </div>
       </div>
     </div>
-    
+
     <view class="other bg-white" v-if="orderInfo.Order_IsRecieve == 1">
       <view class="bd">
         <view class="o_title">
@@ -137,8 +137,15 @@
             <span>是否使用余额</span>
             <switch :checked="moneyChecked" @change="moneyChange" color="#04B600" size='25px' />
           </div>
-           <div class="o_desc c8 m-b-10">您当前最多使用余额:{{userInfo.User_Money>orderInfo.Order_TotalPrice?orderInfo.Order_TotalPrice:userInfo.User_Money}}</div>
-          <input :disabled="!openMoney" :placeholder="userInfo.User_Money>orderInfo.Order_TotalPrice?orderInfo.Order_TotalPrice:userInfo.User_Money" @blur="moneyInputHandle" type="digit" v-if="openMoney" v-model="user_money" />
+          <block v-if="cash_from === 1">
+            <div class="o_desc c8 m-b-10">您当前最多使用余额:{{userInfo.User_Money>orderInfo.Order_TotalPrice?orderInfo.Order_TotalPrice:userInfo.User_Money}}</div>
+            <input :disabled="!openMoney" :placeholder="userInfo.User_Money>orderInfo.Order_TotalPrice?orderInfo.Order_TotalPrice:userInfo.User_Money" @blur="moneyInputHandle" type="digit" v-if="openMoney" v-model="user_money" />
+          </block>
+          <block v-if="cash_from === 2">
+            <div class="o_desc c8 m-b-10">您当前最多使用余额:{{biz_user_money>orderInfo.Order_TotalPrice?orderInfo.Order_TotalPrice:biz_user_money}}</div>
+            <input :disabled="!openMoney" placeholder="点此输入金额" @blur="moneyInputHandleByBiz" type="digit" v-if="openMoney" v-model="user_money" />
+          </block>
+
         </div>
       </div>
       <div class="other  bg-white" v-if="initData.invoice_switch == 1">
@@ -305,6 +312,8 @@ export default {
   },
   data () {
     return {
+      cash_from: 1,
+      biz_user_money: 0,
       allowUseMoney: 0, // 允许使用的余额
       lv: 3, // 二维码容错级别 ， 一般不用设置，默认就行
       loadMake: true, // 组件加载完成后自动生成二维码
@@ -388,7 +397,7 @@ export default {
       userInfo: 'user/userInfo'
     })
   },
-  created () {
+  async created () {
     // #ifdef MP-TOUTIAO
     this.$store.commit('SET_PAY_TEMP_OBJ', this)
     // #endif
@@ -403,6 +412,10 @@ export default {
       }
     }
     // #endif
+
+    const initData = await this.$store.dispatch('system/loadInitData')
+    const { cash_from = 1 } = initData
+    this.cash_from = Number(cash_from)
   },
   methods: {
     refreshPayMoney () {
@@ -517,13 +530,14 @@ export default {
         this.pay_money = this.orderInfo.Order_Fyepay
         this.user_money = this.orderInfo.Order_Yebc
         this.openMoney = this.orderInfo.Order_Yebc > 0
-        this.allowUseMoney = Math.min(parseFloat(this.userInfo.User_Money), parseFloat(this.orderInfo.Order_TotalPrice)) //可以使用的余额
+        this.allowUseMoney = Math.min(parseFloat(this.userInfo.User_Money), parseFloat(this.orderInfo.Order_TotalPrice)) // 可以使用的余额
         this.need_invoice = this.orderInfo.Order_NeedInvoice
         this.openInvoice = this.orderInfo.Order_NeedInvoice > 0
         this.invoice_info = this.orderInfo.Order_InvoiceInfo
         this.order_remark = this.orderInfo.Order_Remark
         this.user_name = this.orderInfo.Address_Name
         this.user_mobile = this.orderInfo.Address_Mobile
+        this.biz_user_money = Number(this.orderInfo.biz_user_money)
 
         if (orderInfo.Order_IsVirtual) {
           this.qrVal = `IsVirtualOrderCheck##Order_Code::${orderInfo.Order_Code}`
@@ -540,42 +554,67 @@ export default {
         this.$back()
       })
     },
-    // 用户重新更改了余额
-    moneyInputHandle (e) {
-  
+    moneyInputHandleByBiz (e) {
       try {
         const val = e.detail.value
-    
         const input_money = parseFloat(Number(val).toFixed(2))
-    
+
         if (input_money < 0 || isNaN(input_money)) {
           throw Error('您输入的金额格式有误')
         }
-    
+
         // 如果价格过大
         if (input_money > parseFloat(this.orderInfo.Order_TotalPrice)) {
           throw Error('输入金额超过订单总支付金额')
         }
-    
-        if (input_money > parseFloat(this.userInfo.User_Money)) {
+
+        if (input_money > parseFloat(this.biz_user_money)) {
           throw Error('已超出可用余额范围')
         }
-    
-        if (input_money + this.useMoneyCount <= parseFloat(this.userInfo.User_Money)) {
-          this.postData.use_money[biz_id] = input_money
+
+        if (input_money + this.useMoneyCount > parseFloat(this.biz_user_money)) {
+          throw Error('已超出可用余额最大范围')
         }
-  
         this.user_money = Number(input_money).toFixed(2)
-    
       } catch (e) {
         this.user_money = 0
         Exception.handle(e)
       } finally {
         this.refreshPayMoney()
       }
-      
-      
-    
+    },
+    // 用户重新更改了余额
+    moneyInputHandle (e) {
+      try {
+        const val = e.detail.value
+
+        const input_money = parseFloat(Number(val).toFixed(2))
+
+        if (input_money < 0 || isNaN(input_money)) {
+          throw Error('您输入的金额格式有误')
+        }
+
+        // 如果价格过大
+        if (input_money > parseFloat(this.orderInfo.Order_TotalPrice)) {
+          throw Error('输入金额超过订单总支付金额')
+        }
+
+        if (input_money > parseFloat(this.userInfo.User_Money)) {
+          throw Error('已超出可用余额范围')
+        }
+
+        if (input_money + this.useMoneyCount <= parseFloat(this.userInfo.User_Money)) {
+          this.postData.use_money[biz_id] = input_money
+        }
+
+        this.user_money = Number(input_money).toFixed(2)
+      } catch (e) {
+        this.user_money = 0
+        Exception.handle(e)
+      } finally {
+        this.refreshPayMoney()
+      }
+
       // this.orderInfo.Order_Fyepay = Number(this.orderInfo.Order_TotalPrice - money).toFixed(2)
       // this.pay_money = Number(this.orderInfo.Order_TotalPrice - money).toFixed(2)
     },

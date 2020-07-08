@@ -95,6 +95,7 @@ const mutations = {
     const idx = findArrayIdx(cartList, { attr_id, prod_id })
     // 首次加入购物车
     if (idx === false) {
+      console.log(product)
       cartList.push({ biz_id, prod_id, attr_id, num, checked, price_selling, price_market, name, pic,attr_text })
     } else {
       cartList[idx].num += num
