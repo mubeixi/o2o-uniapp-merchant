@@ -720,14 +720,13 @@ export default {
       if (!this.submitFlag) return
 
       const cart = await this.$store.dispatch('cart/addNum', {
-        product: { ...this.product, ...this.attrInfo },
+        product: { ...this.product, ...this.attrInfo,checked: true },
         attr_text: this.attrInfo.attr_text,
-        checked: true,
         num: 1
       })
       if (cart !== false) {
         this.attrInfo.num++
-
+        this.refreshCount()
         // 购物车商品价格兼容会员折扣机制
         try {
           const { redis_CartList } = cart

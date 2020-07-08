@@ -27,9 +27,9 @@
           </div>
         </swiper-item>
       </swiper>
-    
+
     </div>
-    
+
     <div class="score-List" v-if="rightCard[inds].card_content&&rightCard[inds].card_content.score">
       <div class="score-List-item flex flex-justify-c flex-vertical-c">
         <image class="title-img" src="/static/user/titleLeft.png"></image>
@@ -38,17 +38,16 @@
             </span>
         <image class="title-img" src="/static/user/titleRight.png"></image>
       </div>
-      
+
       <div class="flex flex-vertical-c score-List-detail">
         <image class="score-img" src="/static/user/scopeImg.png"></image>
         <span class="score-List-detail-test">
             购买此权益卡可享赠送<span class="score-List-color">{{rightCard[inds].card_content.score}}</span>积分特权
           </span>
       </div>
-    
+
     </div>
-    
-    
+
     <div class="score-coupon flex flex-justify-c flex-vertical-c" v-if="rightCard[inds].coupons">
       <image class="title-img" src="/static/user/titleLeft.png"></image>
       <span class="m-l-10 m-r-10">
@@ -62,9 +61,9 @@
           {{coupon.Coupon_Cash}}
         </div>
         <div class="Coupon_Condition">
-          领劵满100减90
+          {{coupon.Coupon_Subject}}
         </div>
-        <div class="coupon-use" v-if="coupon.coupon_prod>0">
+        <div class="coupon-use" v-if="coupon.coupon_prod==0">
           全店通用
         </div>
         <div class="coupon-use" v-else>
@@ -72,9 +71,9 @@
         </div>
       </div>
     </scroll-view>
-    
+
     <div style="width: 750rpx;height: 20rpx;background-color: #f5f5f5" v-if="rightCard[inds].descr"></div>
-    
+
     <div class="score-coupon flex flex-justify-c flex-vertical-c" v-if="rightCard[inds].descr">
       <image class="title-img" src="/static/user/titleLeft.png"></image>
       <span class="m-l-10 m-r-10">
@@ -84,14 +83,14 @@
     </div>
     <div class="buy-know-list fz-13 c8" v-if="rightCard[inds].descr">
       {{rightCard[inds].descr}}
-    
+
     </div>
-    
+
     <div style="width: 750rpx;height: 90rpx"></div>
     <div @click="submit" class="submit fz-17">
       <span class="fz-12">¥</span>{{rightCard[inds].price}} 立即购买
     </div>
-    
+
     <wzw-pay
       :isOpen='false'
       :is_use_order_pay="false"
@@ -101,7 +100,7 @@
       @payMehtod="payMehtod"
       ref="payLayer"
     />
-  
+
   </div>
 </template>
 
@@ -120,14 +119,14 @@ export default {
   components: {
     WzwImTip,
     WzwPay,
-    LayoutIcon,
+    LayoutIcon
   },
   data () {
     return {
       inds: 0,
       rightCard: [],
       order_id: '',
-      pay_type: '',
+      pay_type: ''
     }
   },
   methods: {
@@ -137,7 +136,7 @@ export default {
     async payMehtod (item) {
       const data = {
         order_id: this.order_id,
-        pay_method: item.pay_type,
+        pay_method: item.pay_type
       }
       const payCan = await rightsCardPay(data, { tip: '加载中' }).catch(e => {
         error(e.msg || '创建订单失败')
@@ -148,7 +147,7 @@ export default {
         toast('支付成功')
         setTimeout(function () {
           uni.switchTab({
-            url: '/pages/user/index',
+            url: '/pages/user/index'
           })
         }, 1000)
       }
@@ -157,7 +156,7 @@ export default {
       uni.showToast({
         title: err.msg ? err.msg : '支付失败',
         icon: 'none',
-        duration: 2000,
+        duration: 2000
       })
     },
     paySuccessCall (res) {
@@ -170,7 +169,7 @@ export default {
         toast('用户取消支付', 'none')
         return
       }
-      
+
       // 头条小程序
       if (res && res.code && res.code === 9) {
         uni.showModal({
@@ -180,33 +179,33 @@ export default {
           confirmText: '已支付',
           success: function (res) {
             if (res.confirm) {
-            
+
             } else if (res.cancel) {
-            
+
             }
-          },
+          }
         })
         return
       }
-      
+
       // 0：支付成功 1：支付超时 2：支付失败 3：支付关闭 4：支付取消 9：订单状态开发者自行获取
-      
+
       if (res && res.code && res.code === 4) {
         toast('用户取消支付', 'none')
         return
       }
-      
+
       toast('支付成功')
-      
+
       uni.redirectTo({
-        url: '/pages/user/index',
+        url: '/pages/user/index'
       })
     },
     async submit () {
       if (!checkIsLogin(1, 1)) return
       const order = await createRightsCardOrder({ card_id: this.rightCard[this.inds].id }, {
         onlyData: true,
-        tip: '加载中',
+        tip: '加载中'
       }).catch(e => {
         error(e.msg || '创建订单失败')
       })
@@ -219,7 +218,7 @@ export default {
     async init () {
       const arr = await getRightsCard({ status: 1 }, {
         onlyData: true,
-        tip: '加载中',
+        tip: '加载中'
       }).catch(e => {
         error(e.msg || '获取权益卡错误')
       })
@@ -227,12 +226,12 @@ export default {
       //   item.card_content = JSON.parse(item.card_content)
       // })
       this.rightCard = arr
-    },
+    }
   },
   onLoad () {
     if (!checkIsLogin(1, 1)) return
     this.init()
-  },
+  }
 }
 </script>
 
@@ -246,7 +245,7 @@ export default {
     background-size: 100% 100%;
     padding-top: 150rpx;
     margin-bottom: 120rpx;
-    
+
     &-title {
       color: #885E24;
       font-weight: bold;
@@ -257,7 +256,7 @@ export default {
       top: 46rpx;
       left: 40rpx;
     }
-    
+
     &-coupon {
       /*width:360rpx;*/
       height: 60rpx;
@@ -271,7 +270,7 @@ export default {
       top: 132rpx;
       left: 48rpx;
     }
-    
+
     &-no {
       color: #172B27;
       height: 20rpx;
@@ -281,9 +280,9 @@ export default {
       bottom: 80rpx;
       left: 48rpx;
     }
-    
+
   }
-  
+
   .equity-top {
     height: 34rpx;
     width: 750rpx;
@@ -297,19 +296,19 @@ export default {
     box-sizing: border-box;
     padding: 0px 20rpx;
   }
-  
+
   .back-icon {
     position: absolute;
     left: 10px;
     top: 0;
   }
-  
+
   .center {
     width: 700rpx;
     height: 340rpx;
     margin: 0 auto;
     white-space: nowrap;
-    
+
     .vipFir {
       width: 700rpx !important;
       height: 340rpx !important;
@@ -317,7 +316,7 @@ export default {
       position: relative;
     }
   }
-  
+
   .div-block {
     width: 20rpx;
     height: 4rpx;
@@ -325,7 +324,7 @@ export default {
     background-color: #3A3731;
     margin-right: 8rpx;
   }
-  
+
   .div-block-active {
     width: 20rpx;
     height: 4rpx;
@@ -333,14 +332,14 @@ export default {
     background-color: #FFFFFF;
     margin-right: 8rpx;
   }
-  
+
   .indicator-div {
     position: absolute;
     bottom: 40rpx;
     left: 50%;
     transform: translateX(-50%);
   }
-  
+
   .score-List {
     width: 710rpx;
     height: 220rpx;
@@ -349,7 +348,7 @@ export default {
     margin: 0 auto;
     box-shadow: 0px 0px 20rpx 0px rgba(0, 0, 0, 0.11);
     border-radius: 10rpx;
-    
+
     &-item {
       width: 100%;
       padding: 40rpx 0rpx;
@@ -357,33 +356,33 @@ export default {
       line-height: 32rpx;
       box-sizing: border-box;
     }
-    
+
     &-detail {
       height: 44rpx;
       width: 100%;
       margin-top: 20rpx;
     }
   }
-  
+
   .score-img {
     width: 46rpx;
     height: 44rpx;
     margin-right: 40rpx;
   }
-  
+
   .buy-know {
     width: 750rpx;
     height: 28rpx;
     line-height: 28rpx;
     text-align: center;
   }
-  
+
   .buy-know-list {
     width: 710rpx;
     margin: 0 auto;
     line-height: 52rpx;
   }
-  
+
   .submit {
     position: fixed;
     bottom: 0px;
@@ -395,30 +394,30 @@ export default {
     color: #FFFFFF;
     background: rgba(38, 199, 141, 1);
   }
-  
+
   .title-img {
     width: 106rpx;
     height: 16rpx;
   }
-  
+
   .score-List-detail-test {
     height: 28rpx;
     line-height: 28rpx;
     color: #666666;
   }
-  
+
   .score-List-color {
     color: #26C78D;
     font-size: 32rpx;
   }
-  
+
   .score-coupon {
     width: 750rpx;
     height: 32rpx;
     line-height: 32rpx;
     padding: 54rpx 0rpx;
   }
-  
+
   .score-coupon-list {
     height: 192rpx;
     width: 750rpx;
@@ -426,7 +425,7 @@ export default {
     padding: 0rpx 14rpx 44rpx 14rpx;
     white-space: nowrap;
   }
-  
+
   .score-coupon-list-div {
     display: inline-block;
     position: relative;
@@ -435,7 +434,7 @@ export default {
     background-image: url("/static/user/coupon.png");
     background-size: 100% 100%;
     margin-right: 40rpx;
-    
+
     .Coupon_Cash {
       width: 96rpx;
       height: 44rpx;
@@ -447,7 +446,7 @@ export default {
       top: 30rpx;
       left: 46rpx;
     }
-    
+
     .Coupon_Condition {
       height: 16rpx;
       line-height: 16rpx;
@@ -459,7 +458,7 @@ export default {
       left: 0;
       top: 84rpx;
     }
-    
+
     .coupon-use {
       font-size: 10px;
       color: #F8F9F5;

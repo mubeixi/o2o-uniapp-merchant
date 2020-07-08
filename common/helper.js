@@ -171,6 +171,25 @@ export const getArrColumn = (arr, column) => {
 }
 
 /**
+ * 遍历对象组成的数组，对每个对象的指定键值格式化
+ * @param arr
+ * @param column
+ * @param filterFn
+ */
+export const formatArrayColumn = (arr, column, filterFn, deepCopy) => {
+  try {
+    for (var key in arr) {
+      arr[key][column] = filterFn(arr[key][column])
+    }
+    if (deepCopy) return objTranslate(arr)
+  
+    return true
+  }catch (e) {
+    return false
+  }
+}
+
+/**
  * 获取对象的属性个数
  * @param obj
  * @param stict 严格模式下，只返回自己的，忽略原型链继承的
@@ -349,7 +368,7 @@ export const checkIsLogin = (redirect = 1, tip = 0, isBack = 0) => {
         uni.navigateTo({
           url: '/pages/user/login'
         })
-        return false;
+        return false
       }
 
       confirm({
@@ -470,7 +489,7 @@ export const getCountdownFunc = ({ start_timeStamp, end_timeStamp, current = (ne
   s = countTime - d * 60 * 60 * 24 - h * 60 * 60 - m * 60
 
   return {
-    d: formatNumber(h),
+    d: formatNumber(d),
     h: formatNumber(h),
     m: formatNumber(m),
     s: formatNumber(s),
@@ -717,24 +736,23 @@ export const setNavigationBarTitle = (title) => uni.setNavigationBarTitle({ titl
  * @param event
  * @returns {{x: number, y: number, type: *}}
  */
-export function getTouchEventInfo(event) {
+export function getTouchEventInfo (event) {
   const type = event.type
   let x = 0
   let y = 0
   const touches = event.changedTouches
-  
+
   if (touches && touches.length > 0) {
     x = touches[0].clientX
     y = touches[0].clientY
   }
-  
+
   return {
     type,
     x,
     y
   }
 }
-
 
 const Helper = {
   Object: {

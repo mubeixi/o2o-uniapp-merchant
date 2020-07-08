@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div :style="{top:menuButtonInfo.top+50+'px'}" @touchmove.stop.prevent="$noop"
+    <div :style="{top:menuButtonInfo.top+50+'px'}"
          class="section scroll-box first-cate-list  bg-white">
       <li :key="idx" @click="changeStoreCateNav(idx)" class="scroll-item fz-15 c3"
           v-for="(cate,idx) in firstCateList">
@@ -221,7 +221,9 @@ export default {
     padding: 2px 8px;
     box-sizing: border-box;
     border-bottom: 1px solid #eee;
-
+    overflow-y: hidden;
+    overflow-x: scroll;
+    white-space: nowrap;
     .scroll-item {
       position: relative;
       line-height: 40px;
