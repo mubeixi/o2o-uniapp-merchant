@@ -2,7 +2,7 @@
   <view @click="commonClick" class="wrap">
       <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
 
-    <div class="wrap-item"    :style="{backgroundImage: 'url('+$getDomain('/static/client/storeVipListBg.png')+')'}"  v-for="(item,index) of userVipList" :key="index">
+    <div class="wrap-item" @click="goVipList(item)"    :style="{backgroundImage: 'url('+$getDomain('/static/client/storeVipListBg.png')+')'}"  v-for="(item,index) of userVipList" :key="index">
 
       <div class="money-btn" @click="goBanlance(item.biz_id,item.biz_user_money)">
         查看资金流水
@@ -32,19 +32,18 @@
         <div class="fz-12">
           会员权益：
         </div>
-        <div class="fz-10">
-          <div>
-            1. 享受全店商品九折优惠
-          </div>
-          <div>
-            2. 所有商品一件包邮
-          </div>
-          <div>
-            3. 生日当天精美小礼品
-          </div>
-          <div>
-            4. 部分商品满减优惠券
-          </div>
+        <div class="fz-10"  >
+         <block v-for="(it,ind) of item.arr" :key="ind">
+           <div v-if="it.name=='消费折扣'">
+             {{ind+1}}. 享受全店商品{{it.value*10}}折优惠
+           </div>
+           <div  v-if="it.name=='包邮'">
+             {{ind+1}}. 所有商品一件包邮
+           </div>
+           <div  v-if="it.name=='赠送余额'">
+             {{ind+1}}. 该会员卡赠送余额{{item.value}}元
+           </div>
+         </block>
         </div>
 
       </div>
@@ -80,6 +79,9 @@ export default {
     this.initFn()
   },
   methods: {
+    goVipList (item) {
+      this.$linkTo('/pagesA/user/VipList?bid=' + item.biz_id)
+    },
     chongzhiFn (bid, money) {
       this.$linkTo('/pagesA/user/BalanceRecharge?biz_id=' + bid + '&bizMoney=' + money)
     },
@@ -95,6 +97,11 @@ export default {
       })
       this.totalCount = vipList.totalCount
       vipList.data.map(item => {
+        const arr = []
+        for (const it in item.basic_rights) {
+          arr.push(item.basic_rights[it])
+        }
+        item.arr = arr
         this.userVipList.push(item)
       })
     }

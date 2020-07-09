@@ -227,7 +227,7 @@ export default {
         // const wrapTempFile = await Promisify('getImageInfo', { src: this.wrapPath }).catch(e => { throw Error(e.errMsg || '缓存海报背景失败') })
         console.log(thumbTempFile.path)
         // 绘制底部白色
-        // ctx.setFillStyle('#f2f2f2')
+        ctx.setFillStyle('#f4f4f4')
 
         ctx.fillRect(0, 0, 700, wrapHeight)
         ctx.drawImage('/static/share/cover-wrap.png', 0, 0, 700, wrapHeight)
