@@ -282,7 +282,7 @@
 <!--      </div>-->
 <!--    </layout-modal>-->
 
-    <layout-layer :bottomStr="storeBottomActionHeight" positions="bottom" ref="carts">
+    <layout-layer @maskClicked="bindCartsPopClose" :bottomStr="storeBottomActionHeight" positions="bottom" ref="carts">
       <div class="carts-box">
         <div class="carts-action flex flex-vertical-c flex-justify-between">
           <div class="check-all flex flex-vertical-c" @click="selectBiz">
@@ -327,7 +327,7 @@
 
     <!-- m-b-safe-area-->
     <div  class="mall-tabbar-wrap" v-if="isUserLogin" :animation="animationData" >
-      
+
       <!--右侧内容区域-->
       <div class="cart-box" :animation="animationData2">
         <!--图标区域-->
@@ -335,7 +335,7 @@
           <layout-icon class="cart-icon" color="#fff" size="24" type="iconicon-cart"></layout-icon>
           <div class="tag" :class="{aircle:total_count<100}">{{total_count}}</div>
         </div>
-        <div class="total-info flex flex-column flex-justify-c">
+        <div class="total-info flex flex-column flex-justify-c" @click.stop="taggleCartListExpand">
           <div class="color-white flex flex-vertical-b"><span class="fz-11">￥</span><span class="fz-16 text-nowrap">{{total_price}}</span></div>
           <div class="c9 fz-10 text-nowrap">已减{{$filterPrice(totalPriceByMarket-totalPrice)}}元</div>
         </div>
@@ -345,19 +345,19 @@
           <div class="fz-10 color-white text-center text-nowrap">个人中心</div>
         </div>
       </div>
-      
+
       <div class="close-btn" @click.stop="taggkeCartShow">
         <layout-icon v-if="!cartExpand" size="23" type="iconicon_plus" color="#fff"></layout-icon>
         <layout-icon v-if="cartExpand" size="23" type="iconxingzhuang" color="#fff"></layout-icon>
       </div>
-      
+
     </div>
 
   </div>
 </template>
 <script>
 import { componetMixin } from '@/mixins/BaseMixin'
-import { checkIsExpire, error, hideLoading, showLoading, toast } from '@/common/fun'
+import { checkIsExpire, error, hideLoading, showLoading, toast, confirm } from '@/common/fun'
 import { getAlbumList, getBizInfo, getBizSpikeList } from '@/api/store'
 import { getFlashsaleList, getProductList } from '@/api/product'
 import { getCommitList, getCouponList } from '@/api/common'
@@ -439,9 +439,9 @@ export default {
       total_price: 0,
       qty: 0,
       allCheck: false,
-      animation:{},
+      animation: {},
       animationData: {},
-      animationData2:{},
+      animationData2: {},
       isFavourite: false,
       commentModalPlaceholder: '请输入内容',
       anchorTop: 0,
@@ -548,7 +548,12 @@ export default {
     refreshFn () {
       this.refreshInfoByIsLogin()
     },
+    // 不然点击无法正常
+    bindCartsPopClose () {
+      this.listExpand = false
+    },
     taggleCartListExpand () {
+
       if (this.listExpand) {
         this.$closePop('carts')
         this.listExpand = false
@@ -558,6 +563,19 @@ export default {
         this.$openPop('carts')
         this.listExpand = true
       }
+    },
+    clearCart () {
+	  confirm({
+	    title: '操作确认',
+	    content: '该操作会清空购物车中当前商家商品，操作不可逆，确认继续操作？'
+	  }).then(() => {
+	    this.$store.dispatch('cart/removeGoods', { biz_id: this.bid }).then(() => {
+	      this.allCheck = this.$store.getters['cart/getListCheckStatus'](Number(this.bid))
+	      this.refreshCount()
+	    }).catch(() => {
+	    })
+	  }).catch(() => {
+	  })
     },
     // 单个商家
     async selectBiz () {
@@ -595,10 +613,10 @@ export default {
 
         // 没有规格的商品，直接搞事,同步库存
         if (row.attr_id === 0) {
-          const idx = findArrayIdx(this.bizCateList[this.bizCateNavIndex].child[this.bizCateChildNavIndex].productList, { Products_ID: row.prod_id })
-          if (idx !== false) {
-            this.$set(this.bizCateList[this.bizCateNavIndex].child[this.bizCateChildNavIndex].productList[idx], 'num', amount)
-          }
+          // const idx = findArrayIdx(this.bizCateList[this.bizCateNavIndex].child[this.bizCateChildNavIndex].productList, { Products_ID: row.prod_id })
+          // if (idx !== false) {
+          //   this.$set(this.bizCateList[this.bizCateNavIndex].child[this.bizCateChildNavIndex].productList[idx], 'num', amount)
+          // }
         }
 
         this.refreshCount()
@@ -627,10 +645,10 @@ export default {
       if (cart !== false) {
         // 没有规格的商品，直接搞事,同步库存
         if (row.attr_id === 0) {
-          const idx = findArrayIdx(this.bizCateList[this.bizCateNavIndex].child[this.bizCateChildNavIndex].productList, { Products_ID: row.prod_id })
-          if (idx !== false) {
-            this.$set(this.bizCateList[this.bizCateNavIndex].child[this.bizCateChildNavIndex].productList[idx], 'num', amount)
-          }
+          // const idx = findArrayIdx(this.bizCateList[this.bizCateNavIndex].child[this.bizCateChildNavIndex].productList, { Products_ID: row.prod_id })
+          // if (idx !== false) {
+          //   this.$set(this.bizCateList[this.bizCateNavIndex].child[this.bizCateChildNavIndex].productList[idx], 'num', amount)
+          // }
         }
         this.refreshCount()
       } else {
@@ -648,10 +666,10 @@ export default {
 
         // 没有规格的商品，直接搞事,同步库存
         if (row.attr_id === 0) {
-          const idx = findArrayIdx(this.bizCateList[this.bizCateNavIndex].child[this.bizCateChildNavIndex].productList, { Products_ID: row.prod_id })
-          if (idx !== false) {
-            this.$set(this.bizCateList[this.bizCateNavIndex].child[this.bizCateChildNavIndex].productList[idx], 'num', num)
-          }
+          // const idx = findArrayIdx(this.bizCateList[this.bizCateNavIndex].child[this.bizCateChildNavIndex].productList, { Products_ID: row.prod_id })
+          // if (idx !== false) {
+          //   this.$set(this.bizCateList[this.bizCateNavIndex].child[this.bizCateChildNavIndex].productList[idx], 'num', num)
+          // }
         }
 
         this.refreshCount()
@@ -672,10 +690,10 @@ export default {
       if (cart !== false) {
         // 没有规格的商品，直接搞事,同步库存
         if (row.attr_id === 0) {
-          const idx = findArrayIdx(this.bizCateList[this.bizCateNavIndex].child[this.bizCateChildNavIndex].productList, { Products_ID: row.prod_id })
-          if (idx !== false) {
-            this.$set(this.bizCateList[this.bizCateNavIndex].child[this.bizCateChildNavIndex].productList[idx], 'num', num)
-          }
+          // const idx = findArrayIdx(this.bizCateList[this.bizCateNavIndex].child[this.bizCateChildNavIndex].productList, { Products_ID: row.prod_id })
+          // if (idx !== false) {
+          //   this.$set(this.bizCateList[this.bizCateNavIndex].child[this.bizCateChildNavIndex].productList[idx], 'num', num)
+          // }
         }
 
         this.refreshCount()
@@ -696,10 +714,10 @@ export default {
       if (cart !== false) {
         // 没有规格的商品，直接搞事,同步库存
         if (row.attr_id === 0) {
-          const idx = findArrayIdx(this.bizCateList[this.bizCateNavIndex].child[this.bizCateChildNavIndex].productList, { Products_ID: row.prod_id })
-          if (idx !== false) {
-            this.$set(this.bizCateList[this.bizCateNavIndex].child[this.bizCateChildNavIndex].productList[idx], 'num', num)
-          }
+          // const idx = findArrayIdx(this.bizCateList[this.bizCateNavIndex].child[this.bizCateChildNavIndex].productList, { Products_ID: row.prod_id })
+          // if (idx !== false) {
+          //   this.$set(this.bizCateList[this.bizCateNavIndex].child[this.bizCateChildNavIndex].productList[idx], 'num', num)
+          // }
         }
 
         this.refreshCount()
@@ -713,13 +731,13 @@ export default {
       console.log(this.cartExpandLoading)
       // 不允许快速多次点击
       if (this.cartExpandLoading === true) return
-      const duration = 1000
+      const duration = 600
       this.cartExpandLoading = true
       var animation = uni.createAnimation({
         duration,
         timingFunction: 'ease'
       })
-  
+
       var animation2 = uni.createAnimation({
         duration,
         timingFunction: 'ease'
@@ -732,11 +750,9 @@ export default {
 
         animation.width(wrapWidth).step()
         this.animationData = animation.export()
-  
+
         animation2.opacity(0).step()
         this.animationData2 = animation2.export()
-  
-       
 
         this.cartExpand = false
         setTimeout(() => {
@@ -751,10 +767,10 @@ export default {
 
         animation.width(wrapWidth).step()
         this.animationData = animation.export()
-  
+
         animation2.opacity(1).step()
         this.animationData2 = animation2.export()
-        
+
         this.cartExpand = true
         setTimeout(() => {
           this.cartExpandLoading = false
@@ -891,7 +907,7 @@ export default {
         //   }
         // })
 
-        console.log('this.bizCateList', this.bizCateList)
+        // console.log('this.bizCateList', this.bizCateList)
         this.changeCateIdx(0)
 
         // 不要赠送的优惠券
@@ -1285,7 +1301,7 @@ export default {
       .total-info{
         flex:1;
       }
-      
+
     }
     .icon-box{
       position: relative;
