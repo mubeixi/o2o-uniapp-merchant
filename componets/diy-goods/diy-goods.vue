@@ -44,11 +44,9 @@
   </div>
 </template>
 <script>
-import { getProductList } from '../../common/fetch'
-import { lazyImgUrl } from '../../common'
-
+import { getProductList } from '@/api/product'
+import { lazyImgUrl } from '@/common'
 import { getDomain, toGoodsDetail } from '@/common/helper'
-import { linkTo } from '@/common/fun'
 
 export default {
   name: 'DiyGoods',
@@ -303,9 +301,7 @@ export default {
   }
 
   .cover {
-    .cover-full-bg
-
-  (cover, 0);
+    @include cover-img();
     height: 100%;
   }
 

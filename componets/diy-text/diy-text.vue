@@ -7,7 +7,7 @@
   </view>
 </template>
 <script>
-import { deepCopyStrict } from '../../common/tool'
+import { deepCopyStrict } from '@/common/helper'
 import { linkTo } from '@/common/fun'
 
 const styleDefault = {
