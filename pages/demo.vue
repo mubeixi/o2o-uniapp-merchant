@@ -1,83 +1,44 @@
 <template>
   <div @click="commonClick" class="page-wrap">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
-    <div class="tab bg-white">
-      <div :class="{active:activeIndex===0}" @click="changeActive(0)" class="tab-item">收藏商品</div>
-      <div :class="{active:activeIndex===1}" @click="changeActive(1)" class="tab-item">收藏店铺</div>
+    <div class="page-wrap-index"></div>
+    <div :style="{marginTop:menuButtonInfo.top+'px',height:menuButtonInfo.bottom-menuButtonInfo.top+'px',linHeight:menuButtonInfo.bottom-menuButtonInfo.top+'px'}"    class="index-title m-b-15">
+      及贝
     </div>
-    <swiper class="container" @change="changeIndicatorDots" :current="activeIndex">
-      <swiper-item class="cintainer-item-wrap">
-        <div v-for="(merchant,idx) in viewList" :key="idx" @click="$linkTo('/pages/store/index?biz_id='+merchant.id)" class="store-top-item">
-          <div class="store-info flex flex-vertical-c flex-justify-between">
-            <div class="p-l-10 p-r-10 flex flex-vertical-c">
-              <image :src="merchant.biz_logo" class="logo"></image>
-              <div class="p-l-10 c3">
-                <div class="name fz-15 m-b-5"> {{merchant.biz_shop_name}}</div>
-                <div class="activity" v-if="merchant.manjian_active_info && merchant.manjian_active_info.length>0">
-                  满{{merchant.manjian_active_info[0].reach}}减{{merchant.manjian_active_info[0].award}}
-                </div>
-              </div>
+
+    <div class="index-item">
+      <div class="index-item-top flex ">
+            <div class="m-r-14">
+              <image src="/static/rightCardCoupon.png" class="index-item-userAvatar"></image>
             </div>
-            <div class="flex flex-vertical-c p-r-6">
-              <span class="p-r-4 fz-14 c6">进入商家</span>
-              <layout-icon color="#999" type="iconicon-arrow-right"></layout-icon>
-            </div>
-          </div>
-          <div class="store-goods-list">
-            <block :key="idx2" v-for="(goods,idx2) in merchant.prod_list">
-              <div @click.stop="$toGoodsDetail(goods)" class="store-goods-item" v-if="idx2<3">
-            
-                <image :style="{backgroundImage:'url('+goods.ImgPath+')'}" class="cover" />
-                <div class="title fz-12 c3 p-t-7 p-b-7">{{goods.Products_Name}}</div>
-                <div class="fz-10 c9 flex flex-vertical-b">
-                  <span class="price-selling">￥</span><span
-                  class="fz-12 price-selling">{{goods.Products_PriceX}}</span>
-                  <span class="text-through m-l-4">￥</span><span
-                  class="text-through">{{goods.Products_PriceY}}</span>
+            <div class="flex1 index-item-info">
+                <div  class="info-status flex flex-vertical-c m-b-8">
+                  <div class="fz-18 c1 fz-b info-text m-r-9">
+                    留夏甜品店
+                  </div>
+                  <div class="info-status-img">
+                      营业中
+                  </div>
+                  <div class="flex flex-vertical-c go-store fz-14 c3" >
+                    进入
+                    <LayoutIcon color="#333333" class="m-l-8" display="inline-block" size="12" type="iconicon-arrow-right"></LayoutIcon>
+                  </div>
                 </div>
-          
-              </div>
-            </block>
-          </div>
-        </div>
-      </swiper-item>
-      <swiper-item class="cintainer-item-wrap">
-        <div v-for="(merchant,idx) in buyList" :key="idx" @click="$linkTo('/pages/store/index?biz_id='+merchant.id)" class="store-top-item">
-          <div class="store-info flex flex-vertical-c flex-justify-between">
-            <div class="p-l-10 p-r-10 flex flex-vertical-c">
-              <image :src="merchant.biz_logo" class="logo"></image>
-              <div class="p-l-10 c3">
-                <div class="name fz-15 m-b-5"> {{merchant.biz_shop_name}}</div>
-                <div class="activity" v-if="merchant.manjian_active_info && merchant.manjian_active_info.length>0">
-                  满{{merchant.manjian_active_info[0].reach}}减{{merchant.manjian_active_info[0].award}}
-                </div>
-              </div>
+                <scroll-view scroll-x class="info-coupon flex m-b-8">
+                    <div class="info-coupon-item">
+                      <div>
+
+                      </div>
+                      <div class="coupon-get fz-10">
+                          领取
+                      </div>
+                    </div>
+                </scroll-view>
+
             </div>
-            <div class="flex flex-vertical-c p-r-6">
-              <span class="p-r-4 fz-14 c6">进入商家</span>
-              <layout-icon color="#999" type="iconicon-arrow-right"></layout-icon>
-            </div>
-          </div>
-          <div class="store-goods-list">
-            <block :key="idx2" v-for="(goods,idx2) in merchant.prod_list">
-              <div @click.stop="$toGoodsDetail(goods)" class="store-goods-item" v-if="idx2<3">
-            
-                <image :style="{backgroundImage:'url('+goods.ImgPath+')'}" class="cover" />
-                <div class="title fz-12 c3 p-t-7 p-b-7">{{goods.Products_Name}}</div>
-                <div class="fz-10 c9 flex flex-vertical-b">
-                  <span class="price-selling">￥</span><span
-                  class="fz-12 price-selling">{{goods.Products_PriceX}}</span>
-                  <span class="text-through m-l-4">￥</span><span
-                  class="text-through">{{goods.Products_PriceY}}</span>
-                </div>
-          
-              </div>
-            </block>
-          </div>
-        </div>
-      </swiper-item>
-    </swiper>
-    <div class="h20"></div>
+      </div>
+
+    </div>
 
   </div>
 </template>
@@ -85,37 +46,20 @@
 <script>
 import BaseMixin from '@/mixins/BaseMixin'
 import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
-import { userBizView } from '@/api/customer'
-import { Exception } from '@/common/Exception'
+import LayoutIcon from '@/componets/layout-icon/layout-icon'
 
 export default {
   name: 'liveList',
-  components: { WzwImTip },
+  components: { WzwImTip,LayoutIcon },
   mixins: [BaseMixin],
   data () {
     return {
-      activeIndex:0,
-      viewList:[],
-      buyList:[],
-      paginate: {
-        load: false,
-        page: 1,
-        page_size: 999,
-        totalCount: 0
-      }
+
     }
   },
   methods: {
-    changeIndicatorDots(e){
-      const {current, source} = e.detail
-      this.changeActive(current)
-    },
-    changeActive(idx){
-      this.activeIndex = idx
-    },
-    async _init_func () {
-      this.viewList = await userBizView({type:1}).then(res => res.data).catch(err => { Exception.handle(Error(err.msg)) })
-      this.buyList = await userBizView({type:2}).then(res => res.data).catch(err => { Exception.handle(Error(err.msg)) })
+    _init_func () {
+
     }
   },
   created () {
@@ -124,98 +68,88 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-  .page-wrap{
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
-  .container{
-    flex:1;
-    overflow-x: hidden;
-    overflow-y: scroll;
-  }
-  .cintainer-item-wrap{
-    overflow-y: scroll;
-  }
-  
-  .tab {
+.page-wrap-index{
+  width: 1700rpx;
+  height: 1500rpx;
+  background-color: #1DCA8B;
+  border-radius: 50%;
+  position: absolute;
+  top: -1080rpx;
+  left: -640rpx;
+  z-index: -1;
+}
+  .index-title{
     width: 750rpx;
-    height: 50px;
-    padding-bottom: 4px;
-    background: white;
-    display: flex;
-    justify-content: center;
-    .tab-item {
-      width: 200rpx;
-      text-align: center;
-      padding: 24rpx 0;
-      box-sizing: border-box;
-
-      &.active {
-        color: $fun-primary-color;
-        border-bottom: 2px solid $fun-primary-color;
-      }
-
-      &:first-child {
-        margin-right: 30rpx;
-      }
-    }
+    text-align: center;
+    font-size: 36rpx;
+    color: #FFFFff;
   }
-  .store-top-item {
-    width: 710rpx;
-    overflow: hidden;
-    margin: 30rpx 20rpx 0;
-    background: white;
-    border-radius: 20rpx;
-    padding: 20rpx 0;
-  
-    .store-info {
-      .logo {
-        width: 86rpx;
-        height: 86rpx;
-        border-radius: 50%;
-        background: #f2f2f2;
-      }
-    
-      .name {
-      
-      }
-    
-      .activity {
-        padding: 2px 6px;
-        font-size: 10px;
-        color: #F1A43A;
-        border: 1px solid #F1A43A;
-        border-radius: 5rpx;
-      }
+  .index-item{
+    width:710rpx;
+    height:448rpx;
+    background:rgba(255,255,255,1);
+    border-radius:10rpx;
+    margin: 0 auto 30rpx;
+    box-sizing: border-box;
+    padding: 20rpx;
+
+    &-top{
+      width: 670rpx;
+      padding-left: 4rpx;
     }
-  
-    .store-goods-list {
-      display: flex;
-      padding: 30rpx 10rpx;
-    }
-  
-    .store-goods-item {
-      width: 215rpx;
+
+    &-userAvatar{
+      display: inline-block;
+      width: 100rpx;
+      height: 100rpx;
+      border-radius: 50%;
       overflow: hidden;
-      margin-right: 14rpx;
-    
-      &:last-child {
-        margin-right: 0;
-      }
-    
-      .title {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-    
-      .cover {
-        width: 215rpx;
-        height: 215rpx;
-        @include cover-img();
-      }
     }
-  
+    &-info{
+      padding-top: 2rpx;
+      box-sizing: border-box;
+    }
+
   }
+  .info-status{
+    height: 36rpx;
+  }
+  .info-text{
+    max-height: 300rpx;
+    overflow-x: hidden;
+  }
+  .info-status-img{
+    width:64rpx;
+    height:24rpx;
+    line-height: 24rpx;
+    font-size: 16rpx;
+    text-align: center;
+    color: #FFFFff;
+    background:rgba(213,213,213,1);
+    border-radius:20rpx 0px 20rpx 0px;
+  }
+  .go-store{
+    height: 36rpx;
+    line-height: 36rpx;
+    margin-left: auto;
+  }
+
+  .info-coupon{
+    height: 34rpx;
+    &-item{
+
+    }
+    .coupon-get{
+      height: 34rpx;
+      width: 66rpx;
+      line-height: 34rpx;
+      background-image: url("/static/jibeiCoupon.png");
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+      box-sizing: border-box;
+      padding-left: 20rpx;
+      color: #FFFFff;
+    }
+  }
+
 </style>
