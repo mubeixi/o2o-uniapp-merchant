@@ -44,11 +44,9 @@
   </div>
 </template>
 <script>
-import { getProductList } from '../../common/fetch'
-import { lazyImgUrl } from '../../common'
-
+import { getProductList } from '@/api/product'
+import { lazyImgUrl } from '@/common'
 import { getDomain, toGoodsDetail } from '@/common/helper'
-import { linkTo } from '@/common/fun'
 
 export default {
   name: 'DiyGoods',
@@ -92,7 +90,7 @@ export default {
       } else if (Array.isArray(this.goods.value.list) && this.goods.value.list.length > 0) {
         return this.goods.value.list.length
       } else {
-        return 20
+        return 999
       }
     },
     isEmpeyInfo () {
@@ -196,9 +194,9 @@ export default {
         //   return;
         // }
 
-        if (list.length === 0 && cate_id.length === 0) {
-          param.pageSize = 6
-        }
+        // if (list.length === 0 && cate_id.length === 0) {
+        //   param.pageSize = 6
+        // }
 
         getProductList(param).then(res => {
           this.goodsList = res.data
@@ -303,9 +301,7 @@ export default {
   }
 
   .cover {
-    .cover-full-bg
-
-  (cover, 0);
+    @include cover-img();
     height: 100%;
   }
 

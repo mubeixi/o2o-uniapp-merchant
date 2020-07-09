@@ -16,9 +16,8 @@
   </view>
 </template>
 <script>
-import { mixinStyle } from '../../common/tool'
+import { mixinStyle, getDomain } from '@/common/helper'
 
-import { getDomain } from '@/common/helper'
 import { linkTo } from '@/common/fun'
 
 const styleDefault = {
@@ -69,7 +68,6 @@ export default {
       return getDomain(url)
     },
     go (item) {
-
       linkTo(item)
     }
   },

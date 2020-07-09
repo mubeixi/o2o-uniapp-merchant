@@ -19,8 +19,7 @@
             <div class="tab-item-text" :animation="tabAnimationData[2]">好店</div>
             <div class="tab-item-tip" id="tabItemTip2"></div>
           </li>
-          <span :animation="tabUnderlineAnimationData" :style="{marginLeft:defaultUnderlineLeft+'px'}" class="page-tab-underline"
-                v-show="showUnderLine"></span>
+          <span :animation="tabUnderlineAnimationData" :style="{marginLeft:defaultUnderlineLeft+'px'}" class="page-tab-underline" v-show="showUnderLine"></span>
         </ul>
 
       </div>

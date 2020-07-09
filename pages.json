@@ -167,6 +167,12 @@
       "name": "onther",
       "pages": [
         {
+          "path": "index/pre",
+          "style": {
+            "navigationBarTitleText": "预览"
+          }
+        },
+        {
           "path": "store/productListByMall",
           "style": {
             "navigationBarTitleText": "全部商品",
