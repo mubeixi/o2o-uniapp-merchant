@@ -754,6 +754,20 @@ export function getTouchEventInfo (event) {
   }
 }
 
+export function mixinStyle (defaultStyle, style) {
+  if (!defaultStyle) defaultStyle = {}
+  if (!style) style = {}
+  
+  const rt = objTranslate(defaultStyle)
+  
+  for (var i in style) {
+    if (!style.hasOwnProperty(i)) continue
+    rt[i] = style[i]
+  }
+  
+  return rt
+}
+
 const Helper = {
   Object: {
     mapList: (list, fn) => {

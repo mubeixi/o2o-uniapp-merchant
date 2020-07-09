@@ -62,6 +62,9 @@ export const getProductCountInfo = (param, options) => fetch({ act: 'get_users_i
 // 获取商城的配置
 export const getSkinConfig = (param, options) => fetch({ act: 'get_shophome', param, options })
 
+// 获取自定义页面配置
+export const getSkinPreData = (param, options) => fetch({ act: 'get_makeup_home_data', param, options })
+
 // 获取地址
 export const getAreaByPid = (param, options) => fetch({ act: 'getAreaByPid', param, options })
 
