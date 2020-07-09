@@ -178,8 +178,10 @@ export default {
   },
   watch: {
     ready: {
+      immediate: true,
       handler (val, oldVal) {
-        if (val && !oldVal) this._init_func()
+        console.log('ad comonents ready value change', val)
+        if (val) this._init_func()
       }
     }
   },
