@@ -40,7 +40,10 @@
                 <!--                <div class="tag">美味可口</div>-->
                 <!--              </div>-->
                 <div class="progress">
-                  <image class="progress-img" src=""></image>
+                  <image class="progress-img" src="/static/spikeBg.png"></image>
+                  <div class="progress-div">
+                    已抢{{goods.Products_Sales}}
+                  </div>
                 </div>
                 <div class="p-item-price flex">
                   <div class="p-item-new-price">
@@ -244,12 +247,29 @@ export default {
     }
 
     .progress {
-      width: 100%;
+      width: 340rpx;
+      height: 38rpx;
+      margin-top: 60rpx;
+      margin-bottom: 50rpx;
+      position: relative;
+    }
+    .progress-div{
+      color: #FFFFff;
+      text-align: center;
+      height: 38rpx;
+      line-height: 28rpx;
+      font-size: 8px;
+      position: absolute;
+      top: 0px;
+      width:100rpx;
+      right: 40rpx;
+      box-sizing: border-box;
+      padding-top: 10rpx;
     }
 
     .progress-img {
       width: 100%;
-      height: 62rpx;
+      height: 100%;
     }
 
     .p-item-price {
