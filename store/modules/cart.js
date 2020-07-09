@@ -95,6 +95,7 @@ const mutations = {
     const idx = findArrayIdx(cartList, { attr_id, prod_id })
     // 首次加入购物车
     if (idx === false) {
+      console.log(product)
       cartList.push({ biz_id, prod_id, attr_id, num, checked, price_selling, price_market, name, pic,attr_text })
     } else {
       cartList[idx].num += num
@@ -181,6 +182,23 @@ const mutations = {
 }
 
 const actions = {
+  updateRowPrice({ commit, state }, { prod_id, attr_id, price_selling}){
+    console.log(prod_id, attr_id, price_selling)
+    if(isNaN(price_selling)||price_selling<0){
+      return false
+    }
+    let cartList = state.cartList.length > 0 ? state.cartList : Storage.get('shopCartList')
+    if (!cartList) cartList = []
+  
+    const idx = findArrayIdx(cartList, { attr_id, prod_id })
+    if (idx !== false){
+      cartList[idx].price_selling = price_selling
+      this.commit('cart/ASYNC_DATA', cartList)
+      return true
+    }
+  
+    return false
+  },
   async addNum ({ commit, state }, { product, num = 1 }) {
     try {
       const { biz_id, prod_id, attr_id } = product

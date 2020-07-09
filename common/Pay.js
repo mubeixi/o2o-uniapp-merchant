@@ -40,7 +40,7 @@ const Pay = (vm, pay_type, payRequestData) => {
 
   // 微信h5
   if (pay_type === 'wx_h5') {
-    const redirect_url = res.data.mweb_url + '&redirect_url=' + urlencode(location.origin + '/fre/pages/order/order?index=2')
+    const redirect_url = res.data.mweb_url + '&redirect_url=' + urlencode(location.origin + '/fre/pagesA/active/ActivationCode')
     location.href = redirect_url
     return
   }

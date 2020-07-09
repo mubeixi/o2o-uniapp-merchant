@@ -51,10 +51,11 @@ const actions = {
     commit('SET_CURRENT_TABBAR', value)
   },
   // async 相当于 隐式的promise
-  async loadInitData ({ commit, state }, opts) {
+  async loadInitData ({ commit, state }, opts = {}) {
     try {
-      let initData = state.initData
-      if (!initData) {
+      const { isOnline = false } = opts
+      let initData = state.initData || Storage.get('initData')
+      if (isOnline || !initData || JSON.stringify(initData) === '{}') {
         initData = await getSystemConf({}, { onlyData: 1 }).catch(({ msg = '' }) => { throw Error(msg || '获取全局配置失败') })
       }
       commit('SET_INIT_DATA', initData)

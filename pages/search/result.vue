@@ -46,9 +46,9 @@
     <div @click.stop catchtouchmove="false" class="shaixuan" v-if="showShai">
       <view class="priceInterval">价格区间(元)</view>
       <view class="inputPrice">
-        <input placeholder="最低价" placeholder-style="color:#999999;font-size:26rpx;" type="number" v-model="minPrice">
+        <input placeholder="最低价" placeholder-style="color:#999999;font-size:26rpx;" type="digit" v-model="minPrice">
         <view class="view">—</view>
-        <input placeholder="最高价" placeholder-style="color:#999999;font-size:26rpx;" type="number" v-model="maxPrice">
+        <input placeholder="最高价" placeholder-style="color:#999999;font-size:26rpx;" type="digit" v-model="maxPrice">
       </view>
       <view class="priceInterval">是否包邮</view>
       <view class="isShipping">

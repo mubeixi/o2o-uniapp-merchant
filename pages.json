@@ -12,7 +12,7 @@
     {
       "path": "pages/demo",
       "style": {
-
+        "navigationStyle": "custom"
       }
     },
     {
@@ -166,6 +166,12 @@
       "root": "pagesA",
       "name": "onther",
       "pages": [
+        {
+          "path": "index/pre",
+          "style": {
+            "navigationBarTitleText": "预览"
+          }
+        },
         {
           "path": "store/productListByMall",
           "style": {
@@ -604,7 +610,22 @@
           "style": {
             "navigationBarTitleText": "积分兑换"
           }
-        },{
+        },
+        {
+          "path": "user/StoreVip",
+          "style": {
+            "navigationBarTitleText": "会员卡列表",
+            "navigationBarBackgroundColor": "#f8f8f8"
+          }
+        },
+        {
+          "path": "user/StoreBalanceCenter",
+          "style": {
+            "navigationBarTitleText": "资金流水",
+            "navigationBarBackgroundColor": "#f8f8f8"
+          }
+        },
+        {
           "path": "user/ExpiredCoupon",
           "style": {
             "navigationBarTitleText": "失效优惠券"

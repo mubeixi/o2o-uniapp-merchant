@@ -67,7 +67,7 @@
           <input class="input" placeholder="请输入物流名称" type="text" v-model="shipping">
         </view>
         <view class="inputs" style="margin-top: 30rpx;">
-          <input class="input" placeholder="请输入物流单号" type="number" v-model="shippingID">
+          <input class="input" placeholder="请输入物流单号" type="text" v-model="shippingID">
         </view>
         <view @click="refundSend" class="submits">
           确认发货

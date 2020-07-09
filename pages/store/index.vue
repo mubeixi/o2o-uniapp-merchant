@@ -4,7 +4,7 @@
 
     <store-theme-default @upStoreInfo="bindUpStoreInfo" :bid="bid" v-if="skin_id===0"></store-theme-default>
     <store-theme-one @upStoreInfo="bindUpStoreInfo" :bid="bid" v-if="skin_id===1"></store-theme-one>
-    <store-theme-two @upStoreInfo="bindUpStoreInfo" :bid="bid" v-if="skin_id===2"></store-theme-two>
+    <store-theme-two ref="childTwo" @upStoreInfo="bindUpStoreInfo" :bid="bid" v-if="skin_id===2"></store-theme-two>
     <store-theme-three ref="childThree" @upStoreInfo="bindUpStoreInfo" :bid="bid" v-if="skin_id===3"></store-theme-three>
 
     <!--101: 直播中, 102: 未开始, 103: 已结束, 104: 禁播, 105: 暂停中, 106: 异常，107：已过期-->
@@ -43,7 +43,7 @@ export default {
   data () {
     return {
       bid: '',
-      skin_id: '',
+      skin_id: -1,
       storeInfo: {}
     }
   },
@@ -96,6 +96,7 @@ export default {
     // 登陆后
     if (checkIsLogin(0, 0)) {
       if (this.skin_id === 3) this.$refs.childThree.refreshFn()
+      if (this.skin_id === 2) this.$refs.childTwo.refreshFn()
     }
   },
   mounted () {

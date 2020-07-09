@@ -34,10 +34,12 @@
           :confData="templateData[tagIndex][index]"
           :index="index"
           v-if="item.indexOf('space') !== -1"></diy-space>
+        
         <diy-title
           :confData="templateData[tagIndex][index]"
           :index="index"
           v-if="item.indexOf('title') !== -1"></diy-title>
+
         <diy-text
           :confData="templateData[tagIndex][index]"
           :index="index"
@@ -55,6 +57,7 @@
           :confData="templateData[tagIndex][index]"
           :index="index"
           v-if="item.indexOf('coupon') !== -1"></diy-coupon>
+
         <diy-goods
           :confData="templateData[tagIndex][index]"
           :index="index"
@@ -75,6 +78,7 @@
           :confData="templateData[tagIndex][index]"
           :index="index"
           v-if="item.indexOf('flash') !== -1"></diy-flash>
+
         <diy-kill
           :confData="templateData[tagIndex][index]"
           :index="index"
@@ -145,7 +149,7 @@
                 <div class="action">
                   <image :src="'/static/client/home/capsule.png'|domain" class="bgimg"></image>
                   <div class="fz-12 color-white price-box">
-                    <span style="color: #754827;">爆抢{{item.Products_Sales}}件</span>
+                    <span class="fz-11" style="color: #754827;">爆抢{{item.Products_Sales>9999?'1w+':item.Products_Sales}}件</span>
                     <div class="flex fz-10 flex-vertical-b">
                       <span>￥</span><span class="fz-12">{{item.Products_PriceX}}</span>
                       <span class="text-through p-l-4">￥{{item.Products_PriceY}}</span>
@@ -193,11 +197,19 @@ import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import WzwLiveTag from '@/componets/wzw-live-tag/wzw-live-tag'
 import LayoutAd from '@/componets/layout-ad/layout-ad'
 import LayoutLoading from '@/componets/layout-loading/layout-loading'
+import DiyTitle from '@/componets/diy-title/diy-title'
+import DiyText from '@/componets/diy-text/diy-text'
+import DiyGoods from '@/componets/diy-goods/diy-goods'
+import DiyKill from '@/componets/diy-kill/diy-kill'
 
 export default {
   name: 'scroll-page-hot',
   mixins: [componetMixin],
   components: {
+    DiyKill,
+    DiyGoods,
+    DiyText,
+    DiyTitle,
     LayoutLoading,
     LayoutAd,
     WzwLiveTag,

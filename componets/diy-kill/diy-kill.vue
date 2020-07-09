@@ -59,11 +59,11 @@
   </div>
 </template>
 <script>
-import { getFlashSaleList } from '../../common/fetch'
-import { goProductDetail, lazyImgUrl } from '../../common'
 
-import { createEmptyArray, getCountdownFunc } from '../../common/tool'
-import { getDomain } from '@/common/helper'
+import { getFlashsaleList as getFlashSaleList } from '@/api/product'
+import { lazyImgUrl } from '@/common'
+import { getCountdownFunc, createEmptyArray, getDomain } from '@/common/helper'
+
 import { linkTo } from '@/common/fun'
 
 export default {
@@ -262,7 +262,6 @@ export default {
 
       // return rt;
     },
-    goProductDetail,
     goDetail (goods) {
       // Products_ID=243
       const linkObj = {

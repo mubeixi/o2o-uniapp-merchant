@@ -720,13 +720,29 @@ export default {
       if (!this.submitFlag) return
 
       const cart = await this.$store.dispatch('cart/addNum', {
-        product: { ...this.product, ...this.attrInfo },
+        product: { ...this.product, ...this.attrInfo,checked: true },
         attr_text: this.attrInfo.attr_text,
-        checked: true,
         num: 1
       })
       if (cart !== false) {
         this.attrInfo.num++
+        this.refreshCount()
+        // 购物车商品价格兼容会员折扣机制
+        try {
+          const { redis_CartList } = cart
+          const { Products_ID: prod_id, attr_id } = this.attrInfo
+          const ProductsPriceX = redis_CartList[this.bid][prod_id][attr_id].ProductsPriceX
+          if (!isNaN(ProductsPriceX)) {
+            this.$store.dispatch('cart/updateRowPrice', {
+              biz_id: Number(this.bid),
+              prod_id,
+              attr_id,
+              price_selling: Number(ProductsPriceX)
+            })
+          }
+        } catch (e) {
+          console.log('购物车商品价格兼容会员折扣机制失败')
+        }
       }
     },
     selectAttr (index, i) {
@@ -1108,6 +1124,23 @@ export default {
         product: { ...productInfo }
       })
       if (cart !== false) {
+        // 购物车商品价格兼容会员折扣机制
+        try {
+          const { redis_CartList } = cart
+
+          const ProductsPriceX = redis_CartList[this.bid][goodsInfo.Products_ID][0].ProductsPriceX
+          if (!isNaN(ProductsPriceX)) {
+            const { prod_id, attr_id } = productInfo
+            this.$store.dispatch('cart/updateRowPrice', {
+              biz_id: Number(this.bid),
+              prod_id,
+              attr_id,
+              price_selling: Number(ProductsPriceX)
+            })
+          }
+        } catch (e) {
+          console.log('购物车商品价格兼容会员折扣机制失败')
+        }
         this.$set(goodsInfo, 'num', num)
         this.refreshCount()
       }

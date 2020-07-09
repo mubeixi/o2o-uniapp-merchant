@@ -91,25 +91,27 @@ export default {
   components: {
     WzwImTip,
     LayoutIcon,
-    LayoutAd,
+    LayoutAd
   },
   data () {
     return {
+      page: 1,
+      pageSize: 10,
+      totalCount: 0,
       activeHeadOpacity: 0,
       immersed: false,
       info: {},
       goodsList: [],
-      adData: ['https://newo2o.bafangka.com/uploadfiles/wkbq6nc2kc/image/202004191033295234.png', 'https://newo2o.bafangka.com/uploadfiles/wkbq6nc2kc/image/202004191039274962.png', 'https://newo2o.bafangka.com/uploadfiles/wkbq6nc2kc/image/202004191044146586.jpg'],
+      adData: ['https://newo2o.bafangka.com/uploadfiles/wkbq6nc2kc/image/202004191033295234.png', 'https://newo2o.bafangka.com/uploadfiles/wkbq6nc2kc/image/202004191039274962.png', 'https://newo2o.bafangka.com/uploadfiles/wkbq6nc2kc/image/202004191044146586.jpg']
     }
   },
   computed: {
     userInfo () {
       return this.$store.getters['user/getUserInfo']()
-    },
+    }
   },
   onShow () {
     if (!checkIsLogin(1, 1, 1)) return
-    this._init_func()
   },
   onPageScroll (e) {
     const { scrollTop } = e
@@ -119,25 +121,42 @@ export default {
     this.activeHeadOpacity = opacity > 1 ? 1 : opacity
   },
   methods: {
+    async init () {
+      const list = await getProductList({ share_commission: 1, page: this.page, pageSize: this.pageSize }).catch(e => {
+        uni.showModal({
+          title: '提示',
+          content: e.msg,
+          success: function (res) {
+            if (res.confirm) {
+              uni.navigateBack()
+            } else if (res.cancel) {
+              uni.navigateBack()
+            }
+          }
+        })
+        throw Error('获取分享赚概览信息错误')
+      })
+      this.totalCount = list.totalCount
+      const arrData = list.data.filter(row => row.share_commission > 0)
+      arrData.map(item => {
+        this.goodsList.push(item)
+      })
+    },
     async _init_func () {
       try {
         showLoading()
-        const list = await getProductList({ pageSize: 999 }, { onlyData: true }).catch(e => {
-          throw Error(e.msg || '获取商品列表错误')
-        })
-
-        this.goodsList = list.filter(row => row.share_commission > 0)
+        await this.init()
         if (this.userInfo.User_ID) {
           this.info = await getShareView({ user_id: this.userInfo.User_ID }).then(res => {
             return res.data
           }).catch(e => {
-            throw Error('获取分享赚概览信息错误')
+            error(e.message || '获取分享赚概览信息错误')
           })
         }
 
         hideLoading()
       } catch (e) {
-        error(e.message)
+
         // 回退一下
         // setTimeout(() => {
         //   this.$back()
@@ -145,11 +164,17 @@ export default {
       } finally {
         hideLoading()
       }
-    },
+    }
   },
-  created () {
-
+  onReachBottom () {
+    if (this.goodsList.length < this.totalCount) {
+      this.page++
+      this.init()
+    }
   },
+  onLoad () {
+    this._init_func()
+  }
 }
 </script>
 <style lang="scss" scoped>

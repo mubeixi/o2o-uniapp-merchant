@@ -79,6 +79,7 @@
 
     <wzw-pay
       :isOpen='false'
+      :is_use_money="initData.cash_from==1?true:false"
       :is_use_order_pay="false"
       :payFailCall="payFailCall"
       :paySuccessCall="paySuccessCall"
@@ -130,13 +131,13 @@ export default {
       const payCan = await userLevelPay(data, { tip: '加载中' }).catch(e => {
         error(e.msg || '创建订单失败')
       })
-      if (payCan.data) {
+      if (payCan.msg != '支付成功') {
         Pay(this, item.pay_type, payCan)
       } else {
         toast('支付成功')
         setTimeout(function () {
           that.$back()
-        }, 1000)
+        }, 1500)
       }
     },
     payFailCall (err) {
@@ -271,6 +272,11 @@ export default {
   },
   onShow () {
     this.init()
+  },
+  computed: {
+    initData () {
+      return this.$store.state.system.initData
+    }
   },
   onLoad (options) {
     this.biz_id = options.bid

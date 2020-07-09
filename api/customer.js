@@ -3,6 +3,11 @@ import Storage from '@/common/Storage'
 
 
 
+export const getBizUserList = (param, options) => fetch({
+  act: 'getBizUserList',
+  param,
+  options
+})
 export const jifenProdOrder = (param, options) => fetch({
   act: 'jifen_prod_order',
   param,

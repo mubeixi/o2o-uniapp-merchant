@@ -20,7 +20,7 @@
       </view>
       <view class="inputMoney">
         <view class="input-money-inner">
-          ¥ <input class="input-money-input" type="number" v-model="price">
+          ¥ <input class="input-money-input" type="digit" v-model="price">
         </view>
       </view>
       <view class="canTi">
