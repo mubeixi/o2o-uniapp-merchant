@@ -12,14 +12,14 @@ export const staticUrl = 'https://newo2o.bafangka.com'
 export const users_id = 'wkbq6nc2kc'
 
 // O2O正式版IM
-//appid : dkujHdxulyJkmxh
-//appsecret : b1935ddee886db0a9877876051b42846
+// appid : dkujHdxulyJkmxh
+// appsecret : b1935ddee886db0a9877876051b42846
 // O2O测试版IM
-//appid : uLwqowvvkHAUmq5
-//appsecret : 4MJB9wQDO3EpxSdIPzLn6kejsqnv5d6e
+// appid : uLwqowvvkHAUmq5
+// appsecret : 4MJB9wQDO3EpxSdIPzLn6kejsqnv5d6e
 
-//测试appid   wxfe5d2621576cf895  域名 https://newo2o.bafangka.com
-//正式appid   wx28e6e80223bd5f0f  域名 https://newo2o.netcnnet.net
+// 测试appid   wxfe5d2621576cf895  域名 https://newo2o.bafangka.com
+// 正式appid   wx28e6e80223bd5f0f  域名 https://newo2o.netcnnet.net
 
 // Im相关配置
 export const IM_WSS_URL = 'wss://newjdtravel.bafangka.com/cus/'

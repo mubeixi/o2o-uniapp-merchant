@@ -157,6 +157,11 @@ export default {
     $linkTo: linkToEasy,
     $toGoodsDetail: toGoodsDetail,
     $checkIsLogin: checkIsLogin,
+    $filterPrice: (price) => {
+      if (isNaN(price)) return 0
+      if (!price) return 0
+      return parseInt(Number(price) * 100) / 100
+    },
     $openPop (name) {
       this.$refs[name].show()
     },
