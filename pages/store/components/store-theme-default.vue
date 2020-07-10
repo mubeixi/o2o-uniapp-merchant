@@ -1,5 +1,5 @@
 <template>
-  <div >
+  <div>
     <layout-page-title title="商家详情" ></layout-page-title>
     <div class="store-comp-wrap" :style="{top:menuButtonInfo.bottom+'px'}">
       <scroll-view class="store-comp-scroll" scroll-y>
@@ -381,6 +381,80 @@
       </scroll-view>
     </div>
 
+    <layout-layer @maskClicked="bindCartsPopClose" :bottomStr="storeBottomActionHeight" positions="bottom" ref="carts">
+      <div class="carts-box">
+        <div class="carts-action flex flex-vertical-c flex-justify-between">
+          <div class="check-all flex flex-vertical-c" @click="selectBiz">
+            <layout-icon color="#E64239" size="20" type="iconicon-check" v-if="allCheck"></layout-icon>
+            <layout-icon color="#ccc" size="20" type="iconradio" v-else></layout-icon>
+            <span class="p-l-6 fz-14 c3">全选</span></div>
+          <div class="flex flex-vertical-c" @click="clearCart">
+            <layout-icon size="14" type="iconshanchu"></layout-icon>
+            <span class="c6 fz-12 p-l-3">清空购物车</span></div>
+        </div>
+        <scroll-view scroll-y :style="{height:systemInfo.windowHeight*0.6+'px'}" class="carts-list">
+          <div :key="idx" class="carts-item" v-for="(row,idx) in carts">
+            <div class="check-item flex flex-vertical-c" @click="selectItem(row)">
+              <layout-icon color="#E64239" size="20" type="iconicon-check" v-if="row.checked"></layout-icon>
+              <layout-icon color="#ccc" size="20" type="iconradio" v-else></layout-icon>
+            </div>
+            <div :style="{backgroundImage:'url('+row.pic+')'}" class="carts-item-cover"></div>
+            <div class="carts-item-info">
+              <div class="title">{{row.name}}</div>
+              <div class="attr-text">{{row.attr_text||''}}</div>
+              <div class="actions">
+                <div class="price-box fz-10 flex1">
+                  <span class="price-selling">￥</span><span class="price-selling fz-15">{{row.price_selling}}</span>
+                  <span class="p-l-7 price-market text-through">￥{{row.price_market}}</span>
+                </div>
+                <div class="action flex flex-vertical-c">
+                  <block v-if="row.num>0">
+                    <layout-icon @click.stop="attrNumMinus(row)" color="#B2B1B1" size="24"
+                                 type="iconicon-minus"></layout-icon>
+                    <input style="width: 54rpx;" v-model="row.num" @focus="getQty(row.num)"
+                           @blur="changeAttrNum($event,idx,row)" class="input-num text-center fz-13" />
+                  </block>
+                  <layout-icon @click.stop="attrNumPlus(row)" color="#E64239" size="24"
+                               type="iconicon-plus"></layout-icon>
+                </div>
+              </div>
+            </div>
+          </div>
+        </scroll-view>
+        <!--底部安全区域，然后高度是50+25-->
+        <!-- p-b-safe-area-->
+        <div class="h75"></div>
+      </div>
+    </layout-layer>
+    <!-- m-b-safe-area-->
+    <div class="mall-tabbar-wrap" v-if="isUserLogin" :animation="animationData">
+
+      <!--右侧内容区域-->
+      <div class="cart-box" :animation="animationData2">
+        <!--图标区域-->
+        <div class="icon-box" :class="{expand:cartExpand}" @click.stop="taggleCartListExpand">
+          <layout-icon class="cart-icon" color="#fff" size="24" type="iconicon-cart"></layout-icon>
+          <div class="tag" :class="{aircle:total_count<100}">{{total_count}}</div>
+        </div>
+        <div class="total-info flex flex-column flex-justify-c" @click.stop="taggleCartListExpand">
+          <div class="color-white flex flex-vertical-b"><span class="fz-11">￥</span><span class="fz-16 text-nowrap">{{total_price}}</span>
+          </div>
+          <div class="c9 fz-10 text-nowrap">已减{{$filterPrice(totalPriceByMarket-totalPrice)}}元</div>
+        </div>
+        <div class="go-btn text-nowrap" @click.stop="submit">去结算</div>
+        <div class="user-btn" @click.stop="$linkTo('/pages/user/index')">
+          <layout-icon display="inline" size="23" type="iconyonghu" color="#fff"></layout-icon>
+          <div class="fz-10 color-white text-center text-nowrap">个人中心</div>
+        </div>
+      </div>
+
+      <div class="close-btn" @click.stop="taggkeCartShow">
+        <layout-icon v-if="!cartExpand" size="23" type="iconicon_plus" color="#fff"></layout-icon>
+        <layout-icon v-if="cartExpand" size="23" type="iconxingzhuang" color="#fff"></layout-icon>
+      </div>
+
+    </div>
+
   </div>
 </template>
 
@@ -391,18 +465,53 @@ import LayoutComment from '@/componets/layout-comment/layout-comment'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import { componetMixin } from '@/mixins/BaseMixin'
 import { checkIsLogin, getArrColumn } from '@/common/helper'
-import { error, hideLoading, modal, showLoading, toast , checkIsExpire } from '@/common/fun'
-import { addFavourite, cancelFavourite, checkFavourite, commentReply, getUserCoupon } from '@/api/customer'
+import { error, hideLoading, modal, showLoading, toast, checkIsExpire, confirm } from '@/common/fun'
+import {
+  addFavourite,
+  cancelFavourite,
+  CartList as getCartList,
+  checkFavourite,
+  commentReply,
+  getUserCoupon
+} from '@/api/customer'
 import { Exception } from '@/common/Exception'
 import { getCommitList, getCouponList } from '@/api/common'
 import { getAlbumList, getBizInfo, getBizSpikeList, getStoreList } from '@/api/store'
 import { getBizProdCateList, getProductList } from '@/api/product'
 import LayoutPageTitle from '@/componets/layout-page-title/layout-page-title'
+import LayoutLayer from '@/componets/layout-layer/layout-layer'
+
+const attrInfoTmpl = {
+  num: 0,
+  attr_id: '', // 规格id
+  attr_text: '',
+  price: '', // 价格
+  count: 0// 库存
+}
+
+/**
+ * 检查店铺的状态
+ * 1.要么在营业时间内
+ * 2.要么不在营业时间内，但是开启了非营业时间可以下单
+ * 3.不在营业时间内，不允许下单
+ */
+const checkStoreStatus = (bizInfo) => {
+  const { business_status = 0, business_time_status = 0, out_business_time_order = 0 } = bizInfo
+  // 1.营业状态关闭，任何情况，任何物流都不能下单
+  if (!business_status) return false
+  // 2.营业状态打开，在营业时间，正常下单
+  if (business_status && business_time_status) return true
+  // 3.营业状态打开，不在营业时间，允许营业外下单，同城配送只能预约，不能立即送达，普通物流不受影响
+  if (business_status && !business_time_status && out_business_time_order) return true
+  // 4.营业状态打开，不在营业时间，不允许营业外下单，提交订单不会出现同城配送
+  if (business_status && !business_time_status && !out_business_time_order) return true
+}
 
 export default {
   name: 'store-theme-default',
   mixins: [componetMixin],
   components: {
+    LayoutLayer,
     LayoutPageTitle,
     LayoutModal,
     LayoutCopyright,
@@ -417,6 +526,19 @@ export default {
   },
   data () {
     return {
+      isUserLogin: false,
+      storeBottomActionHeight: '0px',
+      listExpand: false,
+      cartExpand: false,
+      cartExpandLoading: false,
+      total_count: 0,
+      total_price: 0,
+      qty: 0,
+      allCheck: false,
+      animation: {},
+      animationData: {},
+      animationData2: {},
+
       commentItem: {},
       commentValue: '',
       childSwiperHeight: 'auto',
@@ -502,6 +624,25 @@ export default {
       ]
     }
   },
+  computed: {
+    carts: {
+      get () {
+        return this.$store.getters['cart/getCartList'](this.bid)
+      },
+      set (val) {
+        this.$store.commit('cart/ASYNC_DATA', val)
+      }
+    },
+    totalNum () {
+      return this.$store.getters['cart/getTotalNum'](this.bid)
+    },
+    totalPrice () {
+      return this.$store.getters['cart/getTotalMoney'](this.bid)
+    },
+    totalPriceByMarket () {
+      return this.$store.getters['cart/getTotalMoneyByMarket'](this.bid)
+    }
+  },
   watch: {
     bid: {
       immediate: true,
@@ -511,6 +652,306 @@ export default {
     }
   },
   methods: {
+    async submit () {
+      const obj = {}
+      // 删除
+      for (const row of this.carts) {
+        const { biz_id, prod_id, attr_id } = row
+        if (row.checked) {
+          // 有需需要才创建
+          if (!obj.hasOwnProperty(biz_id)) obj[biz_id] = {}
+          if (!obj[biz_id].hasOwnProperty(prod_id)) obj[biz_id][prod_id] = []
+          obj[biz_id][prod_id].push(attr_id)
+        }
+      }
+      if (JSON.stringify(obj) === '{}') {
+        error('请至少选择一个商品')
+        return
+      }
+      const url = '/pages/order/OrderBooking?cart_key=CartList'
+      this.$store.state.cart_buy = obj
+      this.$linkTo(url)
+    },
+    refreshFn () {
+      this.refreshInfoByIsLogin()
+    },
+    // 不然点击无法正常
+    bindCartsPopClose () {
+      this.listExpand = false
+    },
+    taggleCartListExpand () {
+      if (this.listExpand) {
+        this.$closePop('carts')
+        this.listExpand = false
+        return
+      }
+      if (!this.listExpand) {
+        this.$openPop('carts')
+        this.listExpand = true
+      }
+    },
+    clearCart () {
+      confirm({
+        title: '操作确认',
+        content: '该操作会清空购物车中当前商家商品，操作不可逆，确认继续操作？'
+      }).then(() => {
+        this.$store.dispatch('cart/removeGoods', { biz_id: this.bid }).then(() => {
+          this.allCheck = this.$store.getters['cart/getListCheckStatus'](Number(this.bid))
+          this.refreshCount()
+        }).catch(() => {
+        })
+      }).catch(() => {
+      })
+    },
+    // 单个商家
+    async selectBiz () {
+      await this.$store.dispatch('cart/taggleCheckStatus', { biz_id: Number(this.bid) })
+
+      this.allCheck = this.$store.getters['cart/getListCheckStatus'](Number(this.bid))
+      this.refreshCount()
+    },
+    getQty (qty) {
+      this.qty = qty
+    },
+    // 单行
+    async selectItem (row) {
+      const { prod_id, attr_id } = row
+      await this.$store.dispatch('cart/taggleCheckStatus', {
+        attr_id: Number(attr_id),
+        prod_id: Number(prod_id)
+      })
+      this.allCheck = this.$store.getters['cart/getListCheckStatus'](Number(this.bid))
+      this.refreshCount()
+    },
+    async changeAttrNum (e, idx, row) {
+      const amount = parseInt(e.detail.value)
+      const qty = parseInt(this.qty)
+      if (isNaN(amount)) {
+        error('数量必须为数量')
+        return
+      }
+
+      if (amount === 0) {
+        await this.$store.dispatch('cart/removeGoods', {
+          prod_id: row.prod_id,
+          attr_id: row.attr_id
+        })
+
+        // 没有规格的商品，直接搞事,同步库存
+        if (row.attr_id === 0) {
+          // const idx = findArrayIdx(this.bizCateList[this.bizCateNavIndex].child[this.bizCateChildNavIndex].productList, { Products_ID: row.prod_id })
+          // if (idx !== false) {
+          //   this.$set(this.bizCateList[this.bizCateNavIndex].child[this.bizCateChildNavIndex].productList[idx], 'num', amount)
+          // }
+        }
+
+        this.refreshCount()
+
+        return
+      }
+      if (amount <= 1) {
+        this.$set(row, 'num', qty)
+        error('数量最少为1件')
+        return
+      }
+      if ((qty - amount) === 0) return
+      var num = amount - qty
+
+      // 拼接一下
+      const productInfo = {
+        ...attrInfoTmpl,
+        prod_id: row.prod_id,
+        attr_id: row.attr_id
+      }
+
+      const cart = await this.$store.dispatch('cart/addNum', {
+        num,
+        product: { ...productInfo }
+      })
+      if (cart !== false) {
+        // 没有规格的商品，直接搞事,同步库存
+        if (row.attr_id === 0) {
+          // const idx = findArrayIdx(this.bizCateList[this.bizCateNavIndex].child[this.bizCateChildNavIndex].productList, { Products_ID: row.prod_id })
+          // if (idx !== false) {
+          //   this.$set(this.bizCateList[this.bizCateNavIndex].child[this.bizCateChildNavIndex].productList[idx], 'num', amount)
+          // }
+        }
+        this.refreshCount()
+      } else {
+        this.$set(row, 'num', qty)
+      }
+    },
+    async attrNumMinus (row) {
+      const num = row.num ? row.num - 1 : 0
+
+      if (num === 0) {
+        await this.$store.dispatch('cart/removeGoods', {
+          prod_id: row.prod_id,
+          attr_id: row.attr_id
+        })
+
+        // 没有规格的商品，直接搞事,同步库存
+        if (row.attr_id === 0) {
+          // const idx = findArrayIdx(this.bizCateList[this.bizCateNavIndex].child[this.bizCateChildNavIndex].productList, { Products_ID: row.prod_id })
+          // if (idx !== false) {
+          //   this.$set(this.bizCateList[this.bizCateNavIndex].child[this.bizCateChildNavIndex].productList[idx], 'num', num)
+          // }
+        }
+
+        this.refreshCount()
+
+        return
+      }
+
+      // 拼接一下
+      const productInfo = {
+        ...attrInfoTmpl,
+        prod_id: row.prod_id,
+        attr_id: row.attr_id
+      }
+      const cart = await this.$store.dispatch('cart/addNum', {
+        num: -1,
+        product: { ...productInfo }
+      })
+      if (cart !== false) {
+        // 没有规格的商品，直接搞事,同步库存
+        if (row.attr_id === 0) {
+          // const idx = findArrayIdx(this.bizCateList[this.bizCateNavIndex].child[this.bizCateChildNavIndex].productList, { Products_ID: row.prod_id })
+          // if (idx !== false) {
+          //   this.$set(this.bizCateList[this.bizCateNavIndex].child[this.bizCateChildNavIndex].productList[idx], 'num', num)
+          // }
+        }
+
+        this.refreshCount()
+      }
+    },
+    async attrNumPlus (row) {
+      const num = row.num ? row.num + 1 : 1
+      // 拼接一下
+      const productInfo = {
+        ...attrInfoTmpl,
+        prod_id: row.prod_id,
+        attr_id: row.attr_id
+      }
+      const cart = await this.$store.dispatch('cart/addNum', {
+        num: 1,
+        product: { ...productInfo }
+      })
+      if (cart !== false) {
+        // 没有规格的商品，直接搞事,同步库存
+        if (row.attr_id === 0) {
+          // const idx = findArrayIdx(this.bizCateList[this.bizCateNavIndex].child[this.bizCateChildNavIndex].productList, { Products_ID: row.prod_id })
+          // if (idx !== false) {
+          //   this.$set(this.bizCateList[this.bizCateNavIndex].child[this.bizCateChildNavIndex].productList[idx], 'num', num)
+          // }
+        }
+
+        this.refreshCount()
+      }
+    },
+    refreshCount () {
+      this.total_count = this.$store.getters['cart/getTotalNum'](Number(this.bid))
+      this.total_price = this.$store.getters['cart/getTotalMoney'](Number(this.bid))
+    },
+    taggkeCartShow () {
+      console.log(this.cartExpandLoading)
+      // 不允许快速多次点击
+      if (this.cartExpandLoading === true) return
+      const duration = 600
+      this.cartExpandLoading = true
+      var animation = uni.createAnimation({
+        duration,
+        timingFunction: 'ease'
+      })
+
+      var animation2 = uni.createAnimation({
+        duration,
+        timingFunction: 'ease'
+      })
+      this.animation = animation
+
+      if (this.cartExpand) {
+        // 左右各是10px
+        const wrapWidth = 50
+
+        animation.width(wrapWidth).step()
+        this.animationData = animation.export()
+
+        animation2.opacity(0).step()
+        this.animationData2 = animation2.export()
+
+        this.cartExpand = false
+        setTimeout(() => {
+          this.cartExpandLoading = false
+        }, duration)
+        return
+      }
+
+      if (!this.cartExpand) {
+        // 左右各是10px
+        const wrapWidth = this.systemInfo.windowWidth - 20 * 2
+
+        animation.width(wrapWidth).step()
+        this.animationData = animation.export()
+
+        animation2.opacity(1).step()
+        this.animationData2 = animation2.export()
+
+        this.cartExpand = true
+        setTimeout(() => {
+          this.cartExpandLoading = false
+        }, duration)
+      }
+    },
+    /**
+     * 用来做登陆后的一些数据初始化，和其他数据分开，是为了如果登陆后可以刷新
+     */
+    async refreshInfoByIsLogin () {
+      const cart = await getCartList({ cart_key: 'CartList' }, {
+        onlyData: true
+      }).catch(e => {
+        throw Error(e.msg || '获取购物车产品失败')
+      })
+      const { total_count, total_price, CartList, biz_list } = cart
+      const bizList = {}
+      for (var i in biz_list) {
+        const key = parseInt(i)
+        bizList[key] = Object.assign(biz_list[i], { isSaleTime: checkStoreStatus(biz_list[i]) })
+      }
+      this.$store.commit('cart/SET_BIZLIST', bizList)
+      const attrList = []
+      for (const biz_id in CartList) {
+        for (const prod_id in CartList[biz_id]) {
+          for (const attr_id in CartList[biz_id][prod_id]) {
+            // 初始化为false，方便后面触发响应
+            CartList[biz_id][prod_id][attr_id].checked = this.$store.getters['cart/getRowCheckStatus']({
+              attr_id: Number(attr_id),
+              prod_id: Number(prod_id)
+            })
+
+            const attr_value = CartList[biz_id][prod_id][attr_id]
+
+            const { ImgPath, ProductsName, ProductsPriceX, ProductsPriceY, Qty, Productsattrstrval } = attr_value
+            attrList.push({
+              // ...attr_value,
+              biz_id: Number(biz_id),
+              prod_id: Number(prod_id),
+              attr_id: Number(attr_id),
+              attr_text: Productsattrstrval,
+              checked: attr_value.checked, // 能保留上次的结果
+              num: Number(Qty),
+              pic: ImgPath,
+              name: ProductsName,
+              price_selling: Number(ProductsPriceX),
+              price_market: Number(ProductsPriceY)
+            })
+          }
+        }
+      }
+      this.carts = attrList // computed set
+      this.allCheck = this.$store.getters['cart/getListCheckStatus'](Number(this.bid))
+      this.refreshCount()
+    },
     toRoom () {
       // const roomId = this.storeInfo.room_id // 填写具体的房间号，可通过下面【获取直播房间列表】 API 获取
       // const customParams = encodeURIComponent(JSON.stringify({
@@ -534,7 +975,6 @@ export default {
       }
     },
     toDelivery () {
-
       if (checkIsLogin(1, 1)) {
         this.$linkTo('/pages/delivery/desktop?bid=' + this.bid)
       }
@@ -707,7 +1147,7 @@ export default {
           throw Error(e.msg || '获取相册信息失败')
         })
 
-        this.activityList = await getBizSpikeList({ biz_id: this.bid,status:1 }, { onlyData: true }).catch((e) => {
+        this.activityList = await getBizSpikeList({ biz_id: this.bid, status: 1 }, { onlyData: true }).catch((e) => {
           throw Error('获取限时抢购数据失败')
         })
 
@@ -742,10 +1182,18 @@ export default {
           })
           query.exec()
         })
+
+        // 这个就不要等了吧
+        if (!checkIsLogin(0, 0)) {
+          throw Error('nocare')
+        }
+
+        this.refreshInfoByIsLogin()
+
         hideLoading()
       } catch (e) {
         hideLoading()
-        modal(e.message)
+        Exception(e)
       }
     },
     upSwiperHeight () {
@@ -761,17 +1209,184 @@ export default {
   created () {
 
   },
-  ready () {
+  onReady() {
     const query = uni.createSelectorQuery().in(this)
     query.select('#stickyTab').boundingClientRect()
     query.selectViewport().scrollOffset()
     query.exec((res) => {
       this.headTabTop = res[0].top
     })
+
+    this.isUserLogin = checkIsLogin(0, 0)
+    console.log('isUserLogin is ',this.isUserLogin)
   }
 }
 </script>
 <style lang="scss" scoped>
+
+  .mall-tabbar-wrap {
+    position: fixed;
+    z-index: 102;
+    bottom: 25px;
+    right: 20px;
+    height: 50px;
+    width: 50px;
+    border-radius: 50px;
+    background: #262626;
+    overflow: hidden;
+    display: flex;
+
+    .user-btn {
+      height: 50px;
+      width: 50px;
+      padding-left: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .close-btn {
+      height: 50px;
+      width: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .go-btn {
+      height: 50px;
+      width: 70px;
+      text-align: center;
+      line-height: 50px;
+      color: #fff;
+      background: #E64239;
+      font-size: 14px;
+    }
+
+    .cart-box {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+
+      .total-info {
+        flex: 1;
+      }
+
+    }
+
+    .icon-box {
+      position: relative;
+      width: 50px;
+      height: 50px;
+      background: #666666;
+
+      &.expand {
+        background: #262626;
+      }
+
+      .cart-icon {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      .tag {
+        top: 6px;
+        right: 4px;
+        position: absolute;
+        background-color: #FF0000;
+        border-radius: 5px;
+        font-size: 10px;
+        color: #FFFFff;
+        padding: 2px 4px;
+        text-align: center;
+
+        &.aircle {
+          border-radius: 50%;
+          padding: 0;
+          width: 14px;
+          height: 14px;
+          line-height: 14px;
+        }
+
+      }
+    }
+
+  }
+
+  .carts {
+    &-action {
+      height: 80rpx;
+      padding: 0 20rpx 0 36rpx;
+      border-bottom: 1px solid #EDEDED;
+
+    }
+
+    &-box {
+      width: 750rpx;
+      overflow-x: hidden;
+      overflow-y: scroll;
+    }
+
+    &-list {
+      padding: 20rpx 20rpx 60rpx 0;
+      width: 750rpx;
+      box-sizing: border-box;
+    }
+
+    &-item {
+      height: 160rpx;
+      display: flex;
+      align-items: center;
+
+      .check-item {
+        padding-left: 36rpx;
+        padding-right: 22rpx;
+      }
+
+      &-cover {
+        @include cover-img();
+        width: 100rpx;
+        height: 100rpx;
+        border-radius: 5rpx;
+        margin-right: 30rpx;
+      }
+
+      &-info {
+        width: 500rpx;
+        height: 160rpx;
+        box-sizing: border-box;
+
+        border-bottom: 1px solid #EDEDED;
+
+        .title {
+          font-size: 14px;
+          color: #333;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          width: 480rpx;
+        }
+
+        .attr-text {
+          font-size: 12px;
+          color: #999;
+          margin-top: 10rpx;
+        }
+
+        .actions {
+          margin: 20rpx 0 0;
+          height: 54rpx;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+      }
+    }
+  }
+
   .store-comp-wrap{
     position: absolute;
     width: 750rpx;
