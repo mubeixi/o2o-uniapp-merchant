@@ -634,13 +634,13 @@
 		{
 		  "path": "active/ActivationCode",
 		  "style": {
-		    "navigationBarTitleText": "专题页"
+            "navigationStyle": "custom"
 		  }
 		},
         {
           "path": "active/ActivationCodeSuccess",
           "style": {
-            "navigationBarTitleText": "支付成功"
+            "navigationStyle": "custom"
           }
         }
       ]
