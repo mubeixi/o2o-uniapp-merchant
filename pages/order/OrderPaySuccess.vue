@@ -209,7 +209,7 @@ export default {
         // for (const item of res.data) {
         //   this.couponList.push(item)
         // }
-        // this.couponList = res.data.prod_giving_coupon.concat(res.data.free_order_giving_coupon)
+        this.couponList = res.data.prod_giving_coupon.concat(res.data.free_order_giving_coupon)
         this.free_money = res.data.free_money
         this.showMain = true
       }).catch(e => {

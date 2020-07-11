@@ -367,19 +367,19 @@
           </swiper-item>
         </swiper>
 
-        <layout-modal ref="commentModal">
-          <div class="refuseApplyModal">
-        <textarea :value="commentValue" @input="bingReasonInput" auto-height class="reason"
-                  placeholder="请输入评价" placeholder-style="color:#999" />
-            <div class="control">
-              <div @click="cancelComent" class="action-btn btn-cancel">取消</div>
-              <div @click="sureComment" class="btn-sub action-btn">确定</div>
-            </div>
-
-          </div>
-        </layout-modal>
       </scroll-view>
     </div>
+
+    <layout-modal ref="commentModal">
+      <div class="refuseApplyModal">
+        <textarea :disabled="!commentModalShow" :value="commentValue" @input="bingReasonInput" auto-height class="reason" placeholder="请输入评价" placeholder-style="color:#999" />
+        <div class="control">
+          <div @click="cancelComent" class="action-btn btn-cancel">取消</div>
+          <div @click="sureComment" class="btn-sub action-btn">确定</div>
+        </div>
+
+      </div>
+    </layout-modal>
 
     <layout-layer @maskClicked="bindCartsPopClose" :bottomStr="storeBottomActionHeight" positions="bottom" ref="carts">
       <div class="carts-box">
@@ -538,6 +538,8 @@ export default {
       animation: {},
       animationData: {},
       animationData2: {},
+
+      commentModalShow: false,
 
       commentItem: {},
       commentValue: '',
@@ -852,6 +854,7 @@ export default {
     refreshCount () {
       this.total_count = this.$store.getters['cart/getTotalNum'](Number(this.bid))
       this.total_price = this.$store.getters['cart/getTotalMoney'](Number(this.bid))
+      this.allCheck = this.$store.getters['cart/getListCheckStatus'](Number(this.bid))
     },
     taggkeCartShow () {
       console.log(this.cartExpandLoading)
@@ -999,6 +1002,7 @@ export default {
       this.commentItem = {}
       this.commentValue = ''
       this.$closePop('commentModal')
+      this.commentModalShow = false
     },
     async sureComment () {
       if (!this.commentValue) {
@@ -1025,11 +1029,13 @@ export default {
           error(e.msg || '获取评论数据失败')
         })
         this.$closePop('commentModal')
+        this.commentModalShow = false
       }).catch(e => {
         error(e.msg || '评论失败')
         this.commentItem = {}
         this.commentValue = ''
         this.$closePop('commentModal')
+        this.commentModalShow = false
       })
     },
     getCoupon (coupon, idx) {
@@ -1046,6 +1052,7 @@ export default {
       if (!checkIsLogin(1, 1)) return
       this.commentItem = Object.assign({}, item)
       this.$refs.commentModal.show()
+      this.commentModalShow = true
       this.commentItem.groupid = ''
     },
     clickCommentSend (item, goupId, userId) {
@@ -1054,6 +1061,7 @@ export default {
       this.commentItem.groupid = goupId
       this.commentItem.User_ID = userId
       this.$refs.commentModal.show()
+      this.commentModalShow = true
     },
     priviewFn (imgs, current) {
       const urls = getArrColumn(imgs.photo, 'photo_img')
@@ -1209,7 +1217,7 @@ export default {
   created () {
 
   },
-  onReady() {
+  onReady () {
     const query = uni.createSelectorQuery().in(this)
     query.select('#stickyTab').boundingClientRect()
     query.selectViewport().scrollOffset()
@@ -1218,7 +1226,7 @@ export default {
     })
 
     this.isUserLogin = checkIsLogin(0, 0)
-    console.log('isUserLogin is ',this.isUserLogin)
+    console.log('isUserLogin is ', this.isUserLogin)
   }
 }
 </script>

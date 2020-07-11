@@ -781,7 +781,7 @@
           <button class="action-item share-btn" open-type="share">
             <layout-icon :plain="false" color="#fff" size="18" type="iconshare" wrap-padding="6px"></layout-icon>
           </button>
-          <layout-icon :plain="false" @click="$linkTo('/pages/order/ShoppingCart')" class="m-l-10 m-r-10" color="#fff" size="18" type="iconcart"
+          <layout-icon v-if="cash_from!==2" :plain="false" @click="$linkTo('/pages/order/ShoppingCart')" class="m-l-10 m-r-10" color="#fff" size="18" type="iconcart"
                        wrap-padding="6px"></layout-icon>
         </div>
       </div>
@@ -795,7 +795,7 @@
         <div class="flex flex-vertical-c">
           <layout-icon :plain="false" @click="bindLeftBtnClick" class="m-l-10" color="#606060" size="18" type="iconback1"
                        wrap-bg="none" wrap-padding="6px"></layout-icon>
-          <div @click="$linkTo('/pages/search/index')" class="head-search flex flex-vertical-c">
+          <div @click="toSearch" class="head-search flex flex-vertical-c">
             <layout-icon color="#606060" type="iconicon-search"></layout-icon>
             <span class="fz-12 c9 p-l-6">搜索商品</span>
           </div>
@@ -805,7 +805,7 @@
             <layout-icon :plain="false" color="#606060" size="18" type="iconshare" wrap-bg="none"
                          wrap-padding="6px"></layout-icon>
           </button>
-          <layout-icon :plain="false" @click="$linkTo('/pages/order/ShoppingCart')" class="m-l-10 m-r-10" color="#606060" size="18" type="iconcart"
+          <layout-icon v-if="cash_from!==2" :plain="false" @click="$linkTo('/pages/order/ShoppingCart')" class="m-l-10 m-r-10" color="#606060" size="18" type="iconcart"
                        wrap-bg="none" wrap-padding="6px"></layout-icon>
         </div>
       </div>
@@ -1243,6 +1243,7 @@ export default {
   },
   data () {
     return {
+      cash_from: 1,
       liveStatus: 0,
       userLevelList: [], // 是否有会员
       commentDrawerOpen: false,
@@ -1323,6 +1324,14 @@ export default {
     }
   },
   methods: {
+    toSearch () {
+      if (this.cash_from === 1) {
+        this.$linkTo('/pages/search/index')
+      } else {
+        // 如果cash_from===2
+        this.$linkTo('/pages/search/result?biz_id=' + this.productInfo.biz_id)
+      }
+    },
     toRoom () {
       // let path = '/pages/product/detail?prod_id=' + this.prod_id
       //
@@ -1633,6 +1642,7 @@ export default {
      * 3.不在营业时间内，不允许下单
      */
     checkStoreStatus () {
+      if (JSON.stringify(this.bizInfo) === '{}') return false
       const { business_status = 0, business_time_status = 0, out_business_time_order = 0 } = this.bizInfo
       // 1.营业状态关闭，任何情况，任何物流都不能下单
       if (!business_status) return false
@@ -1645,7 +1655,6 @@ export default {
 
       // 4.营业状态打开，不在营业时间，不允许营业外下单，提交订单不会出现同城配送
       if (business_status && !business_time_status && !out_business_time_order) return true
-
     },
     allPay () {
       if (!checkIsLogin(1, 1)) return
@@ -1914,8 +1923,6 @@ export default {
       try {
         showLoading()
 
-        
-
         if (options.gift) {
           this.gift = options.gift
           this.postData.active_id = options.gift
@@ -1942,16 +1949,14 @@ export default {
           throw Error(e.msg || '获取商品详情失败')
         })
         Object.assign(this.productInfo, productInfo)
-  
+
         // 要放在后面
         this.store = await getBizInfo({ biz_id: this.productInfo.biz_id }, { onlyData: true }).catch(e => {
           throw Error(e.msg || '获取店铺信息失败')
         })
-  
-  
+
         this.bizInfo = this.store[0]
         checkIsExpire(this.bizInfo.biz_expires)
-        
 
         if (this.productInfo.is_pintuan) {
           this.titleTag = '拼团'
@@ -2147,6 +2152,12 @@ export default {
   },
   mounted () {
 
+  },
+  onShow () {
+    this.$store.dispatch('system/loadInitData').then((initData) => {
+      const { cash_from = 1 } = initData
+      this.cash_from = Number(cash_from)
+    }).catch(() => {})
   },
   onLoad (options) {
     const { mode, spike_good_id, flashsale_id, prod_id } = options

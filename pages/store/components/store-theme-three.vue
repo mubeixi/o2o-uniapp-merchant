@@ -278,7 +278,7 @@
       </div>
     </scroll-view>
 
-    <layout-layer :bottomStr="storeBottomActionHeight" positions="bottom" ref="carts">
+    <layout-layer @click="bindCartsPopClose" :bottomStr="storeBottomActionHeight" positions="bottom" ref="carts">
       <div class="carts-box">
         <div class="carts-action flex flex-vertical-c flex-justify-between">
           <div class="check-all flex flex-vertical-c" @click="selectBiz">
@@ -322,18 +322,22 @@
     </layout-layer>
 
     <div id="store-bottom-action" class="store-bottom-action">
-      <div class="cart-box" @click="$openPop('carts')">
+      <div class="cart-box" @click="taggleCartListExpand">
         <div class="cart-icon-box">
           <layout-icon type="iconicon-cart" size="22" color="#fff"></layout-icon>
           <div class="total-num" :class="{aircle:total_count<100}">{{total_count}}</div>
         </div>
       </div>
-      <div class="total-info flex flex-column flex-justify-c">
+      <div class="total-info flex flex-column flex-justify-c" @click="taggleCartListExpand">
         <div class="color-white flex flex-vertical-b"><span class="fz-11">￥</span><span
           class="fz-16">{{total_price}}</span></div>
         <div class="c9 fz-10">已减{{$filterPrice(totalPriceByMarket-totalPrice)}}元</div>
       </div>
       <div class="go-btn" @click="submit">去结算</div>
+      <div class="user-btn" @click.stop="$linkTo('/pages/user/index')">
+        <layout-icon display="inline" size="23" type="iconyonghu" color="#fff"></layout-icon>
+        <div class="fz-10 color-white text-center text-nowrap">个人中心</div>
+      </div>
     </div>
 
     <layout-layer positions="center" ref="attr">
@@ -481,6 +485,7 @@ export default {
   },
   data () {
     return {
+      listExpand:false,
       scrollTopNum: 0,
       toViewIdx: '',
       pixelRatio: 1,
@@ -593,6 +598,21 @@ export default {
     }
   },
   methods: {
+    taggleCartListExpand () {
+      if (this.listExpand) {
+        this.$closePop('carts')
+        this.listExpand = false
+        return
+      }
+      if (!this.listExpand) {
+        this.$openPop('carts')
+        this.listExpand = true
+      }
+    },
+    // 不然点击无法正常
+    bindCartsPopClose () {
+      this.listExpand = false
+    },
     async addNum () {
       if (this.attrInfo.num >= this.attrInfo.count) {
         toast('购买数量不能大于库存量', 'none')
@@ -990,6 +1010,7 @@ export default {
     refreshCount () {
       this.total_count = this.$store.getters['cart/getTotalNum'](Number(this.bid))
       this.total_price = this.$store.getters['cart/getTotalMoney'](Number(this.bid))
+      this.allCheck = this.$store.getters['cart/getListCheckStatus'](Number(this.bid))
     },
     async attrNumMinus (row) {
       const num = row.num ? row.num - 1 : 0
@@ -2082,7 +2103,16 @@ export default {
       flex: 1;
       padding-left: 58rpx;
     }
-
+  
+    .user-btn {
+      height: 50px;
+      width: 50px;
+      padding-left: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
     .go-btn {
       height: 96rpx;
       width: 180rpx;

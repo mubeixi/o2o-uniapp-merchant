@@ -538,6 +538,7 @@ export default {
     refreshCount () {
       this.total_count = this.$store.getters['cart/getTotalNum'](Number(this.bid))
       this.total_price = this.$store.getters['cart/getTotalMoney'](Number(this.bid))
+      this.allCheck = this.$store.getters['cart/getListCheckStatus'](Number(this.bid))
       
       // this.refreshShowListNum()
     },
@@ -1416,7 +1417,7 @@ export default {
       height: 100%;
       overflow-x: hidden;
       overflow-y: scroll;
-      padding: 0rpx 20rpx 140rpx 20rpx;
+      padding: 0rpx 20rpx 40rpx 20rpx;
       box-sizing: border-box;
       position: relative;
 
@@ -1452,7 +1453,8 @@ export default {
           }
 
           .title-money {
-            width: 124rpx;
+            /*width: 124rpx;*/
+            padding: 0 18rpx;
             height: 44rpx;
             font-size: 22rpx;
             color: #E64239;
