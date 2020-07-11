@@ -98,7 +98,7 @@ class XHR {
     let postData = createToken(_param)
     // 保持签名通过，同时支持传空字符串
     // Object.assign(postData, param)
-    return emptyObject(postData)
+    return postData //emptyObject(postData)
   }
 }
 

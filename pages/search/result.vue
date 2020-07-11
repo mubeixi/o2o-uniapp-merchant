@@ -1,7 +1,7 @@
 <template>
   <div @click="commonClick" class="bd">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
-    
+
     <div class="top">
       <icon class="search_icon" size="34rpx" type="search" />
       <input @click="goSearch" class="searchs" disabled type="text" v-model="inputValue" />
@@ -21,7 +21,7 @@
         <view class="xiangshang">
           <image :src="'/static/client/result/tops.png'|domain" class="image" v-if="isSheng==1"></image>
           <image :src="'/static/client/result/top.png'|domain" class="image" v-else></image>
-          
+
           <image :src="'/static/client/result/bottoms.png'|domain" class="image" style="bottom: 0rpx;"
                  v-if="isSheng==2"></image>
           <image :src="'/static/client/result/bottom.png'|domain" class="image" style="bottom: 0rpx;" v-else></image>
@@ -29,7 +29,7 @@
         <div class="line">
         </div>
       </div>
-      
+
       <div :class="[active === 3 ? 'checked' : '','tab']" class="filterbox">
         <div :style="{color:showShai?'#F43131':''}" @click.stop="change" class="filter">筛选</div>
         <template v-show="!showShai">
@@ -37,11 +37,11 @@
                  v-if="cate==2"></image>
           <image :src="'/static/client/result/jx.png'|domain" @click="changeCate" class="imgm sorttype" v-else></image>
         </template>
-        
+
         <div class="line"></div>
       </div>
       <!--position: absolute;top: 25rpx;right: 28rpx;position: absolute;top: 0rpx;right: 0rpx;-->
-    
+
     </div>
     <div @click.stop catchtouchmove="false" class="shaixuan" v-if="showShai">
       <view class="priceInterval">价格区间(元)</view>
@@ -60,12 +60,12 @@
         <view @click="sureSearch" class="view sure">确定</view>
       </view>
       <view @click="closeShow" catchtouchmove="false" class="zhao">
-      
+
       </view>
     </div>
-    
+
     <view style="width: 100%;height: 210rpx;background: white;">
-    
+
     </view>
     <div v-if="cate==1">
       <div class="cate1">
@@ -102,7 +102,7 @@
         </div>
       </div>
     </div>
-    
+
     <layout-modal :autoClose="false" ref="commentModal">
       <div class="refuseApplyDialog">
         <div class="c3 fz-14 modal-title">
@@ -128,6 +128,7 @@ import { getLocation } from '@/common/tool/location'
 import { LayoutModal } from '@/componets/layout-modal/layout-modal'
 import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 import WzwLiveTag from '@/componets/wzw-live-tag/wzw-live-tag'
+import { error } from '@/common/fun'
 
 export default {
   mixins: [BaseMixin],
@@ -135,10 +136,11 @@ export default {
   components: {
     WzwLiveTag,
     WzwImTip,
-    LayoutModal,
+    LayoutModal
   },
   data () {
     return {
+      cash_from: 1,
       active: 0,
       cate: 2,
       inputValue: '',
@@ -158,11 +160,11 @@ export default {
       oneHourSend: 0,
       lat: '',
       lng: '',
-      biz_ids: '',
+      biz_ids: ''
     }
   },
   onLoad (option) {
-    const { refer = '', oneHourSend = 0} = option
+    const { refer = '', oneHourSend = 0 } = option
     this.refer = refer
     // 是否是一小时达
     this.oneHourSend = Number(oneHourSend)
@@ -189,6 +191,11 @@ export default {
     this.pro = []
     this.page = 1
     this.init()
+
+    this.$store.dispatch('system/loadInitData').then((initData) => {
+      const { cash_from = 1 } = initData
+      this.cash_from = Number(cash_from)
+    }).catch(() => {})
   },
   onReachBottom () {
     if (this.pro.length < this.count) {
@@ -211,7 +218,7 @@ export default {
           } else {
             this.$back()
           }
-        },
+        }
       })
       // #endif
     },
@@ -221,7 +228,7 @@ export default {
         getLocation(that).then(res => {
           if (res.code === 0) {
             const localInfo = res.data
-            
+
             this.lat = localInfo.latitude
             this.lng = localInfo.longitude
           }
@@ -239,7 +246,7 @@ export default {
         this.$back()
         return
       }
-     this.$linkTo('/pages/search/index')
+      this.$linkTo('/pages/search/index')
     },
     shipping (i) {
       if (i) {
@@ -258,7 +265,7 @@ export default {
         uni.showToast({
           title: '价格为数字',
           icon: 'none',
-          duration: 2000,
+          duration: 2000
         })
         return
       }
@@ -266,7 +273,7 @@ export default {
         uni.showToast({
           title: '最低价不能大于最高价',
           icon: 'none',
-          duration: 2000,
+          duration: 2000
         })
       }
       this.pro = []
@@ -318,7 +325,7 @@ export default {
         this.searchAll.push(this.inputValue) // 将输入框的值添加到搜索记录数组中存储
         uni.setStorage({
           key: 'searchAll',
-          data: than.searchAll,
+          data: than.searchAll
         })
       }
     },
@@ -326,23 +333,23 @@ export default {
       let data
       if (this.inputValue) {
         data = {
-          
+
           Products_Name: this.inputValue,
           page: this.page,
-          pageSize: this.pageSize,
+          pageSize: this.pageSize
         }
       } else if (this.Cate_ID) {
         data = {
-          
+
           Cate_ID: this.Cate_ID,
           page: this.page,
-          pageSize: this.pageSize,
+          pageSize: this.pageSize
         }
       } else {
         data = {
-          
+
           page: this.page,
-          pageSize: this.pageSize,
+          pageSize: this.pageSize
         }
       }
       if (item === 'sales') {
@@ -380,6 +387,12 @@ export default {
       if (this.biz_ids) {
         data.biz_ids = this.biz_ids
       }
+
+      // 模式为2，而且没有商户配置，就不要继续走了
+      if (this.biz_ids === 2 && !this.biz_ids) {
+        error('缺少商家id')
+        return
+      }
       getProductList(data).then(res => {
         for (var item of res.data) {
           this.pro.push(item)
@@ -407,8 +420,8 @@ export default {
         return
       }
       this.showShai = true
-    },
-  },
+    }
+  }
 }
 </script>
 <style lang="scss" scoped>
@@ -418,7 +431,7 @@ export default {
     overflow: hidden;
     background: white;
   }
-  
+
   .top {
     position: relative;
     display: flex;
@@ -430,18 +443,18 @@ export default {
     top: 0rpx;
     background-color: #FFFFFF;
     z-index: 99;
-    
+
     .search_icon {
       position: absolute;
       top: 46rpx;
       left: 61rpx;
     }
-    
+
     .back {
       width: 23rpx;
       height: 37rpx;
     }
-    
+
     .search {
       width: 645rpx;
       height: 65rpx;
@@ -453,7 +466,7 @@ export default {
       margin-left: 41rpx;
       box-sizing: border-box;
     }
-    
+
     .searchs {
       width: 710rpx;
       height: 65rpx;
@@ -464,7 +477,7 @@ export default {
       color: #333;
       box-sizing: border-box;
     }
-    
+
     .clear {
       position: absolute;
       top: 43rpx;
@@ -473,13 +486,13 @@ export default {
       height: 37rpx;
       z-index: 9999;
     }
-    
+
     .clears {
       width: 37rpx;
       height: 37rpx;
     }
   }
-  
+
   .tabs {
     display: flex;
     font-size: 30rpx;
@@ -498,15 +511,15 @@ export default {
     width: 100%;
     box-sizing: border-box;
   }
-  
+
   .tab.checked {
     color: #F43131;
   }
-  
+
   .tab.checked .line {
     background: #F43131;
   }
-  
+
   .tab {
     flex: 1;
     //width: 180rpx;
@@ -516,67 +529,67 @@ export default {
     text-align: center;
     margin-bottom: 20rpx;
     position: relative;
-    
+
     .line {
       position: absolute;
       left: 50%;
       transform: translateX(-50%);
     }
-    
+
     &.pricebox {
       display: flex;
       align-items: center;
       justify-content: center;
     }
-    
+
     &.filterbox {
       display: flex;
       align-items: center;
       justify-content: center;
-      
+
       .filter {
         display: block;
         line-height: 60rpx;
         //padding-right: 6px;
         margin-right: 20px;
       }
-      
+
     }
-    
+
   }
-  
+
   .tab .sorttype {
-    
+
     height: 34rpx;
     width: 40rpx;
     //margin-left: 10rpx;
     //vertical-align: middle;
   }
-  
+
   .tab .line {
     width: 100rpx;
     height: 4rpx;
     bottom: -20rpx;
     //margin: 20rpx auto 0 ;
   }
-  
+
   .cate1 {
     .pro {
       display: flex;
       padding: 0 20rpx;
       margin-bottom: 20rpx;
-      
+
       .pro-img {
         margin-right: 20rpx;
         width: 270rpx;
         height: 270rpx;
       }
-      
+
       .pro_desc {
         flex: 1;
         padding-top: 29rpx;
         text-align: left;
-        
+
         .title {
           overflow: hidden;
           text-overflow: ellipsis;
@@ -587,28 +600,28 @@ export default {
           line-height: 30rpx;
           height: 60rpx;
         }
-        
+
         .price {
           margin-top: 21rpx;
         }
-        
+
         .price .text {
           font-size: 24rpx;
           font-style: normal;
         }
-        
+
         .n_price {
           color: #F43131;
           font-size: 36rpx;
           margin-right: 10rpx;
         }
-        
+
         .o_price {
           color: #afafaf;
           font-size: 28rpx;
           text-decoration: line-through;
         }
-        
+
         .sold {
           color: #666;
           font-size: 19rpx;
@@ -617,27 +630,27 @@ export default {
       }
     }
   }
-  
+
   .cate2 {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0 20rpx;
     flex-wrap: wrap;
-    
+
     .pro {
       width: 345rpx;
-      
+
       .pro-img {
         width: 100%;
         height: 345rpx;
       }
-      
+
       .pro_desc {
         padding: 17rpx 15rpx 34rpx 11rpx;
         color: #333;
         font-size: 24rpx;
-        
+
         .title {
           overflow: hidden;
           text-overflow: ellipsis;
@@ -648,28 +661,28 @@ export default {
           line-height: 30rpx;
           height: 60rpx;
         }
-        
+
         .price {
           margin-top: 21rpx;
         }
-        
+
         .price .text {
           font-size: 20rpx;
           font-style: normal;
         }
-        
+
         .n_price {
           color: #F43131;
           font-size: 36rpx;
           margin-right: 10rpx;
         }
-        
+
         .o_price {
           color: #afafaf;
           font-size: 28rpx;
           text-decoration: line-through;
         }
-        
+
         .sold {
           color: #666;
           font-size: 20rpx;
@@ -677,14 +690,14 @@ export default {
         }
       }
     }
-    
+
   }
-  
+
   .imgm {
     width: 36rpx;
     height: 34rpx;
   }
-  
+
   .shaixuan {
     box-sizing: border-box;
     position: absolute;
@@ -694,12 +707,12 @@ export default {
     z-index: 999;
     padding-top: 20rpx;
     left: 0rpx;
-    
+
     view {
       padding-left: 20rpx;
       padding-right: 20rpx;
     }
-    
+
     .priceInterval {
       font-size: 26rpx;
       color: #999999;
@@ -707,11 +720,11 @@ export default {
       height: 27rpx;
       line-height: 27rpx;
     }
-    
+
     .inputPrice {
       display: flex;
       margin-bottom: 50rpx;
-      
+
       .view {
         width: 29rpx;
         height: 55rpx;
@@ -723,7 +736,7 @@ export default {
         color: rgba(153, 153, 153, 1);
         margin: 0 20rpx;
       }
-      
+
       input {
         width: 192rpx;
         height: 55rpx;
@@ -732,11 +745,11 @@ export default {
         text-align: center;
       }
     }
-    
+
     .isShipping {
       display: flex;
       margin-bottom: 100rpx;
-      
+
       .span {
         width: 110rpx;
         height: 55rpx;
@@ -749,19 +762,19 @@ export default {
         color: #FFFFFF;
         margin-right: 27rpx;
       }
-      
+
       .checked {
         background-color: #F43131 !important;
       }
     }
-    
+
     .submit {
       display: flex;
       width: 100%;
       height: 80rpx;
       padding-left: 0rpx;
       padding-right: 0rpx;
-      
+
       .view {
         width: 50%;
         height: 80rpx;
@@ -770,17 +783,17 @@ export default {
         color: #FFFFFF;
         font-size: 30rpx;
       }
-      
+
       .reset {
         background-color: #B9B9B9;
       }
-      
+
       .sure {
         background-color: #F43131;
       }
     }
   }
-  
+
   .zhao {
     height: 800rpx;
     width: 100%;
@@ -793,34 +806,34 @@ export default {
     background-color: #000;
     opacity: 0.6;
   }
-  
+
   .defaults {
     margin: 0 auto;
     width: 640rpx;
     height: 480rpx;
     margin-top: 100rpx;
   }
-  
+
   .xiangshang {
     width: 7px;
     height: 12px;
-    
+
     .image {
       width: 7px;
       height: 4px;
       display: block;
-      
+
       &:last-child {
         margin-top: 2px;
       }
     }
   }
-  
+
   .control {
     display: flex;
     width: 100%;
     align-items: center;
-    
+
     .action-btn {
       flex: 1;
       text-align: center;
@@ -830,29 +843,29 @@ export default {
       background-color: #FFFFFF;
       border: 0px;
     }
-    
+
     button::after {
       width: 0;
       height: 0;
     }
   }
-  
+
   .refuseApplyDialog {
     width: 560rpx;
     box-sizing: border-box;
     padding-left: 40rpx;
     padding-right: 40rpx;
-    
+
     .modal-title {
       height: 80rpx;
       line-height: 80rpx;
       text-align: center;
       font-weight: bold;
     }
-    
+
     .btn-sub {
       color: #1aac19;
     }
-    
+
   }
 </style>

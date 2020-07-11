@@ -788,6 +788,7 @@ export default {
     refreshCount () {
       this.total_count = this.$store.getters['cart/getTotalNum'](Number(this.bid))
       this.total_price = this.$store.getters['cart/getTotalMoney'](Number(this.bid))
+      this.allCheck = this.$store.getters['cart/getListCheckStatus'](Number(this.bid))
     },
     taggkeCartShow () {
       console.log(this.cartExpandLoading)
