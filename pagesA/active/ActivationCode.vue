@@ -1,8 +1,8 @@
 <template>
   <div @click="commonClick" class="page-wrap">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
-    <div class="active-fixed flex flex-vertical-c">
-      <img class="img-logo m-r-5"  :src="$getDomain('/static/client/active/activeLogo.png')"  />
+    <div class="active-fixed flex flex-vertical-c" :style="{paddingTop:menuButtonInfo.top+'px'}">
+      <img class="img-logo m-r-5" :src="$getDomain('/static/client/active/activeLogo.png')"/>
       <div class="active-fixed-title m-r-12">
         及贝
       </div>
@@ -10,7 +10,8 @@
         专业的自营配送系统
       </div>
     </div>
-    <div class="active-first"   :style="{backgroundImage: 'url('+$getDomain('/static/client/active/activeBgTop.jpg')+')'}" >
+    <div class="active-first"
+         :style="{backgroundImage: 'url('+$getDomain('/static/client/active/activeBgTop.jpg')+')'}">
       <div class="active-first-title">
         专注商家自营配送,为配送而生
       </div>
@@ -26,41 +27,43 @@
         <div class="divCube m-r-5"></div>
         <span>搭建自营数字化配送平台，增加销售渠道</span>
       </div>
-      <img class="first-active"  :src="$getDomain('/static/client/active/firstActive.png')" >
+      <img class="first-active" :src="$getDomain('/static/client/active/firstActive.png')">
 
     </div>
-    <div class="active-second" :style="{backgroundImage: 'url('+$getDomain('/static/client/active/secondActive.png')+')'}" >
+    <div class="active-second"
+         :style="{backgroundImage: 'url('+$getDomain('/static/client/active/secondActive.png')+')'}">
       商家为什么要做自营配送平台？
     </div>
-    <img class="secondActiveContent"  :src="$getDomain('/static/client/active/secondActiveContent.png')" >
+    <img class="secondActiveContent" :src="$getDomain('/static/client/active/secondActiveContent.png')">
 
-    <div class="active-three"  :style="{backgroundImage: 'url('+$getDomain('/static/client/active/threeActive.png')+')'}"  >
+    <div class="active-three"
+         :style="{backgroundImage: 'url('+$getDomain('/static/client/active/threeActive.png')+')'}">
       及贝业务模型
     </div>
     <div class="active-text m-b-12">
       1. 快递收单（例某通）
     </div>
     <div class="active-three-img">
-      <img class="full-img"   :src="$getDomain('/static/client/active/activeThree1.png')" >
+      <img class="full-img" :src="$getDomain('/static/client/active/activeThree1.png')">
     </div>
     <div class="active-text m-b-12">
       2. 同城配送（例跑腿）
     </div>
     <div class="active-three-img">
-      <img class="full-img"  :src="$getDomain('/static/client/active/activeThree2.png')">
+      <img class="full-img" :src="$getDomain('/static/client/active/activeThree2.png')">
     </div>
     <div class="active-text m-b-12">
       3. 自主配送
     </div>
     <div class="active-three-img" style="height: 310rpx !important;margin-bottom: 0px">
-      <img class="full-img"  :src="$getDomain('/static/client/active/activeThree3.png')">
+      <img class="full-img" :src="$getDomain('/static/client/active/activeThree3.png')">
     </div>
 
-    <div class="active-four" :style="{backgroundImage: 'url('+$getDomain('/static/client/active/activeFour.png')+')'}"  >
+    <div class="active-four" :style="{backgroundImage: 'url('+$getDomain('/static/client/active/activeFour.png')+')'}">
       部分功能展示
     </div>
     <div class="active-four-img" style="width: 712rpx">
-      <img class="full-img"  :src="$getDomain('/static/client/active/activeFour1.png')" >
+      <img class="full-img" :src="$getDomain('/static/client/active/activeFour1.png')">
     </div>
     <div class="active-four-img" style="height: 441rpx;margin-bottom: 94rpx">
       <img class="full-img" :src="$getDomain('/static/client/active/activeFour2.png')">
@@ -72,10 +75,11 @@
       <img class="full-img" :src="$getDomain('/static/client/active/activeFour4.png')">
     </div>
 
-    <div class="active-five" :style="{backgroundImage: 'url('+$getDomain('/static/client/active/activeFive.png')+')'}"   >
+    <div class="active-five" :style="{backgroundImage: 'url('+$getDomain('/static/client/active/activeFive.png')+')'}">
       营销工具,助力业务增长
     </div>
-    <div class="active-five-div"  :style="{backgroundImage: 'url('+$getDomain('/static/client/active/activeFive1.png')+')'}"   >
+    <div class="active-five-div"
+         :style="{backgroundImage: 'url('+$getDomain('/static/client/active/activeFive1.png')+')'}">
       <div class="active-five-zhibo active-five-text" style="top: 64rpx;">
             <span class="c-F7D81B fz-13">
               直播
@@ -134,40 +138,44 @@
       </div>
     </div>
 
-    <div class="active-six"  :style="{backgroundImage: 'url('+$getDomain('/static/client/active/avtiveSix.png')+')'}"   >
+    <div class="active-six" :style="{backgroundImage: 'url('+$getDomain('/static/client/active/avtiveSix.png')+')'}">
       19.8元得到什么
     </div>
 
-    <div class="active-six-div"   :style="{backgroundImage: 'url('+$getDomain('/static/client/active/avtiveSixImg.png')+')'}"  >
+    <div class="active-six-div"
+         :style="{backgroundImage: 'url('+$getDomain('/static/client/active/avtiveSixImg.png')+')'}">
 
-        <div class="active-six-text" style="top:52rpx">
-          无需小程序认证，省掉300元
-        </div>
-        <div class="active-six-text" style="top:126rpx">
-          自主配送/同城配送/快递收单系统
-        </div>
-        <div class="active-six-text" style="top:198rpx">
-          直播导购场景搭建，快速流量变现
-        </div>
-        <div class="active-six-text" style="top:270rpx">
-          主流营销插件，吸粉，裂变，转化
-        </div>
-        <div class="active-six-text" style="top:342rpx">
-          不满意，七天无理由退款
-        </div>
+      <div class="active-six-text" style="top:52rpx">
+        无需小程序认证，省掉300元
+      </div>
+      <div class="active-six-text" style="top:126rpx">
+        自主配送/同城配送/快递收单系统
+      </div>
+      <div class="active-six-text" style="top:198rpx">
+        直播导购场景搭建，快速流量变现
+      </div>
+      <div class="active-six-text" style="top:270rpx">
+        主流营销插件，吸粉，裂变，转化
+      </div>
+      <div class="active-six-text" style="top:342rpx">
+        不满意，七天无理由退款
+      </div>
 
     </div>
 
-    <div class="active-seven"  :style="{backgroundImage: 'url('+$getDomain('/static/client/active/activeSeven.png')+')'}"  >
+    <div class="active-seven"
+         :style="{backgroundImage: 'url('+$getDomain('/static/client/active/activeSeven.png')+')'}">
       万家商家选择,好评无数
     </div>
 
     <div class="active-seven-div">
-      <img   :src="$getDomain('/static/client/active/activeSevenImg.png')" class="full-img">
+      <img :src="$getDomain('/static/client/active/activeSevenImg.png')" class="full-img">
     </div>
 
-    <div class="know-ji-bei"  :style="{backgroundImage: 'url('+$getDomain('/static/client/active/activeBgBottom.jpg')+')'}"  >
-      <div class="active-last"  :style="{backgroundImage: 'url('+$getDomain('/static/client/active/activeLast.png')+')'}" >
+    <div class="know-ji-bei"
+         :style="{backgroundImage: 'url('+$getDomain('/static/client/active/activeBgBottom.jpg')+')'}">
+      <div class="active-last"
+           :style="{backgroundImage: 'url('+$getDomain('/static/client/active/activeLast.png')+')'}">
         了解及贝
       </div>
       <div class="last-text">
@@ -183,21 +191,21 @@
             <span>
               首月特惠<span class="c-FF0101 m-l-2 m-r-2">¥</span>
             </span>
-            <span class="c-FF0101 fz-18">
+          <span class="c-FF0101 fz-18">
               19.8
             </span>
-            <span class="m-l-12">
+          <span class="m-l-12">
               续费<span class="c-FF0101  m-l-2 m-r-2">¥</span>
             </span>
-            <span class="c-FF0101 fz-18">
+          <span class="c-FF0101 fz-18">
               56.6
             </span>
-            <span>
+          <span>
               /月
             </span>
         </div>
         <div class="last-btn" @click="buyActiveCodeFn">
-            立即激活
+          立即激活
         </div>
       </div>
     </div>
@@ -212,6 +220,8 @@ import { buyActiveCode } from '@/api/order'
 import Pay from '@/common/Pay'
 import { error, toast } from '@/common/fun'
 import Promisify from '@/common/Promisify'
+import { isWeiXin } from '@/common/helper'
+
 export default {
   mixins: [BaseMixin],
   components: {
@@ -219,7 +229,8 @@ export default {
   },
   data () {
     return {
-      order_id: ''
+      order_id: '',
+      code: ''
     }
   },
   methods: {
@@ -240,28 +251,43 @@ export default {
 
       error(msg || '支付失败')
     },
-    async buyActiveCodeFn () {
+    async buyActiveCodeFn (codeFn) {
       try {
-        const pay_type = 'wx_h5'
+        const _self = this
+        let pay_type = 'wx_lp'
+        // #ifdef H5
+        if (!isWeiXin()) {
+          pay_type = 'wx_h5'
+        }
+        await buyActiveCode({ }, { tip: '加载中' }).then(res => {
+          this.order_id = res.data.order_id
+          Pay(_self, pay_type, res)
+        }).catch(e => {
+          error(e.msg || '获取code错误')
+        })
+        // #endif
         // #ifdef MP-WEIXIN
-			// 获取code
-			const _self = this
-			const wxLoginRt = await Promisify('login').catch(() => {
-			  throw Error('微信login错误')
-			})
-			const { code } = wxLoginRt
-			await buyActiveCode({ code }, { tip: '加载中' }).then(res => {
-			  this.order_id = res.data.order_id
-			  Pay(_self, pay_type, res)
-			}).catch(e => {
-			  error(e.msg || '获取code错误')
-			})
+        // 获取code
+
+        const wxLoginRt = await Promisify('login').catch(() => {
+          throw Error('微信login错误')
+        })
+        const { code } = wxLoginRt
+        await buyActiveCode({ code }, { tip: '加载中' }).then(res => {
+          this.order_id = res.data.order_id
+          Pay(_self, pay_type, res)
+        }).catch(e => {
+          error(e.msg || '获取code错误')
+        })
         // #endif
       } catch (e) {
         console.log(e)
         error(e.message)
       }
     }
+  },
+  created () {
+
   }
 
 }
@@ -279,21 +305,19 @@ export default {
   .c-F7D81B {
     color: #f7d81b !important;
   }
-  .c-FF0101{
+
+  .c-FF0101 {
     color: #FF0101 !important;
   }
 
   .active-fixed {
     height: 70rpx;
-    width: 750rpx;
+    width: 724rpx;
     padding-left: 26rpx;
-    box-sizing: border-box;
+   // box-sizing: border-box;
     background-color: #FFFFff;
     position: fixed;
     top: 0px;
-	/* #ifdef H5 */
-	top: 44px;
-	/* #endif */
     left: 0px;
     z-index: 10;
 
@@ -410,7 +434,8 @@ export default {
     padding-left: 84rpx;
     box-sizing: border-box;
   }
-  .active-six{
+
+  .active-six {
     width: 490rpx;
     height: 66rpx;
     background-size: 100% 100%;
@@ -422,7 +447,8 @@ export default {
     padding-left: 110rpx;
     box-sizing: border-box;
   }
-  .active-seven{
+
+  .active-seven {
     width: 590rpx;
     height: 66rpx;
     background-size: 100% 100%;
@@ -434,7 +460,8 @@ export default {
     padding-left: 82rpx;
     box-sizing: border-box;
   }
-  .active-last{
+
+  .active-last {
     width: 350rpx;
     height: 66rpx;
     background-size: 100% 100%;
@@ -446,6 +473,7 @@ export default {
     padding-left: 102rpx;
     box-sizing: border-box;
   }
+
   .secondActiveContent {
     display: block;
     width: 700rpx;
@@ -501,46 +529,49 @@ export default {
     left: 126rpx;
   }
 
-  .active-six-div{
+  .active-six-div {
     width: 710rpx;
     height: 422rpx;
     background-size: 100% 100%;
     position: relative;
-    margin:0 auto 94rpx;
+    margin: 0 auto 94rpx;
   }
-  .active-six-text{
+
+  .active-six-text {
     width: 420rpx;
     height: 28rpx;
     font-size: 28rpx;
     line-height: 28rpx;
-    color:#333333;
+    color: #333333;
     position: absolute;
     left: 166rpx;
   }
 
-  .active-seven-div{
+  .active-seven-div {
     width: 700rpx;
     height: 920rpx;
     margin: 0 auto;
   }
-  .know-ji-bei{
+
+  .know-ji-bei {
     width: 750rpx;
     height: 680rpx;
     background-size: 100% 100%;
     background-repeat: no-repeat;
   }
-  .last-text{
+
+  .last-text {
     width: 650rpx;
     margin: 0 auto 74rpx;
     font-size: 26rpx;
-    line-height:48rpx;
+    line-height: 48rpx;
     color: #FFFFff;
   }
 
-  .active-last-fixed{
+  .active-last-fixed {
     z-index: 9;
     width: 750rpx;
-    height:106rpx;
+    height: 106rpx;
     position: fixed;
     display: flex;
     align-items: center;
@@ -552,27 +583,28 @@ export default {
     bottom: env(safe-area-inset-bottom);
     /* #endif */
   }
-  .active-bottom-fixed{
-    width:700rpx;
-    height:106rpx;
-    background:rgba(255,255,255,1);
-    box-shadow:0px 0px 24rpx 0px rgba(0, 0, 0, 0.5);
-    border-radius:50rpx;
+
+  .active-bottom-fixed {
+    width: 700rpx;
+    height: 106rpx;
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0px 0px 24rpx 0px rgba(0, 0, 0, 0.5);
+    border-radius: 50rpx;
     box-sizing: border-box;
     padding-left: 28rpx;
     padding-right: 36rpx;
 
   }
-  .last-btn{
-    width:150rpx;
-    height:58rpx;
+
+  .last-btn {
+    width: 150rpx;
+    height: 58rpx;
     line-height: 58rpx;
     text-align: center;
     font-size: 26rpx;
     color: #FFFFff;
-    background:rgba(83,36,185,1);
-    border-radius:6rpx;
+    background: rgba(83, 36, 185, 1);
+    border-radius: 6rpx;
   }
-
 
 </style>

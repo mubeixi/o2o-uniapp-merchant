@@ -173,6 +173,12 @@ export default {
         this.initCode = res.data
       }).catch(e => {
         error(e.msg || '获取二维码错误')
+        const _self = this
+        setTimeout(function () {
+          uni.redirectTo({
+            url: '/pagesA/active/ActivationCode'
+          })
+        }, 1500)
       })
     }
   },
