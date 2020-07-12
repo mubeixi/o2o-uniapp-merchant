@@ -1,6 +1,7 @@
 <template>
   <div class="page-wrap">
-    <layout-page-title extStyle="position:fixed;top:0;width:750rpx;left:0;z-index:5;background:#fff;color:#333;" :letfFn="true" :pageTitle="'店铺详情'" @clickLeft="bindBackFn"></layout-page-title>
+    <layout-page-title extStyle="position:fixed;top:0;width:750rpx;left:0;z-index:5;background:#fff;color:#333;"
+                       :letfFn="true" :pageTitle="'店铺详情'" @clickLeft="bindBackFn"></layout-page-title>
     <div class="store-info-space bg-white" :style="{height: menuButtonInfo.bottom+'px'}"></div>
     <div class="store-info-toolbar">
       <div class="actions">
@@ -10,7 +11,7 @@
         <!--        <div class="action-item-space"></div>-->
         <div @click.stop="taggleFavorite" class="action-item">
           <layout-icon :color="isFavourite?'#26C78D':'#333333'" size="22" type="iconicon-favorite"></layout-icon>
-<!--          <layout-icon weight="bold" color="#333" size="22" type="iconicon-phone"></layout-icon>-->
+          <!--          <layout-icon weight="bold" color="#333" size="22" type="iconicon-phone"></layout-icon>-->
         </div>
       </div>
       <div class="toolbar-search" @click="toSearch">
@@ -21,8 +22,8 @@
       </div>
       <image @click="toVip" class="toolbar-vip" :src="$getDomain('/static/client/store/theme_two/vip.png')"></image>
     </div>
-    <scroll-view :style="{top:headTabTop+'px'}" class="store-comp-wrap"  @scrolltolower="bindScrolltolower" scroll-y>
-<!--      <layout-page-title></layout-page-title>-->
+    <scroll-view :style="{top:headTabTop+'px'}" class="store-comp-wrap" @scrolltolower="bindScrolltolower" scroll-y>
+      <!--      <layout-page-title></layout-page-title>-->
 
       <div class="store-info flex flex-vertical-c" v-if="storeInfo.biz_logo">
         <div @click="toPicture" :style="{backgroundImage:'url('+storeInfo.biz_logo+')'}" class="base-logo">
@@ -31,40 +32,47 @@
         <div class="info-box flex1">
           <div class="store-name fz-15 m-b-8">{{storeInfo.biz_shop_name}}</div>
           <div class="store-activity-list m-b-8" v-if="flashActivityList.length>0">
-            <div class="store-activity-item fz-10" v-for="(item,idx) in flashActivityList" :key="idx" @click="toActivity(item.id)">{{item.name}}</div>
+            <div class="store-activity-item fz-10" v-for="(item,idx) in flashActivityList" :key="idx"
+                 @click="toActivity(item.id)">{{item.name}}
+            </div>
           </div>
           <!--<div class="like fz-11">{{storeInfo.follow}}人关注</div>-->
         </div>
         <div class="activity-go">
-<!--          <span class="c7 fz-14">活动详情</span>-->
-<!--          <layout-icon class="fz-10 c4" display="inline" type="iconicon-arrow-right"></layout-icon>-->
+          <!--          <span class="c7 fz-14">活动详情</span>-->
+          <!--          <layout-icon class="fz-10 c4" display="inline" type="iconicon-arrow-right"></layout-icon>-->
         </div>
       </div>
 
       <div class="section-item coupon-list" :class="couponClassName">
         <div v-for="(coupon,idx) in couponList" :key="idx" @click="getCoupon(coupon,idx)" class="coupon-item">
-          <div style="height: 70rpx;" class="coupon-item-bg flex" >
-            <image mode="heightFix" style="height: 70rpx;" :src="$getDomain('/static/client/store/theme_two/conpon-l.png')"></image>
-            <div style="height: 70rpx;" class="flex1 coupon-item-bg-c" :style="{backgroundImage:'url('+$getDomain('/static/client/store/theme_two/coupon-c.png')+')'}">
+          <div style="height: 70rpx;" class="coupon-item-bg flex">
+            <image mode="heightFix" style="height: 70rpx;"
+                   :src="$getDomain('/static/client/store/theme_two/conpon-l.png')"></image>
+            <div style="height: 70rpx;" class="flex1 coupon-item-bg-c"
+                 :style="{backgroundImage:'url('+$getDomain('/static/client/store/theme_two/coupon-c.png')+')'}">
               <div class="sign">{{coupon.Coupon_UseType?'￥':'折'}}</div>
               <div class="num">{{coupon.Coupon_UseType?coupon.Coupon_Cash:coupon.Coupon_Discount}}</div>
             </div>
-            <image mode="heightFix" style="height: 70rpx;" :src="$getDomain('/static/client/store/theme_two/coupon-r.png')"></image>
+            <image mode="heightFix" style="height: 70rpx;"
+                   :src="$getDomain('/static/client/store/theme_two/coupon-r.png')"></image>
           </div>
         </div>
       </div>
       <!--便捷操作-->
       <div class="section-item feature-list">
         <div class="feature-item" @click="toOffinePay">
-          <image :src="$getDomain('/static/client/store/theme_two/pay.png')" class="feature-item-img" mode="scaleToFill"></image>
+          <image :src="$getDomain('/static/client/store/theme_two/pay.png')" class="feature-item-img"
+                 mode="scaleToFill"></image>
         </div>
         <div class="feature-item" @click="toAllProduct">
-          <image :src="$getDomain('/static/client/store/theme_two/prod.png')" class="feature-item-img" mode="scaleToFill"></image>
+          <image :src="$getDomain('/static/client/store/theme_two/prod.png')" class="feature-item-img"
+                 mode="scaleToFill"></image>
         </div>
 
       </div>
       <!--秒杀-->
-      <div class="section-item kill-box bg-white"  v-if="killList.length>0">
+      <div class="section-item kill-box bg-white" v-if="killList.length>0">
         <div class="title p-t-20 p-l-10 p-r-10 flex flex-vertical-c flex-justify-between">
           <div class="fz-20 c3 fz-b">全民秒杀日</div>
           <div class="more flex flex-vertical-c" @click.stop="$linkTo('/pagesA/active/SeckillByBiz?biz_id='+bid)">
@@ -107,15 +115,18 @@
         </div>
       </div>
       <!--限时抢购-->
-      <div class="section-item flash-box"  v-if="activity.spike_goods.length>0||flashActivityList.length>0">
+      <div class="section-item flash-box" v-if="activity.spike_goods.length>0||flashActivityList.length>0">
         <div class="title p-15" style="background: #F6F6F6;text-align: center;">
-          <image style="width: 294rpx;height: 34rpx;" :src="$getDomain('/static/client/store/theme_two/spkie-title-bg.png')"></image>
+          <image style="width: 294rpx;height: 34rpx;"
+                 :src="$getDomain('/static/client/store/theme_two/spkie-title-bg.png')"></image>
         </div>
         <div class="flash-act-list">
           <div class="flash-act-item" v-for="(activity,idx1) in flashActivityList" :key="idx1">
-            <div class="flash-act-title flex flex-vertical-c flex-justify-between" :style="{backgroundImage:'url('+$getDomain('/static/client/store/theme_two/spkie-item-top-bg.png')+')'}">
+            <div class="flash-act-title flex flex-vertical-c flex-justify-between"
+                 :style="{backgroundImage:'url('+$getDomain('/static/client/store/theme_two/spkie-item-top-bg.png')+')'}">
               <div class="title-text">{{activity.name}}</div>
-              <div class="more flex flex-vertical-c" @click.stop="$linkTo('/pagesA/active/FlashSaleByBiz?biz_id='+bid+'&spike_id='+activity.id)">
+              <div class="more flex flex-vertical-c"
+                   @click.stop="$linkTo('/pagesA/active/FlashSaleByBiz?biz_id='+bid+'&spike_id='+activity.id)">
                 <span class="fz-12">查看更多</span>
                 <layout-icon display="inline" type="iconicon-arrow-right" size="14" color="#fff"></layout-icon>
               </div>
@@ -136,7 +147,8 @@
             </div>
 
             <div class="act-goods-list">
-              <div class="act-goods-item" v-for="(pro,idx) in activity.spike_goods" :key="idx" @click="toGoodsDetailFn(pro,activity)">
+              <div class="act-goods-item" v-for="(pro,idx) in activity.spike_goods" :key="idx"
+                   @click="toGoodsDetailFn(pro,activity)">
                 <div :style="{backgroundImage:'url('+pro.ImgPath+')'}" class="item-cover"></div>
                 <div class="act-goods-item-title fz-12 c3 m-t-14 m-b-8">
                   <wzw-live-tag :room_id="pro.room_id" :product-info="pro" />
@@ -158,17 +170,20 @@
       </div>
 
       <div class="h15" style="background: #f8f8f8"></div>
-      <div class="section-item cate-box" >
+      <div class="section-item cate-box">
         <div id="section-sale" class="section-anchor" :style="{top:anchorTop+'px'}"></div>
         <div class="title p-t-20 p-b-0" style="text-align: center;">
-          <image style="width: 258rpx;height: 34rpx;" :src="$getDomain('/static/client/store/theme_two/sale-top-bg.png')"></image>
+          <image style="width: 258rpx;height: 34rpx;"
+                 :src="$getDomain('/static/client/store/theme_two/sale-top-bg.png')"></image>
         </div>
         <div class="cate-goods-list">
           <div class="fun-goods-col" style="padding: 0 9rpx 0 0rpx">
             <block v-for="(pro,idx) in bizCateList[bizCateNavIndex].productList" :key="idx">
-              <div class="fun-goods-item" v-if="idx%2===0"  @click="$toGoodsDetail(pro)">
-                <div class="product-cover" :style="{backgroundImage:'url('+$getDomain(pro.ImgPath)+')'}" ></div>
-                <div class="p-t-8 fz-13 c3" style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis">{{pro.Products_Name}}</div>
+              <div class="fun-goods-item" v-if="idx%2===0" @click="$toGoodsDetail(pro)">
+                <div class="product-cover" :style="{backgroundImage:'url('+$getDomain(pro.ImgPath)+')'}"></div>
+                <div class="p-t-8 fz-13 c3" style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis">
+                  {{pro.Products_Name}}
+                </div>
                 <div class="price-discount flex flex-vertical-c" style="padding: 20rpx 0 20rpx 20rpx">
                   <div class="price-box" style="color: #FE2C4D">
                     <span class="sign" style="font-size: 20rpx;">￥</span><span class="num" style="font-size: 30rpx;">{{pro.Products_PriceX}}</span>
@@ -179,16 +194,19 @@
                 </div>
                 <div slot="ext" class="goods-action">
                   <div class="goods-action-reduce">已减{{$filterPrice(pro.Products_PriceY-pro.Products_PriceX)}}元</div>
-                  <image :src="$getDomain('/static/client/store/theme_two/go-btn-icon.png')" class="goods-action-go"></image>
+                  <image :src="$getDomain('/static/client/store/theme_two/go-btn-icon.png')"
+                         class="goods-action-go"></image>
                 </div>
               </div>
             </block>
           </div>
           <div class="fun-goods-col" style="padding: 0 0rpx 0 9rpx">
             <block v-for="(pro,idx) in bizCateList[bizCateNavIndex].productList" :key="idx">
-              <div class="fun-goods-item" v-if="idx%2===1"  @click="$toGoodsDetail(pro)">
-                <div class="product-cover" :style="{backgroundImage:'url('+$getDomain(pro.ImgPath)+')'}" ></div>
-                <div class="p-t-8 fz-13 c3" style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis">{{pro.Products_Name}}</div>
+              <div class="fun-goods-item" v-if="idx%2===1" @click="$toGoodsDetail(pro)">
+                <div class="product-cover" :style="{backgroundImage:'url('+$getDomain(pro.ImgPath)+')'}"></div>
+                <div class="p-t-8 fz-13 c3" style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis">
+                  {{pro.Products_Name}}
+                </div>
                 <div class="price-discount flex flex-vertical-c" style="padding: 20rpx 0 20rpx 20rpx">
                   <div class="price-box" style="color: #FE2C4D">
                     <span class="sign" style="font-size: 20rpx;">￥</span><span class="num" style="font-size: 30rpx;">{{pro.Products_PriceX}}</span>
@@ -199,88 +217,89 @@
                 </div>
                 <div slot="ext" class="goods-action">
                   <div class="goods-action-reduce">已减{{$filterPrice(pro.Products_PriceY-pro.Products_PriceX)}}元</div>
-                  <image :src="$getDomain('/static/client/store/theme_two/go-btn-icon.png')" class="goods-action-go"></image>
+                  <image :src="$getDomain('/static/client/store/theme_two/go-btn-icon.png')"
+                         class="goods-action-go"></image>
                 </div>
               </div>
             </block>
           </div>
         </div>
         <layout-loading v-if="bizCateList[bizCateNavIndex].load"></layout-loading>
-<!--        <div @click="getCateGoodsList" class="get-more flex flex-justify-c flex-vertical-c" v-if="!bizCateList[bizCateNavIndex].finish">-->
-<!--          <span class="c9 fz-13 m-r-4">查看更多</span>-->
-<!--          <layout-icon type="iconright1" color="#999" size="12"></layout-icon>-->
-<!--        </div>-->
+        <!--        <div @click="getCateGoodsList" class="get-more flex flex-justify-c flex-vertical-c" v-if="!bizCateList[bizCateNavIndex].finish">-->
+        <!--          <span class="c9 fz-13 m-r-4">查看更多</span>-->
+        <!--          <layout-icon type="iconright1" color="#999" size="12"></layout-icon>-->
+        <!--        </div>-->
         <div class="h10"></div>
       </div>
       <div class="h15" style="background: #f8f8f8"></div>
-<!--      <div class="section-item store-box">-->
-<!--        <div id="section-store" class="section-anchor" :style="{top:anchorTop+'px'}"></div>-->
-<!--        <div class="title p-15" style="text-align: center;">-->
-<!--          <image style="width: 254rpx;height: 63rpx;" :src="$getDomain('/static/client/store/theme_one/store-list.png')"></image>-->
-<!--        </div>-->
-<!--        <div class="store-list">-->
+      <!--      <div class="section-item store-box">-->
+      <!--        <div id="section-store" class="section-anchor" :style="{top:anchorTop+'px'}"></div>-->
+      <!--        <div class="title p-15" style="text-align: center;">-->
+      <!--          <image style="width: 254rpx;height: 63rpx;" :src="$getDomain('/static/client/store/theme_one/store-list.png')"></image>-->
+      <!--        </div>-->
+      <!--        <div class="store-list">-->
 
-<!--          <div class="store-list-item flex flex-vertical-c" v-for="(st,ind) of storeList" :key="ind" >-->
-<!--            <div class="flex1">-->
-<!--              <div @click.stop="goStore(st.biz_id)" class="c3 fz-14 m-b-8">{{st.store_name}}</div>-->
-<!--              <div class="flex flex-vertical-c" @click="$openLocation(st.store_lat,st.store_lon,st.store_name)">-->
-<!--                <layout-icon @click="$openLocation(st.store_lat,st.store_lon,st.store_name)" color="#999" size="15" type="iconicon-address"></layout-icon>-->
-<!--                <span class="c9 fz-11 m-l-4">{{st.area_address}}</span>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--            <layout-icon @click.stop="$cellPhone(st.store_mobile)" color="#26C78D" size="22" type="iconicon-phone"></layout-icon>-->
-<!--          </div>-->
+      <!--          <div class="store-list-item flex flex-vertical-c" v-for="(st,ind) of storeList" :key="ind" >-->
+      <!--            <div class="flex1">-->
+      <!--              <div @click.stop="goStore(st.biz_id)" class="c3 fz-14 m-b-8">{{st.store_name}}</div>-->
+      <!--              <div class="flex flex-vertical-c" @click="$openLocation(st.store_lat,st.store_lon,st.store_name)">-->
+      <!--                <layout-icon @click="$openLocation(st.store_lat,st.store_lon,st.store_name)" color="#999" size="15" type="iconicon-address"></layout-icon>-->
+      <!--                <span class="c9 fz-11 m-l-4">{{st.area_address}}</span>-->
+      <!--              </div>-->
+      <!--            </div>-->
+      <!--            <layout-icon @click.stop="$cellPhone(st.store_mobile)" color="#26C78D" size="22" type="iconicon-phone"></layout-icon>-->
+      <!--          </div>-->
 
-<!--        </div>-->
-<!--      </div>-->
-<!--      <div class="h15" style="background: #f8f8f8"></div>-->
+      <!--        </div>-->
+      <!--      </div>-->
+      <!--      <div class="h15" style="background: #f8f8f8"></div>-->
       <!--评论列表-->
-<!--      <div class="section-item comment-box">-->
-<!--        <div id="section-comment" class="section-anchor" :style="{top:anchorTop+'px'}"></div>-->
-<!--        <div class="block-title">-->
-<!--          留言评论-->
-<!--        </div>-->
-<!--        <div class="comment-list">-->
-<!--          <div class="comment-item" :key="idx" v-for="(item,idx) in comments">-->
-<!--            <layout-comment :comment="item" :isLast="comments.length-1===idx" @comment="clickComment"></layout-comment>-->
-<!--            <div class="comment-send" v-if="item.child.length>0">-->
-<!--              <block :key="ind" v-for="(com,ind) of item.child">-->
-<!--                <block :key="indx" v-for="(co,indx) of com">-->
-<!--                  <block v-if="co.touserid==item.User_ID">-->
-<!--                    <div @click.stop="clickCommentSend(item,co.groupid,co.userid,co)" class="fz-12 c3 comment-send-item">-->
-<!--                      <span class="color-comment p-r-5">{{co.user_nickname}}:</span> {{co.content}}-->
-<!--                    </div>-->
-<!--                  </block>-->
-<!--                  <block v-else>-->
-<!--                    <div  class="fz-12 c3 comment-send-item p-l-10">-->
-<!--                      <span @click.stop="clickCommentSend(item,co.groupid,co.userid,co)" class="color-comment p-r-2">{{co.user_nickname}}</span>-->
-<!--                      <span class="p-l-3 p-r-3">回复</span>-->
-<!--                      &lt;!&ndash;同一行记录里面，点击不同的人名，可以分别回复两个人&ndash;&gt;-->
-<!--                      <span @click.stop="clickCommentSend(item,co.groupid,co.touserid,co,true)" class="color-comment p-r-5">{{co.to_user_nickname}}</span>{{co.content}}-->
-<!--                    </div>-->
-<!--                  </block>-->
+      <!--      <div class="section-item comment-box">-->
+      <!--        <div id="section-comment" class="section-anchor" :style="{top:anchorTop+'px'}"></div>-->
+      <!--        <div class="block-title">-->
+      <!--          留言评论-->
+      <!--        </div>-->
+      <!--        <div class="comment-list">-->
+      <!--          <div class="comment-item" :key="idx" v-for="(item,idx) in comments">-->
+      <!--            <layout-comment :comment="item" :isLast="comments.length-1===idx" @comment="clickComment"></layout-comment>-->
+      <!--            <div class="comment-send" v-if="item.child.length>0">-->
+      <!--              <block :key="ind" v-for="(com,ind) of item.child">-->
+      <!--                <block :key="indx" v-for="(co,indx) of com">-->
+      <!--                  <block v-if="co.touserid==item.User_ID">-->
+      <!--                    <div @click.stop="clickCommentSend(item,co.groupid,co.userid,co)" class="fz-12 c3 comment-send-item">-->
+      <!--                      <span class="color-comment p-r-5">{{co.user_nickname}}:</span> {{co.content}}-->
+      <!--                    </div>-->
+      <!--                  </block>-->
+      <!--                  <block v-else>-->
+      <!--                    <div  class="fz-12 c3 comment-send-item p-l-10">-->
+      <!--                      <span @click.stop="clickCommentSend(item,co.groupid,co.userid,co)" class="color-comment p-r-2">{{co.user_nickname}}</span>-->
+      <!--                      <span class="p-l-3 p-r-3">回复</span>-->
+      <!--                      &lt;!&ndash;同一行记录里面，点击不同的人名，可以分别回复两个人&ndash;&gt;-->
+      <!--                      <span @click.stop="clickCommentSend(item,co.groupid,co.touserid,co,true)" class="color-comment p-r-5">{{co.to_user_nickname}}</span>{{co.content}}-->
+      <!--                    </div>-->
+      <!--                  </block>-->
 
-<!--                </block>-->
+      <!--                </block>-->
 
-<!--              </block>-->
-<!--            </div>-->
-<!--          </div>-->
+      <!--              </block>-->
+      <!--            </div>-->
+      <!--          </div>-->
 
-<!--        </div>-->
-<!--        <layout-loading v-if="commentPaginate.load"></layout-loading>-->
-<!--      </div>-->
+      <!--        </div>-->
+      <!--        <layout-loading v-if="commentPaginate.load"></layout-loading>-->
+      <!--      </div>-->
     </scroll-view>
 
-<!--    <layout-modal ref="commentModal" @maskClicked="cancelComent">-->
-<!--      <div class="replay-comment-wrap">-->
-<!--        <textarea :disabled="!commentModalShow" :value="commentValue" @input="bindReplyInput" auto-height class="reason" :placeholder="commentModalPlaceholder" placeholder-style="color:#999" />-->
-<!--        <div class="control">-->
-<!--          <div @click="cancelComent" class="action-btn btn-cancel">取消</div>-->
-<!--          <div @click="sureComment" class="btn-sub action-btn">确定</div>-->
-<!--        </div>-->
+    <!--    <layout-modal ref="commentModal" @maskClicked="cancelComent">-->
+    <!--      <div class="replay-comment-wrap">-->
+    <!--        <textarea :disabled="!commentModalShow" :value="commentValue" @input="bindReplyInput" auto-height class="reason" :placeholder="commentModalPlaceholder" placeholder-style="color:#999" />-->
+    <!--        <div class="control">-->
+    <!--          <div @click="cancelComent" class="action-btn btn-cancel">取消</div>-->
+    <!--          <div @click="sureComment" class="btn-sub action-btn">确定</div>-->
+    <!--        </div>-->
 
-<!--      </div>-->
-<!--    </layout-modal>-->
+    <!--      </div>-->
+    <!--    </layout-modal>-->
 
     <layout-layer @maskClicked="bindCartsPopClose" :bottomStr="storeBottomActionHeight" positions="bottom" ref="carts">
       <div class="carts-box">
@@ -310,10 +329,13 @@
                 </div>
                 <div class="action flex flex-vertical-c">
                   <block v-if="row.num>0">
-                    <layout-icon @click.stop="attrNumMinus(row)" color="#B2B1B1" size="24" type="iconicon-minus"></layout-icon>
-                    <input style="width: 54rpx;" v-model="row.num" @focus="getQty(row.num)" @blur="changeAttrNum($event,idx,row)" class="input-num text-center fz-13" />
+                    <layout-icon @click.stop="attrNumMinus(row)" color="#B2B1B1" size="24"
+                                 type="iconicon-minus"></layout-icon>
+                    <input style="width: 54rpx;" v-model="row.num" @focus="getQty(row.num)"
+                           @blur="changeAttrNum($event,idx,row)" class="input-num text-center fz-13" />
                   </block>
-                  <layout-icon @click.stop="attrNumPlus(row)" color="#E64239" size="24" type="iconicon-plus"></layout-icon>
+                  <layout-icon @click.stop="attrNumPlus(row)" color="#E64239" size="24"
+                               type="iconicon-plus"></layout-icon>
                 </div>
               </div>
             </div>
@@ -326,7 +348,7 @@
     </layout-layer>
 
     <!-- m-b-safe-area-->
-    <div  class="mall-tabbar-wrap" v-if="isUserLogin" :animation="animationData" >
+    <div class="mall-tabbar-wrap" v-if="isUserLogin" :animation="animationData">
 
       <!--右侧内容区域-->
       <div class="cart-box" :animation="animationData2">
@@ -336,7 +358,8 @@
           <div class="tag" :class="{aircle:total_count<100}">{{total_count}}</div>
         </div>
         <div class="total-info flex flex-column flex-justify-c" @click.stop="taggleCartListExpand">
-          <div class="color-white flex flex-vertical-b"><span class="fz-11">￥</span><span class="fz-16 text-nowrap">{{total_price}}</span></div>
+          <div class="color-white flex flex-vertical-b"><span class="fz-11">￥</span><span class="fz-16 text-nowrap">{{total_price}}</span>
+          </div>
           <div class="c9 fz-10 text-nowrap">已减{{$filterPrice(totalPriceByMarket-totalPrice)}}元</div>
         </div>
         <div class="go-btn text-nowrap" @click.stop="submit">去结算</div>
@@ -357,11 +380,11 @@
 </template>
 <script>
 import { componetMixin } from '@/mixins/BaseMixin'
-import { checkIsExpire, error, hideLoading, showLoading, toast, confirm } from '@/common/fun'
+import { checkIsExpire, confirm, error, hideLoading, showLoading, toast } from '@/common/fun'
 import { getAlbumList, getBizInfo, getBizSpikeList } from '@/api/store'
 import { getFlashsaleList, getProductList } from '@/api/product'
 import { getCommitList, getCouponList } from '@/api/common'
-import { checkIsLogin, findArrayIdx, getCountdownFunc } from '@/common/helper'
+import { checkIsLogin, getCountdownFunc } from '@/common/helper'
 import {
   addFavourite,
   cancelFavourite,
@@ -420,7 +443,13 @@ const checkStoreStatus = (bizInfo) => {
 
 export default {
   name: 'store-theme-two',
-  components: { LayoutLayer, LayoutPageTitle, LayoutLoading, WzwLiveTag, LayoutIcon },
+  components: {
+    LayoutLayer,
+    LayoutPageTitle,
+    LayoutLoading,
+    WzwLiveTag,
+    LayoutIcon
+  },
   mixins: [componetMixin],
   props: {
     bid: {
@@ -553,7 +582,6 @@ export default {
       this.listExpand = false
     },
     taggleCartListExpand () {
-
       if (this.listExpand) {
         this.$closePop('carts')
         this.listExpand = false
@@ -565,17 +593,17 @@ export default {
       }
     },
     clearCart () {
-	  confirm({
-	    title: '操作确认',
-	    content: '该操作会清空购物车中当前商家商品，操作不可逆，确认继续操作？'
-	  }).then(() => {
-	    this.$store.dispatch('cart/removeGoods', { biz_id: this.bid }).then(() => {
-	      this.allCheck = this.$store.getters['cart/getListCheckStatus'](Number(this.bid))
-	      this.refreshCount()
-	    }).catch(() => {
-	    })
-	  }).catch(() => {
-	  })
+      confirm({
+        title: '操作确认',
+        content: '该操作会清空购物车中当前商家商品，操作不可逆，确认继续操作？'
+      }).then(() => {
+        this.$store.dispatch('cart/removeGoods', { biz_id: this.bid }).then(() => {
+          this.allCheck = this.$store.getters['cart/getListCheckStatus'](Number(this.bid))
+          this.refreshCount()
+        }).catch(() => {
+        })
+      }).catch(() => {
+      })
     },
     // 单个商家
     async selectBiz () {
@@ -726,6 +754,7 @@ export default {
     refreshCount () {
       this.total_count = this.$store.getters['cart/getTotalNum'](Number(this.bid))
       this.total_price = this.$store.getters['cart/getTotalMoney'](Number(this.bid))
+      this.allCheck = this.$store.getters['cart/getListCheckStatus'](Number(this.bid))
     },
     taggkeCartShow () {
       console.log(this.cartExpandLoading)
@@ -841,17 +870,28 @@ export default {
 
         const base = { biz_ids: this.bid }
 
-        getProductList({ ...base, pageSize: 1 }).then(({ totalCount }) => {
+        getProductList({
+          ...base,
+          pageSize: 1
+        }).then(({ totalCount }) => {
           this.storeGoodsTotal = totalCount
-        }).catch((err) => { throw Error(err.msg) })
+        }).catch((err) => {
+          throw Error(err.msg)
+        })
 
-        const flashActivitys = await getBizSpikeList({ biz_id: this.bid, status: 1 }, { onlyData: true }).catch((e) => {
+        const flashActivitys = await getBizSpikeList({
+          biz_id: this.bid,
+          status: 1
+        }, { onlyData: true }).catch((e) => {
           throw Error('获取限时抢购数据失败')
         })
 
         this.flashActivityList = flashActivitys.map(row => {
           // 句柄也加上
-          return { ...row, countdown: { ...countdownTpml } }
+          return {
+            ...row,
+            countdown: { ...countdownTpml }
+          }
         })
         // 启动限时抢购倒计时，牛逼啊霸哥
         countdownInstanceByFlash = setInterval(this.stampFuncByFlash, 1000)
@@ -885,7 +925,10 @@ export default {
 
         this.killList = killList.map(row => {
           // 句柄也加上
-          return { ...row, countdown: { ...countdownTpml } }
+          return {
+            ...row,
+            countdown: { ...countdownTpml }
+          }
         })
 
         // 启动倒计时，牛逼啊霸哥
@@ -982,11 +1025,6 @@ export default {
     },
     toGoodsDetailFn (pro, activity) {
       this.$linkTo(`/pages/product/detail?prod_id=${pro.Products_ID}&mode=spike&spike_good_id=${pro.id}`)
-    },
-    toDelivery () {
-      error('common soon')
-      return
-      this.$linkTo(`/pages/delivery/desktop?bid=${this.bid}`)
     },
     toAllProduct () {
       this.$linkTo(`/pagesA/store/productListByMall?biz_id=${this.bid}`)
@@ -1131,7 +1169,9 @@ export default {
           ...base,
           page: biz_cate.page,
           pageSize: biz_cate.pageSize
-        }).catch(err => { throw Error(err.msg) })
+        }).catch(err => {
+          throw Error(err.msg)
+        })
 
         this.bizCateList[this.bizCateNavIndex].page++
         this.bizCateList[this.bizCateNavIndex].productList = biz_cate.productList.concat(newList)
@@ -1239,10 +1279,10 @@ export default {
 
     this.isUserLogin = checkIsLogin(0, 0)
 
-    var animation = uni.createAnimation({
-      duration: 100,
-      timingFunction: 'ease'
-    })
+    // var animation = uni.createAnimation({
+    //   duration: 100,
+    //   timingFunction: 'ease'
+    // })
 
     // animation.width(0).opacity(0).step()
     // this.animationData = animation.export()
@@ -1258,7 +1298,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-  .mall-tabbar-wrap{
+  .mall-tabbar-wrap {
     position: fixed;
     z-index: 102;
     bottom: 25px;
@@ -1269,7 +1309,8 @@ export default {
     background: #262626;
     overflow: hidden;
     display: flex;
-    .user-btn{
+
+    .user-btn {
       height: 50px;
       width: 50px;
       padding-left: 10px;
@@ -1278,14 +1319,16 @@ export default {
       align-items: center;
       justify-content: center;
     }
-    .close-btn{
+
+    .close-btn {
       height: 50px;
       width: 50px;
       display: flex;
       align-items: center;
       justify-content: center;
     }
-    .go-btn{
+
+    .go-btn {
       height: 50px;
       width: 70px;
       text-align: center;
@@ -1294,31 +1337,36 @@ export default {
       background: #E64239;
       font-size: 14px;
     }
-    .cart-box{
-      flex:1;
+
+    .cart-box {
+      flex: 1;
       display: flex;
       overflow: hidden;
-      .total-info{
-        flex:1;
+
+      .total-info {
+        flex: 1;
       }
 
     }
-    .icon-box{
+
+    .icon-box {
       position: relative;
       width: 50px;
       height: 50px;
       background: #666666;
-      &.expand{
+
+      &.expand {
         background: #262626;
       }
-      .cart-icon{
+
+      .cart-icon {
         position: absolute;
         left: 50%;
         top: 50%;
-        transform: translate(-50%,-50%);
+        transform: translate(-50%, -50%);
       }
 
-      .tag{
+      .tag {
         top: 6px;
         right: 4px;
         position: absolute;
@@ -1328,6 +1376,7 @@ export default {
         color: #FFFFff;
         padding: 2px 4px;
         text-align: center;
+
         &.aircle {
           border-radius: 50%;
           padding: 0;
@@ -1412,7 +1461,7 @@ export default {
     }
   }
 
-  .store-info-toolbar{
+  .store-info-toolbar {
     display: flex;
     align-items: center;
     padding: 30rpx 20rpx;
@@ -1420,36 +1469,43 @@ export default {
     box-sizing: border-box;
     background: #fff;
     border-bottom: 1px solid #eee;
-    .actions{
+
+    .actions {
       width: 150rpx;
       box-sizing: border-box;
       padding: 0 30rpx 0 0;
       display: flex;
       align-items: center;
-      .action-item{
-        flex:1;
+
+      .action-item {
+        flex: 1;
         text-align: center;
       }
     }
-    .toolbar-search{
-      flex:1;
-      .toolbar-search-input{
+
+    .toolbar-search {
+      flex: 1;
+
+      .toolbar-search-input {
         box-sizing: border-box;
-        background:rgba(198,198,198,1);
+        background: rgba(198, 198, 198, 1);
         width: 410rpx;
         height: 56rpx;
         border-radius: 28rpx;
         padding-left: 30rpx;
       }
     }
-    .toolbar-vip{
+
+    .toolbar-vip {
       width: 126rpx;
       height: 54rpx;
     }
   }
-  .section-item{
+
+  .section-item {
     position: relative;
-    .section-anchor{
+
+    .section-anchor {
       position: absolute;
       z-index: -6;
       visibility: hidden;
@@ -1457,7 +1513,8 @@ export default {
       height: 1px;
     }
   }
-  .store-comp-wrap{
+
+  .store-comp-wrap {
     position: absolute;
     width: 750rpx;
 
@@ -1466,7 +1523,8 @@ export default {
     overflow-x: hidden;
     overflow-y: scroll;
   }
-  .top-bg{
+
+  .top-bg {
     position: fixed;
     left: 0;
     top: 0;
@@ -1476,7 +1534,8 @@ export default {
     @include cover-img();
 
   }
-  .navigator-bar{
+
+  .navigator-bar {
     position: fixed;
     z-index: 9;
     width: 750rpx;
@@ -1484,11 +1543,13 @@ export default {
     display: flex;
     align-items: center;
   }
+
   .store-info {
     height: 65px;
     padding: 36rpx 20rpx 0;
     color: #333;
-    .base-logo{
+
+    .base-logo {
       position: relative;
       width: 65px;
       height: 65px;
@@ -1496,7 +1557,8 @@ export default {
       border-radius: 50%;
       overflow: hidden;
       @include cover-img();
-      .thumbCount{
+
+      .thumbCount {
         position: absolute;
         bottom: 0;
         width: 65px;
@@ -1504,20 +1566,24 @@ export default {
         text-align: center;
         line-height: 16px;
         font-size: 10px;
-        background: rgba(0,0,0,.6);
+        background: rgba(0, 0, 0, .6);
         color: #FFFFff;
       }
     }
+
     .info-box {
       padding: 0 20rpx;
+
       .store-name {
 
       }
-      .store-activity-list{
+
+      .store-activity-list {
         display: flex;
         align-items: center;
       }
-      .store-activity-item{
+
+      .store-activity-item {
         overflow: hidden;
         display: inline-block;
         margin-right: 6px;
@@ -1530,13 +1596,15 @@ export default {
       }
 
     }
-    .activity-go{
+
+    .activity-go {
       display: flex;
       align-items: center;
     }
 
   }
-  .sticky-space{
+
+  .sticky-space {
     position: fixed;
     width: 750rpx;
     top: 0;
@@ -1545,23 +1613,25 @@ export default {
     //@include cover-img();
   }
 
-  .coupon-list{
-    margin:30rpx 0;
+  .coupon-list {
+    margin: 30rpx 0;
     width: 750rpx;
 
-    &.iswrap{
+    &.iswrap {
       white-space: nowrap;
       overflow-y: hidden;
       overflow-x: scroll;
-      .coupon-item{
+
+      .coupon-item {
         display: inline-block;
         margin-left: 20rpx;
-        &:last-child{
+
+        &:last-child {
           margin-right: 20rpx;
         }
 
-        .coupon-item-info{
-          bottom:33rpx;
+        .coupon-item-info {
+          bottom: 33rpx;
           left: 16rpx;
           top: 36rpx;
 
@@ -1569,27 +1639,32 @@ export default {
 
       }
     }
-    .coupon-item{
+
+    .coupon-item {
       position: relative;
-      .coupon-item-bg{
+
+      .coupon-item-bg {
         background-repeat: no-repeat;
         background-size: 100% 100%;
       }
-      .coupon-item-bg-c{
+
+      .coupon-item-bg-c {
         height: 70rpx;
         margin: 0;
-        padding:0;
+        padding: 0;
         background-size: 100% 100%;
         background-repeat: no-repeat;
         background-color: red;
         display: flex;
         align-items: flex-end;
-        .sign{
+
+        .sign {
           color: #fff;
           font-size: 22rpx;
           margin-bottom: 10rpx;
         }
-        .num{
+
+        .num {
           font-weight: bold;
           color: #fff;
           font-size: 50rpx;
@@ -1598,16 +1673,18 @@ export default {
           margin-bottom: 10rpx;
         }
       }
-      .coupon-item-info{
+
+      .coupon-item-info {
         position: absolute;
         left: 0;
         top: 0;
-        botttom:0;
+        botttom: 0;
         right: 0;
         z-index: 2;
       }
     }
   }
+
   .feature-list {
 
     display: flex;
@@ -1617,7 +1694,8 @@ export default {
     .feature-item {
       flex: 1;
       text-align: center;
-      .feature-item-img{
+
+      .feature-item-img {
         width: 340rpx;
         height: 120rpx;
         vertical-align: top;
@@ -1630,68 +1708,77 @@ export default {
 
   }
 
-  .kill-list{
+  .kill-list {
     padding: 40rpx 0 50rpx;
     width: 750rpx;
     background: #fff;
     white-space: nowrap;
     overflow-y: hidden;
     overflow-x: scroll;
-    .kill-list-item{
+
+    .kill-list-item {
       display: inline-block;
       width: 260rpx;
       padding-top: 20rpx;
       margin-left: 20rpx;
       font-size: 24rpx;
-      border-radius:12rpx;
+      border-radius: 12rpx;
       overflow: hidden;
-      box-shadow:0px 0px 38rpx 0px rgba(166,4,39,0.49);
-      &:last-child{
+      box-shadow: 0px 0px 38rpx 0px rgba(166, 4, 39, 0.49);
+
+      &:last-child {
         margin-right: 20rpx;
       }
-      .pro-title{
+
+      .pro-title {
         text-align: center;
         width: 260rpx;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
       }
-      .item-cover{
+
+      .item-cover {
 
         width: 173rpx;
         height: 173rpx;
         margin: auto;
         @include cover-img();
       }
-      .kill-action{
+
+      .kill-action {
         height: 50rpx;
         padding: 0 20rpx;
         margin-bottom: 10rpx;
         display: flex;
         align-items: flex-end;
         justify-content: space-between;
-        .kill-action-reduce{
-          height:33rpx;
+
+        .kill-action-reduce {
+          height: 33rpx;
           line-height: 33rpx;
-          font-size:20rpx;
+          font-size: 20rpx;
           padding: 0rpx 20rpx;
           box-sizing: border-box;
           color: #fff;
-          background:linear-gradient(180deg,rgba(252,109,136,1),rgba(254,43,75,1));
-          border-radius:6rpx;
+          background: linear-gradient(180deg, rgba(252, 109, 136, 1), rgba(254, 43, 75, 1));
+          border-radius: 6rpx;
         }
-        .kill-action-go{
+
+        .kill-action-go {
           width: 50rpx;
           height: 50rpx;
         }
       }
-      .kill-countdown{
+
+      .kill-countdown {
         height: 70rpx;
-        background:rgba(255,237,237,1);
+        background: rgba(255, 237, 237, 1);
         display: flex;
         align-items: center;
         justify-content: center;
-        .countdown-tag{
+
+        .countdown-tag {
           background: #FE2B4B;
           color: #fff;
           font-size: 20rpx;
@@ -1699,78 +1786,93 @@ export default {
           border-radius: 6rpx;
           text-align: center;
         }
-        .countdown-delimiter{
+
+        .countdown-delimiter {
           text-align: center;
           font-size: 20rpx;
           color: #E64239;
           padding: 0 2rpx;
         }
       }
-      .price-discount{
+
+      .price-discount {
         display: flex;
         align-items: flex-end;
-        .price-box{
-          .sign{
+
+        .price-box {
+          .sign {
             font-size: 18rpx;
           }
-          .num{
+
+          .num {
             font-size: 24rpx;
           }
         }
-        .discount{
+
+        .discount {
           background: $fun-red-color;
           color: #fff;
         }
       }
     }
   }
-  .flash-box{
+
+  .flash-box {
     background: #f8f8f8;
-    .flash-act-list{
+
+    .flash-act-list {
       padding-bottom: 20rpx;
     }
-    .flash-act-item{
+
+    .flash-act-item {
       width: 710rpx;
       box-sizing: border-box;
       margin: 0 auto 30rpx;
       border-radius: 15rpx;
-      padding: 0rpx  0rpx 30rpx 0rpx;
+      padding: 0rpx 0rpx 30rpx 0rpx;
       background: #fff;
       overflow: hidden;
-      &:last-child{
+
+      &:last-child {
         margin-bottom: 0;
       }
-      .flash-act-title{
+
+      .flash-act-title {
         width: 710rpx;
         height: 100rpx;
         color: #fff;
         background-repeat: no-repeat;
         background-size: cover;
         background-position: center;
-        .more{
+
+        .more {
           margin-right: 20rpx;
         }
-        .title-text{
+
+        .title-text {
           margin-left: 30rpx;
         }
       }
-      .flash-act-countdown{
+
+      .flash-act-countdown {
         width: 658rpx;
         height: 70rpx;
         margin: 20rpx auto 40rpx;
-        background:rgba(255,244,243,1);
+        background: rgba(255, 244, 243, 1);
         display: flex;
         align-items: center;
         justify-content: center;
-        .countdown-tag{
-          background:#E64239;
+
+        .countdown-tag {
+          background: #E64239;
           color: #fff;
           font-size: 28rpx;
           padding: 6rpx;
           border-radius: 6rpx;
           text-align: center;
         }
-        .countdown-delimiter{
+
+        .countdown-delimiter {
           text-align: center;
           font-size: 24rpx;
           color: #E64239;
@@ -1778,22 +1880,26 @@ export default {
         }
       }
     }
-    .act-goods-list{
+
+    .act-goods-list {
       overflow-y: hidden;
       overflow-x: scroll;
       white-space: nowrap;
     }
-    .act-goods-item{
+
+    .act-goods-item {
       display: inline-block;
       width: 200rpx;
       margin-left: 20rpx;
-      .act-goods-item-title{
+
+      .act-goods-item-title {
         width: 200rpx;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
       }
-      .item-cover{
+
+      .item-cover {
         margin: 0 auto;
         width: 154rpx;
         height: 154rpx;
@@ -1801,33 +1907,39 @@ export default {
       }
     }
   }
-  .virtual-box{
+
+  .virtual-box {
     background: #fff;
-    .virtual-list{
+
+    .virtual-list {
       padding: 20rpx;
       width: 710rpx;
-      .virtual-item{
+
+      .virtual-item {
         margin-bottom: 30rpx;
         height: 160rpx;
-        .item-cover{
+
+        .item-cover {
           width: 160rpx;
           height: 160rpx;
           margin-right: 25rpx;
           @include cover-img();
         }
-        .product-title{
+
+        .product-title {
           font-size: 26rpx;
           line-height: 30rpx;
           max-height: 60rpx;
           overflow: hidden;
           text-overflow: ellipsis;
         }
-        .btn-buy{
+
+        .btn-buy {
           font-size: 28rpx;
-          width:140rpx;
-          height:58rpx;
-          background:rgba(245,54,54,1);
-          border-radius:5rpx;
+          width: 140rpx;
+          height: 58rpx;
+          background: rgba(245, 54, 54, 1);
+          border-radius: 5rpx;
           text-align: center;
           color: #fff;
           line-height: 58rpx;
@@ -1835,22 +1947,27 @@ export default {
       }
     }
   }
-  .store-box{
+
+  .store-box {
     background: #fff;
 
-    .store-list{
+    .store-list {
       padding: 0 20rpx 20rpx;
       width: 710rpx;
-      .store-list-item{
+
+      .store-list-item {
         padding: 30rpx 24rpx;
         box-sizing: border-box;
         border-bottom: 1px solid #e3e3e3;
-        &:first-child{
+
+        &:first-child {
           padding-top: 10rpx;
         }
-        &:last-child{
+
+        &:last-child {
           border-bottom: none;
         }
+
         .store-item-address {
           width: 100%;
           box-sizing: border-box;
@@ -1869,47 +1986,56 @@ export default {
       }
     }
   }
-  .cate-box{
+
+  .cate-box {
     background: #fff;
-    .cate-goods-list{
+
+    .cate-goods-list {
       padding: 30rpx 20rpx;
       display: flex;
-      .fun-goods-col{
+
+      .fun-goods-col {
         width: 355rpx;
         box-sizing: border-box;
-        .fun-goods-item{
+
+        .fun-goods-item {
           margin-bottom: 40rpx;
-          .product-cover{
-            width:345rpx;
-            height:345rpx;
-            border-radius:8rpx;
+
+          .product-cover {
+            width: 345rpx;
+            height: 345rpx;
+            border-radius: 8rpx;
             @include cover-img();
           }
         }
       }
-      .goods-action{
+
+      .goods-action {
         height: 58rpx;
         padding: 0 20rpx;
         margin-bottom: 10rpx;
         display: flex;
         align-items: flex-end;
         justify-content: space-between;
-        .goods-action-reduce{
-          height:33rpx;
+
+        .goods-action-reduce {
+          height: 33rpx;
           line-height: 33rpx;
-          font-size:20rpx;
+          font-size: 20rpx;
           padding: 0rpx 20rpx;
           box-sizing: border-box;
           color: #fff;
-          background:linear-gradient(180deg,rgba(252,109,136,1),rgba(254,43,75,1));
-          border-radius:6rpx;
+          background: linear-gradient(180deg, rgba(252, 109, 136, 1), rgba(254, 43, 75, 1));
+          border-radius: 6rpx;
         }
-        .goods-action-go{
+
+        .goods-action-go {
           width: 58rpx;
           height: 58rpx;
         }
       }
     }
+
     .cate-nav {
       width: 750rpx;
       padding: 40rpx 0 20rpx;
@@ -1917,6 +2043,7 @@ export default {
       overflow-x: scroll;
       overflow-y: hidden;
       white-space: nowrap;
+
       .cate-nav-item {
         position: relative;
         padding: 0;
@@ -1925,9 +2052,11 @@ export default {
         padding-bottom: 8px;
         display: inline-block;
         color: #333;
-        &:first-child{
+
+        &:first-child {
           margin-left: 40rpx;
         }
+
         .sale-underline {
           position: absolute;
           bottom: 0;
@@ -1940,6 +2069,7 @@ export default {
       }
     }
   }
+
   .replay-comment-wrap {
     width: 560rpx;
     box-sizing: border-box;
@@ -1979,23 +2109,28 @@ export default {
     }
   }
 
-  .comment-box{
+  .comment-box {
     background: #fff;
+
     .block-title {
       padding: 20px;
       font-weight: bold;
     }
-    .comment-list{
+
+    .comment-list {
       width: 710rpx;
       padding: 20rpx;
-      .comment-item{
+
+      .comment-item {
         padding: 30rpx 0;
         border-bottom: 1px solid #e8e8e8;
-        &:last-child{
+
+        &:last-child {
           border-bottom: none;
         }
       }
-      .comment-send-item{
+
+      .comment-send-item {
         overflow-x: hidden;
         text-overflow: ellipsis;
       }

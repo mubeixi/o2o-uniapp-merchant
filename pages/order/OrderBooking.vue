@@ -40,7 +40,7 @@
       <div class="section-box bg-white" style="margin-bottom: 0">
         <div class="other">
           <div class="bd">
-            <div class="o_title  words">
+            <div class="o_title p-10  words">
               <span>购买人姓名</span>
               <input class="inputs" placeholder="请填写姓名" type="text" v-model="user_name">
             </div>
@@ -48,7 +48,7 @@
         </div>
         <div class="other">
           <div class="bd">
-            <div class="o_title  words">
+            <div class="o_title p-10  words">
               <span>购买人手机号</span>
               <input class="inputs" placeholder="请填写手机号码" type="text" v-model="user_mobile">
             </div>

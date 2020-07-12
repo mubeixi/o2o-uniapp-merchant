@@ -165,7 +165,7 @@ export default {
           error('暂无免单活动')
           setTimeout(function () {
             that.$back()
-          }, 1000)
+          }, 1500)
           return
         }
         
@@ -197,7 +197,7 @@ export default {
         // 回退一下
         setTimeout(() => {
           this.$back()
-        }, 1000)
+        }, 1500)
       } finally {
         hideLoading()
       }

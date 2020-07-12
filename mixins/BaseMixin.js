@@ -1,7 +1,7 @@
 import { backFunc, cellPhone, error, linkToEasy, modal, openLocation, toast } from '@/common/fun'
 import T from '../common/langue/i18n'
 import Storage from '@/common/Storage'
-import { checkIsLogin, getDomain, toGoodsDetail, emptyObject } from '@/common/helper'
+import { checkIsLogin, getDomain, toGoodsDetail, emptyObject, GetQueryByString } from '@/common/helper'
 import eventHub from '@/common/eventHub'
 // #ifdef H5
 import { WX_JSSDK_INIT } from '@/common/env'
@@ -157,6 +157,11 @@ export default {
     $linkTo: linkToEasy,
     $toGoodsDetail: toGoodsDetail,
     $checkIsLogin: checkIsLogin,
+    $filterPrice: (price) => {
+      if (isNaN(price)) return 0
+      if (!price) return 0
+      return parseInt(Number(price) * 100) / 100
+    },
     $openPop (name) {
       this.$refs[name].show()
     },
@@ -205,6 +210,28 @@ export default {
       if (users_id) {
         // 不管ls有没有，都存一次
         Storage.set('users_id', users_id)
+
+        const old_users_id = Storage.get('users_id')
+
+        // #ifdef H5
+        // 要保持url里面一直有users_id,没有就重新跳转一次
+        if (!GetQueryByString(location.href, 'users_id')) {
+          let { href, protocol, host, search, hash, pathname } = window.location
+          if (search.indexOf('?') === -1) {
+            search += '?users_id=' + users_id
+          } else {
+            search = search.replace(/\?/, '?users_id=' + users_id + '&')
+          }
+          const newHref = `${protocol}//${host}${pathname}${search}${hash}`
+          if (newHref !== href) {
+            window.location.replace(newHref)
+          }
+        }
+        // 比较新旧users_id,只有h5有这个问题，app和小程序都是有单独分配的
+        if (old_users_id && old_users_id !== users_id) {
+          this.setUserInfo({})
+        }
+      // #endif
       }
     },
     getCurrentPageRoute () {

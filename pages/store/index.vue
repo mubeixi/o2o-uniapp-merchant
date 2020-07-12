@@ -2,8 +2,8 @@
   <div @click="commonClick" class="page-wrap">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
 
-    <store-theme-default @upStoreInfo="bindUpStoreInfo" :bid="bid" v-if="skin_id===0"></store-theme-default>
-    <store-theme-one @upStoreInfo="bindUpStoreInfo" :bid="bid" v-if="skin_id===1"></store-theme-one>
+    <store-theme-default ref="childDefault" @upStoreInfo="bindUpStoreInfo" :bid="bid" v-if="skin_id===0"></store-theme-default>
+    <store-theme-one ref="childOne" @upStoreInfo="bindUpStoreInfo" :bid="bid" v-if="skin_id===1"></store-theme-one>
     <store-theme-two ref="childTwo" @upStoreInfo="bindUpStoreInfo" :bid="bid" v-if="skin_id===2"></store-theme-two>
     <store-theme-three ref="childThree" @upStoreInfo="bindUpStoreInfo" :bid="bid" v-if="skin_id===3"></store-theme-three>
 
@@ -97,6 +97,8 @@ export default {
     if (checkIsLogin(0, 0)) {
       if (this.skin_id === 3) this.$refs.childThree.refreshFn()
       if (this.skin_id === 2) this.$refs.childTwo.refreshFn()
+      if (this.skin_id === 1) this.$refs.childOne.refreshFn()
+      if (this.skin_id === 0) this.$refs.childDefault.refreshFn()
     }
   },
   mounted () {

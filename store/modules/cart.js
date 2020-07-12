@@ -4,6 +4,12 @@ import { Exception } from '@/common/Exception'
 import { updateCart } from '@/api/order'
 import { DelCart } from '@/api/customer'
 
+const filterPrice = (price) => {
+  if (isNaN(price)) return 0
+  if (!price) return 0
+  return parseInt(Number(price) * 100) / 100
+}
+
 /**
  * 异步更新库存
  * @param prod_id
@@ -395,7 +401,7 @@ const getters = {
         }
       }
 
-      return count
+      return filterPrice(count)
     } catch (e) {
       return 0
     }

@@ -1,7 +1,7 @@
 import * as ENV from './env'
 // import store from '../store'
 import { error } from './fun'
-import { emptyObject } from './helper'
+import { emptyObject,isWeiXin } from './helper'
 import Storage from '@/common/Storage'
 import { hexMD5 } from './tool/md5'
 import Base64 from './tool/base64.js'
@@ -15,7 +15,35 @@ export const getUserID = () => Storage.get('user_id')
 
 export const getBizId = () => Storage.get('biz_id')
 
-export const getEnv = () => 'wx_lp'
+export const getEnv = () => {
+
+  var rt = ''
+  // #ifdef APP-PLUS
+  rt = 'app'
+  // #endif
+
+  // #ifdef MP-WEIXIN
+  rt = 'wx_lp'
+  // #endif
+
+  // #ifdef MP-TOUTIAO
+  rt = 'tt_lp'
+  // #endif
+
+  // #ifdef MP-ALIPAY
+  rt = 'ali_lp'
+  // #endif
+
+  // #ifdef H5
+  // 需要考虑是不是普通浏览器
+  if (isWeiXin()) {
+    rt = 'wx_mp'
+  } else {
+    rt = 'wap'
+  }
+  // #endif
+  return rt
+}
 
 export const createToken = function (object) {
   object = ObjectToArr(object)
@@ -50,7 +78,7 @@ function ObjectToArr (object, addkey) {
   }
   var newkey_1 = Object.keys(arrs).sort()
   var newObj = {}// 创建一个新的对象，用于存放排好序的键值对
-  
+
   // 此处不能使用for..in
   newkey_1.forEach(function (val) {
     newObj[val] = arrs[val]// 向新创建的对象中按照排好的顺序依次增加键值对
@@ -86,19 +114,19 @@ class XHR {
       }
     }
   }
-  
+
   static formData = (param) => {
     let _param = {
       access_token: getAccessToken(),
       //biz_id: getBizId(),客户端不需要自动传biz_id的
       env: getEnv(), ...param,
     }
-    
+
     // 数据加密
     let postData = createToken(_param)
     // 保持签名通过，同时支持传空字符串
     // Object.assign(postData, param)
-    return emptyObject(postData)
+    return postData //emptyObject(postData)
   }
 }
 
@@ -122,23 +150,23 @@ export const ajax = ({ url, method = 'post', data = {}, options = {},isAddHost=t
     // reqHeader = false, // 是否需要把响应头返回放在resolve里面，一般是有时候登录的时候需要从请求头里拿到token的
     onlyData = false,// 是否直接返回data，方便结构赋值
   } = options
-  
+
   if (tip) {
     uni.showLoading({
       title: tip,
       mask,
     })
   }
-  
+
   // let token
   var header = {
     // 'Authorization': 'Bearer ' + token,
     'content-type': 'application/x-www-form-urlencoded',
     ...headerExt
   }
-  
+
   const _url = !isAddHost ? url:ENV.apiBaseUrl + url
-  
+
   // console.log(`请求链接${_url}`)
   // console.log('请求参数:',data)
   return new Promise((resolve, reject) => {
@@ -154,16 +182,16 @@ export const ajax = ({ url, method = 'post', data = {}, options = {},isAddHost=t
           reject(new Error('服务器去旅行了'))
         }
         const { data: res } = ret
-        
+
         // console.log('响应',res)
         const { errorCode = 1, msg = '请求未成功' } = res
-        
+
         if (hookErrorCode.includes(errorCode)) {
           if (errorCode === 66001) {
             error(res.msg)
-            
+
             // 重置用户信息
-            
+
             setTimeout(() => {
               uni.navigateTo({
                 url: '/pages/user/login',
@@ -171,7 +199,7 @@ export const ajax = ({ url, method = 'post', data = {}, options = {},isAddHost=t
             }, 500)
             return
           }
-          
+
           resolve(onlyData ? res.data : res)
         } else {
           // 配置决定是否显示错误提示
@@ -204,7 +232,7 @@ export const fetch = function ({ act, param = {}, options = false, url = '/api/l
       error('act参数必传')
       return
     }
-    
+
     param.Users_ID = getUsersID()
     param.User_ID = getUserID()
     // 如果某接口指定不要User_ID的
@@ -234,12 +262,12 @@ export const upload = ({ filePath, idx = 0, name = 'image', param = {}, progress
     act: 'uploadFile',
     ...param,
   }
-  
+
   const url = `/api/v1/${_param.act}.html`
   const formData = XHR.formData(_param)
-  
+
   const _url = ENV.apiBaseUrl + url
-  
+
   return new Promise((resolve, reject) => {
     const uploadTask = uni.uploadFile({
       url: _url,
@@ -247,45 +275,45 @@ export const upload = ({ filePath, idx = 0, name = 'image', param = {}, progress
       name,
       formData,
       success: (res) => {
-        
+
         console.log('upload file result', res)
         let { data: body } = res
         if (typeof body === 'string' && body) {
           body = JSON.parse(body)
         }
-        
+
         console.log('body is', body)
         if (body.hasOwnProperty('data') && typeof body.data === 'object') {
-        
+
         } else {
           reject(body.msg)
           return
         }
-        
+
         const { errorCode = 0, data } = body
-        
+
         if (errorCode === 0 && data.hasOwnProperty('path') && data.path) {
           resolve(data.path)
         } else {
           console.log(res)
           reject(body.msg)
         }
-        
+
       },
       fail: (err) => {
         reject(err)
       },
       complete: (rt) => {
-      
+
       },
     })
-    
+
     uploadTask.onProgressUpdate((res) => {
       console.log('上传进度' + res.progress)
       console.log('已经上传的数据长度' + res.totalBytesSent)
       console.log('预期需要上传的数据总长度' + res.totalBytesExpectedToSend)
-      
-      
+
+
       try{
         Vue.set(progressList,idx,res)
         // progressList[idx] = {...res}

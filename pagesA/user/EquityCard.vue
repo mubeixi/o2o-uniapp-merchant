@@ -115,7 +115,7 @@ import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 
 export default {
-  mixins: { BaseMixin },
+  mixins: [BaseMixin],
   components: {
     WzwImTip,
     WzwPay,
@@ -197,7 +197,7 @@ export default {
 
       toast('支付成功')
 
-      uni.redirectTo({
+      uni.switchTab({
         url: '/pages/user/index'
       })
     },
