@@ -7,7 +7,8 @@
     </button>
 
     <!--a类型-->
-    <view v-else-if="node.tag === 'a'" @click="wxParseATap(node.attr,$event)" :class="node.classStr" :data-href="node.attr.href" :style="node.styleStr">
+    <view v-else-if="node.tag === 'a'" @click="wxParseATap(node.attr,$event)" :class="node.classStr"
+          :data-href="node.attr.href" :style="node.styleStr">
       <block v-for="(node, index) of node.nodes" :key="index">
         <wx-parse-template :node="node" />
       </block>
@@ -22,10 +23,12 @@
 
     <!--table类型-->
     <wx-parse-table v-else-if="node.tag === 'table'" :class="node.classStr" :style="node.styleStr" :node="node" />
+    
+    <wx-parse-span v-else-if="node.tag === 'span'" :class="node.classStr" :style="node.styleStr" :node="node"></wx-parse-span>
 
     <!--br类型-->
     <!-- #ifndef H5 -->
-    <text v-else-if="node.tag === 'br'"></text>
+    <text v-else-if="node.tag === 'br'">\n</text>
     <!-- #endif -->
     <!-- #ifdef H5 -->
     <br v-else-if="node.tag === 'br'">
@@ -53,29 +56,20 @@
 </template>
 
 <script>
-
-import wxParseTemplate from './wxParseTemplate0'
-// #ifdef APP-PLUS | H5
-// #endif
-// #ifdef MP
-// #endif
+import wxParseTemplate from './wxParseTemplate'
 import wxParseImg from './wxParseImg'
 import wxParseVideo from './wxParseVideo'
 import wxParseAudio from './wxParseAudio'
 import wxParseTable from './wxParseTable'
+import WxParseSpan from '@/componets/gaoyia-parse/components/wxParseSpan'
 
 export default {
-  // // #ifdef APP-PLUS | H5
-  // name: 'wxParseTemplate1',
-  // // #endif
-  // // #ifdef MP
-  // name: 'wxParseTemplate0',
-  // // #endif
-  name: 'wxParseTemplate0',
+  name: 'wxParseTemplate',
   props: {
     node: {}
   },
   components: {
+    WxParseSpan,
     wxParseTemplate,
     wxParseImg,
     wxParseVideo,
@@ -86,10 +80,10 @@ export default {
     wxParseATap (attr, e) {
       const {
         href
-      } = e.currentTarget.dataset// TODO currentTarget才有dataset
+      } = e.currentTarget.dataset
       if (!href) return
       let parent = this.$parent
-      while (!parent.preview || typeof parent.preview !== 'function') { // TODO 遍历获取父节点执行方法
+      while (!parent.preview || typeof parent.preview !== 'function') {
         parent = parent.$parent
       }
       parent.navigate(href, e, attr)

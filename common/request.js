@@ -188,6 +188,10 @@ export const ajax = ({ url, method = 'post', data = {}, options = {},isAddHost=t
 
         if (hookErrorCode.includes(errorCode)) {
           if (errorCode === 66001) {
+            //阻断后面的跳转
+            if(Storage.get('toLogin'))return;
+            Storage.set('toLogin',1,1)
+            
             error(res.msg)
 
             // 重置用户信息

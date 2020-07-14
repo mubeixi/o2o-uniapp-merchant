@@ -19,7 +19,7 @@
 
 <script>
 import HtmlToJson from './libs/html2json'
-import wxParseTemplate from './components/wxParseTemplate0'
+import wxParseTemplate from './components/wxParseTemplate'
 
 export default {
   name: 'uParse',
@@ -144,7 +144,7 @@ export default {
         // #endif
         // #ifdef MP-BAIDU
         swan.createSelectorQuery().select('.wxParse').boundingClientRect(function (rect) {
-          rect[0].width
+          resolve(rect[0].width)
         }).exec()
         // #endif
         // #ifdef MP-ALIPAY
@@ -189,10 +189,10 @@ export default {
     }
   },
   watch: {
-    content:{
-      deep:true,
-      immediate:true,
-      handler(newVal, oldVal) {
+    content: {
+      deep: true,
+      immediate: true,
+      handler (newVal, oldVal) {
         // console.log(newVal)
         newVal && this.setHtml()
       }
