@@ -182,9 +182,9 @@ export const formatArrayColumn = (arr, column, filterFn, deepCopy) => {
       arr[key][column] = filterFn(arr[key][column])
     }
     if (deepCopy) return objTranslate(arr)
-  
+
     return true
-  }catch (e) {
+  } catch (e) {
     return false
   }
 }
@@ -606,6 +606,24 @@ export const buildSharePath = (path) => {
 }
 
 /**
+ * 小程序分享到朋友圈
+ * @param path
+ * @returns {string}
+ */
+export const buildShrareTimeQuery = () => {
+  const users_ID = Storage.get('users_id')
+  const userInfo = store.state.userInfo || Storage.get('userInfo')
+  let search = ''
+  search += (users_ID ? ('users_id=' + users_ID) : '')
+  let owner_id = 0
+  if (userInfo.User_ID && userInfo.Is_Distribute === 1) {
+    owner_id = userInfo.User_ID
+  }
+  search += ('&owner_id=' + owner_id)
+  return search
+}
+
+/**
  *获取商品缩略图
  * @param img
  * @param size n3最小
@@ -757,14 +775,14 @@ export function getTouchEventInfo (event) {
 export function mixinStyle (defaultStyle, style) {
   if (!defaultStyle) defaultStyle = {}
   if (!style) style = {}
-  
+
   const rt = objTranslate(defaultStyle)
-  
+
   for (var i in style) {
     if (!style.hasOwnProperty(i)) continue
     rt[i] = style[i]
   }
-  
+
   return rt
 }
 

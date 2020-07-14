@@ -1,7 +1,15 @@
 import { backFunc, cellPhone, error, linkToEasy, modal, openLocation, toast } from '@/common/fun'
 import T from '../common/langue/i18n'
 import Storage from '@/common/Storage'
-import { checkIsLogin, getDomain, toGoodsDetail, emptyObject, GetQueryByString } from '@/common/helper'
+import {
+  checkIsLogin,
+  getDomain,
+  toGoodsDetail,
+  emptyObject,
+  GetQueryByString,
+  buildSharePath,
+  buildShrareTimeQuery
+} from '@/common/helper'
 import eventHub from '@/common/eventHub'
 // #ifdef H5
 import { WX_JSSDK_INIT } from '@/common/env'
@@ -289,6 +297,14 @@ export default {
   },
   // 自定义小程序分享
   onShareAppMessage () {
+    const currentPagePath = this.getCurrentPageRoute()
+    const shareObj = {
+      path: buildSharePath(currentPagePath)
+    }
+    return shareObj
+  },
+  // 分享到朋友圈
+  onShareTimeline () {
 
   }
 }

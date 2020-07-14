@@ -5,20 +5,20 @@
     overflow-x: hidden;
     overflow-y: hidden;
   }
-  
+
   .share-btn {
     background: none;
-    
+
     &::after {
       border: none;
     }
   }
-  
+
   .lazy-box {
     bottom: constant(safe-area-inset-bottom);
     bottom: env(safe-area-inset-bottom);
   }
-  
+
   .container-wrap {
     position: fixed;
     width: 750rpx;
@@ -26,7 +26,7 @@
     bottom: 60px;
     z-index: 1;
   }
-  
+
   .head-box-default {
     position: fixed;
     z-index: 3;
@@ -34,14 +34,14 @@
     width: 750rpx;
     background: none;
   }
-  
+
   .head-box-active {
     position: fixed;
     z-index: 2;
     top: 0;
     width: 750rpx;
     background: #f2f2f2;
-    
+
     .head-search {
       width: 200rpx;
       height: 32px;
@@ -50,7 +50,7 @@
       background: #fff;
     }
   }
-  
+
   .head-tab-active {
     position: fixed;
     z-index: 9;
@@ -60,16 +60,16 @@
     box-sizing: border-box;
     padding: 10px 0;
     display: flex;
-    
+
     .head-tab-item {
       flex: 1;
       text-align: center;
-      
+
       &.active {
         color: $fun-primary-color;
       }
     }
-    
+
     .head-tab-underline {
       position: absolute;
       bottom: 0;
@@ -78,9 +78,9 @@
       width: 20px;
       background: $fun-primary-color;
     }
-    
+
   }
-  
+
   .end-time {
     width: 750rpx;
     height: 58rpx;
@@ -90,7 +90,7 @@
     font-size: 22rpx;
     background-color: #F2FFFA;
   }
-  
+
   .end-time-block {
     width: 36rpx;
     height: 36rpx;
@@ -103,11 +103,11 @@
     color: #ffffff;
     margin: 0px 4rpx;
   }
-  
+
   .end-time-day {
     margin: 0px 4rpx;
   }
-  
+
   .product-price {
     background-color: #ffffff;
     display: flex;
@@ -119,12 +119,12 @@
     justify-content: space-between;
     color: #ABABAB;
   }
-  
+
   .product-price-red {
     font-size: 20px;
     color: #F53636;
   }
-  
+
   .product-price-right {
     width: 164rpx;
     height: 60rpx;
@@ -135,7 +135,7 @@
     line-height: 60rpx;
     color: #fff;
   }
-  
+
   .share-box {
     position: fixed;
     right: 0;
@@ -145,7 +145,7 @@
     height: 70rpx;
     //position: relative;
   }
-  
+
   .product-share {
     height: 20rpx;
     font-size: 11px;
@@ -156,7 +156,7 @@
     top: 12rpx;
     left: 84rpx;
   }
-  
+
   .product-title {
     width: 698rpx;
     line-height: 40rpx;
@@ -172,18 +172,18 @@
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
   }
-  
+
   .line-f8 {
     width: 750rpx;
     height: 20rpx;
     background: rgba(248, 248, 248, 1);
   }
-  
+
   .full-img {
     width: 100% !important;
     height: 100% !important;
   }
-  
+
   .product-price-share {
     font-size: 13px;
     height: 20rpx;
@@ -193,19 +193,19 @@
     position: absolute;
     bottom: 12rpx;
     left: 74rpx;
-    
+
     .price-q {
       font-size: 10px;
     }
   }
-  
+
   .product-activity {
     width: 750rpx;
     padding: 30rpx 20rpx 0rpx 20rpx;
     box-sizing: border-box;
     background: #fff;
   }
-  
+
   .product-activity-title {
     width: 134rpx;
     height: 34rpx;
@@ -214,7 +214,7 @@
     color: rgba(51, 51, 51, 1);
     line-height: 30rpx;
   }
-  
+
   .activity-item {
     width: 104rpx;
     height: 34rpx;
@@ -225,7 +225,7 @@
     margin-right: 20rpx;
     position: relative;
   }
-  
+
   .activity-img {
     position: absolute;
     top: 0;
@@ -233,10 +233,10 @@
     width: 104rpx;
     height: 34rpx
   }
-  
+
   .activity-second {
     margin-top: 20rpx;
-    
+
     .color-first {
       color: #1CA272;
       height: 32rpx;
@@ -248,7 +248,7 @@
       margin-right: 16rpx;
       font-size: 10px;
     }
-    
+
     .color-second {
       color: #333333;
       height: 22rpx;
@@ -258,13 +258,13 @@
       line-height: 22rpx;
     }
   }
-  
+
   .vip-img {
     width: 710rpx;
     margin: 0 auto;
     height: 96rpx;
   }
-  
+
   .shouhou {
     width: 750rpx;
     box-sizing: border-box;
@@ -272,7 +272,7 @@
     height: 86rpx;
     padding: 30rpx 20rpx;
   }
-  
+
   .shouhou-item {
     display: flex;
     height: 28rpx;
@@ -282,13 +282,13 @@
     line-height: 28rpx;
     margin-right: 36rpx;
   }
-  
+
   .shouhou-img {
     width: 28rpx;
     height: 28rpx;
     margin-right: 10rpx
   }
-  
+
   .store {
     position: sticky;
     z-index: 999;
@@ -299,7 +299,7 @@
     box-sizing: border-box;
     padding: 0rpx 72rpx;
     justify-content: space-between;
-    
+
     .li-item {
       width: 60rpx;
       height: 84rpx;
@@ -311,11 +311,11 @@
       font-weight: bold;
       position: relative;
     }
-    
+
     .color-store {
       color: #26C78D;
     }
-    
+
     .active {
       width: 36rpx;
       height: 6rpx;
@@ -327,16 +327,16 @@
       bottom: 0rpx;
     }
   }
-  
+
   .tab-containers {
     border-top: 1px solid #f1f1f1;
   }
-  
+
   .store-info {
     width: 710rpx;
     padding: 0 20rpx;
   }
-  
+
   .store-info-title {
     width: 540rpx;
     height: 30rpx;
@@ -348,7 +348,7 @@
     line-height: 30rpx;
     margin-bottom: 24rpx;
   }
-  
+
   .store-info-call {
     height: 28rpx;
     line-height: 28rpx;
@@ -356,17 +356,17 @@
     font-size: 13px;
     color: #999999;
   }
-  
+
   .section-store {
     background: white;
     padding-bottom: 30rpx;
   }
-  
+
   .section-store-info {
     margin: 40rpx 0;
     padding: 30rpx;
     background: #fff;
-    
+
     .into-btn {
       width: 140rpx;
       height: 58rpx;
@@ -376,12 +376,12 @@
       border-radius: 10rpx;
     }
   }
-  
+
   .store-list {
     width: 710rpx;
     padding: 0 20rpx;
   }
-  
+
   .store-list-top {
     height: 32rpx;
     display: flex;
@@ -389,7 +389,7 @@
     font-size: 13px;
     color: #999999;
   }
-  
+
   .block-div {
     background-color: #26C78D;
     width: 8rpx;
@@ -397,19 +397,19 @@
     margin-right: 16rpx;
     display: inline-block;
   }
-  
+
   .store-list-item {
     width: 710rpx;
     padding: 30rpx 24rpx;
     box-sizing: border-box;
     border-bottom: 1px solid #EBEBEB;
-    
+
     &:last-child {
     }
-    
+
     border-bottom: none;
   }
-  
+
   .store-list-title {
     width: 600rpx;
     height: 28px;
@@ -418,11 +418,11 @@
     line-height: 28px;
     margin-bottom: 10rpx;
   }
-  
+
   .isStickly {
     border-bottom: 1px solid #eee;
   }
-  
+
   .store-list-address {
     width: 100%;
     box-sizing: border-box;
@@ -431,14 +431,14 @@
     line-height: 34rpx;
     align-items: center;
   }
-  
+
   .store-list-font {
     color: #999999;
     font-size: 12px;
     height: 12px;
     line-height: 12px;
   }
-  
+
   .store-su {
     width: 1px;
     height: 34rpx;
@@ -446,43 +446,43 @@
     margin: 0px 24rpx;
     display: inline-block;
   }
-  
+
   .over {
     overflow-x: hidden;
     overflow-y: scroll;
   }
-  
+
   ul li {
     list-style: none;
   }
-  
+
   .section-comment {
     background: white;
-    
+
     .block-title {
     }
-    
+
     .comment-list {
       padding: 0 25rpx;
     }
   }
-  
+
   .commtent-add {
     margin: 50rpx 25rpx;
     background: #F7F7F7;
     min-height: 150rpx;
     padding: 20rpx;
-    
+
     .textarea {
       font-size: 14px;
       line-height: 1.4;
-      
+
       &::placeholder {
         color: #999;
       }
     }
   }
-  
+
   .wzw-goods-action {
     position: fixed;
     left: 0px;
@@ -490,7 +490,7 @@
     bottom: env(safe-area-inset-bottom);
     z-index: 10;
   }
-  
+
   .back-icon {
     position: fixed;
     top: 60rpx;
@@ -498,7 +498,7 @@
     //opacity: 0.5;
     z-index: 9;
   }
-  
+
   /*分享开始*/
   .shareinfo {
     background: #fff;
@@ -509,34 +509,34 @@
     border-top-left-radius: 10rpx;
     border-top-right-radius: 10rpx;
   }
-  
+
   .shareinfo {
     padding-bottom: 0;
     color: #333;
     font-size: 24rpx;
   }
-  
+
   .shareinfo > div {
     text-align: center;
   }
-  
+
   .s_top {
     display: flex;
     justify-content: center;
     align-items: center;
   }
-  
+
   .s_top .img {
     width: 76rpx;
     height: 76rpx;
     display: block;
     margin: 0 auto 10rpx;
   }
-  
+
   .s_top > div:nth-child(1) {
     /*margin-right: 120rpx;*/
   }
-  
+
   .s_bottom {
     position: relative;
     bottom: 0;
@@ -548,14 +548,14 @@
     line-height: 60rpx;
     margin-top: 16rpx;
   }
-  
+
   /*分享结束*/
   .refuseApplyDialog {
     width: 560rpx;
     box-sizing: border-box;
     padding: 15px;
     font-size: 14px;
-    
+
     .reason {
       font-size: 14px;
       min-height: 200px;
@@ -565,12 +565,12 @@
       width: auto;
       padding: 10px;
     }
-    
+
     .control {
       margin-top: 15px;
       display: flex;
       justify-content: center;
-      
+
       .action-btn {
         width: 70px;
         height: 36px;
@@ -579,7 +579,7 @@
         text-align: center;
         color: #666;
         background: #e9e9e9;
-        
+
         &.btn-sub {
           background: #f43131;
           color: white;
@@ -588,7 +588,7 @@
       }
     }
   }
-  
+
   .comment-send {
     width: 700rpx;
     box-sizing: border-box;
@@ -596,22 +596,22 @@
     background-color: #F6F6F6;
     border-radius: 6rpx;
     margin-top: 10px;
-    
+
     &-item {
       width: 600rpx;
       line-height: 40rpx;
     }
   }
-  
+
   .color-comment {
     color: #476DB9;
   }
-  
+
   .comment-item {
     border-bottom: 1px solid #E8E8E8;
     padding-bottom: 30rpx;
   }
-  
+
   /* 领券start */
   .coupon-box {
     padding: 30rpx 20rpx;
@@ -622,13 +622,13 @@
     background: white;
     border-bottom: 20rpx solid #f8f8f8;
   }
-  
+
   .coupon-box .btn {
     padding: 0 10rpx;
     color: #26C78D;
     border: 1px solid #26C78D;
   }
-  
+
   .right {
     display: flex;
     align-items: center;
@@ -636,13 +636,13 @@
     color: #666666;
     font-weight: 500;
   }
-  
+
   .right .img {
     width: 20rpx;
     height: 26rpx;
     margin-left: 20rpx;
   }
-  
+
   /* 领券 end */
   .ticks {
     max-height: 1050rpx;
@@ -650,7 +650,7 @@
     padding-top: 0rpx !important;
     // overflow: scroll;
   }
-  
+
   .t_title {
     font-size: 30rpx;
     color: #333;
@@ -662,14 +662,14 @@
     line-height: 90rpx;
     background-color: #FFFFFF;
   }
-  
+
   .t_title .delIcon {
-    
+
     position: absolute;
     top: 0rpx;
     right: 20rpx;
   }
-  
+
   .t_content {
     position: relative;
     width: 720rpx;
@@ -682,34 +682,34 @@
     font-size: 22rpx;
     color: #F43131;
   }
-  
+
   .t_left {
     float: left;
   }
-  
+
   .t_left .t_left_t .money {
     font-size: 42rpx;
     margin-right: 10rpx;
   }
-  
+
   .t_left .t_left_t {
     font-size: 24rpx;
     margin-bottom: 10rpx;
   }
-  
+
   .t_left .t_left_b {
     margin-top: 6rpx;
   }
-  
+
   .t_left .t_left_t i {
     font-size: 22rpx;
     font-style: normal;
   }
-  
+
   .t_left .t_left_c, .t_left .t_left_b {
     font-size: 22rpx;
   }
-  
+
   .t_right {
     float: right;
     height: 116rpx;
@@ -718,10 +718,10 @@
     font-size: 30rpx;
     border-left: 2rpx dotted #999;
     //width: 124rpx;
-    
+
     text-align: center;
   }
-  
+
   .left-btn {
     font-size: 14px;
     padding: 0 20rpx;
@@ -732,7 +732,7 @@
     border-radius: 42rpx;
     background: #85D4B8; //行内可以覆盖
   }
-  
+
   .right-btn {
     font-size: 14px;
     margin-left: 10rpx;
@@ -744,7 +744,7 @@
     border-radius: 42rpx;
     background: #26C78D; //行内可以覆盖
   }
-  
+
   .goods-bottom-action {
     position: fixed;
     bottom: 0;
@@ -753,7 +753,7 @@
     color: #fff;
     font-size: 12px;
     z-index: 103;
-    
+
     .cart {
       position: absolute;
       top: -8rpx;
@@ -764,13 +764,13 @@
       overflow: hidden;
       background: #5B5B5B;
       z-index: 4;
-      
+
       .icon-wrap {
         position: absolute;
         left: 50%;
         top: 50%;
         transform: translate(-50%, -50%);
-        
+
         .tag {
           position: absolute;
           right: -10px;
@@ -785,40 +785,40 @@
           text-align: center;
         }
       }
-      
+
     }
-    
+
     .box {
       position: absolute;
       bottom: 0;
       width: 750rpx;
-      
+
       background: rgba(0, 0, 0, .5);
       display: flex;
       align-items: center;
-      
+
       .prompt {
         flex: 1;
         padding-left: 158rpx;
       }
-      
+
       .buy {
         width: 200rpx;
         background: $fun-primary-color;
         height: 85rpx;
         line-height: 85rpx;
         text-align: center;
-        
+
       }
     }
-    
+
   }
-  
+
   .attr-form-wrap {
     width: 660rpx;
     background: #fff;
     border-radius: 10rpx;
-    
+
     .actions {
       display: flex;
       height: 90rpx;
@@ -826,7 +826,7 @@
       align-items: center;
       justify-content: space-between;
       padding: 0 30rpx;
-      
+
       .confirm-btn {
         width: 145rpx;
         height: 50rpx;
@@ -837,46 +837,46 @@
         border: none;
         font-size: 12px;
         color: #fff;
-        
+
         &.disabled {
           background: #999;
         }
       }
     }
-    
+
     .attr-head {
       padding: 14px;
       text-align: center;
       position: relative;
-      
+
       .close {
         position: absolute;
         right: 10px;
         top: 14;
       }
     }
-    
+
     .form {
-    
+
     }
-    
+
     .cart-attr-box {
       padding-bottom: 15px;
       max-height: 400px;
       overflow-y: scroll;
     }
-    
+
     .cartAttr {
       padding: 15px 15px 0;
-      
+
       .sku-title {
         margin-bottom: 12px;
       }
-      
+
       .sku-val-list {
         display: flex;
         flex-wrap: wrap;
-        
+
         .sku-val-item {
           padding: 4px 6px;
           font-size: 12px;
@@ -885,7 +885,7 @@
           margin-right: 20rpx;
           margin-bottom: 20rpx;
           box-sizing: border-box;
-          
+
           &.checked {
             border: 1px solid $fun-primary-color;
             color: $fun-primary-color;
@@ -895,25 +895,25 @@
       }
     }
   }
-  
+
   .carts {
     &-box {
       width: 750rpx;
       overflow-x: hidden;
       overflow-y: scroll;
     }
-    
+
     &-list {
       padding: 30rpx 30rpx 60rpx;
       width: 750rpx;
       box-sizing: border-box;
     }
-    
+
     &-item {
       height: 186rpx;
       display: flex;
       align-items: center;
-      
+
       &-cover {
         @include cover-img();
         width: 122rpx;
@@ -921,21 +921,21 @@
         border-radius: 4rpx;
         margin-right: 22rpx;
       }
-      
+
       &-info {
         width: 546rpx;
-        
+
         .title {
           font-size: 16px;
           color: #333;
         }
-        
+
         .attr-text {
           font-size: 12px;
           color: #999;
           margin-top: 10rpx;
         }
-        
+
         .actions {
           margin: 18rpx 0;
           height: 54rpx;
@@ -967,7 +967,7 @@
         </div>
       </div>
     </div>
-    
+
     <div :style="{height:diyHeadHeight+'px',opacity:activeHeadOpacity}" class="head-box-active"
          v-show="activeHeadOpacity">
       <div :style="{height:menuButtonInfo.top+'px'}"></div>
@@ -991,7 +991,7 @@
         </div>
       </div>
     </div>
-    
+
     <scroll-view
       :scroll-into-view="currentEleId"
       :scroll-with-animation="true"
@@ -999,7 +999,7 @@
       @scroll="bindScrollEvent"
       @scrolltolower="bindScrollLowerEvent"
       @scrolltoupper="bindScrollToupperEvent" @touchmove.stop.prevent="bindScrollTouchEvent" class="container-wrap" scroll-y>
-      
+
       <div id="section0">
         <swiper autoplay="true" circular="true" duration="500"
                 indicator-active-color="#26C78D" indicator-color="rgba(0,0,0,.16)" indicator-dots="true" interval="3000" style="height:750rpx;width: 750rpx;">
@@ -1007,7 +1007,7 @@
             <image :src="item" @click="previewImg(index)" class="full-img" v-if="item" />
           </swiper-item>
         </swiper>
-        
+
         <block v-show="isReady">
           <div class="end-time" v-if="mode==='spike' || mode==='seckill'">
             <block v-if="!countdown.is_end">
@@ -1056,7 +1056,7 @@
               <layout-icon size="20" type="iconicon-arrow-right"></layout-icon>
             </div>
           </div>
-          
+
           <div class="product-activity m-t-10">
             <div class="flex" style="padding-bottom: 30rpx" v-if="active.length>0">
               <div class="product-activity-title">
@@ -1102,7 +1102,7 @@
           </div>
         </block>
       </div>
-      
+
       <div @click="toShare" class="share-box">
         <image :src="'/static/client/product/product_share.png'|domain" class="full-img"
                style="width: 130% !important;"></image>
@@ -1114,7 +1114,7 @@
           {{productInfo.share_commission}}
         </div>
       </div>
-      
+
 <!--      评论列表-->
 <!--      <div id="section2" class="block section-comment"  v-show="isReady">-->
 <!--              -->
@@ -1156,7 +1156,7 @@
 <!--                </div>-->
 <!--              </div>-->
 <!--            </div>-->
-      
+
       <div @click="$linkTo('/pages/store/index?biz_id='+productInfo.biz_id)" class="section-store-info flex flex-vertical-c" id="section3"
            v-show="isReady">
         <image :src="store[0].biz_logo" style="width: 96rpx;height: 96rpx;margin-right: 28rpx;border-radius: 50%;"
@@ -1164,7 +1164,7 @@
         <div class="store-info-title">{{store[0].biz_shop_name}}</div>
         <div class="into-btn c9 fz-14">进店逛逛</div>
       </div>
-      
+
       <div class="section-content" id="section1" v-show="isReady">
         <div class="block" style="padding:40rpx 25rpx">
           <div class="block-title">
@@ -1172,17 +1172,17 @@
             <div class="block-title-more flex flex-vertical-center c9 fz-12"></div>
           </div>
         </div>
-        
+
         <block v-if="richTextReady">
           <u-parse :content="richContent"></u-parse>
         </block>
-      
+
       </div>
-      
+
       <div :style="{height:diyHeadHeight+40+'px'}"></div>
-    
+
     </scroll-view>
-    
+
     <div @touchmove.stop.prevent class="lazy-box"
          style="position: fixed;top: 0rpx;width: 750rpx;z-index: 102;background: #f8f8f8;" v-if="!isReady">
       <div
@@ -1193,7 +1193,7 @@
       <image class="" mode="widthFix"
              src="/static/goods/detail-lazy-3.png" style="width: 750rpx;position: fixed;bottom: 0;left: 0;z-index: 102"></image>
     </div>
-    
+
     <div class="goods-bottom-action">
       <div class="cart">
         <div @click="$openPop('carts')" class="icon-wrap">
@@ -1211,7 +1211,7 @@
         </div>
       </div>
     </div>
-    
+
     <layout-layer bottomStr="85rpx" positions="bottom" radius="20rpx" ref="carts">
       <div :style="{height:systemInfo.windowHeight*0.6+'px'}" class="carts-box">
         <div class="carts-list">
@@ -1241,7 +1241,7 @@
         </div>
       </div>
     </layout-layer>
-    
+
     <layout-layer positions="center" ref="attr">
       <div class="attr-form-wrap">
         <div class="attr-head">
@@ -1275,7 +1275,7 @@
         </div>
         <div class="actions">
           <div>
-          
+
           </div>
           <div>
             <div :class="{disabled:!submitFlag}" @click="confirmAdd" class="confirm-btn" v-if="attrInfo.num<1">加入购物车
@@ -1288,13 +1288,13 @@
               <layout-icon @click.stop="addNum" color="#26C78D" size="24" type="iconicon-plus p-10"></layout-icon>
             </div>
           </div>
-        
+
         </div>
       </div>
     </layout-layer>
-    
+
     <div class="safearea-box fixed"></div>
-    
+
     <layout-popup ref="couponModal">
       <view style="max-height: 1050rpx;">
         <div class="t_title ">
@@ -1317,7 +1317,7 @@
         </scroll-view>
       </view>
     </layout-popup>
-  
+
   </div>
 </template>
 
@@ -1343,7 +1343,7 @@ import {
   getCountdownFunc,
   getProductThumb,
   mergeObject,
-  numberSort,
+  numberSort
 } from '@/common/helper'
 import uParse from '@/componets/gaoyia-parse/parse'
 import Storage from '@/common/Storage'
@@ -1358,7 +1358,7 @@ const attrInfoTmpl = {
   attr_id: '', // 规格id
   attr_text: '',
   price: '', // 价格
-  count: 0,// 库存
+  count: 0// 库存
 }
 export default {
   name: 'ProductDetail',
@@ -1372,7 +1372,7 @@ export default {
     ProductSku,
     WzwGoodsAction,
     uParse,
-    LayoutPopup,
+    LayoutPopup
   },
   data () {
     return {
@@ -1388,9 +1388,9 @@ export default {
         attr_id: '', // 规格id
         attr_text: '',
         price: '', // 价格
-        count: 0,// 库存
+        count: 0// 库存
       },
-      
+
       thumbTempFilePath: '', // 图片本地地址
       isReady: false,
       richTextReady: false,
@@ -1398,14 +1398,14 @@ export default {
       // 倒计时
       activeInfo: {
         start_time: '',
-        end_time: '',
+        end_time: ''
       },
       countdown: {
         h: 0,
         s: 0,
         m: 0,
         d: 0,
-        is_end: true,
+        is_end: true
       },
       mode: 'default',
       flashsale_id: '',
@@ -1433,7 +1433,7 @@ export default {
         Products_PriceY: '0',
         Products_JSON: {},
         Products_Description: '',
-        Products_Promise: [],
+        Products_Promise: []
       }, // 商品数据
       active: [], // 满减活动列表
       bizInfo: {},
@@ -1445,9 +1445,9 @@ export default {
       checkfrom: '',
       postData: {
         prod_id: '',
-        qty: 1, // 购买数量
+        qty: 1 // 购买数量
       },
-      commentItem: {},// 要评论的对象
+      commentItem: {}// 要评论的对象
     }
   },
   computed: {
@@ -1469,13 +1469,13 @@ export default {
     },
     initData () {
       return this.$store.state.system.initData
-    },
+    }
   },
   methods: {
     goodsNumPlus (goodsInfo) {
       const num = goodsInfo.num ? goodsInfo.num + 1 : 1
       this.$set(goodsInfo, 'num', num)
-      
+
       // const attrInfoTmpl = {
       //   num: 0,
       //   attr_id: '', // 规格id
@@ -1489,38 +1489,38 @@ export default {
         attr_id: 'noattr_' + goodsInfo.Products_ID,
         attr_text: '无规格',
         price: goodsInfo.Products_PriceX,
-        count: goodsInfo.Products_Count,
+        count: goodsInfo.Products_Count
       }
       this.$store.commit('delivery/ADD_GOODS', {
         num: 1,
-        product: { ...goodsInfo, ...productInfo },
+        product: { ...goodsInfo, ...productInfo }
       })
     },
     async openAttrLayer (goodsInfo) {
       this.attrInfo = { ...attrInfoTmpl } // 重置
       this.check_attr = {}// 重置
       this.product = goodsInfo
-      
+
       if (goodsInfo.skujosn) {
         let skujosn_new = []
         for (const i in goodsInfo.skujosn) {
           skujosn_new.push({
             sku: i,
-            val: goodsInfo.skujosn[i],
+            val: goodsInfo.skujosn[i]
           })
         }
-        
+
         // 新增如果有手机的规格
         for (const i in goodsInfo.skujosn) {
           if (i === 'mobile_prod_attr_name') {
             skujosn_new = [{
               sku: i,
-              val: goodsInfo.skujosn[i],
+              val: goodsInfo.skujosn[i]
             }]
           }
         }
         // 结束
-        
+
         this.product.skujosn_new = skujosn_new
         this.product.skuvaljosn = goodsInfo.skuvaljosn
       }
@@ -1545,10 +1545,10 @@ export default {
         amount = currentAttrInfo.count
         error('购买数量不能超过库存量')
       }
-      
+
       this.$store.commit('delivery/SET_GOODS_NUM', {
         num: amount,
-        product: { attr_id: currentAttrInfo.attr_id },
+        product: { attr_id: currentAttrInfo.attr_id }
       })
     },
     addNum () {
@@ -1557,28 +1557,28 @@ export default {
       } else {
         uni.showToast({
           title: '购买数量不能大于库存量',
-          icon: 'none',
+          icon: 'none'
         })
         this.attrInfo.num = this.attrInfo.count
       }
-      
+
       this.$store.commit('delivery/ADD_GOODS', {
         num: 1,
-        product: { ...this.product, ...this.attrInfo },
+        product: { ...this.product, ...this.attrInfo }
       })
     },
     delNum () {
       if (this.attrInfo.num > 0) {
         this.attrInfo.num -= 1
-        
+
         this.$store.commit('delivery/MINUS_GOODS', {
           num: 1,
-          product: { attr_id: this.attrInfo.attr_id },
+          product: { attr_id: this.attrInfo.attr_id }
         })
       } else {
         uni.showToast({
           title: '购买数量不能小于0',
-          icon: 'none',
+          icon: 'none'
         })
         // this.attrInfo.num = 0
       }
@@ -1598,18 +1598,18 @@ export default {
         error('购买数量不能超过库存量')
         return
       }
-      
+
       // 实际也是加减的意思
       if (action === 'add') {
         this.$store.commit('delivery/ADD_GOODS', {
           num: amount - this.attrInfo.num,
-          product: { ...this.product, ...this.attrInfo },
+          product: { ...this.product, ...this.attrInfo }
         })
       }
       if (action === 'minus') {
         this.$store.commit('delivery/MINUS_GOODS', {
           num: this.attrInfo.num - amount,
-          product: { ...this.product, ...this.attrInfo },
+          product: { ...this.product, ...this.attrInfo }
         })
       }
     },
@@ -1618,7 +1618,7 @@ export default {
       this.attrInfo.num++
       this.$store.commit('delivery/ADD_GOODS', {
         num: 1,
-        product: { ...this.product, ...this.attrInfo },
+        product: { ...this.product, ...this.attrInfo }
       })
       // this.$closePop('attr')
     },
@@ -1665,9 +1665,9 @@ export default {
         this.attrInfo.attr_text = attr_val.Attr_Value_text
         this.attrInfo.count = attr_val.Property_count // 选择属性的库存
         this.attrInfo.price = attr_val.Attr_Price ? attr_val.Attr_Price : this.product.Products_PriceX // 选择属性的价格
-        
+
         this.submitFlag = !(!this.check_attr)
-        
+
         const atrr_id = attr_val.Product_Attr_ID
         const isCartHas = this.$store.getters['delivery/getRow'](atrr_id)
         console.log(isCartHas, attr_val)
@@ -1680,7 +1680,7 @@ export default {
       } else {
         this.attrInfo = { ...attrInfoTmpl }
       }
-      
+
       console.log(attr_val)
       // 判断属性库存
       if (attr_val && attr_val.Property_count <= 0) {
@@ -1689,7 +1689,7 @@ export default {
       }
       this.check_attr = check_attr
       this.submitFlag = !((!this.check_attr || Object.keys(this.check_attr).length !== Object.keys(this.product.skujosn_new).length))
-      
+
       // 购买数量处理  大于最高时赋值最高值
       if (this.attrInfo.num > this.attrInfo.count) {
         this.attrInfo.num = this.attrInfo.count
@@ -1698,13 +1698,13 @@ export default {
     attrNumMinus (attr, idx) {
       this.$store.commit('delivery/MINUS_GOODS', {
         num: 1,
-        product: { attr_id: attr.attr_id },
+        product: { attr_id: attr.attr_id }
       })
     },
     attrNumPlus (attr, idx) {
       this.$store.commit('delivery/ADD_GOODS', {
         num: 1,
-        product: { attr_id: attr.attr_id },
+        product: { attr_id: attr.attr_id }
       })
     },
     changeAttrNum (e, idx) {
@@ -1720,10 +1720,10 @@ export default {
         amount = currentAttrInfo.count
         error('购买数量不能超过库存量')
       }
-      
+
       this.$store.commit('delivery/SET_GOODS_NUM', {
         num: amount,
-        product: { attr_id: currentAttrInfo.attr_id },
+        product: { attr_id: currentAttrInfo.attr_id }
       })
     },
     // 滚动到顶部
@@ -1744,12 +1744,12 @@ export default {
     bindScrollEvent (e) {
       const { scrollTop } = e.detail
       const h = this.diyHeadHeight// 滑到这里的时候,就透明度为1
-      
+
       // this.scrollViewTop = scrollTop > h ? h : scrollTop
-      
+
       const opacity = scrollTop / h
       this.activeHeadOpacity = opacity > 1 ? 1 : opacity
-      
+
       /** 根据滑动的位置切换tab end **/
     },
     /**
@@ -1760,18 +1760,18 @@ export default {
     setAcitveTabIndx (idx, stop = false) {
       this.tabClick = true// 标记为改动
       this.headTabIndex = idx
-      
+
       var underlineAnimation = uni.createAnimation({
         duration: 200,
-        timingFunction: 'ease',
+        timingFunction: 'ease'
       })
-      
+
       const left = this.systemInfo.windowWidth / 4 * idx + this.systemInfo.windowWidth / 4 / 2 - 10 + 'px'
-      
+
       // 正下方
       underlineAnimation.width('40px').left(left).step()
       underlineAnimation.width('20px').step()
-      
+
       this.tabUnderlineAnimationData = underlineAnimation.export()
       this.scrollViewTop = idx > 0 ? 110 : 0
       if (!stop) {
@@ -1784,20 +1784,20 @@ export default {
       if (this.isLoading === true) return
       this.isLoading = true
       const data = {
-        coupon_id: item,
+        coupon_id: item
       }
       getUserCoupon(data, {
         tip: '领取中',
-        mask: true,
+        mask: true
       }).then(res => {
         uni.showToast({
           title: res.msg,
-          icon: 'none',
+          icon: 'none'
         })
         this.isLoading = false
         this.page = 1
         this.couponList.splice(i, 1)
-        
+
         if (this.couponList.length <= 0) {
           this.$closePop('couponModal')
         }
@@ -1806,7 +1806,7 @@ export default {
       })
       // this.getCoupon();
     },
-    
+
     goVipList () {
       const url = '/pagesA/user/VipList?bid=' + this.productInfo.biz_id
       this.$linkTo(url)
@@ -1827,7 +1827,7 @@ export default {
       const data = {
         touserid: this.commentItem.User_ID,
         commit_id: this.commentItem.Item_ID,
-        content: this.commentValue,
+        content: this.commentValue
       }
       if (this.commentItem.groupid) {
         data.groupid = this.commentItem.groupid
@@ -1858,7 +1858,7 @@ export default {
     },
     onePay () {
       if (!checkIsLogin(1, 1)) return
-      
+
       // 赠品
       if (this.mode === 'gift') {
         this.lingqu()
@@ -1867,18 +1867,18 @@ export default {
       // 重置参数，后面有需要再设置回来
       this.productInfo.minPrice = this.productInfo.Products_PriceX
       this.checkfrom = ''
-      
+
       if (this.mode === 'default') {
         this.hasCart = true
       }
-      
+
       if (this.mode === 'spike') {
         this.hasCart = false
         this.postData.active = 'spike' // 标记为是限时抢购
         this.checkfrom = 'spike'
         this.productInfo.minPrice = this.productInfo.price
       }
-      
+
       if (this.mode === 'seckill') {
         this.hasCart = false
         this.postData.active_id = this.productInfo.id // 秒杀id
@@ -1886,12 +1886,12 @@ export default {
         this.postData.active = 'flashsale' // 标记为是秒杀
         this.productInfo.minPrice = this.productInfo.price
       }
-      
+
       // 如果是有下单模板的商品,或者是虚拟商品，都不能加入购物车
       if (this.productInfo.order_temp_id || this.productInfo.Products_IsVirtual === 1) {
         this.hasCart = false
       }
-      
+
       this.$refs.mySku.show()
     },
     allPay () {
@@ -1911,7 +1911,7 @@ export default {
           attr_id: sku.id, // 选择属性id
           // count: sku.count, // 选择属性的库存
           qty: sku.qty, // 购买数量
-          cart_key: 'DirectBuy', // 购物车类型   CartList（加入购物车）、DirectBuy（立即购买）、PTCartList（不能加入购物车）
+          cart_key: 'DirectBuy' // 购物车类型   CartList（加入购物车）、DirectBuy（立即购买）、PTCartList（不能加入购物车）
           // productDetail_price: sku.price
         }
         if (this.postData.active) {
@@ -1942,7 +1942,7 @@ export default {
         cart_key: 'CartList',
         prod_id: this.productInfo.Products_ID,
         qty: sku.qty,
-        attr_id: sku.id,
+        attr_id: sku.id
       }
       updateCart(data).then(res => {
         toast('加入购物车成功')
@@ -1968,7 +1968,7 @@ export default {
         this.directBuy()
         return
       }
-      
+
       try {
         showLoading()
         this.postData.cart_key = 'DirectBuy'
@@ -1992,9 +1992,9 @@ export default {
         title: this.productInfo.Products_Name,
         desc: this.productInfo.Products_BriefDescription,
         imageUrl: getProductThumb(this.productInfo.ImgPath),
-        path: buildSharePath(path),
+        path: buildSharePath(path)
       }
-      
+
       switch (channel) {
         case 'wx':
           uni.share({
@@ -2008,7 +2008,7 @@ export default {
             success: function (res) {
             },
             fail: function (err) {
-            },
+            }
           })
           break
         case 'wxtimeline':
@@ -2023,7 +2023,7 @@ export default {
             success: function (res) {
             },
             fail: function (err) {
-            },
+            }
           })
           break
         case 'wxmini':
@@ -2037,17 +2037,17 @@ export default {
               id: _self.wxMiniOriginId,
               path: '/' + shareObj.path,
               type: 0,
-              webUrl: 'http://uniapp.dcloud.io',
+              webUrl: 'http://uniapp.dcloud.io'
             },
             success: ret => {
-            },
+            }
           })
           break
         case 'pic':
           // this.$toast('comming soon')
           const res = await getProductSharePic({ product_id: this.prod_id }, {
             tip: '努力加载中',
-            mask: true,
+            mask: true
           })
           Storage.set('temp_sharepic_info', res.data)
           const sharePic = res.data.img_url
@@ -2057,7 +2057,7 @@ export default {
           }
           setTimeout(function () {
             uni.navigateTo({
-              url: '/pagesA/product/SharePic/SharePic',
+              url: '/pagesA/product/SharePic/SharePic'
             })
           }, 200)
           // uni.previewImage({
@@ -2074,13 +2074,13 @@ export default {
       uni.previewImage({
         urls: imgs,
         indicator: 'default',
-        current: index,
+        current: index
       })
     },
     stampFunc () {
       const data = getCountdownFunc({
         start_timeStamp: this.activeInfo.start_time,
-        end_timeStamp: this.activeInfo.end_time,
+        end_timeStamp: this.activeInfo.end_time
       })
       if (data) {
         this.countdown = data
@@ -2091,77 +2091,77 @@ export default {
     async _init_func (options) {
       try {
         showLoading()
-        
+
         // 获取优惠券
         this.page = 1
         const data = {
-          prod_id: this.prod_id,
+          prod_id: this.prod_id
         }
-        
+
         const productInfo = await getProductDetail(data, { onlyData: true }).catch(e => {
           throw Error(e.msg || '获取商品详情失败')
         })
         Object.assign(this.productInfo, productInfo)
-        
+
         // this.productInfo.Products_Promise = [{ name: '随时退款' }, { name: '随时退款' }, { name: '随时退款' }, { name: '随时退款' }]
         // this.productInfo.Products_Description = formatRichTextByUparseFn(this.productInfo.Products_Description)
-        
+
         this.richContent = formatRichTextByUparseFn(this.productInfo.Products_Description)
         this.richTextReady = true
         this.isVirtual = this.productInfo.Products_IsVirtual === 1
-        
+
         this.isReady = true
-        
+
         const couponParam = {
           pageSize: 999,
           page: 1,
           status: 3,
           front_show: 1,
-          biz_id: this.productInfo.biz_id,
+          biz_id: this.productInfo.biz_id
         }
-        
+
         this.couponList = await getCouponList(couponParam, { onlyData: true }).catch(e => {
           throw Error(e.msg || '获取优惠券失败')
         })
-        
+
         this.comments = await getCommitList({
           Products_ID: this.productInfo.Products_ID,
           pageSize: 999,
-          page: 1,
+          page: 1
         }, {
-          onlyData: true,
+          onlyData: true
         }).catch((e) => {
           throw Error('获取评论数据失败')
         })
-        
+
         this.store = await getBizInfo({ biz_id: this.productInfo.biz_id }, { onlyData: true }).catch(e => {
           throw Error(e.msg || '获取店铺信息失败')
         })
-        
+
         this.bizInfo = this.store[0]
-        
+
         this.storeList = await getStoreList({ biz_id: this.productInfo.biz_id }, {
-          onlyData: true,
+          onlyData: true
         }).catch(e => {
           throw Error(e.msg || '获取店铺列表失败')
         })
-        
+
         const res = await getActiveInfo({
           biz_id: this.productInfo.biz_id,
-          type: 'manjian',
+          type: 'manjian'
         }, { onlyData: true }).catch(e => {
         })
         if (res !== null && res.active_info) {
           this.active = res.active_info
         }
-        
+
         hideLoading()
       } catch (e) {
         Exception.handle(e)
       } finally {
         hideLoading()
       }
-    },
+    }
   },
   onReady () {
     this.setAcitveTabIndx(0)
@@ -2169,10 +2169,10 @@ export default {
   },
   onPageScroll (e) {
     // console.log(e)
-    
+
   },
   mounted () {
-  
+
   },
   onLoad (options) {
     const { mode = 'waimai', prod_id } = options
@@ -2189,8 +2189,17 @@ export default {
     }
     this.prod_id = prod_id
     if (mode) this.mode = mode
-    
+
     this._init_func(options)
+  },
+  // 分享到朋友圈
+  onShareTimeline () {
+    return {
+      query: {
+        prod_id: this.prod_id,
+        mode:this.mode
+      }
+    }
   },
   // 自定义小程序分享
   onShareAppMessage () {
@@ -2199,9 +2208,9 @@ export default {
       title: this.productInfo.Products_Name,
       desc: this.productInfo.Products_BriefDescription,
       imageUrl: this.productInfo.ImgPath,
-      path: buildSharePath(path),
+      path: buildSharePath(path)
     }
     return shareObj
-  },
+  }
 }
 </script>
