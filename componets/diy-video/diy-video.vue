@@ -13,7 +13,7 @@
   </view>
 </template>
 <script>
-import { isDev } from '../../common/env.js'
+import ENV from '../../common/env.js'
 
 export default {
   name: 'DiyVideo',
@@ -49,7 +49,7 @@ export default {
       }
     },
     videoErrorCallback (e) {
-      if (!isDev) return
+      if (!ENV.isDev) return
       const msg = '视频播放错误:' + JSON.stringify(e)
       uni.showModal({
         content: msg,

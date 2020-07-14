@@ -1,4 +1,4 @@
-import { staticUrl } from './env'
+import ENV from '@/common/env'
 import { confirm, error, linkToEasy } from './fun'
 import { getAccessToken, upload } from './request'
 import Storage from '@/common/Storage'
@@ -182,7 +182,7 @@ export const formatArrayColumn = (arr, column, filterFn, deepCopy) => {
       arr[key][column] = filterFn(arr[key][column])
     }
     if (deepCopy) return objTranslate(arr)
-  
+
     return true
   }catch (e) {
     return false
@@ -316,7 +316,7 @@ export const getString = (arr, key, mbx = 99) => {
 
 export const getDomain = (url) => {
   if (!url) return ''
-  if (url.indexOf('http') === -1) return staticUrl + url
+  if (url.indexOf('http') === -1) return ENV.staticUrl + url
   return url
 }
 
@@ -757,14 +757,14 @@ export function getTouchEventInfo (event) {
 export function mixinStyle (defaultStyle, style) {
   if (!defaultStyle) defaultStyle = {}
   if (!style) style = {}
-  
+
   const rt = objTranslate(defaultStyle)
-  
+
   for (var i in style) {
     if (!style.hasOwnProperty(i)) continue
     rt[i] = style[i]
   }
-  
+
   return rt
 }
 
