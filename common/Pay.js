@@ -1,4 +1,4 @@
-import { WX_JSSDK_INIT } from '@/common/env'
+import { WX_JSSDK_INIT } from '@/common/uni'
 import { isWeiXin, urlencode } from '@/common/helper'
 import Storage from '@/common/Storage'
 import { confirmOrderPayStatus } from '@/api/order'

@@ -459,6 +459,7 @@ export default {
   },
   data () {
     return {
+      isLoading: false,
       isUserLogin: false,
       storeBottomActionHeight: '0px',
       listExpand: false,
@@ -1155,6 +1156,9 @@ export default {
       this.$refs.commentModal.show()
     },
     async changeCateIdx (idx, more = false) {
+      // 多次触发
+      if (this.isLoading) return
+      this.isLoading = true
       if (!more) {
         // if (idx === this.bizCateNavIndex) return// 重复点击不要了
         this.bizCateNavIndex = idx
@@ -1182,6 +1186,7 @@ export default {
         Exception.handle(e)
       } finally {
         this.bizCateList[this.bizCateNavIndex].load = false
+        this.isLoading = false
       }
     },
     async getMoreByVirtual () {

@@ -1,6 +1,4 @@
-import {
-  IM_WSS_URL
-} from '@/common/env'
+import ENV from '@/common/env'
 import { bindUid, getAccessToken, getMsgList, sendMsg, checkOnline, getNoReadMsg, readMsg } from '@/common/Im/Fetch'
 import Promisify from '@/common/Promisify'
 import { Exception } from '@/common/Exception'
@@ -504,7 +502,7 @@ class IM {
     let SocketTask = null
     await new Promise(resolve => {
       SocketTask = uni.connectSocket({
-        url: IM_WSS_URL,
+        url: ENV.IM_WSS_URL,
         complete: () => {
           // this.createInstance = true // 标记为创建成功
           resolve(true)
