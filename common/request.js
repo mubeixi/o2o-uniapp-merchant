@@ -1,4 +1,4 @@
-import * as ENV from './env'
+import  ENV from '@/common/env'
 // import store from '../store'
 import { error } from './fun'
 import { emptyObject,isWeiXin } from './helper'

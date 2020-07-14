@@ -1,9 +1,9 @@
 import Vue from 'vue'
-import { staticUrl } from './env'
+import ENV from './env'
 
 Vue.filter('domain', function (url) {
   if (!url) return ''
-  if (url.indexOf('http') === -1) return staticUrl + url
+  if (url.indexOf('http') === -1) return ENV.staticUrl + url
   return url
 })
 
@@ -95,7 +95,7 @@ export const formatRichTextByUparseFn = (html) => {
   })
 
   // 替换地址
-  newContent = newContent.replace(/="\/uploadfiles/gi, `="${staticUrl}/uploadfiles`)
+  newContent = newContent.replace(/="\/uploadfiles/gi, `="${ENV.staticUrl}/uploadfiles`)
 
   // newContent= newContent.replace(/<img[^>]*>/gi,function(match,capture){
   //   match = match.replace(/style="[^"]+"/gi, '')//.replace(/style='[^']+'/gi, '');

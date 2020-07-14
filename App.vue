@@ -3,7 +3,7 @@
   @import "./assets/app.scss";
 </style>
 <script>
-import { users_id, isCustom } from '@/common/env'
+import ENV from '@/common/env'
 import Storage from '@/common/Storage'
 import eventHub from '@/common/eventHub'
 import IM from '@/common/Im/Im'
@@ -16,12 +16,12 @@ export default {
   },
   onLaunch: function () {
     console.log('App Launch')
-    
+
     // eventHub.livePlayer = livePlayer
     // #ifdef MP-WEIXIN
     let _users_id = ''
-    if (isCustom) {
-      _users_id = users_id
+    if (ENV.isCustom) {
+      _users_id = ENV.users_id
     } else {
       const extConfig = wx.getExtConfigSync ? wx.getExtConfigSync() : {}
       _users_id = extConfig.users_id
@@ -35,7 +35,7 @@ export default {
     // #endif
 
     // #ifndef MP-WEIXIN
-    Storage.set('users_id', users_id)
+    Storage.set('users_id', ENV.users_id)
     // #endif
 
     this.$store.dispatch('system/loadInitData')
