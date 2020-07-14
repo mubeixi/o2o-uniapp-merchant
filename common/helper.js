@@ -184,7 +184,7 @@ export const formatArrayColumn = (arr, column, filterFn, deepCopy) => {
     if (deepCopy) return objTranslate(arr)
 
     return true
-  }catch (e) {
+  } catch (e) {
     return false
   }
 }
@@ -603,6 +603,24 @@ export const buildSharePath = (path) => {
   console.log(`share path is ${ret}`)
 
   return ret
+}
+
+/**
+ * 小程序分享到朋友圈
+ * @param path
+ * @returns {string}
+ */
+export const buildShrareTimeQuery = () => {
+  const users_ID = Storage.get('users_id')
+  const userInfo = store.state.userInfo || Storage.get('userInfo')
+  let search = ''
+  search += (users_ID ? ('users_id=' + users_ID) : '')
+  let owner_id = 0
+  if (userInfo.User_ID && userInfo.Is_Distribute === 1) {
+    owner_id = userInfo.User_ID
+  }
+  search += ('&owner_id=' + owner_id)
+  return search
 }
 
 /**

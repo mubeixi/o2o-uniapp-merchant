@@ -9,7 +9,7 @@
       <block v-if="initData.ShopLogo">
         <image :src="initData.ShopLogo+'-r100'" class="img m-t-25" mode="widthFix"></image>
       </block>
-      
+
       <div class="form">
         <form @reset="formReset" @submit="formSubmit" style="display: block">
           <div class="form-item uni-column">
@@ -500,6 +500,9 @@ export default {
   },
   onReady () {
 
+  },
+  onShow () {
+    Storage.remove('toLogin')
   },
   computed: {
     initData () {

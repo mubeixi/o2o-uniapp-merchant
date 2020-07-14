@@ -64,7 +64,8 @@ export default {
       postData: {
         page: 1,
         pageSize: 6,
-        has_img: 1
+        has_img: 1,
+		score: 5
       },
       totalCount: 0
     }
