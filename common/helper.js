@@ -1,4 +1,4 @@
-import { staticUrl } from './env'
+import ENV from '@/common/env'
 import { confirm, error, linkToEasy } from './fun'
 import { getAccessToken, upload } from './request'
 import Storage from '@/common/Storage'
@@ -316,7 +316,7 @@ export const getString = (arr, key, mbx = 99) => {
 
 export const getDomain = (url) => {
   if (!url) return ''
-  if (url.indexOf('http') === -1) return staticUrl + url
+  if (url.indexOf('http') === -1) return ENV.staticUrl + url
   return url
 }
 

@@ -12,7 +12,7 @@ import {
 } from '@/common/helper'
 import eventHub from '@/common/eventHub'
 // #ifdef H5
-import { WX_JSSDK_INIT } from '@/common/env'
+import { WX_JSSDK_INIT } from '@/common/uni'
 // #endif
 import { sendAnalysisData } from '@/api/common'
 

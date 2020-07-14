@@ -1,5 +1,5 @@
 import { modal, toast } from '@/common/fun'
-import { isDev } from '@/common/env'
+import ENV from '@/common/env'
 
 /**
  * 异常类——构造函数模式
@@ -30,7 +30,7 @@ function handle (e) {
     message = e
   }
   // 开发模式下，全部都弹出来
-  if (isDev) { type = 'modal'; message = '开发调试信息:' + message; console.log(e) }
+  if (ENV.isDev) { type = 'modal'; message = '开发调试信息:' + message; console.log(e) }
   if (type === 'toast') toast(message, icon)
   if (type === 'modal') modal(message)
 
