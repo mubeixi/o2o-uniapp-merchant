@@ -1220,6 +1220,7 @@ import LayoutModal from '@/componets/layout-modal/layout-modal'
 import { Exception } from '@/common/Exception'
 import ProductComment from '@/pages/product/components/product-comment'
 import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import store from '@/store'
 
 let countdownInstance = null
 
@@ -2182,10 +2183,20 @@ export default {
   },
   // 分享到朋友圈
   onShareTimeline () {
+    const users_ID = Storage.get('users_id')
+    const userInfo = this.$store.state.userInfo || Storage.get('userInfo')
+
+    let owner_id = 0
+    if (userInfo.User_ID && userInfo.Is_Distribute === 1) {
+      owner_id = userInfo.User_ID
+    }
+
     return {
       query: {
+        users_id: users_ID,
+        owner_id,
         prod_id: this.prod_id,
-        mode:this.mode
+        mode: this.mode
       }
     }
   },
