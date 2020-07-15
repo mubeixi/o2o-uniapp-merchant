@@ -15,6 +15,7 @@ import eventHub from '@/common/eventHub'
 import { WX_JSSDK_INIT } from '@/common/uni'
 // #endif
 import { sendAnalysisData } from '@/api/common'
+import store from '@/store'
 
 const Analysis = {
   data () {
@@ -305,7 +306,20 @@ export default {
   },
   // 分享到朋友圈
   onShareTimeline () {
+    const users_ID = Storage.get('users_id')
+    const userInfo = store.state.userInfo || Storage.get('userInfo')
 
+    let owner_id = 0
+    if (userInfo.User_ID && userInfo.Is_Distribute === 1) {
+      owner_id = userInfo.User_ID
+    }
+
+    return {
+      query: {
+        users_id: users_ID,
+        owner_id
+      }
+    }
   }
 }
 
