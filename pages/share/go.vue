@@ -92,7 +92,7 @@ import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import LayoutModal from '@/componets/layout-modal/layout-modal'
 import BaseMixin from '@/mixins/BaseMixin'
 import Promisify from '@/common/Promisify'
-import { buildSharePath, cutstrFun, saveImageToDisk } from '@/common/helper'
+import { buildSharePath, checkIsLogin, cutstrFun, saveImageToDisk } from '@/common/helper'
 import { Exception } from '@/common/Exception'
 import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
@@ -127,17 +127,18 @@ export default {
         Products_PriceX: '0',
         Products_PriceY: '0',
         Products_JSON: {},
-        Products_Description: ''
+        Products_Description: '',
+        userInfo: null
       }
     }
   },
   computed: {
     initData () {
       return this.$store.state.system.initData
-    },
-    userInfo () {
-      return this.$store.getters['user/getUserInfo']()
     }
+    // userInfo () {
+    //   return this.$store.getters['user/getUserInfo']()
+    // }
   },
   onLoad (options) {
     const { mode, spike_good_id, flashsale_id, prod_id } = options
@@ -163,7 +164,7 @@ export default {
     // this.wrapPath = this.$getDomain('/static/client/share/cover-wrap.png')
   },
   onShow () {
-    this.$refs.commentModal.close()
+    this.$refs.commentModal && this.$refs.commentModal.close()
   },
   methods: {
     async saveFn () {
@@ -210,6 +211,7 @@ export default {
       this.shareText = e.detail.value
     },
     async createCanvas () {
+      if (!checkIsLogin(1, 1)) return
       try {
         showLoading('生成中')
         const wrapHeight = 1038
@@ -348,6 +350,7 @@ export default {
         //   urls: [tempFilePath] // 需要预览的图片http链接列表
         // })
       } catch (e) {
+        e.type = 'modal'
         Exception.handle(e)
       } finally {
         hideLoading()
@@ -367,6 +370,8 @@ export default {
     async _init_func (options) {
       try {
         showLoading()
+
+        this.userInfo = await this.$store.dispatch('user/getUerInfo', { stroage: 'online' })
 
         const data = {
           prod_id: this.prod_id

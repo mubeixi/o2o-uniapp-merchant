@@ -18,6 +18,7 @@ export default {
     console.log('App Launch')
 
     // eventHub.livePlayer = livePlayer
+    console.log('ENV is',ENV)
     // #ifdef MP-WEIXIN
     let _users_id = ''
     if (ENV.isCustom) {

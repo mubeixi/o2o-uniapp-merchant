@@ -532,7 +532,10 @@ export default {
     },
     allCouponMoney () {
       try {
-        return computeArrayColumnSum(this.bizList, 'Coupon_Money')
+        const bizCouponMoney = computeArrayColumnSum(this.bizList, 'Coupon_Money')
+        const sysCouponMoney = computeArrayColumnSum(this.bizList, 'users_coupon_money')
+
+        return sysCouponMoney + bizCouponMoney
       } catch (e) {
         return 0
       }
@@ -1240,7 +1243,7 @@ export default {
           if (this.checkfrom === 'group') {
             shippingStatus.isAppoint = false
           }
-          
+
           bizInfo.biz_user_money = Number(bizInfo.biz_user_money)
 
           bizListUpShiping[bizId] = Object.assign({}, { shippingStatus: { ...shippingStatus }, bizSendByMerchat }, bizInfo)

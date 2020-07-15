@@ -493,8 +493,8 @@ export default {
         this.allowUseMoney = Math.min(parseFloat(this.userInfo.User_Money), parseFloat(allTotalPrice))
 
         for (var orderItem of order_list) {
-          console.log(orderItem.users_coupon_money, orderItem.Coupon_Money)
-          if (orderItem.users_coupon_money > 0 && orderItem.Coupon_Money == 0) {
+          // console.log(orderItem.users_coupon_money, orderItem.Coupon_Money)
+          if (orderItem.users_coupon_money > 0 && Number(orderItem.Coupon_Money) === 0) {
             orderItem.Coupon_Money = orderItem.users_coupon_money
           }
           this.$set(this.postData.need_invoice, orderItem.Order_ID, orderItem.Order_NeedInvoice ? 1 : 0)// 是否需要发票
