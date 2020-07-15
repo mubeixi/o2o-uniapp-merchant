@@ -2180,6 +2180,15 @@ export default {
 
     this._init_func(options)
   },
+  // 分享到朋友圈
+  onShareTimeline () {
+    return {
+      query: {
+        prod_id: this.prod_id,
+        mode:this.mode
+      }
+    }
+  },
   // 自定义小程序分享
   onShareAppMessage () {
     let path = '/pages/product/detail?prod_id=' + this.prod_id
