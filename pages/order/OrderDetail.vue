@@ -90,6 +90,15 @@
       </div>
     </div>
 
+    <view class="other bg-white" v-if="orderInfo.Order_Shipping&&orderInfo.Order_Shipping.shipping_id=='is_self_get'">
+      <view class="bd" @click="$openLocation(orderInfo.biz_lat_gd,orderInfo.biz_lon_gd)">
+        <view class="o_title">
+          <span>自提地点</span>
+          <span class="c8">{{orderInfo.biz_address}}</span>
+        </view>
+      </view>
+    </view>
+
     <view class="other bg-white" v-if="orderInfo.Order_IsRecieve == 1">
       <view class="bd">
         <view class="o_title">
