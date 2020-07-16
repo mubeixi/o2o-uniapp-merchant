@@ -1,13 +1,9 @@
 <template>
-  <div class="page-wrap">
-    <layout-loading v-if="loadingByTmpl"></layout-loading>
-    <view class="home-diy-wrap" v-else>
-      <section
-        :class="[item]"
-        :data-name="item"
-        :key="index"
-        class="section"
-        v-for="(item, index) in templateList[tagIndex]">
+  <view @click="commonClick" style="position: relative;" v-show="system.title">
+    <view :style="{background:system.bgcolor}" class="home-wrap">
+
+      <section :class="[item]" :data-name="item" :key="index" :ref="item" class="section"
+               v-for="(item, index) in templateList[tagIndex]">
         <diy-base
           :confData="templateData[tagIndex][index]"
           :index="index"
@@ -80,9 +76,8 @@
           v-if="item.indexOf('kill') !== -1"></diy-kill>
       </section>
     </view>
-    <layout-copyright></layout-copyright>
+  </view>
 
-  </div>
 </template>
 
 <script>
@@ -101,23 +96,30 @@ import DiyVideo from '@/componets/diy-video/diy-video'
 import DiySwiper from '@/componets/diy-swiper/diy-swiper'
 import DiyBase from '@/componets/diy-base/diy-base'
 import DiyGoods from '@/componets/diy-goods/diy-goods'
-import LayoutCopyright from '@/componets/layout-copyright/layout-copyright'
-import { getSkinConfig, getSkinPreData } from '@/api/common'
-import { Exception } from '@/common/Exception'
-import { error, modal } from '@/common/fun'
 import DiyKill from '@/componets/diy-kill/diy-kill'
 import DiyTitle from '@/componets/diy-title/diy-title'
 import DiyText from '@/componets/diy-text/diy-text'
-
+import { getSkinConfig, getSkinPreData, getDiySkinConfig } from '@/api/common'
+import { Exception } from '@/common/Exception'
+import { error, modal } from '@/common/fun'
+import BaseMixin from '@/mixins/BaseMixin'
 
 export default {
-  name: 'pre',
+  mixins: [BaseMixin],
+  data () {
+    return {
+      selfObj: null,
+      templateList: [],
+      templateData: [],
+      tagIndex: 0,
+      system: {}
+    }
+  },
   components: {
     DiyText,
     DiyTitle,
     DiyKill,
     DiyGoods,
-    LayoutLoading,
     DiyNav,
     DiyFlash,
     DiyGroup,
@@ -130,32 +132,74 @@ export default {
     DiyHr,
     DiyVideo,
     DiySwiper,
-    DiyBase,
-    LayoutCopyright
+    DiyBase
   },
-  data () {
-    return {
-      loadingByTmpl: false, // 标记是否请求完结
-      templateList: [],
-      templateData: [],
-      tagIndex: 0,
-      Home_ID: 0
+  onHide () {
+    // 暂停notice组件的定时器任务
+    if (this.$refs.notice) {
+      this.$refs.notice.map(item => {
+        item.pauseAn()
+      })
+    }
+
+    // 暂停播放
+    if (this.$refs.video) {
+      this.$refs.video.map(item => {
+        item.pauseFn()
+      })
     }
   },
-  methods: {
-    async get_tmpl_data () {
-      try {
-        const { Home_Json: resultData } = await getSkinPreData({ Home_ID: this.Home_ID }, { onlyData: true }).catch(e => {
-          throw Error(e.msg || '获取首页模板失败')
+  created () {
+
+  },
+  methods: {},
+  onShow () {
+    if (this.$refs.notice) {
+      this.$refs.notice.map(item => {
+        item.restartAn()
+      })
+    }
+  },
+  onLoad (options) {
+    const Home_ID = options.Home_ID
+
+    // #ifdef H5
+    // if (!Home_ID && GetQueryByString(location.href, 'Home_ID')) {
+    //   Home_ID = GetQueryByString(location.href, 'Home_ID')
+    // }
+    // #endif
+
+    if (!Home_ID) {
+      this.$error('Home_ID参数错误')
+    }
+
+    new Promise((resolve, reject) => {
+      // Skin_ID,
+      getDiySkinConfig({ Home_ID }, {
+        tip: 'loading',
+        mask: true
+      }).then(res => {
+        if (res.data.Home_Json) {
+          resolve(JSON.parse(res.data.Home_Json))
+        } else {
+          reject(Error('获取模板数据失败'))
+        }
+      }).catch(e => {
+
+      })
+    })
+      .then(mixinData => {
+        const templateData = mixinData.plugin
+        this.system = mixinData.system
+
+        uni.setNavigationBarTitle({
+          title: mixinData.system.title
         })
-
-        const mixinData = typeof resultData === 'string' ? JSON.parse(resultData) : resultData
-
-        const { plugin: templateData, system } = mixinData
 
         // 存储页面数据
         this.templateData = [] // 页面数据的二维数组。
         this.templateList = [] // 页面组件的二维数组。
+
         if (templateData && Array.isArray(templateData[0])) {
           // 多个页面，每个页面是一个数组
           templateData.map(item => {
@@ -163,7 +207,9 @@ export default {
             this.templateList.push([])
           })
         } else if (
-          templateData && !Array.isArray(templateData[0]) && templateData.length > 0
+          templateData &&
+          !Array.isArray(templateData[0]) &&
+          templateData.length > 0
         ) {
           // 单纯是一个对象的时候？？
           this.templateData = [templateData]
@@ -184,66 +230,31 @@ export default {
             })
           }
         }
-
-        return true
-      } catch (e) {
-        return e
-      }
-    },
-    async _init_func () {
-      // showLoading('初始化数据')
-      try {
-        this.loadingByTmpl = true
-        const handleRT = await this.get_tmpl_data()
-        this.loadingByTmpl = false
-        if (handleRT !== true) throw handleRT // hanldeRT不是true就是一个Error实例，直接抛出
-      } catch (e) {
-        Exception.handle(e)
-      } finally {
-        // hideLoading()
-      }
-    }
-  },
-  onLoad (options) {
-    const Skin_ID = options.Skin_ID
-    const Home_ID = options.Home_ID
-    
-    
-  
-    if (!Skin_ID && !Home_ID) {
-      error('参数错误')
-      return
-    }
-    this.Home_ID = Home_ID
-    this._init_func()
-  },
-  onShow () {
-    if (this.$refs.notice) {
-      this.$refs.notice.map(item => {
-        item.restartAn()
       })
-    }
-  },
-  onHide () {
-    // 暂停notice组件的定时器任务
-    if (this.$refs.notice) {
-      this.$refs.notice.map(item => {
-        item.pauseAn()
+      .catch(err => {
+        modal(err.msg || '初始化模板信息错误')
       })
-    }
-
-    // 暂停播放
-    if (this.$refs.video) {
-      this.$refs.video.map(item => {
-        item.pauseFn()
-      })
-    }
-  },
-  created () {
-
   }
 }
 </script>
-<style scoped>
 
+<style lang="less" scope="scope">
+  .home-wrap {
+    width: 750rpx;
+    overflow-x: hidden;
+    background: #f2f2f2;
+    position: relative;
+    min-height: 100vh;
+    /* #ifdef APP-PLUS */
+    /*padding-top: var(--status-bar-height);*/
+    /* #endif */
+
+    .section {
+      position: relative;
+      //搜索框特殊
+      &.search {
+        position: static;
+      }
+    }
+  }
 </style>

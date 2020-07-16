@@ -1,6 +1,5 @@
 import { fetch } from '@/common/request'
 
-
 // 统计
 export const sendAnalysisData = (param, options) => fetch({
   act: 'clickRecord',
@@ -27,7 +26,6 @@ export const getActiveInfo = (param, options) => fetch({
   param,
   options
 })
-
 
 // 获取赠品列表
 export const getShopGiftList = (param, options) => fetch({
@@ -63,7 +61,10 @@ export const getProductCountInfo = (param, options) => fetch({ act: 'get_users_i
 export const getSkinConfig = (param, options) => fetch({ act: 'get_shophome', param, options })
 
 // 获取自定义页面配置
-export const getSkinPreData = (param, options) => fetch({ act: 'get_makeup_home_data', param, options })
+export const getSkinPreData = (param, options) => fetch({ act: 'get_skin_data', param, options })
+
+// 获取自定义页面配置
+export const getDiySkinConfig = (param, options) => fetch({ act: 'get_makeup_home_data', param, options })
 
 // 获取地址
 export const getAreaByPid = (param, options) => fetch({ act: 'getAreaByPid', param, options })
@@ -90,4 +91,3 @@ export const getDistributeWxQrcode = (param, options) => fetch({ act: 'get_distr
 
 // 获取乡镇
 export const getTown = (param, options) => fetch({ act: 'get_town', param, options })
-

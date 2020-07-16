@@ -173,6 +173,18 @@
           }
         },
         {
+          "path": "common/single",
+          "style": {
+            "navigationBarTitleText": "单页面"
+          }
+        },
+        {
+          "path": "common/webview",
+          "style": {
+            "navigationBarTitleText": "webview"
+          }
+        },
+        {
           "path": "store/productListByMall",
           "style": {
             "navigationBarTitleText": "全部商品",
