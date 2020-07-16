@@ -2,8 +2,8 @@
   <div class="wrap">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <div class="bg"></div>
-    <div :style="{backgroundImage:'url('+$getDomain('/static/client/moneybox.png')+')'}" class="moneybox font14">
-      分销佣金<span class="font14" style="color: #f43838">￥</span><span
+    <div :style="{backgroundImage:'url('+$getDomain('/static/client/moneybox.png')+')'}" class="moneybox fz-14">
+      分销佣金<span class="fz-14" style="color: #f43838">￥</span><span
       class="money">{{info.product.share_commission}}</span>
     </div>
     <div @click="preview" class="imgbox">

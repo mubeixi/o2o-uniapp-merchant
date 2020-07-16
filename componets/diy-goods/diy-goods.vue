@@ -21,7 +21,7 @@
                :class="{empyInfo:isEmpeyInfo}">
             <div class="left">
               <div v-show="goods.config.attr.title.show" class="title">{{item.Products_Name}}</div>
-              <div v-show="goods.config.attr.desc.show" class="font12 graytext desc">
+              <div v-show="goods.config.attr.desc.show" class="fz-12 graytext desc">
                 {{item.Products_BriefDescription||'暂无介绍'}}
               </div>
               <!--              <div v-show="goods.config.attr.price.show" class="price"><span class="sign">￥</span>{{item.Products_PriceX}}-->
@@ -90,7 +90,7 @@ export default {
       } else if (Array.isArray(this.goods.value.list) && this.goods.value.list.length > 0) {
         return this.goods.value.list.length
       } else {
-        return 999
+        return 9999
       }
     },
     isEmpeyInfo () {

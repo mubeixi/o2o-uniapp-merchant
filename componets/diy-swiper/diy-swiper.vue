@@ -8,6 +8,8 @@
       :indicator-dots="config.indicatorDots==='circle'"
       :autoplay="autoplay"
       :circular="circular"
+      :indicator-color="dotsColor"
+      :indicator-active-color="dotsActiveColor"
       :interval="interval"
       :duration="duration">
       <swiper-item class="swiper-item" v-for="(img,idx) in imgList" :key="idx" @click="bindClick(idx)">
@@ -30,6 +32,7 @@ import { linkTo, linkToEasy } from '@/common/fun'
 import { getAdvertList } from '@/api/common'
 import { Exception } from '@/common/Exception'
 
+// https://developers.weixin.qq.com/miniprogram/dev/component/swiper.html
 export default {
   name: 'DiySwiper',
   props: {
@@ -57,28 +60,14 @@ export default {
     //   type: [Boolean, String],
     //   default: false
     // },
-    circular: {
-      default: true,
-      type: Boolean
-    },
+    // circular: {
+    //   default: true,
+    //   type: Boolean
+    // },
     vertical: {
       default: false
     },
-    autoplay: {
-      default: true
-    },
-    dotsColor: {
-      default: 'rgba(0,0,0,.3)'
-    },
-    dotsActiveColor: {
-      default: '#26C78D'
-    },
-    interval: {
-      default: 5000
-    },
-    duration: {
-      default: 500
-    },
+
     position: {
       default: '',
       type: String
@@ -99,15 +88,22 @@ export default {
   data () {
     return {
       lists: [],
-      config:{
-        paddingStr:'0px',
-        indicatorDots:'none'
+
+      config: {
+        paddingStr: '0px',
+        indicatorDots: 'none'
       },
       boxw: [],
       boxh: [],
       urls: [],
       imgList: [],
-      current: 0
+      current: 0,
+      circular: true,
+      autoplay: true,
+      dotsColor: 'rgba(0,0,0,.3)',
+      dotsActiveColor: '#26c78d',
+      interval: 5000,
+      duration: 500
     }
   },
   computed: {
@@ -130,16 +126,29 @@ export default {
   components: {},
   methods: {
     async _init_func () {
-      console.log('layout-ad init_func',this.confData)
+      console.log('layout-ad init_func', this.confData)
 
-      const { value,config } = this.confData
+      const { value, config, style } = this.confData
       this.lists = value.list
       this.config = config
-      console.log(this.lists,config)
+      // this.style = style
+      // console.log(config, style)
+
+      const { dotsColor, dotsActiveColor } = style
+      var { interval, duration, autoplay = true, loop = true } = config
+      interval = Number(interval)
+      console.log(config, style)
+      if (dotsColor) this.dotsColor = dotsColor
+      if (dotsActiveColor) this.dotsActiveColor = dotsActiveColor
+      if (interval > 0) this.interval = interval<10?5000:interval; //需要兼容老数据啊。。。 毫秒
+      console.log(this.interval)
+      if (duration>0) this.duration = duration
+      this.circular = loop
+      this.autoplay = autoplay
       // img_src: "https://newo2o.bafangka.com/uploadfiles/wkbq6nc2kc/image/202006101709465178.jpg"
       // link: ""
       // linkType: null
-      this.imgList = getArrColumn(this.lists, 'img_src').map(url=>getDomain(url))
+      this.imgList = getArrColumn(this.lists, 'img_src').map(url => getDomain(url))
       this.urls = getArrColumn(this.lists, 'link')
     },
     bindClick (idx) {
@@ -172,7 +181,7 @@ export default {
     background: #fff;
 
     .swiper {
-      
+
       &-item {
         position: relative;
 

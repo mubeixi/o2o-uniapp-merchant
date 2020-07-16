@@ -5,8 +5,7 @@
     <view class="small">{{title.value.small}}</view>
     <view class="more" @click="go(moreData)">{{moreData.title}}</view> -->
     <div class="flex">
-      <img v-if="title.config.icon" class="icon" :style="{marginRight:10+'px'}"
-           :src="domainFunc(title.config.icon)" />
+      <img v-if="title.config.icon"  mode="widthFix" class="icon" :style="{marginRight:10+'px'}" :src="domainFunc(title.config.icon)" />
       <div class="flex1" :style="{textAlign:title.style.textAlign}">
         <div class="text" :style="{fontSize:title.style.fontSize+'px'}">{{title.value.title}}</div>
         <div class="small" :style="{fontSize:title.style.fontSize-4+'px'}">{{title.value.small}}</div>

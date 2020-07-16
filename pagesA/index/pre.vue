@@ -80,7 +80,7 @@
           v-if="item.indexOf('kill') !== -1"></diy-kill>
       </section>
     </view>
-    <layout-copyright></layout-copyright>
+<!--    <layout-copyright></layout-copyright>-->
 
   </div>
 </template>
@@ -102,13 +102,13 @@ import DiySwiper from '@/componets/diy-swiper/diy-swiper'
 import DiyBase from '@/componets/diy-base/diy-base'
 import DiyGoods from '@/componets/diy-goods/diy-goods'
 import LayoutCopyright from '@/componets/layout-copyright/layout-copyright'
-import { getSkinConfig, getSkinPreData } from '@/api/common'
+import { getSkinPreData, getDiySkinConfig } from '@/api/common'
 import { Exception } from '@/common/Exception'
 import { error, modal } from '@/common/fun'
 import DiyKill from '@/componets/diy-kill/diy-kill'
 import DiyTitle from '@/componets/diy-title/diy-title'
 import DiyText from '@/componets/diy-text/diy-text'
-
+import { setNavigationBarTitle } from '@/common/helper'
 
 export default {
   name: 'pre',
@@ -145,7 +145,9 @@ export default {
   methods: {
     async get_tmpl_data () {
       try {
-        const { Home_Json: resultData } = await getSkinPreData({ Home_ID: this.Home_ID }, { onlyData: true }).catch(e => {
+        const getTmplAction = this.mode === 'home' ? getSkinPreData : getDiySkinConfig
+
+        const { Home_Json: resultData } = await getTmplAction({ Home_ID: this.Home_ID }, { onlyData: true }).catch(e => {
           throw Error(e.msg || '获取首页模板失败')
         })
 
@@ -153,6 +155,8 @@ export default {
 
         const { plugin: templateData, system } = mixinData
 
+        setNavigationBarTitle(system.title)
+        console.log(templateData)
         // 存储页面数据
         this.templateData = [] // 页面数据的二维数组。
         this.templateList = [] // 页面组件的二维数组。
@@ -205,15 +209,13 @@ export default {
     }
   },
   onLoad (options) {
-    const Skin_ID = options.Skin_ID
-    const Home_ID = options.Home_ID
-    
-    
-  
-    if (!Skin_ID && !Home_ID) {
+    const { Skin_ID, Home_ID, mode } = options
+
+    if ((!Skin_ID && !Home_ID) || !mode) {
       error('参数错误')
       return
     }
+    this.mode = mode
     this.Home_ID = Home_ID
     this._init_func()
   },

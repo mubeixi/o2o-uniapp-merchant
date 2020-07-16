@@ -32,20 +32,20 @@
           <div class="info" :style="{width:goods.config.style==2?itemw:''}" :class="{empyInfo:isEmpeyInfo}">
             <div class="left">
               <div v-show="goods.config.attr.title.show" class="title">{{item.Products_Name}}</div>
-              <div v-show="goods.config.attr.desc.show" class="font12 graytext desc">
+              <div v-show="goods.config.attr.desc.show" class="fz-12 graytext desc">
                 {{item.Products_BriefDescription||'暂无介绍'}}
               </div>
               <div v-if="goods.config.style!==1" v-show="goods.config.attr.price.show" class="price"><span
-                class="graytext2 font12">抢购价 </span><span class="sign">￥</span><span
+                class="graytext2 fz-12">抢购价 </span><span class="sign">￥</span><span
                 style="font-weight: 600">{{item.price}}</span><span
-                class="graytext2 market-price font12"> ￥{{item.Products_PriceX}} </span>
+                class="graytext2 market-price fz-12"> ￥{{item.Products_PriceX}} </span>
               </div>
             </div>
             <div class="bottom-box">
               <div v-if="goods.config.style==1" v-show="goods.config.attr.price.show" class="price"><span
-                class="graytext2 font12">抢购价 </span><span class="sign">￥</span><span
+                class="graytext2 fz-12">抢购价 </span><span class="sign">￥</span><span
                 style="font-weight: 600">{{item.price}}</span><span
-                class="graytext2 market-price font12"> ￥{{item.Products_PriceX}} </span></div>
+                class="graytext2 market-price fz-12"> ￥{{item.Products_PriceX}} </span></div>
 
               <span class="count" v-if="goods.config.style==2">库存{{item.Products_Count}}</span>
               <div v-show="goods.config.attr.buybtn.show" class="buybtn"

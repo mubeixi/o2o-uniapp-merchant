@@ -19,8 +19,8 @@
         </view>
       </div>
       
-      <view @click="goLogin" class="font14 loginBtn" plain size="mini" v-if="!userInfo.User_ID">登录/注册</view>
-      <view @click="goDistributor" class="font14 loginBtn" plain size="mini"
+      <view @click="goLogin" class="fz-14 loginBtn" plain size="mini" v-if="!userInfo.User_ID">登录/注册</view>
+      <view @click="goDistributor" class="fz-14 loginBtn" plain size="mini"
             v-if="userInfo.User_ID && userInfo.Is_Distribute!==1">成为{{initData.commi_rename.commi}}
       </view>
       <view class="sales">

@@ -57,13 +57,13 @@ export const getUserLevel = (param, options) => fetch({
 
 export const getProductCountInfo = (param, options) => fetch({ act: 'get_users_info', param, options })
 
-// 获取商城的配置
+// 获取商城首页装修配置
 export const getSkinConfig = (param, options) => fetch({ act: 'get_shophome', param, options })
 
-// 获取自定义页面配置
+// 获取预览配置(首页)
 export const getSkinPreData = (param, options) => fetch({ act: 'get_skin_data', param, options })
 
-// 获取自定义页面配置
+// 获取自定义页面配置(自定义页面)
 export const getDiySkinConfig = (param, options) => fetch({ act: 'get_makeup_home_data', param, options })
 
 // 获取地址
