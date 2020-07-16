@@ -94,7 +94,10 @@
       <view class="bd" @click="$openLocation(orderInfo.biz_lat_gd,orderInfo.biz_lon_gd)">
         <view class="o_title">
           <span>自提地点</span>
-          <span class="c8">{{orderInfo.biz_address}}</span>
+          <span class="flex c9">
+			  {{orderInfo.biz_address}}
+			  <layout-icon color="#ff0000" size="18" type="iconicon-address" class="m-l-5"></layout-icon>
+		  </span>
         </view>
       </view>
     </view>
