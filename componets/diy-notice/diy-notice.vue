@@ -1,7 +1,8 @@
 <template>
   <view class="notice wrap">
     <view class="flex content" :style="{background:notice.style.bgColor}">
-      <view class="funicon icon-gonggao icon" :style="{color:notice.style.iconColor}"></view>
+<!--      <view class="funicon icon-gonggao icon" :style="{color:notice.style.iconColor}"></view>-->
+      <layout-icon type="icongonggao" :color="notice.style.iconColor"></layout-icon>
       <div class="flex1 title" :style="{color:notice.style.color}">
         <div class="content-box" id="content" :style="{marginLeft: marginLeft + 'px'}">{{notice.value.content}}</div>
       </div>
@@ -10,6 +11,7 @@
 </template>
 <script>
 import { deepCopyStrict } from '@/common/helper'
+import LayoutIcon from '@/componets/layout-icon/layout-icon'
 
 const styleDefault = {}
 export default {
@@ -47,7 +49,7 @@ export default {
 
   },
   watch: {},
-  components: {},
+  components: { LayoutIcon },
   beforeDestroy () {
     this.pauseAn()
   },

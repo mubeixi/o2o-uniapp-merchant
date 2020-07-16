@@ -65,7 +65,8 @@ export const linkToEasy = (url, type = 'default') => {
         uni.switchTab({
           url,
           fail (e) {
-            modal(e.errMsg)
+            error(e.errMsg)
+            console.log(e.errMsg)
           }
         })
       }
@@ -149,7 +150,6 @@ export const linkTo = (linkObj) => {
           console.log(err)
         }
       })
-      return
     } else {
       error('小程序跳转参数错误')
     }
@@ -170,11 +170,11 @@ export const linkTo = (linkObj) => {
   }
 
   // 第三方链接
-  if (linkType === 'third' || link.indexOf('http') !== -1) {
+  if ((linkType === 'diyurl' || linkType === 'third') && link.indexOf('http') !== -1) {
     // #ifndef H5
 
     uni.navigateTo({
-      url: '/pages/common/webview?encode=1&url=' + encodeURIComponent(link)
+      url: '/pagesA/common/webview?encode=1&url=' + encodeURIComponent(link)
     })
     // #endif
 
@@ -189,9 +189,8 @@ export const linkTo = (linkObj) => {
     link = '/' + link
   }
 
-  uni.navigateTo({
-    url: link
-  })
+  // 还是有tabbar
+  linkToEasy(link)
   // 除了这些页面之外，其他都走普通跳转
   // if (isHasTabbarRouter(link)) {
   //   uni.switchTab({

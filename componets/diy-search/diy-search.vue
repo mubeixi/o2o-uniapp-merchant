@@ -2,8 +2,8 @@
   <view @click="toSearch" v-if="style.position==='absolute'" class="search wrap absolute" :style="[getWrapStyle]">
     <view class="box" :class="{'round':search.config.type==='round'}">
       <icon class="icon" type="search" :color="style.color" size="16" />
-      <!-- <input :placeholder="placeholderText" class="input font14" disabled :style="{height:style.height+'px',lineHeight:style.height-8+'px',backgroundColor:style.inputBgColor,color:style.color}" /> -->
-      <view class="input font14"
+      <!-- <input :placeholder="placeholderText" class="input fz-14" disabled :style="{height:style.height+'px',lineHeight:style.height-8+'px',backgroundColor:style.inputBgColor,color:style.color}" /> -->
+      <view class="input fz-14"
             :style="{height:style.height+'px',lineHeight:style.height+'px',backgroundColor:style.inputBgColor,color:style.color}">
         {{placeholderText}}
       </view>
@@ -12,7 +12,7 @@
   <view @click="toSearch" v-else class="search wrap" :style="[getWrapStyle]">
     <view class="box" :class="{'round':search.config.type==='round'}">
       <icon class="icon" type="search" :color="style.color" size="16" />
-      <view class="input font14"
+      <view class="input fz-14"
             :style="{height:style.height+'px',lineHeight:style.height+'px',backgroundColor:style.inputBgColor,color:style.color}">
         {{placeholderText}}
       </view>
