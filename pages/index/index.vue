@@ -45,10 +45,7 @@
           <scroll-page-merchat ref="page2"></scroll-page-merchat>
         </scroll-view>
       </div>
-      <div @click="toMerchant" class="publish-btn">
-        <layout-icon color="#fff" display="inline" size="18" type="iconfabu"></layout-icon>
-        <div class="fz-10 color-white">发布活动</div>
-      </div>
+      
       <layout-modal :autoClose="false" ref="openLocalSettingModal">
         <div class="refuseApplyDialog">
           <div class="c3 fz-16 modal-title">
@@ -73,6 +70,10 @@
         <scroll-page-hot :full-diy="true"></scroll-page-hot>
       </scroll-view>
     </block>
+    <div @click="toMerchant" class="publish-btn">
+      <layout-icon color="#fff" display="inline" size="18" type="iconfabu"></layout-icon>
+      <div class="fz-10 color-white">发布活动</div>
+    </div>
 
 <!--    <div @click="toLiveList" class="live-btn" v-if="initData.live_flag">-->
 <!--      <div class="live-icon">-->
