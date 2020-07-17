@@ -62,7 +62,7 @@
 
 import { getFlashsaleList as getFlashSaleList } from '@/api/product'
 import { lazyImgUrl } from '@/common'
-import { getCountdownFunc, createEmptyArray, getDomain } from '@/common/helper'
+import { getCountdownFunc, createEmptyArray, getDomain,toGoodsDetail } from '@/common/helper'
 
 import { linkTo } from '@/common/fun'
 
@@ -263,13 +263,14 @@ export default {
       // return rt;
     },
     goDetail (goods) {
+      toGoodsDetail(goods)
       // Products_ID=243
-      const linkObj = {
-        link: '/pages/detail/spikeDetail?flashsale_id=' + goods.id,
-        linkType: 'default'
-      }
+      // const linkObj = {
+      //   link: '/pages/detail/spikeDetail?flashsale_id=' + goods.id,
+      //   linkType: 'default'
+      // }
 
-      linkTo(linkObj)
+      // linkTo(linkObj)
     },
     itemMarginObj (idx) {
       const conf = this.goods.style.margin

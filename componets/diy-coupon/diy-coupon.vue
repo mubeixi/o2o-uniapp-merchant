@@ -168,7 +168,7 @@ export default {
 
 <style scoped lang="scss">
   .wrap {
-    padding: 0 0 0 10px;
+    padding: 0 10px 0 10px;
   }
 
   .list {
@@ -202,6 +202,9 @@ export default {
       height: 70px;
       position: relative;
       margin-right: 10px;
+      &:last-child{
+        margin-right: 0;
+      }
 
       &:before, &:after {
         background-image: url("/static/diy/coupon-left.png");
@@ -288,6 +291,9 @@ export default {
       padding-right: 100px;
 
       background: white;
+      &:last-child{
+        margin-right: 0;
+      }
 
       &:before {
         background-image: url("/static/diy/coupon-left.png");
@@ -368,6 +374,10 @@ export default {
       font-size: 16px;
       background: white;
 
+      &:last-child{
+        margin-right: 0;
+      }
+
       &:before, &:after {
         background-image: url("/static/diy/coupon-left.png");
         content: "";
@@ -424,6 +434,10 @@ export default {
       background: #e74c2c;
       color: white;
       padding: 6px 20px;
+
+      &:last-child{
+        margin-right: 0;
+      }
 
       .title {
 

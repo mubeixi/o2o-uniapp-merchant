@@ -91,3 +91,12 @@ export const getDistributeWxQrcode = (param, options) => fetch({ act: 'get_distr
 
 // 获取乡镇
 export const getTown = (param, options) => fetch({ act: 'get_town', param, options })
+
+// 大转盘开始
+export const rotateBegin = (param, options) => fetch({ act: 'beginTurn', param, options })
+
+// 获取中奖记录
+export const getRotateRecord = (param, options) => fetch({ act: 'getPrizeRecord', param, options })
+
+// 大转盘初始化
+export const rotateInit = (param, options) => fetch({ act: 'initTurn', param, options })

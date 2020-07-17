@@ -55,6 +55,7 @@
           :index="index"
           v-if="item.indexOf('coupon') !== -1"></diy-coupon>
         <diy-goods
+          ref="goodsPlugin"
           :confData="templateData[tagIndex][index]"
           :index="index"
           v-if="item.indexOf('goods') !== -1"></diy-goods>
@@ -225,6 +226,12 @@ export default {
         item.restartAn()
       })
     }
+
+    if (this.$refs.goodsPlugin) {
+      this.$refs.goodsPlugin.map(item => {
+        item.startDownloadImg()
+      })
+    }
   },
   onHide () {
     // 暂停notice组件的定时器任务
@@ -233,7 +240,6 @@ export default {
         item.pauseAn()
       })
     }
-
     // 暂停播放
     if (this.$refs.video) {
       this.$refs.video.map(item => {

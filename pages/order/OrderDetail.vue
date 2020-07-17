@@ -15,7 +15,7 @@
             :val="qrVal"
             @result="qrR"
             cid="qrcode2"
-            class="line6"
+            class="m-b-6"
             ref="qrcode2"
             unit="px"
           />

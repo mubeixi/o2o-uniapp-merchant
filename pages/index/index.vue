@@ -241,8 +241,13 @@ export default {
   onLoad () {
     console.log(this.$store.getters['theme/pimaryColor'])
   },
+  onHide () {
+    this.$refs.page0.hookOnHide()
+  },
   onShow () {
     this.setTabBarIndex(0)
+
+    this.$refs.page0.hookOnShow()
 
     // 底部tabbar
     this.$store.dispatch('system/setTabActiveIdx', 0)

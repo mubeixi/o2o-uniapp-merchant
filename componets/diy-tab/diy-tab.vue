@@ -2,8 +2,7 @@
   <div class="tab wrap" :class="tab.config.position"
        :style="{background:tab.style.bgColor,margin:tab.config.position === 'left'?tab.style.wrapmargin:0+'px'}">
     <div class="tabs">
-      <li :class="{active:tabActive===idx}" :id="'tab-item'+idx" @click="clickTab(item,idx)"
-          v-for="(item,idx) in tab.value.list"><span>{{item.title}}</span></li>
+      <li :class="{active:tabActive===idx}" :id="'tab-item'+idx" @click="clickTab(item,idx)" v-for="(item,idx) in tab.value.list"><span>{{item.title}}</span></li>
     </div>
     <div class="tabs-panel">
       <div class="box" :class="[className]"
@@ -434,6 +433,7 @@ export default {
       color: #444;
       white-space: nowrap;
       padding: 0 10px;
+      margin-bottom: 10px;
       overflow-x: scroll;
       overflow-y: hidden;
 
