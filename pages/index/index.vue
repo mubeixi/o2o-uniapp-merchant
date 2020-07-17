@@ -1,77 +1,92 @@
 <template>
   <div class="page-wrap">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
-    <div @touchmove.stop.prevent :style="{height:menuButtonInfo.height+'px',width:menuButtonInfo.height+'px',paddingLeft:menuButtonInfo.height/2+'px',paddingRight:menuButtonInfo.height/3+'px',top:menuButtonInfo.top+'px',right:diyHeadRight+10+'px'}" @click="$linkTo('/pages/search/index')" class="search-box">
-      <layout-icon display="inline" class="iconsearch" color="#fff" size="18" weight="bold" type="iconicon-search"></layout-icon>
-    </div>
-    <div @touchmove.stop.prevent :style="{backgroundColor:primaryColor,paddingTop:menuButtonInfo.top+'px'}" class="head-box" style="height: 50px;">
-      <div style="height: 36px;" :style="{marginRight:diyHeadRight+menuButtonInfo.height+'px'}" class="head">
-        <ul class="tab-box">
-          <li :class="[headTabIndex === 0?'active':'']" @click="setHeadTabIndex(0)" class="tab-item" id="headTabItem0">
-            <div class="tab-item-text" :animation="tabAnimationData[0]">特价</div>
-            <div class="tab-item-tip" id="tabItemTip0"></div>
-          </li>
-          <li :class="[headTabIndex === 1?'active':'']" @click="setHeadTabIndex(1)" class="tab-item" id="headTabItem1">
-            <div class="tab-item-text" :animation="tabAnimationData[1]">同城闪送</div>
-            <div class="tab-item-tip" id="tabItemTip1"></div>
-          </li>
-          <li :class="[headTabIndex === 2?'active':'']" @click="setHeadTabIndex(2)" class="tab-item" id="headTabItem2">
-            <div class="tab-item-text" :animation="tabAnimationData[2]">好店</div>
-            <div class="tab-item-tip" id="tabItemTip2"></div>
-          </li>
-          <span :animation="tabUnderlineAnimationData" :style="{marginLeft:defaultUnderlineLeft+'px'}" class="page-tab-underline" v-show="showUnderLine"></span>
-        </ul>
-
+    <layout-loading v-if="loadingByTmpl"></layout-loading>
+    <block v-if="topTheme==='default'">
+      <div @touchmove.stop.prevent
+           :style="{height:menuButtonInfo.height+'px',width:menuButtonInfo.height+'px',paddingLeft:menuButtonInfo.height/2+'px',paddingRight:menuButtonInfo.height/3+'px',top:menuButtonInfo.top+'px',right:diyHeadRight+10+'px'}"
+           @click="$linkTo('/pages/search/index')" class="search-box">
+        <layout-icon display="inline" class="iconsearch" color="#fff" size="18" weight="bold" type="iconicon-search"></layout-icon>
       </div>
-    </div>
-    <!--占位-->
-    <div @touchmove.stop.prevent :style="{height:menuButtonInfo.top+50+'px'}" style="background-color: #26C78D"></div>
-    <div :style="{top:menuButtonInfo.top+50+'px'}" class="main tab-container">
-      <scroll-view @scrolltolower="bindGetMore(0)" class="tab-page-wrap" lower-threshold="1" scroll-y
-                   v-show="headTabIndex===0">
-        <scroll-page-hot ref="page0"></scroll-page-hot>
+      <div @touchmove.stop.prevent :style="{backgroundColor:primaryColor,paddingTop:menuButtonInfo.top+'px'}"
+           class="head-box" style="height: 50px;">
+        <div style="height: 36px;" :style="{marginRight:diyHeadRight+menuButtonInfo.height+'px'}" class="head">
+          <ul class="tab-box">
+            <li :class="[headTabIndex === 0?'active':'']" @click="setHeadTabIndex(0)" class="tab-item" id="headTabItem0">
+              <div class="tab-item-text" :animation="tabAnimationData[0]">特价</div>
+              <div class="tab-item-tip" id="tabItemTip0"></div>
+            </li>
+            <li :class="[headTabIndex === 1?'active':'']" @click="setHeadTabIndex(1)" class="tab-item" id="headTabItem1">
+              <div class="tab-item-text" :animation="tabAnimationData[1]">同城闪送</div>
+              <div class="tab-item-tip" id="tabItemTip1"></div>
+            </li>
+            <li :class="[headTabIndex === 2?'active':'']" @click="setHeadTabIndex(2)" class="tab-item" id="headTabItem2">
+              <div class="tab-item-text" :animation="tabAnimationData[2]">好店</div>
+              <div class="tab-item-tip" id="tabItemTip2"></div>
+            </li>
+            <span :animation="tabUnderlineAnimationData" :style="{marginLeft:defaultUnderlineLeft+'px'}"
+                  class="page-tab-underline" v-show="showUnderLine"></span>
+          </ul>
+
+        </div>
+      </div>
+      <!--占位-->
+      <!--<div @touchmove.stop.prevent :style="{height:menuButtonInfo.top+50+'px'}" style="background-color: #26C78D"></div>-->
+      <div :style="{top:menuButtonInfo.top+50+'px'}" class="main tab-container">
+        <scroll-view @scrolltolower="bindGetMore(0)" class="tab-page-wrap" lower-threshold="1" scroll-y v-show="headTabIndex===0">
+          <scroll-page-hot ref="page0"></scroll-page-hot>
+        </scroll-view>
+        <scroll-view @scrolltolower="bindGetMore(1)" class="tab-page-wrap" lower-threshold="1" scroll-y
+                     v-show="headTabIndex===1">
+          <scroll-page-local ref="page1"></scroll-page-local>
+        </scroll-view>
+        <scroll-view @scrolltolower="bindGetMore(2)" class="tab-page-wrap" lower-threshold="1" scroll-y
+                     v-show="headTabIndex===2">
+          <scroll-page-merchat ref="page2"></scroll-page-merchat>
+        </scroll-view>
+      </div>
+      <div @click="toMerchant" class="publish-btn">
+        <layout-icon color="#fff" display="inline" size="18" type="iconfabu"></layout-icon>
+        <div class="fz-10 color-white">发布活动</div>
+      </div>
+      <layout-modal :autoClose="false" ref="openLocalSettingModal">
+        <div class="refuseApplyDialog">
+          <div class="c3 fz-16 modal-title">
+            是否开启定位
+          </div>
+          <div class="fz-14 m-b-20 m-t-10 c9">
+            很抱歉，该功能必须基于地理位置提供商品检索，您需开启地理位置授权才可以使用该功能
+          </div>
+          <div class="control flex flex-justify-between flex-justify-c">
+            <button @click="$closePop('openLocalSettingModal')" class="action-btn btn-cancel" size="mini">取消</button>
+            <button bindopensetting="bindOpenSetting" class="btn-sub action-btn" open-type='openSetting' size="mini">确定
+            </button>
+          </div>
+        </div>
+      </layout-modal>
+    </block>
+
+    <block v-if="topTheme==='none'">
+      <layout-page-title :show-left-icon="false" :extStyle="'padding-bottom:10px;background:#fff;'" :page-title="diyTitle"></layout-page-title>
+      <!--@scrolltolower="bindGetMore(0)"-->
+      <scroll-view class="full-diy-wrap" lower-threshold="1" scroll-y :style="{top:menuButtonInfo.bottom+10+'px'}">
+        <scroll-page-hot :full-diy="true"></scroll-page-hot>
       </scroll-view>
-      <scroll-view @scrolltolower="bindGetMore(1)" class="tab-page-wrap" lower-threshold="1" scroll-y
-                   v-show="headTabIndex===1">
-        <scroll-page-local ref="page1"></scroll-page-local>
-      </scroll-view>
-      <scroll-view @scrolltolower="bindGetMore(2)" class="tab-page-wrap" lower-threshold="1" scroll-y
-                   v-show="headTabIndex===2">
-        <scroll-page-merchat ref="page2"></scroll-page-merchat>
-      </scroll-view>
-    </div>
-    <div @click="toMerchant" class="publish-btn">
-      <layout-icon  color="#fff" display="inline" size="18" type="iconfabu"></layout-icon>
-      <div class="fz-10 color-white">发布活动</div>
-    </div>
+    </block>
 
 <!--    <div @click="toLiveList" class="live-btn" v-if="initData.live_flag">-->
-<!--      <div class="live-icon"><layout-icon color="#fff" display="inline" size="20" type="icon15"></layout-icon></div>-->
+<!--      <div class="live-icon">-->
+<!--        <layout-icon color="#fff" display="inline" size="20" type="icon15"></layout-icon>-->
+<!--      </div>-->
 <!--      <div class="fz-10 color-white">直播</div>-->
 <!--    </div>-->
-
-    <layout-modal :autoClose="false" ref="openLocalSettingModal">
-      <div class="refuseApplyDialog">
-        <div class="c3 fz-16 modal-title">
-          是否开启定位
-        </div>
-        <div class="fz-14 m-b-20 m-t-10 c9">
-          很抱歉，该功能必须基于地理位置提供商品检索，您需开启地理位置授权才可以使用该功能
-        </div>
-        <div class="control flex flex-justify-between flex-justify-c">
-          <button @click="$closePop('openLocalSettingModal')" class="action-btn btn-cancel" size="mini">取消</button>
-          <button bindopensetting="bindOpenSetting" class="btn-sub action-btn" open-type='openSetting' size="mini">确定
-          </button>
-        </div>
-      </div>
-    </layout-modal>
 
   </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import { modal, error } from '@/common/fun'
+import { error } from '@/common/fun'
 import BaseMixin, { tabbarMixin } from '@/mixins/BaseMixin'
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import ScrollPageHot from '@/pages/index/components/scroll-page-hot'
@@ -81,12 +96,15 @@ import Promisify from '@/common/Promisify'
 import LayoutModal from '@/componets/layout-modal/layout-modal'
 import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 import Storage from '@/common/Storage'
-import eventHub from '@/common/eventHub'
+import { getSkinConfig } from '@/api/common'
+import LayoutLoading from '@/componets/layout-loading/layout-loading'
+import LayoutPageTitle from '@/componets/layout-page-title/layout-page-title'
 
 export default {
   mixins: [BaseMixin, tabbarMixin],
   components: {
-
+    LayoutPageTitle,
+    LayoutLoading,
     WzwImTip,
     LayoutModal,
     ScrollPageMerchat,
@@ -107,6 +125,13 @@ export default {
   },
   data () {
     return {
+      loadingByTmpl: false, // 标记是否请求完结
+      templateList: [],
+      templateData: [],
+      tagIndex: 0,
+      topTheme: '',
+      diyTitle: '',
+
       /** 疯狂hack **/
       getLocationDone: false,
       showUnderLine: false,
@@ -222,8 +247,62 @@ export default {
       const { current } = event.detail
       this.headTabIndex = current
     },
-    async _init_func () {
+    async get_tmpl_data () {
+      try {
+        const { Home_Json: resultData } = await getSkinConfig({}, { onlyData: true }).catch(e => {
+          throw Error(e.msg || '获取首页模板失败')
+        })
 
+        const mixinData = typeof resultData === 'string' ? JSON.parse(resultData) : resultData
+
+        const { plugin: templateData, system } = mixinData
+
+        const { topTheme = 'default', title = '' } = system
+
+        this.topTheme = topTheme
+        this.diyTitle = title
+
+        // // 存储页面数据
+        // this.templateData = [] // 页面数据的二维数组。
+        // this.templateList = [] // 页面组件的二维数组。
+        // if (templateData && Array.isArray(templateData[0])) {
+        //   // 多个页面，每个页面是一个数组
+        //   templateData.map(item => {
+        //     this.templateData.push(item)
+        //     this.templateList.push([])
+        //   })
+        // } else if (
+        //   templateData && !Array.isArray(templateData[0]) && templateData.length > 0
+        // ) {
+        //   // 单纯是一个对象的时候？？
+        //   this.templateData = [templateData]
+        //   this.templateList = [[]]
+        // } else {
+        //   this.templateData = [[]]
+        //   this.templateList = [[]]
+        // }
+        // // this.templateData = templateData
+        // // 存储页面组件templateList
+        // for (let i = 0; i < this.templateData.length; i++) {
+        //   if (
+        //     this.templateData[i] &&
+        //     this.templateData[i] !== []
+        //   ) {
+        //     this.templateData[i].map(m => {
+        //       this.templateList[i].push(m.tag)
+        //     })
+        //   }
+        // }
+
+        return true
+      } catch (e) {
+        return e
+      }
+    },
+    async _init_func () {
+      this.loadingByTmpl = true
+      await this.get_tmpl_data()
+      this.loadingByTmpl = false
     },
     bindGetMore (idx) {
       console.log(idx)
@@ -239,42 +318,46 @@ export default {
   //   if (this.headTabIndex === 2) this.$refs.page2.bindReachBottom()
   // },
   onLoad () {
-    console.log(this.$store.getters['theme/pimaryColor'])
+
   },
   onHide () {
-    this.$refs.page0.hookOnHide()
+    if (this.topTheme === 'default') {
+      this.$refs.page0.hookOnHide()
+    }
   },
   onShow () {
     this.setTabBarIndex(0)
-
-    this.$refs.page0.hookOnShow()
-
     // 底部tabbar
     this.$store.dispatch('system/setTabActiveIdx', 0)
     this.refreshTabTag()
 
-    this.$refs.openLocalSettingModal.close()
-    if (this.headTabIndex > 0) {
-      Promisify('authorize', { scope: 'scope.userLocation' }).then(() => {
-        this.getUserLocation()
-      }).catch(() => {
-        this.$refs.openLocalSettingModal.show()
-      })
+    if (this.topTheme === 'default') {
+      this.$refs.page0.hookOnShow()
+      this.$refs.openLocalSettingModal.close()
+      if (this.headTabIndex > 0) {
+        Promisify('authorize', { scope: 'scope.userLocation' }).then(() => {
+          this.getUserLocation()
+        }).catch(() => {
+          this.$refs.openLocalSettingModal.show()
+        })
+      }
     }
   },
   onReady () {
-    const query = uni.createSelectorQuery()
-    query.select('#tabItemTip0').boundingClientRect(data => {
-      this.tabDom[0] = data
-      this.defaultUnderlineLeft = data.left - 10 - 4
-      this.showUnderLine = true
-    }).exec()
-    query.select('#tabItemTip1').boundingClientRect(data => {
-      this.tabDom[1] = data
-    }).exec()
-    query.select('#tabItemTip2').boundingClientRect(data => {
-      this.tabDom[2] = data
-    }).exec()
+    if (this.topTheme === 'default') {
+      const query = uni.createSelectorQuery()
+      query.select('#tabItemTip0').boundingClientRect(data => {
+        this.tabDom[0] = data
+        this.defaultUnderlineLeft = data.left - 10 - 4
+        this.showUnderLine = true
+      }).exec()
+      query.select('#tabItemTip1').boundingClientRect(data => {
+        this.tabDom[1] = data
+      }).exec()
+      query.select('#tabItemTip2').boundingClientRect(data => {
+        this.tabDom[2] = data
+      }).exec()
+    }
   },
   created () {
     this.getLocationDone = false
@@ -285,7 +368,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 
-  .live-icon{
+  .live-icon {
     animation: zy 2.5s .15s linear infinite;
   }
 
@@ -297,7 +380,15 @@ export default {
     left: 0;
     top: 0;
   }
-  .live-btn{
+
+  .full-diy-wrap{
+    position: absolute;
+    width: 750rpx;
+    left: 0;
+    bottom: 48px;
+  }
+
+  .live-btn {
     position: fixed;
     bottom: 256rpx;
     margin-bottom: env(safe-area-inset-bottom);
@@ -308,7 +399,7 @@ export default {
     width: 98rpx;
     height: 98rpx;
     background: $fun-orange-color;
-    box-shadow: 0rpx 2rpx 12rpx 0rpx rgba(255,120, 0, 0.4);
+    box-shadow: 0rpx 2rpx 12rpx 0rpx rgba(255, 120, 0, 0.4);
     border-radius: 50%;
     text-align: center;
   }
@@ -362,6 +453,7 @@ export default {
       display: flex;
       align-items: flex-end;
       height: 36px;
+
       .page-tab-underline {
         position: absolute;
         bottom: -6px;
@@ -379,11 +471,12 @@ export default {
         display: flex;
         flex-direction: column;
         justify-content: flex-end;
+
         &:last-child {
           margin-right: 0;
         }
 
-        .tab-item-text{
+        .tab-item-text {
 
         }
 
@@ -417,6 +510,7 @@ export default {
     align-items: center;
     /*justify-content: center;*/
     justify-content: flex-end;
+
     .iconsearch {
 
     }
