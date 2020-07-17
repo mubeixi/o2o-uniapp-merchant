@@ -1,6 +1,8 @@
 <template>
-  <view @click="commonClick" style="position: relative;" v-show="system.title">
-    <view :style="{background:system.bgcolor}" class="home-wrap">
+  <view @click="commonClick" style="position: relative;">
+
+    <layout-loading v-if="loadingByTmpl"></layout-loading>
+    <view v-else :style="{background:system.bgcolor}" class="home-wrap">
 
       <section :class="[item]" :data-name="item" :key="index" :ref="item" class="section"
                v-for="(item, index) in templateList[tagIndex]">
@@ -51,6 +53,7 @@
           :index="index"
           v-if="item.indexOf('coupon') !== -1"></diy-coupon>
         <diy-goods
+          ref="goodsPlugin"
           :confData="templateData[tagIndex][index]"
           :index="index"
           v-if="item.indexOf('goods') !== -1"></diy-goods>
@@ -81,7 +84,7 @@
 </template>
 
 <script>
-import LayoutLoading from '@/componets/layout-loading/layout-loading'
+
 import DiyNav from '@/componets/diy-nav/diy-nav'
 import DiyFlash from '@/componets/diy-flash/diy-flash'
 import DiyGroup from '@/componets/diy-group/diy-group'
@@ -103,11 +106,13 @@ import { getDiySkinConfig } from '@/api/common'
 import { Exception } from '@/common/Exception'
 import { error, modal } from '@/common/fun'
 import BaseMixin from '@/mixins/BaseMixin'
+import LayoutLoading from '@/componets/layout-loading/layout-loading'
 
 export default {
   mixins: [BaseMixin],
   data () {
     return {
+      loadingByTmpl: false, // 标记是否请求完结
       selfObj: null,
       templateList: [],
       templateData: [],
@@ -116,6 +121,7 @@ export default {
     }
   },
   components: {
+    LayoutLoading,
     DiyText,
     DiyTitle,
     DiyKill,
@@ -134,21 +140,7 @@ export default {
     DiySwiper,
     DiyBase
   },
-  onHide () {
-    // 暂停notice组件的定时器任务
-    if (this.$refs.notice) {
-      this.$refs.notice.map(item => {
-        item.pauseAn()
-      })
-    }
 
-    // 暂停播放
-    if (this.$refs.video) {
-      this.$refs.video.map(item => {
-        item.pauseFn()
-      })
-    }
-  },
   created () {
 
   },
@@ -157,6 +149,26 @@ export default {
     if (this.$refs.notice) {
       this.$refs.notice.map(item => {
         item.restartAn()
+      })
+    }
+
+    if (this.$refs.goodsPlugin) {
+      this.$refs.goodsPlugin.map(item => {
+        item.startDownloadImg()
+      })
+    }
+  },
+  onHide () {
+    // 暂停notice组件的定时器任务
+    if (this.$refs.notice) {
+      this.$refs.notice.map(item => {
+        item.pauseAn()
+      })
+    }
+    // 暂停播放
+    if (this.$refs.video) {
+      this.$refs.video.map(item => {
+        item.pauseFn()
       })
     }
   },
@@ -173,19 +185,21 @@ export default {
       this.$error('Home_ID参数错误')
     }
 
+    this.loadingByTmpl = true
+
     new Promise((resolve, reject) => {
       // Skin_ID,
       getDiySkinConfig({ Home_ID }, {
-        tip: 'loading',
         mask: true
       }).then(res => {
+        this.loadingByTmpl = false
         if (res.data.Home_Json) {
           resolve(JSON.parse(res.data.Home_Json))
         } else {
           reject(Error('获取模板数据失败'))
         }
       }).catch(e => {
-
+        this.loadingByTmpl = false
       })
     })
       .then(mixinData => {

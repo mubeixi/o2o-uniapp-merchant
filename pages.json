@@ -173,6 +173,12 @@
           }
         },
         {
+          "path": "marketing/rotate",
+          "style": {
+            "navigationBarTitleText": "幸运大转盘"
+          }
+        },
+        {
           "path": "common/single",
           "style": {
             "navigationBarTitleText": "单页面"

@@ -207,6 +207,7 @@ export default {
   },
   components: {},
   methods: {
+    startDownloadImg(){},
     goDetail (goods) {
       toGoodsDetail(goods)
     },

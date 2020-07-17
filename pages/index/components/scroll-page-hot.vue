@@ -34,7 +34,7 @@
           :confData="templateData[tagIndex][index]"
           :index="index"
           v-if="item.indexOf('space') !== -1"></diy-space>
-        
+
         <diy-title
           :confData="templateData[tagIndex][index]"
           :index="index"
@@ -59,6 +59,7 @@
           v-if="item.indexOf('coupon') !== -1"></diy-coupon>
 
         <diy-goods
+          ref="goodsPlugin"
           :confData="templateData[tagIndex][index]"
           :index="index"
           v-if="item.indexOf('goods') !== -1"></diy-goods>
@@ -240,6 +241,7 @@ export default {
       liveNavIndex: 0,
       liveNav: [],
       loadingByKillList: false, // 标记是否请求完结
+      loadingByKillList: false, // 标记是否请求完结
       killList: []
       // livePaginate: {
       //   pageSize: 10,
@@ -260,7 +262,7 @@ export default {
   methods: {
 
     bindReachBottom () {
-      console.log('emit bindReachBottom event',objTranslate(this.liveNav),this.liveNavIndex)
+      console.log('emit bindReachBottom event', objTranslate(this.liveNav), this.liveNavIndex)
       this.loadLiveGoodsList(this.liveNavIndex)
     },
     changeLiveNav (idx) {
@@ -314,7 +316,7 @@ export default {
       }
     },
     async loadLiveGoodsList (idx) {
-      if(this.liveNav.length<1)return;
+      if (this.liveNav.length < 1) return
       if (this.liveNav[idx].goodsList.length >= this.liveNav[idx].totalCount) {
         // toast('已经到底了', 'none')
         return
@@ -336,11 +338,10 @@ export default {
 
       this.$set(this.liveNav[idx], 'goodsList', this.liveNav[idx].goodsList.concat(liveGoodsList))
       this.$set(this.liveNav[idx], 'totalCount', totalCount)
-      this.$set(this.liveNav[idx], 'page', this.liveNav[idx].page+1)
+      this.$set(this.liveNav[idx], 'page', this.liveNav[idx].page + 1)
       this.$set(this.liveNav[idx], 'isAjax', false)
 
       this.loadingByLiveList = false
-
     },
     async _init_func () {
       this.loadingByKillList = true
@@ -382,8 +383,38 @@ export default {
         // hideLoading()
       }
     },
+    // 组件没有onShow生命周期
+    hookOnShow () {
+      if (this.$refs.notice) {
+        this.$refs.notice.map(item => {
+          item.restartAn()
+        })
+      }
+
+      if (this.$refs.goodsPlugin) {
+        this.$refs.goodsPlugin.map(item => {
+          item.startDownloadImg()
+        })
+      }
+    },
+    // 组件没有onHide生命周期
+    hookOnHide () {
+      // 暂停notice组件的定时器任务
+      if (this.$refs.notice) {
+        this.$refs.notice.map(item => {
+          item.pauseAn()
+        })
+      }
+      // 暂停播放
+      if (this.$refs.video) {
+        this.$refs.video.map(item => {
+          item.pauseFn()
+        })
+      }
+    },
     $toGoodsDetail: toGoodsDetail
   },
+
   created () {
     this._init_func()
   }
