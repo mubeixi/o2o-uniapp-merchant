@@ -1,8 +1,8 @@
 <template>
   <div>
 <!--    <layout-ad code="index_top" paddingStr="20px 0 20px 0"></layout-ad>-->
-    <layout-loading v-if="loadingByTmpl"></layout-loading>
-    <view class="home-diy-wrap" v-else>
+<!--    <layout-loading v-if="loadingByTmpl"></layout-loading>-->
+    <view class="home-diy-wrap" :style="{backgroundColor:bgcolor}" v-if="loadReady">
       <section
         :class="[item]"
         :data-name="item"
@@ -86,7 +86,7 @@
           v-if="item.indexOf('kill') !== -1"></diy-kill>
       </section>
     </view>
-    <div class="block kill-box">
+    <div v-if="!fullDiy" class="block kill-box">
       <div class="block-title flex-vertical-c">
         <div class="block-title-text">今日秒杀</div>
         <div @click="$linkTo('/pagesA/active/SeckillByBiz')" class="block-title-more flex flex-ver-c c9 fz-12">
@@ -115,7 +115,7 @@
         </div>
       </div>
     </div>
-    <div class="block live-box">
+    <div v-if="!fullDiy" class="block live-box">
       <div class="block-title">
         <div class="block-title-text">钜惠推荐</div>
         <div class="block-title-more flex flex-vertical-center c9 fz-12">
@@ -164,7 +164,7 @@
         </div>
       </div>
     </div>
-    <layout-copyright></layout-copyright>
+    <layout-copyright v-if="!fullDiy"></layout-copyright>
     <div class="h20"></div>
     <div class="safearea-box"></div>
   </div>
@@ -189,7 +189,7 @@ import DiyFlash from '@/componets/diy-flash/diy-flash'
 import DiyNav from '@/componets/diy-nav/diy-nav'
 import LayoutCopyright from '@/componets/layout-copyright/layout-copyright'
 import { objTranslate, toGoodsDetail } from '@/common/helper'
-import { hideLoading, showLoading } from '@/common/fun'
+
 import { getFlashsaleList, getProductCategory, getProductList } from '@/api/product'
 import { Exception } from '@/common/Exception'
 import { getSkinConfig } from '@/api/common'
@@ -206,6 +206,12 @@ import DiyKill from '@/componets/diy-kill/diy-kill'
 export default {
   name: 'scroll-page-hot',
   mixins: [componetMixin],
+  props: {
+    fullDiy: {
+      type: Boolean,
+      default: false
+    }
+  },
   components: {
     DiyKill,
     DiyGoods,
@@ -232,6 +238,8 @@ export default {
   },
   data () {
     return {
+      bgcolor: '',
+      loadReady: false,
       loadingByTmpl: false, // 标记是否请求完结
       templateList: [],
       templateData: [],
@@ -240,7 +248,6 @@ export default {
       loadingByLiveList: false, // 标记是否请求完结
       liveNavIndex: 0,
       liveNav: [],
-      loadingByKillList: false, // 标记是否请求完结
       loadingByKillList: false, // 标记是否请求完结
       killList: []
       // livePaginate: {
@@ -277,6 +284,9 @@ export default {
         const mixinData = typeof resultData === 'string' ? JSON.parse(resultData) : resultData
 
         const { plugin: templateData, system } = mixinData
+
+        const { bgcolor = '#fff' } = system
+        this.bgcolor = bgcolor
 
         // 存储页面数据
         this.templateData = [] // 页面数据的二维数组。
@@ -350,6 +360,7 @@ export default {
         this.loadingByTmpl = true
         const handleRT = await this.get_tmpl_data()
         this.loadingByTmpl = false
+        this.loadReady = true
         if (handleRT !== true) throw handleRT // hanldeRT不是true就是一个Error实例，直接抛出
 
         this.killList = await getFlashsaleList({}, { onlyData: true }).catch(err => {
