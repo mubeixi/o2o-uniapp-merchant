@@ -418,7 +418,8 @@
       </div>
 
       <div class="close-btn" @click.stop="taggkeCartShow">
-        <layout-icon v-if="!cartExpand" size="23" type="iconicon_plus" color="#fff"></layout-icon>
+        <div v-if="!cartExpand" class="plus-tag" :class="{aircle:total_count<100,zero:total_count<10}">{{total_count}}</div>
+<!--        <layout-icon v-if="!cartExpand" size="23" type="iconicon_plus" color="#fff"></layout-icon>-->
         <layout-icon v-if="cartExpand" size="23" type="iconxingzhuang" color="#fff"></layout-icon>
       </div>
 
@@ -866,8 +867,8 @@ export default {
               prod_id: Number(prod_id)
             })
 
-            const attr_value = CartList[biz_id][prod_id][attr_id]
-
+            var attr_value = CartList[biz_id][prod_id][attr_id]
+            attr_value.checked = true // 手动加上
             const { ImgPath, ProductsName, ProductsPriceX, ProductsPriceY, Qty, Productsattrstrval } = attr_value
             attrList.push({
               // ...attr_value,
@@ -1294,6 +1295,27 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+
+  .plus-tag {
+
+    background-color: #FF0000;
+    border-radius: 8px;
+    font-size: 12px;
+    color: #FFFFff;
+    padding: 2px 6px;
+    text-align: center;
+    &.aircle {
+      border-radius: 50%;
+      padding: 0;
+      width: 24px;
+      height: 24px;
+      line-height: 24px;
+      &.zero{
+        font-size: 14px;
+      }
+    }
+
+  }
 
   .mall-tabbar-wrap {
     position: fixed;

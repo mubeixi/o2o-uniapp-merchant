@@ -487,7 +487,7 @@ export default {
   },
   async onReachBottom () {
     if (this.proList.length >= this.productTotal) {
-      error('到底了')
+      // error('到底了')
       return
     }
     const proList = await getProductList({ page: this.page }, { onlyData: true }).catch(e => {

@@ -166,7 +166,7 @@
     </div>
     <layout-copyright v-if="!fullDiy"></layout-copyright>
     <div class="h20"></div>
-    <div class="safearea-box"></div>
+    <div style="background:#f8f8f8;" class="safearea-box"></div>
   </div>
 </template>
 
@@ -378,7 +378,7 @@ export default {
           throw Error('获取商品分类失败')
         })
         if (!this.firstCateList) this.firstCateList = []
-        this.liveNav = this.firstCateList.map(row => {
+        const liveNavData = this.firstCateList.map(row => {
           row.goodsList = []
           row.totalCount = 999
           row.pageSize = 10
@@ -386,6 +386,19 @@ export default {
           row.isAjax = false
           return objTranslate(row)
         }) // 也是一级分类
+
+        this.liveNav = [
+          {
+            Category_Name:'全部',
+            Category_ID:'',
+            goodsList : [],
+            totalCount : 999,
+            pageSize : 10,
+            page : 1,
+            isAjax : false,
+          },
+          ...liveNavData
+        ]
 
         this.loadLiveGoodsList(0) // 加载第一个分类的商品
       } catch (e) {
