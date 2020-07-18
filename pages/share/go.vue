@@ -421,7 +421,7 @@ export default {
           this.shareText = `${detailData.Products_Name},已售${detailData.Products_Sales}件,拼购价:${detailData.price},原价:${detailData.Products_PriceX}`
         }
 
-        const productShareInfo = await getProductSharePic({ product_id: this.prod_id }, { noUid: 1 }).then(res => res.data).catch(err => {
+        const productShareInfo = await getProductSharePic({ product_id: this.prod_id }).then(res => res.data).catch(err => {
           throw Error(err.msg || '获取商品分享信息错误')
         })
         console.log(productShareInfo)
