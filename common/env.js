@@ -7,6 +7,7 @@ const IM_API_URL = 'https://chat.bafangka.com'
 
 // 测试appid   wxfe5d2621576cf895  域名 https://newo2o.bafangka.com
 // 正式appid   wx28e6e80223bd5f0f  域名 https://newo2o.netcnnet.net
+// 及贝  wxb627a9dde54f65f6
 
 const confByDev = {
   apiBaseUrl: 'https://newo2o.bafangka.com',
@@ -26,7 +27,19 @@ const confByPro = {
   isCustom: true,
   isDev
 }
+//及贝
+const confByJb = {
+  apiBaseUrl: 'https://jb.jbaycloud.com',
+  staticUrl: 'https://jb.jbaycloud.com',
+  IM_WSS_URL,
+  IM_API_URL,
+  users_id,
+  isCustom: false,
+  isDev
+}
 
 export default confByDev
 
 // export default confByPro
+
+// export default confByJb
