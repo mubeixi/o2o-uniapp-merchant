@@ -331,7 +331,12 @@ export const tabbarMixin = {
   methods: {
     async refreshTabTag () {
       // console.log(this.$mp)
-      if (!eventHub.imInstance) return
+      if (!eventHub.imInstance) {
+        this.$mp.page.getTabBar().setData({
+          tags: [0, 0, 0, 0, 0]
+        })
+        return
+      }
       const count = await eventHub.imInstance.getNoReadMsgCount()
       if (typeof this.$mp.page.getTabBar === 'function' && this.$mp.page.getTabBar()) {
         // console.log('更新IM下标数量' + count)
