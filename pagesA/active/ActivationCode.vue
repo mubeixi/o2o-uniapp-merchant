@@ -11,7 +11,7 @@
       </div>
     </div>
     <div class="active-first"
-         :style="{backgroundImage: 'url('+$getDomain('/static/client/active/activeBgTop.jpg')+')'}">
+         :style="{backgroundImage: 'url('+$getDomain('/static/client/active/activeBgTop.jpg')+')',marginTop:menuButtonInfo.top+'px'}">
       <div class="active-first-title">
         专注商家自营配送,为配送而生
       </div>

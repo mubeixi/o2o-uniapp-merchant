@@ -53,7 +53,7 @@
                 <span @click.stop="goPay(order,pro)" class="btn-group-item" v-if="order.Order_Status==2&&order.Order_Type !== 'gift'">退款</span>
                 <span @click.stop="goPay(order,pro)" class="btn-group-item" v-else-if="order.Order_Status==3&&order.Order_Shipping.shipping_id!==2">退货退款</span>
               </div>
-              
+
             <div class="fz-14 c7"
                  v-if="(Number(pro.prod_count)-Number(pro.is_back_num))*Number(pro.single_free_money)>0">
               免单金额({{(Number(pro.prod_count)-Number(pro.is_back_num))*Number(pro.single_free_money)}}元)
@@ -62,6 +62,7 @@
         </div>
         </div>
         <div v-if="order.city_express_appoint_time>0" class="text-right fz-14 c9 p-t-15">预约配送:<span class="c4 p-l-3">预计{{order.city_express_appoint_time_desc}}</span></div>
+        <div v-if="order.Order_Shipping&&order.Order_Shipping.shipping_id=='is_self_get'" class="text-right fz-14 c9 p-t-15">自提地点:<span class="c4 p-l-3">{{order.biz_address}}</span></div>
         <div class="total flex flex-justify-between">
           <view @click.stop="goPintuan(order)" class="ptdesc" v-if="order.Order_Type ==='pintuan' && order.teamstatus_desc">
             <span>{{order.teamstatus_desc}}</span>

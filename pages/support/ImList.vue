@@ -255,13 +255,16 @@ export default {
     })
   },
   onShow () {
-    if (!checkIsLogin(1, 1)) return
+    if (!checkIsLogin(1, 1)) {
+      this.chatList = []// 清空列表
+      this.refreshTabTag()
+      return
+    }
 
     getUserInfo().then(res => {
       this.setUserInfo(res.data)
     }).catch(err => {
     })
-
 
     if (eventHub.imInstance) {
       this.imInstance = imInstance = eventHub.imInstance
