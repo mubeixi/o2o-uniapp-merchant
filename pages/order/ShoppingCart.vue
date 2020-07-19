@@ -100,7 +100,7 @@
     </div>
 
     <div class="h50"></div>
-    <div class="safearea-box"></div>
+    <div class="safearea-box" style="background-color: #f8f8f8!important;"></div>
 
   </div>
 </template>
