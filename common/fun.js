@@ -1,9 +1,9 @@
-export const toast = (title, icon, image, duration) => {
+export const toast = (title, icon, image, duration=1500) => {
   uni.showToast({
     title,
-    duration: duration || 1500,
     icon,
-    image
+    image,
+    duration
   })
 }
 

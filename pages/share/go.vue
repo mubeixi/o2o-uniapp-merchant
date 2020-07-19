@@ -65,7 +65,7 @@
     </div>
 
 	<div class="h20"></div>
-    <div class="safearea-box"></div>
+    <div class="safearea-box" style="background-color: #f8f8f8 !important;"></div>
 
     <layout-modal  ref="commentModal" :autoClose="false" positions="center">
       <div class="refuseApplyDialog">

@@ -309,7 +309,7 @@
     </div>
 
     <div class="space-box"></div>
-    <div class="safearea-box fixed"></div>
+    <div class="safearea-box fixed" style="background-color: #f8f8f8!important;"></div>
 
     <layout-layer @maskClicked="handClicked" bottomStr="50px" ref="popupMX" title="明细">
       <div class="mxdetail">

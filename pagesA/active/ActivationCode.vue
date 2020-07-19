@@ -218,7 +218,7 @@ import BaseMixin from '@/mixins/BaseMixin'
 import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 import { buyActiveCode } from '@/api/order'
 import Pay from '@/common/Pay'
-import { error, toast } from '@/common/fun'
+import { error, toast, showLoading, hideLoading } from '@/common/fun'
 import Promisify from '@/common/Promisify'
 import { isWeiXin } from '@/common/helper'
 
@@ -259,11 +259,16 @@ export default {
         if (!isWeiXin()) {
           pay_type = 'wx_h5'
         }
-        await buyActiveCode({ }, { tip: '加载中' }).then(res => {
+        showLoading()
+        await buyActiveCode({ }).then(res => {
+          hideLoading()
           this.order_id = res.data.order_id
           Pay(_self, pay_type, res)
         }).catch(e => {
           error(e.msg || '获取code错误')
+          setTimeout(function () {
+            hideLoading()
+          }, 2000)
         })
         // #endif
         // #ifdef MP-WEIXIN
