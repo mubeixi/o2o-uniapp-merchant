@@ -85,7 +85,7 @@
 
     </div>
 
-    <div class="safearea-box"></div>
+    <div class="safearea-box" style="background-color: #EDF0F5 !important;"></div>
 
   </div>
 </template>
