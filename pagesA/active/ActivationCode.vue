@@ -310,14 +310,15 @@ export default {
         if (!isWeiXin()) {
           pay_type = 'wx_h5'
         } else {
-          const isHasCode = this.code
+          // const isHasCode = this.code
           // if (!isHasCode) {
           if (codeFn != 1) {
+            this.code = ''
             this.$_init_wxpay_env()
             return
           }
-          data.code = isHasCode
-          Storage.set('codePay', isHasCode)
+          data.code = this.code
+          Storage.set('codePay', this.code)
 
           pay_type = 'wx_mp'
         }
