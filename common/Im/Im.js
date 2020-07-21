@@ -6,6 +6,7 @@ import Storage from '@/common/Storage'
 import { modal } from '@/common/fun'
 import { createUpTaskArr, getDomain, uploadImages } from '@/common/helper'
 import store from '@/store'
+import eventHub from '@/common/eventHub'
 
 // 消息类,就先不用继承了吧
 /**
@@ -324,7 +325,7 @@ class IM {
 
   close () {
     uni.closeSocket()
-    this.clearIntervalFn()
+
     // this.task.close()
   }
 
@@ -441,8 +442,7 @@ class IM {
         this.heartBeatFailNum++
         // 丢失心跳达到最大次数之后需要重连
         if (this.heartBeatFailNum > this.heartBeatFailMax) {
-          console.log('心跳请求超过三次错误')
-
+          console.log('心跳请求超过阈值:' + this.heartBeatFailMax)
           // 先关掉
           this.close()
           // 重连吧
@@ -536,6 +536,15 @@ class IM {
     SocketTask.onClose((res) => {
       console.log('WebSocket关闭')
       console.log(res)
+
+      // 取消心跳
+      this.clearIntervalFn()
+      // 取消监听和重置
+      if (eventHub.imInstance) {
+        console.log('一并取消eventHub')
+        eventHub.imInstance.cancalListen()
+        eventHub.imInstance = null
+      }
     })
 
     this.task = SocketTask
@@ -567,7 +576,7 @@ class IM {
 // 还是放到类上面，这样就每个项目用工程文件就好了
 
 IM.prototype.heartBeatTimout = 30 * 1000 // 心跳保持时间，默认三十秒
-IM.prototype.heartBeatFailMax = 3 // 最大心跳丢失次数，错误3次重新建立socket请求
+IM.prototype.heartBeatFailMax = 0 // 最大心跳丢失次数，错误3次重新建立socket请求
 IM.prototype.tryRequestMax = 5 // 最大重连次数，重连超过5次不成功，就直接报错提醒用户洗洗睡
 IM.prototype.historyPageSize = 20 // 一次加载以往消息20条
 IM.prototype.allowMsgType = ['text', 'image', 'video', 'prod', 'live_text', 'live_pop'] // 目前只handler这几种，不允许其他的
