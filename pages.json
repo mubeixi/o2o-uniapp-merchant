@@ -675,7 +675,7 @@
   "globalStyle": {
     "navigationBarTextStyle": "black",
     "navigationBarBackgroundColor": "#FFF",
-    "navigationBarTitleText": "本地生活",
+    "navigationBarTitleText": "及贝",
     "backgroundColor": "#F8F8F8"
   },
   "tabBar": {

@@ -198,6 +198,8 @@ export default {
     background-color: #170130;
     padding-top: 66rpx;
     padding-bottom: 64rpx;
+    width: 750rpx;
+    overflow-x: hidden;
   }
   .full-img{
     width: 100%;

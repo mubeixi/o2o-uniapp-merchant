@@ -2,7 +2,7 @@
   <div @click="commonClick" class="page-wrap">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <div class="active-fixed flex flex-vertical-c" :style="{paddingTop:menuButtonInfo.top+'px'}">
-      <img class="img-logo m-r-5" :src="$getDomain('/static/client/active/activeLogo.png')"/>
+      <img class="img-logo m-r-5" :src="$getDomain('/static/images/jbay/logo/50.png')"/>
       <div class="active-fixed-title m-r-12">
         及贝
       </div>
@@ -252,44 +252,44 @@ export default {
       error(msg || '支付失败')
     },
     async buyActiveCodeFn (codeFn) {
-      try {
-        const _self = this
-        let pay_type = 'wx_lp'
-        // #ifdef H5
-        if (!isWeiXin()) {
-          pay_type = 'wx_h5'
+          try {
+            const _self = this
+            let pay_type = 'wx_lp'
+            // #ifdef H5
+            if (!isWeiXin()) {
+              pay_type = 'wx_h5'
+            }
+            showLoading()
+            await buyActiveCode({ }).then(res => {
+              hideLoading()
+              this.order_id = res.data.order_id
+              Pay(_self, pay_type, res)
+            }).catch(e => {
+              error(e.msg || '获取code错误')
+              setTimeout(function () {
+                hideLoading()
+              }, 2000)
+            })
+            // #endif
+            // #ifdef MP-WEIXIN
+            // 获取code
+    
+            const wxLoginRt = await Promisify('login').catch(() => {
+              throw Error('微信login错误')
+            })
+            const { code } = wxLoginRt
+            await buyActiveCode({ code }, { tip: '加载中' }).then(res => {
+              this.order_id = res.data.order_id
+              Pay(_self, pay_type, res)
+            }).catch(e => {
+              error(e.msg || '获取code错误')
+            })
+            // #endif
+          } catch (e) {
+            console.log(e)
+            error(e.message)
+          }
         }
-        showLoading()
-        await buyActiveCode({ }).then(res => {
-          hideLoading()
-          this.order_id = res.data.order_id
-          Pay(_self, pay_type, res)
-        }).catch(e => {
-          error(e.msg || '获取code错误')
-          setTimeout(function () {
-            hideLoading()
-          }, 2000)
-        })
-        // #endif
-        // #ifdef MP-WEIXIN
-        // 获取code
-
-        const wxLoginRt = await Promisify('login').catch(() => {
-          throw Error('微信login错误')
-        })
-        const { code } = wxLoginRt
-        await buyActiveCode({ code }, { tip: '加载中' }).then(res => {
-          this.order_id = res.data.order_id
-          Pay(_self, pay_type, res)
-        }).catch(e => {
-          error(e.msg || '获取code错误')
-        })
-        // #endif
-      } catch (e) {
-        console.log(e)
-        error(e.message)
-      }
-    }
   },
   created () {
 
@@ -305,6 +305,8 @@ export default {
     padding-top: 70rpx;
     overflow-y: scroll;
     overflow-x: hidden;
+	padding-bottom: constant(safe-area-inset-bottom);
+	padding-bottom: env(safe-area-inset-bottom);
   }
 
   .c-F7D81B {
@@ -582,11 +584,9 @@ export default {
     align-items: center;
     justify-content: center;
     left: 0rpx;
-    bottom: 0rpx;
-    /* #ifdef MP */
-    bottom: constant(safe-area-inset-bottom);
-    bottom: env(safe-area-inset-bottom);
-    /* #endif */
+    bottom: 40rpx;
+    // bottom: constant(safe-area-inset-bottom);
+    // bottom: env(safe-area-inset-bottom);
   }
 
   .active-bottom-fixed {
