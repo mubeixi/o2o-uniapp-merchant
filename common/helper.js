@@ -551,7 +551,7 @@ export function isWeiXin () {
   ) {
     return 'xcx'
   }
-  if (ua.match(/MicroMessenger/i) === 'micromessenger') {
+  if (ua.match(/MicroMessenger/i) === 'micromessenger' || ((ua.match(/MicroMessenger/i)) && (ua.match(/MicroMessenger/i))[0] === 'micromessenger')) {
     return true
   } else {
     return false
@@ -812,5 +812,6 @@ const Helper = {
     }
   }
 }
+
 
 export default Helper
