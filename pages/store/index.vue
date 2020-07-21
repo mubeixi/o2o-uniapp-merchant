@@ -92,6 +92,9 @@ export default {
   // },
   onShow () {
     this.init()
+    // #ifdef MP-WEIXIN
+    wx.hideHomeButton()
+    // #endif
 
     // 登陆后
     if (checkIsLogin(0, 0)) {

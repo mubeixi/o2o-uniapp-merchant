@@ -1,5 +1,5 @@
 {
-    "name" : "本地生活",
+    "name" : "及贝",
     "appid" : "__UNI__A07EDA1",
     "description" : "",
     "versionName" : "1.0.0",
@@ -110,7 +110,7 @@
             "disableHostCheck" : true,
             "proxy" : {
                 "/api" : {
-                    "target" : "http://www.newo2osrc.com", //"http://www.gogo.com/api",
+                    "target" : "https://newo2o.bafangka.com/api", //"http://www.gogo.com/api",
                     "changeOrigin" : true,
                     "secure" : false,
                     "pathRewrite" : {

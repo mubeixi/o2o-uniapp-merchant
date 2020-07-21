@@ -2,7 +2,7 @@
   <div @click="commonClick" class="page-wrap">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <div class="active-fixed flex flex-vertical-c" :style="{paddingTop:menuButtonInfo.top+'px'}">
-      <img class="img-logo m-r-5" :src="$getDomain('/static/client/active/activeLogo.png')"/>
+      <img class="img-logo m-r-5" :src="$getDomain('/static/images/jbay/logo/50.png')"/>
       <div class="active-fixed-title m-r-12">
         及贝
       </div>
@@ -81,60 +81,28 @@
     <div class="active-five-div"
          :style="{backgroundImage: 'url('+$getDomain('/static/client/active/activeFive1.png')+')'}">
       <div class="active-five-zhibo active-five-text" style="top: 64rpx;">
-            <span class="c-F7D81B fz-13">
-              直播
-            </span>
-        <span>
-              ：开启卖货新机遇，助力商家流量高效变现
-            </span>
+            <span class="c-F7D81B fz-13">直播</span>
+            <span>：开启卖货新机遇，助力商家流量高效变现</span>
       </div>
       <div class="active-five-zhibo active-five-text" style="top: 162rpx;">
-              <span class="c-F7D81B fz-13">
-                团购
-              </span>
-        <span>
-                ：有效激励用户购买/传播，销售/裂变利器
-              </span>
+              <span class="c-F7D81B fz-13">团购</span>
+              <span>：有效激励用户购买/传播，销售/裂变利器</span>
       </div>
       <div class="active-five-zhibo active-five-text" style="top: 258rpx;">
-                <span class="c-F7D81B fz-13">
-                  秒杀
-                </span>
-        <span>
-
-                                ：同一时间以超低价格吸引、活跃、转化用户
-
-                </span>
+                <span class="c-F7D81B fz-13">秒杀</span>
+                <span>：同一时间以超低价格吸引、活跃、转化用户</span>
       </div>
       <div class="active-five-zhibo active-five-text" style="top: 356rpx;">
-                <span class="c-F7D81B fz-13">
-                  优惠券
-                </span>
-        <span>
-
-                                ：抵扣等值现金，留存、成交、增加复购率
-
-                </span>
+                <span class="c-F7D81B fz-13">优惠券</span>
+                <span>：抵扣等值现金，留存、成交、增加复购率</span>
       </div>
       <div class="active-five-zhibo active-five-text" style="top: 452rpx;">
-                    <span class="c-F7D81B fz-13">
-                      满减
-                    </span>
-        <span>
-
-                                ：满100元减50元，吸引用户成交，提升客单价
-
-                    </span>
+                    <span class="c-F7D81B fz-13"> 满减</span>
+                    <span>：满100元减50元，吸引用户成交，提升客单价 </span>
       </div>
       <div class="active-five-zhibo active-five-text" style="top: 550rpx;">
-                    <span class="c-F7D81B fz-13">
-                      会员
-                    </span>
-        <span>
-
-                                ：会员制的基础，对留存及转化起到关键性作用
-
-                    </span>
+        <span class="c-F7D81B fz-13">会员</span>
+        <span>：会员制的基础，对留存及转化起到关键性作用</span>
       </div>
     </div>
 
@@ -204,7 +172,7 @@
               /月
             </span>
         </div>
-        <div class="last-btn" @click="buyActiveCodeFn">
+        <div class="last-btn" @click="buyActiveCodeFn(0)">
           立即激活
         </div>
       </div>
@@ -220,7 +188,8 @@ import { buyActiveCode } from '@/api/order'
 import Pay from '@/common/Pay'
 import { error, toast, showLoading, hideLoading } from '@/common/fun'
 import Promisify from '@/common/Promisify'
-import { isWeiXin } from '@/common/helper'
+import { isWeiXin, urlencode, GetQueryByString } from '@/common/helper'
+import Storage from '@/common/Storage'
 
 export default {
   mixins: [BaseMixin],
@@ -233,8 +202,16 @@ export default {
       code: ''
     }
   },
+  computed: {
+    initData () {
+      return this.$store.state.system.initData
+    }
+  },
   methods: {
     paySuccessCall () {
+      // #ifdef H5
+      this.code = ''
+      // #endif
       toast('支付成功')
       const _self = this
       const url = '/pagesA/active/ActivationCodeSuccess?order_id=' + this.order_id
@@ -243,6 +220,10 @@ export default {
       }, 1000)
     },
     payFailCall (err) {
+      // #ifdef H5
+      this.code = ''
+      // #endif
+
       const { msg, errMsg } = err
       if (errMsg === 'requestPayment:fail cancel') {
         error('用户取消支付')
@@ -251,16 +232,97 @@ export default {
 
       error(msg || '支付失败')
     },
+    async $_init_wxpay_env () {
+      const initData = this.initData
+
+      const login_methods = initData.login_methods
+      const component_appid = login_methods.component_appid
+
+      let channel = null
+
+      // 根据服务器返回配置设置channels,只有微信公众号和小程序会用到component_appid
+      // 而且状态可以灵活控制 state为1
+      for (var i in login_methods) {
+        // && login_methods[i].state ??状态呢？
+        if (i !== 'component_appid' && login_methods[i].state) {
+          channel = ['wx_mp'].indexOf(login_methods[i].type) === -1 ? {
+            ...login_methods[i]
+          } : {
+            ...login_methods[i],
+            component_appid
+          }
+          break
+        }
+      }
+
+      if (!channel) {
+        this.$error('未开通公众号支付')
+        return false
+      }
+
+      // 如果url有code去掉
+      let {
+        origin,
+        pathname,
+        search,
+        hash
+      } = window.location
+      const strArr = []
+      if (search.indexOf('code') !== -1) {
+        const tempArr = search.split('&')
+        for (var j of tempArr) {
+          // 过滤多余的参数
+          if (j.indexOf('code') === -1 && j.indexOf('state') === -1 && j.indexOf('appid') === -1) {
+            strArr.push(j)
+          }
+        }
+        let newSearchStr = strArr.join('&')
+        if (newSearchStr.indexOf('?') === -1) {
+          newSearchStr = '?' + newSearchStr
+        }
+
+        search = newSearchStr
+      }
+
+      const REDIRECT_URI = urlencode(origin + pathname + search + hash)
+
+      let wxAuthUrl = null
+
+      if (channel.component_appid) {
+        // 服务商模式登录
+        wxAuthUrl =
+          `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${channel.appid}&redirect_uri=${REDIRECT_URI}&response_type=code&scope=snsapi_base&state=STATE&component_appid=${channel.component_appid}#wechat_redirect`
+      } else {
+        // 公众号自己的appid用于登录
+        wxAuthUrl =
+          `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${channel.appid}&redirect_uri=${REDIRECT_URI}&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect`
+      }
+
+      window.location.href = wxAuthUrl
+    },
     async buyActiveCodeFn (codeFn) {
       try {
         const _self = this
+        const data = {}
         let pay_type = 'wx_lp'
         // #ifdef H5
+
         if (!isWeiXin()) {
           pay_type = 'wx_h5'
+        } else {
+          const isHasCode = this.code
+          // if (!isHasCode) {
+          if (codeFn != 1) {
+            this.$_init_wxpay_env()
+            return
+          }
+          data.code = isHasCode
+          Storage.set('codePay', isHasCode)
+
+          pay_type = 'wx_mp'
         }
         showLoading()
-        await buyActiveCode({ }).then(res => {
+        await buyActiveCode(data).then(res => {
           hideLoading()
           this.order_id = res.data.order_id
           Pay(_self, pay_type, res)
@@ -292,7 +354,18 @@ export default {
     }
   },
   created () {
+    // #ifdef H5
+    if (isWeiXin()) {
+      this.code = GetQueryByString(location.href, 'code')
+      const code = Storage.get('codePay')
 
+      if (this.code && this.code != code) {
+        this.buyActiveCodeFn(1)
+      } else {
+        this.code = ''
+      }
+    }
+    // #endif
   }
 
 }
@@ -305,6 +378,8 @@ export default {
     padding-top: 70rpx;
     overflow-y: scroll;
     overflow-x: hidden;
+    padding-bottom: constant(safe-area-inset-bottom);
+    padding-bottom: env(safe-area-inset-bottom);
   }
 
   .c-F7D81B {
@@ -319,7 +394,7 @@ export default {
     height: 70rpx;
     width: 724rpx;
     padding-left: 26rpx;
-   // box-sizing: border-box;
+    // box-sizing: border-box;
     background-color: #FFFFff;
     position: fixed;
     top: 0px;
@@ -582,11 +657,9 @@ export default {
     align-items: center;
     justify-content: center;
     left: 0rpx;
-    bottom: 0rpx;
-    /* #ifdef MP */
-    bottom: constant(safe-area-inset-bottom);
-    bottom: env(safe-area-inset-bottom);
-    /* #endif */
+    bottom: 40rpx;
+    // bottom: constant(safe-area-inset-bottom);
+    // bottom: env(safe-area-inset-bottom);
   }
 
   .active-bottom-fixed {
