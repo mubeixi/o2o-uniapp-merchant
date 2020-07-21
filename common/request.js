@@ -165,7 +165,15 @@ export const ajax = ({ url, method = 'post', data = {}, options = {},isAddHost=t
     ...headerExt
   }
 
-  const _url = !isAddHost ? url:ENV.apiBaseUrl + url
+    let _url =''
+   // #ifdef H5
+    _url = url // 直接用绝对目录,这样就可以随便部署在任意域名下,会默认读取host/api/xxx接口
+   // #endif
+ 
+   // #ifndef H5
+    _url = !isAddHost ? url:ENV.apiBaseUrl + url
+   // #endif
+ 
 
   // console.log(`请求链接${_url}`)
   // console.log('请求参数:',data)
