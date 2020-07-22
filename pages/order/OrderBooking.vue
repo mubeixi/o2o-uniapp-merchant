@@ -172,7 +172,7 @@
               <span>预约送达时间</span>
               <div class="flex flex-vertical-c" style="text-align:right; color: #888;" @click="citySendTypeOpen(biz_id)">
                 <block v-if="postData.appoint_time[biz_id]">
-                  {{toDay}} <sapn class="m-l-6">{{postData.appoint_time[biz_id]}}</sapn>
+                  {{postData.teamstamp[biz_id]}}<sapn class="m-l-6">{{postData.appoint_time[biz_id]}}</sapn>
                 </block>
                 <block v-else>
                   请设置时间
@@ -465,6 +465,7 @@ export default {
         shipping_name: {}, // 对应名称,不过不需要提交到后台
         appoint_time_type: {},
         appoint_time: {}, // ，同城配送时有效，同城配送的预约时间，0|不填=立即配送
+        teamstamp: {},
         shipping_id: {},
         coupon_id: {},
         coupon_current: {},
@@ -981,6 +982,7 @@ export default {
         return
       }
       this.postData.appoint_time[this.activeBizId] = this.appointTimeTypes[selectIdx].time_str
+      this.postData.teamstamp[this.activeBizId] = uni.$moment(this.appointTimeTypes[selectIdx].teamstamp * 1000).format('YYYY-MM-DD')
       this.$closePop('citySendTime')
     },
     bindCitySendTimeChange (e) {
