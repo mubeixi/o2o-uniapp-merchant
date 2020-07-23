@@ -491,7 +491,7 @@ export default {
       scrollTopNum: 0,
       toViewIdx: '',
       pixelRatio: 1,
-      bizSearchKeyWord: '酸奶 整箱',
+      bizSearchKeyWord: '请输入商品关键词',
       headTabTop: 100,
       pageScrollTop: 0,
       headTabIndex: 0,
