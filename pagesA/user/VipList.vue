@@ -38,7 +38,7 @@
           <span class="label p-r-8 fz-16 color-red">*</span>
           <span class="c6">{{vipData[inds].upgrade_rights.price_back.name}}</span>
         </div>
-        <div style="line-height: 30px;" class="flex flex-vertical-c fz-14" v-if="vipData[inds].upgrade_rights.money">
+        <div style="line-height: 30px;" class="flex flex-vertical-c fz-14" v-if="vipData[inds].upgrade_rights.money&&vipData[inds].upgrade_rights.money.value>0">
           <span class="label p-r-8 fz-16 color-red">*</span>
           <span class="c6">{{vipData[inds].upgrade_rights.money.name}}</span>：<span class="price-selling">￥{{vipData[inds].upgrade_rights.money.value}}</span>
         </div>
