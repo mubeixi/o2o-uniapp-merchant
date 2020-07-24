@@ -67,7 +67,8 @@
       <image :src="'/static/client/fenxiao/background.png'|domain" class="back"></image>
       <view class="zhezhao">
         <view :key="index" @click="goOther(item)" class="td" v-for="(item,index) in funcModules">
-          <image :src="item.img" class="imgs"></image>
+          <image v-if="item.img_icon.use==0" :src="item.img_icon.img" class="imgs"></image>
+          <layout-icon v-if="item.img_icon.use==1" :color="item.img_icon.color" :type="item.img_icon.icon"></layout-icon>
           <view class="views">
             {{item.name}}
           </view>
@@ -96,13 +97,13 @@ const routerList = {
   '/pagesA/fenxiao/promotion': '/pagesA/distributor/Promotion',
   '/pagesA/fenxiao/leaderboard': '/pagesA/distributor/LeaderBoard',
   '/pagesA/fenxiao/region': '/pagesA/distributor/Region',
-  '/pagesA/fenxiao/gudong': '/pagesA/distributor/Shareholder',
+  '/pagesA/fenxiao/gudong': '/pagesA/distributor/Shareholder'
 }
 export default {
   mixins: [BaseMixin],
   components: {
     WzwImTip,
-    LayoutIcon,
+    LayoutIcon
     // TabbarComponents
   },
   data () {
@@ -112,10 +113,10 @@ export default {
         disInfo: {},
         total_sales: '',
         total_income: '',
-        balance: '',
+        balance: ''
       }, //
       pro: [],
-      funcModules: [], // 功能模块
+      funcModules: [] // 功能模块
     }
   },
   computed: {
@@ -124,30 +125,30 @@ export default {
     },
     userInfo () {
       return this.$store.getters['user/getUserInfo']()
-    },
+    }
   },
   methods: {
     ...mapActions({
-      setUserInfo: 'user/setUserInfo',
+      setUserInfo: 'user/setUserInfo'
     }),
     goSales () {
       if (!checkIsLogin(1, 1)) return
       if (!checkIsDistribute(1, 1)) return
       uni.navigateTo({
-        url: '/pagesA/distributor/SalesSum',
+        url: '/pagesA/distributor/SalesSum'
       })
     },
     goProfit () {
       if (!checkIsLogin(1, 1)) return
       if (!checkIsDistribute(1, 1)) return
       uni.navigateTo({
-        url: '/pagesA/distributor/ProfitSum',
+        url: '/pagesA/distributor/ProfitSum'
       })
     },
     goDistributor () {
       // 跳转成为
       uni.navigateTo({
-        url: '/pagesA/distributor/DistributorLevel',
+        url: '/pagesA/distributor/DistributorLevel'
       })
     },
     goLogin () {
@@ -156,7 +157,7 @@ export default {
     },
     goMsg () {
       uni.navigateTo({
-        url: '/pagesA/user/SystemMsg',
+        url: '/pagesA/user/SystemMsg'
       })
     },
     // 去分销商页面
@@ -164,7 +165,7 @@ export default {
       if (!checkIsLogin(1, 1)) return
       if (!checkIsDistribute(1, 1)) return
       uni.navigateTo({
-        url: '/pagesA/distributor/Profile',
+        url: '/pagesA/distributor/Profile'
       })
     },
     // 去提现
@@ -180,9 +181,9 @@ export default {
       if (!checkIsDistribute(1, 1)) return
       
       uni.navigateTo({
-        url: routerList[item.url],
+        url: routerList[item.url]
       })
-    },
+    }
   },
   onShow () {
     if (checkIsLogin()) {
@@ -200,11 +201,11 @@ export default {
       this.data = res.data
       this.userInfo.Is_Distribute = 1
       uni.setNavigationBarTitle({
-        title: res.data.title,
+        title: res.data.title
       })
     }).catch(err => {
     })
-  },
+  }
 }
 </script>
 

@@ -9,7 +9,7 @@
         个人中心
       </div>
     </div>
-
+    
     <div class="header">
       <div :style="{top:menuButtonInfo.top+'px',height:menuButtonInfo.height+'px'}" class="left-icon-box">
         <!--:plain="false" :wrap-bg="activeHeadOpacity===1?'#f2f2f2':'none'" wrap-padding="6px"-->
@@ -59,18 +59,18 @@
     <div class="functions flex">
       <block :key="index" v-for="(item,index) of  iconList">
         <block v-if="initData.cash_from==2">
-          <LayoutFun  v-if="item.name!='余额'" :color="item.color" :index="index" :name="item.name" :type="item.className" @openNext="openNext"
-                     width="150rpx"></LayoutFun>
+          
+          <LayoutFun v-if="item.name!='余额'" :color="item.color" :index="index" :name="item.name" :type="item.className" @openNext="openNext" width="150rpx"></LayoutFun>
         </block>
-        <LayoutFun v-else-if="item.name!='会员卡'" :color="item.color" :index="index" :name="item.name" :type="item.className" @openNext="openNext"
-                   width="150rpx"></LayoutFun>
+        <LayoutFun v-else-if="item.name!='会员卡'" :color="item.color" :index="index" :name="item.name" :type="item.className" @openNext="openNext" width="150rpx"></LayoutFun>
+      
       </block>
-
+      
       </block>
     </div>
     <div class="intro">为你推荐</div>
     <div class="product-list flex">
-
+      
       <pro-tag
         :index="idx"
         :key="idx"
@@ -82,11 +82,11 @@
         :prod_id="item.Products_ID"
         v-for="(item,idx) in proList"
       />
-
+    
     </div>
-
+    
     <div class="safearea-box" style="background-color: #EDF0F5 !important;"></div>
-
+  
   </div>
 </template>
 
@@ -99,6 +99,8 @@ import { checkIsLogin } from '@/common/helper'
 import { getProductList } from '@/api/product'
 import { getOrderNum } from '@/api/order'
 import { getRightsCard, getUserInfo } from '@/api/customer'
+import {getFuncModule} from '@/api/customer'
+import {getDomain} from '@/common/helper'
 import { mapActions } from 'vuex'
 import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 import eventHub from '@/common/eventHub'
@@ -107,7 +109,7 @@ import { error } from '@/common/fun'
 export default {
   mixins: [BaseMixin, tabbarMixin],
   components: {
-
+    
     WzwImTip,
     LayoutIcon,
     LayoutFun,
@@ -120,98 +122,99 @@ export default {
       orderNum: {},
       productTotal: 0,
       page: 1,
-      iconList: [
-        {
-          className: 'iconpintuan',
-          name: '拼团订单',
-          color: '#FE7602',
-          link: '/pages/order/OrderList?type=pintuan'
-        },
-        {
-          className: 'iconxianshiqianggou',
-          name: '限时折扣单',
-          color: '#ADCF81',
-          link: '/pages/order/OrderList?type=spike'
-        },
-        {
-          className: 'iconmiaosha',
-          name: '秒杀订单',
-          color: '#54AEED',
-          link: '/pages/order/OrderList?type=flashsale'
-        },
-        // {
-        //   className: 'iconwaimai',
-        //   name: '外卖订单',
-        //   color: '#f4ea2a',
-        //   link: '/pages/order/OrderList?type=waimai'
-        // },
-        {
-          className: 'iconzengpin',
-          name: '我的赠品',
-          color: '#E8779F',
-          link: '/pagesA/user/MyGift'
-        },
-        {
-          className: 'iconyue',
-          name: '余额',
-          color: '#69C276',
-          link: '/pagesA/user/BalanceCenter'
-        },
-		{
-		  className: 'iconhuiyuanka',
-		  name: '会员卡',
-		  color: '#54AEED',
-		  link: '/pagesA/user/StoreVip'
-		},
-        {
-          className: 'iconjifen',
-          name: '积分',
-          color: '#52CCCD',
-          link: '/pagesA/user/IntegralCenter'
-        },
-        {
-          className: 'iconshoucang18-copy',
-          name: '收藏',
-          color: '#FF7F79',
-          link: '/pages/favorite/index'
-        },
-        {
-          className: 'iconyouhuiquan',
-          name: '优惠券',
-          color: '#D1BE71',
-          link: '/pagesA/user/Coupon'
-        },
-        {
-          className: 'iconrenwu',
-          name: '任务中心',
-          color: '#54AEED',
-          link: '/pagesA/user/TaskCenter'
-        },
-        {
-          className: 'icondizhi',
-          name: '地址管理',
-          color: '#E8779F',
-          link: '/pagesA/user/AddressList'
-        },
-        {
-          className: 'icontuikuan',
-          name: '退款/售后',
-          color: '#FE7602',
-          link: '/pagesA/order/RefundList'
-        },
-        {
-          className: 'iconfenxiao',
-          name: '分销中心',
-          color: '#69C276',
-          link: '/pagesA/distributor/Main'
-        },
-        {
-          className: 'iconguiji',
-          name: '轨迹',
-          color: '#69C276',
-          link: '/pagesA/user/history'
-        }
-      ],
+      //   iconList: [
+      //     {
+      //       className: 'iconpintuan',
+      //       name: '拼团订单',
+      //       color: '#FE7602',
+      //       link: '/pages/order/OrderList?type=pintuan'
+      //     },
+      //     {
+      //       className: 'iconxianshiqianggou',
+      //       name: '限时折扣单',
+      //       color: '#ADCF81',
+      //       link: '/pages/order/OrderList?type=spike'
+      //     },
+      //     {
+      //       className: 'iconmiaosha',
+      //       name: '秒杀订单',
+      //       color: '#54AEED',
+      //       link: '/pages/order/OrderList?type=flashsale'
+      //     },
+      //     // {
+      //     //   className: 'iconwaimai',
+      //     //   name: '外卖订单',
+      //     //   color: '#f4ea2a',
+      //     //   link: '/pages/order/OrderList?type=waimai'
+      //     // },
+      //     {
+      //       className: 'iconzengpin',
+      //       name: '我的赠品',
+      //       color: '#E8779F',
+      //       link: '/pagesA/user/MyGift'
+      //     },
+      //     {
+      //       className: 'iconyue',
+      //       name: '余额',
+      //       color: '#69C276',
+      //       link: '/pagesA/user/BalanceCenter'
+      //     },
+      // {
+      //   className: 'iconhuiyuanka',
+      //   name: '会员卡',
+      //   color: '#54AEED',
+      //   link: '/pagesA/user/StoreVip'
+      // },
+      //     {
+      //       className: 'iconjifen',
+      //       name: '积分',
+      //       color: '#52CCCD',
+      //       link: '/pagesA/user/IntegralCenter'
+      //     },
+      //     {
+      //       className: 'iconshoucang18-copy',
+      //       name: '收藏',
+      //       color: '#FF7F79',
+      //       link: '/pages/favorite/index'
+      //     },
+      //     {
+      //       className: 'iconyouhuiquan',
+      //       name: '优惠券',
+      //       color: '#D1BE71',
+      //       link: '/pagesA/user/Coupon'
+      //     },
+      //     {
+      //       className: 'iconrenwu',
+      //       name: '任务中心',
+      //       color: '#54AEED',
+      //       link: '/pagesA/user/TaskCenter'
+      //     },
+      //     {
+      //       className: 'icondizhi',
+      //       name: '地址管理',
+      //       color: '#E8779F',
+      //       link: '/pagesA/user/AddressList'
+      //     },
+      //     {
+      //       className: 'icontuikuan',
+      //       name: '退款/售后',
+      //       color: '#FE7602',
+      //       link: '/pagesA/order/RefundList'
+      //     },
+      //     {
+      //       className: 'iconfenxiao',
+      //       name: '分销中心',
+      //       color: '#69C276',
+      //       link: '/pagesA/distributor/Main'
+      //     },
+      //     {
+      //       className: 'iconguiji',
+      //       name: '轨迹',
+      //       color: '#69C276',
+      //       link: '/pagesA/user/history'
+      //     }
+      //   ],
+      iconList: [],
       proList: []
     }
   },
@@ -243,7 +246,7 @@ export default {
     },
     openNext (index) {
       if (!checkIsLogin(1, 1)) return
-      this.$linkTo(this.iconList[index].link)
+      this.$linkTo(this.$linkTo(this.iconList[index].url))
     },
     goOrder (index) {
       if (!checkIsLogin(1, 1)) return
@@ -251,10 +254,19 @@ export default {
       this.$linkTo(url)
     },
     async _init_func () {
+      
+      const iconList = await getFuncModule({ type: 2 }).then(res => res.data).catch(err => {
+        error('获取图标失败:' + err.msg)
+      })
+      this.iconList = iconList.map(row => {
+        return { ...row, color: row.img_icon.color, className: row.img_icon.use === 1 ? row.img_icon.icon : getDomain(row.img_icon.img) }
+      })
+      
+      
       const { data, totalCount } = await getProductList({}).catch(e => {
         throw Error(e.msg || '获取推荐商品信息失败')
       })
-
+      
       this.proList = data
       this.productTotal = totalCount
       this.page++
@@ -280,7 +292,7 @@ export default {
     this.setTabBarIndex(4)
     this.$store.dispatch('system/setTabActiveIdx', 4)
     this.refreshTabTag()
-
+    
     this.init()
     if (this.userInfo.Users_ID) {
       getUserInfo().then(res => {
@@ -298,7 +310,7 @@ export default {
     const proList = await getProductList({ page: this.page }, { onlyData: true }).catch(e => {
       throw Error(e.msg || '获取推荐商品信息失败')
     })
-
+    
     this.page++
     this.proList = this.proList.concat(proList)
   },
@@ -315,18 +327,18 @@ export default {
     box-sizing: border-box;
     overflow-x: hidden;
   }
-
+  
   .flex {
     display: flex;
   }
-
+  
   .align-items-center {
     align-items: center;
   }
-
+  
   .header {
     position: relative;
-
+    
     .left-icon-box {
       position: fixed;
       left: 30rpx;
@@ -334,16 +346,16 @@ export default {
       align-items: center;
       z-index: 3;
     }
-
+    
     .user-msg {
       text-align: center;
-
+      
       .avatar {
         width: 96rpx;
         height: 96rpx;
         border-radius: 50%;
       }
-
+      
       .name {
         font-size: 32rpx;
         color: #333;
@@ -351,7 +363,7 @@ export default {
       }
     }
   }
-
+  
   .orders {
     width: 690rpx;
     height: 210rpx;
@@ -359,19 +371,19 @@ export default {
     margin-top: 40rpx;
     border-radius: 10rpx;
     justify-content: space-around;
-
+    
     .order-item {
       text-align: center;
       font-size: 28rpx;
       color: #333;
       position: relative;
-
+      
       .order-desc {
         margin-top: 22rpx;
       }
     }
   }
-
+  
   .quanyi {
     position: relative;
     width: 690rpx;
@@ -379,13 +391,13 @@ export default {
     margin-top: 40rpx;
     border-radius: 10rpx;
     background: #000;
-
+    
     .v-icon {
       position: absolute;
       top: 23rpx;
       left: 38rpx;
     }
-
+    
     .quanyi-title {
       position: absolute;
       left: 101rpx;
@@ -393,7 +405,7 @@ export default {
       font-size: 32rpx;
       color: #DA8E4B;
     }
-
+    
     .quanyi-ad {
       position: absolute;
       top: 79rpx;
@@ -401,7 +413,7 @@ export default {
       color: #fff;
       font-size: 22rpx;
     }
-
+    
     .detail {
       position: absolute;
       top: 39rpx;
@@ -417,25 +429,25 @@ export default {
       padding: 0 10rpx;
     }
   }
-
+  
   .functions {
     background-color: #fff;
     flex-wrap: wrap;
     padding: 60rpx 40rpx 0;
     margin-top: 40rpx;
   }
-
+  
   .intro {
     text-align: center;
     margin: 60rpx 0 32rpx;
     font-size: 34rpx;
   }
-
+  
   .product-list {
     flex-wrap: wrap;
     margin: 0 10rpx;
   }
-
+  
   .jiaobiao {
     position: absolute;
     top: 0rpx;
