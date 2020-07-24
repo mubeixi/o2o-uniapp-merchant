@@ -65,7 +65,7 @@
     </div>
 
 	<div class="h20"></div>
-    <div class="safearea-box"></div>
+    <div class="safearea-box" style="background-color: #f8f8f8 !important;"></div>
 
     <layout-modal  ref="commentModal" :autoClose="false" positions="center">
       <div class="refuseApplyDialog">
@@ -92,7 +92,7 @@ import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import LayoutModal from '@/componets/layout-modal/layout-modal'
 import BaseMixin from '@/mixins/BaseMixin'
 import Promisify from '@/common/Promisify'
-import { buildSharePath, cutstrFun, saveImageToDisk } from '@/common/helper'
+import { buildSharePath, checkIsLogin, cutstrFun, saveImageToDisk } from '@/common/helper'
 import { Exception } from '@/common/Exception'
 import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 
@@ -127,7 +127,8 @@ export default {
         Products_PriceX: '0',
         Products_PriceY: '0',
         Products_JSON: {},
-        Products_Description: ''
+        Products_Description: '',
+        userInfo: null
       }
     }
   },
@@ -163,7 +164,7 @@ export default {
     // this.wrapPath = this.$getDomain('/static/client/share/cover-wrap.png')
   },
   onShow () {
-    this.$refs.commentModal.close()
+    this.$refs.commentModal && this.$refs.commentModal.close()
   },
   methods: {
     async saveFn () {
@@ -210,6 +211,7 @@ export default {
       this.shareText = e.detail.value
     },
     async createCanvas () {
+      if (!checkIsLogin(1, 1)) return
       try {
         showLoading('生成中')
         const wrapHeight = 1038
@@ -348,6 +350,7 @@ export default {
         //   urls: [tempFilePath] // 需要预览的图片http链接列表
         // })
       } catch (e) {
+        e.type = 'modal'
         Exception.handle(e)
       } finally {
         hideLoading()
@@ -367,6 +370,8 @@ export default {
     async _init_func (options) {
       try {
         showLoading()
+
+        this.userInfo = await this.$store.dispatch('user/getUerInfo', { stroage: 'online' })
 
         const data = {
           prod_id: this.prod_id
@@ -416,7 +421,7 @@ export default {
           this.shareText = `${detailData.Products_Name},已售${detailData.Products_Sales}件,拼购价:${detailData.price},原价:${detailData.Products_PriceX}`
         }
 
-        const productShareInfo = await getProductSharePic({ product_id: this.prod_id }, { noUid: 1 }).then(res => res.data).catch(err => {
+        const productShareInfo = await getProductSharePic({ product_id: this.prod_id }).then(res => res.data).catch(err => {
           throw Error(err.msg || '获取商品分享信息错误')
         })
         console.log(productShareInfo)

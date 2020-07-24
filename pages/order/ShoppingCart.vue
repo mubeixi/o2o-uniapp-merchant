@@ -100,7 +100,7 @@
     </div>
 
     <div class="h50"></div>
-    <div class="safearea-box"></div>
+    <div class="safearea-box" style="background-color: #f8f8f8!important;"></div>
 
   </div>
 </template>
@@ -309,6 +309,7 @@ export default {
         // 需要更正数字
         this.CartList[biz_id][prod_id][attr_id].Qty = this.qty
       }
+      this.SumPrice()
       this.isAjax = false
     },
     // 全选
@@ -378,6 +379,7 @@ export default {
         }
       }
 
+      this.SumPrice()
       this.isAjax = false
     },
     // 初始化 选中状态
@@ -487,7 +489,7 @@ export default {
   },
   async onReachBottom () {
     if (this.proList.length >= this.productTotal) {
-      error('到底了')
+      // error('到底了')
       return
     }
     const proList = await getProductList({ page: this.page }, { onlyData: true }).catch(e => {

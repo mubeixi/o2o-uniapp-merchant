@@ -1,4 +1,7 @@
 import Storage from '@/common/Storage'
+import { getSystemConf } from '@/api/common'
+import { modal } from '@/common/fun'
+import { getUserInfo } from '@/api/customer'
 
 const state = {
   userInfo: false,
@@ -30,6 +33,22 @@ const mutations = {
 }
 
 const actions = {
+  // async 相当于 隐式的promise
+  async getUerInfo ({ commit, state }, opts = {}) {
+    try {
+      const { stroage = 'online' } = opts
+      let userInfo = state.userInfo || Storage.get('userInfo')
+      if (stroage === 'online' || !userInfo || JSON.stringify(userInfo) === '{}') {
+        userInfo = await getUserInfo().then(res => res.data).catch(({ msg = '' }) => { throw Error(msg || '获取用户信息失败') })
+      }
+      commit('SET_USER_INFO', userInfo)
+      return userInfo
+    } catch (e) {
+      modal(e.message)
+    } finally {
+
+    }
+  },
   setUserInfo: ({ commit }, data) => {
     commit('SET_USER_INFO', data)
   },

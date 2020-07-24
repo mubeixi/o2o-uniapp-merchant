@@ -37,7 +37,7 @@
           <div class="pro-msg flex flex-column">
             <div class="flex1">
               <div class="pro-msg-row fz-14 c3 flex flex-justify-between">
-                <div style="width: 380rpx;word-break: break-all;">{{pro.prod_name}}</div>
+                <div style="width: 380rpx;word-break: break-all;"><span class="order-type-tag">{{order.Order_Type_text}}</span>{{pro.prod_name}}</div>
                 <div>￥{{pro.prod_price}}</div>
               </div>
               <div class="pro-msg-row fz-12 c9 flex flex-justify-between">
@@ -54,14 +54,15 @@
                 <span @click.stop="goPay(order,pro)" class="btn-group-item" v-else-if="order.Order_Status==3&&order.Order_Shipping.shipping_id!==2">退货退款</span>
               </div>
               
-            <div class="fz-14 c7"
-                 v-if="(Number(pro.prod_count)-Number(pro.is_back_num))*Number(pro.single_free_money)>0">
-              免单金额({{(Number(pro.prod_count)-Number(pro.is_back_num))*Number(pro.single_free_money)}}元)
+              <div class="fz-14 c7"
+                   v-if="(Number(pro.prod_count)-Number(pro.is_back_num))*Number(pro.single_free_money)>0">
+                免单金额({{(Number(pro.prod_count)-Number(pro.is_back_num))*Number(pro.single_free_money)}}元)
+              </div>
             </div>
           </div>
         </div>
-        </div>
         <div v-if="order.city_express_appoint_time>0" class="text-right fz-14 c9 p-t-15">预约配送:<span class="c4 p-l-3">预计{{order.city_express_appoint_time_desc}}</span></div>
+        <div v-if="order.Order_Shipping&&order.Order_Shipping.shipping_id=='is_self_get'" class="text-right fz-14 c9 p-t-15">自提地点:<span class="c4 p-l-3">{{order.biz_address}}</span></div>
         <div class="total flex flex-justify-between">
           <view @click.stop="goPintuan(order)" class="ptdesc" v-if="order.Order_Type ==='pintuan' && order.teamstatus_desc">
             <span>{{order.teamstatus_desc}}</span>
@@ -102,11 +103,11 @@
         </div>
       </div>
     </block>
-
+    
     <div class="defaults" v-else>
       <image :src="'/static/client/empty.png'|domain"></image>
     </div>
-
+    
     <layout-modal ref="sureReason">
       <div class="refuseApplyDialog">
         <div style="width: 110px;height: 110px;margin: 0 auto;">
@@ -304,7 +305,7 @@ export default {
       const data = {
         page: this.page,
         pageSize: this.pageSize,
-        Order_Type: this.type
+        // Order_Type: this.type
       }
       if (this.index > 0) {
         data.Order_Status = this.index
@@ -318,7 +319,7 @@ export default {
       orderLsit.data.map(item => {
         item.Order_Shipping = JSON.parse(item.Order_Shipping)
       })
-
+      
       this.totalCount = orderLsit.totalCount
       if (item === 'init') {
         this.orderList = orderLsit.data
@@ -343,20 +344,20 @@ export default {
     this.type = type
     this.index = index
     let pageTitle = '订单列表'
-    switch (type) {
-      case 'spike':
-        pageTitle = '限时抢购订单'
-        break
-      case 'waimai':
-        pageTitle = '外卖订单'
-        break
-      case 'flashsale':
-        pageTitle = '秒杀订单'
-        break
-      case 'pintuan':
-        pageTitle = '拼团订单'
-        break
-    }
+    // switch (type) {
+    //   case 'spike':
+    //     pageTitle = '限时抢购订单'
+    //     break
+    //   case 'waimai':
+    //     pageTitle = '外卖订单'
+    //     break
+    //   case 'flashsale':
+    //     pageTitle = '秒杀订单'
+    //     break
+    //   case 'pintuan':
+    //     pageTitle = '拼团订单'
+    //     break
+    // }
     uni.setNavigationBarTitle({
       title: pageTitle
     })
@@ -379,7 +380,7 @@ export default {
     margin-right: 10px;
     /*position:relative;*/
     z-index: 3;
-
+    
     .tooltip {
       position: absolute;
       background: #fff;
@@ -394,9 +395,9 @@ export default {
       border-radius: 5px;
       color: #444;
       font-size: 15px;
-
+      
       &::after {
-
+        
         content: " ";
         position: absolute;
         bottom: 100%; /* 提示工具头部 */
@@ -409,12 +410,12 @@ export default {
       }
     }
   }
-
+  
   .page-wrap {
     background-color: #ffffff !important;
     min-height: 100vh;
   }
-
+  
   .titless {
     position: fixed;
     top: 0rpx;
@@ -422,7 +423,7 @@ export default {
     width: 100%;
     z-index: 999;
   }
-
+  
   .navs {
     z-index: 999;
     position: fixed;
@@ -440,13 +441,13 @@ export default {
     background: #fff;
     font-size: 28rpx;
     padding: 0 10px;
-
+    
     .nav-item {
       flex: 1;
       box-sizing: border-box;
       text-align: center;
       position: relative;
-
+      
       .jiaobiao {
         position: absolute;
         top: 24rpx;
@@ -463,64 +464,75 @@ export default {
         color: #F43131;
       }
     }
-
+    
     .nav-item.active {
       color: red;
       border-bottom: 2px solid red;
     }
   }
-
+  
   .order {
     padding: 0rpx 20rpx;
     background: #fff;
     position: relative;
-
+    
     .bizinfo {
       margin-top: 20rpx;
       display: flex;
       align-items: center;
       justify-content: space-between;
       width: 100%;
-
+      
       .img {
         width: 70rpx;
         height: 70rpx;
         border-radius: 50%;
         margin-right: 21rpx;
       }
-
+      
       .bizname {
         flex: 1;
         font-size: 28rpx;
       }
-
+      
       .status {
         color: red;
         font-size: 26rpx;
       }
     }
-
+    
     .pro {
       display: flex;
       margin-bottom: 0rpx;
       margin-top: 30rpx;
     }
-
+    
     .pro-msg {
       margin-left: 24rpx;
       width: 520rpx;
     }
-
+    
     .pro-div {
       width: 166rpx;
       height: 166rpx;
     }
-
+    
     .pro-img {
       width: 100%;
       height: 100%;
     }
-
+    
+    .order-type-tag{
+      font-size: 12px;
+      height: 16px;
+      line-height: 16px;
+      padding: 0px 4px;
+      border-radius: 2px;
+      background: $fun-red-color;
+      color: #fff;
+      margin-right: 4px;
+    }
+    
     .pro-name {
       font-size: 26rpx;
       margin-bottom: 20rpx;
@@ -531,7 +543,7 @@ export default {
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
     }
-
+    
     .attr {
       display: inline-block;
       height: 50rpx;
@@ -542,7 +554,7 @@ export default {
       padding: 0 20rpx;
       margin-bottom: 20rpx;
     }
-
+    
     .attrs {
       display: inline-block;
       height: 50rpx;
@@ -552,23 +564,23 @@ export default {
       padding: 0 20rpx;
       margin-bottom: 20rpx;
     }
-
+    
     .pro-price {
       color: #F43131;
       font-size: 36rpx;
     }
-
+    
     .amount {
       font-size: 30rpx;
       float: right;
       color: #333;
     }
-
+    
     .total {
       font-size: 24rpx;
       padding: 40rpx 0rpx;
       margin-right: 15rpx;
-
+      
       .ptdesc {
         background: #F43131;
         padding: 10rpx;
@@ -578,24 +590,24 @@ export default {
         padding-left: 20rpx;
         padding-right: 20rpx;
       }
-
+      
       .price {
         color: red;
         font-size: 30rpx;
-
+        
         span {
           font-size: 24rpx;
         }
       }
     }
-
+    
     .btn-group {
       display: flex;
       /*text-align: right;*/
       justify-content: flex-end;
       align-items: center;
       margin-bottom: 30rpx;
-
+      
       .btn-group-item {
         display: inline-block;
         padding: 0px 10px;
@@ -606,11 +618,11 @@ export default {
         border-radius: 14px;
         color: #777;
         font-size: 13px;
-
+        
         &:last-child {
           margin-left: 14rpx;
         }
-
+        
         &.active {
           /*color: #fff;*/
           /*background: #F43131;*/
@@ -619,24 +631,24 @@ export default {
       }
     }
   }
-
+  
   .text-right {
     text-align: right;
   }
-
+  
   .defaults {
     margin: 0 auto;
     width: 640rpx;
     height: 480rpx;
     margin-top: 100rpx;
   }
-
+  
   .refuseApplyDialog {
     width: 560rpx;
     box-sizing: border-box;
     padding: 15px;
     font-size: 14px;
-
+    
     .reason {
       font-size: 14px;
       min-height: 200px;
@@ -646,7 +658,7 @@ export default {
       width: auto;
       padding: 10px;
     }
-
+    
     .inputs {
       font-size: 14px;
       border: 1px solid #E3E3E3;
@@ -656,19 +668,19 @@ export default {
       width: auto;
       margin-bottom: 10px;
     }
-
+    
     .reasons {
       min-height: 20px;
     }
-
+    
   }
-
+  
   .control {
     width: 100%;
     margin-top: 15px;
     display: flex;
     border-top: 1px solid #e4e4e4;
-
+    
     .action-btn {
       flex: 1;
       font-size: 16px;
@@ -677,9 +689,9 @@ export default {
       line-height: 40px;
       text-align: center;
     }
-
+    
   }
-
+  
   .my-huo {
     margin-top: 20px;
     margin-bottom: 10px;
@@ -689,14 +701,14 @@ export default {
     width: 100%;
     text-align: center;
   }
-
+  
   .my-content {
     font-size: 14px;
     width: 100%;
     text-align: center;
     color: #a1a1a1;
   }
-
+  
   .page-wrap /deep/ .popup-content {
     padding: 0px;
   }

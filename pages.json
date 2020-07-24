@@ -3,7 +3,7 @@
     {
       "path": "pages/index/index",
       "style": {
-        "navigationBarTextStyle": "light",
+
         "backgroundTextStyle": "light",
         "navigationBarTitleText": "首页",
         "navigationStyle": "custom"
@@ -170,6 +170,24 @@
           "path": "index/pre",
           "style": {
             "navigationBarTitleText": "预览"
+          }
+        },
+        {
+          "path": "marketing/rotate",
+          "style": {
+            "navigationBarTitleText": "幸运大转盘"
+          }
+        },
+        {
+          "path": "common/single",
+          "style": {
+            "navigationBarTitleText": "单页面"
+          }
+        },
+        {
+          "path": "common/webview",
+          "style": {
+            "navigationBarTitleText": "webview"
           }
         },
         {
@@ -638,6 +656,12 @@
 		  }
 		},
         {
+          "path": "active/Propaganda",
+          "style": {
+            "navigationStyle": "custom"
+          }
+        },
+        {
           "path": "active/ActivationCodeSuccess",
           "style": {
             "navigationStyle": "custom"
@@ -657,7 +681,7 @@
   "globalStyle": {
     "navigationBarTextStyle": "black",
     "navigationBarBackgroundColor": "#FFF",
-    "navigationBarTitleText": "本地生活",
+    "navigationBarTitleText": "及贝",
     "backgroundColor": "#F8F8F8"
   },
   "tabBar": {

@@ -8,8 +8,8 @@
           <div class="title">
             <div style="line-height: 32px">{{info.ShopName}}</div>
             <div class="flex" style="line-height: initial">
-              <div class="total font12">全部商品{{info.prod_total}}</div>
-              <div class="new font12" style="margin-left: 4px;"> 上新{{info.prod_isnew_total}}</div>
+              <div class="total fz-12">全部商品{{info.prod_total}}</div>
+              <div class="new fz-12" style="margin-left: 4px;"> 上新{{info.prod_isnew_total}}</div>
             </div>
           </div>
         </div>
@@ -26,8 +26,8 @@
           <div class="title">
             <div style="line-height: 32px">{{info.ShopName}}</div>
             <div class="flex" style="line-height: initial">
-              <div class="total font12">全部商品{{info.prod_total}}</div>
-              <div class="new font12" style="margin-left: 4px;"> 上新{{info.prod_isnew_total}}</div>
+              <div class="total fz-12">全部商品{{info.prod_total}}</div>
+              <div class="new fz-12" style="margin-left: 4px;"> 上新{{info.prod_isnew_total}}</div>
             </div>
           </div>
         </div>

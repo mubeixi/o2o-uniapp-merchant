@@ -15,7 +15,7 @@
             :val="qrVal"
             @result="qrR"
             cid="qrcode2"
-            class="line6"
+            class="m-b-6"
             ref="qrcode2"
             unit="px"
           />
@@ -89,6 +89,18 @@
         </div>
       </div>
     </div>
+
+    <view class="other bg-white" v-if="orderInfo.Order_Shipping&&orderInfo.Order_Shipping.shipping_id=='is_self_get'">
+      <view class="bd" @click="$openLocation(orderInfo.biz_lat_gd,orderInfo.biz_lon_gd)">
+        <view class="o_title">
+          <span>自提地点</span>
+          <span class="flex c9">
+			  {{orderInfo.biz_address}}
+			  <layout-icon color="#ff0000" size="18" type="iconicon-address" class="m-l-5"></layout-icon>
+		  </span>
+        </view>
+      </view>
+    </view>
 
     <view class="other bg-white" v-if="orderInfo.Order_IsRecieve == 1">
       <view class="bd">

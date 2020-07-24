@@ -7,7 +7,7 @@
           <view v-if="nav.config.type===1" class="cover"
                 :style="{backgroundImage:'url('+domainFunc(item.img)+')'}">
           </view>
-          <view class="title">{{item.title}}</view>
+          <view class="title" :style="{color:style.color}">{{item.title}}</view>
         </view>
       </view>
     </view>
@@ -99,7 +99,7 @@ export default {
           line-height: 22px;
           text-align: center;
           font-size: 14px;
-          color: #444;
+          /*color: #444;*/
         }
       }
     }

@@ -59,11 +59,11 @@
     <div class="functions flex">
       <block :key="index" v-for="(item,index) of  iconList">
         <block v-if="initData.cash_from==2">
-          <LayoutFun  v-if="item.name!='余额'" :color="item.color" :index="index" :name="item.name" :type="item.className" @openNext="openNext"
-                     width="150rpx"></LayoutFun>
+
+          <LayoutFun v-if="item.name!='余额'" :color="item.color" :index="index" :name="item.name" :type="item.className" @openNext="openNext" width="150rpx"></LayoutFun>
         </block>
-        <LayoutFun v-else-if="item.name!='会员卡'" :color="item.color" :index="index" :name="item.name" :type="item.className" @openNext="openNext"
-                   width="150rpx"></LayoutFun>
+        <LayoutFun v-else-if="item.name!='会员卡'" :color="item.color" :index="index" :name="item.name" :type="item.className" @openNext="openNext" width="150rpx"></LayoutFun>
+
       </block>
 
       </block>
@@ -85,7 +85,7 @@
 
     </div>
 
-    <div class="safearea-box"></div>
+    <div class="safearea-box" style="background-color: #EDF0F5 !important;"></div>
 
   </div>
 </template>
@@ -95,10 +95,11 @@ import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import LayoutFun from '@/componets/layout-fun/layout-fun'
 import ProTag from '@/componets/pro-tag/pro-tag'
 import BaseMixin, { tabbarMixin } from '@/mixins/BaseMixin'
-import { checkIsLogin } from '@/common/helper'
+import { checkIsLogin, getDomain } from '@/common/helper'
 import { getProductList } from '@/api/product'
 import { getOrderNum } from '@/api/order'
-import { getRightsCard, getUserInfo } from '@/api/customer'
+import { getRightsCard, getUserInfo, getFuncModule } from '@/api/customer'
+
 import { mapActions } from 'vuex'
 import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
 import eventHub from '@/common/eventHub'
@@ -120,98 +121,99 @@ export default {
       orderNum: {},
       productTotal: 0,
       page: 1,
-      iconList: [
-        {
-          className: 'iconpintuan',
-          name: '拼团订单',
-          color: '#FE7602',
-          link: '/pages/order/OrderList?type=pintuan'
-        },
-        {
-          className: 'iconxianshiqianggou',
-          name: '限时折扣单',
-          color: '#ADCF81',
-          link: '/pages/order/OrderList?type=spike'
-        },
-        {
-          className: 'iconmiaosha',
-          name: '秒杀订单',
-          color: '#54AEED',
-          link: '/pages/order/OrderList?type=flashsale'
-        },
-        // {
-        //   className: 'iconwaimai',
-        //   name: '外卖订单',
-        //   color: '#f4ea2a',
-        //   link: '/pages/order/OrderList?type=waimai'
-        // },
-        {
-          className: 'iconzengpin',
-          name: '我的赠品',
-          color: '#E8779F',
-          link: '/pagesA/user/MyGift'
-        },
-        {
-          className: 'iconyue',
-          name: '余额',
-          color: '#69C276',
-          link: '/pagesA/user/BalanceCenter'
-        },
-		{
-		  className: 'iconhuiyuanka',
-		  name: '会员卡',
-		  color: '#54AEED',
-		  link: '/pagesA/user/StoreVip'
-		},
-        {
-          className: 'iconjifen',
-          name: '积分',
-          color: '#52CCCD',
-          link: '/pagesA/user/IntegralCenter'
-        },
-        {
-          className: 'iconshoucang18-copy',
-          name: '收藏',
-          color: '#FF7F79',
-          link: '/pages/favorite/index'
-        },
-        {
-          className: 'iconyouhuiquan',
-          name: '优惠券',
-          color: '#D1BE71',
-          link: '/pagesA/user/Coupon'
-        },
-        {
-          className: 'iconrenwu',
-          name: '任务中心',
-          color: '#54AEED',
-          link: '/pagesA/user/TaskCenter'
-        },
-        {
-          className: 'icondizhi',
-          name: '地址管理',
-          color: '#E8779F',
-          link: '/pagesA/user/AddressList'
-        },
-        {
-          className: 'icontuikuan',
-          name: '退款/售后',
-          color: '#FE7602',
-          link: '/pagesA/order/RefundList'
-        },
-        {
-          className: 'iconfenxiao',
-          name: '分销中心',
-          color: '#69C276',
-          link: '/pagesA/distributor/Main'
-        },
-        {
-          className: 'iconguiji',
-          name: '轨迹',
-          color: '#69C276',
-          link: '/pagesA/user/history'
-        }
-      ],
+      //   iconList: [
+      //     {
+      //       className: 'iconpintuan',
+      //       name: '拼团订单',
+      //       color: '#FE7602',
+      //       link: '/pages/order/OrderList?type=pintuan'
+      //     },
+      //     {
+      //       className: 'iconxianshiqianggou',
+      //       name: '限时折扣单',
+      //       color: '#ADCF81',
+      //       link: '/pages/order/OrderList?type=spike'
+      //     },
+      //     {
+      //       className: 'iconmiaosha',
+      //       name: '秒杀订单',
+      //       color: '#54AEED',
+      //       link: '/pages/order/OrderList?type=flashsale'
+      //     },
+      //     // {
+      //     //   className: 'iconwaimai',
+      //     //   name: '外卖订单',
+      //     //   color: '#f4ea2a',
+      //     //   link: '/pages/order/OrderList?type=waimai'
+      //     // },
+      //     {
+      //       className: 'iconzengpin',
+      //       name: '我的赠品',
+      //       color: '#E8779F',
+      //       link: '/pagesA/user/MyGift'
+      //     },
+      //     {
+      //       className: 'iconyue',
+      //       name: '余额',
+      //       color: '#69C276',
+      //       link: '/pagesA/user/BalanceCenter'
+      //     },
+      // {
+      //   className: 'iconhuiyuanka',
+      //   name: '会员卡',
+      //   color: '#54AEED',
+      //   link: '/pagesA/user/StoreVip'
+      // },
+      //     {
+      //       className: 'iconjifen',
+      //       name: '积分',
+      //       color: '#52CCCD',
+      //       link: '/pagesA/user/IntegralCenter'
+      //     },
+      //     {
+      //       className: 'iconshoucang18-copy',
+      //       name: '收藏',
+      //       color: '#FF7F79',
+      //       link: '/pages/favorite/index'
+      //     },
+      //     {
+      //       className: 'iconyouhuiquan',
+      //       name: '优惠券',
+      //       color: '#D1BE71',
+      //       link: '/pagesA/user/Coupon'
+      //     },
+      //     {
+      //       className: 'iconrenwu',
+      //       name: '任务中心',
+      //       color: '#54AEED',
+      //       link: '/pagesA/user/TaskCenter'
+      //     },
+      //     {
+      //       className: 'icondizhi',
+      //       name: '地址管理',
+      //       color: '#E8779F',
+      //       link: '/pagesA/user/AddressList'
+      //     },
+      //     {
+      //       className: 'icontuikuan',
+      //       name: '退款/售后',
+      //       color: '#FE7602',
+      //       link: '/pagesA/order/RefundList'
+      //     },
+      //     {
+      //       className: 'iconfenxiao',
+      //       name: '分销中心',
+      //       color: '#69C276',
+      //       link: '/pagesA/distributor/Main'
+      //     },
+      //     {
+      //       className: 'iconguiji',
+      //       name: '轨迹',
+      //       color: '#69C276',
+      //       link: '/pagesA/user/history'
+      //     }
+      //   ],
+      iconList: [],
       proList: []
     }
   },
@@ -243,7 +245,7 @@ export default {
     },
     openNext (index) {
       if (!checkIsLogin(1, 1)) return
-      this.$linkTo(this.iconList[index].link)
+      this.$linkTo(this.iconList[index].url)
     },
     goOrder (index) {
       if (!checkIsLogin(1, 1)) return
@@ -251,6 +253,13 @@ export default {
       this.$linkTo(url)
     },
     async _init_func () {
+      const iconList = await getFuncModule({ type: 2 }).then(res => res.data).catch(err => {
+        error('获取图标失败:' + err.msg)
+      })
+      this.iconList = iconList.map(row => {
+        return { ...row, color: row.img_icon.color, className: row.img_icon.use === 1 ? row.img_icon.icon : getDomain(row.img_icon.img) }
+      })
+
       const { data, totalCount } = await getProductList({}).catch(e => {
         throw Error(e.msg || '获取推荐商品信息失败')
       })
@@ -261,7 +270,8 @@ export default {
     },
     // 获取订单角标数
     getOrderNum () {
-      getOrderNum({ Order_Type: 'shop' }).then(res => {
+      // { Order_Type: 'shop' }
+      getOrderNum().then(res => {
         this.orderNum = res.data
       }).catch(e => {
       })

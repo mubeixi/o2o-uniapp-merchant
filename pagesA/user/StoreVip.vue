@@ -2,9 +2,9 @@
   <view @click="commonClick" class="wrap">
       <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
 
-    <div class="wrap-item" @click="goVipList(item)"    :style="{backgroundImage: 'url('+$getDomain('/static/client/storeVipListBg.png')+')'}"  v-for="(item,index) of userVipList" :key="index">
+    <div class="wrap-item" @click.stop="goVipList(item)"    :style="{backgroundImage: 'url('+$getDomain('/static/client/storeVipListBg.png')+')'}"  v-for="(item,index) of userVipList" :key="index">
 
-      <div class="money-btn" @click="goBanlance(item.biz_id,item.biz_user_money)">
+      <div class="money-btn"  :class="item.arr.length<=0?'lastPos':''" @click.stop="goBanlance(item.biz_id,item.biz_user_money)">
         查看资金流水
       </div>
 
@@ -23,21 +23,21 @@
             <span class="fz-11">¥</span>
             <span class="fz-18">{{item.biz_user_money}}</span>
           </div>
-          <div class="wrap-item-money-btn" @click="chongzhiFn(item.biz_id,item.biz_user_money)">
+          <div class="wrap-item-money-btn" @click.stop="chongzhiFn(item.biz_id,item.biz_user_money)">
             充值
           </div>
       </div>
 
-      <div class="flex wrap-item-content">
+      <div class="flex wrap-item-content" v-if="item.arr.length>0">
         <div class="fz-12">
-          会员权益：
+          权益：
         </div>
         <div class="fz-10"  >
          <block v-for="(it,ind) of item.arr" :key="ind">
            <div v-if="it.name=='消费折扣'">
-             {{ind+1}}. 享受全店商品{{it.value*10}}折优惠
+             {{ind+1}}. 享受全店商品{{it.value}}折优惠
            </div>
-           <div  v-if="it.name=='包邮'">
+           <div  v-if="it.name=='包邮'&&it.value==1">
              {{ind+1}}. 所有商品一件包邮
            </div>
            <div  v-if="it.name=='赠送余额'">
@@ -49,6 +49,10 @@
       </div>
 
     </div>
+
+	<div class="defaults" v-if="userVipList.length<=0">
+	  <image :src="'/static/client/empty.png'|domain"></image>
+	</div>
 
   </view>
 </template>
@@ -99,7 +103,9 @@ export default {
       vipList.data.map(item => {
         const arr = []
         for (const it in item.basic_rights) {
-          arr.push(item.basic_rights[it])
+          if (item.basic_rights[it].value > 0) {
+            arr.push(item.basic_rights[it])
+          }
         }
         item.arr = arr
         this.userVipList.push(item)
@@ -173,7 +179,7 @@ export default {
     &-content{
       width: 430rpx;
       .fz-12{
-        width: 120rpx;
+        /*width: 120rpx;*/
       }
       .fz-10{
         width: 310rpx;
@@ -209,5 +215,15 @@ export default {
     color: #C1A272;
     font-size: 12px;
     text-align:right;
+  }
+  .defaults {
+    margin: 0 auto;
+    width: 640rpx;
+    height: 480rpx;
+    margin-top: 100rpx;
+  }
+  .lastPos{
+    top: 220rpx !important;
+    left: 60rpx !important;
   }
 </style>

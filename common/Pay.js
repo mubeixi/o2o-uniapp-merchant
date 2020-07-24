@@ -84,6 +84,7 @@ const Pay = (vm, pay_type, payRequestData) => {
 
   // 直接支付
   WX_JSSDK_INIT(_self).then((wxEnv) => {
+
     // 关键字？？package
     wxEnv.chooseWXPay({
       timestamp,
@@ -94,6 +95,9 @@ const Pay = (vm, pay_type, payRequestData) => {
       success: function (res) {
         // 支付成功后的回调函数
         _self.paySuccessCall(res)
+      },
+      fail (err) {
+        _self.payFailCall(err)
       }
     })
   }).catch((e) => {

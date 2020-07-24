@@ -1408,8 +1408,8 @@ export default {
               prod_id: Number(prod_id)
             })
 
-            const attr_value = CartList[biz_id][prod_id][attr_id]
-            console.log(attr_value)
+            var attr_value = CartList[biz_id][prod_id][attr_id]
+            attr_value.checked = true // 手动加上
             const { ImgPath, ProductsName, ProductsPriceX, ProductsPriceY, Qty, Productsattrstrval } = attr_value
             attrList.push({
               // ...attr_value,

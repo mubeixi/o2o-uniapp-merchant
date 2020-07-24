@@ -10,7 +10,7 @@
           <!-- :style="vipData.length==1?'margin-left:43rpx;':''" -->
           <image :src="'/static/client/vip/vip.png'|domain" class="img-full"></image>
           <div class="vip-title">
-            {{item.level_name}}
+            {{item.level_name||''}}
           </div>
         </swiper-item>
       </swiper>
@@ -30,6 +30,19 @@
           </div>
         </block>
       </scroll-view>
+    </div>
+
+    <div class="vip-has" style="height: auto;" v-if="initData.cash_from==2 && vipData[inds].upgrade_rights && (vipData[inds].upgrade_rights.price_back || vipData[inds].upgrade_rights.money)">
+      <div class="vip-coupon-list" style="display: block">
+        <div style="line-height: 30px;" class="flex flex-vertical-c fz-14 c3" v-if="vipData[inds].upgrade_rights.price_back && vipData[inds].upgrade_rights.price_back.value">
+          <span class="label p-r-8 fz-16 color-red">*</span>
+          <span class="c6">{{vipData[inds].upgrade_rights.price_back.name}}</span>
+        </div>
+        <div style="line-height: 30px;" class="flex flex-vertical-c fz-14" v-if="vipData[inds].upgrade_rights.money&&vipData[inds].upgrade_rights.money.value>0">
+          <span class="label p-r-8 fz-16 color-red">*</span>
+          <span class="c6">{{vipData[inds].upgrade_rights.money.name}}</span>：<span class="price-selling">￥{{vipData[inds].upgrade_rights.money.value}}</span>
+        </div>
+      </div>
     </div>
 
     <div class="vip-has" style="height: auto;" v-if="coupon.length>0">
@@ -233,8 +246,7 @@ export default {
       try {
         const that = this
         const arr = await getUserLevel({ biz_id: this.biz_id }, {
-          onlyData: true,
-          tip: '加载中'
+          onlyData: true
         }).catch(e => {
           throw Error(e.msg || '获取会员信息失败')
         })

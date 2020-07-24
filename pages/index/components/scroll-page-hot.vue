@@ -1,8 +1,8 @@
 <template>
   <div>
 <!--    <layout-ad code="index_top" paddingStr="20px 0 20px 0"></layout-ad>-->
-    <layout-loading v-if="loadingByTmpl"></layout-loading>
-    <view class="home-diy-wrap" v-else>
+<!--    <layout-loading v-if="loadingByTmpl"></layout-loading>-->
+    <view class="home-diy-wrap" :style="{backgroundColor:bgcolor}" v-if="loadReady">
       <section
         :class="[item]"
         :data-name="item"
@@ -34,7 +34,7 @@
           :confData="templateData[tagIndex][index]"
           :index="index"
           v-if="item.indexOf('space') !== -1"></diy-space>
-        
+
         <diy-title
           :confData="templateData[tagIndex][index]"
           :index="index"
@@ -59,6 +59,7 @@
           v-if="item.indexOf('coupon') !== -1"></diy-coupon>
 
         <diy-goods
+          ref="goodsPlugin"
           :confData="templateData[tagIndex][index]"
           :index="index"
           v-if="item.indexOf('goods') !== -1"></diy-goods>
@@ -85,7 +86,7 @@
           v-if="item.indexOf('kill') !== -1"></diy-kill>
       </section>
     </view>
-    <div class="block kill-box">
+    <div v-if="!fullDiy" class="block kill-box">
       <div class="block-title flex-vertical-c">
         <div class="block-title-text">今日秒杀</div>
         <div @click="$linkTo('/pagesA/active/SeckillByBiz')" class="block-title-more flex flex-ver-c c9 fz-12">
@@ -114,7 +115,7 @@
         </div>
       </div>
     </div>
-    <div class="block live-box">
+    <div v-if="!fullDiy" class="block live-box">
       <div class="block-title">
         <div class="block-title-text">钜惠推荐</div>
         <div class="block-title-more flex flex-vertical-center c9 fz-12">
@@ -163,9 +164,9 @@
         </div>
       </div>
     </div>
-    <layout-copyright></layout-copyright>
+    <layout-copyright v-if="!fullDiy"></layout-copyright>
     <div class="h20"></div>
-    <div class="safearea-box"></div>
+    <div style="background:#f8f8f8;" class="safearea-box"></div>
   </div>
 </template>
 
@@ -188,7 +189,7 @@ import DiyFlash from '@/componets/diy-flash/diy-flash'
 import DiyNav from '@/componets/diy-nav/diy-nav'
 import LayoutCopyright from '@/componets/layout-copyright/layout-copyright'
 import { objTranslate, toGoodsDetail } from '@/common/helper'
-import { hideLoading, showLoading } from '@/common/fun'
+
 import { getFlashsaleList, getProductCategory, getProductList } from '@/api/product'
 import { Exception } from '@/common/Exception'
 import { getSkinConfig } from '@/api/common'
@@ -205,6 +206,12 @@ import DiyKill from '@/componets/diy-kill/diy-kill'
 export default {
   name: 'scroll-page-hot',
   mixins: [componetMixin],
+  props: {
+    fullDiy: {
+      type: Boolean,
+      default: false
+    }
+  },
   components: {
     DiyKill,
     DiyGoods,
@@ -231,6 +238,8 @@ export default {
   },
   data () {
     return {
+      bgcolor: '',
+      loadReady: false,
       loadingByTmpl: false, // 标记是否请求完结
       templateList: [],
       templateData: [],
@@ -260,7 +269,7 @@ export default {
   methods: {
 
     bindReachBottom () {
-      console.log('emit bindReachBottom event',objTranslate(this.liveNav),this.liveNavIndex)
+      console.log('emit bindReachBottom event', objTranslate(this.liveNav), this.liveNavIndex)
       this.loadLiveGoodsList(this.liveNavIndex)
     },
     changeLiveNav (idx) {
@@ -275,6 +284,9 @@ export default {
         const mixinData = typeof resultData === 'string' ? JSON.parse(resultData) : resultData
 
         const { plugin: templateData, system } = mixinData
+
+        const { bgcolor = '#fff' } = system
+        this.bgcolor = bgcolor
 
         // 存储页面数据
         this.templateData = [] // 页面数据的二维数组。
@@ -314,7 +326,7 @@ export default {
       }
     },
     async loadLiveGoodsList (idx) {
-      if(this.liveNav.length<1)return;
+      if (this.liveNav.length < 1) return
       if (this.liveNav[idx].goodsList.length >= this.liveNav[idx].totalCount) {
         // toast('已经到底了', 'none')
         return
@@ -336,11 +348,10 @@ export default {
 
       this.$set(this.liveNav[idx], 'goodsList', this.liveNav[idx].goodsList.concat(liveGoodsList))
       this.$set(this.liveNav[idx], 'totalCount', totalCount)
-      this.$set(this.liveNav[idx], 'page', this.liveNav[idx].page+1)
+      this.$set(this.liveNav[idx], 'page', this.liveNav[idx].page + 1)
       this.$set(this.liveNav[idx], 'isAjax', false)
 
       this.loadingByLiveList = false
-
     },
     async _init_func () {
       this.loadingByKillList = true
@@ -349,6 +360,7 @@ export default {
         this.loadingByTmpl = true
         const handleRT = await this.get_tmpl_data()
         this.loadingByTmpl = false
+        this.loadReady = true
         if (handleRT !== true) throw handleRT // hanldeRT不是true就是一个Error实例，直接抛出
 
         this.killList = await getFlashsaleList({}, { onlyData: true }).catch(err => {
@@ -366,7 +378,7 @@ export default {
           throw Error('获取商品分类失败')
         })
         if (!this.firstCateList) this.firstCateList = []
-        this.liveNav = this.firstCateList.map(row => {
+        const liveNavData = this.firstCateList.map(row => {
           row.goodsList = []
           row.totalCount = 999
           row.pageSize = 10
@@ -375,6 +387,19 @@ export default {
           return objTranslate(row)
         }) // 也是一级分类
 
+        this.liveNav = [
+          {
+            Category_Name:'全部',
+            Category_ID:'',
+            goodsList : [],
+            totalCount : 999,
+            pageSize : 10,
+            page : 1,
+            isAjax : false,
+          },
+          ...liveNavData
+        ]
+
         this.loadLiveGoodsList(0) // 加载第一个分类的商品
       } catch (e) {
         Exception.handle(e)
@@ -382,8 +407,38 @@ export default {
         // hideLoading()
       }
     },
+    // 组件没有onShow生命周期
+    hookOnShow () {
+      if (this.$refs.notice) {
+        this.$refs.notice.map(item => {
+          item.restartAn()
+        })
+      }
+
+      if (this.$refs.goodsPlugin) {
+        this.$refs.goodsPlugin.map(item => {
+          item.startDownloadImg()
+        })
+      }
+    },
+    // 组件没有onHide生命周期
+    hookOnHide () {
+      // 暂停notice组件的定时器任务
+      if (this.$refs.notice) {
+        this.$refs.notice.map(item => {
+          item.pauseAn()
+        })
+      }
+      // 暂停播放
+      if (this.$refs.video) {
+        this.$refs.video.map(item => {
+          item.pauseFn()
+        })
+      }
+    },
     $toGoodsDetail: toGoodsDetail
   },
+
   created () {
     this._init_func()
   }

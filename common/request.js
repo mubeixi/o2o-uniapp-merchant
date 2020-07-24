@@ -165,7 +165,15 @@ export const ajax = ({ url, method = 'post', data = {}, options = {},isAddHost=t
     ...headerExt
   }
 
-  const _url = !isAddHost ? url:ENV.apiBaseUrl + url
+    let _url =''
+   // #ifdef H5
+    _url = url // 直接用绝对目录,这样就可以随便部署在任意域名下,会默认读取host/api/xxx接口
+   // #endif
+
+   // #ifndef H5
+    _url = !isAddHost ? url:ENV.apiBaseUrl + url
+   // #endif
+
 
   // console.log(`请求链接${_url}`)
   // console.log('请求参数:',data)
@@ -191,16 +199,24 @@ export const ajax = ({ url, method = 'post', data = {}, options = {},isAddHost=t
             //阻断后面的跳转
             if(Storage.get('toLogin'))return;
             Storage.set('toLogin',1,1)
-            
-            error(res.msg)
+            const noLoginList=['pages/store/index','pages/product/detail']
 
-            // 重置用户信息
+            const currentPagePath=Storage.get('currentPagePath')
 
-            setTimeout(() => {
-              uni.navigateTo({
-                url: '/pages/user/login',
-              })
-            }, 500)
+            //特定页面登录信息过期 不需要去强制跳转登录
+            if(noLoginList.indexOf(currentPagePath)==-1){
+              // 重置用户信息
+              error(res.msg)
+              setTimeout(() => {
+                uni.navigateTo({
+                  url: '/pages/user/login',
+                })
+              }, 500)
+            }
+
+
+
+
             return
           }
 
