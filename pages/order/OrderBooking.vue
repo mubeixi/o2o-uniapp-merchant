@@ -1221,24 +1221,25 @@ export default {
           }
 
           // 2.营业状态打开，在营业时间，正常下单
-          if (business_status && business_time_status && city_express_appoint_send) {
+          if (business_status && business_time_status) {
             shippingStatus.isOrder = true
             shippingStatus.isSameCity = true
             shippingStatus.isNow = true
-            shippingStatus.isAppoint = true
+            // 能不能预约就看具体的配置了
+            shippingStatus.isAppoint = !!city_express_appoint_send
           }
 
           // 3.营业状态打开，不在营业时间，允许营业外下单，同城配送只能预约，不能立即送达，普通物流不受影响
-          if (business_status && !business_time_status && out_business_time_order && city_express_appoint_send) {
+          if (business_status && !business_time_status && out_business_time_order) {
             shippingStatus.isOrder = true
-            shippingStatus.isSameCity = true
-            shippingStatus.isAppoint = true
+            shippingStatus.isSameCity = !!city_express_appoint_send
+            shippingStatus.isAppoint = !!city_express_appoint_send
           }
 
           // 4.营业状态打开，不在营业时间，不允许营业外下单，提交订单不会出现同城配送
           if (business_status && !business_time_status && !out_business_time_order) {
             shippingStatus.isOrder = true
-            shippingStatus.isSameCity = false
+            // shippingStatus.isSameCity = false
           }
 
           // 团购无法用同城配送的预约功能
