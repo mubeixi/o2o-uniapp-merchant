@@ -8,12 +8,12 @@
           {{imgs.cate_name}}
           <span class="underline" v-if="headTabIndex === idx"></span>
         </div>
-      
+
       </div>
     </div>
     <!--  占位-->
     <!--    <div class="h50 bg-white" v-if="headTabSticky"></div>-->
-    
+
     <!--    <swiper-->
     <!--      :current="headTabIndex"-->
     <!--      @change="indexChangeEvent"-->
@@ -27,13 +27,17 @@
           <image :src="img.photo_img" @click="priviewFn(photoList[headTabIndex],idx2)"
                  class="photo-item"></image>
         </block>
-      
+
       </div>
     </div>
     <!--        </scroll-view>-->
     <!--      </swiper-item>-->
     <!--    </swiper>-->
-  
+
+    <div class="defaults" v-if="photoList.length<=0">
+      <image :src="'/static/client/empty.png'|domain"></image>
+    </div>
+
   </div>
 </template>
 
@@ -55,7 +59,7 @@ export default {
       bid: null,
       pageSize: 1000,
       headTabIndex: 0,
-      photoList: [],
+      photoList: []
     }
   },
   methods: {
@@ -63,7 +67,7 @@ export default {
       const urls = getArrColumn(imgs.photo, 'photo_img')
       uni.previewImage({
         urls,
-        current,
+        current
       })
     },
     setActive (idx) {
@@ -80,7 +84,7 @@ export default {
         page,
         pageSize: this.pageSize,
         cate_id,
-        biz_id: this.bid,
+        biz_id: this.bid
       }).then(res => {
         if (Array.isArray(res.data) && res.data.length > 0) {
           this.$set(this.photoList[this.headTabIndex], 'page', page + 1)
@@ -92,29 +96,34 @@ export default {
     async _init_func () {
       try {
         showLoading('加载中')
-        
+
         const base = { biz_id: this.bid }
-        
+
         this.photoList = await getAlbumList({
           ...base,
-          get_photo: this.pageSize,
+          get_photo: this.pageSize
         }, { onlyData: 1 }).catch(e => {
           throw Error(e.msg || '获取相册信息失败')
         })
+
+        if (this.photoList.length <= 0) {
+          hideLoading()
+          return
+        }
         this.loadMore()
-        
+
         hideLoading()
       } catch (e) {
         hideLoading()
         modal(e.message)
       }
-    },
+    }
   },
   onReachBottom () {
-  
+
   },
   onShow () {
-  
+
   },
   onLoad (options) {
     if (!options.bid) {
@@ -128,11 +137,11 @@ export default {
     this._init_func()
   },
   created () {
-  
+
   },
   onReady () {
-  
-  },
+
+  }
 }
 </script>
 <style lang="scss" scoped>
@@ -140,10 +149,10 @@ export default {
     background: #f2f2f2;
     min-height: 100vh;
   }
-  
+
   .photo-section {
     margin: 20rpx 20rpx 40rpx;
-    
+
     .php-section-title {
       .label {
         width: 6rpx;
@@ -151,31 +160,31 @@ export default {
         background: #26C78D;
         margin-right: 8px;
       }
-      
+
       .text {
         font-size: 15px;
         font-weight: bold;
       }
     }
-    
+
     .photo-list {
       display: flex;
       flex-wrap: wrap;
     }
-    
+
     .photo-item {
       width: 350rpx;
       height: 350rpx;
       margin-bottom: 10rpx;
       margin-right: 10rpx;
       @include cover-img();
-      
+
       &:nth-child(even) {
         margin-right: 0;
       }
     }
   }
-  
+
   .tab-container {
     background: #fff;
     position: fixed;
@@ -183,18 +192,18 @@ export default {
     bottom: 0px;
     width: 750rpx;
     height: auto;
-    
+
     .tab-page-wrap {
       position: absolute;
       width: 750rpx;
       height: 100%;
       overflow-x: hidden;
       overflow-y: scroll;
-      
+
     }
-    
+
   }
-  
+
   .head {
     position: sticky;
     z-index: 999;
@@ -205,24 +214,24 @@ export default {
     padding: 10px 50rpx;
     align-items: center;
     color: #333;
-    
+
     .tab-box {
-      
+
       display: block;
       overflow-y: hidden;
       overflow-x: scroll;
-      
+
       .tab-item {
         display: inline-block;
         text-align: center;
         margin-right: 40rpx;
         padding-bottom: 8px;
         position: relative;
-        
+
         &:last-child {
           margin-right: 0;
         }
-        
+
         .underline {
           visibility: hidden;
           position: absolute;
@@ -233,16 +242,23 @@ export default {
           width: 18px;
           background: $fun-green-color;
         }
-        
+
         &.active {
           color: $fun-green-color;
-          
+
           .underline {
             visibility: visible;
           }
         }
       }
     }
-    
+
+  }
+
+  .defaults {
+    margin: 0 auto;
+    width: 640rpx;
+    height: 480rpx;
+    margin-top: 100rpx;
   }
 </style>
