@@ -68,7 +68,9 @@
       <view class="zhezhao">
         <view :key="index" @click="goOther(item)" class="td" v-for="(item,index) in funcModules">
           <image v-if="item.img_icon.use==0" :src="item.img_icon.img" class="imgs"></image>
-          <layout-icon v-if="item.img_icon.use==1" :color="item.img_icon.color" :type="item.img_icon.icon"></layout-icon>
+          <div style="display: inline-block" class="imgs" v-if="item.img_icon.use==1">
+            <layout-icon size="95rpx" :color="item.img_icon.color" :type="item.img_icon.icon"></layout-icon>
+          </div>
           <view class="views">
             {{item.name}}
           </view>

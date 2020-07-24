@@ -245,7 +245,7 @@ export default {
     },
     openNext (index) {
       if (!checkIsLogin(1, 1)) return
-      this.$linkTo(this.$linkTo(this.iconList[index].url))
+      this.$linkTo(this.iconList[index].url)
     },
     goOrder (index) {
       if (!checkIsLogin(1, 1)) return
