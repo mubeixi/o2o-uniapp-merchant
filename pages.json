@@ -656,6 +656,12 @@
 		  }
 		},
         {
+          "path": "active/Propaganda",
+          "style": {
+            "navigationStyle": "custom"
+          }
+        },
+        {
           "path": "active/ActivationCodeSuccess",
           "style": {
             "navigationStyle": "custom"
