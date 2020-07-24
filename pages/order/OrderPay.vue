@@ -94,7 +94,7 @@
               <div class="o_de c9">该订单可使用余额:<text>{{orderItem.biz_user_money>orderItem.Order_TotalPrice ? orderItem.Order_TotalPrice : orderItem.biz_user_money}}</text></div>
               <input @blur="moneyInputHandleByBiz($event,orderItem.Order_ID,idx)" class="fz-12" placeholder="点此输入金额" type="digit" v-if="postData.use_money_conf[orderItem.Order_ID]" v-model="postData.use_money[orderItem.Order_ID]" />
             </block>
-
+          
           </div>
         </div>
         <div class="other" v-if="pagefrom !== 'gift' && orderItem.invoice_switch">
@@ -125,10 +125,10 @@
         </div>
       </div>
     </div>
-
+    
     <div class="space-box"></div>
     <div class="safearea-box fixed"></div>
-
+    
     <div :style="{'z-index': zIndex}" class="order_total">
       <div class="totalinfo">
         <div class="info">共{{numTotal}}件商品 合计：<span
@@ -141,7 +141,7 @@
       </view>
       <div @click="submitPayFn" class="submit">去支付</div>
     </div>
-
+    
     <wzw-pay
       :Order_ID="payConf.Order_ID"
       :invoice_info="payConf.invoice_info"
@@ -156,7 +156,7 @@
       ref="payLayer"
       v-if="ready"
     />
-
+    
     <layout-layer :direction="'top'" @maskClicked="handClicked" bottomStr="50px" ref="pupupDetail">
       <view class="mxdetail">
         <view class="mxtitle">明细</view>
@@ -183,7 +183,7 @@
         </view>
       </view>
     </layout-layer>
-
+  
   </div>
 </template>
 
@@ -276,7 +276,7 @@ export default {
         return 0
       }
     },
-
+    
     numTotal () {
       return computeArrayColumnSum(this.orderList, 'order_total_prod_count') - computeArrayColumnSum(this.orderList, 'order_total_back_count')
     },
@@ -360,14 +360,14 @@ export default {
       // 单个或者合单都可以
       this.payConf.Order_ID = this.Order_ID
       this.payConf.pay_money = this.pay_money
-
+      
       const {
         need_invoice,
         invoice_info,
         use_money,
         order_remark
       } = objTranslate(this.postData)
-
+      
       Object.assign(this.payConf, {
         need_invoice: JSON.stringify(need_invoice),
         invoice_info: JSON.stringify(invoice_info),
@@ -412,19 +412,19 @@ export default {
         this.zIndex = 99
         this.isSlide = false
       }, 500)
-
+      
       // 关闭明细的popup,避免被遮盖
       this.$refs.pupupDetail.close()
-
+      
       // 如果用户全部使用了余额支付，就不要走弹窗再选择支付方式了,直接输入密码
       if (this.pay_money === 0) {
         this.password_input = true
         return
       }
-
+      
       // 刷新数据
       this.refreshPayConf()
-
+      
       this.$refs.payLayer.show()
       return
       // 发票信息
@@ -448,7 +448,7 @@ export default {
         // 不使用余额支付
         if (this.orderInfo.Order_Fyepay > 0) {
           // 待支付金额
-
+          
           this.$refs.payLayer.show()
           // this.$refs.popupLayer.show();
         } else {
@@ -461,7 +461,7 @@ export default {
     async _init_func () {
       try {
         showLoading()
-
+        
         let order_list = null
         console.log(this.mode)
         if (this.mode === 'single') {
@@ -470,7 +470,7 @@ export default {
           })
           order_list = [orderInfo]
           this.orderInfo = orderInfo
-
+          
           this.Order_Type = orderInfo.Order_Type
           Storage.set('temp_order_type', this.Order_Type)
         } else if (this.mode === 'multi') {
@@ -482,16 +482,16 @@ export default {
           this.orderInfo = info
         }
         console.log(this.orderInfo)
-
+        
         formatArrayColumn(order_list, 'biz_user_money', (num) => Number(num))
         console.log(order_list)
-
+        
         this.orderList = order_list
-
+        
         const allTotalPrice = computeArrayColumnSum(order_list, 'Order_TotalPrice') // computeArrayColumnSum()
         console.log(allTotalPrice)
         this.allowUseMoney = Math.min(parseFloat(this.userInfo.User_Money), parseFloat(allTotalPrice))
-
+        
         for (var orderItem of order_list) {
           // console.log(orderItem.users_coupon_money, orderItem.Coupon_Money)
           if (orderItem.users_coupon_money > 0 && Number(orderItem.Coupon_Money) === 0) {
@@ -503,13 +503,13 @@ export default {
           this.$set(this.postData.use_money_conf, orderItem.Order_ID, parseFloat(orderItem.Order_Yebc) > 0 ? 1 : 0)// 使用余额
           this.$set(this.postData.order_remark, orderItem.Order_ID, orderItem.Order_Remark || '')// 订单备注
         }
-
+        
         this.refreshPayMoney()
-
+        
         this.refreshPayConf()
-
+        
         if (this.orderInfo.Order_Fyepay !== 0) this.isOpen = true
-
+        
         this.ready = true
       } catch (e) {
         modal(e.message)
@@ -526,12 +526,12 @@ export default {
         if (input_money < 0 || isNaN(input_money)) {
           throw Error('您输入的金额格式有误')
         }
-
+        
         // 如果价格过大
         if (input_money > parseFloat(this.orderList[order_idx].Order_TotalPrice)) {
           throw Error('输入金额超过订单总支付金额')
         }
-
+        
         if (input_money + this.useMoneyCount <= parseFloat(currentOrderInfo.biz_user_money)) {
           this.$set(this.postData.use_money, Order_ID, input_money)
         } else {
@@ -555,12 +555,12 @@ export default {
         if (input_money < 0 || isNaN(input_money)) {
           throw Error('您输入的金额格式有误')
         }
-
+        
         // 如果价格过大
         if (input_money > parseFloat(this.orderList[order_idx].Order_TotalPrice)) {
           throw Error('输入金额超过订单总支付金额')
         }
-
+        
         if (input_money + this.useMoneyCount <= parseFloat(this.userInfo.User_Money)) {
           this.$set(this.postData.use_money, Order_ID, input_money)
         } else {
@@ -586,7 +586,7 @@ export default {
         this.postData.use_money[Order_ID] = '' // 重置
       }
     },
-
+    
     // 发票开关
     invoiceChange (e, Order_ID) {
       var checked = e.detail.value
@@ -604,15 +604,15 @@ export default {
       this.show = false
       this.wl_show = false
     },
-
+    
     async $_init_wxpay_env () {
       const initData = await this.getInitData()
-
+      
       const login_methods = initData.login_methods
       const component_appid = login_methods.component_appid
-
+      
       let channel = null
-
+      
       // 根据服务器返回配置设置channels,只有微信公众号和小程序会用到component_appid
       // 而且状态可以灵活控制 state为1
       for (var i in login_methods) {
@@ -625,12 +625,12 @@ export default {
           break
         }
       }
-
+      
       if (!channel) {
         this.$error('未开通公众号支付')
         return false
       }
-
+      
       // 如果url有code去掉
       let {
         origin,
@@ -650,14 +650,14 @@ export default {
         if (newSearchStr.indexOf('?') === -1) {
           newSearchStr = '?' + newSearchStr
         }
-
+        
         search = newSearchStr
       }
-
+      
       const REDIRECT_URI = urlencode(origin + pathname + search + hash)
-
+      
       let wxAuthUrl = null
-
+      
       if (channel.component_appid) {
         // 服务商模式登录
         wxAuthUrl =
@@ -667,7 +667,7 @@ export default {
         wxAuthUrl =
           `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${channel.appid}&redirect_uri=${REDIRECT_URI}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect`
       }
-
+      
       window.location.href = wxAuthUrl
     },
     payFailCall (err) {
@@ -676,12 +676,12 @@ export default {
         error('用户取消支付')
         return
       }
-
+      
       error(msg || '支付失败')
     },
     paySuccessCall (res) {
       var _that = this
-
+      
       // 用来解决子组件中无法调用父组件变量，而又不想一直props的问题
       const Order_Type = Storage.get('temp_order_type')
       const pagefrom = Storage.get('temp_order_pagefrom')
@@ -689,17 +689,17 @@ export default {
       Storage.remove('temp_order_type')
       Storage.remove('temp_order_pagefrom')
       Storage.remove('temp_order_id')
-
+      
       if (res && res.code && res.code === 2) {
         _that.payFailCall()
         return
       }
-
+      
       if (res && res.code && res.code === 1) {
         toast('用户取消支付', 'none')
         return
       }
-
+      
       // 头条小程序
       // if (res && res.code && res.code === 9) {
       //   uni.showModal({
@@ -743,26 +743,26 @@ export default {
       //   })
       //   return
       // }
-
+      
       // 0：支付成功 1：支付超时 2：支付失败 3：支付关闭 4：支付取消 9：订单状态开发者自行获取
-
+      
       if (res && res.code && res.code === 4) {
         toast('用户取消支付', 'none')
         return
       }
-
+      
       toast('支付成功')
-
+      
       // 拼团订单则跳转到开团成功
-
+      
       console.log(Order_Type, Order_ID)
       if (Order_Type === 'pintuan') {
-        // uni.redirectTo({
-        //   url: '/pagesA/order/GroupSuccess?Order_Type=' + Order_Type + '&OrderId=' + Order_ID
-        // })
         uni.redirectTo({
-          url: '/pages/order/OrderPaySuccess?Order_Type=' + Order_Type + '&OrderId=' + Order_ID
+          url: '/pagesA/order/GroupSuccess?Order_Type=' + Order_Type + '&OrderId=' + Order_ID
         })
+        // uni.redirectTo({
+        //   url: '/pages/order/OrderPaySuccess?Order_Type=' + Order_Type + '&OrderId=' + Order_ID
+        // })
       } else {
         if (pagefrom === 'check') {
           // 合单无法跳转
@@ -783,7 +783,7 @@ export default {
     // 用户选择 微信支付
     async wechatPay () {
       const _self = this
-
+      
       this.pay_type = 'wechat'
       this.$refs.popupLayer.close()
       if (this.orderInfo.Order_Fyepay > 0) {
@@ -791,7 +791,7 @@ export default {
           this.password_input = true
         } else {
           // 用户选择微信，并且不用余额支付
-
+          
           let payConf = {
             Order_ID: this.Order_ID,
             user_money: this.user_money,
@@ -800,7 +800,7 @@ export default {
             invoice_info: this.invoice_info,
             order_remark: this.order_remark
           }
-
+          
           // 需要格外有一个code
           // #ifdef H5
           if (!isWeiXin()) {
@@ -808,7 +808,7 @@ export default {
             return
           }
           const isHasCode = this.code || GetQueryByString('code')
-
+          
           if (isHasCode) {
             // 拿到之前的配置
             payConf = {
@@ -823,21 +823,21 @@ export default {
             this.$_init_wxpay_env()
             return
           }
-
+          
           return
           // #endif
-
+          
           // #ifdef MP-WEIXIN
           payConf.pay_type = 'wx_lp'
           // #endif
-
+          
           // #ifdef APP-PLUS
           payConf.pay_type = 'wx_app'
           // #endif
-
+          
           // #ifdef MP-WEIXIN
           payConf.pay_type = 'wx_lp'
-
+          
           await new Promise(resolve => {
             uni.login({
               success: function (loginRes) {
@@ -846,9 +846,9 @@ export default {
               }
             })
           })
-
+          
           // #endif
-
+          
           orderPay(payConf, {
             mask: true,
             tip: '正在加载中'
@@ -860,7 +860,7 @@ export default {
               signType,
               paySign
             } = res.data
-
+            
             // 直接支付
             _self.WX_JSSDK_INIT(_self).then((wxEnv) => {
               // 关键字？？package
@@ -876,26 +876,26 @@ export default {
                 }
               })
             }).catch((e) => {
-
+            
             })
-
+            
             return
-
+            
             // #endif
-
+            
             let provider = 'wxpay'
             let orderInfo = {}
-
+            
             // #ifdef MP-WEIXIN || MP-BAIDU || MP-TOUTIAO || MP-ALIPAY
-
+            
             // #endif
-
+            
             // #ifdef MP-WEIXIN
-
+            
             provider = 'wxpay'
             orderInfo = res.data
             delete orderInfo.timestamp
-
+            
             uni.requestPayment({
               ...orderInfo,
               provider,
@@ -910,11 +910,11 @@ export default {
               }
             })
             // #endif
-
+            
             // #ifdef APP-PLUS
             provider = 'wxpay'
             orderInfo = res.data
-
+            
             uni.requestPayment({
               provider,
               orderInfo, // 微信、支付宝订单数据
@@ -953,12 +953,12 @@ export default {
             mask: true,
             tip: '正在加载中'
           }).then(res => {
-
+          
           })
         }
       }
     },
-
+    
     // 取消输入支付密码
     cancelInput () {
       this.password_input = false
@@ -991,7 +991,7 @@ export default {
       this.Order_ID = options.Order_ID
       // 标记为多个或者单个
       this.mode = options.Order_ID.indexOf('PRE') === -1 ? 'single' : 'multi'
-
+      
       Storage.set('temp_order_id', options.Order_ID)
     } else {
       modal('Order_ID参数必填')
@@ -1000,7 +1000,7 @@ export default {
       this.pagefrom = options.pagefrom
       Storage.set('temp_order_pagefrom', options.pagefrom)
     }
-
+    
     // 获取支付方式
     this.pay_arr = this.initData.pay_arr
   },
@@ -1011,7 +1011,7 @@ export default {
   },
   async created () {
     this.$store.commit('SET_PAY_TEMP_OBJ', this)
-
+    
     // #ifdef H5
     if (isWeiXin()) {
       this.code = GetQueryByString(location.href, 'code')
@@ -1021,7 +1021,7 @@ export default {
       }
     }
     // #endif
-
+    
     const initData = await this.$store.dispatch('system/loadInitData')
     const { cash_from = 1 } = initData
     this.cash_from = Number(cash_from)
@@ -1038,55 +1038,55 @@ export default {
     padding-bottom: env(safe-area-inset-bottom);
     /* #endif */
   }
-
+  
   .space-box {
     height: 50px;
     background: #f8f8f8;
   }
-
+  
   .mxdetail {
     width: 690rpx;
     font-size: 28rpx;
     line-height: 80rpx;
     padding: 20rpx 30rpx;
     padding-bottom: 100rpx;
-
+    
     .mxtitle {
       font-size: 28rpx;
       text-align: center;
     }
-
+    
     .mxitem {
       border-bottom: 1px solid #eaeaea;
-
+      
       .num {
         float: right;
       }
     }
   }
-
+  
   .state {
     padding: 20rpx 28rpx;
     font-size: 28rpx;
     display: flex;
     align-items: center;
     border-top: 30rpx solid #f8f8f8;
-
+    
     .img {
       width: 60rpx;
       height: 60rpx;
     }
   }
-
+  
   .state-desc {
     margin-left: 24rpx;
   }
-
+  
   .c8 {
     color: #888;
     font-size: 26rpx;
   }
-
+  
   /* 收货地址 start */
   .address {
     /* margin: 15px 0 10px; */
@@ -1096,89 +1096,89 @@ export default {
     border-top: 30rpx solid #F3F3F3;
     border-bottom: 20rpx solid #F3F3F3;
   }
-
+  
   .loc_icon {
     width: 41rpx;
     height: 51rpx;
     margin-right: 30rpx;
   }
-
+  
   .right {
     width: 18rpx;
     height: 27rpx;
     margin-left: 28rpx;
   }
-
+  
   .name {
     margin-bottom: 30rpx;
     font-size: 26rpx;
   }
-
+  
   .name > span {
     margin-left: 10rpx;
   }
-
+  
   .location {
     font-size: 24rpx;
     color: #444;
   }
-
+  
   /* 收货地址 end */
   /* 订单信息 start */
-
+  
   .order-section {
     margin: 0 20rpx 30rpx;
     border-radius: 8rpx;
     overflow: hidden;
   }
-
+  
   .order_msg {
     padding: 20rpx 30rpx 0px;
   }
-
+  
   .biz_msg {
     display: flex;
     align-items: center;
     margin-bottom: 30rpx;
   }
-
+  
   .biz_logo {
     width: 70rpx;
     height: 70rpx;
     border-radius: 35rpx;
     margin-right: 20rpx;
   }
-
+  
   .biz_name {
     font-size: 28rpx;
   }
-
+  
   .pro {
     display: flex;
     margin-bottom: 50rpx;
   }
-
+  
   .pro-msg {
     margin-left: 27rpx;
     width: 451rpx;
   }
-
+  
   .pro-div {
     width: 200rpx;
     height: 200rpx;
   }
-
+  
   .pro-img {
     width: 200rpx;
     height: 200rpx;
     margin-right: 28rpx;
   }
-
+  
   .pro-name {
     font-size: 26rpx;
     margin-bottom: 20rpx;
   }
-
+  
   .attr {
     display: inline-block;
     height: 50rpx;
@@ -1189,69 +1189,69 @@ export default {
     padding: 0 20rpx;
     margin-bottom: 20rpx;
   }
-
+  
   .pro-price {
     color: #F43131;
     font-size: 36rpx;
   }
-
+  
   .pro-price span {
     font-size: 24rpx;
     font-style: normal;
   }
-
+  
   .amount {
     font-size: 30rpx;
     float: right;
     color: #333;
   }
-
+  
   /* 订单信息 end */
   /* 订单其他信息 start */
   .other {
     padding: 34rpx 45rpx 0rpx 31rpx;
     font-size: 28rpx;
   }
-
+  
   .other .bd {
     padding-bottom: 30rpx;
     border-bottom: 2rpx solid #efefef;
   }
-
+  
   .o_title {
     display: flex;
     align-items: center;
     justify-content: space-between;
     font-size: 28rpx;
   }
-
+  
   .o_title .van-switch {
     float: right;
   }
-
+  
   .o_de {
     font-size: 22rpx;
     margin-top: 10rpx;
-
+    
     text {
       color: #F43131;
     }
   }
-
+  
   .o_desc {
     margin-top: 10rpx;
     font-size: 24rpx;
   }
-
+  
   .msg {
     margin-left: 20rpx;
     font-size: 24rpx;
   }
-
+  
   .words {
     justify-content: flex-start;
   }
-
+  
   .words {
     input {
       border: 0;
@@ -1259,7 +1259,7 @@ export default {
       flex: 1;
     }
   }
-
+  
   .total {
     display: flex;
     justify-content: flex-end;
@@ -1268,16 +1268,16 @@ export default {
     font-size: 24rpx;
     padding-right: 44rpx;
   }
-
+  
   i {
     font-style: normal;
   }
-
+  
   .total .money {
     font-size: 30rpx;
     color: #F43131;
   }
-
+  
   /* 订单其他信息 end */
   /* 提交订单 */
   .order_total {
@@ -1292,23 +1292,23 @@ export default {
     display: flex;
     align-items: center;
     background: #fff;
-
+    
     .mx {
       font-size: 22rpx;
       margin-right: 10rpx;
-
+      
       .image {
         width: 20rpx;
         height: 20rpx;
         margin-left: 10rpx;
       }
-
+      
       .slidedown {
         transform: rotate(180deg);
       }
     }
   }
-
+  
   .submit {
     width: 230rpx;
     background: #F43131;
@@ -1316,48 +1316,48 @@ export default {
     color: #fff;
     line-height: 50px;
   }
-
+  
   .totalinfo {
     flex: 1;
     text-align: center;
   }
-
+  
   .info {
     font-size: 24rpx;
   }
-
+  
   .tips {
     font-size: 20rpx;
     color: #979797;
   }
-
+  
   .iMbx {
     text-align: center;
     padding: 0 20rpx;
     font-size: 28rpx;
     color: #333;
-
+    
     .c_method {
       padding: 37rpx 0;
       border-bottom: 2rpx solid #E6E6E6;
     }
-
+    
     & .c_method:first-child {
       color: #F43131;
     }
-
+    
     & .c_method:nth-last-child(1) {
       border: none;
     }
   }
-
+  
   .zhezhao {
     position: fixed;
     width: 100%;
     height: 100%;
     background: rgba($color: #000000, $alpha: 0.3);
     z-index: 1000;
-
+    
     .input-wrap {
       background: #fff;
       color: #000;
@@ -1368,20 +1368,20 @@ export default {
       box-sizing: border-box;
       font-size: 28rpx;
       border-radius: 10rpx;
-
+      
       .input {
         margin: 40rpx 0;
         border: 1px solid #efefef;
         height: 80rpx;
         line-height: 80rpx;
       }
-
+      
       .btns {
         display: flex;
         justify-content: space-around;
         height: 60rpx;
         line-height: 60rpx;
-
+        
         .btn {
           flex: 1;
         }

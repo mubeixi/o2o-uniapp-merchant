@@ -418,7 +418,7 @@ class IM {
             })
           }).catch(() => {})
         }
-        Exception.handle(Error(err.msg))
+        // Exception.handle(Error(err.msg))
       })
     } else {
       this.msgQueue.push(message)
