@@ -161,7 +161,7 @@ export default {
           login_method: 'wx_lp',
           code: lp_code,
           lp_raw_data
-        }, { tip: '登录中' }).catch((err) => {
+        }).catch((err) => {
           throw Error(err.msg || '第三方登录请求错误')
         })
 
