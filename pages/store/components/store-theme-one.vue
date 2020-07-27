@@ -249,15 +249,17 @@
           <image style="width: 254rpx;height: 63rpx;" :src="$getDomain('/static/client/store/theme_one/sale-list.png')"></image>
         </div>
         <ul class="cate-nav">
-          <li
-            v-for="(cate,idx) in bizCateList"
-            :key="idx"
-            :class="{active:bizCateNavIndex === idx}"
-            @click="changeCateIdx(idx)"
-            class="cate-nav-item">
-            {{cate.cate_name}}
-            <div class="sale-underline" v-if="bizCateNavIndex===idx"></div>
-          </li>
+          <block  v-for="(cate,idx) in bizCateList"
+			    :key="idx">
+			  <li
+			   v-if="cate.prod_count>0"
+			    :class="{active:bizCateNavIndex === idx}"
+			    @click="changeCateIdx(idx)"
+			    class="cate-nav-item">
+			    {{cate.cate_name}}
+			    <div class="sale-underline" v-if="bizCateNavIndex===idx"></div>
+			  </li>
+		  </block>
         </ul>
         <div class="cate-goods-list">
           <div class="fun-goods-col" style="padding: 0 9rpx 0 0rpx">
@@ -952,7 +954,7 @@ export default {
         // 启动倒计时，牛逼啊霸哥
         countdownInstance = setInterval(this.stampFuncByKill, 1000)
 
-        const bizCateList = await getBizProdCateList({ biz_id: this.bid }, { onlyData: true }).catch((e) => {
+        const bizCateList = await getBizProdCateList({ biz_id: this.bid,prod_count:1 }, { onlyData: true }).catch((e) => {
           throw Error('获取商家自定义分类失败')
         })
 
@@ -976,6 +978,7 @@ export default {
           page: 1,
           pageSize: 6,
           total: 0,
+		  prod_count:99,
           finish: false,
           productList: [] // 商品列表
         })
