@@ -1613,10 +1613,12 @@ export default {
       if (this.mode === 'default') {
         this.hasCart = true
       }
+	  this.productInfo.active = 'default'
 
       if (this.mode === 'spike') {
         this.hasCart = false
         this.postData.active = 'spike' // 标记为是限时抢购
+		this.productInfo.active = 'spike'
         this.checkfrom = 'spike'
         this.productInfo.minPrice = this.productInfo.price
       }
@@ -1626,6 +1628,7 @@ export default {
         this.postData.active_id = this.productInfo.id // 秒杀id
         this.checkfrom = 'seckill'
         this.postData.active = 'flashsale' // 标记为是秒杀
+		this.productInfo.active = 'flashsale'
         this.productInfo.minPrice = this.productInfo.price
       }
 
@@ -1668,6 +1671,7 @@ export default {
       }
       this.hasCart = false
       this.postData.active = 'pintuan' // 标记为是拼团
+	  this.productInfo.active = 'pintuan'
       this.checkfrom = 'group'
 
       // 限时抢购
