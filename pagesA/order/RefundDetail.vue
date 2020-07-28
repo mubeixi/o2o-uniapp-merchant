@@ -33,8 +33,8 @@
       </view>
       <view class="td">
         退款总价：
-        <span>退回余额<span class="font16 danger-color"><span class="span font12">￥</span>{{pro.refund_money_fee}} </span>,</span>
-        <span>原路退回 <span class="danger-color"><span class="span font12 ">￥</span>{{pro.refund_pay_fee}} </span></span>
+        <span>退回余额<span class="font16 danger-color"><span class="span fz-12">￥</span>{{pro.refund_money_fee}} </span>,</span>
+        <span>原路退回 <span class="danger-color"><span class="span fz-12 ">￥</span>{{pro.refund_pay_fee}} </span></span>
       </view>
       <view class="td">
         退款状态：

@@ -19,10 +19,11 @@
             <div v-show="goods.config.attr.tag.show" v-else class="tag img"><img
               :src="goods.config.attr.tag.img|domain" /></div>
 
-            <div v-if="goods.config.style!==3" class="stamp">距{{item.countdown.is_start?'结束':'开始'}}<span
+            <div v-if="goods.config.style!==3" class="stamp">
+              <!-- 距{{item.countdown.is_start?'结束':'开始'}}<span
               class="countdown_tag2">{{item.countdown.d|zero}}</span>天<span class="countdown_tag">{{item.countdown.h|zero}}</span>时<span
-              class="countdown_tag">{{item.countdown.m|zero}}</span>分<span class="countdown_tag">{{item.countdown.s|zero}}</span>秒<span
-              class="count" v-if="goods.config.style==1">拼团库存{{item.Products_Count}}</span></div>
+              class="countdown_tag">{{item.countdown.m|zero}}</span>分<span class="countdown_tag">{{item.countdown.s|zero}}</span>秒 -->
+              <span class="count" v-if="goods.config.style==1">拼团库存{{item.Products_Count}}</span></div>
 
             <span class="count" v-if="goods.config.style==3">库存{{item.Products_Count}}</span>
 
@@ -30,24 +31,24 @@
           <div class="info" :style="{width:goods.config.style==2?itemw:''}" :class="{empyInfo:isEmpeyInfo}">
             <div class="left">
               <div v-show="goods.config.attr.title.show" class="title"><wzw-live-tag :room_id="item.room_id" :product-info="item" />{{item.Products_Name}}</div>
-              <div v-show="goods.config.attr.desc.show" class="font12 graytext desc">
+              <div v-show="goods.config.attr.desc.show" class="fz-12 graytext desc">
                 {{item.Products_BriefDescription||'暂无介绍'}}
               </div>
               <div v-if="goods.config.style!==1" v-show="goods.config.attr.price.show" class="price"><span
-                class="graytext2 font12">拼团价 </span><span class="sign">￥</span><span
+                class="graytext2 fz-12">拼团价 </span><span class="sign">￥</span><span
                 style="font-weight: 600">{{item.pintuan_pricex}}</span><span
-                class="graytext2 market-price font12"> ￥{{item.Products_PriceX}} </span>
+                class="graytext2 market-price fz-12"> ￥{{item.Products_PriceX}} </span>
               </div>
             </div>
-            <div v-if="goods.config.style==3" class="stamp">距{{item.countdown.is_start?'结束':'开始'}}<span
+            <!-- <div v-if="goods.config.style==3" class="stamp">距{{item.countdown.is_start?'结束':'开始'}}<span
               class="countdown_tag2">{{item.countdown.d|zero}}</span>天<span class="countdown_tag">{{item.countdown.h|zero}}</span>时<span
               class="countdown_tag">{{item.countdown.m|zero}}</span>分<span class="countdown_tag">{{item.countdown.s|zero}}</span>秒
-            </div>
+            </div> -->
             <div class="bottom-box">
               <div v-if="goods.config.style==1" v-show="goods.config.attr.price.show" class="price"><span
-                class="graytext2 font12">拼团价 </span><span class="sign">￥</span><span
+                class="graytext2 fz-12">拼团价 </span><span class="sign">￥</span><span
                 style="font-weight: 600">{{item.pintuan_pricex}}</span><span
-                class="graytext2 market-price font12"> ￥{{item.Products_PriceX}} </span></div>
+                class="graytext2 market-price fz-12"> ￥{{item.Products_PriceX}} </span></div>
               <span class="count" v-if="goods.config.style==2">库存{{item.Products_Count}}</span>
               <div v-show="goods.config.attr.buybtn.show" class="buybtn"
                    :class="'theme'+goods.config.attr.buybtn.style">
@@ -326,7 +327,7 @@ export default {
     this.fullWidth = res.screenWidth
     this.goods = this.confData
 
-    setInterval(this.stampFunc, 1000)
+    //setInterval(this.stampFunc, 1000)
   }
 
 }

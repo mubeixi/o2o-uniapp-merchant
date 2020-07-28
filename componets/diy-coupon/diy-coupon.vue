@@ -10,7 +10,7 @@
         </div>
       </div>
       <div v-else class="list style1 style1block">
-        <div class="item" v-for="(item,idx) in couponList" :key="idx">
+        <div @click="getCoupon(item)" class="item" v-for="(item,idx) in couponList" :key="idx">
           <p class="title">满{{item.Coupon_Condition}}享</p>
           <p class="info"> {{item.Coupon_UseType ==
             0?item.Coupon_Discount+'折扣':'￥'+item.Coupon_Cash+'减免'}}</p>
@@ -48,7 +48,7 @@
         </div>
       </div>
     </div>
-    <div v-if="couponList.length<1" class="text-center graytext font12 padding10-r">
+    <div v-if="couponList.length<1" class="text-center graytext fz-12 padding10-r">
       <!--没有优惠券-->
     </div>
 
@@ -56,6 +56,9 @@
 </template>
 <script>
 import { getCoupon, getUserCoupon } from '@/api/customer'
+import { getCouponList } from '@/api/common'
+import { error, hideLoading, showLoading, toast } from '@/common/fun'
+import { getArrColumn } from '@/common/helper'
 
 /**
  * 某个值是否在指定数组内存在（指定键值)
@@ -66,7 +69,7 @@ import { getCoupon, getUserCoupon } from '@/api/customer'
  */
 function is_index_has (val, arr, index) {
   for (var item of arr) {
-    if (item[index] === val) {
+    if (Number(item[index]) === Number(val)) {
       return true
     }
   }
@@ -95,7 +98,7 @@ export default {
     }
   },
   computed: {
-    //...mapGetters(['userInfo']),
+    // ...mapGetters(['userInfo']),
     couponList () {
       if (this.coupon.value.list.length < 1) {
         return []
@@ -103,12 +106,15 @@ export default {
 
       const arr = []; const confData = this.coupon.value.list
 
+      console.log(getArrColumn(this.isAllowCouponList,'Coupon_ID'), getArrColumn(confData,'Coupon_ID'))
       // 只有在允许获得的优惠券里面才可以
       for (var coupon of confData) {
         if (is_index_has(coupon.Coupon_ID, this.isAllowCouponList, 'Coupon_ID')) {
           arr.push(coupon)
         }
       }
+
+      console.log(arr)
       return arr
     },
     style () {
@@ -121,23 +127,40 @@ export default {
   components: {},
   methods: {
     getCoupon (couponInfo) {
+      showLoading('领取中')
       getUserCoupon({ coupon_id: couponInfo.Coupon_ID }).then(res => {
-        uni.showToast({
-          title: '领取成功'
-        })
-        getCoupon({ pageSize: 999 }, { errtip: false }).then(res => {
+        toast('领取成功')
+        getCouponList({
+          pageSize: 999,
+          front_show: 1,
+          status: 3
+        }, { errtip: false }).then(res => {
+          hideLoading()
           this.isAllowCouponList = res.data
+        }).catch(err => {
+          console.log(err.errMsg)
+          hideLoading()
         })
-      }, err => {
-
+      }, (err) => {
+        hideLoading()
+        error('领取优惠券失败:' + err.msg)
       })
     }
   },
   async created () {
+    // console.log(this.confData)
     this.coupon = this.confData
 
-    getCoupon({ pageSize: 999 }, { errtip: false }).then(res => {
+    // 要拿到可以领取的。。
+    getCouponList({
+      pageSize: 999,
+      front_show: 1,
+      status: 3
+    }, { errtip: false }).then(res => {
       this.isAllowCouponList = res.data
+      // console.log(this.isAllowCouponList)
+    }).catch(err => {
+      error(err.msg)
     })
   }
 }
@@ -145,7 +168,7 @@ export default {
 
 <style scoped lang="scss">
   .wrap {
-    padding: 0 0 0 10px;
+    padding: 0 10px 0 10px;
   }
 
   .list {
@@ -179,6 +202,9 @@ export default {
       height: 70px;
       position: relative;
       margin-right: 10px;
+      &:last-child{
+        margin-right: 0;
+      }
 
       &:before, &:after {
         background-image: url("/static/diy/coupon-left.png");
@@ -265,6 +291,9 @@ export default {
       padding-right: 100px;
 
       background: white;
+      &:last-child{
+        margin-right: 0;
+      }
 
       &:before {
         background-image: url("/static/diy/coupon-left.png");
@@ -345,6 +374,10 @@ export default {
       font-size: 16px;
       background: white;
 
+      &:last-child{
+        margin-right: 0;
+      }
+
       &:before, &:after {
         background-image: url("/static/diy/coupon-left.png");
         content: "";
@@ -401,6 +434,10 @@ export default {
       background: #e74c2c;
       color: white;
       padding: 6px 20px;
+
+      &:last-child{
+        margin-right: 0;
+      }
 
       .title {
 

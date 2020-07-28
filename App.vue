@@ -18,6 +18,7 @@ export default {
     console.log('App Launch')
 
     // eventHub.livePlayer = livePlayer
+    console.log('ENV is',ENV)
     // #ifdef MP-WEIXIN
     let _users_id = ''
     if (ENV.isCustom) {
@@ -41,19 +42,7 @@ export default {
     this.$store.dispatch('system/loadInitData')
     this.$store.dispatch('theme/refreshTheme')
 
-    // 初始化信息
-    const userInfo = this.$store.getters['user/getUserInfo']()
-
-    if (userInfo && userInfo.User_ID) {
-      // IM全局
-      const imInstance = new IM()
-      // 设置本地用户信息
-      imInstance.setSendInfo({ type: 'user', id: userInfo.User_ID, name: userInfo.User_NickName, avatar: userInfo.User_HeadImg })
-      imInstance.start().then(() => {
-        imInstance.openListen()
-        eventHub.imInstance = imInstance // 全局用一个句柄
-      }).catch((e) => { console.log(e) })
-    }
+    
   },
   onShow: function (options) {
     // 分享卡片入口场景才调用getShareParams接口获取以下参数
@@ -75,11 +64,31 @@ export default {
     //       console.log('get share params', err)
     //     })
     // }
+  
+    // 初始化信息
+    const userInfo = this.$store.getters['user/getUserInfo']()
+  
+    // IM
+    if (userInfo && userInfo.User_ID && !eventHub.imInstance) {
+      // IM全局
+      const imInstance = new IM()
+      // 设置本地用户信息
+      imInstance.setSendInfo({ type: 'user', id: userInfo.User_ID, name: userInfo.User_NickName, avatar: userInfo.User_HeadImg })
+      imInstance.start().then(() => {
+        imInstance.openListen()
+        eventHub.imInstance = imInstance // 全局用一个句柄
+      }).catch((e) => { console.log(e) })
+    }
 
     console.log('App Show')
   },
   onHide: function () {
     console.log('App Hide')
+    // hide的时候主动关比较好
+    if (eventHub.imInstance) {
+      // IM全局
+      eventHub.imInstance.close()
+    }
   },
   onError: function (e) {
     console.log(e)

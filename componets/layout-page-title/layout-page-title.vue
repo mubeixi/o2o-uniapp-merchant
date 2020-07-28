@@ -4,7 +4,7 @@
     <div class="status-bar" :style="{height:menuButtonInfo.top+'px',backgroundColor:statusBgColor}"></div>
     <!--导航栏-->
     <div class="navigation-bar" :style="{height:menuButtonInfo.height+'px',backgroundColor:menuButtonBgColor}">
-      <layout-icon @click="bindBack" class="left-icon" :color="letfIconColor" :size="letfIconSize" type="iconicon-arrow-left"></layout-icon>
+      <layout-icon v-if="showLeftIcon" @click="bindBack" class="left-icon" :color="letfIconColor" :size="letfIconSize" type="iconicon-arrow-left"></layout-icon>
       <div class="title" :style="{lineHeight:menuButtonInfo.height+'px'}">{{pageTitle}}</div>
     </div>
   </div>
@@ -13,13 +13,17 @@
 <script>
 import LayoutIcon from '@/componets/layout-icon/layout-icon'
 import { backFunc } from '@/common/fun'
-import {componetMixin} from '@/mixins/BaseMixin'
+import { componetMixin } from '@/mixins/BaseMixin'
 
 export default {
   name: 'layoutPageTitle',
   mixins: [componetMixin],
   components: { LayoutIcon },
   props: {
+    showLeftIcon: {
+      type: Boolean,
+      default: true
+    },
     extStyle: {
       type: String,
       default: ''
@@ -52,7 +56,7 @@ export default {
   },
   data () {
     return {
-    
+
     }
   },
   methods: {
@@ -62,7 +66,7 @@ export default {
     }
   },
   onReady () {
-  
+
   }
 }
 </script>

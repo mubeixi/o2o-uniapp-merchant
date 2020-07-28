@@ -38,7 +38,11 @@
 
     </div>
 
-    <div class="safearea-box"></div>
+    <div class="defaults" v-if="praise.length<=0">
+      <image :src="'/static/client/defaultImg.png'|domain"></image>
+    </div>
+
+    <div class="safearea-box" style="background-color: #f8f8f8 !important;"></div>
 
   </div>
 </template>
@@ -109,6 +113,13 @@ export default {
 
   .page-wrap {
     padding-bottom: 48px;
+  }
+
+  .defaults {
+    margin: 0 auto;
+    width: 640rpx;
+    height: 480rpx;
+
   }
 
   .praise {

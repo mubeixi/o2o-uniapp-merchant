@@ -2,8 +2,7 @@
   <div class="tab wrap" :class="tab.config.position"
        :style="{background:tab.style.bgColor,margin:tab.config.position === 'left'?tab.style.wrapmargin:0+'px'}">
     <div class="tabs">
-      <li :class="{active:tabActive===idx}" :id="'tab-item'+idx" @click="clickTab(item,idx)"
-          v-for="(item,idx) in tab.value.list"><span>{{item.title}}</span></li>
+      <li :class="{active:tabActive===idx}" :id="'tab-item'+idx" @click="clickTab(item,idx)" v-for="(item,idx) in tab.value.list"><span>{{item.title}}</span></li>
     </div>
     <div class="tabs-panel">
       <div class="box" :class="[className]"
@@ -25,7 +24,7 @@
             <div class="info" :style="{width:itemw}" :class="{empyInfo:isEmpeyInfo}">
               <div class="left">
                 <div v-show="tab.config.attr.title.show" class="title"><wzw-live-tag :room_id="item.room_id" :product-info="item" />{{item.Products_Name}}</div>
-                <div v-show="tab.config.attr.desc.show" class="font12 graytext desc">
+                <div v-show="tab.config.attr.desc.show" class="fz-12 graytext desc">
                   {{item.Products_BriefDescription||'暂无介绍'}}
                 </div>
                 <!--                <div v-show="tab.config.attr.price.show" class="price"><span class="sign">￥</span>{{item.Products_PriceX}}-->
@@ -60,7 +59,7 @@
           <!--            <div class="info" :style="{width:itemw}" :class="{empyInfo:isEmpeyInfo}">-->
           <!--              <div class="left">-->
           <!--                <div v-show="tab.config.attr.title.show" class="title">{{infoTmpl.Products_Name}}</div>-->
-          <!--                <div v-show="tab.config.attr.desc.show" class="font12 graytext desc">-->
+          <!--                <div v-show="tab.config.attr.desc.show" class="fz-12 graytext desc">-->
           <!--                  {{infoTmpl.Products_BriefDescription||'暂无介绍'}}-->
           <!--                </div>-->
           <!--                <div v-show="tab.config.attr.price.show" class="price"><span class="sign">￥</span>{{infoTmpl.Products_PriceX}}-->
@@ -434,6 +433,7 @@ export default {
       color: #444;
       white-space: nowrap;
       padding: 0 10px;
+      margin-bottom: 10px;
       overflow-x: scroll;
       overflow-y: hidden;
 

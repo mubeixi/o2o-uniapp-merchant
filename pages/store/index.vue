@@ -42,6 +42,7 @@ export default {
   computed: {},
   data () {
     return {
+      mode: 'default',
       bid: '',
       skin_id: -1,
       storeInfo: {}
@@ -49,6 +50,7 @@ export default {
   },
   methods: {
     init () {
+      if (this.mode === 'preview') return// 自己上了
       getBizInfo({ biz_id: this.bid }).then(res => {
         this.skin_id = Number(res.data[0].skin_id)
       })
@@ -91,14 +93,16 @@ export default {
   //   this.headTabSticky = scrollTop > this.headTabTop
   // },
   onShow () {
-    this.init()
+    // #ifdef MP-WEIXIN
+    wx.hideHomeButton()
+    // #endif
 
     // 登陆后
     if (checkIsLogin(0, 0)) {
-      if (this.skin_id === 3) this.$refs.childThree.refreshFn()
-      if (this.skin_id === 2) this.$refs.childTwo.refreshFn()
-      if (this.skin_id === 1) this.$refs.childOne.refreshFn()
-      if (this.skin_id === 0) this.$refs.childDefault.refreshFn()
+      if (this.skin_id === 3) this.$refs.childThree && this.$refs.childThree.refreshFn()
+      if (this.skin_id === 2) this.$refs.childTwo && this.$refs.childTwo.refreshFn()
+      if (this.skin_id === 1) this.$refs.childOne && this.$refs.childOne.refreshFn()
+      if (this.skin_id === 0) this.$refs.childDefault && this.$refs.childDefault.refreshFn()
     }
   },
   mounted () {
@@ -110,6 +114,14 @@ export default {
       return
     }
     this.bid = parseInt(options.biz_id)
+    // biz_id=2&origin=merchat&action=preview&skin_id=1
+    const { origin = '', action = '', skin_id = null } = options
+    if (origin === 'merchat' && action === 'preview' && skin_id) {
+      this.mode = 'preview'
+      this.skin_id = Number(skin_id)
+    }
+
+    this.init()
   },
   created () {
 

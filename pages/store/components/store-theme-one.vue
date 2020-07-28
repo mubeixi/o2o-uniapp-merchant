@@ -249,15 +249,17 @@
           <image style="width: 254rpx;height: 63rpx;" :src="$getDomain('/static/client/store/theme_one/sale-list.png')"></image>
         </div>
         <ul class="cate-nav">
-          <li
-            v-for="(cate,idx) in bizCateList"
-            :key="idx"
-            :class="{active:bizCateNavIndex === idx}"
-            @click="changeCateIdx(idx)"
-            class="cate-nav-item">
-            {{cate.cate_name}}
-            <div class="sale-underline" v-if="bizCateNavIndex===idx"></div>
-          </li>
+          <block  v-for="(cate,idx) in bizCateList"
+			    :key="idx">
+			  <li
+			   v-if="cate.prod_count>0"
+			    :class="{active:bizCateNavIndex === idx}"
+			    @click="changeCateIdx(idx)"
+			    class="cate-nav-item">
+			    {{cate.cate_name}}
+			    <div class="sale-underline" v-if="bizCateNavIndex===idx"></div>
+			  </li>
+		  </block>
         </ul>
         <div class="cate-goods-list">
           <div class="fun-goods-col" style="padding: 0 9rpx 0 0rpx">
@@ -418,7 +420,8 @@
       </div>
 
       <div class="close-btn" @click.stop="taggkeCartShow">
-        <layout-icon v-if="!cartExpand" size="23" type="iconicon_plus" color="#fff"></layout-icon>
+        <div v-if="!cartExpand" class="plus-tag" :class="{aircle:total_count<100,zero:total_count<10}">{{total_count}}</div>
+<!--        <layout-icon v-if="!cartExpand" size="23" type="iconicon_plus" color="#fff"></layout-icon>-->
         <layout-icon v-if="cartExpand" size="23" type="iconxingzhuang" color="#fff"></layout-icon>
       </div>
 
@@ -866,8 +869,8 @@ export default {
               prod_id: Number(prod_id)
             })
 
-            const attr_value = CartList[biz_id][prod_id][attr_id]
-
+            var attr_value = CartList[biz_id][prod_id][attr_id]
+            attr_value.checked = true // 手动加上
             const { ImgPath, ProductsName, ProductsPriceX, ProductsPriceY, Qty, Productsattrstrval } = attr_value
             attrList.push({
               // ...attr_value,
@@ -951,7 +954,7 @@ export default {
         // 启动倒计时，牛逼啊霸哥
         countdownInstance = setInterval(this.stampFuncByKill, 1000)
 
-        const bizCateList = await getBizProdCateList({ biz_id: this.bid }, { onlyData: true }).catch((e) => {
+        const bizCateList = await getBizProdCateList({ biz_id: this.bid,prod_count:1 }, { onlyData: true }).catch((e) => {
           throw Error('获取商家自定义分类失败')
         })
 
@@ -967,6 +970,19 @@ export default {
           }
         })
         console.log(this.bizCateList)
+
+        this.bizCateList.unshift({
+          cate_name: '所有',
+          id: 0,
+          load: false,
+          page: 1,
+          pageSize: 6,
+          total: 0,
+		  prod_count:99,
+          finish: false,
+          productList: [] // 商品列表
+        })
+
         this.changeCateIdx(0)
 
         // 不要赠送的优惠券
@@ -1182,12 +1198,15 @@ export default {
       try {
         const biz_cate = this.bizCateList[this.bizCateNavIndex]
         this.bizCateList[this.bizCateNavIndex].load = true
-        const { data: newList, totalCount } = await getProductList({
+        const postData = {
           ...base,
-          biz_cate_id: biz_cate.id,
           page: biz_cate.page,
           pageSize: biz_cate.pageSize
-        }).catch(err => { throw Error(err.msg) })
+        }
+        if (biz_cate.id) {
+          postData.biz_cate_id = biz_cate.id
+        }
+        const { data: newList, totalCount } = await getProductList(postData).catch(err => { throw Error(err.msg) })
 
         this.bizCateList[this.bizCateNavIndex].page++
         this.bizCateList[this.bizCateNavIndex].productList = biz_cate.productList.concat(newList)
@@ -1294,6 +1313,27 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+
+  .plus-tag {
+
+    background-color: #FF0000;
+    border-radius: 8px;
+    font-size: 12px;
+    color: #FFFFff;
+    padding: 2px 6px;
+    text-align: center;
+    &.aircle {
+      border-radius: 50%;
+      padding: 0;
+      width: 24px;
+      height: 24px;
+      line-height: 24px;
+      &.zero{
+        font-size: 14px;
+      }
+    }
+
+  }
 
   .mall-tabbar-wrap {
     position: fixed;
@@ -2077,5 +2117,10 @@ export default {
       }
     }
   }
+}
+.pro-title{
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow-x: hidden;
 }
 </style>

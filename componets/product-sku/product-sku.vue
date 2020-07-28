@@ -68,6 +68,7 @@
 import layoutPopup from '@/componets/layout-popup/layout-popup.vue'
 import { error } from '@/common/fun.js'
 import { numberSort } from '@/common/helper'
+import Storage from '@/common/Storage'
 
 export default {
   components: { layoutPopup },
@@ -222,10 +223,15 @@ export default {
 
       // 属性判断
       if (attr_val) {
-        console.log(attr_val)
+        console.log(attr_val, 'attr_val', this.productInfo)
         this.postData.id = attr_val.Product_Attr_ID // 选择属性的id
         this.postData.count = attr_val.Property_count // 选择属性的库存
-        this.postData.price = attr_val.Attr_Price ? attr_val.Attr_Price : this.list.Products_PriceX // 选择属性的价格
+        if (this.productInfo.active === 'pintuan') {
+          this.postData.price = attr_val.pt_pricex ? attr_val.pt_pricex : this.list.Products_PriceX // 选择属性的价格
+        } else {
+          this.postData.price = attr_val.Attr_Price ? attr_val.Attr_Price : this.list.Products_PriceX // 选择属性的价格
+        }
+
         this.submitFlag = !(!this.check_attr)
         // this.submitFlag = (!this.check_attr || Object.getOwnPropertyNames(this.check_attr).length !== Object.getOwnPropertyNames(this.list.skujosn).length) ? false : true;
       }
@@ -242,6 +248,9 @@ export default {
       if (this.postData.qty > this.postData.count) {
         this.postData.qty = this.postData.count
       }
+
+      Storage.set('value_index', value_index)
+      Storage.set('attr_index', attr_index)
     },
     addNum () {
       if (this.postData.qty < this.postData.count) {
@@ -309,9 +318,15 @@ export default {
         this.submitFlag = true
       }
     },
-    show () {
+    async show () {
       this.isShow = true
-      this.init()
+      await this.init()
+
+      const value_index = Storage.get('value_index')
+      const attr_index = Storage.get('attr_index')
+      if (value_index && attr_index) {
+        await this.selectAttr(value_index, attr_index)
+      }
     },
     closePro () {
       this.submitFlag = false

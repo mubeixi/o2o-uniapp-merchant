@@ -24,19 +24,24 @@
 
 <template>
   <!--  ,height:size + 'px',lineHeight:size+'px' ,transform:'rotate('+rotate+')'-->
-
-  <i v-if="plain" class="iconfont icon"
-     :class="[type,display]"
-     :style="{ color: color, 'font-size': size + 'px',fontWeight:weight}"
-     @click="_onClick"
-  ></i>
-  <div v-else class="wrap" :style="{padding:wrapPadding,width:size + 'px',height:size + 'px',backgroundColor:wrapBg}">
-    <i class="iconfont icon"
+  <block v-if="!isImg">
+    <i v-if="plain" class="iconfont icon"
        :class="[type,display]"
-       :style="{ color: color, 'font-size': size + 'px',fontWeight:weight}"
+       :style="{ color: color, 'font-size': _size,fontWeight:weight}"
        @click="_onClick"
     ></i>
-  </div>
+    <div v-else class="wrap" :style="{padding:wrapPadding,width:size + 'px',height:size + 'px',backgroundColor:wrapBg}">
+      <i class="iconfont icon"
+         :class="[type,display]"
+         :style="{ color: color, 'font-size': _size,fontWeight:weight}"
+         @click="_onClick"
+      ></i>
+    </div>
+  </block>
+  <block v-else>
+    <image  :style="{ width: _size}" mode="widthFix" class="icon-img" :src="type"></image>
+  </block>
+
 </template>
 
 <script>
@@ -80,6 +85,27 @@ export default {
     size: {
       type: [Number, String],
       default: 16
+    }
+  },
+  computed: {
+    /**
+     * 可以传入数字或者字符串
+     * @returns {number|string}
+     * @private
+     */
+    _size: function () {
+      if (this.size) {
+        if (String(this.size).indexOf('px') === -1) {
+          return this.size + 'px'
+        } else {
+          return this.size
+        }
+      } else {
+        return '16px'
+      }
+    },
+    isImg: function () {
+      return this.type.indexOf('http') !== -1
     }
   },
   methods: {

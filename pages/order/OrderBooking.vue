@@ -172,7 +172,7 @@
               <span>预约送达时间</span>
               <div class="flex flex-vertical-c" style="text-align:right; color: #888;" @click="citySendTypeOpen(biz_id)">
                 <block v-if="postData.appoint_time[biz_id]">
-                  {{toDay}} <sapn class="m-l-6">{{postData.appoint_time[biz_id]}}</sapn>
+                  {{postData.teamstamp[biz_id]}}<sapn class="m-l-6">{{postData.appoint_time[biz_id]}}</sapn>
                 </block>
                 <block v-else>
                   请设置时间
@@ -309,7 +309,7 @@
     </div>
 
     <div class="space-box"></div>
-    <div class="safearea-box fixed"></div>
+    <div class="safearea-box fixed" style="background-color: #f8f8f8!important;"></div>
 
     <layout-layer @maskClicked="handClicked" bottomStr="50px" ref="popupMX" title="明细">
       <div class="mxdetail">
@@ -465,6 +465,7 @@ export default {
         shipping_name: {}, // 对应名称,不过不需要提交到后台
         appoint_time_type: {},
         appoint_time: {}, // ，同城配送时有效，同城配送的预约时间，0|不填=立即配送
+        teamstamp: {},
         shipping_id: {},
         coupon_id: {},
         coupon_current: {},
@@ -532,7 +533,10 @@ export default {
     },
     allCouponMoney () {
       try {
-        return computeArrayColumnSum(this.bizList, 'Coupon_Money')
+        const bizCouponMoney = computeArrayColumnSum(this.bizList, 'Coupon_Money')
+        const sysCouponMoney = computeArrayColumnSum(this.bizList, 'users_coupon_money')
+
+        return sysCouponMoney + bizCouponMoney
       } catch (e) {
         return 0
       }
@@ -978,6 +982,7 @@ export default {
         return
       }
       this.postData.appoint_time[this.activeBizId] = this.appointTimeTypes[selectIdx].time_str
+      this.postData.teamstamp[this.activeBizId] = uni.$moment(this.appointTimeTypes[selectIdx].teamstamp * 1000).format('YYYY-MM-DD')
       this.$closePop('citySendTime')
     },
     bindCitySendTimeChange (e) {
@@ -1216,31 +1221,32 @@ export default {
           }
 
           // 2.营业状态打开，在营业时间，正常下单
-          if (business_status && business_time_status && city_express_appoint_send) {
+          if (business_status && business_time_status) {
             shippingStatus.isOrder = true
             shippingStatus.isSameCity = true
             shippingStatus.isNow = true
-            shippingStatus.isAppoint = true
+            // 能不能预约就看具体的配置了
+            shippingStatus.isAppoint = !!city_express_appoint_send
           }
 
           // 3.营业状态打开，不在营业时间，允许营业外下单，同城配送只能预约，不能立即送达，普通物流不受影响
-          if (business_status && !business_time_status && out_business_time_order && city_express_appoint_send) {
+          if (business_status && !business_time_status && out_business_time_order) {
             shippingStatus.isOrder = true
-            shippingStatus.isSameCity = true
-            shippingStatus.isAppoint = true
+            shippingStatus.isSameCity = !!city_express_appoint_send
+            shippingStatus.isAppoint = !!city_express_appoint_send
           }
 
           // 4.营业状态打开，不在营业时间，不允许营业外下单，提交订单不会出现同城配送
           if (business_status && !business_time_status && !out_business_time_order) {
             shippingStatus.isOrder = true
-            shippingStatus.isSameCity = false
+            // shippingStatus.isSameCity = false
           }
 
           // 团购无法用同城配送的预约功能
           if (this.checkfrom === 'group') {
             shippingStatus.isAppoint = false
           }
-          
+
           bizInfo.biz_user_money = Number(bizInfo.biz_user_money)
 
           bizListUpShiping[bizId] = Object.assign({}, { shippingStatus: { ...shippingStatus }, bizSendByMerchat }, bizInfo)

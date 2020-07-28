@@ -20,22 +20,22 @@
             {{logList[0].provider_text}}
           </view>
         </view>
-        <!--        <view class="fonts" v-if="pro.shipping_no">-->
-        <!--          <view class="left">-->
-        <!--            物流单号:-->
-        <!--          </view>-->
-        <!--          <view>-->
-        <!--            {{pro.shipping_no}}-->
-        <!--          </view>-->
-        <!--        </view>-->
-        <!--        <view class="fonts" v-if="pro.delivery_man_phone">-->
-        <!--          <view class="left">-->
-        <!--            派送员电话:-->
-        <!--          </view>-->
-        <!--          <view @click="call">-->
-        <!--            {{pro.delivery_man_phone}}-->
-        <!--          </view>-->
-        <!--        </view>-->
+        <view class="fonts" v-if="logList[0].driver_name">
+                  <view class="left">
+                    物流单号:
+                  </view>
+                  <view>
+                    {{logList[0].driver_name}}
+                  </view>
+                </view>
+                <view class="fonts" v-if="logList[0].driver_phone">
+                  <view class="left">
+                    派送员电话:
+                  </view>
+                  <view class="color-green text-underline" @click="call">
+                    {{logList[0].driver_phone}}
+                  </view>
+                </view>
       </view>
     </view>
     <view class="box-sizing xiangxi">
@@ -117,7 +117,7 @@ export default {
   methods: {
     call () {
       uni.makePhoneCall({
-        phoneNumber: this.pro.delivery_man_phone,
+        phoneNumber: this.logList[0].driver_phone,
       })
     },
     getOrderExpress () {
