@@ -1,5 +1,13 @@
 import { fetch } from '@/common/request'
 
+
+
+// 获取产品列表
+export const getPintuanTeam = (param, options) => fetch({
+  act: 'get_pintuan_team',
+  param,
+  options
+})
 // 获取产品列表
 export const getProductList = (param, options) => {
   if (param.hasOwnProperty('biz_id')) param.biz_ids = param.biz_id // hack biz_id参数变更
