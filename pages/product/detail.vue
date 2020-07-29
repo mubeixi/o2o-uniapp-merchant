@@ -25,6 +25,7 @@
     width: 750rpx;
     overflow-x: hidden;
     overflow-y: hidden;
+    box-sizing: border-box;
   }
 
   .comment-list-drawer {
@@ -58,6 +59,7 @@
     top: 0;
     bottom: 60px;
     z-index: 1;
+    background-color: #FFFFff;
   }
 
   .head-box-default {
@@ -73,21 +75,23 @@
     z-index: 2;
     top: 0;
     width: 750rpx;
-    background: #f2f2f2;
+    background: #FFFFff;
 
     .head-search {
-      width: 200rpx;
-      height: 32px;
+      width: 346rpx;
+      height: 30px;
       padding: 0 16px;
       border-radius: 16px;
-      background: #fff;
+      box-sizing: border-box;
+      margin-left: 40rpx;
+      background-color: #EEEEEE;
     }
   }
 
   .head-tab-active {
     position: fixed;
     z-index: 9;
-    background: #F2F2F2;
+    background: #FFFFff;
     width: 750rpx;
     height: 40px;
     box-sizing: border-box;
@@ -144,18 +148,20 @@
   .product-price {
     background-color: #ffffff;
     display: flex;
-    height: 108rpx;
+    height: 70rpx;
     width: 750rpx;
     box-sizing: border-box;
-    padding-left: 20rpx;
-    align-items: center;
+    padding-left: 30rpx;
     justify-content: space-between;
     color: #ABABAB;
+
   }
 
+  .product-price-left {
+    padding-top: 8rpx;
+  }
   .product-price-red {
     font-size: 20px;
-    color: #F53636;
   }
 
   .product-price-right {
@@ -193,13 +199,13 @@
       margin-right: 12rpx;
       display: inline-block;
       text-align: center;
-      padding: 0 10rpx;
-      height:36rpx;
-      line-height: 36rpx;
-      background:$fun-red-color;
-      border-radius:5rpx;
+      padding: 0 16rpx;
+      height:40rpx;
+      line-height: 40rpx;
+      background:$fun-green-color;
       font-size:22rpx;
       color: #fff;
+      border-radius: 20rpx;
     }
   }
 
@@ -299,8 +305,8 @@
     width: 750rpx;
     box-sizing: border-box;
     background: #fff;
-    height: 86rpx;
-    padding: 30rpx 20rpx;
+    height: 88rpx;
+    padding: 0rpx 30rpx;
   }
 
   .shouhou-item {
@@ -393,8 +399,21 @@
   }
 
   .store-list {
-    width: 710rpx;
-    padding: 0 20rpx;
+    width: 690rpx;
+    padding: 0 30rpx;
+
+    .store-vip-call{
+      height: 40rpx;
+      display: flex;
+      align-items: center;
+      font-size: 28rpx;
+      color: #999999;
+    }
+    .store-vip-address{
+      lin-height: 40rpx;
+      font-size: 28rpx;
+      color: #999999;
+    }
   }
 
   .store-list-top {
@@ -414,24 +433,21 @@
   }
 
   .store-list-item {
-    width: 710rpx;
-    padding: 30rpx 24rpx;
+    width: 690rpx;
+    padding: 30rpx 0rpx;
     box-sizing: border-box;
-    border-bottom: 1px solid #EBEBEB;
+    border-bottom: 1px solid #EEEEEE;
 
-    &:last-child {
-    }
-
-    border-bottom: none;
   }
 
   .store-list-title {
     width: 600rpx;
-    height: 28px;
-    font-size: 14px;
-    color: rgba(51, 51, 51, 1);
-    line-height: 28px;
-    margin-bottom: 10rpx;
+    height: 30px;
+    font-size: 30rpx;
+    color:#333333;
+    font-weight: bold;
+    line-height: 30px;
+    margin-bottom: 16rpx;
   }
 
   .isStickly {
@@ -478,7 +494,7 @@
     }
 
     .comment-list {
-      padding: 0 25rpx;
+      padding: 0 30rpx;
     }
   }
 
@@ -624,25 +640,41 @@
   }
 
   .comment-item {
-    border-bottom: 1px solid #E8E8E8;
-    padding-bottom: 30rpx;
+    border-bottom: 1px solid #eeeeee;
+    &:last-child{
+      border-bottom: 0rpx;
+    }
   }
 
   /* 领券start */
   .coupon-box {
-    padding: 30rpx 20rpx;
+    padding:0rpx 30rpx ;
+    height: 40rpx;
     font-size: 24rpx;
     display: flex;
     align-items: center;
     justify-content: space-between;
     background: white;
-    border-bottom: 20rpx solid #f8f8f8;
   }
 
   .coupon-box .btn {
-    padding: 0 10rpx;
-    color: #26C78D;
-    border: 1px solid #26C78D;
+    height: 40rpx;
+    display: flex;
+    max-width: 450rpx;
+    overflow-x: scroll;
+
+    .btn-item{
+      padding: 0rpx 14rpx;
+      height: 40rpx;
+      background-color: #EBFFF8;
+      line-height: 40rpx;
+      text-align: center;
+      border-radius: 6rpx;
+      width: auto;
+      color: #1CA272;
+      font-size: 26rpx;
+      margin-right: 10rpx;
+    }
   }
 
   .right {
@@ -741,20 +773,32 @@
   }
 
   .left-btn {
+    width: 214rpx;
     font-size: 14px;
-    padding: 0 20rpx;
     height: 86rpx;
     line-height: 86rpx;
     text-align: center;
     color: #fff;
-    border-radius: 42rpx;
-    background: #85D4B8; //行内可以覆盖
+    border-top-left-radius: 42rpx;
+    border-bottom-left-radius: 42rpx;
+    background: #333333; //行内可以覆盖
   }
 
   .right-btn {
+    width: 214rpx;
     font-size: 14px;
-    margin-left: 10rpx;
-    padding: 0 20rpx;
+    height: 86rpx;
+    line-height: 86rpx;
+    text-align: center;
+    color: #fff;
+    border-top-right-radius: 42rpx;
+    border-bottom-right-radius: 42rpx;
+    background: #26C78D; //行内可以覆盖
+  }
+
+  .right-btn-only {
+    width: 428rpx;
+    font-size: 14px;
     height: 86rpx;
     line-height: 86rpx;
     text-align: center;
@@ -766,38 +810,359 @@
     overflow-x: hidden;
   }
 
+  .indicator-num{
+    width:72rpx;
+    height:40rpx;
+    background:rgba(0,0,0,1);
+    opacity:0.8;
+    border-radius:20rpx;
+    line-height: 40rpx;
+    text-align: center;
+    font-size: 24rpx;
+    color: #FFFFff;
+    position: absolute;
+    top: 690rpx;
+    right: 20rpx;
+    z-index: 9;
+  }
+  .bg-ebebeb{
+    background-color: #EBEBEB !important;
+  }
+  .bg-white{
+    background-color: #FFFFff !important;
+  }
+  .c-bc{
+    color: #bcbcbc !important;
+  }
+  .c-26c78d{
+    color: $fun-green-color;
+  }
+  .c-a4a4a4{
+    color: #a4a4a4;
+  }
+  .product-stock-info{
+    width: 700rpx;
+    height: 80rpx;
+    margin: 0 auto;
+    box-sizing: border-box;
+    border-bottom: 1px solid #EEEEEE;
+  }
+  .m-l-54{
+    margin-left: 54px;
+  }
+
+  .product-group{
+    width: 750rpx;
+    padding: 30rpx 30rpx 0rpx 30rpx;
+    box-sizing: border-box;
+
+    &-title{
+      height: 30rpx;
+      margin-bottom: 2rpx;
+    }
+
+  }
+  .product-group-item{
+    padding-top: 30rpx;
+    padding-bottom: 30rpx;
+    height: 140rpx;
+    box-sizing: border-box;
+    border-bottom: 1px solid  #EEEEEE;
+    .product-group-item-user{
+      width: 240rpx;
+      overflow-x: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      &-modal{
+        width: 140rpx !important;
+      }
+    }
+    &:last-child{
+      border-bottom: 0px;
+    }
+    .h-80{
+      height: 80rpx;
+    }
+    &-img{
+      width: 80rpx;
+      height: 80rpx;
+      overflow: hidden;
+      border-radius: 50%;
+    }
+    .go-group{
+      width:120rpx;
+      height:58rpx;
+      line-height: 58rpx;
+      text-align: center;
+      border-radius:10rpx;
+      color: #FFFFff;
+      font-size: 28rpx;
+      background-color: $fun-green-color;
+    }
+
+  }
+
+  .product-store-vip{
+    width: 690rpx;
+    height: 400rpx;
+    margin: 30rpx auto 40rpx;
+    padding: 20rpx;
+    box-sizing: border-box;
+    color: #FFFFff;
+    &-img{
+      width: 76rpx;
+      height: 76rpx;
+    }
+
+    &-info{
+      height: 76rpx;
+    }
+    &-btn{
+      width:120rpx;
+      height:28px;
+      line-height: 26px;
+      border:1px solid rgba(213,213,213,1);
+      border-radius:28rpx;
+      box-sizing: border-box;
+      text-align: center;
+      font-size: 26rpx;
+    }
+    .store-vip-call{
+      height: 40rpx;
+      display: flex;
+      align-items: center;
+      font-size: 28rpx;
+      color: #FFFFff;
+    }
+    .store-vip-address{
+      lin-height: 40rpx;
+      height: 80rpx;
+      font-size: 28rpx;
+      color: #FFFFff;
+    }
+
+    .product-vip-list{
+      position: relative;
+      width: 650rpx;
+      height: 100rpx;
+      box-sizing: border-box;
+      padding-top: 20rpx;
+      margin: 0 auto;
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+      .product-vip-power{
+        margin: 0rpx 0rpx 14rpx  166rpx;
+        font-size: 26rpx;
+        color: #372B1E;
+      }
+      .product-vip-power-eng{
+        color: #372B1E;
+        font-size: 18rpx;
+        margin-left: 166rpx;
+      }
+      .product-vip-list-icon{
+        position: absolute;
+        top: 34rpx;
+        right: 30rpx;
+      }
+
+    }
+  }
+
+  //推荐产品
+  .recommend{
+    width: 750rpx;
+    padding: 40rpx 30rpx 30rpx 30rpx;
+    .recommend-title{
+      font-size: 32rpx;
+      margin-bottom: 30rpx;
+    }
+
+    .recommend-list{
+      width: 100%;
+      .recommend-item {
+          width: 220rpx;
+          margin-right: 14rpx;
+          &:last-child{
+            margin-right: 0rpx;
+          }
+          &-img{
+            width: 220rpx;
+            height: 220rpx;
+            display: block;
+            border-radius: 10rpx;
+          }
+          &-title{
+            width: 220rpx;
+            height: 28rpx;
+            color: #372B1E;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            line-height: 28rpx;
+            margin-bottom: 10px;
+          }
+
+      }
+    }
+
+  }
+
+  .groupModal{
+    width: 606rpx;
+    box-sizing: border-box;
+    padding: 6rpx 10rpx  0rpx 10rpx;
+    max-height: 600rpx;
+    overflow-y: scroll;
+    .c9{
+      height: 60rpx;
+      line-height: 80rpx;
+      text-align: center;
+    }
+  }
+
+  .end-time-active{
+    width: 750rpx;
+    height: 120rpx;
+    background-color: #26C78D;
+    box-sizing: border-box;
+    padding-left: 30rpx;
+    margin-bottom: 30rpx;
+
+    .end-time-active-all{
+      padding-top: 26rpx;
+      height: 120rpx;
+      width: 500rpx;
+      box-sizing: border-box;
+    }
+
+    .end-time-active-price{
+      height: 30rpx;
+      line-height: 30rpx;
+      margin-bottom: 22rpx;
+    }
+    .end-time-active-sales{
+      height: 24rpx;
+      line-height: 24rpx;
+      font-size: 24rpx;
+    }
+  }
+  .color-white{
+    color: #FFFFff !important;
+  }
+
+  .spike-all{
+    width: 220rpx;
+    height: 120rpx;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    .spike-all-top{
+      margin-top: 18rpx;
+      height: 26rpx;
+      line-height: 26rpx;
+      color: #862F1B;
+      padding-left: 40rpx;
+      padding-right: 10rpx;
+      box-sizing: border-box;
+      font-size: 26rpx;
+    }
+    .spike-all-title{
+      width: 120rpx;
+      overflow-x: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .spike-all-time{
+      margin-top: 22rpx;
+      height: 30rpx;
+      line-height: 30rpx;
+      width: 100%;
+      box-sizing: border-box;
+      padding-left: 24rpx ;
+      color: #862F1B;
+      font-size: 22rpx;
+
+      .spike-all-time-block{
+        width: 30rpx;
+        height: 30rpx;
+        line-height: 30rpx;
+        text-align: center;
+        color: #FFE3B3;
+        background-color: #EC9A34;
+        border-radius: 4rpx;
+        padding: 0rpx 2rpx;
+      }
+
+    }
+
+  }
+
+  .text-through-color{
+    text-decoration: line-through #a4a4a4;
+  }
+  .product-title-all{
+    width: 750rpx;
+    box-sizing: border-box;
+    padding-left: 30rpx;
+    height: 80rpx;
+  }
+  .product-title-left{
+    width: 498rpx;
+    line-height: 40rpx;
+    height: 80rpx;
+    color: #333333;
+    font-size: 14px;
+    font-weight: bold;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    .product-title-tag{
+      margin-right: 12rpx;
+      display: inline-block;
+      text-align: center;
+      padding: 0 16rpx;
+      height:40rpx;
+      line-height: 40rpx;
+      background:$fun-green-color;
+      font-size:22rpx;
+      color: #fff;
+      border-radius: 20rpx;
+    }
+
+  }
 </style>
 <template>
-  <div @click="commonClick" class="page-wrap">
+  <div @click="commonClick" class="page-wrap"  >
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
-    <div :style="{height:diyHeadHeight+'px',opacity:1-activeHeadOpacity}" class="head-box-default"
-         v-show="1-activeHeadOpacity">
-      <div :style="{height:menuButtonInfo.top+'px'}"></div>
-      <div :style="{height:menuButtonInfo.height+'px',paddingRight:diyHeadRight+'px'}"
-           class="flex flex-vertical-c flex-justify-between">
-        <layout-icon :plain="false" @click="bindLeftBtnClick" class="m-l-10" color="#fff" size="18" type="iconback1"
-                     wrap-padding="6px"></layout-icon>
-        <div class="flex flex-vertical-c">
-          <button class="action-item share-btn" open-type="share">
-            <layout-icon :plain="false" color="#fff" size="18" type="iconshare" wrap-padding="6px"></layout-icon>
-          </button>
-          <layout-icon v-if="cash_from!==2" :plain="false" @click="$linkTo('/pages/order/ShoppingCart')" class="m-l-10 m-r-10" color="#fff" size="18" type="iconcart"
-                       wrap-padding="6px"></layout-icon>
-        </div>
-      </div>
-    </div>
+<!--    <div :style="{height:diyHeadHeight+'px',opacity:1-activeHeadOpacity}" class="head-box-default"-->
+<!--         v-show="1-activeHeadOpacity">-->
+<!--      <div :style="{height:menuButtonInfo.top+'px'}"></div>-->
+<!--      <div :style="{height:menuButtonInfo.height+'px',paddingRight:diyHeadRight+'px'}"-->
+<!--           class="flex flex-vertical-c flex-justify-between">-->
+<!--        <layout-icon :plain="false" @click="bindLeftBtnClick" class="m-l-10" color="#fff" size="18" type="iconback1"-->
+<!--                     wrap-padding="6px"></layout-icon>-->
+<!--        <div class="flex flex-vertical-c">-->
+<!--          <button class="action-item share-btn" open-type="share">-->
+<!--            <layout-icon :plain="false" color="#fff" size="18" type="iconshare" wrap-padding="6px"></layout-icon>-->
+<!--          </button>-->
+<!--          <layout-icon v-if="cash_from!==2" :plain="false" @click="$linkTo('/pages/order/ShoppingCart')" class="m-l-10 m-r-10" color="#fff" size="18" type="iconcart"-->
+<!--                       wrap-padding="6px"></layout-icon>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
 
-    <div :style="{height:diyHeadHeight+'px',opacity:activeHeadOpacity}" class="head-box-active"
-         v-show="activeHeadOpacity">
+    <div :style="{height:diyHeadHeight+'px'}" class="head-box-active"  :class="activeHeadOpacity?'bg-ebebeb':''">
       <div :style="{height:menuButtonInfo.top+'px'}"></div>
       <div :style="{height:menuButtonInfo.height+'px',paddingRight:diyHeadRight+'px'}"
            class="flex flex-vertical-c flex-justify-between">
         <div class="flex flex-vertical-c">
           <layout-icon :plain="false" @click="bindLeftBtnClick" class="m-l-10" color="#606060" size="18" type="iconback1"
                        wrap-bg="none" wrap-padding="6px"></layout-icon>
-          <div @click="toSearch" class="head-search flex flex-vertical-c">
+          <div @click="toSearch" class="head-search flex flex-vertical-c flex-justify-between"  :class="activeHeadOpacity?'bg-white':''" >
+            <span class="fz-12  p-l-6 c-bc"  >搜索商品</span>
             <layout-icon color="#606060" type="iconicon-search"></layout-icon>
-            <span class="fz-12 c9 p-l-6">搜索商品</span>
           </div>
         </div>
         <div class="flex flex-vertical-c">
@@ -805,16 +1170,16 @@
             <layout-icon :plain="false" color="#606060" size="18" type="iconshare" wrap-bg="none"
                          wrap-padding="6px"></layout-icon>
           </button>
-          <layout-icon v-if="cash_from!==2" :plain="false" @click="$linkTo('/pages/order/ShoppingCart')" class="m-l-10 m-r-10" color="#606060" size="18" type="iconcart"
-                       wrap-bg="none" wrap-padding="6px"></layout-icon>
+<!--          <layout-icon v-if="cash_from!==2" :plain="false" @click="$linkTo('/pages/order/ShoppingCart')" class="m-l-10 m-r-10" color="#606060" size="18" type="iconcart"-->
+<!--                       wrap-bg="none" wrap-padding="6px"></layout-icon>-->
         </div>
       </div>
     </div>
-    <div :style="{top:diyHeadHeight+'px',opacity:activeHeadOpacity}" class="head-tab-active fz-14 c3"
-         v-show="activeHeadOpacity">
+    <div :style="{top:diyHeadHeight+'px',opacity:activeHeadOpacity}" class="head-tab-active fz-14 c3"  :class="activeHeadOpacity?'bg-ebebeb':''"
+         v-if="activeHeadOpacity">
       <div :class="{active:headTabIndex===0}" @click="setAcitveTabIndx(0)" class="head-tab-item">宝贝</div>
-      <div :class="{active:headTabIndex===1}" @click="setAcitveTabIndx(1)" class="head-tab-item">详情</div>
-      <div :class="{active:headTabIndex===2}" @click="setAcitveTabIndx(2)" class="head-tab-item">评价</div>
+      <div :class="{active:headTabIndex===1}" @click="setAcitveTabIndx(1)" class="head-tab-item">评价</div>
+      <div :class="{active:headTabIndex===2}" @click="setAcitveTabIndx(2)" class="head-tab-item">详情</div>
       <div :class="{active:headTabIndex===3}" @click="setAcitveTabIndx(3)" class="head-tab-item">门店</div>
       <span :animation="tabUnderlineAnimationData" class="head-tab-underline"></span>
     </div>
@@ -828,40 +1193,98 @@
       @scrolltoupper="bindScrollToupperEvent" @touchmove.stop.prevent="bindScrollTouchEvent" class="container-wrap" scroll-y>
 
       <div id="section0">
+
+        <div class="indicator-num" v-if="imgs">
+          <span class="m-r-2">{{indicatorCurrent}}</span>/{{imgs.length}}
+        </div>
         <swiper autoplay="true" circular="true" duration="500"
-                indicator-active-color="#26C78D" indicator-color="rgba(0,0,0,.16)" indicator-dots="true" interval="3000" style="height:750rpx;width: 750rpx;">
+                @change="changeSwiperCurrent"
+                interval="3000" style="height:750rpx;width: 750rpx;"  >
           <swiper-item :key="index" v-for="(item,index) of imgs">
             <image :src="item+'-r640'" @click="previewImg(index)" class="full-img" v-if="item" />
           </swiper-item>
         </swiper>
 
         <block v-show="isReady">
-          <div class="end-time" v-if="mode==='spike' || mode==='seckill'">
-            <block v-if="!countdown.is_end">
-              <span>距{{countdown.is_start?'结束':'开始'}}还有：</span>
-              <span class="end-time-day">{{countdown.d}}天</span>
-              <span class="end-time-block">{{countdown.h}}</span>
-              <span class="delimiter">：</span>
-              <span class="end-time-block">{{countdown.m}}</span>
-              <span class="delimiter">：</span>
-              <span class="end-time-block">{{countdown.s}}</span>
-            </block>
+
+          <div class="end-time-active flex flex-justify-between"  v-if="mode==='spike' || mode==='seckill'">
+              <div class="end-time-active-all">
+                <div  class="color-white end-time-active-price">
+                   <span class="product-price-red c-26c78d">
+                    <span class="fz-15 color-white">¥</span>
+                    <span class="fz-20 fz-bold color-white">
+                      <block v-if="mode==='spike' || mode==='seckill'">{{productInfo.price}}</block>
+                      <block v-else-if="productInfo.is_pintuan">{{productInfo.pintuan_pricex}}</block>
+                      <block v-else>{{productInfo.Products_PriceX}}</block>
+                    </span>
+                  </span>
+                  <span class="m-l-5 text-through-color c-a4a4a4" >
+                    <span class="fz-11 color-white">
+                      ¥
+                    </span>
+                    <span class="fz-13 color-white">
+                      <block v-if="mode==='spike' || mode==='seckill' || productInfo.is_pintuan">{{productInfo.Products_PriceX}}</block>
+                      <block v-else>{{productInfo.Products_PriceY}}</block>
+                    </span>
+
+                  </span>
+
+                </div>
+                <div class="flex flex-vertical-c color-white  end-time-active-sales" >
+                  <div>
+                    库存：{{productInfo.Products_Count||0}}
+                  </div>
+                  <div class="m-l-17">
+                    已售：{{productInfo.Products_Sales||0}}
+                  </div>
+                </div>
+              </div>
+              <div  class="spike-all " :style="{backgroundImage: 'url('+$getDomain('/static/client/productActiveBg.png')+')'}"  >
+                <div class="spike-all-top flex flex-vertical-c">
+                  <layout-icon  size="20" class="m-r-9" color="#862F1B" type="iconxianshiqianggou"></layout-icon>
+                  <div class="spike-all-title">
+                    限时抢购
+                  </div>
+                </div>
+                <div class="spike-all-time">
+                  <span class="spike-all-time-block m-r-2">{{countdown.d}}</span>
+                  天
+                  <span class="spike-all-time-block m-l-2">{{countdown.h}}</span>
+                  ：
+                  <span class="spike-all-time-block">{{countdown.m}}</span>
+                  ：
+                  <span  class="spike-all-time-block">{{countdown.s}}</span>
+                </div>
+              </div>
+
           </div>
-          <div class="product-price fz-14">
-            <div class="product-price-left">
-              <span class="product-price-red">
-                <span class="fz-13">¥</span>
-                <span>
+
+<!--          <div class="end-time" v-if="mode==='spike' || mode==='seckill'">-->
+<!--            <block v-if="!countdown.is_end">-->
+<!--              <span>距{{countdown.is_start?'结束':'开始'}}还有：</span>-->
+<!--              <span class="end-time-day">{{countdown.d}}天</span>-->
+<!--              <span class="end-time-block">{{countdown.h}}</span>-->
+<!--              <span class="delimiter">：</span>-->
+<!--              <span class="end-time-block">{{countdown.m}}</span>-->
+<!--              <span class="delimiter">：</span>-->
+<!--              <span class="end-time-block">{{countdown.s}}</span>-->
+<!--            </block>-->
+<!--          </div>-->
+          <div class="product-price  m-t-15 m-b-9 fz-14" v-else>
+            <div class="product-price-left ">
+              <span class="product-price-red c-26c78d">
+                <span class="fz-15">¥</span>
+                <span class="fz-24 fz-bold">
                   <block v-if="mode==='spike' || mode==='seckill'">{{productInfo.price}}</block>
                   <block v-else-if="productInfo.is_pintuan">{{productInfo.pintuan_pricex}}</block>
                   <block v-else>{{productInfo.Products_PriceX}}</block>
                 </span>
               </span>
-              <span class="m-l-5 text-through">
-                <span>
+              <span class="m-l-5 text-through c-a4a4a4">
+                <span class="fz-11">
                   ¥
                 </span>
-                <span>
+                <span class="fz-15">
                   <block v-if="mode==='spike' || mode==='seckill' || productInfo.is_pintuan">{{productInfo.Products_PriceX}}</block>
                   <block v-else>{{productInfo.Products_PriceY}}</block>
                 </span>
@@ -881,55 +1304,53 @@
               </div>
             </div>
           </div>
-          <div class="product-title">
-            <div class="product-title-tag" v-if="titleTag">{{titleTag}}</div>
-            {{productInfo.Products_Name}}
-          </div>
           <!-- 领券 -->
-          <div @click="$openPop('couponModal')" class="coupon-box" v-if="couponList.length>0">
-            <div class="btn">领券</div>
-            <div class="right">
-              店铺优惠券
-              <layout-icon size="20" type="iconicon-arrow-right"></layout-icon>
+          <div @click="$openPop('couponModal')" class="coupon-box m-b-6" v-if="couponList.length>0" >
+            <div class="btn">
+              <div class="btn-item" v-for="(coupon,couponIndex) of couponList" :key="couponIndex">
+                {{coupon.Coupon_Subject}}
+              </div>
+            </div>
+            <div class="right c-26c78d">
+              领券
+              <layout-icon class="m-l-5" size="16" color="#26c78d" type="iconicon-arrow-right"></layout-icon>
             </div>
           </div>
 
-          <div class="product-activity m-t-10" v-if="userLevelList.length>0">
-            <div class="flex" style="padding-bottom: 30rpx" v-if="active.length>0">
-              <div class="product-activity-title">
-                优惠活动
-              </div>
-              <div class="flex1">
-                <div class="flex">
-                  <div :key="index" class="activity-item" v-for="(item,index) of active">
-                    <image :src="'/static/client/product/activity.png'|domain" class="activity-img"></image>
-                    满{{item.reach}}减{{item.award}}
-                  </div>
-                </div>
-                <!--          <div class="flex flex-vertical-center  activity-second">-->
-                <!--            <div class="color-first">-->
-                <!--              多买优惠-->
-                <!--            </div>-->
-                <!--            <div class="color-second">-->
-                <!--              满2件打8.8折-->
-                <!--            </div>-->
-                <!--          </div>-->
-                <!--          <div class="flex flex-vertical-center  activity-second">-->
-                <!--            <div class="color-first">-->
-                <!--              多买优惠-->
-                <!--            </div>-->
-                <!--            <div class="color-second">-->
-                <!--              满2件打8.8折-->
-                <!--            </div>-->
-                <!--          </div>-->
-              </div>
+          <div class="product-title" v-if="mode!=='spike' && mode!=='seckill'">
+            <div class="product-title-tag" v-if="titleTag">{{titleTag}}</div>
+            {{productInfo.Products_Name}}
+          </div>
+
+          <div class="product-title-all flex flex-justify-between m-t-6" v-if="mode==='spike' || mode==='seckill'">
+            <div class="product-title-left">
+              <div class="product-title-tag" v-if="titleTag">{{titleTag}}</div>
+              {{productInfo.Products_Name}}
             </div>
-            <div @click="goVipList" class="vip-img">
-              <image :src="'/static/client/product/vip.png'|domain" class="full-img"></image>
+            <div @click="toShare" class="product-price-right" v-if="mode!='gift'">
+              <image :src="'/static/client/product/product_share.png'|domain" class="full-img"
+                     style="width: 130% !important;"></image>
+              <div class="product-share">
+                分享赚
+              </div>
+              <div class="product-price-share">
+                <span class="price-q">¥</span>
+                {{productInfo.share_commission}}
+              </div>
             </div>
           </div>
+
+          <div class="product-stock-info flex flex-vertical-c fz-12 c9 p-l-4" v-if="mode!=='spike' && mode!=='seckill'">
+              <div>
+                库存：{{productInfo.Products_Count||0}}
+              </div>
+              <div class="m-l-54">
+                已售：{{productInfo.Products_Sales||0}}
+              </div>
+          </div>
+
           <!-- 服务保障   -->
-          <div class="shouhou flex flex-vertical-center" v-if="productInfo.Products_Promise.length>0">
+          <div class="shouhou flex flex-vertical-c" v-if="productInfo.Products_Promise.length>0">
             <block :key="index" v-for="(item,index) in productInfo.Products_Promise">
               <div class="shouhou-item" v-if="item.name">
                 <layout-icon class="p-r-4" color="#26C78D" display="inline" type="iconradio-check"></layout-icon>
@@ -937,13 +1358,174 @@
               </div>
             </block>
           </div>
+
+          <div style="height: 20rpx;background-color: #F8F8F8;"></div>
+
+<!--          <div class="product-activity m-t-10" v-if="userLevelList.length>0">-->
+<!--            <div class="flex" style="padding-bottom: 30rpx" v-if="active.length>0">-->
+<!--              <div class="product-activity-title">-->
+<!--                优惠活动-->
+<!--              </div>-->
+<!--              <div class="flex1">-->
+<!--                <div class="flex">-->
+<!--                  <div :key="index" class="activity-item" v-for="(item,index) of active">-->
+<!--                    <image :src="'/static/client/product/activity.png'|domain" class="activity-img"></image>-->
+<!--                    满{{item.reach}}减{{item.award}}-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--            <div @click="goVipList" class="vip-img">-->
+<!--              <image :src="'/static/client/product/vip.png'|domain" class="full-img"></image>-->
+<!--            </div>-->
+<!--          </div>-->
+
         </block>
+
+        <!--   拼团产品才显示     -->
+        <block  v-if="groupList.length>0">
+          <div class="product-group">
+
+            <div class="flex-vertical-c flex product-group-title flex-justify-between">
+              <div class="fz-15 c3">
+                {{groupListTotalCount}}人正在拼团，可直接参与
+              </div>
+
+              <div class=" fz-13 c8 flex flex-vertical-c"  v-if="groupList.length>3" @click="$openPop('groupModal')">
+                  查看更多
+                  <layout-icon class="m-l-5" size="16" color="#888888" type="iconicon-arrow-right"></layout-icon>
+              </div>
+              <div class=" fz-13 c8 flex flex-vertical-c"  v-else>
+
+              </div>
+            </div>
+
+            <block v-for="(group,groupIndex) of groupList" :key="groupIndex">
+              <div class="product-group-item flex flex-vertical-c flex-justify-between" v-if="groupIndex<3">
+                <div class="h-80 flex flex-vertical-c">
+                  <image class="product-group-item-img" :src="group.User_HeadImg"></image>
+                  <div class="fz-14 c3 m-l-8 product-group-item-user" >{{group.User_NickName}}</div>
+                </div>
+                <div class="h-80 flex flex-vertical-c">
+                  <div class="fz-14 c3 m-r-12">
+                    还差<span class="c-26c78d">{{productInfo.pintuan_people-group.teamnum}}</span>人拼成
+                  </div>
+                  <div class="go-group" @click="toJoinGroup(group.id,group)">
+                    去拼单
+                  </div>
+                </div>
+              </div>
+            </block>
+
+          </div>
+          <div style="height: 20rpx;background-color: #F8F8F8;"></div>
+        </block>
+
       </div>
 
-      <div class="section-content" id="section1" v-show="isReady">
+      <div id="section1" v-show="isReady">
+      <!--评论列表-->
+          <div class="block section-comment" >
+
+            <div class="block-title"  style="padding: 30rpx 30rpx 10rpx 30rpx">
+              <div class="block-title-text fz-16 c3">评论</div>
+              <div @click="openCommentDrawer" class="block-title-more flex flex-vertical-center c9 fz-12">
+                <block v-if="comments.length>0">
+                  <span>查看更多</span>
+                  <layout-icon class="m-l-5" size="16" color="#999999" type="iconicon-arrow-right"></layout-icon>
+                </block>
+              </div>
+            </div>
+            <div class="block-content">
+              <div class="comment-list" v-if="comments.length>0">
+                <div :key="idx" class="comment-item" v-for="(item,idx) in comments">
+                  <div class="p-t-15 p-b-15">
+                    <layout-comment :comment="item" :showReply="false" :isLast="comments.length-1===idx"
+                                    @comment="clickComment"></layout-comment>
+                  </div>
+                </div>
+
+              </div>
+              <div class="fz-12 text-center "  style="color: #D2D2D2;padding-bottom: 68rpx;padding-top: 44rpx;" v-else>
+                该商品暂无相关评论
+              </div>
+            </div>
+          </div>
+          <div style="height: 20rpx;background-color: #F8F8F8;"></div>
+
+          <!--会员信息-->
+          <div class="product-store-vip " :style="{backgroundImage: 'url('+$getDomain('/static/client/productVipBg.png')+')'}"  >
+
+            <div class="flex flex-vertical-c flex-justify-between m-b-10">
+
+              <div class="product-store-vip-info flex flex-vertical-c">
+
+                <image :src="store[0].biz_logo" class="product-store-vip-img m-r-10" v-if="store[0].biz_logo"></image>
+
+                <div class="product-store-vip-title fz-15 fz-bold">
+                  {{store[0].biz_shop_name}}
+                </div>
+
+              </div>
+              <div class="product-store-vip-btn" @click="goStore(store[0].id)">
+                进店
+              </div>
+            </div>
+
+            <div @click="$cellPhone(store[0].biz_account)" class="store-vip-call m-b-10">
+              电话：{{store[0].biz_account}}
+              <layout-icon color="#26c78d" class="m-l-15" size="20" type="icondianhua"></layout-icon>
+            </div>
+
+            <div @click="$openLocation(store[0].biz_lat_gd,store[0].biz_lon_gd,store[0].biz_shop_name)" class="store-vip-address m-b-10">
+              地址：{{store[0].area_address}}{{store[0].biz_address}}
+              <layout-icon color="#26c78d" class="m-l-15" style="display: inline-block" size="20" type="icondizhi1"></layout-icon>
+            </div>
+
+            <div   :style="{backgroundImage: 'url('+$getDomain('/static/client/productVipGo.png')+')'}" class="product-vip-list" @click="goVipList">
+                <div class="product-vip-power">
+                  尊贵会员&特权专享
+                </div>
+                <div class="product-vip-power-eng">
+                  SELECTED SERVICE FOR ONLY YOU
+                </div>
+                <layout-icon class="product-vip-list-icon"  size="20" color="#333333" type="iconicon-arrow-right"></layout-icon>
+            </div>
+
+          </div>
+
+    <!--      recommendList-->
+          <div class="recommend" v-if="recommendList.length>0">
+            <div class="recommend-title c3 ">
+              店铺推荐
+            </div>
+            <div class="recommend-list flex ">
+
+              <div class="recommend-item"  v-for="(recommend,recommendIndex) of recommendList" :key="recommendIndex"  @click="$toGoodsDetail(recommend)">
+                  <image :src="recommend.ImgPath" class="recommend-item-img  m-b-12"></image>
+                  <div class="recommend-item-title">
+                    {{recommend.Products_Name}}
+                  </div>
+                  <div>
+                    <span class="fz-12 c-26c78d">
+                      ¥
+                      <span class="fz-17 m-l-3">
+                        {{recommend.Products_PriceX}}
+                      </span>
+                    </span>
+                  </div>
+
+              </div>
+
+            </div>
+
+          </div>
+          <div style="height: 20rpx;background-color: #F8F8F8;"></div>
+      </div>
+      <div class="section-content" id="section2" v-show="isReady">
         <div class="block" style="padding:40rpx 25rpx">
           <div class="block-title">
-            <div class="block-title-text fz-b">商品详情</div>
+            <div class="block-title-text ">商品详情</div>
             <div class="block-title-more flex flex-vertical-center c9 fz-12"></div>
           </div>
         </div>
@@ -953,109 +1535,33 @@
 
       </div>
 
-      <!--评论列表-->
-      <div class="block section-comment" id="section2" v-show="isReady">
-
-        <div class="block-title" style="padding:40rpx 25rpx">
-          <div class="block-title-text fz-b">留言评论</div>
-          <div @click="openCommentDrawer" class="block-title-more flex flex-vertical-center c9 fz-12">
-            <span>查看全部</span>
-            <icon class="iconright" color="#999" size="14" type="iconright"></icon>
-          </div>
-        </div>
-        <div class="block-content">
-          <div class="comment-list" v-if="comments.length>0">
-            <div :key="idx" class="comment-item" v-for="(item,idx) in comments">
-              <div class="p-t-15 p-b-15">
-                <layout-comment :comment="item" :isLast="comments.length-1===idx"
-                                @comment="clickComment"></layout-comment>
-              </div>
-              <div class="comment-send" v-if="item.child.length>0">
-                <block :key="ind" v-for="(com,ind) of item.child">
-                  <block :key="indx" v-for="(co,indx) of com">
-
-                      <block v-if="co.touserid==item.User_ID">
-                        <div @click.stop="clickCommentSend(item,co.groupid,co.userid)" class="fz-12 c3 comment-send-item">
-                        <span class="color-comment p-r-5">{{co.user_nickname}}:</span> {{co.content}}
-                        </div>
-                      </block>
-                      <block v-else>
-                        <div @click.stop="clickCommentSend(item,co.groupid,co.userid)" class="fz-12 c3 comment-send-item p-l-10">
-                        <span class="color-comment p-r-2">{{co.user_nickname}}</span>回复<span
-                        class="color-comment p-r-5">{{co.to_user_nickname}}</span>{{co.content}}
-                        </div>
-                      </block>
-
-                  </block>
-
-                </block>
-              </div>
-            </div>
-
-          </div>
-          <div class="fz-14 c9 text-center p-10" v-else>
-            暂未评论
-          </div>
-        </div>
-      </div>
-
       <div class="section-store" id="section3" v-show="isReady">
-        <div class="block" style="padding:40rpx 25rpx">
-          <div class="block-title">
-            <div class="block-title-text fz-b">店铺信息</div>
-            <div class="block-title-more flex flex-vertical-center c9 fz-12"></div>
-          </div>
-        </div>
 
-        <div class="store-info flex">
-          <div style="width: 96rpx;height: 96rpx;margin-right: 28rpx">
-            <image :src="store[0].biz_logo" class="full-img" v-if="store[0].biz_logo"></image>
-          </div>
-          <div v-if="store[0].biz_shop_name">
-            <div class="store-info-title">
-              {{store[0].biz_shop_name}}
-            </div>
-            <div @click="$cellPhone(store[0].biz_account)" class="store-info-call m-b-10">
-              <layout-icon color="#999" size="14" type="icontime"></layout-icon>
-              <span style="margin: 0rpx 26rpx 0rpx 16rpx"> {{store[0].biz_account}}</span>
-              <layout-icon color="#26C78D" size="14" type="iconicon-phone"></layout-icon>
-            </div>
-            <div @click="$openLocation(store[0].biz_lat_gd,store[0].biz_lon_gd,store[0].biz_shop_name)"
-                 class="store-info-call">
-              <layout-icon color="#999" size="14" type="iconicon-address"></layout-icon>
-              <span style="margin: 0rpx 20rpx 0rpx 16rpx">{{store[0].area_address}}</span>
-              <layout-icon color="#26C78D" size="14" type="iconicon-address"></layout-icon>
-            </div>
-          </div>
-        </div>
-        <div class="hr h1 m-b-15 m-t-15"></div>
-        <div class="store-list">
-          <div class="flex flex-justify-between">
-            <div class="store-list-top fz-15" style="color: #333333;font-weight: bold">
+        <div class="store-list m-t-20">
+          <div class="flex flex-justify-between m-b-5">
+            <div class="store-list-top fz-16" style="color: #333333;font-weight: bold">
               <span class="block-div"></span>
               其他门店
             </div>
-            <div class="store-list-top">
-              {{storeList.length}}家
-              <layout-icon color="#999" size="15" type="iconicon-arrow-right"></layout-icon>
-            </div>
+<!--            <div class="store-list-top">-->
+<!--              {{storeList.length}}家-->
+<!--              <layout-icon color="#999" size="15" type="iconicon-arrow-right"></layout-icon>-->
+<!--            </div>-->
           </div>
           <div :key="ind" class="store-list-item" v-for="(st,ind) of storeList">
             <div @click.stop="goStore(st.biz_id)" class="store-list-title">
               {{st.store_name}}
             </div>
-            <div class="flex flex-justify-between store-list-address">
-              <div @click.stop="goStore(st.biz_id)" class="store-list-font">
-                {{st.area_address}}
-              </div>
-              <div class="flex flex-vertical-center">
-                <layout-icon @click="$openLocation(st.store_lat,st.store_lon,st.store_name)" color="#26C78D" size="17"
-                             type="iconicon-address"></layout-icon>
-                <span class="store-su"></span>
-                <layout-icon @click.stop="$cellPhone(st.store_mobile)" color="#26C78D" size="17"
-                             type="iconicon-phone"></layout-icon>
-              </div>
+
+            <div @click="$cellPhone(st.store_mobile)" class="store-vip-call m-b-10">
+              电话：{{st.store_mobile}}
+              <layout-icon color="#26c78d" class="m-l-15" size="20" type="icondianhua"></layout-icon>
             </div>
+            <div @click="$openLocation(st.store_lat,st.store_lon,st.biz_shop_name)" class="store-vip-address m-b-10">
+              地址：{{st.area_address}}{{st.store_address}}
+              <layout-icon color="#26c78d" class="m-l-15" style="display: inline-block" size="20" type="icondizhi1"></layout-icon>
+            </div>
+
           </div>
         </div>
       </div>
@@ -1093,7 +1599,7 @@
     >
       <block v-if="mode==='default'" v-slot:action>
         <div class="flex flex-vertical-c">
-          <div @click="onePay" class="left-btn">
+          <div @click="onePay" class="left-btn"  :class="productInfo.is_pintuan?'':'right-btn-only'" >
             <span class="fz-12">单买</span><span class="p-l-4">¥{{productInfo.Products_PriceX}}</span>
           </div>
           <div @click="allPay" class="right-btn" v-if="productInfo.is_pintuan">
@@ -1103,15 +1609,15 @@
       </block>
 
       <block v-if="mode==='gift'" v-slot:action>
-        <div @click="onePay" class="right-btn">立即领取</div>
+        <div @click="onePay" class="right-btn-only">立即领取</div>
       </block>
 
       <block v-if="mode==='seckill'" v-slot:action>
-        <div @click="onePay" class="right-btn">立即秒杀</div>
+        <div @click="onePay" class="right-btn-only">立即秒杀</div>
       </block>
 
       <block v-if="mode==='spike'" v-slot:action>
-        <div @click="onePay" class="right-btn">立即抢购</div>
+        <div @click="onePay" class="right-btn-only">立即抢购</div>
       </block>
 
     </wzw-goods-action>
@@ -1158,6 +1664,31 @@
       </div>
     </layout-modal>
 
+    <layout-modal ref="groupModal">
+
+      <scroll-view class="groupModal" scroll-y=true>
+        <block v-for="(group,groupIndex) of groupList" :key="groupIndex">
+          <div class="product-group-item flex flex-vertical-c flex-justify-between" >
+            <div class="h-80 flex flex-vertical-c">
+              <image class="product-group-item-img" :src="group.User_HeadImg"></image>
+              <div class="fz-14 c3 m-l-8 product-group-item-user  product-group-item-user-modal">{{group.User_NickName}}</div>
+            </div>
+            <div class="h-80 flex flex-vertical-c">
+              <div class="fz-14 c3 m-r-12">
+                还差<span class="c-26c78d">{{productInfo.pintuan_people-group.teamnum}}</span>人拼成
+              </div>
+              <div class="go-group" @click="toJoinGroup(group.id,group)">
+                去拼单
+              </div>
+            </div>
+          </div>
+        </block>
+        <div class="c9 fz-12" v-if="groupList.length>=6">
+          仅显示10个正在拼单的人
+        </div>
+      </scroll-view>
+    </layout-modal>
+
     <layout-popup ref="couponModal">
       <view>
         <div class="t_title ">
@@ -1198,7 +1729,9 @@ import {
   getProductSharePic,
   getStoreList,
   judgeReceiveGift,
-  spikeProdDetail
+  spikeProdDetail,
+  getProductList,
+  getPintuanTeam
 } from '@/api/product'
 import { getActiveInfo, getCommitList, getCouponList, getUserLevel } from '@/api/common'
 import { getBizInfo } from '@/api/store'
@@ -1212,7 +1745,7 @@ import LayoutComment from '@/componets/layout-comment/layout-comment'
 import WzwGoodsAction from '@/componets/wzw-goods-action/wzw-goods-action'
 import LayoutPopup from '@/componets/layout-popup/layout-popup'
 
-import { error, hideLoading, modal, showLoading, toast, checkIsExpire } from '@/common/fun'
+import { error, hideLoading, modal, showLoading, toast, checkIsExpire, confirm, linkTo } from '@/common/fun'
 import { buildSharePath, checkIsLogin, getCountdownFunc, getProductThumb } from '@/common/helper'
 import uParse from '@/componets/gaoyia-parse/parse'
 import Storage from '@/common/Storage'
@@ -1244,6 +1777,10 @@ export default {
   },
   data () {
     return {
+      groupListTotalCount: 0, // 多少人在拼团
+      groupList: [], // 拼团列表
+      recommendList: [], // 推荐产品
+      indicatorCurrent: 1,
       cash_from: 1,
       liveStatus: 0,
       userLevelList: [], // 是否有会员
@@ -1320,18 +1857,45 @@ export default {
         return []
       }
     },
+    userInfo () {
+      return this.$store.getters['user/getUserInfo']()
+    },
     initData () {
       return this.$store.state.system.initData
     }
   },
   methods: {
-    toSearch () {
-      if (this.cash_from === 1) {
-        this.$linkTo('/pages/search/index')
-      } else {
-        // 如果cash_from===2
-        this.$linkTo('/pages/search/result?biz_id=' + this.productInfo.biz_id)
+    toJoinGroup (groupId, group) {
+      if (!checkIsLogin(1, 1)) return
+
+      const url = '/pagesA/active/GroupJoin?Team_ID=' + groupId + '&Products_ID=' + this.prod_id
+      if (group.join_user && group.join_user.indexOf(String(this.userInfo.User_ID)) != -1) {
+        confirm({
+          title: '操作提示',
+          content: '您已经参加该团,是否继续查看?'
+        }).then(res => {
+          this.$closePop('groupModal')
+          this.$linkTo(url)
+        }, err => {
+
+        })
+        return
       }
+      this.$closePop('groupModal')
+      this.$linkTo(url)
+    },
+    changeSwiperCurrent (e) {
+      this.indicatorCurrent = (e.detail.current) + 1
+    },
+    toSearch () {
+      // 目前需求一直查询本店产品
+      this.$linkTo('/pages/search/result?biz_id=' + this.productInfo.biz_id)
+      // if (this.cash_from === 1) {
+      //   this.$linkTo('/pages/search/index')
+      // } else {
+      //   // 如果cash_from===2
+      //   this.$linkTo('/pages/search/result?biz_id=' + this.productInfo.biz_id)
+      // }
     },
     toRoom () {
       // let path = '/pages/product/detail?prod_id=' + this.prod_id
@@ -1401,7 +1965,8 @@ export default {
     },
     // 滚动到顶部
     bindScrollToupperEvent () {
-      this.scrollViewTop = 0
+      this.scrollViewTop = this.diyHeadHeight
+      this.activeHeadOpacity = 0
       // this.setAcitveTabIndx(0, true)
     },
     // 滚动到底部
@@ -1416,6 +1981,11 @@ export default {
     },
     bindScrollEvent (e) {
       const { scrollTop } = e.detail
+
+      if (scrollTop < 40) {
+        this.bindScrollToupperEvent()
+        return
+      }
       const h = this.diyHeadHeight + 40 // 滑到这里的时候,就透明度为1
 
       // this.scrollViewTop = scrollTop > h ? h : scrollTop
@@ -1473,7 +2043,7 @@ export default {
       underlineAnimation.width('20px').step()
 
       this.tabUnderlineAnimationData = underlineAnimation.export()
-      this.scrollViewTop = idx > 0 ? 110 : 0
+      this.scrollViewTop = idx > 0 ? 110 : this.diyHeadHeight
       if (!stop) {
         this.currentEleId = `section${idx}`
       }
@@ -1613,10 +2183,12 @@ export default {
       if (this.mode === 'default') {
         this.hasCart = true
       }
+	  this.productInfo.active = 'default'
 
       if (this.mode === 'spike') {
         this.hasCart = false
         this.postData.active = 'spike' // 标记为是限时抢购
+        this.productInfo.active = 'spike'
         this.checkfrom = 'spike'
         this.productInfo.minPrice = this.productInfo.price
       }
@@ -1626,6 +2198,7 @@ export default {
         this.postData.active_id = this.productInfo.id // 秒杀id
         this.checkfrom = 'seckill'
         this.postData.active = 'flashsale' // 标记为是秒杀
+        this.productInfo.active = 'flashsale'
         this.productInfo.minPrice = this.productInfo.price
       }
 
@@ -1668,6 +2241,7 @@ export default {
       }
       this.hasCart = false
       this.postData.active = 'pintuan' // 标记为是拼团
+	  this.productInfo.active = 'pintuan'
       this.checkfrom = 'group'
 
       // 限时抢购
@@ -1951,6 +2525,17 @@ export default {
         })
         Object.assign(this.productInfo, productInfo)
 
+        // 获取拼团列表
+        const groupList = await getPintuanTeam({ prod_id: this.prod_id, page: 1, pageSize: 10 }).catch(e => {
+          throw Error(e.msg || '获取拼团信息失败')
+        })
+        this.groupList = groupList.data
+        this.groupListTotalCount = groupList.totalCount
+
+        // 获取推荐产品
+        this.recommendList = await getProductList({ biz_id: this.productInfo.biz_id, Is_Recommend: 1, page: 1, pageSize: 3 }, { onlyData: true }).catch(e => {
+          throw Error(e.msg || '获取推荐产品失败')
+        })
         // 要放在后面
         this.store = await getBizInfo({ biz_id: this.productInfo.biz_id }, { onlyData: true }).catch(e => {
           throw Error(e.msg || '获取店铺信息失败')
@@ -2161,6 +2746,8 @@ export default {
     }).catch(() => {})
   },
   onLoad (options) {
+    // 初始化scrollview 顶部的距离
+    this.scrollViewTop = this.diyHeadHeight
     const { mode, spike_good_id, flashsale_id, prod_id } = options
     if (!prod_id) {
       modal('产品id必传')

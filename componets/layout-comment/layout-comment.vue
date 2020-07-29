@@ -8,7 +8,7 @@
       <span class="create_at">{{comment.CreateTime|formatTime('YYYY-MM-DD')}}</span>
     </div>
     <div class="content">{{comment.Note}}</div>
-    <div class="actions" @click.stop="commentMethod">
+    <div  v-if="showReply" class="actions" @click.stop="commentMethod">
       <image class="icon" :src="'/static/client/comment.png'|domain"></image>
       <span class="fz-13">{{comment.child.length}}</span>
     </div>
@@ -21,6 +21,10 @@ export default {
   name: 'LayoutComment',
   components: {},
   props: {
+    showReply:{
+      type: Boolean,
+      default: true
+    },
     isLast: {
       type: Boolean,
       default: false
@@ -65,6 +69,7 @@ export default {
 
       .create_at {
         color: #777;
+        font-size: 26rpx;
       }
     }
 
