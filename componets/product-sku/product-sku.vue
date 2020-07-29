@@ -6,10 +6,18 @@
           <image class="image" @click="showImgDetal"
                  :src="imgShow?imgShow+'-r200':(list.Products_JSON.ImgPath[0]?list.Products_JSON.ImgPath[0]+'-r200':'')"></image>
           <div class="cartTitle">
-            <div class="cartTitles">{{list.Products_Name}}</div>
-            <div class="addInfo">
-              <div class="addPrice">{{postData.price}}元</div>
-              <div class="proSale">库存{{postData.count}}</div>
+            <div class="cartTitles flex flex-justify-between">
+              <div class=" cart-price">
+                ¥<span class="fz-20 fz-b m-l-2">{{postData.price}}</span>
+              </div>
+              <layout-icon  color="#999999" size="21" type="iconguanbi" @click.stop="closePro"></layout-icon>
+
+            </div>
+            <div class="addInfo c9 m-b-10">
+              库存：{{postData.count}}
+            </div>
+            <div class="addInfo c9" v-if="postData&&postData.id&&postData.Attr_Value_text">
+              已选：{{postData.Attr_Value_text}}
             </div>
           </div>
         </div>
@@ -28,20 +36,20 @@
         </div>
         <div class="numBer" v-if="gift === 0">
           <div class="numBers">
-            数量
+            购买数量
           </div>
           <div class="inputNumber">
-            <div class="clicks" @click="delNum">-</div>
+            <div class="clicks m-r-1" @click="delNum">-</div>
             <input class="inputq" type="number" v-model="postData.qty" @blur="setCount">
             <div class="clicks" @click="addNum">+</div>
           </div>
         </div>
         <div class="numBer" v-else>
           <div class="numBers">
-            数量
+            购买数量
           </div>
           <div class="inputNumber">
-            <div class="clicks">-</div>
+            <div class="clicks m-r-1">-</div>
             <input class="inputq" type="number" value="1" disabled>
             <div class="clicks">+</div>
           </div>
@@ -69,9 +77,9 @@ import layoutPopup from '@/componets/layout-popup/layout-popup.vue'
 import { error } from '@/common/fun.js'
 import { numberSort } from '@/common/helper'
 import Storage from '@/common/Storage'
-
+import LayoutIcon from '@/componets/layout-icon/layout-icon'
 export default {
-  components: { layoutPopup },
+  components: { layoutPopup, LayoutIcon },
   props: {
     mode: {
       type: String,
@@ -226,6 +234,7 @@ export default {
         console.log(attr_val, 'attr_val', this.productInfo)
         this.postData.id = attr_val.Product_Attr_ID // 选择属性的id
         this.postData.count = attr_val.Property_count // 选择属性的库存
+        this.postData.Attr_Value_text = attr_val.Attr_Value_text // 选择属性的名字
         if (this.productInfo.active === 'pintuan') {
           this.postData.price = attr_val.pt_pricex ? attr_val.pt_pricex : this.list.Products_PriceX // 选择属性的价格
         } else {
@@ -343,70 +352,59 @@ export default {
 
 <style lang="scss" scoped>
   .cartSku {
-    padding: 0rpx 20rpx;
+    padding: 0rpx 30rpx;
     z-index: 100;
 
     .cartTop {
       position: relative;
       display: flex;
-      padding-top: 20rpx;
+      padding-top: 30rpx;
+      padding-bottom: 30rpx;
+      box-sizing: border-box;
+      border-bottom: 1px solid #EEEEEE;
 
       .image {
-        width: 220rpx;
-        height: 220rpx;
+        width: 160rpx;
+        height: 160rpx;
       }
 
       .cartTitle {
-        margin-left: 20rpx;
+        margin-left: 22rpx;
         font-size: 32rpx;
         //width: 420rpx;
         flex: 1;
+        height: 160rpx;
 
         .cartTitles {
-          height: 80rpx;
-          overflow: hidden;
-          margin-top: 20rpx;
-          line-height: 40rpx;
+          height: 48rpx;
+          margin-bottom: 22rpx;
         }
 
         .addInfo {
           width: 450rpx;
-          margin-top: 70rpx;
-          display: flex;
-          flex-flow: row;
-          justify-content: space-between;
-          align-items: flex-end;
-
-          .addPrice {
-            font-size: 42rpx;
-            color: #ff4200;
-          }
-
-          .proSale {
-            font-size: 24rpx;
-            color: #999;
-            justify-content: flex-end;
-          }
+          font-size: 26rpx;
+          height: 26rpx;
+          line-height: 26rpx;
         }
       }
     }
 
     .cartCenter {
-      margin-top: 20rpx;
       max-height: 300px;
       overflow: scroll;
 
       .cartAttr {
         //display: flex;
-        padding: 15rpx 0rpx;
+        padding: 30rpx 0rpx;
+        box-sizing: border-box;
+        border-bottom: 1px solid #EEEEEE;
 
         .sku {
-          font-size: 28rpx;
-          height: 70rpx;
-          line-height: 70rpx;
+          font-size: 30rpx;
+          height: 30rpx;
+          line-height: 30rpx;
           width: 140rpx;
-          padding-left: 10px;
-          margin-bottom: 5px;
+          margin-bottom: 24rpx;
         }
 
         .skuValue {
@@ -415,17 +413,14 @@ export default {
           flex-wrap: wrap;
 
           .skuview {
-            margin-bottom: 10px;
-            height: 70rpx;
-            line-height: 70rpx;
-            font-size: 14px;
-            border-radius: 10rpx;
-            color: #000;
-            background-color: #F2F2F2;
-            padding-left: 20rpx;
-            padding-right: 20rpx;
-            margin-right: 20rpx;
-            //border: 1px solid #ccc;
+            height: 60rpx;
+            line-height: 60rpx;
+            font-size: 12px;
+            border-radius: 8rpx;
+            color: #333333;
+            background-color: #F5F5F5;
+            margin-right: 26rpx;
+            padding: 0rpx 30rpx;
           }
 
           .unablechoose {
@@ -436,41 +431,49 @@ export default {
     }
 
     .numBer {
-      margin-top: 20rpx;
+
       display: flex;
-      padding: 15rpx 0rpx;
+      padding: 24rpx 0rpx;
+      height: 108rpx;
+      border-bottom: 1px solid #EEEEEE;
+      align-items: center;
       justify-content: space-between;
 
       .numBers {
-        font-size: 28rpx;
-        height: 70rpx;
-        line-height: 70rpx;
-        width: 140rpx;
+        font-size: 30rpx;
+        height: 30rpx;
+        line-height: 30rpx;
+        color: #333333;
       }
 
       .inputNumber {
-        border: 1px solid #ccc;
-        border-radius: 6rpx;
-        height: 50rpx;
-        //margin-right: 50rpx;
+
+        height: 60rpx;
         display: flex;
 
         .inputq {
-          color: black;
-          margin: 0 auto;
-          width: 80rpx;
-          height: 50rpx;
+          max-width: 120rpx;
+          display: inline-block;
+          min-width: 80rpx;
+          height: 60rpx;
           text-align: center;
-          font-size: 24rpx;
-          border-left: 2rpx solid #ccc;
-          border-right: 2rpx solid #ccc;
+          font-size: 32rpx;
+          color: #333333;
+          padding: 0rpx 32rpx;
+          margin-right: 1px;
+          background-color: #f5f5f5;
+          box-sizing: border-box;
         }
 
         .clicks {
-          height: 50rpx;
-          line-height: 50rpx;
-          width: 60rpx;
+          font-size: 40rpx;
+          color: #333333;
+          height: 60rpx;
+          line-height: 60rpx;
+          width: 66rpx;
           text-align: center;
+          border-radius:0px 6rpx 6rpx 0px;
+          background-color: #f5f5f5;
         }
       }
     }
@@ -478,13 +481,13 @@ export default {
 
   .cartSub {
     width: 100%;
-    height: 90rpx;
-    background-color: #F43131;
-    font-size: 20px;
-    line-height: 90rpx;
+    height: 76rpx;
+    background-color: #26C78D;
+    font-size: 28rpx;
+    line-height: 76rpx;
     text-align: center;
     color: #FFFFFF;
-    margin-top: 30rpx;
+    margin-top: 66rpx;
     border-radius: 0;
     border: none;
 
@@ -494,19 +497,21 @@ export default {
   }
 
   .skuBtn {
-    margin-top: 30rpx;
+    margin-top: 66rpx;
     width: 100%;
     display: flex;
     align-items: center;
-    height: 90rpx;
+    height: 76rpx;
+    padding: 0rpx 30rpx  10rpx 30rpx;
+    box-sizing: border-box;
 
     .sku-btn {
       flex: 1;
-      height: 90rpx;
-      line-height: 90rpx;
+      height: 76rpx;
+      line-height: 76rpx;
       text-align: center;
-      font-size: 20px;
       color: #FFFFFF;
+      font-size: 28rpx;
     }
 
     .disabled {
@@ -514,21 +519,30 @@ export default {
     }
 
     .cart {
-      background: linear-gradient(to right, #f6ca44, #f19b38);
-      /*border-bottom-left-radius: 375rpx;*/
-      /*border-top-left-radius: 375rpx;*/
+      background-color: #333333;
+      //background: linear-gradient(to right, #f6ca44, #f19b38);
+      border-bottom-left-radius: 78rpx;
+      border-top-left-radius: 78rpx;
     }
 
     .buyNow {
-      background: linear-gradient(to right, #ee7e30, #eb5928);
-      /*border-bottom-right-radius: 375rpx;*/
-      /*border-top-right-radius: 375rpx;*/
+      background-color: #26C78D;
+      //background: linear-gradient(to right, #ee7e30, #eb5928);
+      border-bottom-right-radius: 78rpx;
+      border-top-right-radius: 78rpx;
     }
   }
 
   .skuCheck {
-    color: #fff !important;
-    background-color: #ff4200 !important;
+    color: #26C78D !important;
+    background-color: #E8FFF7 !important;
   }
 
+  .cart-price{
+    padding-top: 18rpx;
+    height: 30rpx;
+    line-height: 30rpx;
+    color: #26C78D;
+    font-size:13px;
+  }
 </style>

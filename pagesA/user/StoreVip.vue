@@ -4,7 +4,7 @@
 
     <div class="wrap-item" @click.stop="goVipList(item)"    :style="{backgroundImage: 'url('+$getDomain('/static/client/storeVipListBg.png')+')'}"  v-for="(item,index) of userVipList" :key="index">
 
-      <div class="money-btn"  :class="item.arr.length<=0?'lastPos':''" @click.stop="goBanlance(item.biz_id,item.biz_user_money)">
+      <div class="money-btn"  :class="item.arr.length<=0?'lastPos':''" @click.stop="goBanlance(item.biz_id,item.biz_user_money)" v-if="initData.cash_from==2">
         查看资金流水
       </div>
 
@@ -17,7 +17,7 @@
         </div>
       </div>
 
-      <div class="wrap-item-money flex flex-vertical-c m-b-15">
+      <div class="wrap-item-money flex flex-vertical-c m-b-15"  v-if="initData.cash_from==2">
           <div class="m-r-15">
             <span class="fz-13">余额：</span>
             <span class="fz-11">¥</span>
@@ -81,6 +81,11 @@ export default {
     this.page = 1
     this.userVipList = []
     this.initFn()
+  },
+  computed: {
+    initData () {
+      return this.$store.state.system.initData
+    }
   },
   methods: {
     goVipList (item) {

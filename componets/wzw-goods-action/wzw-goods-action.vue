@@ -100,19 +100,21 @@ export default {
     height: 86rpx;
     display: flex;
     align-items: center;
-    flex:1;
+    //flex:1;
+    width: 306rpx;
     //padding-left: 54rpx;
   }
 
   .bottom-q {
     font-size: 12px;
     color: #666666;
-    width: 80rpx;
+    //width: 80rpx;
+    flex: 1;
     text-align: center;
   }
 
   .left-btn {
-    width: 198rpx;
+    width: 214rpx;
     height: 86rpx;
     line-height: 86rpx;
     text-align: center;
