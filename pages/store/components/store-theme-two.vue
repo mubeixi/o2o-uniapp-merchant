@@ -1215,7 +1215,7 @@ export default {
       }
     },
     toPicture () {
-      if(this.storePhotoTotal>0)this.$linkTo('/pagesA/store/photo?bid=' + this.bid)
+      if (this.storePhotoTotal > 0) this.$linkTo('/pagesA/store/photo?bid=' + this.bid)
     },
     taggleFavorite () {
       if (!checkIsLogin(1, 1)) return
@@ -1305,7 +1305,7 @@ export default {
 </script>
 <style lang="scss" scoped>
   .plus-tag {
-    
+
     background-color: #FF0000;
     border-radius: 8px;
     font-size: 12px;
@@ -1322,9 +1322,9 @@ export default {
         font-size: 14px;
       }
     }
-    
+
   }
-  
+
   .mall-tabbar-wrap {
     position: fixed;
     z-index: 102;

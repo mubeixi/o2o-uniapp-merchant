@@ -12,7 +12,7 @@
       <!--        <image @click="toVip" class="fixed-top-vip" :src="$getDomain('/static/client/store/theme-three/vip.png')"></image>-->
       <!--      </div>-->
     </div>
-    
+
     <scroll-view class="store-comp-wrap"
                  @touchstart="touchPageStart"
                  @touchmove="touchPageMove"
@@ -74,7 +74,7 @@
             </div>
           </div>
         </div>
-        
+
         <div v-if="headTabSticky==1" class="top-search-space"></div>
         <div class="top-search flex flex-vertical-c" :class="{sticky:headTabSticky==1}"
              :style="{top:headTabSticky==1?(menuButtonInfo.bottom+10+'px'):'0px'}">
@@ -85,7 +85,7 @@
           <image @click="toVip" class="top-vip" :src="$getDomain('/static/client/store/theme-three/vip.png')"></image>
         </div>
       </div>
-      
+
       <div class="container" :style="{height:systemInfo.windowHeight-diyHeadHeight+'px'}"
            :class="{sticky:headTabSticky==1}">
         <scroll-view class="container-l"
@@ -110,7 +110,7 @@
             <div class="cate-title">{{item.cate_name}}</div>
           </div>
           <div v-if="bizCateList.length>0" class="p-b-safe-area" style="height: 96rpx"></div>
-        
+
         </scroll-view>
         <scroll-view
           :scroll-y="rightScrollEnable"
@@ -176,11 +176,11 @@
                                        type="iconicon-plus"></layout-icon>
                         </div>
                       </block>
-                    
+
                     </div>
                   </div>
                 </div>
-              
+
               </div>
             </div>
             <div class="p-b-safe-area" style="height: 96rpx"></div>
@@ -205,7 +205,7 @@
                     <span class="countdown-delimiter">秒</span>
                   </block>
                 </div>
-                
+
                 <div class="act-goods-list">
                   <div class="act-goods-item flex" v-for="(pro,idx) in activity.spike_goods" :key="idx"
                        @click.stop="toGoodsDetailFn(pro,activity)">
@@ -273,11 +273,11 @@
             </div>
             <div class="p-b-safe-area" style="height: 96rpx"></div>
           </div>
-        
+
         </scroll-view>
       </div>
     </scroll-view>
-    
+
     <layout-layer @click="bindCartsPopClose" :bottomStr="storeBottomActionHeight" positions="bottom" ref="carts">
       <div class="carts-box">
         <div class="carts-action flex flex-vertical-c flex-justify-between">
@@ -320,7 +320,7 @@
         </scroll-view>
       </div>
     </layout-layer>
-    
+
     <div id="store-bottom-action" class="store-bottom-action">
       <div class="cart-box" @click="taggleCartListExpand">
         <div class="cart-icon-box">
@@ -339,7 +339,7 @@
         <div class="fz-10 color-white text-center text-nowrap">个人中心</div>
       </div>
     </div>
-    
+
     <layout-layer positions="center" ref="attr">
       <div class="attr-form-wrap">
         <div class="attr-head">
@@ -373,7 +373,7 @@
         </div>
         <div class="actions">
           <div class="flex1">
-          
+
           </div>
           <div>
             <div :class="{disabled:!submitFlag}" @click="confirmAdd" class="confirm-btn" v-if="attrInfo.num<1">加入购物车
@@ -387,11 +387,11 @@
               <layout-icon @click.stop="addNum" color="#26C78D" size="24" type="iconicon-plus p-10"></layout-icon>
             </div>
           </div>
-        
+
         </div>
       </div>
     </layout-layer>
-    
+
     <!--用到这里的，都是有模板的地方，不需要加入购物车-->
     <!--    <product-sku-->
     <!--      :hasCart="false"-->
@@ -399,9 +399,9 @@
     <!--      @submitSure="submitSure"-->
     <!--      ref="mySku"-->
     <!--    ></product-sku>-->
-    
+
     <div class="safearea-box fixed" style="z-index: 5"></div>
-  
+
   </div>
 </template>
 
@@ -470,7 +470,7 @@ const attrInfoTmpl = {
 export default {
   name: 'store-theme-three',
   components: {
-    
+
     LayoutLayer,
     WzwLiveTag,
     LayoutIcon,
@@ -485,7 +485,7 @@ export default {
   },
   data () {
     return {
-      listExpand:false,
+      listExpand: false,
       scrollTopNum: 0,
       toViewIdx: '',
       pixelRatio: 1,
@@ -576,7 +576,7 @@ export default {
             }
           }
         }
-        
+
         return listData
       } catch (e) {
         return []
@@ -618,7 +618,7 @@ export default {
         toast('购买数量不能大于库存量', 'none')
         return
       }
-      
+
       const cartRT = await this.$store.dispatch('cart/addNum', {
         product: { ...this.product, ...this.attrInfo },
         num: 1
@@ -633,7 +633,7 @@ export default {
         error('购买数量不能小于0')
         return
       }
-      
+
       this.attrInfo.num -= 1
       const num = this.attrInfo.num
       if (num === 0) {
@@ -641,7 +641,7 @@ export default {
           attr_id: this.attrInfo.attr_id,
           prod_id: this.attrInfo.prod_id
         })
-        
+
         // 没有规格的商品，直接搞事,同步库存
         // 全是有库存的，在openAttrPop的时候初始化规格就好了
         // if (this.attrInfo.attr_id === 0) {
@@ -650,12 +650,12 @@ export default {
         //     this.$set(this.bizCateList[this.bizCateNavIndex].child[this.bizCateChildNavIndex].productList[idx], 'num', num)
         //   }
         // }
-        
+
         this.refreshCount()
-        
+
         return
       }
-      
+
       this.product.prod_id = this.product.Products_ID
       this.$store.dispatch('cart/addNum', {
         product: { ...this.product, ...this.attrInfo },
@@ -665,35 +665,35 @@ export default {
     },
     async changeNum (e) {
       const amount = parseInt(e.detail.value)
-      
+
       const qty = parseInt(this.qty)
       if (isNaN(amount)) {
         error('数量必须为数量')
         this.attrInfo.num = 0
         return
       }
-      
+
       const currentAttrInfo = this.attrInfo
       if (currentAttrInfo.num === amount) return
-      
+
       if (amount < 0) {
         this.attrInfo.num = 0
         error('至少购买一件')
         return
       }
-      
+
       if (amount > currentAttrInfo.count) {
         this.attrInfo.num = qty
         error('购买数量不能超过库存量')
         return
       }
-      
+
       if (amount === 0) {
         await this.$store.dispatch('cart/removeGoods', {
           attr_id: this.attrInfo.attr_id,
           prod_id: this.attrInfo.prod_id
         })
-        
+
         // 没有规格的商品，直接搞事,同步库存
         // 全是有库存的，在openAttrPop的时候初始化规格就好了
         // if (currentAttrInfo.attr_id === 0) {
@@ -702,22 +702,22 @@ export default {
         //     this.$set(this.bizCateList[this.bizCateNavIndex].child[this.bizCateChildNavIndex].productList[idx], 'num', amount)
         //   }
         // }
-        
+
         this.refreshCount()
-        
+
         return
       }
-      
+
       if ((qty - amount) === 0) return
       var num = amount - qty
-      
+
       // 拼接一下
       const productInfo = {
         ...attrInfoTmpl,
         attr_id: this.attrInfo.attr_id,
         prod_id: this.attrInfo.prod_id
       }
-      
+
       const cart = await this.$store.dispatch('cart/addNum', {
         num,
         product: { ...productInfo }
@@ -738,9 +738,9 @@ export default {
     },
     async confirmAdd () {
       if (!this.submitFlag) return
-      
+
       const cart = await this.$store.dispatch('cart/addNum', {
-        product: { ...this.product, ...this.attrInfo,checked: true },
+        product: { ...this.product, ...this.attrInfo, checked: true },
         attr_text: this.attrInfo.attr_text,
         num: 1
       })
@@ -805,13 +805,13 @@ export default {
       // 属性判断
       if (attr_val) {
         const { ImgPath, Products_Name, Products_PriceX, Products_PriceY } = this.product
-        
+
         this.attrInfo.Products_ID = attr_val.Products_ID
         this.attrInfo.attr_id = attr_val.Product_Attr_ID // 选择属性的id
         this.attrInfo.attr_text = attr_val.Attr_Value_text
         this.attrInfo.count = attr_val.Property_count // 选择属性的库存
         this.attrInfo.price = attr_val.Attr_Price ? attr_val.Attr_Price : this.product.Products_PriceX // 选择属性的价格
-        
+
         Object.assign(this.attrInfo, {
           biz_id: Number(this.bid),
           prod_id: Number(attr_val.Products_ID),
@@ -822,9 +822,9 @@ export default {
           price_selling: Number(Products_PriceX),
           price_market: Number(Products_PriceY)
         })
-        
+
         this.submitFlag = !(!this.check_attr)
-        
+
         const { attr_id, prod_id } = this.attrInfo
         const isCartHas = this.$store.getters['cart/getRow']({
           attr_id,
@@ -844,7 +844,7 @@ export default {
       // if (this.CartList[this.bid] && this.CartList[this.bid][this.attrInfo.Products_ID] && this.CartList[this.bid][this.attrInfo.Products_ID][this.attrInfo.attr_id]) {
       //   this.attrInfo.num = this.CartList[this.bid][this.attrInfo.Products_ID][this.attrInfo.attr_id].Qty
       // }
-      
+
       console.log(attr_val)
       // 判断属性库存
       if (attr_val && attr_val.Property_count <= 0) {
@@ -853,7 +853,7 @@ export default {
       }
       this.check_attr = check_attr
       this.submitFlag = !((!this.check_attr || Object.keys(this.check_attr).length !== Object.keys(this.product.skujosn_new).length))
-      
+
       // 购买数量处理  大于最高时赋值最高值
       if (this.attrInfo.num > this.attrInfo.count) {
         this.attrInfo.num = this.attrInfo.count
@@ -868,11 +868,11 @@ export default {
       }).catch(e => {
         throw Error(e.msg || '获取商品详情失败')
       })
-      
+
       this.attrInfo = { ...attrInfoTmpl } // 重置
       this.check_attr = {}// 重置
       this.product = goodsInfo
-      
+
       if (goodsInfo.skujosn) {
         let skujosn_new = []
         for (const i in goodsInfo.skujosn) {
@@ -881,7 +881,7 @@ export default {
             val: goodsInfo.skujosn[i]
           })
         }
-        
+
         // 新增如果有手机的规格
         for (const i in goodsInfo.skujosn) {
           if (i === 'mobile_prod_attr_name') {
@@ -892,7 +892,7 @@ export default {
           }
         }
         // 结束
-        
+
         this.product.skujosn_new = skujosn_new
         this.product.skuvaljosn = goodsInfo.skuvaljosn
       }
@@ -956,13 +956,13 @@ export default {
         error('数量必须为数量')
         return
       }
-      
+
       if (amount === 0) {
         await this.$store.dispatch('cart/removeGoods', {
           prod_id: row.prod_id,
           attr_id: row.attr_id
         })
-        
+
         // 没有规格的商品，直接搞事,同步库存
         if (row.attr_id === 0) {
           const idx = findArrayIdx(this.bizCateList[this.bizCateNavIndex].child[this.bizCateChildNavIndex].productList, { Products_ID: row.prod_id })
@@ -970,9 +970,9 @@ export default {
             this.$set(this.bizCateList[this.bizCateNavIndex].child[this.bizCateChildNavIndex].productList[idx], 'num', amount)
           }
         }
-        
+
         this.refreshCount()
-        
+
         return
       }
       if (amount <= 1) {
@@ -982,14 +982,14 @@ export default {
       }
       if ((qty - amount) === 0) return
       var num = amount - qty
-      
+
       // 拼接一下
       const productInfo = {
         ...attrInfoTmpl,
         prod_id: row.prod_id,
         attr_id: row.attr_id
       }
-      
+
       const cart = await this.$store.dispatch('cart/addNum', {
         num,
         product: { ...productInfo }
@@ -1014,13 +1014,13 @@ export default {
     },
     async attrNumMinus (row) {
       const num = row.num ? row.num - 1 : 0
-      
+
       if (num === 0) {
         await this.$store.dispatch('cart/removeGoods', {
           prod_id: row.prod_id,
           attr_id: row.attr_id
         })
-        
+
         // 没有规格的商品，直接搞事,同步库存
         if (row.attr_id === 0) {
           const idx = findArrayIdx(this.bizCateList[this.bizCateNavIndex].child[this.bizCateChildNavIndex].productList, { Products_ID: row.prod_id })
@@ -1028,12 +1028,12 @@ export default {
             this.$set(this.bizCateList[this.bizCateNavIndex].child[this.bizCateChildNavIndex].productList[idx], 'num', num)
           }
         }
-        
+
         this.refreshCount()
-        
+
         return
       }
-      
+
       // 拼接一下
       const productInfo = {
         ...attrInfoTmpl,
@@ -1052,7 +1052,7 @@ export default {
             this.$set(this.bizCateList[this.bizCateNavIndex].child[this.bizCateChildNavIndex].productList[idx], 'num', num)
           }
         }
-        
+
         this.refreshCount()
       }
     },
@@ -1076,7 +1076,7 @@ export default {
             this.$set(this.bizCateList[this.bizCateNavIndex].child[this.bizCateChildNavIndex].productList[idx], 'num', num)
           }
         }
-        
+
         this.refreshCount()
       }
     },
@@ -1084,7 +1084,7 @@ export default {
     async goodsNumMinus (goodsInfo) {
       console.log('goodsNumMinus', goodsInfo)
       const num = goodsInfo.num ? goodsInfo.num - 1 : 0
-      
+
       if (num === 0) {
         await this.$store.dispatch('cart/removeGoods', {
           prod_id: goodsInfo.Products_ID,
@@ -1094,7 +1094,7 @@ export default {
         this.refreshCount()
         return
       }
-      
+
       // 拼接一下
       const productInfo = {
         ...attrInfoTmpl,
@@ -1118,15 +1118,15 @@ export default {
         return
       }
       const num = goodsInfo.num ? goodsInfo.num + 1 : 1
-      
+
       // 拼接一下
       var productInfo = {
         ...attrInfoTmpl,
         prod_id: goodsInfo.Products_ID,
         attr_id: 0
-        
+
       }
-      
+
       // 兼容第一次添加的情况
       if (num === 1) {
         const { ImgPath, Products_Name, Products_PriceX, Products_PriceY } = goodsInfo
@@ -1139,7 +1139,7 @@ export default {
           price_market: Number(Products_PriceY)
         })
       }
-      
+
       const cart = await this.$store.dispatch('cart/addNum', {
         num: 1,
         product: { ...productInfo }
@@ -1148,7 +1148,7 @@ export default {
         // 购物车商品价格兼容会员折扣机制
         try {
           const { redis_CartList } = cart
-          
+
           const ProductsPriceX = redis_CartList[this.bid][goodsInfo.Products_ID][0].ProductsPriceX
           if (!isNaN(ProductsPriceX)) {
             const { prod_id, attr_id } = productInfo
@@ -1172,13 +1172,13 @@ export default {
     async changeGoodsNum (e, idx, goodsInfo) {
       this.activeGoodsIdx = idx
       const amount = parseInt(e.detail.value)
-      
+
       const qty = parseInt(this.qty)
       if (isNaN(amount)) {
         error('数量必须为数量')
         return
       }
-      
+
       if (amount === 0) {
         await this.$store.dispatch('cart/removeGoods', {
           prod_id: goodsInfo.Products_ID,
@@ -1188,7 +1188,7 @@ export default {
         this.refreshCount()
         return
       }
-      
+
       if (amount <= 1) {
         this.$set(goodsInfo, 'num', qty)
         error('数量最少为1件')
@@ -1196,14 +1196,14 @@ export default {
       }
       if ((qty - amount) === 0) return
       var num = amount - qty
-      
+
       // 拼接一下
       const productInfo = {
         ...attrInfoTmpl,
         prod_id: goodsInfo.Products_ID,
         attr_id: 0
       }
-      
+
       const cart = await this.$store.dispatch('cart/addNum', {
         num,
         product: { ...productInfo }
@@ -1213,7 +1213,7 @@ export default {
       } else {
         this.$set(goodsInfo, 'num', qty)
       }
-      
+
       this.refreshCount()
     },
     toGoodsDetailFn (pro, activity) {
@@ -1249,11 +1249,11 @@ export default {
       if (this.leftScrollEnable || this.rightScrollEnable) {
         return
       }
-      
+
       const { x, y, type } = getTouchEventInfo(e)
       // console.log(x, y, type, this.pageScrollTop, this.headTabTop)
       console.log('touchPageEnd', this.pageScrollTop, this.headTabTop)
-      
+
       // 向上拖动,页面向下滚动
       if (y < this.moveStartYByPage) {
         this.moveDirectionByPage = 'top'
@@ -1266,10 +1266,10 @@ export default {
     },
     bindScroll (e) {
       const { scrollTop } = e.detail
-      
+
       console.log('wrap bindScroll', scrollTop, this.moveDirectionByPage)
       this.pageScrollTop = scrollTop
-      
+
       // 多给20的空间
       if (this.pageScrollTop + 20 >= this.headTabTop) {
         this.headTabSticky = true
@@ -1277,33 +1277,33 @@ export default {
       if (this.pageScrollTop < this.headTabTop) {
         this.headTabSticky = false
       }
-      
+
       if (this.pageScrollTop + 20 > this.headTabTop) {
         this.rightScrollEnable = true
         this.leftScrollEnable = true
-        
+
         // this.pageScrollEnable = false
       }
-      
+
       if (this.pageScrollTop < this.headTabTop) {
         this.rightScrollEnable = false
         this.leftScrollEnable = false
       }
-      
+
       this.headTabOpacity = this.pageScrollTop < this.headTabTop ? this.pageScrollTop / this.headTabTop : 1
     },
     touchLeftStart (e) {
       const { x, y, type } = getTouchEventInfo(e)
       console.log(x, y, type)
       this.moveStartYByLeft = y
-      
+
       // 在右边滚动后，才禁用
       if (this.pageScrollTop > this.headTabTop && this.pageScrollEnable) {
         // this.pageScrollEnable = false
       }
     },
     touchLeftMove (e) {
-    
+
     },
     touchLeftEnd (e) {
       const { x, y, type } = getTouchEventInfo(e)
@@ -1324,7 +1324,7 @@ export default {
       }
     },
     touchRightMove (e) {
-    
+
     },
     touchRightEnd (e) {
       console.log('touchRightEnd', this.rightScrollEnable)
@@ -1360,7 +1360,7 @@ export default {
     // 单个商家
     async selectBiz () {
       await this.$store.dispatch('cart/taggleCheckStatus', { biz_id: Number(this.bid) })
-      
+
       this.allCheck = this.$store.getters['cart/getListCheckStatus'](Number(this.bid))
       this.refreshCount()
     },
@@ -1385,7 +1385,7 @@ export default {
         }).catch(() => {
         })
       }
-      
+
       const cart = await getCartList({ cart_key: 'CartList' }, {
         onlyData: true
       }).catch(e => {
@@ -1407,7 +1407,7 @@ export default {
               attr_id: Number(attr_id),
               prod_id: Number(prod_id)
             })
-            
+
             var attr_value = CartList[biz_id][prod_id][attr_id]
             attr_value.checked = true // 手动加上
             const { ImgPath, ProductsName, ProductsPriceX, ProductsPriceY, Qty, Productsattrstrval } = attr_value
@@ -1443,20 +1443,20 @@ export default {
         this.storeInfo = storeInfoData[0]
         checkIsExpire(this.storeInfo.biz_expires)
         this.$emit('upStoreInfo', this.storeInfo)
-        
+
         const base = { biz_ids: this.bid }
-        
+
         // getProductList({ ...base, pageSize: 1 }).then(({ totalCount }) => {
         //   this.storeGoodsTotal = totalCount
         // }).catch((err) => { throw Error(err.msg) })
-        
+
         const flashActivitys = await getBizSpikeList({
           biz_id: this.bid,
           status: 1
         }, { onlyData: true }).catch((e) => {
           throw Error('获取限时抢购数据失败')
         })
-        
+
         this.flashActivityList = flashActivitys.map(row => {
           // 句柄也加上
           return {
@@ -1467,11 +1467,11 @@ export default {
         console.log(this.flashActivityList)
         // 启动限时抢购倒计时，牛逼啊霸哥
         countdownInstanceByFlash = setInterval(this.stampFuncByFlash, 1000)
-        
+
         const killList = await getFlashsaleList({ biz_id: this.bid }, { onlyData: true }).catch(e => {
           throw Error(e.msg || '获取秒杀列表失败')
         })
-        
+
         this.killList = killList.map(row => {
           // 句柄也加上
           return {
@@ -1479,17 +1479,17 @@ export default {
             countdown: { ...countdownTpml }
           }
         })
-        
+
         // 启动倒计时，牛逼啊霸哥
         countdownInstance = setInterval(this.stampFuncByKill, 1000)
-        
+
         const bizCateList = await getBizProdCateList({
           biz_id: this.bid,
           pageSize: 999
         }, { onlyData: true }).catch((e) => {
           throw Error('获取商家自定义分类失败')
         })
-        
+
         // 添加一个全部
         bizCateList.unshift({
           cate_img: '',
@@ -1498,7 +1498,7 @@ export default {
           id: '',
           pid: 0
         })
-        
+
         const bizCateListData = []
         for (var key in bizCateList) {
           var tempRow = objTranslate(bizCateList[key])
@@ -1535,9 +1535,9 @@ export default {
           }
           bizCateListData.push(tempRow)
         }
-        
+
         this.bizCateList = bizCateListData
-        
+
         if (this.flashActivityList.length > 0) {
           this.changeCateIdx(-2, 0, true)
         } else if (this.killList.length > 0) {
@@ -1545,7 +1545,7 @@ export default {
         } else {
           this.changeCateIdx(0, 0, true)
         }
-        
+
         // 不要赠送的优惠券
         const couponList = await getCouponList({
           biz_id: this.bid,
@@ -1557,26 +1557,26 @@ export default {
           throw Error('获取优惠券失败')
         })
         this.$set(this, 'couponList', couponList)
-        
+
         this.$nextTick().then(() => {
           const query = uni.createSelectorQuery().in(this)
           query.select('#topBox').boundingClientRect(data => {
             const { windowWidth } = this.systemInfo
             const pixelRatio = windowWidth / 750
-            
+
             this.pixelRatio = pixelRatio
-            
+
             // + 60 * pixelRatio
             // 以后不再怕顶部有rpx了
             this.diyHeadHeight = this.menuButtonInfo.bottom + 10 + 60 * pixelRatio
             console.log(this.diyHeadHeight, this.systemInfo.windowHeight, this.systemInfo.windowHeight - this.diyHeadHeight)
-            
+
             this.headTabTop = data.height - this.diyHeadHeight
             console.log(this.headTabTop)
           })
           query.exec()
         })
-        
+
         this.photoList = await getAlbumList({
           biz_id: this.bid,
           get_photo: 4
@@ -1593,14 +1593,14 @@ export default {
         }).catch(e => {
           throw Error(e.msg || '获取相册信息失败')
         })
-        
+
         // 这个就不要等了吧
         if (!checkIsLogin(0, 0)) {
           throw Error('nocare')
         }
-        
+
         this.refreshInfoByIsLogin()
-        
+
         hideLoading()
       } catch (e) {
         console.log(e)
@@ -1609,7 +1609,7 @@ export default {
       }
     },
     toPicture () {
-      if(this.storePhotoTotal>0)this.$linkTo('/pagesA/store/photo?bid=' + this.bid)
+      if (this.storePhotoTotal > 0) this.$linkTo('/pagesA/store/photo?bid=' + this.bid)
     },
     taggleFavorite () {
       if (!checkIsLogin(1, 1)) return
@@ -1660,42 +1660,42 @@ export default {
         this.showMode = 'kill'
         return
       }
-      
+
       if (idx === -2) {
         this.bizCateNavIndex = idx
         this.bizCateChildNavIndex = 0
         this.showMode = 'spike'
         return
       }
-      
+
       this.showMode = 'goods'
-      
+
       if (!more) {
         if (idx === this.bizCateNavIndex && cidx === this.bizCateChildNavIndex) return// 重复点击不要了
         this.bizCateNavIndex = idx
         this.bizCateChildNavIndex = cidx
       }
-      
+
       if (this.bizCateList[idx].child[cidx].finish) return // 到底了
       const base = { biz_ids: this.bid }
       const ext = { ...this.bizCateList[idx].child[cidx].filterObj } // biz_cate_id: biz_cate.id,
-      
+
       try {
         const biz_cate = this.bizCateList[idx].child[cidx]
         this.bizCateList[idx].child[cidx].load = true
         const { data: newList, totalCount } = await getProductList({
           ...base,
           ...ext,
-          
+
           page: biz_cate.page,
           pageSize: biz_cate.pageSize
         }).catch(err => {
           throw Error(err.msg)
         })
-        
+
         this.bizCateList[idx].child[cidx].page++
         this.bizCateList[idx].child[cidx].productList = biz_cate.productList.concat(newList)
-        
+
         this.bizCateList[idx].child[cidx].finish = this.bizCateList[idx].child[cidx].productList.length >= totalCount
       } catch (e) {
         Exception.handle(e)
@@ -1721,7 +1721,7 @@ export default {
           start_timeStamp: this.flashActivityList[idx].start_time,
           end_timeStamp: this.flashActivityList[idx].end_time
         })
-        
+
         if (data) {
           this.$set(this.flashActivityList[idx], 'countdown', { ...data })
         }
@@ -1735,7 +1735,7 @@ export default {
   },
   onReady () {
     this.pageScrollEnable = true
-    
+
     this.$nextTick().then(() => {
       const query = uni.createSelectorQuery().in(this)
       query.select('#store-bottom-action').boundingClientRect(data => {
@@ -1754,12 +1754,12 @@ export default {
     height: 0;
     color: transparent;
   }
-  
+
   .attr-form-wrap {
     width: 660rpx;
     background: #fff;
     border-radius: 10rpx;
-    
+
     .actions {
       display: flex;
       height: 90rpx;
@@ -1767,7 +1767,7 @@ export default {
       align-items: center;
       justify-content: space-between;
       padding: 0 30rpx;
-      
+
       .confirm-btn {
         width: 145rpx;
         height: 50rpx;
@@ -1778,52 +1778,52 @@ export default {
         border: none;
         font-size: 12px;
         color: #fff;
-        
+
         &.disabled {
           background: #999;
         }
       }
     }
-    
+
     .attr-head {
       padding: 14px;
       position: relative;
-      
+
       .title {
         width: 560rpx;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
       }
-      
+
       .close {
         position: absolute;
         right: 10px;
         top: 14px;
       }
     }
-    
+
     .form {
-    
+
     }
-    
+
     .cart-attr-box {
       padding-bottom: 15px;
       max-height: 400px;
       overflow-y: scroll;
     }
-    
+
     .cartAttr {
       padding: 15px 15px 0;
-      
+
       .sku-title {
         margin-bottom: 12px;
       }
-      
+
       .sku-val-list {
         display: flex;
         flex-wrap: wrap;
-        
+
         .sku-val-item {
           padding: 4px 6px;
           font-size: 12px;
@@ -1832,7 +1832,7 @@ export default {
           margin-right: 20rpx;
           margin-bottom: 20rpx;
           box-sizing: border-box;
-          
+
           &.checked {
             border: 1px solid $fun-primary-color;
             color: $fun-primary-color;
@@ -1842,23 +1842,23 @@ export default {
       }
     }
   }
-  
+
   .page-wrap {
-  
+
   }
-  
+
   .kill-goods-list {
     .kill-goods-item {
       padding: 30rpx 0;
       width: 550rpx;
-      
+
       .item-cover {
         width: 170rpx;
         height: 170rpx;
         @include cover-img();
         margin-right: 20rpx;
       }
-      
+
       .price-num {
         background: #FFF4F4;
         font-size: 22rpx;
@@ -1867,19 +1867,19 @@ export default {
         margin-right: 18rpx;
         padding: 10rpx 18rpx;
       }
-      
+
       .act-goods-item-title {
         width: 350rpx;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
       }
-      
+
       .kill-countdown {
         margin-top: 20rpx;
         display: flex;
         align-items: center;
-        
+
         .countdown-tag {
           background: #E64239;
           color: #fff;
@@ -1888,7 +1888,7 @@ export default {
           border-radius: 6rpx;
           text-align: center;
         }
-        
+
         .countdown-delimiter {
           text-align: center;
           font-size: 24rpx;
@@ -1898,10 +1898,10 @@ export default {
       }
     }
   }
-  
+
   .spike-list {
     padding-bottom: 20rpx;
-    
+
     .flash-act-item {
       width: 550rpx;
       box-sizing: border-box;
@@ -1910,26 +1910,26 @@ export default {
       padding: 0rpx 0rpx 30rpx 0rpx;
       background: #fff;
       overflow: hidden;
-      
+
       &:last-child {
         margin-bottom: 0;
       }
-      
+
       .flash-act-title {
         width: 550rpx;
         padding: 30rpx 0;
-        
+
       }
-      
+
       .flash-act-countdown {
         width: 550rpx;
         height: 64rpx;
-        
+
         background: rgba(255, 244, 243, 1);
         display: flex;
         align-items: center;
         justify-content: center;
-        
+
         .countdown-tag {
           background: #E64239;
           color: #fff;
@@ -1940,7 +1940,7 @@ export default {
           border-radius: 6rpx;
           text-align: center;
         }
-        
+
         .countdown-delimiter {
           text-align: center;
           font-size: 24rpx;
@@ -1949,22 +1949,22 @@ export default {
         }
       }
     }
-    
+
     .act-goods-list {
-    
+
     }
-    
+
     .act-goods-item {
       padding: 30rpx 0;
       width: 550rpx;
-      
+
       .item-cover {
         width: 170rpx;
         height: 170rpx;
         @include cover-img();
         margin-right: 20rpx;
       }
-      
+
       .price-num {
         background: #FFF4F4;
         font-size: 22rpx;
@@ -1973,7 +1973,7 @@ export default {
         margin-right: 18rpx;
         padding: 10rpx 18rpx;
       }
-      
+
       .act-goods-item-title {
         width: 350rpx;
         white-space: nowrap;
@@ -1982,37 +1982,37 @@ export default {
       }
     }
   }
-  
+
   .carts {
     &-action {
       height: 80rpx;
       padding: 0 20rpx 0 36rpx;
       border-bottom: 1px solid #EDEDED;
-      
+
     }
-    
+
     &-box {
       width: 750rpx;
       overflow-x: hidden;
       overflow-y: scroll;
     }
-    
+
     &-list {
       padding: 20rpx 20rpx 60rpx 0;
       width: 750rpx;
       box-sizing: border-box;
     }
-    
+
     &-item {
       height: 160rpx;
       display: flex;
       align-items: center;
-      
+
       .check-item {
         padding-left: 36rpx;
         padding-right: 22rpx;
       }
-      
+
       &-cover {
         @include cover-img();
         width: 100rpx;
@@ -2020,14 +2020,14 @@ export default {
         border-radius: 5rpx;
         margin-right: 30rpx;
       }
-      
+
       &-info {
         width: 500rpx;
         height: 160rpx;
         box-sizing: border-box;
-        
+
         border-bottom: 1px solid #EDEDED;
-        
+
         .title {
           font-size: 14px;
           color: #333;
@@ -2036,13 +2036,13 @@ export default {
           text-overflow: ellipsis;
           width: 480rpx;
         }
-        
+
         .attr-text {
           font-size: 12px;
           color: #999;
           margin-top: 10rpx;
         }
-        
+
         .actions {
           margin: 20rpx 0 0;
           height: 54rpx;
@@ -2053,7 +2053,7 @@ export default {
       }
     }
   }
-  
+
   .store-bottom-action {
     position: fixed;
     display: flex;
@@ -2064,7 +2064,7 @@ export default {
     bottom: env(safe-area-inset-bottom);
     left: 0;
     z-index: 6;
-    
+
     .cart-box {
       display: flex;
       align-items: center;
@@ -2072,10 +2072,10 @@ export default {
       width: 160rpx;
       height: 96rpx;
       border-right: 1px solid #656565;
-      
+
       .cart-icon-box {
         position: relative;
-        
+
         .total-num {
           position: absolute;
           right: 0;
@@ -2087,7 +2087,7 @@ export default {
           font-size: 20rpx;
           padding: 4rpx 8rpx;
           text-align: center;
-          
+
           &.aircle {
             border-radius: 50%;
             padding: 0;
@@ -2098,12 +2098,12 @@ export default {
         }
       }
     }
-    
+
     .total-info {
       flex: 1;
       padding-left: 58rpx;
     }
-    
+
     .user-btn {
       height: 50px;
       width: 50px;
@@ -2123,7 +2123,7 @@ export default {
       font-size: 32rpx;
     }
   }
-  
+
   .store-comp-wrap {
     position: absolute;
     width: 750rpx;
@@ -2134,7 +2134,7 @@ export default {
     z-index: 1;
     overflow-x: hidden;
     background: #fff;
-    
+
     .container-l {
       position: absolute;
       bottom: 0;
@@ -2144,18 +2144,18 @@ export default {
       overflow-y: scroll;
       width: 160rpx;
       background: #f6f6f6;
-      
+
       &::-webkit-scrollbar {
         width: 0;
         height: 0;
         color: transparent;
       }
-      
+
       .cate-item {
         width: 160rpx;
         height: 97rpx;
         position: relative;
-        
+
         .cate-title {
           white-space: nowrap;
           overflow: hidden;
@@ -2167,7 +2167,7 @@ export default {
           line-height: 97rpx;
           text-align: center;
         }
-        
+
         .cate-underline {
           width: 5rpx;
           height: 50rpx;
@@ -2178,25 +2178,25 @@ export default {
           transform: translateY(-50%);
           visibility: hidden;
         }
-        
+
         &.active {
           color: #E64239;
           background: #fff;
-          
+
           .cate-underline {
             visibility: visible;
           }
         }
       }
     }
-    
+
     .container-r {
       &::-webkit-scrollbar {
         width: 0;
         height: 0;
         color: transparent;
       }
-      
+
       width: 550rpx;
       padding-left: 20rpx;
       padding-right: 20rpx;
@@ -2206,9 +2206,9 @@ export default {
       top: 20px;
       overflow-x: hidden;
       overflow-y: scroll;
-      
+
     }
-    
+
     .goods-box {
       .cate-child-list {
         overflow-y: hidden;
@@ -2216,7 +2216,7 @@ export default {
         width: 550rpx;
         margin-bottom: 30rpx;
         white-space: nowrap;
-        
+
         .cate-item {
           display: inline-block;
           margin-right: 15rpx;
@@ -2227,20 +2227,20 @@ export default {
           border-radius: 6rpx;
           color: #666666;
           font-size: 24rpx;
-          
+
           &.active {
             color: #444;
             background: #FFE9E8;
           }
         }
       }
-      
+
       .goods-list {
         .goods-item {
           display: flex;
           align-items: center;
           margin: 30rpx 0;
-          
+
           .goods-item-action {
             .btn-open-attr {
               background: #E64239;
@@ -2252,7 +2252,7 @@ export default {
               border-radius: 19rpx;
               text-align: center;
               position: relative;
-              
+
               .goods-num-tag {
                 position: absolute;
                 right: -10px;
@@ -2268,18 +2268,18 @@ export default {
               }
             }
           }
-          
+
           .cover {
             width: 170rpx;
             height: 170rpx;
             @include cover-img();
           }
-          
+
           .info {
             width: 360rpx;
             overflow-x: hidden;
             padding-left: 20rpx;
-            
+
             .title {
               line-height: 16px;
               height: 16px;
@@ -2287,7 +2287,7 @@ export default {
               overflow: hidden;
               text-overflow: ellipsis;
             }
-            
+
             .price-num {
               background: #FFF4F4;
               font-size: 22rpx;
@@ -2296,7 +2296,7 @@ export default {
               margin-right: 18rpx;
               padding: 10rpx 18rpx;
             }
-            
+
             .input-num {
               width: 32px;
             }
@@ -2305,19 +2305,19 @@ export default {
       }
     }
   }
-  
+
   .container {
     position: relative;
     left: 0;
     bottom: 0;
     width: 750rpx;
     z-index: 4;
-    
+
   }
-  
+
   .top-box {
     position: relative;
-    
+
     .top-box-bg {
       position: absolute;
       left: 0;
@@ -2325,7 +2325,7 @@ export default {
       width: 750rpx;
       height: 230rpx;
     }
-    
+
     .store-info {
       position: relative;
       z-index: 5;
@@ -2336,7 +2336,7 @@ export default {
       border-radius: 10px;
       box-sizing: border-box;
       padding: 30rpx 20rpx;
-      
+
       .store-info-logo {
         width: 105rpx;
         height: 105rpx;
@@ -2356,28 +2356,28 @@ export default {
           color: #fff;
         }
       }
-      
+
       .store-info-more {
         width: 545rpx;
         padding: 0 20rpx;
-        
+
         .store-info-row {
           display: flex;
         }
       }
-      
+
       .activity-info {
         display: flex;
         align-items: center;
         margin-top: 25rpx;
-        
+
         .store-activity {
           margin-left: 20rpx;
           width: 480rpx;
           white-space: nowrap;
           overflow-y: hidden;
           overflow-x: scroll;
-          
+
           .activity-item {
             display: inline-block;
             font-size: 20rpx;
@@ -2391,12 +2391,12 @@ export default {
             border-radius: 6rpx;
           }
         }
-        
+
         .store-follow {
           width: 162rpx;
           height: 42rpx;
           position: relative;
-          
+
           .store-follow-bg {
             width: 162rpx;
             height: 42rpx;
@@ -2405,7 +2405,7 @@ export default {
             top: 0;
             z-index: 2;
           }
-          
+
           .store-follow-text {
             z-index: 3;
             width: 162rpx;
@@ -2421,25 +2421,25 @@ export default {
         }
       }
     }
-    
+
   }
-  
+
   .top-search-space {
     height: 60rpx;
-    
+
   }
-  
+
   .top-search {
-    
+
     padding: 0 20rpx;
     position: relative;
-    
+
     &.sticky {
       position: fixed;
       z-index: 6;
       background: #fff;
     }
-    
+
     .search-input {
       width: 540rpx;
       height: 60rpx;
@@ -2447,14 +2447,14 @@ export default {
       border-radius: 10rpx;
       padding-left: 32rpx;
       box-sizing: border-box;
-      
+
       .placeholder {
         color: #ADADAD;
         font-size: 12px;
         margin-left: 18rpx;
       }
     }
-    
+
     .top-vip {
       width: 150rpx;
       height: 60rpx;
@@ -2463,18 +2463,18 @@ export default {
       margin-left: 20rpx;
     }
   }
-  
+
   .fixed-top-box {
     position: fixed;
     background: #fff;
     top: 0;
     left: 0;
     width: 750rpx;
-    
+
     .fixed-top-search {
       padding: 0 20rpx;
     }
-    
+
     .fixed-search-input {
       width: 540rpx;
       height: 60rpx;
@@ -2482,14 +2482,14 @@ export default {
       border-radius: 10rpx;
       padding-left: 32rpx;
       box-sizing: border-box;
-      
+
       .placeholder {
         color: #ADADAD;
         font-size: 12px;
         margin-left: 18rpx;
       }
     }
-    
+
     .fixed-top-vip {
       width: 150rpx;
       height: 60rpx;
@@ -2498,27 +2498,27 @@ export default {
       margin-left: 20rpx;
     }
   }
-  
+
   .coupon-list {
     margin: 0 0 30rpx 0;
     width: 750rpx;
     white-space: nowrap;
     overflow-y: hidden;
     overflow-x: scroll;
-    
+
     .coupon-item {
       position: relative;
       display: inline-block;
       margin-left: 20rpx;
       height: 40rpx;
       color: #fff;
-      
+
       align-items: center;
-      
+
       &:last-child {
         margin-right: 20rpx;
       }
-      
+
       .coupon-item-r {
         line-height: 40rpx;
         width: 79rpx;
@@ -2529,7 +2529,7 @@ export default {
         background-size: 100% 100%;
         background-repeat: no-repeat;
       }
-      
+
       .coupon-item-l {
         background-color: #E64239;
         display: flex;
@@ -2540,16 +2540,16 @@ export default {
         padding: 0 15rpx;
         border-top-left-radius: 5rpx;
         border-bottom-left-radius: 5rpx;
-        
+
         .sign {
-        
+
         }
-        
+
         .num {
-        
+
         }
       }
-      
+
     }
   }
 </style>

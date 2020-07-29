@@ -1417,6 +1417,7 @@ export default {
           return
         }
 
+        hideLoading()
         const url = '/pages/order/OrderPay?Order_ID=' + createOrderResult.Order_ID + '&pagefrom=check'
         uni.redirectTo({
           url: url
@@ -1429,8 +1430,12 @@ export default {
           this.formCheckResult = []
         }, 4000)
         Exception.handle(e)
+
+        setTimeout(() => {
+          hideLoading()
+        }, 2000)
       } finally {
-        hideLoading()
+
       }
     }
     // ...mapActions(['getUserInfo','setUserInfo']),
