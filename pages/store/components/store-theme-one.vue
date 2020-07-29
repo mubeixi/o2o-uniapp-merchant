@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="fixed-wrap">
     <!--超级占位，把上面这些全干掉了-->
-    <div class="sticky-space" :style="{backgroundImage: 'url('+$getDomain('/static/client/store/theme_one/top-bg.png')+')',height:menuButtonInfo.bottom+10+'px',zIndex:headTabSticky?3:-4}"></div>
+    <div class="sticky-space" :style="{backgroundImage: 'url('+$getDomain('/static/client/store/theme_one/top-bg-large.jpg')+')',height:menuButtonInfo.bottom+10+'px',zIndex:headTabSticky?3:-4}"></div>
     <div :class="{isStickly:headTabSticky}" :style="{top:menuButtonInfo.bottom+10+'px',zIndex:headTabSticky?3:-5}" class="head-tab fixed" id="stickyTab">
       <ul class="tab-box sticky">
         <li :class="{active:headTabIndex === 0}" @click="bindHeadTabClick(0,'section-virtual')" class="tab-item">到店券<span class="underline" v-if="headTabIndex === 0"></span></li>
@@ -10,8 +10,8 @@
         <li :class="{active:headTabIndex === 3}" @click="bindHeadTabClick(3,'section-comment')" class="tab-item">点评<span class="underline" v-if="headTabIndex === 3"></span></li>
       </ul>
     </div>
-    <div class="top-bg" :style="{zIndex:headTabSticky?-2:-4,height:menuButtonInfo.bottom+10+15+75+15+'px',backgroundImage: 'url('+$getDomain('/static/client/store/theme_one/top-bg.png')+')'}"></div>
-    <div class="top-bg" :style="{zIndex:headTabSticky?-2:-4,top:menuButtonInfo.bottom+10+15+75+15+'px',height:menuButtonInfo.bottom+10+15+75+15+'px',backgroundImage: 'url('+$getDomain('/static/client/store/theme_one/top-bg.png')+')'}"></div>
+    <div class="top-bg" :style="{zIndex:headTabSticky?-2:-4,height:(menuButtonInfo.bottom+10+15+75+15)*2+'px',backgroundImage: 'url('+$getDomain('/static/client/store/theme_one/top-bg-large.jpg')+')'}"></div>
+<!--    <div class="top-bg" :style="{zIndex:headTabSticky?-2:-4,top:menuButtonInfo.bottom+10+15+75+15+'px',height:menuButtonInfo.bottom+10+15+75+15+'px',backgroundImage: 'url('+$getDomain('/static/client/store/theme_one/top-bg.png')+')'}"></div>-->
     <div :style="{height:menuButtonInfo.height+'px',top:menuButtonInfo.top+'px'}" class="navigator-bar">
       <layout-icon @click="$back" class="m-l-10" :color="headTabSticky?'#fff':'#fff'" size="20" weight="500" type="iconicon-arrow-left"></layout-icon>
     </div>
@@ -27,9 +27,9 @@
       <div class="store-info-space" :style="{height: menuButtonInfo.bottom+10+'px'}"></div>
       <div class="store-info flex flex-vertical-c m-b-15" v-if="storeInfo.biz_logo">
         <div @click="toPicture" :style="{backgroundImage:'url('+storeInfo.biz_logo+')'}" class="base-logo">
-          <div class="thumbCount">{{storePhotoTotal}}张照片</div>
+          <div class="thumbCount" v-if="storePhotoTotal>0">{{storePhotoTotal}}张照片</div>
         </div>
-        <div class="info-box flex1">
+        <div class="info-box">
           <div class="store-name fz-15 m-b-8">{{storeInfo.biz_shop_name}}</div>
           <div class="store-activity-list m-b-8" v-if="flashActivityList.length>0">
             <div class="store-activity-item fz-10" v-for="(item,idx) in flashActivityList" :key="idx" @click="toActivity(item.id)">{{item.name}}</div>
@@ -1241,7 +1241,7 @@ export default {
       }
     },
     toPicture () {
-      this.$linkTo('/pagesA/store/photo?bid=' + this.bid)
+      if(this.storePhotoTotal>0)this.$linkTo('/pagesA/store/photo?bid=' + this.bid)
     },
     taggleFavorite () {
       if (!checkIsLogin(1, 1)) return
@@ -1311,6 +1311,14 @@ export default {
 </script>
 <style lang="scss" scoped>
 
+  .fixed-wrap{
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    overflow: hidden;
+  }
   .plus-tag {
 
     background-color: #FF0000;
@@ -1506,8 +1514,8 @@ export default {
   }
 }
 .store-comp-wrap{
-  position: absolute;
-  width: 750rpx;
+  position: fixed;
+  right: 0;
   left: 0;
   bottom: 0;
   overflow-x: hidden;

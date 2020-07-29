@@ -18,7 +18,7 @@ export default {
     console.log('App Launch')
 
     // eventHub.livePlayer = livePlayer
-    console.log('ENV is',ENV)
+    console.log('ENV is', ENV)
     // #ifdef MP-WEIXIN
     let _users_id = ''
     if (ENV.isCustom) {
@@ -41,8 +41,6 @@ export default {
 
     this.$store.dispatch('system/loadInitData')
     this.$store.dispatch('theme/refreshTheme')
-
-    
   },
   onShow: function (options) {
     // 分享卡片入口场景才调用getShareParams接口获取以下参数
@@ -64,10 +62,10 @@ export default {
     //       console.log('get share params', err)
     //     })
     // }
-  
+
     // 初始化信息
     const userInfo = this.$store.getters['user/getUserInfo']()
-  
+
     // IM
     if (userInfo && userInfo.User_ID && !eventHub.imInstance) {
       // IM全局
