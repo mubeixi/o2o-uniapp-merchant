@@ -27,7 +27,7 @@
 
       <div class="store-info flex flex-vertical-c" v-if="storeInfo.biz_logo">
         <div @click="toPicture" :style="{backgroundImage:'url('+storeInfo.biz_logo+')'}" class="base-logo">
-          <div class="thumbCount">{{storePhotoTotal}}张照片</div>
+          <div class="thumbCount" v-if="storePhotoTotal>0">{{storePhotoTotal}}张照片</div>
         </div>
         <div class="info-box flex1">
           <div class="store-name fz-15 m-b-8">{{storeInfo.biz_shop_name}}</div>
@@ -1215,7 +1215,7 @@ export default {
       }
     },
     toPicture () {
-      this.$linkTo('/pagesA/store/photo?bid=' + this.bid)
+      if(this.storePhotoTotal>0)this.$linkTo('/pagesA/store/photo?bid=' + this.bid)
     },
     taggleFavorite () {
       if (!checkIsLogin(1, 1)) return

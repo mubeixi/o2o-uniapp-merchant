@@ -108,6 +108,13 @@ export default {
   mounted () {
 
   },
+  onPageScroll: function (e) {
+    if (e.scrollTop < 0) {
+      uni.pageScrollTo({
+        scrollTop: 0
+      })
+    }
+  },
   onLoad (options) {
     if (!options.biz_id) {
       modal('店铺id缺失')
@@ -164,12 +171,13 @@ export default {
 
   .page-wrap {
     background: #f2f2f2;
-    position: absolute;
+    position: fixed;
     width: 750rpx;
     left: 0;
     top: 0;
     z-index: 1;
-    height: 100vh;
+    right: 0;
+    bottom: 0;
     overflow: hidden;
   }
 
