@@ -1,7 +1,7 @@
 <template>
   <div>
-    <layout-page-title title="商家详情" ></layout-page-title>
-    <div class="store-comp-wrap" :style="{top:menuButtonInfo.bottom+'px'}">
+    <layout-page-title extStyle="padding-bottom:10px;background:#fff;" title="商家详情" ></layout-page-title>
+    <div class="store-comp-wrap" :style="{top:menuButtonInfo.bottom+10+'px'}">
       <scroll-view class="store-comp-scroll" scroll-y>
         <div class="store-info">
           <div class="base">
@@ -1418,12 +1418,11 @@ export default {
   }
 
   .store-comp-wrap{
-    position: absolute;
+    position: fixed;
     width: 750rpx;
     left: 0;
     bottom: 0;
     z-index: 2;
-
     overflow-x: hidden;
     overflow-y: scroll;
   }
