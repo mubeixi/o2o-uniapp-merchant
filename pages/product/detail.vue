@@ -365,7 +365,7 @@
   }
 
   .tab-containers {
-    border-top: 1px solid #f1f1f1;
+    border-top: 1rpx solid #f1f1f1;
   }
 
   .store-info {
@@ -436,7 +436,7 @@
     width: 690rpx;
     padding: 30rpx 0rpx;
     box-sizing: border-box;
-    border-bottom: 1px solid #EEEEEE;
+    border-bottom: 1rpx solid #EEEEEE;
 
   }
 
@@ -640,7 +640,7 @@
   }
 
   .comment-item {
-    border-bottom: 1px solid #eeeeee;
+    border-bottom: 1rpx solid #eeeeee;
     &:last-child{
       border-bottom: 0rpx;
     }
@@ -870,7 +870,7 @@
     padding-bottom: 30rpx;
     height: 140rpx;
     box-sizing: border-box;
-    border-bottom: 1px solid  #EEEEEE;
+    border-bottom: 1rpx solid  #EEEEEE;
     .product-group-item-user{
       width: 240rpx;
       overflow-x: hidden;
@@ -926,7 +926,7 @@
       width:120rpx;
       height:28px;
       line-height: 26px;
-      border:1px solid rgba(213,213,213,1);
+      border:1rpx solid rgba(213,213,213,1);
       border-radius:28rpx;
       box-sizing: border-box;
       text-align: center;
