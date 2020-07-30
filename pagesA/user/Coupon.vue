@@ -108,7 +108,7 @@ export default {
           url: '/pages/store/index?biz_id='+biz_id
         })
       } else {
-        uni.redirectTo({
+        uni.switchTab({
           url: '/pages/index/index'
         })
       }
