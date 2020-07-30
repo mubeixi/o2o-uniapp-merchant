@@ -926,7 +926,7 @@
       width:120rpx;
       height:28px;
       line-height: 26px;
-      border:1rpx solid rgba(213,213,213,1);
+      border:1px solid rgba(213,213,213,1);
       border-radius:28rpx;
       box-sizing: border-box;
       text-align: center;
@@ -978,6 +978,7 @@
   .recommend{
     width: 750rpx;
     padding: 40rpx 30rpx 30rpx 30rpx;
+    box-sizing: border-box;
     .recommend-title{
       font-size: 32rpx;
       margin-bottom: 30rpx;
@@ -985,9 +986,10 @@
 
     .recommend-list{
       width: 100%;
+      justify-content: space-around;
       .recommend-item {
           width: 220rpx;
-          margin-right: 14rpx;
+          //margin-right: 14rpx;
           &:last-child{
             margin-right: 0rpx;
           }
@@ -1521,6 +1523,10 @@
                   </div>
 
               </div>
+
+              <div class="recommend-item"  v-if="recommendList.length==2"></div>
+              <div class="recommend-item"  v-if="recommendList.length==1"></div>
+              <div class="recommend-item"  v-if="recommendList.length==1"></div>
 
             </div>
 
