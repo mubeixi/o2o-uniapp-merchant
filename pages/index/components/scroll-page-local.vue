@@ -16,7 +16,7 @@
       duration="300"
     >
       <swiper-item :key="idx1" class="quick-cate-swiper-item" v-for="(first,idx1) in firstCateList">
-        <scroll-view class="bg-white scroll-view-wrap" scroll-y>
+        <scroll-view class="bg-white scroll-view-wrap" scroll-y  >
 
           <div class="grid-box">
             <div
@@ -98,7 +98,7 @@ export default {
   mixins: [componetMixin],
   data () {
     return {
-      areaLoading:false,
+      areaLoading: false,
       firstCateHeight: 44,
       firstCateList: [],
       quickFirstCateIdx: 0, // 同城闪送
@@ -111,7 +111,7 @@ export default {
     }),
     cateViewHeight () {
       try {
-        return this.systemInfo.windowHeight - this.firstCateHeight - (this.menuButtonInfo.top+50)
+        return this.systemInfo.windowHeight - this.firstCateHeight - (this.menuButtonInfo.top + 50)
       } catch (e) {
         return 'auto'
       }
@@ -147,6 +147,7 @@ export default {
         this.firstCateList = await getProductCategory({}, { onlyData: true }).catch(() => {
           throw Error('获取商品分类失败')
         })
+        this.firstCateList.unshift({ Category_Name: '所有', Category_ID: '-1' })
         if (!this.firstCateList) this.firstCateList = []
         this.loadQuickGoodsList(0)
       } catch (e) {
@@ -160,7 +161,7 @@ export default {
      */
     async loadGoodsList (postData, obj) {
       if (!obj) obj = []
-      obj = await getProductList({ ...postData }, { onlyData: true }).catch(e => {
+      obj = await getProductList({ ...postData, one_hour_send: 1 }, { onlyData: true }).catch(e => {
         throw Error(e.msg || '获取商品列表失败')
       })
       return obj.concat([])
@@ -173,7 +174,10 @@ export default {
         if (!cateId) return
 
         this.areaLoading = true
-        var postData = { Cate_ID: cateId }
+        const postData = { page: 1, pageSize: 999 }
+        if (cateId != -1) {
+          postData.Cate_ID = cateId
+        }
         this.userAddressInfo = this.$store.getters['user/getUserAddressInfo']()
         if (this.userAddressInfo && this.userAddressInfo.hasOwnProperty('latitude') && this.userAddressInfo.hasOwnProperty('longitude')) {
           Object.assign(postData, {
