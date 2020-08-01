@@ -1001,12 +1001,12 @@
           }
           &-title{
             width: 220rpx;
-            height: 28rpx;
+           // height: 28rpx;
             color: #372B1E;
             white-space: nowrap;
             text-overflow: ellipsis;
-            overflow: hidden;
-            line-height: 28rpx;
+            overflow-x: hidden;
+            //line-height: 28rpx;
             margin-bottom: 10px;
           }
 
