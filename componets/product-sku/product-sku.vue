@@ -81,6 +81,10 @@ import LayoutIcon from '@/componets/layout-icon/layout-icon'
 export default {
   components: { layoutPopup, LayoutIcon },
   props: {
+    isCart: {
+      type: Boolean,
+      default: false
+    },
     mode: {
       type: String,
       default: 'default'
@@ -171,7 +175,11 @@ export default {
       }
       this.close()
       console.log('pro')
-      this.$emit('submitSure', this.postData)
+      if (this.isCart) {
+        this.$emit('updaCart', this.postData)
+      } else {
+        this.$emit('submitSure', this.postData)
+      }
     },
     buyNow () {
       console.log(this.productInfo.skuvaljosn, this.submitFlag)
