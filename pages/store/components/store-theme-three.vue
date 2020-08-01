@@ -96,11 +96,11 @@
                      @scrolltoupper="bindScrollLeftTop"
                      @scroll="bindContainerLeftScroll"
                      :scroll-y="leftScrollEnable">
-          <div :class="{active:bizCateNavIndex===-2}" @click="setCateActuveIdx(-2,0)" class="cate-item">
+          <div :class="{active:bizCateNavIndex===-2}" @click="setCateActuveIdx(-2,0)" class="cate-item"  v-if="flashActivityList.length>0">
             <div class="cate-underline"></div>
             <div class="cate-title">限时抢购</div>
           </div>
-          <div :class="{active:bizCateNavIndex===-1}" @click="setCateActuveIdx(-1,0)" class="cate-item">
+          <div :class="{active:bizCateNavIndex===-1}" @click="setCateActuveIdx(-1,0)" class="cate-item"  v-if="killList.length>0">
             <div class="cate-underline"></div>
             <div class="cate-title">秒杀</div>
           </div>

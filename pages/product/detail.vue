@@ -184,7 +184,7 @@
   .product-title {
     width: 698rpx;
     line-height: 40rpx;
-    height: 80rpx;
+
     padding: 0rpx 30rpx 0rpx 22rpx;
     background-color: #ffffff;
     color: #333333;
@@ -365,7 +365,7 @@
   }
 
   .tab-containers {
-    border-top: 1px solid #f1f1f1;
+    border-top: 1rpx solid #f1f1f1;
   }
 
   .store-info {
@@ -436,7 +436,7 @@
     width: 690rpx;
     padding: 30rpx 0rpx;
     box-sizing: border-box;
-    border-bottom: 1px solid #EEEEEE;
+    border-bottom: 1rpx solid #EEEEEE;
 
   }
 
@@ -640,7 +640,7 @@
   }
 
   .comment-item {
-    border-bottom: 1px solid #eeeeee;
+    border-bottom: 1rpx solid #eeeeee;
     &:last-child{
       border-bottom: 0rpx;
     }
@@ -661,7 +661,7 @@
     height: 40rpx;
     display: flex;
     max-width: 450rpx;
-    overflow-x: scroll;
+    overflow-x: hidden;
 
     .btn-item{
       padding: 0rpx 14rpx;
@@ -670,10 +670,13 @@
       line-height: 40rpx;
       text-align: center;
       border-radius: 6rpx;
-      width: auto;
+     // width: auto;
       color: #1CA272;
       font-size: 26rpx;
       margin-right: 10rpx;
+      display: block;
+      min-width: 120rpx;
+      max-width: 160rpx;
     }
   }
 
@@ -845,7 +848,7 @@
     height: 80rpx;
     margin: 0 auto;
     box-sizing: border-box;
-    border-bottom: 1px solid #EEEEEE;
+    border-bottom: 1rpx solid #EEEEEE;
   }
   .m-l-54{
     margin-left: 54px;
@@ -867,7 +870,7 @@
     padding-bottom: 30rpx;
     height: 140rpx;
     box-sizing: border-box;
-    border-bottom: 1px solid  #EEEEEE;
+    border-bottom: 1rpx solid  #EEEEEE;
     .product-group-item-user{
       width: 240rpx;
       overflow-x: hidden;
@@ -909,6 +912,8 @@
     padding: 20rpx;
     box-sizing: border-box;
     color: #FFFFff;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
     &-img{
       width: 76rpx;
       height: 76rpx;
@@ -973,6 +978,7 @@
   .recommend{
     width: 750rpx;
     padding: 40rpx 30rpx 30rpx 30rpx;
+    box-sizing: border-box;
     .recommend-title{
       font-size: 32rpx;
       margin-bottom: 30rpx;
@@ -980,9 +986,10 @@
 
     .recommend-list{
       width: 100%;
+      justify-content: space-around;
       .recommend-item {
           width: 220rpx;
-          margin-right: 14rpx;
+          //margin-right: 14rpx;
           &:last-child{
             margin-right: 0rpx;
           }
@@ -1158,7 +1165,7 @@
       <div :style="{height:menuButtonInfo.height+'px',paddingRight:diyHeadRight+'px'}"
            class="flex flex-vertical-c flex-justify-between">
         <div class="flex flex-vertical-c">
-          <layout-icon :plain="false" @click="bindLeftBtnClick" class="m-l-10" color="#606060" size="18" type="iconback1"
+          <layout-icon :plain="false" @click="bindLeftBtnClick" class="m-l-10" color="#606060" size="22" type="iconback1"
                        wrap-bg="none" wrap-padding="6px"></layout-icon>
           <div @click="toSearch" class="head-search flex flex-vertical-c flex-justify-between"  :class="activeHeadOpacity?'bg-white':''" >
             <span class="fz-12  p-l-6 c-bc"  >搜索商品</span>
@@ -1242,8 +1249,8 @@
               <div  class="spike-all " :style="{backgroundImage: 'url('+$getDomain('/static/client/productActiveBg.png')+')'}"  >
                 <div class="spike-all-top flex flex-vertical-c">
                   <layout-icon  size="20" class="m-r-9" color="#862F1B" type="iconxianshiqianggou"></layout-icon>
-                  <div class="spike-all-title">
-                    限时抢购
+                  <div class="spike-all-title" v-if="titleTag">
+                    {{titleTag}}
                   </div>
                 </div>
                 <div class="spike-all-time">
@@ -1308,7 +1315,7 @@
           <div @click="$openPop('couponModal')" class="coupon-box m-b-6" v-if="couponList.length>0" >
             <div class="btn">
               <div class="btn-item" v-for="(coupon,couponIndex) of couponList" :key="couponIndex">
-                {{coupon.Coupon_Subject}}
+                满{{coupon.Coupon_Condition}}减{{coupon.Coupon_Cash}}
               </div>
             </div>
             <div class="right c-26c78d">
@@ -1517,6 +1524,10 @@
 
               </div>
 
+              <div class="recommend-item"  v-if="recommendList.length==2"></div>
+              <div class="recommend-item"  v-if="recommendList.length==1"></div>
+              <div class="recommend-item"  v-if="recommendList.length==1"></div>
+
             </div>
 
           </div>
@@ -1699,9 +1710,11 @@
         <scroll-view class="ticks" scroll-y=true>
           <div :key="i" class="t_content " v-for="(item,i) of couponList">
             <div class="t_left">
-              <div class="t_left_t"><span>￥</span><span class="money">{{item.Coupon_Cash}}</span><span>店铺优惠券<text
-                v-if="item.Coupon_UseArea==0">(实体店)</text></span></div>
-              <div class="t_left_c">{{item.Coupon_Subject}}</div>
+              <div class="t_left_t"><span>￥</span><span class="money">{{item.Coupon_Cash}}</span>
+<!--                <span>店铺优惠券<text-->
+<!--                v-if="item.Coupon_UseArea==0">(实体店)</text></span>-->
+              </div>
+              <div class="t_left_c">满{{item.Coupon_Condition}}减{{item.Coupon_Cash}}</div>
               <div class="t_left_b">
                 有效期{{item.Coupon_StartTime.substring(0,10)}}-{{item.Coupon_EndTime.substring(0,10)}}
               </div>
@@ -2544,7 +2557,7 @@ export default {
         this.bizInfo = this.store[0]
         checkIsExpire(this.bizInfo.biz_expires)
 
-        if (this.productInfo.is_pintuan) {
+        if (this.productInfo.is_pintuan && this.mode !== 'seckill' && this.mode !== 'spike') {
           this.titleTag = '拼团'
         }
 

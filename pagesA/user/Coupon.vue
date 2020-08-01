@@ -11,7 +11,7 @@
           <image :src="item.Coupon_PhotoPath" class="image"></image>
         </view>
         <view class="storeTitle">
-          {{item.Coupon_Subject}}
+          满{{item.Coupon_Condition}}减{{item.Coupon_Cash}} <span v-if="item.biz_id>0">(店铺优惠券)</span><span v-else>(通用优惠券)</span>
         </view>
         <view class="times">
           有效期：{{item.Coupon_StartTime.substring(0,10)}}至{{item.Coupon_EndTime.substring(0,10)}}
@@ -19,16 +19,16 @@
         <view class="subject">
           {{item.limit_txt||''}}
         </view>
-        <view class="prices" v-if="item.Coupon_Discount<=0">
+        <view class="prices" >
           ¥
           <text>{{item.Coupon_Cash}}</text>
         </view>
-        <view class="prices" v-else>
-          {{item.Coupon_Discount*10}}折优惠
-        </view>
-        <view class="man">
-          满{{item.Coupon_Condition}}可用
-        </view>
+<!--        <view class="prices" v-else>-->
+<!--          {{item.Coupon_Discount*10}}折优惠-->
+<!--        </view>-->
+<!--        <view class="man">-->
+<!--          满{{item.Coupon_Condition}}可用-->
+<!--        </view>-->
         <view @click="goIndex(item.biz_id)" class="button">
           去使用
         </view>
@@ -108,7 +108,7 @@ export default {
           url: '/pages/store/index?biz_id='+biz_id
         })
       } else {
-        uni.redirectTo({
+        uni.switchTab({
           url: '/pages/index/index'
         })
       }
@@ -262,7 +262,7 @@ export default {
       color: #F43131;
       text-align: center;
       position: absolute;
-      top: 133rpx;
+      top: 126rpx;
       left: 527rpx;
     }
 
