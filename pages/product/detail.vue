@@ -778,8 +778,8 @@
   .left-btn {
     width: 214rpx;
     font-size: 14px;
-    height: 86rpx;
-    line-height: 86rpx;
+    height: 76rpx;
+    line-height: 76rpx;
     text-align: center;
     color: #fff;
     border-top-left-radius: 42rpx;
@@ -790,8 +790,8 @@
   .right-btn {
     width: 214rpx;
     font-size: 14px;
-    height: 86rpx;
-    line-height: 86rpx;
+    height: 76rpx;
+    line-height: 76rpx;
     text-align: center;
     color: #fff;
     border-top-right-radius: 42rpx;
@@ -802,8 +802,8 @@
   .right-btn-only {
     width: 428rpx;
     font-size: 14px;
-    height: 86rpx;
-    line-height: 86rpx;
+    height: 76rpx;
+    line-height: 76rpx;
     text-align: center;
     color: #fff;
     border-radius: 42rpx;
@@ -1591,6 +1591,7 @@
     <product-sku
       :hasCart="hasCart"
       :mode="mode"
+      :isCart="isCart"
       :product-info="productInfo"
       @buyNow="buyNow"
       @submitSure="submitSure"
@@ -1609,12 +1610,20 @@
       class="wzw-goods-action"
     >
       <block v-if="mode==='default'" v-slot:action>
-        <div class="flex flex-vertical-c">
-          <div @click="onePay" class="left-btn"  :class="productInfo.is_pintuan?'':'right-btn-only'" >
+        <div class="flex flex-vertical-c" v-if="productInfo.is_pintuan">
+          <div @click="onePay" class="left-btn"  >
             <span class="fz-12">单买</span><span class="p-l-4">¥{{productInfo.Products_PriceX}}</span>
           </div>
-          <div @click="allPay" class="right-btn" v-if="productInfo.is_pintuan">
+          <div @click="allPay" class="right-btn" >
             <span class="fz-12">拼团购</span><span class="p-l-4">¥{{productInfo.pintuan_pricex}}</span>
+          </div>
+        </div>
+        <div class="flex flex-vertical-c" v-else>
+          <div @click="onePay('noHasCart','isCart')" class="left-btn"   >
+            <span class="fz-12">加入购物车</span>
+          </div>
+          <div @click="onePay('noHasCart')" class="right-btn" >
+            <span class="fz-12">立即购买</span>
           </div>
         </div>
       </block>
@@ -1790,6 +1799,7 @@ export default {
   },
   data () {
     return {
+      isCart: false, // 是否确定是加入购物车
       groupListTotalCount: 0, // 多少人在拼团
       groupList: [], // 拼团列表
       recommendList: [], // 推荐产品
@@ -2175,7 +2185,7 @@ export default {
 
       this.$linkTo(url)
     },
-    onePay () {
+    onePay (noHasCart, isCart) {
       if (!checkIsLogin(1, 1)) return
       if (!this.checkStoreStatus()) {
         uni.showModal({
@@ -2184,6 +2194,13 @@ export default {
         })
         return
       }
+      // 判断规格弹窗确定按钮是否是加入购物车
+      if (isCart === 'isCart') {
+        this.isCart = true
+      } else {
+        this.isCart = false
+      }
+
       // 赠品
       if (this.mode === 'gift') {
         this.lingqu()
@@ -2196,7 +2213,10 @@ export default {
       if (this.mode === 'default') {
         this.hasCart = true
       }
-	  this.productInfo.active = 'default'
+      if (this.mode === 'default' && noHasCart === 'noHasCart') {
+        this.hasCart = false
+      }
+	    this.productInfo.active = 'default'
 
       if (this.mode === 'spike') {
         this.hasCart = false
@@ -2252,9 +2272,10 @@ export default {
         })
         return
       }
+      this.isCart = false
       this.hasCart = false
       this.postData.active = 'pintuan' // 标记为是拼团
-	  this.productInfo.active = 'pintuan'
+	    this.productInfo.active = 'pintuan'
       this.checkfrom = 'group'
 
       // 限时抢购
