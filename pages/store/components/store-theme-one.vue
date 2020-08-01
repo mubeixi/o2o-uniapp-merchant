@@ -1038,7 +1038,8 @@ export default {
         })
 
         if (checkIsLogin(0, 0)) {
-          const { is_favourite = 0 } = await checkFavourite({ biz_id: this.bid }, { onlyData: true }).catch(() => {
+          const { is_favourite = 0 } = await checkFavourite({ biz_id: this.bid }, { onlyData: true }).catch((e) => {
+            throw e
           })
           this.isFavourite = is_favourite
         }
@@ -1050,10 +1051,11 @@ export default {
 
         this.refreshInfoByIsLogin()
 
-        hideLoading()
       } catch (e) {
-        hideLoading()
+
         Exception(e)
+      }finally{
+         hideLoading()
       }
     },
     toGoodsDetailFn (pro, activity) {

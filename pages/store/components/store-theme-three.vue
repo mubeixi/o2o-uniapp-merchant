@@ -1382,7 +1382,8 @@ export default {
         checkFavourite({ biz_id: this.bid }, { onlyData: true }).then(res => {
           const { is_favourite = 0 } = res
           this.isFavourite = is_favourite
-        }).catch(() => {
+        }).catch((e) => {
+          throw e
         })
       }
 
@@ -1601,11 +1602,11 @@ export default {
 
         this.refreshInfoByIsLogin()
 
-        hideLoading()
       } catch (e) {
         console.log(e)
-        hideLoading()
         Exception.handle(e)
+      }finally{
+         hideLoading()
       }
     },
     toPicture () {

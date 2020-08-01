@@ -144,6 +144,7 @@ export const ajax = ({ url, method = 'post', data = {}, options = {},isAddHost=t
   let {
     tip = '', // loading text
     mask = false,
+    loginRedirect=true,//66001状态码是否跳去登录
     // timelen = 2000,
     timeout = 100, // 如果tip参数生效，请求结束后会延迟取消loading,有的请求太快了一闪而过
     errtip = false, // 是否提示错误,尽量让接口自己决定如何展示
@@ -197,14 +198,17 @@ export const ajax = ({ url, method = 'post', data = {}, options = {},isAddHost=t
         if (hookErrorCode.includes(errorCode)) {
           if (errorCode === 66001) {
             //阻断后面的跳转
-            if(Storage.get('toLogin'))return;
+            if(Storage.get('toLogin')){
+              reject(Error('nocare'))
+              return;
+            }
             Storage.set('toLogin',1,1)
             const noLoginList=['pages/store/index','pages/product/detail']
 
             const currentPagePath=Storage.get('currentPagePath')
 
-            //特定页面登录信息过期 不需要去强制跳转登录
-            if(noLoginList.indexOf(currentPagePath)==-1){
+            //特定页面登录信息过期 不需要去强制跳转登录  //也可以实现接口级别的配置
+            if(noLoginList.indexOf(currentPagePath)==-1 && loginRedirect){
               // 重置用户信息
               error(res.msg)
               setTimeout(() => {
@@ -212,7 +216,11 @@ export const ajax = ({ url, method = 'post', data = {}, options = {},isAddHost=t
                   url: '/pages/user/login',
                 })
               }, 500)
+
+              return
             }
+
+            reject(Error('nocare'))
 
 
 

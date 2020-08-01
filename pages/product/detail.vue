@@ -2611,7 +2611,8 @@ export default {
 
         if (checkIsLogin(0, 0)) {
           const is_favourite = await checkFavourite(data, { onlyData: true }).catch(e => {
-            throw Error(e.msg || '检查商品是否收藏失败')
+            // throw Error(e.msg || '检查商品是否收藏失败')
+            throw e
           })
           this.isFavorite = Number(is_favourite.is_favourite) === 1
         }
