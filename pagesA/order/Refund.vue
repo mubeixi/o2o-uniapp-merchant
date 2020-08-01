@@ -94,13 +94,13 @@
 </template>
 
 <script>
-import popupLayer from '@/componets/layout-popup/layout-popup'
+import popupLayer from '@/components/layout-popup/layout-popup'
 import { getRefund, orderRefund } from '@/api/order'
 import { error, hideLoading, showLoading, toast } from '@/common/fun'
 import BaseMixin from '@/mixins/BaseMixin'
-import LayoutIcon from '@/componets/layout-icon/layout-icon'
+import LayoutIcon from '@/components/layout-icon/layout-icon'
 import { chooseImageByPromise, getArrColumn, uploadImages } from '@/common/helper'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 
 export default {
   mixins: [BaseMixin],

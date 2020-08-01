@@ -106,7 +106,7 @@ import { getUserChargeRecord, getUserInfo, getUserMoneyRecord, transferBalance }
 import { mapActions } from 'vuex'
 import { confirm, error } from '@/common/fun'
 import { checkIsLogin } from '@/common/helper'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 
 export default {
   components: { WzwImTip },

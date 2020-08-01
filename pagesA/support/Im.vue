@@ -62,12 +62,12 @@ import { checkIsLogin, chooseImageByPromise, getArrColumn, setNavigationBarTitle
 import IM from '@/common/Im/Im'
 import { error, modal } from '@/common/fun'
 import Storage from '@/common/Storage'
-import WzwImCard from '@/componets/wzw-im-card/wzw-im-card'
-// import LayoutIcon from '@/componets/layout-icon/layout-icon'
+import WzwImCard from '@/components/wzw-im-card/wzw-im-card'
+// import LayoutIcon from '@/components/layout-icon/layout-icon'
 import { Exception } from '@/common/Exception'
 import { getProductDetail } from '@/api/product'
 import eventHub from '@/common/eventHub'
-import LayoutIcon from '@/componets/layout-icon/layout-icon'
+import LayoutIcon from '@/components/layout-icon/layout-icon'
 import { readMsg } from '@/common/Im/Fetch'
 
 let imInstance = null

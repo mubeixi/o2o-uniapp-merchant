@@ -94,14 +94,14 @@
 </template>
 
 <script>
-import LayoutIcon from '@/componets/layout-icon/layout-icon'
+import LayoutIcon from '@/components/layout-icon/layout-icon'
 import BaseMixin from '@/mixins/BaseMixin'
 import { getProductList } from '@/api/product'
 import { getPayCoupons } from '@/api/order'
 import { toHome } from '@/common/fun'
 import { getUserInfo } from '@/api/customer'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
-import WzwLiveTag from '@/componets/wzw-live-tag/wzw-live-tag'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
+import WzwLiveTag from '@/components/wzw-live-tag/wzw-live-tag'
 import { mapActions } from 'vuex'
 import { checkIsLogin } from '@/common/helper'
 export default {

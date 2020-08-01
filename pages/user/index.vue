@@ -91,9 +91,9 @@
 </template>
 
 <script>
-import LayoutIcon from '@/componets/layout-icon/layout-icon'
-import LayoutFun from '@/componets/layout-fun/layout-fun'
-import ProTag from '@/componets/pro-tag/pro-tag'
+import LayoutIcon from '@/components/layout-icon/layout-icon'
+import LayoutFun from '@/components/layout-fun/layout-fun'
+import ProTag from '@/components/pro-tag/pro-tag'
 import BaseMixin, { tabbarMixin } from '@/mixins/BaseMixin'
 import { checkIsLogin, getDomain } from '@/common/helper'
 import { getProductList } from '@/api/product'
@@ -101,7 +101,7 @@ import { getOrderNum } from '@/api/order'
 import { getRightsCard, getUserInfo, getFuncModule } from '@/api/customer'
 
 import { mapActions } from 'vuex'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 import eventHub from '@/common/eventHub'
 import { error } from '@/common/fun'
 

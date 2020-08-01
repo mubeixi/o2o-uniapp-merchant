@@ -89,17 +89,17 @@
 import { mapActions, mapGetters } from 'vuex'
 import { error } from '@/common/fun'
 import BaseMixin, { tabbarMixin } from '@/mixins/BaseMixin'
-import LayoutIcon from '@/componets/layout-icon/layout-icon'
+import LayoutIcon from '@/components/layout-icon/layout-icon'
 import ScrollPageHot from '@/pages/index/components/scroll-page-hot'
 import ScrollPageLocal from '@/pages/index/components/scroll-page-local'
 import ScrollPageMerchat from '@/pages/index/components/scroll-page-merchat'
 import Promisify from '@/common/Promisify'
-import LayoutModal from '@/componets/layout-modal/layout-modal'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import LayoutModal from '@/components/layout-modal/layout-modal'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 import Storage from '@/common/Storage'
 import { getSkinConfig } from '@/api/common'
-import LayoutLoading from '@/componets/layout-loading/layout-loading'
-import LayoutPageTitle from '@/componets/layout-page-title/layout-page-title'
+import LayoutLoading from '@/components/layout-loading/layout-loading'
+import LayoutPageTitle from '@/components/layout-page-title/layout-page-title'
 
 export default {
   mixins: [BaseMixin, tabbarMixin],

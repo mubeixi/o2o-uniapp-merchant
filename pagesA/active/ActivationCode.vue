@@ -181,9 +181,9 @@
   </div>
 </template>
 <script>
-import layoutIcon from '@/componets/layout-icon/layout-icon'
+import layoutIcon from '@/components/layout-icon/layout-icon'
 import BaseMixin from '@/mixins/BaseMixin'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 import { buyActiveCode } from '@/api/order'
 import Pay from '@/common/Pay'
 import { error, toast, showLoading, hideLoading } from '@/common/fun'

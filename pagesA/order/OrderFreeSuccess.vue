@@ -87,14 +87,14 @@
 <script>
 
 import BaseMixin from '@/mixins/BaseMixin'
-import LayoutIcon from '@/componets/layout-icon/layout-icon'
+import LayoutIcon from '@/components/layout-icon/layout-icon'
 import { getActiveInfo } from '@/api/common'
 import { getProductList } from '@/api/product'
 import { getBizInfo } from '@/api/store'
 import { hideLoading, modal, showLoading } from '@/common/fun'
 import { Exception } from '@/common/Exception'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
-import WzwLiveTag from '@/componets/wzw-live-tag/wzw-live-tag'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
+import WzwLiveTag from '@/components/wzw-live-tag/wzw-live-tag'
 
 export default {
   name: 'OrderFree',

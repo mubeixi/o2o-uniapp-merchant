@@ -33,8 +33,8 @@ import Storage from '@/common/Storage'
 import { delUserWithdrawMethod, getUserWithdrawMethod } from '@/api/customer'
 import BaseMixin from '@/mixins/BaseMixin'
 
-import PageTitle from '@/componets/page-title/page-title'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import PageTitle from '@/components/page-title/page-title'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 
 export default {
   components: {

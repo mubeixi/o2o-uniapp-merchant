@@ -166,15 +166,15 @@
 
 <script>
 import BaseMixin from '@/mixins/BaseMixin'
-import LayoutIcon from '@/componets/layout-icon/layout-icon'
+import LayoutIcon from '@/components/layout-icon/layout-icon'
 import { getBizProdCateList, getProductDetail, getProductList } from '@/api/product'
-import LayoutLayer from '@/componets/layout-layer/layout-layer'
+import LayoutLayer from '@/components/layout-layer/layout-layer'
 import { error, modal } from '@/common/fun'
 import { Exception } from '@/common/Exception'
 import { getBizInfo } from '@/api/store'
 import { checkIsLogin, mergeObject, numberSort } from '@/common/helper'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
-import WzwLiveTag from '@/componets/wzw-live-tag/wzw-live-tag'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
+import WzwLiveTag from '@/components/wzw-live-tag/wzw-live-tag'
 
 const attrInfoTmpl = {
   num: 0,

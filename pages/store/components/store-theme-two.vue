@@ -394,12 +394,12 @@ import {
   commentReply,
   getUserCoupon
 } from '@/api/customer'
-import LayoutIcon from '@/componets/layout-icon/layout-icon'
+import LayoutIcon from '@/components/layout-icon/layout-icon'
 import { Exception } from '@/common/Exception'
-import WzwLiveTag from '@/componets/wzw-live-tag/wzw-live-tag'
-import LayoutLoading from '@/componets/layout-loading/layout-loading'
-import LayoutPageTitle from '@/componets/layout-page-title/layout-page-title'
-import LayoutLayer from '@/componets/layout-layer/layout-layer'
+import WzwLiveTag from '@/components/wzw-live-tag/wzw-live-tag'
+import LayoutLoading from '@/components/layout-loading/layout-loading'
+import LayoutPageTitle from '@/components/layout-page-title/layout-page-title'
+import LayoutLayer from '@/components/layout-layer/layout-layer'
 
 var countdownInstance = null
 var countdownInstanceByFlash = null

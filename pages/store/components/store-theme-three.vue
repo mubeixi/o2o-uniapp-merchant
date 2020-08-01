@@ -422,10 +422,10 @@ import {
 } from '@/common/helper'
 import { addFavourite, cancelFavourite, CartList as getCartList, checkFavourite, getUserCoupon } from '@/api/customer'
 import { Exception } from '@/common/Exception'
-import LayoutPageTitle from '@/componets/layout-page-title/layout-page-title'
-import LayoutIcon from '@/componets/layout-icon/layout-icon'
-import WzwLiveTag from '@/componets/wzw-live-tag/wzw-live-tag'
-import LayoutLayer from '@/componets/layout-layer/layout-layer'
+import LayoutPageTitle from '@/components/layout-page-title/layout-page-title'
+import LayoutIcon from '@/components/layout-icon/layout-icon'
+import WzwLiveTag from '@/components/wzw-live-tag/wzw-live-tag'
+import LayoutLayer from '@/components/layout-layer/layout-layer'
 
 var countdownInstance = null
 var countdownInstanceByFlash = null

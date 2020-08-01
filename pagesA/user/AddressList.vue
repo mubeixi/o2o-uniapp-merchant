@@ -42,8 +42,8 @@
 <script>
 import { delAddress, getAddressList } from '@/api/customer'
 import BaseMixin from '@/mixins/BaseMixin'
-import LayoutIcon from '@/componets/layout-icon/layout-icon'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import LayoutIcon from '@/components/layout-icon/layout-icon'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 
 export default {
   mixins: [BaseMixin],

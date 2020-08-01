@@ -239,8 +239,8 @@ import { confirm, error, modal } from '@/common/fun'
 import { getBizProdCateList, getProductDetail, getProductList } from '@/api/product'
 import { checkIsLogin, mergeObject, numberSort } from '@/common/helper'
 import { CartList as getCartList } from '@/api/customer'
-import LayoutLayer from '@/componets/layout-layer/layout-layer'
-import LayoutIcon from '@/componets/layout-icon/layout-icon'
+import LayoutLayer from '@/components/layout-layer/layout-layer'
+import LayoutIcon from '@/components/layout-icon/layout-icon'
 
 const attrInfoTmpl = {
   Products_ID: 0,

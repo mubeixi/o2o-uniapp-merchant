@@ -110,11 +110,11 @@ import { getCouponList, getShopGiftList, getUserLevel } from '@/api/common'
 import { createBuyLevelOrder, userLevelPay } from '@/api/order'
 import { error, toast } from '@/common/fun'
 import { getUserID } from '@/common/request'
-import WzwPay from '@/componets/wzw-pay/wzw-pay'
+import WzwPay from '@/components/wzw-pay/wzw-pay'
 import BaseMixin from '@/mixins/BaseMixin'
 import Pay from '@/common/Pay'
 import { checkIsLogin } from '@/common/helper.js'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 
 export default {
   name: 'VipList',

@@ -64,7 +64,7 @@ import Promisify from '@/common/Promisify'
 import { mapActions } from 'vuex'
 import { error } from '@/common/fun'
 import BaseMixin from '@/mixins/BaseMixin'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 import { checkIsLogin } from '@/common/helper'
 
 export default {

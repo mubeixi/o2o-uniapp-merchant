@@ -125,9 +125,9 @@ import { getProductList } from '@/api/product'
 import BaseMixin from '@/mixins/BaseMixin'
 import Storage from '@/common/Storage'
 import { getLocation } from '@/common/tool/location'
-import { LayoutModal } from '@/componets/layout-modal/layout-modal'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
-import WzwLiveTag from '@/componets/wzw-live-tag/wzw-live-tag'
+import { LayoutModal } from '@/components/layout-modal/layout-modal'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
+import WzwLiveTag from '@/components/wzw-live-tag/wzw-live-tag'
 import { error } from '@/common/fun'
 
 export default {

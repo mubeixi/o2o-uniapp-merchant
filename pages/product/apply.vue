@@ -56,10 +56,10 @@ import { getProductList } from '@/api/product'
 import BaseMixin from '@/mixins/BaseMixin'
 import { updateCart } from '@/api/order'
 import { error, hideLoading, modal, showLoading } from '@/common/fun'
-import LayoutIcon from '@/componets/layout-icon/layout-icon'
-import ProductSku from '@/componets/product-sku/product-sku'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
-import WzwLiveTag from '@/componets/wzw-live-tag/wzw-live-tag'
+import LayoutIcon from '@/components/layout-icon/layout-icon'
+import ProductSku from '@/components/product-sku/product-sku'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
+import WzwLiveTag from '@/components/wzw-live-tag/wzw-live-tag'
 
 export default {
   mixins: [BaseMixin],

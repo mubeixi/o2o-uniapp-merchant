@@ -64,12 +64,12 @@
 <script>
 import BaseMixin from '@/mixins/BaseMixin'
 
-import uniRate from '@/componets/uni-rate/uni-rate'
-import LayoutIcon from '@/componets/layout-icon/layout-icon'
+import uniRate from '@/components/uni-rate/uni-rate'
+import LayoutIcon from '@/components/layout-icon/layout-icon'
 import { comment, getOrderDetail } from '@/api/order'
 import { chooseImageByPromise, getArrColumn, uploadImages } from '@/common/helper'
 import { hideLoading, showLoading } from '@/common/fun'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 
 export default {
   mixins: [BaseMixin],

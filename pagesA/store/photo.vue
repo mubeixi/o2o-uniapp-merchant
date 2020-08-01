@@ -46,7 +46,7 @@ import BaseMixin from '@/mixins/BaseMixin'
 import { hideLoading, modal, showLoading } from '@/common/fun'
 import { getAlbumList, getPhotoList } from '@/api/store'
 import { getArrColumn } from '@/common/helper'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 
 export default {
   name: 'StorePhoto',
