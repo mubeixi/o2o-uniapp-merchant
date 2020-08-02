@@ -16,13 +16,19 @@
   }
 </style>
 <template>
-  <div class="wrap">
+  <div class="wrap" v-if="!isCustom">
     <img class="logo" :src="'/static/client/copyright.png'|domain" />
 <!--    <p class="text">真产品聚划算就在网中网</p>-->
   </div>
 </template>
 <script>
+import ENV from '@/common/env'
 export default {
-  name: 'LayoutCopyright'
+  name: 'LayoutCopyright',
+  data () {
+    return {
+      isCustom: ENV.isCustom
+    }
+  }
 }
 </script>
