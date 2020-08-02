@@ -82,11 +82,11 @@
 
 <script>
 
-import LayoutIcon from '@/componets/layout-icon/layout-icon'
+import LayoutIcon from '@/components/layout-icon/layout-icon'
 import BaseMixin from '@/mixins/BaseMixin'
 import { getTaskCenter } from '@/api/customer'
-import CircleTitle from '@/componets/circle-title/circle-title'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import CircleTitle from '@/components/circle-title/circle-title'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 
 export default {
   mixins: [BaseMixin],

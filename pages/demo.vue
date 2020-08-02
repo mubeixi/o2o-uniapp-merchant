@@ -84,8 +84,8 @@
 
 <script>
 import BaseMixin from '@/mixins/BaseMixin'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
-import LayoutIcon from '@/componets/layout-icon/layout-icon'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
+import LayoutIcon from '@/components/layout-icon/layout-icon'
 import { getBizInfo } from '@/api/store'
 import { error, toast } from '@/common/fun'
 import { getUserCoupon } from '@/api/customer'

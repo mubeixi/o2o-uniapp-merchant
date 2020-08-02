@@ -104,8 +104,8 @@ import { Exception } from '@/common/Exception'
 import { componetMixin } from '@/mixins/BaseMixin'
 import { getBizInfo } from '@/api/store'
 import { mapGetters } from 'vuex'
-import LayoutLoading from '@/componets/layout-loading/layout-loading'
-import LayoutAd from '@/componets/layout-ad/layout-ad'
+import LayoutLoading from '@/components/layout-loading/layout-loading'
+import LayoutAd from '@/components/layout-ad/layout-ad'
 
 export default {
   name: 'scroll-page-merchat',

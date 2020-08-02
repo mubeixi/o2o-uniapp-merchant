@@ -46,10 +46,10 @@
 
 import BaseMixin from '@/mixins/BaseMixin'
 import { addAddress, editAddress, getAddressList } from '@/api/customer'
-import WzwAddress from '@/componets/wzw-address/wzw-address'
+import WzwAddress from '@/components/wzw-address/wzw-address'
 import { regPhone } from '@/common/Regs'
 import { error, toast } from '@/common/fun'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 
 export default {
   mixins: [BaseMixin],

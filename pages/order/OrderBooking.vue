@@ -393,17 +393,17 @@
 import BaseMixin from '@/mixins/BaseMixin'
 import { createOrder, createOrderCheck, getBizOrderTemplateList } from '@/api/order'
 import { getAddressList } from '@/api/customer'
-import LayoutLayer from '@/componets/layout-layer/layout-layer'
+import LayoutLayer from '@/components/layout-layer/layout-layer'
 import { confirm, error, hideLoading, modal, showLoading } from '@/common/fun'
 import Storage from '@/common/Storage'
 import { findArrayIdx, getObjectAttrNum, objTranslate } from '@/common/helper'
-import LayoutIcon from '@/componets/layout-icon/layout-icon'
-import FunErrMsg from '@/componets/fun-err-msg/fun-err-msg'
+import LayoutIcon from '@/components/layout-icon/layout-icon'
+import FunErrMsg from '@/components/fun-err-msg/fun-err-msg'
 import { Exception } from '@/common/Exception'
-import DiyForm from '@/componets/diy-form/diy-form'
+import DiyForm from '@/components/diy-form/diy-form'
 import { mapGetters } from 'vuex'
 import { computeArrayColumnSum } from '@/pages/order/pay'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 
 export default {
   mixins: [BaseMixin],
@@ -1417,6 +1417,7 @@ export default {
           return
         }
 
+        hideLoading()
         const url = '/pages/order/OrderPay?Order_ID=' + createOrderResult.Order_ID + '&pagefrom=check'
         uni.redirectTo({
           url: url
@@ -1429,8 +1430,12 @@ export default {
           this.formCheckResult = []
         }, 4000)
         Exception.handle(e)
+
+        setTimeout(() => {
+          hideLoading()
+        }, 2000)
       } finally {
-        hideLoading()
+
       }
     }
     // ...mapActions(['getUserInfo','setUserInfo']),

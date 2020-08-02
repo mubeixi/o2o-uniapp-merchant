@@ -162,11 +162,11 @@ import { buildSharePath, checkIsLogin, getProductThumb } from '@/common/helper'
 import Storage from '@/common/Storage'
 
 import { error, hideLoading, showLoading } from '@/common/fun'
-import LayoutLayer from '@/componets/layout-layer/layout-layer'
+import LayoutLayer from '@/components/layout-layer/layout-layer'
 import { Exception } from '@/common/Exception'
 import { mapActions } from 'vuex'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
-import WzwLiveTag from '@/componets/wzw-live-tag/wzw-live-tag'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
+import WzwLiveTag from '@/components/wzw-live-tag/wzw-live-tag'
 
 const groupStam = null
 const getGroupCountdown = ({ end_timeStamp = 1571221631, current = (new Date()).getTime() } = {}) => {

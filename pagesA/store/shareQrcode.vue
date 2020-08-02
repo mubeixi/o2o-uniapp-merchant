@@ -38,8 +38,8 @@ import { error, hideLoading, showLoading, toast } from '@/common/fun'
 import { getDomain, saveImageToDisk } from '@/common/helper'
 import Promisify from '@/common/Promisify'
 import { getBizInfo } from '@/api/store'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
-import LayoutModal from '@/componets/layout-modal/layout-modal'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
+import LayoutModal from '@/components/layout-modal/layout-modal'
 
 let canvasInstance = null
 export default {

@@ -44,7 +44,7 @@
 import { getJifenProd, getUserInfo, jifenProdDuihuan } from '@/api/customer'
 import { mapActions } from 'vuex'
 import BaseMixin from '@/mixins/BaseMixin'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 import { error } from '@/common/fun'
 
 export default {

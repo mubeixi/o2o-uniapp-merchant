@@ -50,9 +50,9 @@ import BaseMixin from '@/mixins/BaseMixin.js'
 import { getFlashsaleList } from '@/api/product'
 import { getBizInfo } from '@/api/store'
 import { getCountdownFunc, objTranslate } from '@/common/helper'
-import LayoutIcon from '@/componets/layout-icon/layout-icon'
+import LayoutIcon from '@/components/layout-icon/layout-icon'
 import { hideLoading, showLoading } from '@/common/fun'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 
 export default {
   mixins: [BaseMixin],

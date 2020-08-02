@@ -20,7 +20,7 @@
 import BaseMixin from '@/mixins/BaseMixin'
 import { modal } from '@/common/fun'
 import { buildSharePath, checkIsLogin } from '@/common/helper'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 import StoreThemeDefault from '@/pages/store/components/store-theme-default'
 import StoreThemeOne from '@/pages/store/components/store-theme-one'
 import StoreThemeTwo from '@/pages/store/components/store-theme-two'

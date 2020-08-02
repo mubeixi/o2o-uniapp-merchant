@@ -30,7 +30,7 @@ import Storage from '@/common/Storage'
 import BaseMixin from '@/mixins/BaseMixin'
 
 import { bindUserClientId } from '@/api/customer'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 import eventHub from '@/common/eventHub'
 
 export default {

@@ -445,14 +445,14 @@ import {
   commentReply,
   getUserCoupon
 } from '@/api/customer'
-import LayoutIcon from '@/componets/layout-icon/layout-icon'
+import LayoutIcon from '@/components/layout-icon/layout-icon'
 import { Exception } from '@/common/Exception'
-import WzwLiveTag from '@/componets/wzw-live-tag/wzw-live-tag'
-import LayoutLoading from '@/componets/layout-loading/layout-loading'
-import GoodsItem from '@/componets/good-item/good-item'
-import LayoutComment from '@/componets/layout-comment/layout-comment'
-import LayoutModal from '@/componets/layout-modal/layout-modal'
-import LayoutLayer from '@/componets/layout-layer/layout-layer'
+import WzwLiveTag from '@/components/wzw-live-tag/wzw-live-tag'
+import LayoutLoading from '@/components/layout-loading/layout-loading'
+import GoodsItem from '@/components/good-item/good-item'
+import LayoutComment from '@/components/layout-comment/layout-comment'
+import LayoutModal from '@/components/layout-modal/layout-modal'
+import LayoutLayer from '@/components/layout-layer/layout-layer'
 var countdownInstance = null
 var countdownInstanceByFlash = null
 /**
@@ -1038,7 +1038,8 @@ export default {
         })
 
         if (checkIsLogin(0, 0)) {
-          const { is_favourite = 0 } = await checkFavourite({ biz_id: this.bid }, { onlyData: true }).catch(() => {
+          const { is_favourite = 0 } = await checkFavourite({ biz_id: this.bid }, { onlyData: true }).catch((e) => {
+            throw e
           })
           this.isFavourite = is_favourite
         }
@@ -1050,10 +1051,11 @@ export default {
 
         this.refreshInfoByIsLogin()
 
-        hideLoading()
       } catch (e) {
-        hideLoading()
+
         Exception(e)
+      }finally{
+         hideLoading()
       }
     },
     toGoodsDetailFn (pro, activity) {
@@ -1244,7 +1246,7 @@ export default {
       }
     },
     toPicture () {
-      if(this.storePhotoTotal>0)this.$linkTo('/pagesA/store/photo?bid=' + this.bid)
+      if (this.storePhotoTotal > 0) this.$linkTo('/pagesA/store/photo?bid=' + this.bid)
     },
     taggleFavorite () {
       if (!checkIsLogin(1, 1)) return

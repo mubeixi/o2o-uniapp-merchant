@@ -460,10 +460,10 @@
 </template>
 
 <script>
-import LayoutModal from '@/componets/layout-modal/layout-modal'
-import LayoutCopyright from '@/componets/layout-copyright/layout-copyright'
-import LayoutComment from '@/componets/layout-comment/layout-comment'
-import LayoutIcon from '@/componets/layout-icon/layout-icon'
+import LayoutModal from '@/components/layout-modal/layout-modal'
+import LayoutCopyright from '@/components/layout-copyright/layout-copyright'
+import LayoutComment from '@/components/layout-comment/layout-comment'
+import LayoutIcon from '@/components/layout-icon/layout-icon'
 import { componetMixin } from '@/mixins/BaseMixin'
 import { checkIsLogin, getArrColumn } from '@/common/helper'
 import { error, hideLoading, modal, showLoading, toast, checkIsExpire, confirm } from '@/common/fun'
@@ -479,8 +479,8 @@ import { Exception } from '@/common/Exception'
 import { getCommitList, getCouponList } from '@/api/common'
 import { getAlbumList, getBizInfo, getBizSpikeList, getStoreList } from '@/api/store'
 import { getBizProdCateList, getProductList } from '@/api/product'
-import LayoutPageTitle from '@/componets/layout-page-title/layout-page-title'
-import LayoutLayer from '@/componets/layout-layer/layout-layer'
+import LayoutPageTitle from '@/components/layout-page-title/layout-page-title'
+import LayoutLayer from '@/components/layout-layer/layout-layer'
 
 const attrInfoTmpl = {
   num: 0,
@@ -1161,7 +1161,8 @@ export default {
         })
 
         if (checkIsLogin(0, 0)) {
-          const { is_favourite = 0 } = await checkFavourite({ biz_id: this.bid }, { onlyData: true }).catch(() => {
+          const { is_favourite = 0 } = await checkFavourite({ biz_id: this.bid }, { onlyData: true }).catch((e) => {
+            throw e
           })
           this.isFavourite = is_favourite
         }
@@ -1199,10 +1200,12 @@ export default {
 
         this.refreshInfoByIsLogin()
 
-        hideLoading()
+        
       } catch (e) {
-        hideLoading()
+       
         Exception(e)
+      }finally{
+         hideLoading()
       }
     },
     upSwiperHeight () {

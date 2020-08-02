@@ -83,10 +83,10 @@ import { hideLoading, showLoading } from '@/common/fun'
 import { getProductCategory, getProductList } from '@/api/product'
 import { Exception } from '@/common/Exception'
 import { componetMixin } from '@/mixins/BaseMixin'
-import GoodsItem from '@/componets/good-item/good-item'
+import GoodsItem from '@/components/good-item/good-item'
 import { mapGetters } from 'vuex'
-import LayoutLoading from '@/componets/layout-loading/layout-loading'
-import LayoutAd from '@/componets/layout-ad/layout-ad'
+import LayoutLoading from '@/components/layout-loading/layout-loading'
+import LayoutAd from '@/components/layout-ad/layout-ad'
 
 export default {
   name: 'scroll-page-local',

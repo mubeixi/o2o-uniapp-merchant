@@ -135,9 +135,9 @@
 import { cancelOrder, confirmOrder, delOrder, getOrderList, getOrderNum } from '@/api/order'
 import BaseMixin from '@/mixins/BaseMixin'
 import { error } from '@/common/fun'
-import LayoutModal from '@/componets/layout-modal/layout-modal'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
-import LayoutIcon from '@/componets/layout-icon/layout-icon'
+import LayoutModal from '@/components/layout-modal/layout-modal'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
+import LayoutIcon from '@/components/layout-icon/layout-icon'
 
 export default {
   components: {

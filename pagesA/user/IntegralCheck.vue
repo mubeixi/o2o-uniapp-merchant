@@ -122,7 +122,7 @@
 </template>
 
 <script>
-import popupLayer from '@/componets/layout-popup/layout-popup'
+import popupLayer from '@/components/layout-popup/layout-popup'
 import {
   getAddressList,
   getShipping,
@@ -138,8 +138,8 @@ import Pay from '@/common/Pay'
 import { GetQueryByString, isWeiXin, urlencode } from '@/common/helper'
 import { backFunc, error } from '@/common/fun'
 import { Storage } from '@/common/Storage'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
-import LayoutIcon from '@/componets/layout-icon/layout-icon'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
+import LayoutIcon from '@/components/layout-icon/layout-icon'
 
 export default {
   mixins: [BaseMixin],

@@ -108,11 +108,11 @@
 import { createRightsCardOrder, getRightsCard, rightsCardPay } from '@/api/customer'
 import BaseMixin from '@/mixins/BaseMixin'
 import { error, toast } from '@/common/fun'
-import WzwPay from '@/componets/wzw-pay/wzw-pay'
+import WzwPay from '@/components/wzw-pay/wzw-pay'
 import Pay from '@/common/Pay'
 import { checkIsLogin } from '@/common/helper'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
-import LayoutIcon from '@/componets/layout-icon/layout-icon'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
+import LayoutIcon from '@/components/layout-icon/layout-icon'
 
 export default {
   mixins: [BaseMixin],

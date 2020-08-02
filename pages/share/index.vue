@@ -76,14 +76,14 @@
 </template>
 
 <script>
-import LayoutAd from '@/componets/layout-ad/layout-ad'
+import LayoutAd from '@/components/layout-ad/layout-ad'
 import { getProductList } from '@/api/product'
 import { getShareView } from '@/api/customer'
 import { checkIsLogin } from '@/common/helper'
 import { error, hideLoading, showLoading } from '@/common/fun'
-import LayoutIcon from '@/componets/layout-icon/layout-icon'
+import LayoutIcon from '@/components/layout-icon/layout-icon'
 import BaseMixin from '@/mixins/BaseMixin'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 
 export default {
   name: 'ShareIndex',

@@ -422,10 +422,10 @@ import {
 } from '@/common/helper'
 import { addFavourite, cancelFavourite, CartList as getCartList, checkFavourite, getUserCoupon } from '@/api/customer'
 import { Exception } from '@/common/Exception'
-import LayoutPageTitle from '@/componets/layout-page-title/layout-page-title'
-import LayoutIcon from '@/componets/layout-icon/layout-icon'
-import WzwLiveTag from '@/componets/wzw-live-tag/wzw-live-tag'
-import LayoutLayer from '@/componets/layout-layer/layout-layer'
+import LayoutPageTitle from '@/components/layout-page-title/layout-page-title'
+import LayoutIcon from '@/components/layout-icon/layout-icon'
+import WzwLiveTag from '@/components/wzw-live-tag/wzw-live-tag'
+import LayoutLayer from '@/components/layout-layer/layout-layer'
 
 var countdownInstance = null
 var countdownInstanceByFlash = null
@@ -485,7 +485,7 @@ export default {
   },
   data () {
     return {
-      listExpand:false,
+      listExpand: false,
       scrollTopNum: 0,
       toViewIdx: '',
       pixelRatio: 1,
@@ -740,7 +740,7 @@ export default {
       if (!this.submitFlag) return
 
       const cart = await this.$store.dispatch('cart/addNum', {
-        product: { ...this.product, ...this.attrInfo,checked: true },
+        product: { ...this.product, ...this.attrInfo, checked: true },
         attr_text: this.attrInfo.attr_text,
         num: 1
       })
@@ -1382,7 +1382,8 @@ export default {
         checkFavourite({ biz_id: this.bid }, { onlyData: true }).then(res => {
           const { is_favourite = 0 } = res
           this.isFavourite = is_favourite
-        }).catch(() => {
+        }).catch((e) => {
+          throw e
         })
       }
 
@@ -1601,15 +1602,15 @@ export default {
 
         this.refreshInfoByIsLogin()
 
-        hideLoading()
       } catch (e) {
         console.log(e)
-        hideLoading()
         Exception.handle(e)
+      }finally{
+         hideLoading()
       }
     },
     toPicture () {
-      if(this.storePhotoTotal>0)this.$linkTo('/pagesA/store/photo?bid=' + this.bid)
+      if (this.storePhotoTotal > 0) this.$linkTo('/pagesA/store/photo?bid=' + this.bid)
     },
     taggleFavorite () {
       if (!checkIsLogin(1, 1)) return

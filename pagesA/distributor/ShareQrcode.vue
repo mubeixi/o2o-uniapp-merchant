@@ -23,7 +23,7 @@ import { mapActions } from 'vuex'
 import { getDistributeWxQrcode, getPosterDetail, getPosterList } from '@/api/common'
 import { error } from '@/common/fun'
 import BaseMixin from '@/mixins/BaseMixin'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 
 export default {
   components: { WzwImTip },

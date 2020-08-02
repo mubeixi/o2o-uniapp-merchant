@@ -1759,22 +1759,22 @@ import { getActiveInfo, getCommitList, getCouponList, getUserLevel } from '@/api
 import { getBizInfo } from '@/api/store'
 import { addFavourite, cancelFavourite, checkFavourite, commentReply, getUserCoupon } from '@/api/customer'
 
-import ProductSku from '@/componets/product-sku/product-sku'
+import ProductSku from '@/components/product-sku/product-sku'
 import { updateCart } from '@/api/order'
 import { formatRichTextByUparseFn } from '@/common/filter'
-import LayoutIcon from '@/componets/layout-icon/layout-icon'
-import LayoutComment from '@/componets/layout-comment/layout-comment'
-import WzwGoodsAction from '@/componets/wzw-goods-action/wzw-goods-action'
-import LayoutPopup from '@/componets/layout-popup/layout-popup'
+import LayoutIcon from '@/components/layout-icon/layout-icon'
+import LayoutComment from '@/components/layout-comment/layout-comment'
+import WzwGoodsAction from '@/components/wzw-goods-action/wzw-goods-action'
+import LayoutPopup from '@/components/layout-popup/layout-popup'
 
 import { error, hideLoading, modal, showLoading, toast, checkIsExpire, confirm, linkTo } from '@/common/fun'
 import { buildSharePath, checkIsLogin, getCountdownFunc, getProductThumb } from '@/common/helper'
-import uParse from '@/componets/gaoyia-parse/parse'
+import uParse from '@/components/gaoyia-parse/parse'
 import Storage from '@/common/Storage'
-import LayoutModal from '@/componets/layout-modal/layout-modal'
+import LayoutModal from '@/components/layout-modal/layout-modal'
 import { Exception } from '@/common/Exception'
 import ProductComment from '@/pages/product/components/product-comment'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 import store from '@/store'
 
 let countdownInstance = null
@@ -2611,7 +2611,8 @@ export default {
 
         if (checkIsLogin(0, 0)) {
           const is_favourite = await checkFavourite(data, { onlyData: true }).catch(e => {
-            throw Error(e.msg || '检查商品是否收藏失败')
+            // throw Error(e.msg || '检查商品是否收藏失败')
+            throw e
           })
           this.isFavorite = Number(is_favourite.is_favourite) === 1
         }

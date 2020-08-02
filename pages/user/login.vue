@@ -109,10 +109,10 @@
 
 <script>
 import BaseMixin from '@/mixins/BaseMixin'
-import LayoutPageTitle from '@/componets/layout-page-title/layout-page-title'
-import FunErrMsg from '@/componets/fun-err-msg/fun-err-msg'
-import LayoutPopup from '@/componets/layout-popup/layout-popup'
-import LayoutIcon from '@/componets/layout-icon/layout-icon'
+import LayoutPageTitle from '@/components/layout-page-title/layout-page-title'
+import FunErrMsg from '@/components/fun-err-msg/fun-err-msg'
+import LayoutPopup from '@/components/layout-popup/layout-popup'
+import LayoutIcon from '@/components/layout-icon/layout-icon'
 
 import { error } from '@/common/fun'
 import { getSmsCode, userLogin } from '@/api/customer'
@@ -122,7 +122,7 @@ import Promisify from '@/common/Promisify'
 import Storage from '@/common/Storage'
 import IM from '@/common/Im/Im'
 import eventHub from '@/common/eventHub'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 
 export default {
   name: 'UserLogin',

@@ -29,10 +29,10 @@
 <script>
 import BaseMixin from '@/mixins/BaseMixin'
 import { getLiveList } from '@/api/live'
-import LayoutLoading from '@/componets/layout-loading/layout-loading'
+import LayoutLoading from '@/components/layout-loading/layout-loading'
 import { getDomain, objTranslate } from '@/common/helper'
-import LayoutIcon from '@/componets/layout-icon/layout-icon'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import LayoutIcon from '@/components/layout-icon/layout-icon'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 const livePlayer = requirePlugin('live-player-plugin')
 export default {
   name: 'liveList',

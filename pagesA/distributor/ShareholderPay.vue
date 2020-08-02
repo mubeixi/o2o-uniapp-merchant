@@ -98,8 +98,8 @@ import { cancelShaApply, getShaApply, shaApplyPay } from '@/api/customer'
 import Pay from '@/common/Pay'
 import { confirm, error, toast } from '@/common/fun'
 import BaseMixin from '@/mixins/BaseMixin'
-import LayoutLayer from '@/componets/layout-layer/layout-layer'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import LayoutLayer from '@/components/layout-layer/layout-layer'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 
 export default {
   mixins: [BaseMixin],

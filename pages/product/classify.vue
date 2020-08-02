@@ -92,7 +92,7 @@
 <script>
 import BaseMixin from '@/mixins/BaseMixin'
 import { getProductCategory } from '@/api/product'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 
 export default {
   name: 'ProductClassify',

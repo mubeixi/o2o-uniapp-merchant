@@ -21,7 +21,7 @@
 import { disApplyInit } from '@/api/customer'
 import { mapActions } from 'vuex'
 import BaseMixin from '@/mixins/BaseMixin'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 
 export default {
   components: { WzwImTip },

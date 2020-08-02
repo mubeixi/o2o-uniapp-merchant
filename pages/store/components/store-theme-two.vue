@@ -394,12 +394,12 @@ import {
   commentReply,
   getUserCoupon
 } from '@/api/customer'
-import LayoutIcon from '@/componets/layout-icon/layout-icon'
+import LayoutIcon from '@/components/layout-icon/layout-icon'
 import { Exception } from '@/common/Exception'
-import WzwLiveTag from '@/componets/wzw-live-tag/wzw-live-tag'
-import LayoutLoading from '@/componets/layout-loading/layout-loading'
-import LayoutPageTitle from '@/componets/layout-page-title/layout-page-title'
-import LayoutLayer from '@/componets/layout-layer/layout-layer'
+import WzwLiveTag from '@/components/wzw-live-tag/wzw-live-tag'
+import LayoutLoading from '@/components/layout-loading/layout-loading'
+import LayoutPageTitle from '@/components/layout-page-title/layout-page-title'
+import LayoutLayer from '@/components/layout-layer/layout-layer'
 
 var countdownInstance = null
 var countdownInstanceByFlash = null
@@ -1008,6 +1008,7 @@ export default {
 
         if (checkIsLogin(0, 0)) {
           const { is_favourite = 0 } = await checkFavourite({ biz_id: this.bid }, { onlyData: true }).catch(() => {
+            
           })
           this.isFavourite = is_favourite
         }
@@ -1018,11 +1019,12 @@ export default {
         }
 
         this.refreshInfoByIsLogin()
-
-        hideLoading()
+        
       } catch (e) {
-        hideLoading()
+
         Exception.handle(e)
+      }finally{
+         hideLoading()
       }
     },
     toGoodsDetailFn (pro, activity) {
@@ -1215,7 +1217,7 @@ export default {
       }
     },
     toPicture () {
-      if(this.storePhotoTotal>0)this.$linkTo('/pagesA/store/photo?bid=' + this.bid)
+      if (this.storePhotoTotal > 0) this.$linkTo('/pagesA/store/photo?bid=' + this.bid)
     },
     taggleFavorite () {
       if (!checkIsLogin(1, 1)) return
@@ -1305,7 +1307,7 @@ export default {
 </script>
 <style lang="scss" scoped>
   .plus-tag {
-    
+
     background-color: #FF0000;
     border-radius: 8px;
     font-size: 12px;
@@ -1322,9 +1324,9 @@ export default {
         font-size: 14px;
       }
     }
-    
+
   }
-  
+
   .mall-tabbar-wrap {
     position: fixed;
     z-index: 102;

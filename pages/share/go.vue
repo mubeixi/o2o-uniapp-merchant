@@ -88,13 +88,13 @@
 <script>
 import { getFlashsaleDetail, getProductDetail, getProductSharePic, spikeProdDetail } from '@/api/product'
 import { hideLoading, modal, showLoading, error, toast } from '@/common/fun'
-import LayoutIcon from '@/componets/layout-icon/layout-icon'
-import LayoutModal from '@/componets/layout-modal/layout-modal'
+import LayoutIcon from '@/components/layout-icon/layout-icon'
+import LayoutModal from '@/components/layout-modal/layout-modal'
 import BaseMixin from '@/mixins/BaseMixin'
 import Promisify from '@/common/Promisify'
 import { buildSharePath, checkIsLogin, cutstrFun, saveImageToDisk } from '@/common/helper'
 import { Exception } from '@/common/Exception'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 
 let canvasInstance = null
 export default {

@@ -147,13 +147,13 @@ import { updateCart } from '@/api/order'
 import { buildSharePath, checkIsLogin, getProductThumb } from '@/common/helper'
 import Storage from '@/common/Storage'
 import { error, hideLoading, modal, showLoading } from '@/common/fun'
-import LayoutLayer from '@/componets/layout-layer/layout-layer'
+import LayoutLayer from '@/components/layout-layer/layout-layer'
 import { Exception } from '@/common/Exception'
 import { mapActions } from 'vuex'
-import ProductSku from '@/componets/product-sku/product-sku'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
-import WzwLiveTag from '@/componets/wzw-live-tag/wzw-live-tag'
-import LayoutIcon from '@/componets/layout-icon/layout-icon'
+import ProductSku from '@/components/product-sku/product-sku'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
+import WzwLiveTag from '@/components/wzw-live-tag/wzw-live-tag'
+import LayoutIcon from '@/components/layout-icon/layout-icon'
 const groupStam = null
 const getGroupCountdown = ({ end_timeStamp = 1571221631, current = (new Date()).getTime() } = {}) => {
   let { d = 0, h = 0, m = 0, s = 0 } = {}

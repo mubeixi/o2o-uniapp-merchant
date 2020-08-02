@@ -39,7 +39,7 @@ import { mapActions } from 'vuex'
 import BaseMixin from '@/mixins/BaseMixin'
 import { chooseImageByPromise, getArrColumn, uploadImages } from '@/common/helper'
 import { Exception } from '@/common/Exception'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 
 export default {
   components: { WzwImTip },

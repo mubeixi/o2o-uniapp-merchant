@@ -88,8 +88,8 @@ import { getDisInit, getFuncModule, getUserInfo } from '@/api/customer'
 
 import { mapActions } from 'vuex'
 import { checkIsDistribute, checkIsLogin } from '@/common/helper'
-import LayoutIcon from '@/componets/layout-icon/layout-icon'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import LayoutIcon from '@/components/layout-icon/layout-icon'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 
 const routerList = {
   '/pagesA/fenxiao/erweima': '/pagesA/distributor/Qrcode',
