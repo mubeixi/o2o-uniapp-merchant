@@ -13,11 +13,7 @@
       <!--      </div>-->
     </div>
 
-    <scroll-view class="store-comp-wrap"
-                 @touchstart="touchPageStart"
-                 @touchmove="touchPageMove"
-                 @touchend="touchPageEnd"
-                 @scroll="bindScroll" :scroll-y="pageScrollEnable">
+    <div class="store-comp-wrap">
       <div id="topBox" class="top-box">
         <image class="top-box-bg" :src="$getDomain('/static/client/store/theme-three/top-bg.png')"></image>
         <layout-page-title letf-icon-color="#fff" status-bg-color="none" menu-button-bg-color="none"
@@ -86,7 +82,7 @@
         </div>
       </div>
 
-      <div class="container" :style="{height:systemInfo.windowHeight-diyHeadHeight+'px'}"
+      <div class="container" :style="{height:systemInfo.windowHeight-headBlockHeight+'px'}"
            :class="{sticky:headTabSticky==1}">
         <scroll-view class="container-l"
                      :upper-threshold="5"
@@ -276,7 +272,7 @@
 
         </scroll-view>
       </div>
-    </scroll-view>
+    </div>
 
     <layout-layer @click="bindCartsPopClose" :bottomStr="storeBottomActionHeight" positions="bottom" ref="carts">
       <div class="carts-box">
@@ -490,6 +486,7 @@ export default {
       toViewIdx: '',
       pixelRatio: 1,
       headTabTop: 100,
+      headBlockHeight:0,
       pageScrollTop: 0,
       containerRightScrollTop: 0,
       containerLeftScrollTop: 0,
@@ -499,8 +496,8 @@ export default {
       moveDirectionByPage: '--',
       storeBottomActionHeight: '52px',
       pageScrollEnable: false,
-      leftScrollEnable: false,
-      rightScrollEnable: false,
+      leftScrollEnable: true,
+      rightScrollEnable: true,
       product: {
         skuvaljosn: {}
       },
@@ -1346,10 +1343,10 @@ export default {
       this.containerRightScrollTop = scrollTop
     },
     bindScrollLeftTop () {
-      this.leftScrollEnable = false
+      // this.leftScrollEnable = false
     },
     bindScrollRightTop () {
-      this.rightScrollEnable = false
+      // this.rightScrollEnable = false
       // this.headTabSticky = false
       // this.pageScrollEnable = true
       // this.leftScrollEnable = false
@@ -1573,6 +1570,7 @@ export default {
             console.log(this.diyHeadHeight, this.systemInfo.windowHeight, this.systemInfo.windowHeight - this.diyHeadHeight)
 
             this.headTabTop = data.height - this.diyHeadHeight
+            this.headBlockHeight = data.height
             console.log(this.headTabTop)
           })
           query.exec()
@@ -2134,7 +2132,7 @@ export default {
     top: 0;
     right: 0;
     z-index: 1;
-    overflow-x: hidden;
+    overflow: hidden;
     background: #fff;
 
     .container-l {
