@@ -2112,7 +2112,7 @@ export default {
   }
   .comment-list{
     width: 710rpx;
-    padding: 20rpx;
+    padding:0rpx 20rpx;
     .comment-item{
       padding: 30rpx 0;
       border-bottom: 1px solid #e8e8e8;

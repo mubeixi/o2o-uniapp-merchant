@@ -295,7 +295,7 @@ export default {
       oldQty: 0,
       pageSize: 999,
       cateIndex: 0,
-      bizSearchKeyWord: '酸奶',
+      bizSearchKeyWord: '搜索',
 
       bid: '',
       cateActiveIdx: 0,
@@ -684,7 +684,7 @@ export default {
       }
     },
     toSearch () {
-      this.$linkTo('/pages/search/result?inputValue=' + this.bizSearchKeyWord + '&biz_id=' + this.bid)
+      this.$linkTo('/pages/search/result?biz_id=' + this.bid)
     },
     changeCate (index) {
       this.cateIndex = index

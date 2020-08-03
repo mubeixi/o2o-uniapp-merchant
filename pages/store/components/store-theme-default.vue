@@ -223,7 +223,7 @@
                 </div>
                 <div class="block-content">
                   <div class="comment-list">
-                    <div :key="idx" v-for="(item,idx) in comments">
+                    <div :key="idx" v-for="(item,idx) in comments" class='p-t-15 p-b-15'>
                       <layout-comment :comment="item" :isLast="comments.length-1===idx"
                                       @comment="clickComment"></layout-comment>
                       <div class="comment-send" v-if="item.child.length>0">
