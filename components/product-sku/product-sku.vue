@@ -11,7 +11,7 @@
                 ¥<span class="fz-20 fz-b m-l-2">{{postData.price}}</span>
               </div>
               <layout-icon  color="#999999" size="21" type="iconguanbi" @click.stop="close"></layout-icon>
-            
+
             </div>
             <div class="addInfo c9 m-b-10">
               库存：{{postData.count}}
@@ -55,7 +55,7 @@
           </div>
         </div>
       </div>
-      
+
       <div v-if="hasCart" class="skuBtn">
         <div class="sku-btn cart" @click="updaCart">
           加入购物车
@@ -132,7 +132,7 @@ export default {
   },
   methods: {
     noop () {
-    
+
     },
     showImgDetal () {
       const arr = []
@@ -159,9 +159,9 @@ export default {
           return
         }
       }
-      
-      this.close()
+
       this.$emit('updaCart', this.postData)
+      this.close()
     },
     submit () {
       if (this.productInfo.skuvaljosn) {
@@ -173,7 +173,7 @@ export default {
           return
         }
       }
-      
+
       console.log('pro')
       if (this.isCart) {
         this.$emit('updaCart', this.postData)
@@ -193,14 +193,15 @@ export default {
           return
         }
       }
-      
+
       this.$emit('buyNow', this.postData)
       this.close()
     },
     skuSub () {
       if (!this.submitFlag) return
-      this.close()
+
       this.$emit('sureSku', this.postData)
+      this.close()
     },
     selectAttr (index, i) {
       const value_index = index // 选择的属性值索引
@@ -238,7 +239,7 @@ export default {
           break
         }
       }
-      
+
       // 属性判断
       if (attr_val) {
         console.log(attr_val, 'attr_val', this.productInfo)
@@ -250,7 +251,7 @@ export default {
         } else {
           this.postData.price = attr_val.Attr_Price ? attr_val.Attr_Price : this.list.Products_PriceX // 选择属性的价格
         }
-        
+
         this.submitFlag = !(!this.check_attr)
         // this.submitFlag = (!this.check_attr || Object.getOwnPropertyNames(this.check_attr).length !== Object.getOwnPropertyNames(this.list.skujosn).length) ? false : true;
       }
@@ -267,7 +268,7 @@ export default {
       if (this.postData.qty > this.postData.count) {
         this.postData.qty = this.postData.count
       }
-      
+
       Storage.set('value_index', value_index)
       Storage.set('attr_index', attr_index)
     },
@@ -328,7 +329,7 @@ export default {
           }
         }
         // 结束
-        
+
         this.submitFlag = false
         this.list.skujosn_new = skujosn_new
         this.list.skuvaljosn = this.list.skuvaljosn
@@ -341,7 +342,7 @@ export default {
       this.isShow = true
       this.$refs.productSku.show()
       await this.init()
-      
+
       const value_index = Storage.get('value_index')
       const attr_index = Storage.get('attr_index')
       if (value_index && attr_index) {
@@ -367,7 +368,7 @@ export default {
   .cartSku {
     padding: 0rpx 30rpx;
     z-index: 100;
-    
+
     .cartTop {
       position: relative;
       display: flex;
@@ -375,24 +376,24 @@ export default {
       padding-bottom: 30rpx;
       box-sizing: border-box;
       border-bottom: 1rpx solid #EEEEEE;
-      
+
       .image {
         width: 160rpx;
         height: 160rpx;
       }
-      
+
       .cartTitle {
         margin-left: 22rpx;
         font-size: 32rpx;
         //width: 420rpx;
         flex: 1;
         height: 160rpx;
-        
+
         .cartTitles {
           height: 48rpx;
           margin-bottom: 22rpx;
         }
-        
+
         .addInfo {
           width: 450rpx;
           font-size: 26rpx;
@@ -401,17 +402,17 @@ export default {
         }
       }
     }
-    
+
     .cartCenter {
       max-height: 300px;
       overflow: scroll;
-      
+
       .cartAttr {
         //display: flex;
         padding: 30rpx 0rpx;
         box-sizing: border-box;
         border-bottom: 1rpx solid #EEEEEE;
-        
+
         .sku {
           font-size: 30rpx;
           height: 30rpx;
@@ -419,12 +420,12 @@ export default {
           width: 140rpx;
           margin-bottom: 24rpx;
         }
-        
+
         .skuValue {
           display: flex;
           //flex:1;
           flex-wrap: wrap;
-          
+
           .skuview {
             height: 60rpx;
             line-height: 60rpx;
@@ -436,35 +437,35 @@ export default {
             margin-bottom: 26rpx;
             padding: 0rpx 30rpx;
           }
-          
+
           .unablechoose {
             background: #ddd;
           }
         }
       }
     }
-    
+
     .numBer {
-      
+
       display: flex;
       padding: 24rpx 0rpx;
       height: 108rpx;
       border-bottom: 1rpx solid #EEEEEE;
       align-items: center;
       justify-content: space-between;
-      
+
       .numBers {
         font-size: 30rpx;
         height: 30rpx;
         line-height: 30rpx;
         color: #333333;
       }
-      
+
       .inputNumber {
-        
+
         height: 60rpx;
         display: flex;
-        
+
         .inputq {
           max-width: 120rpx;
           display: inline-block;
@@ -478,7 +479,7 @@ export default {
           background-color: #f5f5f5;
           box-sizing: border-box;
         }
-        
+
         .clicks {
           font-size: 40rpx;
           color: #333333;
@@ -492,7 +493,7 @@ export default {
       }
     }
   }
-  
+
   .cartSub {
     width: 100%;
     height: 76rpx;
@@ -504,12 +505,12 @@ export default {
     margin-top: 66rpx;
     border-radius: 0;
     border: none;
-    
+
     &.disabled {
       background: #999;
     }
   }
-  
+
   .skuBtn {
     margin-top: 66rpx;
     width: 100%;
@@ -518,7 +519,7 @@ export default {
     height: 76rpx;
     padding: 0rpx 30rpx  10rpx 30rpx;
     box-sizing: border-box;
-    
+
     .sku-btn {
       flex: 1;
       height: 76rpx;
@@ -527,18 +528,18 @@ export default {
       color: #FFFFFF;
       font-size: 28rpx;
     }
-    
+
     .disabled {
       background: #999 !important;
     }
-    
+
     .cart {
       background-color: #333333;
       //background: linear-gradient(to right, #f6ca44, #f19b38);
       border-bottom-left-radius: 78rpx;
       border-top-left-radius: 78rpx;
     }
-    
+
     .buyNow {
       background-color: #26C78D;
       //background: linear-gradient(to right, #ee7e30, #eb5928);
@@ -546,12 +547,12 @@ export default {
       border-top-right-radius: 78rpx;
     }
   }
-  
+
   .skuCheck {
     color: #26C78D !important;
     background-color: #E8FFF7 !important;
   }
-  
+
   .cart-price{
     padding-top: 18rpx;
     height: 30rpx;
