@@ -150,7 +150,7 @@
                     <div class="goods-list">
                       <div :key="idx" @click="$toGoodsDetail(item)"
                            class="goods-item" style="margin-bottom: 18rpx;" v-for="(item,idx) in recommends">
-                        <image :style="{backgroundImage:'url('+item.ImgPath+')'}" class="goods-item-cover"></image>
+                        <div :style="{backgroundImage:'url('+item.ImgPath+')'}" class="goods-item-cover"></image>
                         <div class="goods-item-right">
                           <div class="title">{{item.Products_Name}}</div>
                           <div class="c8" style="line-height: 16px;max-height: 32px;overflow: hidden;">

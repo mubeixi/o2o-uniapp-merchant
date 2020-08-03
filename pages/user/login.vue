@@ -55,7 +55,7 @@
       </div>
     </block>
     <block v-if="mode==='wxLogin'">
-      <image :src="initData.ShopLogo+'-r100'" class="img imgWx m-t-50" mode="widthFix"></image>
+      <image v-if="initData.ShopLogo" :src="initData.ShopLogo+'-r100'" class="img imgWx m-t-50" mode="widthFix"></image>
 
       <div  class="otherLogin-top-item" >
         <button @getuserinfo="weixinlogin" class="btn  wxBtn" open-type="getUserInfo">

@@ -180,7 +180,7 @@ export default {
     ready: {
       immediate: true,
       handler (val, oldVal) {
-        console.log('ad comonents ready value change', val)
+        // console.log('ad comonents ready value change', val)
         if (val) this._init_func()
       }
     }

@@ -39,13 +39,13 @@
         </div>
         <div @click.stop="delMsgItem(chat,idx)" class="inner-del">删除</div>
       </div>
-
+    
     </div>
     <div class="none" v-else>
       <image :src="'/static/client/box.png'|domain" class="img" />
       <div class="m-t-15"><span>信箱是空的</span></div>
     </div>
-
+  
   </div>
 </template>
 
@@ -225,16 +225,19 @@ export default {
   //   }
   // },
   onLoad () {
-
+    if (!checkIsLogin(1, 1)) {
+      
+      return
+    }
   },
   onReady () {
     this.delBtnWidth = this.getEleWidth(180)
     // 给单个的行记录也累加数量
     uni.$on('IM_TAKE_MSG', async (res) => {
       // 只有当前页面响应
-
+      
       console.log(res)
-
+      
       if (eventHub.imInstance) {
         const chatList = await getChatList({ page: this.paginate.page, page_size: this.paginate.page_size, out_uid: this.out_uid }).then(res => {
           this.paginate.totalCount = res.totalCount
@@ -249,39 +252,42 @@ export default {
         console.log(chatList)
         // this.paginate.page++
         this.chatList = chatList // this.chatList.concat()
-
+        
         await this.refreshTabTag()
       }
     })
   },
   onShow () {
-    if (!checkIsLogin(1, 1)) {
+  
+    this.setTabBarIndex(1)
+    
+    if (!checkIsLogin(0, 0)) {
       this.chatList = []// 清空列表
       this.refreshTabTag()
       return
     }
-
+    
     getUserInfo().then(res => {
       this.setUserInfo(res.data)
     }).catch(err => {
     })
-
+    
     if (eventHub.imInstance) {
       this.imInstance = imInstance = eventHub.imInstance
     } else {
       this.imInstance = imInstance = new IM()
     }
-
+    
     // 设置本地用户信息
     imInstance.setSendInfo({
       type: 'user',
       id: Storage.get('user_id')
     })
     this.out_uid = imInstance.getOutUid()
-
+    
     this._init_func()
-
-    this.setTabBarIndex(1)
+    
+    
     this.$store.dispatch('system/setTabActiveIdx', 1)
     this.refreshTabTag()
   }
@@ -327,7 +333,7 @@ export default {
     width: 750rpx;
     overflow: hidden;
   }
-
+  
   .inner-del {
     position: absolute;
     background: $fun-red-color;
@@ -339,7 +345,7 @@ export default {
     right: 0;
     color: #fff
   }
-
+  
   .chat-item {
     position: absolute;
     width: 100%;
@@ -349,19 +355,19 @@ export default {
     z-index: 3;
     background: #fff;
     transition: left 0.2s ease-in-out;
-
+    
     .left {
       width: 160rpx;
       position: relative;
-
+      
       .cover {
         margin: 22rpx 32rpx;
         width: 96rpx;
         height: 96rpx;
         @include cover-img();
-
+        
       }
-
+      
       .item-tag {
         position: absolute;
         right: 32rpx;
@@ -375,7 +381,7 @@ export default {
         border-radius: 7px;
         color: #fff;
         font-size: 10px;
-
+        
         &.circle {
           width: 14px;
           padding: 0px 0px 0px 0px;
@@ -383,7 +389,7 @@ export default {
         }
       }
     }
-
+    
     .right {
       width: 590rpx;
       padding: 30rpx 30rpx 30rpx 0;
@@ -392,13 +398,13 @@ export default {
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-
+      
       .nickname {
         max-width: 400rpx;
         overflow: hidden;
         text-overflow: ellipsis;
       }
-
+      
       .msg {
         max-width: 600rpx;
         overflow: hidden;
@@ -406,14 +412,14 @@ export default {
       }
     }
   }
-
+  
   .none {
     text-align: center;
     padding: 60rpx 0;
     color: #B0B0B0;
     font-size: 26rpx;
   }
-
+  
   .none .img {
     height: 220rpx;
     width: 200rpx;
