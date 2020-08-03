@@ -224,7 +224,8 @@
       </div>
 
       <div class="close-btn" @click.stop="taggkeCartShow">
-        <layout-icon v-if="!cartExpand" size="23" type="iconicon_plus" color="#fff"></layout-icon>
+        <div v-if="!cartExpand" class="plus-tag" :class="{aircle:total_count<100,zero:total_count<10}">{{total_count}}</div>
+<!--        <layout-icon v-if="!cartExpand" size="23" type="iconicon_plus" color="#fff"></layout-icon>-->
         <layout-icon v-if="cartExpand" size="23" type="iconxingzhuang" color="#fff"></layout-icon>
       </div>
 
@@ -1191,7 +1192,28 @@ export default {
       align-items: center;
       justify-content: center;
     }
-
+  
+    .plus-tag {
+    
+      background-color: #FF0000;
+      border-radius: 8px;
+      font-size: 12px;
+      color: #FFFFff;
+      padding: 2px 6px;
+      text-align: center;
+      &.aircle {
+        border-radius: 50%;
+        padding: 0;
+        width: 24px;
+        height: 24px;
+        line-height: 24px;
+        &.zero{
+          font-size: 14px;
+        }
+      }
+    
+    }
+    
     .close-btn {
       height: 50px;
       width: 50px;
