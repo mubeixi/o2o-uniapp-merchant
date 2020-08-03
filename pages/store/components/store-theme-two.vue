@@ -1046,7 +1046,7 @@ export default {
       })
     },
     toSearch () {
-      this.$linkTo('/pages/search/result?inputValue=' + this.bizSearchKeyWord + '&biz_id=' + this.bid)
+      this.$linkTo('/pages/search/result?biz_id=' + this.bid)
     },
     toVip () {
       if (checkIsLogin(1, 1)) {
