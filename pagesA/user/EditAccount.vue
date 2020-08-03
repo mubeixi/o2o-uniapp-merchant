@@ -19,7 +19,7 @@
     <div class="action p-b-safe-area">
       <view @click="logoutFunc" class="btn">退出登录</view>
     </div>
-    
+  
   </view>
 </template>
 
@@ -41,19 +41,19 @@ export default {
   },
   methods: {
     ...mapActions({
-      setUserInfo: 'user/setUserInfo',
+      setUserInfo: 'user/setUserInfo'
     }),
     // 修改信息
     update (type) {
       // type 0 表示修改登录，1，修改支付
       uni.navigateTo({
-        url: '/pagesA/user/UpdateUserPsw?type=' + type,
+        url: '/pagesA/user/UpdateUserPsw?type=' + type
       })
     },
     logoutFunc () {
       confirm({
         title: '操作提示',
-        content: '是否退出登录',
+        content: '是否退出登录'
       }).then(res => {
         bindUserClientId({ action: 'clear' }, { errtip: false }).then(() => {
         }).catch(() => {
@@ -81,9 +81,9 @@ export default {
       }).catch(() => {
       
       })
-    },
+    }
     
-  },
+  }
 }
 </script>
 
@@ -104,7 +104,7 @@ export default {
     padding: 35rpx 0;
     font-size: 30rpx;
     color: #333;
-    border-bottom: 1px solid #E3E3E3;
+    border-bottom: 1rpx solid #eee;
     
     image {
       width: 15rpx;

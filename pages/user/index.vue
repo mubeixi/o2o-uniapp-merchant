@@ -68,7 +68,7 @@
 
       </block>
     </div>
-    <div class="intro">为你推荐</div>
+    <div class="intro" v-if="proList.length>0">为你推荐</div>
     <div class="product-list flex">
 
       <pro-tag

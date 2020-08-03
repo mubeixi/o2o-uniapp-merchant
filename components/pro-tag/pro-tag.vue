@@ -66,6 +66,7 @@ export default {
       display: block;
       width: 310rpx;
       height: 310rpx;
+      border-radius: 6rpx;
       @include cover-img();
     }
 

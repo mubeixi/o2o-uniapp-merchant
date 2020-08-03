@@ -90,12 +90,9 @@
                 <!--$linkTo()-->
                 <!--              <image :src="'/static/client/store/send.png'|domain" @click="toDelivery" class="feature-item"-->
                 <!--                     mode="scaleToFill"></image>-->
-                <image :src="'/static/client/store/pay.png'|domain" @click="toOffinePay" class="feature-item"
-                       mode="scaleToFill"></image>
-                <image :src="'/static/client/store/join.png'|domain" @click="$linkTo('/pages/product/apply?bid='+bid)" class="feature-item"
-                       mode="scaleToFill"></image>
-                <image :src="'/static/client/store/member.png'|domain" @click="toVip" class="feature-item"
-                       mode="scaleToFill"></image>
+                <image :src="'/static/client/store/pay.png'|domain" @click="toOffinePay" class="feature-item" mode="scaleToFill"></image>
+                <image :src="'/static/client/store/join.png'|domain" @click="$linkTo('/pages/product/apply?bid='+bid)" class="feature-item" mode="scaleToFill"></image>
+                <image :src="'/static/client/store/member.png'|domain" @click="toVip" class="feature-item" mode="scaleToFill"></image>
               </div>
 
               <!--虚拟产品-->
@@ -197,9 +194,9 @@
                              style="width: 345rpx;height: 345rpx"></div>
                         <div class="c3 fz-13" style="line-height: 36rpx;height: 72rpx;overflow-x: hidden">{{item.Products_Name}}</div>
                         <div class="flex flex-vertical-c" style="height: 32rpx;">
-                          <div class="price-selling"><span class="fz-10">￥</span><span class="fz-12">{{item.Products_PriceX}}</span>
+                          <div class="price-selling"><span class="fz-12">￥</span><span class="fz-17">{{item.Products_PriceX}}</span>
                           </div>
-                          <div class="p-l-10 text-through price-market"><span class="fz-10">￥</span><span class="fz-12">{{item.Products_PriceY}}</span>
+                          <div class="p-l-10 text-through price-market"><span class="fz-12">￥</span><span class="fz-17">{{item.Products_PriceY}}</span>
                           </div>
                         </div>
                       </div>
@@ -1880,9 +1877,12 @@ export default {
 
             .selling-price {
               color: $fun-red-color;
-
+  
+              .sign{
+                font-size: 24rpx;
+              }
               .num {
-                font-size: 14px;
+                font-size: 34rpx;
               }
             }
 
@@ -2010,9 +2010,13 @@ export default {
 
           .selling-price {
             color: $fun-red-color;
-
+  
+            .sign{
+              font-size: 24rpx;
+            }
+            
             .num {
-              font-size: 14px;
+              font-size: 34rpx;
             }
           }
 

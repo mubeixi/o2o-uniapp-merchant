@@ -1,5 +1,5 @@
 <template>
-  <div @click="commonClick" class="wrap">
+  <div @click="commonClick" class="page-wrap">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <layout-page-title :letfFn="true" :page-title="pageTitle" @clickLeft="bindBackFn"></layout-page-title>
     <fun-err-msg :errs="formCheckResult" :topStr="menuButtonInfo.height+menuButtonInfo.top+10+'px'"
@@ -512,6 +512,19 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+
+  .page-wrap {
+    text-align: center;
+    top: 0;
+    bottom: 0;
+    width: 750rpx;
+    color: #333;
+    box-sizing: border-box;
+    background: #fff;
+    overflow: hidden;
+    position: fixed;
+  }
+
   button {
     line-height: 2.3;
   }

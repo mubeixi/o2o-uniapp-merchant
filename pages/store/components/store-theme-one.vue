@@ -228,7 +228,7 @@
               </div>
               <div class="flex flex-vertical-c flex-justify-between">
                 <div class="price-box price-selling">
-                  <span class="sign fz-11">￥</span><span class="num  fz-15">{{pro.Products_PriceX}}</span>
+                  <span class="sign fz-12">￥</span><span class="num  fz-17">{{pro.Products_PriceX}}</span>
                 </div>
                 <div class="btn-buy">立即购买</div>
               </div>
@@ -264,12 +264,12 @@
         <div class="cate-goods-list">
           <div class="fun-goods-col" style="padding: 0 9rpx 0 0rpx">
             <block v-for="(pro,idx) in bizCateList[bizCateNavIndex].productList" :key="idx">
-              <goods-item cover-radius="8rpx" margin-bottom="20px" cover-width="345rpx" mode="top-bottom" :vo="pro" v-if="idx%2===0" ></goods-item>
+              <goods-item price-num-size="34rpx" price-sign-size="24rpx" cover-radius="8rpx" margin-bottom="20px" cover-width="345rpx" mode="top-bottom" :vo="pro" v-if="idx%2===0" ></goods-item>
             </block>
           </div>
           <div class="fun-goods-col" style="padding: 0 0rpx 0 9rpx">
             <block v-for="(pro,idx) in bizCateList[bizCateNavIndex].productList" :key="idx">
-              <goods-item cover-radius="8rpx" margin-bottom="20px" cover-width="345rpx" mode="top-bottom" :vo="pro" v-if="idx%2===1" ></goods-item>
+              <goods-item price-num-size="34rpx" price-sign-size="24rpx" cover-radius="8rpx" margin-bottom="20px" cover-width="345rpx" mode="top-bottom" :vo="pro" v-if="idx%2===1" ></goods-item>
             </block>
           </div>
         </div>
@@ -1043,7 +1043,7 @@ export default {
           })
           this.isFavourite = is_favourite
         }
-
+		hideLoading()
         // 这个就不要等了吧
         if (!checkIsLogin(0, 0)) {
           throw Error('nocare')
@@ -1052,10 +1052,8 @@ export default {
         this.refreshInfoByIsLogin()
 
       } catch (e) {
-
+		hideLoading()
         Exception(e)
-      }finally{
-         hideLoading()
       }
     },
     toGoodsDetailFn (pro, activity) {

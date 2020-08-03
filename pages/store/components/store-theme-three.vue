@@ -149,7 +149,7 @@
                   </div>
                   <div class="flex flex-vertical-c flex-justify-between">
                     <div class="flex flex-vertical-c">
-                      <span class="price-selling fz-12">￥</span><span class="price-selling fz-14">{{goods.Products_PriceX}}</span>
+                      <span class="price-selling fz-12">￥</span><span class="price-selling fz-17">{{goods.Products_PriceX}}</span>
                       <!--<div class="text-through price-market fz-12 m-l-6">￥{{goods.Products_PriceY}}</div>-->
                     </div>
                     <div @click.stop="$noop" class="action goods-item-action">
@@ -222,7 +222,7 @@
                       </div>
                       <div class="flex flex-vertical-b">
                         <div class="price-box price-selling ">
-                          <span class="sign fz-10">￥</span><span class="num fz-14">{{pro.price}}</span>
+                          <span class="sign fz-12">￥</span><span class="num fz-17">{{pro.price}}</span>
                         </div>
                         <div class="m-l-6 fz-11 price-market text-through">
                           <span class="sign">￥</span><span class="num">{{pro.Products_PriceX}}</span>
@@ -1595,18 +1595,19 @@ export default {
           throw Error(e.msg || '获取相册信息失败')
         })
 
+
         // 这个就不要等了吧
         if (!checkIsLogin(0, 0)) {
           throw Error('nocare')
         }
 
+		hideLoading()
         this.refreshInfoByIsLogin()
 
       } catch (e) {
         console.log(e)
+		hideLoading()
         Exception.handle(e)
-      }finally{
-         hideLoading()
       }
     },
     toPicture () {

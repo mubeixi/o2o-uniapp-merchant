@@ -341,8 +341,8 @@ export default {
       box-sizing: border-box;
       
       &.active {
-        color: $fun-primary-color;
-        border-bottom: 2px solid $fun-primary-color;
+        color: $fun-red-color;
+        border-bottom: 2px solid $fun-red-color;
       }
       
       &:first-child {
