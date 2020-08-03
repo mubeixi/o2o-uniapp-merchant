@@ -152,7 +152,7 @@ export default {
     background: #fff;
     
     .ins {
-      width: 236rpx;
+      flex: 1;
       height: 72rpx;
       line-height: 72rpx;
       text-align: center;
@@ -169,7 +169,8 @@ export default {
           background-color: $fun-red-color;
           position: absolute;
           bottom: 0rpx;
-          left: 50rpx;
+          left: 50%;
+		  transform: translateX(-50%)
         }
       }
     }

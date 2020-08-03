@@ -295,7 +295,7 @@ export default {
       oldQty: 0,
       pageSize: 999,
       cateIndex: 0,
-      bizSearchKeyWord: '',
+      bizSearchKeyWord: '搜索',
 
       bid: '',
       cateActiveIdx: 0,
