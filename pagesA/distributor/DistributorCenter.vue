@@ -24,7 +24,7 @@
     <view class="titleImg">
       <image :src="'/static/client/distributor/bedistributor.jpg'|domain" class="image" mode=""></image>
     </view>
-    
+
     <!--  申请逻辑 -->
     <block v-if="type=='edit'">
       <block>
@@ -84,20 +84,20 @@
           </view>
         </view>
       </block>
-      
+
       <view class="checks m-t-15" v-if="pro.dis_config.Distribute_AgreementOpen">
         <radio :checked="isAgree" @click="changes" style="transform:scale(0.7)" />
         <text @click="goDistributeAgreement">同意
           <text class="checkq">{{pro.dis_config.Distribute_AgreementTitle}}</text>
         </text>
       </view>
-      
+
       <view @click="application" class="submits">
         {{textShen}}
         <!--				立即申请成为分销商-->
       </view>
     </block>
-    
+
     <block v-else>
       <block v-if="pro.dis_config.Level_Form">
         <view class="center" v-if="pro.dis_config.Reserve_DisplayName==1">
@@ -146,7 +146,7 @@
         立即购买成为{{commi_rename.commi}}
       </view>
     </block>
-    
+
     <layout-layer :direction="'top'" ref="popupLayer">
       <div class="iMbx">
         <div :key="index" @click="chooseType(index)" class="c_method" v-for="(item,index) in initData.pay_arr">
@@ -159,7 +159,8 @@
 </template>
 
 <script>
-
+import LayoutLayer from '@/components/layout-layer/layout-layer'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 import { disApply, disApplyInit, disBuy } from '@/api/customer'
 import { getTown } from '@/api/common'
 import area from '@/common/area'
@@ -170,15 +171,13 @@ import Pay from '@/common/Pay'
 import Storage from '@/common/Storage'
 import { confirm, error, toast } from '@/common/fun'
 import BaseMixin from '@/mixins/BaseMixin'
-import LayoutLayer from '@/components/layout-layer/layout-layer'
-import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 
 export default {
   mixins: [BaseMixin],
   components: {
     WzwImTip,
-    LayoutLayer,
-    
+    LayoutLayer
+
   },
   data () {
     return {
@@ -186,13 +185,13 @@ export default {
       addressArr: {},
       isShowAddress: false,
       type: '', // 是申请还是购买
-      
+
       isXu: false, // 是否弹出购买须知
       isAgree: false, // 是否同意
       pro: {
         dis_level: [{}],
         dis_config: {},
-        Dis_Agreement_btn: {},
+        Dis_Agreement_btn: {}
       },
       change_objectMultiArray: [], // 选择数据
       address_info: {},
@@ -205,7 +204,7 @@ export default {
       t_index: 0,
       shenArr: {
         DisplayName: '',
-        DisplayTelephone: '',
+        DisplayTelephone: ''
       },
       forIndex: 0,
       select_lists: '', // 填写下拉选
@@ -220,7 +219,7 @@ export default {
       pay_type: '', // 支付方式
       pay_money: 0, // 支付金额
       level_id: '',
-      textShen: '',
+      textShen: ''
     }
   },
   computed: {
@@ -242,23 +241,23 @@ export default {
       } catch (e) {
         return {}
       }
-    },
+    }
   },
   onLoad (options) {
     this.level_id = parseInt(options.id)
     this.type = options.type
     const that = this
-    
+
     this.disApplyInit()
     this.objectMultiArray = [
       array_change(area[0]['0']),
       array_change(area[0]['0,1']),
-      array_change(area[0]['0,1,35']),
+      array_change(area[0]['0,1,35'])
     ]
     this.change_objectMultiArray = [
       array_change(area[0]['0']),
       array_change(area[0]['0,1']),
-      array_change(area[0]['0,1,35']),
+      array_change(area[0]['0,1,35'])
     ]
     // 获取支付方式
     const initData = this.getInitData()
@@ -266,19 +265,19 @@ export default {
   },
   methods: {
     ...mapActions({
-      getInitData: 'system/loadInitData',
+      getInitData: 'system/loadInitData'
     }),
     payFailCall (err) {
       uni.showToast({
         title: err.msg ? err.msg : '支付失败',
         icon: 'none',
-        duration: 2000,
+        duration: 2000
       })
     },
     // 查看须知
     goDistributeAgreement () {
       uni.navigateTo({
-        url: '/pagesA/distributor/DistributeAgreement',
+        url: '/pagesA/distributor/DistributeAgreement'
       })
     },
     // 取消输入支付密码
@@ -305,16 +304,16 @@ export default {
       this.pay_type = index
       if (index === 'remainder_pay') {
         this.$refs.popupLayer.close()
-        
+
         if (this.userInfo.hasOwnProperty('User_PayPassword') && !this.userInfo.User_PayPassword) {
           confirm({
             title: '提示',
             content: '该操作需要设置支付密码,是否前往设置?',
             confirmText: '去设置',
-            cancelText: '暂不设置',
+            cancelText: '暂不设置'
           }).then(res => {
             uni.navigateTo({
-              url: '/pagesA/user/UpdateUserPsw?type=1&is_back=1',
+              url: '/pagesA/user/UpdateUserPsw?type=1&is_back=1'
             })
           }).catch(err => {
             error('请选择其他支付方式')
@@ -324,7 +323,7 @@ export default {
         this.password_input = true// 弹出密码输入框
         return
       }
-      
+
       this.disBuy()
     },
     paySuccessCall (res) {
@@ -332,12 +331,12 @@ export default {
       if (res && res.code && res.code === 2) {
         return
       }
-      
+
       if (res && res.code && res.code === 1) {
         toast('用户取消支付', 'none')
         return
       }
-      
+
       if (res && res.code && res.code === 9) {
         uni.showModal({
           title: '提示',
@@ -348,23 +347,23 @@ export default {
             if (res.confirm) {
               toast('成为经销商')
               uni.navigateTo({
-                url: '/pages/distributor/Main',
+                url: '/pages/distributor/Main'
               })
             } else if (res.cancel) {
-            
+
             }
-          },
+          }
         })
         return
       }
-      
+
       // 0：支付成功 1：支付超时 2：支付失败 3：支付关闭 4：支付取消 9：订单状态开发者自行获取
-      
+
       if (res && res.code && res.code === 4) {
         toast('用户取消支付', 'none')
         return
       }
-      
+
       // 微信小程序下需要模板消息
       // #ifdef MP-WEIXIN
       // const initData = this.initData
@@ -377,13 +376,13 @@ export default {
       // #endif
       toast('成为经销商')
       uni.navigateTo({
-        url: '/pages/distributor/Main',
+        url: '/pages/distributor/Main'
       })
     },
     // 购买提交信息
     async disBuy () {
       let data = {
-        buy_info: {},
+        buy_info: {}
       }
       data.pay_type = this.pay_type
       if (this.pro.dis_config.Level_Form) {
@@ -423,37 +422,37 @@ export default {
             success: function (loginRes) {
               _that.code = loginRes.code
               resolve()
-            },
+            }
           })
         })
       }
       // #endif
       // #ifdef H5
-      
+
       // 微信h5
       if (this.pay_type === 'wx_h5') {
         data.pay_type = 'wx_h5'
       }
-      
+
       // 阿里h5
       if (this.pay_type === 'alipay') {
         data.pay_type = 'alipay'
       }
-      
+
       // 公众号需要code
       if (this.pay_type === 'wx_mp') {
         if (!isWeiXin()) {
           error('请在微信内打开')
           return
         }
-        
+
         const isHasCode = this.code || GetQueryByString('code')
         if (isHasCode) {
           // 拿到之前的配置
           data = {
             ...Storage.get('temp_order_info'),
             code: isHasCode,
-            pay_type: 'wx_mp',
+            pay_type: 'wx_mp'
           }
         } else {
           // 存上临时的数据
@@ -463,9 +462,9 @@ export default {
           return
         }
       }
-      
+
       // #endif
-      
+
       if (this.pay_type === 'remainder_pay') {
         data.user_pay_password = this.user_pay_password
       } else {
@@ -473,18 +472,18 @@ export default {
           data.code = this.code
         }
       }
-      
+
       if (this.pay_type === 'remainder_pay') {
         disBuy(data).then(res => {
           this.paySuccessCall(res)
         }, err => {
           uni.showToast({
             title: res.msg,
-            icon: 'none',
+            icon: 'none'
           })
           setTimeout(function () {
             uni.navigateTo({
-              url: '/pages/distributor/Main',
+              url: '/pages/distributor/Main'
             })
           }, 2000)
         }).catch(e => {
@@ -492,18 +491,18 @@ export default {
       } else {
         disBuy(data, {
           tip: '正在加载中',
-          mask: true,
+          mask: true
         }).then(res => {
           Pay(this, this.pay_type, res)
         }, err => {
           uni.showToast({
             title: res.msg,
-            icon: 'none',
+            icon: 'none'
           })
         }).catch(e => {
         })
       }
-      
+
       // }else if(this.pay_type=='ali_app'){
       // 		disBuy(data).then(res=>{
       // 			let provider = 'alipay';
@@ -540,7 +539,7 @@ export default {
         if (this.pro.dis_config.Reserve_DisplayName === 1 && this.shenArr.DisplayName === '') {
           uni.showToast({
             title: '姓名不能为空',
-            icon: 'none',
+            icon: 'none'
           })
           arr = false
           return
@@ -548,14 +547,14 @@ export default {
           if (this.pro.dis_configReserve_DisplayTelephone === 1 && this.shenArr.DisplayTelephone === '') {
             uni.showToast({
               title: '电话不能为空',
-              icon: 'none',
+              icon: 'none'
             })
             arr = false
             return
           } else if (this.pro.dis_config.Reserve_DisplayTelephone === 1 && !(/^1[3456789]\d{9}$/.test(this.shenArr.DisplayTelephone))) {
             uni.showToast({
               title: '手机号输入错误，请重新输入',
-              icon: 'none',
+              icon: 'none'
             })
             arr = false
             return
@@ -566,7 +565,7 @@ export default {
                 if (item.Value === '') {
                   uni.showToast({
                     title: item.Name + '不能为空',
-                    icon: 'none',
+                    icon: 'none'
                   })
                   arr = false
                   return
@@ -580,7 +579,7 @@ export default {
         if (!this.isAgree) {
           uni.showToast({
             title: '未同意须知',
-            icon: 'none',
+            icon: 'none'
           })
           return
         }
@@ -592,33 +591,33 @@ export default {
     // 跳转商品详情
     goDetail (item) {
       uni.navigateTo({
-        url: '/pages/detail/detail?Products_ID=' + item,
+        url: '/pages/detail/detail?Products_ID=' + item
       })
     },
     // 跳转去列表页
     goResult () {
       uni.navigateTo({
-        url: '/paegs/classify/result',
+        url: '/paegs/classify/result'
       })
     },
     application () {
       if (this.submitM) {
         uni.showToast({
           title: '当前不可申请',
-          icon: 'none',
+          icon: 'none'
         })
         return
       }
-      
+
       let arr = true
-      
+
       // 循环判断输入框
       if (this.text_lists.length > 0) {
         for (const item of this.text_lists) {
           if (item.Value === '') {
             uni.showToast({
               title: item.Name + '不能为空',
-              icon: 'none',
+              icon: 'none'
             })
             arr = false
             return
@@ -630,18 +629,18 @@ export default {
         if (JSON.stringify(this.address_info) === '{}') {
           uni.showToast({
             title: '地址不能为空',
-            icon: 'none',
+            icon: 'none'
           })
           arr = false
           return
         }
       }
-      
+
       if (this.pro.dis_config.Distribute_AgreementOpen) {
         if (!this.isAgree) {
           uni.showToast({
             title: '未同意须知',
-            icon: 'none',
+            icon: 'none'
           })
           arr = false
           return
@@ -650,7 +649,7 @@ export default {
       // 是否同意购买须知
       if (arr) {
         const apply_info = {}
-        
+
         if (this.isShowAddress) {
           const DisplayLocaltion = this.addressArr.name
           apply_info[DisplayLocaltion] = {}
@@ -671,20 +670,20 @@ export default {
             apply_info[item.Name] = item.Value
           }
         }
-        
+
         disApply({
           apply_info: JSON.stringify(apply_info),
-          apply_level_id: this.level_id,
+          apply_level_id: this.level_id
         }).then(res => {
           uni.showToast({
             title: res.msg,
-            icon: 'none',
+            icon: 'none'
           })
           this.submitM = true
           setTimeout(() => {
             this.$back()
           }, 1000)
-          
+
           this.textShen = res.msg
         }).catch(res => {
           this.textShen = res.msg
@@ -693,7 +692,7 @@ export default {
         this.isXu = true
         uni.showToast({
           title: '请勾选同意购买须知',
-          icon: 'none',
+          icon: 'none'
         })
       }
     },
@@ -706,7 +705,7 @@ export default {
         if (!(/^1[3456789]\d{9}$/.test(this.shenArr.DisplayTelephone))) {
           uni.showToast({
             title: '手机号输入错误，请重新输入',
-            icon: 'none',
+            icon: 'none'
           })
         }
       }
@@ -725,7 +724,7 @@ export default {
           for (var j in res.data[i]) {
             t_arr.push({
               id: j,
-              name: res.data[i][j],
+              name: res.data[i][j]
             })
             if (j === this.address_info.Address_Town) {
               t_index = idx
@@ -748,7 +747,7 @@ export default {
       this.change_objectMultiArray = [
         p_arr,
         c_arr,
-        a_arr,
+        a_arr
       ]
       this.change_multiIndex = columnValue
     },
@@ -757,11 +756,11 @@ export default {
       var column = e.detail.column // 修改的列
       var index = e.detail.value // 选择列的下标（从0开始）
       var change_multiIndex = 'change_multiIndex[' + column + ']'
-      
+
       var columnValue = [
         column === 0 ? index : this.change_multiIndex[0],
         column === 0 ? 0 : (column === 1 ? index : this.change_multiIndex[1]),
-        column === 0 || column === 1 ? 0 : index,
+        column === 0 || column === 1 ? 0 : index
       ]
       this.addressChange(columnValue)
     },
@@ -781,38 +780,38 @@ export default {
     },
     async $_init_wxpay_env () {
       const initData = await this.getInitData()
-      
+
       const login_methods = initData.login_methods
       const component_appid = login_methods.component_appid
-      
+
       let channel = null
-      
+
       // 根据服务器返回配置设置channels,只有微信公众号和小程序会用到component_appid
       // 而且状态可以灵活控制 state为1
       for (var i in login_methods) {
         // && login_methods[i].state ??状态呢？
         if (i !== 'component_appid' && login_methods[i].state) {
           channel = ['wx_mp'].indexOf(login_methods[i].type) === -1 ? {
-            ...login_methods[i],
+            ...login_methods[i]
           } : {
             ...login_methods[i],
-            component_appid,
+            component_appid
           }
           break
         }
       }
-      
+
       if (!channel) {
         this.$error('未开通公众号支付')
         return false
       }
-      
+
       // 如果url有code去掉
       let {
         origin,
         pathname,
         search,
-        hash,
+        hash
       } = window.location
       const strArr = []
       if (search.indexOf('code') !== -1) {
@@ -827,14 +826,14 @@ export default {
         if (newSearchStr.indexOf('?') === -1) {
           newSearchStr = '?' + newSearchStr
         }
-        
+
         search = newSearchStr
       }
-      
+
       const REDIRECT_URI = urlencode(origin + pathname + search + hash)
-      
+
       let wxAuthUrl = null
-      
+
       if (channel.component_appid) {
         // 服务商模式登录
         wxAuthUrl =
@@ -844,50 +843,50 @@ export default {
         wxAuthUrl =
           `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${channel.appid}&redirect_uri=${REDIRECT_URI}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect`
       }
-      
+
       window.location.href = wxAuthUrl
     },
     async self_orderPay (is_forward) {
       const _self = this
       let payConf = {}
-      
+
       // 不是跳转的
       if (!is_forward) {
         return
       }
-      
+
       if (this.pay_type === 'unionpay') {
         error('即将上线')
         return
       }
-      
+
       if (this.pay_type === 'ali_app') {
-      
+
       }
-      
+
       // 下面都是微信
-      
+
       // 需要格外有一个code
-      
+
       // #ifdef H5
-      
+
       // 微信h5
       if (this.pay_type === 'wx_h5') {
         payConf.pay_type = 'wx_h5'
       }
-      
+
       // 阿里h5
       if (this.pay_type === 'alipay') {
         payConf.pay_type = 'alipay'
       }
-      
+
       // 公众号需要code
       if (this.pay_type === 'wx_mp') {
         if (!isWeiXin()) {
           error('请在微信内打开')
           return
         }
-        
+
         const isHasCode = this.code || GetQueryByString('code')
         // 已经用过的code不再用
         if (isHasCode && isHasCode !== Storage.get('isUseCode')) {
@@ -895,9 +894,9 @@ export default {
           payConf = {
             ...Storage.get('temp_order_info'),
             code: isHasCode,
-            pay_type: 'wx_mp',
+            pay_type: 'wx_mp'
           }
-          
+
           Storage.set('isUseCode', isHasCode)
         } else {
           // 存上临时的数据
@@ -907,28 +906,28 @@ export default {
           return
         }
       }
-      
+
       // #endif
-      
+
       // #ifdef MP-TOUTIAO
       // #endif
-      
+
       // #ifdef MP-WEIXIN
       payConf.pay_type = 'wx_lp'
-      
+
       await new Promise((resolve) => {
         uni.login({
           success: function (loginRes) {
             payConf.code = loginRes.code
             resolve()
-          },
+          }
         })
       })
       // #endif
       this.disBuy()
     },
     disApplyInit () {
-      let _self = this
+      const _self = this
       disApplyInit().then(res => {
         this.pro = res.data
         if (this.type === 'edit') {
@@ -978,7 +977,7 @@ export default {
           if (!dislist.apply_order) return
           if (!((JSON.stringify(dislist.apply_order) === '{}'))) {
             const myInfo = JSON.parse(dislist.apply_order.manual_form)
-            
+
             console.log(dislist.apply_order, 'ss')
             if (dislist.apply_order.status === 3) {
               _self.textShen = dislist.apply_order.status_desc + '(' + dislist.apply_order.reason + ')'
@@ -1001,20 +1000,20 @@ export default {
                   array_change(area[0]['0']),
                   array_change(area[0]['0,' + myInfo[item].pro_id]),
                   array_change(area[0]['0,' + myInfo[item].pro_id + ',' + myInfo[item].city_id]),
-                  array_change(area[0]['0,' + myInfo[item].pro_id + ',' + myInfo[item].city_id] + ',' + myInfo[item].town_id),
+                  array_change(area[0]['0,' + myInfo[item].pro_id + ',' + myInfo[item].city_id] + ',' + myInfo[item].town_id)
                 ]
                 // 设置初始显示列
                 const multiIndex = [
                   get_arr_index(objectMultiArray[0], myInfo[item].pro_id),
                   get_arr_index(objectMultiArray[1], myInfo[item].city_id),
                   get_arr_index(objectMultiArray[2], myInfo[item].area_id),
-                  get_arr_index(objectMultiArray[3], myInfo[item].town_id),
+                  get_arr_index(objectMultiArray[3], myInfo[item].town_id)
                 ]
                 this.objectMultiArray = objectMultiArray
                 this.multiIndex = multiIndex
               }
             }
-            
+
             for (const ite in myInfo) {
               for (const text in this.text_lists) {
                 if (this.text_lists[text].Name === ite) {
@@ -1075,7 +1074,7 @@ export default {
     },
     changes () {
       this.isAgree = !this.isAgree
-    },
+    }
   },
   async created () {
     // #ifdef H5
@@ -1088,14 +1087,13 @@ export default {
       }
     }
     // #endif
-    
+
     const initData = await this.getInitData()
     uni.setNavigationBarTitle({
-      title: initData.commi_rename.commi + '信息',
+      title: initData.commi_rename.commi + '信息'
     })
     this.textShen = '立即申请成为' + this.commi_rename.commi
-    
-  },
+  }
 }
 </script>
 
@@ -1103,83 +1101,83 @@ export default {
   view {
     box-sizing: border-box;
   }
-  
+
   .titleImg {
-    width: 750 upx;
-    height: 330 upx;
-    margin-bottom: 25 upx;
-    
+    width: 750rpx;
+    height: 330rpx;
+    margin-bottom: 25rpx;
+
     .image {
       width: 100%;
       height: 100%;
     }
   }
-  
+
   .fenxiao {
-    margin-top: 30 upx;
-    margin-left: 20 upx;
-    font-size: 30 upx;
-    
+    margin-top: 30rpx;
+    margin-left: 20rpx;
+    font-size: 30rpx;
+
     .textq {
-      font-size: 24 upx;
+      font-size: 24rpx;
       color: #666666;
-      
+
       .textw {
-        font-size: 28 upx;
+        font-size: 28rpx;
         color: #F43131;
       }
     }
   }
-  
+
   .isFenxiao {
-    width: 620 upx;
-    height: 80 upx;
+    width: 620rpx;
+    height: 80rpx;
     background: rgba(244, 49, 49, 1);
-    border-radius: 20 upx;
+    border-radius: 20rpx;
     margin: 0 auto;
-    margin-top: 50 upx;
-    font-size: 34 upx;
+    margin-top: 50rpx;
+    font-size: 34rpx;
     color: #FFFFFF;
-    line-height: 80 upx;
+    line-height: 80rpx;
     text-align: center;
   }
-  
+
   .line {
-    width: 750 upx;
-    height: 20 upx;
+    width: 750rpx;
+    height: 20rpx;
     background: rgba(248, 248, 248, 1);
-    margin-top: 30 upx;
+    margin-top: 30rpx;
   }
-  
+
   .pro {
-    width: 750 upx;
-    padding: 30 upx 20 upx;
+    width: 750rpx;
+    padding: 30rpx 20rpx;
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
-    margin-top: 50 upx;
-    padding-top: 0 upx;
-    padding-bottom: 0 upx;
-    
+    margin-top: 50rpx;
+    padding-top: 0rpx;
+    padding-bottom: 0rpx;
+
     .forOf {
-      width: 345 upx;
-      
+      width: 345rpx;
+
       .imgs {
-        width: 345 upx;
-        height: 345 upx;
-        
+        width: 345rpx;
+        height: 345rpx;
+
         .image {
           width: 100%;
           height: 100%;
         }
       }
-      
+
       .text {
-        margin: 17 upx 15 upx 20 upx 11 upx;
-        width: 319 upx;
-        height: 60 upx;
-        line-height: 30 upx;
-        font-size: 24 upx;
+        margin: 17rpx 15rpx 20rpx 11rpx;
+        width: 319rpx;
+        height: 60rpx;
+        line-height: 30rpx;
+        font-size: 24rpx;
         font-weight: 500;
         color: rgba(51, 51, 51, 1);
         text-overflow: -o-ellipsis-lastline;
@@ -1192,58 +1190,58 @@ export default {
       }
     }
   }
-  
+
   .prices {
     color: #F43131;
-    font-size: 24 upx;
-    margin-left: 15 upx;
-    margin-bottom: 37 upx;
-    
+    font-size: 24rpx;
+    margin-left: 15rpx;
+    margin-bottom: 37rpx;
+
     text {
-      font-size: 34 upx;
+      font-size: 34rpx;
       font-weight: bold;
     }
   }
-  
+
   .titleImg {
-    width: 750 upx;
-    height: 330 upx;
-    margin-bottom: 25 upx;
-    
+    width: 750rpx;
+    height: 330rpx;
+    margin-bottom: 25rpx;
+
     .image {
       width: 100%;
       height: 100%;
     }
   }
-  
+
   .center {
-    height: 98 upx;
-    width: 710 upx;
+    height: 98rpx;
+    width: 710rpx;
     margin: 0 auto;
-    border-bottom: 1 upx solid #E7E7E7;
+    border-bottom: 1rpx solid #E7E7E7;
     display: flex;
     align-items: center;
-    
+
     .mbx {
-      width: 140 upx;
-      font-size: 30 upx;
+      width: 140rpx;
+      font-size: 30rpx;
       color: #333333;
     }
-    
+
     .inputa {
-      width: 600 upx;
-      font-size: 28 upx;
+      width: 600rpx;
+      font-size: 28rpx;
     }
   }
-  
+
   .checks {
-    font-size: 20 upx;
+    font-size: 20rpx;
     color: #333333;
     display: flex;
     align-items: center;
-    margin-left: 4 upx;
+    margin-left: 4rpx;
   }
-  
+
   .disHaihong {
     font-size: 30rpx;
     height: 60rpx;
@@ -1252,146 +1250,146 @@ export default {
     margin-top: 10px;
     margin-bottom: 10px;
   }
-  
+
   .checkq {
     color: #69A1FF;
-    margin-left: 10 upx;
+    margin-left: 10rpx;
   }
-  
+
   .submits {
-    width: 620 upx;
-    height: 80 upx;
-    line-height: 80 upx;
+    width: 620rpx;
+    height: 80rpx;
+    line-height: 80rpx;
     background: rgba(244, 49, 49, 1);
-    border-radius: 20 upx;
+    border-radius: 20rpx;
     margin: 0 auto;
-    font-size: 34 upx;
+    font-size: 34rpx;
     color: #FFFFFF;
     text-align: center;
-    margin-top: 40 upx;
-    margin-bottom: 120 upx;
+    margin-top: 40rpx;
+    margin-bottom: 120rpx;
   }
-  
+
   .qwe {
-    width: 750 upx;
-    height: 100 upx;
+    width: 750rpx;
+    height: 100rpx;
     position: fixed;
-    bottom: 0 upx;
-    left: 0 upx;
+    bottom: 0rpx;
+    left: 0rpx;
     background: rgba(64, 61, 61, 1);
     display: flex;
     align-items: center;
-    padding-left: 20 upx;
-    padding-right: 24 upx;
-    
+    padding-left: 20rpx;
+    padding-right: 24rpx;
+
     .imgs {
-      width: 68 upx;
-      height: 68 upx;
+      width: 68rpx;
+      height: 68rpx;
       border-radius: 50%;
-      
+
       .image {
         width: 100%;
         height: 100%;
       }
     }
-    
+
     .nickName {
-      font-size: 30 upx;
+      font-size: 30rpx;
       color: #FFFFFF;
-      margin-left: 16 upx;
+      margin-left: 16rpx;
     }
-    
+
     .liji {
-      margin-left: 113 upx;
-      font-size: 22 upx;
+      margin-left: 113rpx;
+      font-size: 22rpx;
       color: #FFFFFF;
     }
-    
+
     .hahas {
-      width: 140 upx;
-      height: 50 upx;
+      width: 140rpx;
+      height: 50rpx;
       background: rgba(244, 49, 49, 1);
-      border-radius: 10 upx;
+      border-radius: 10rpx;
       position: absolute;
-      top: 25 upx;
-      right: 20 upx;
-      font-size: 26 upx;
+      top: 25rpx;
+      right: 20rpx;
+      font-size: 26rpx;
       color: #FFFFFF;
       text-align: center;
-      line-height: 50 upx;
+      line-height: 50rpx;
     }
   }
-  
+
   .picker view {
-    width: 160 upx;
-    font-size: 28 upx;
-    line-height: 90 upx;
-    height: 90 upx;
-    margin-right: 10 upx;
+    width: 160rpx;
+    font-size: 28rpx;
+    line-height: 90rpx;
+    height: 90rpx;
+    margin-right: 10rpx;
     overflow: hidden;
   }
-  
+
   .picker {
     display: flex;
-    
+
     .quyu {
-      width: 120 upx;
+      width: 120rpx;
     }
   }
-  
+
   view.haha {
-    font-size: 30 upx;
+    font-size: 30rpx;
     color: #333333;
-    margin-right: 42 upx;
+    margin-right: 42rpx;
   }
-  
+
   .disConfig {
-    padding-bottom: 50 upx;
+    padding-bottom: 50rpx;
   }
-  
+
   .uni-list-cell {
     display: flex;
     align-items: center;
-    font-size: 25 upx;
+    font-size: 25rpx;
     color: #333333;
-    height: 25 upx;
-    padding-top: 38 upx;
-    margin-left: 20 upx;
-    width: 710 upx;
-    
+    height: 25rpx;
+    padding-top: 38rpx;
+    margin-left: 20rpx;
+    width: 710rpx;
+
     &:last-child {
-      padding-bottom: 30 upx;
-      border-bottom: 1 upx solid #E7E7E7;
+      padding-bottom: 30rpx;
+      border-bottom: 1rpx solid #E7E7E7;
     }
   }
-  
+
   .iMbx {
     text-align: center;
-    padding: 0 20 upx;
-    font-size: 28 upx;
+    padding: 0 20rpx;
+    font-size: 28rpx;
     color: #333;
-    
+
     .c_method {
-      padding: 37 upx 0;
-      border-bottom: 2 upx solid #E6E6E6;
+      padding: 37rpx 0;
+      border-bottom: 2rpx solid #E6E6E6;
     }
-    
+
     & .c_method:first-child {
       color: #F43131;
     }
-    
+
     & .c_method:nth-last-child(1) {
       border: none;
     }
   }
-  
+
   // .zhezhao {
   // 		position: fixed;
   // 		width: 100%;
   // 		height: 100%;
   // 		background: rgba($color: #000000, $alpha: 0.3);
   // 		z-index: 1000;
-  
+
   // 		.input-wrap {
   // 			background: #fff;
   // 			color: #000;
@@ -1401,23 +1399,23 @@ export default {
   // 			padding: 40px 50upx;
   // 			box-sizing: border-box;
   // 			font-size: 28upx;
-  
+
   // 			.inputpass {
   // 				margin: 40upx 0;
   // 				border: 1px solid #efefef;
   // 			}
-  
+
   // 			.btns {
   // 				display: flex;
   // 				justify-content: space-around;
-  
+
   // 				.btn {
   // 					flex: 1;
   // 				}
   // 			}
   // 		}
   // 	}
-  
+
   .zhezhao {
     left: 0;
     top: 0;
@@ -1426,7 +1424,7 @@ export default {
     height: 100%;
     background: rgba(0, 0, 0, .3);
     z-index: 1000;
-    
+
     .input-wrap {
       background: #fff;
       color: #000;
@@ -1437,7 +1435,7 @@ export default {
       box-sizing: border-box;
       font-size: 28rpx;
       border-radius: 10rpx;
-      
+
       .input {
         margin: 40rpx 0;
         border: 1px solid #efefef;
@@ -1445,20 +1443,20 @@ export default {
         line-height: 20px;
         padding: 10px 0px;
       }
-      
+
       .btns {
         display: flex;
         justify-content: space-around;
         height: 60rpx;
         line-height: 60rpx;
-        
+
         .btn {
           flex: 1;
         }
       }
     }
   }
-  
+
   .disMy {
     display: flex;
     align-items: center;
@@ -1466,7 +1464,7 @@ export default {
     width: 100%;
     margin-right: 0px !important;
   }
-  
+
   .disMyImg {
     width: 9px;
     height: 14px;
