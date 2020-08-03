@@ -305,26 +305,25 @@
                       <span class="block-div"></span>
                       门店列表
                     </div>
-                    <div class="store-list-top">
-                      {{storeList.length}}家
-                    </div>
+                    <!--                    <div class="store-list-top">-->
+                    <!--                      {{storeList.length}}家-->
+                    <!--                    </div>-->
                   </div>
+
                   <div :key="ind" class="store-list-item" v-for="(st,ind) of storeList">
-                    <div @click.stop="goStore(st.biz_id)" class="store-list-title">
+                    <div @click.stop="goStore(st.biz_id)" class="store-list-title"  >
                       {{st.store_name}}
                     </div>
-                    <div class="flex flex-justify-between store-list-address">
-                      <div @click="$openLocation(st.store_lat,st.store_lon,st.store_name)" class="store-list-font">
-                        {{st.area_address}}
-                      </div>
-                      <div class="flex flex-vertical-center">
-                        <layout-icon @click="$openLocation(st.store_lat,st.store_lon,st.store_name)" color="#26C78D" size="17"
-                                     type="iconicon-address"></layout-icon>
-                        <span class="store-su"></span>
-                        <layout-icon @click.stop="$cellPhone(st.store_mobile)" color="#26C78D" size="17"
-                                     type="iconicon-phone"></layout-icon>
-                      </div>
+
+                    <div @click="$cellPhone(st.store_mobile)" class="store-vip-call m-b-10">
+                      电话：{{st.store_mobile}}
+                      <layout-icon color="#26c78d" class="m-l-15" size="20" type="icondianhua"></layout-icon>
                     </div>
+                    <div @click="$openLocation(st.store_lat,st.store_lon,st.biz_shop_name)" class="store-vip-address m-b-10">
+                      地址：{{st.area_address}}{{st.store_address}}
+                      <layout-icon color="#26c78d" class="m-l-15" style="display: inline-block" size="20" type="icondizhi1"></layout-icon>
+                    </div>
+
                   </div>
                 </div>
               </div>
@@ -336,7 +335,7 @@
 
               <div class="block-content">
                 <div class="comment-list" v-if="comments.length>0">
-                  <div :key="idx" class="comment-item" v-for="(item,idx) in comments">
+                  <div :key="idx" class="comment-item p-t-15 p-b-15" v-for="(item,idx) in comments">
                     <layout-comment :comment="item" :isLast="comments.length-1===idx"
                                     @comment="clickComment"></layout-comment>
                     <div class="comment-send" v-if="item.child.length>0">
@@ -361,6 +360,10 @@
                     </div>
                   </div>
 
+                </div>
+
+                <div class="fz-12 text-center "  style="color: #D2D2D2;padding-bottom: 68rpx;padding-top: 44rpx;" v-else>
+                  该商品暂无相关评论
                 </div>
               </div>
             </div>
@@ -1200,9 +1203,9 @@ export default {
 
         this.refreshInfoByIsLogin()
 
-        
+
       } catch (e) {
-       
+
         Exception(e)
       }finally{
          hideLoading()
@@ -1500,7 +1503,7 @@ export default {
   }
 
   .comment-item {
-    border-bottom: 1px solid #E8E8E8;
+    border-bottom: 1rpx solid #E8E8E8;
     padding-bottom: 30rpx;
   }
 
@@ -1575,6 +1578,24 @@ export default {
       padding-bottom: 10rpx;
     }
 
+    .store-list {
+      width: 690rpx;
+      padding: 0 30rpx;
+
+      .store-vip-call{
+        height: 40rpx;
+        display: flex;
+        align-items: center;
+        font-size: 28rpx;
+        color: #999999;
+      }
+      .store-vip-address{
+        lin-height: 40rpx;
+        font-size: 28rpx;
+        color: #999999;
+      }
+    }
+
     .store-list-top {
       height: 32rpx;
       display: flex;
@@ -1626,6 +1647,57 @@ export default {
       height: 12px;
       line-height: 12px;
     }
+  }
+
+  .store-list-top {
+    height: 32rpx;
+    display: flex;
+    align-items: center;
+    font-size: 13px;
+    color: #999999;
+  }
+
+  .block-div {
+    background-color: #26C78D;
+    width: 8rpx;
+    height: 32rpx;
+    margin-right: 16rpx;
+    display: inline-block;
+  }
+
+  .store-list-item {
+    width: 690rpx;
+    padding: 30rpx 0rpx;
+    box-sizing: border-box;
+    border-bottom: 1rpx solid #EEEEEE;
+    &:last-child{
+      border-bottom: 0rpx;
+    }
+  }
+
+  .store-list-title {
+    width: 600rpx;
+    height: 30px;
+    font-size: 30rpx;
+    color:#333333;
+    font-weight: bold;
+    line-height: 30px;
+    margin-bottom: 16rpx;
+  }
+  .store-list-address {
+    width: 100%;
+    box-sizing: border-box;
+    padding-left: 2rpx;
+    height: 34rpx;
+    line-height: 34rpx;
+    align-items: center;
+  }
+
+  .store-list-font {
+    color: #999999;
+    font-size: 12px;
+    height: 12px;
+    line-height: 12px;
   }
 
   .coupon-section {
