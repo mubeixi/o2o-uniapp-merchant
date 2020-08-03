@@ -288,15 +288,20 @@
         </div>
         <div class="store-list">
 
-          <div class="store-list-item flex flex-vertical-c" v-for="(st,ind) of storeList" :key="ind" >
-            <div class="flex1">
-              <div @click.stop="goStore(st.biz_id)" class="c3 fz-14 m-b-8">{{st.store_name}}</div>
-              <div class="flex flex-vertical-c" @click="$openLocation(st.store_lat,st.store_lon,st.store_name)">
-                <layout-icon @click="$openLocation(st.store_lat,st.store_lon,st.store_name)" color="#999" size="15" type="iconicon-address"></layout-icon>
-                <span class="c9 fz-11 m-l-4">{{st.area_address}}</span>
-              </div>
+          <div :key="ind" class="store-list-item" v-for="(st,ind) of storeList">
+            <div @click.stop="goStore(st.biz_id)" class="store-list-title"  >
+              {{st.store_name}}
             </div>
-            <layout-icon @click.stop="$cellPhone(st.store_mobile)" color="#26C78D" size="22" type="iconicon-phone"></layout-icon>
+
+            <div @click="$cellPhone(st.store_mobile)" class="store-vip-call m-b-10">
+              电话：{{st.store_mobile}}
+              <layout-icon color="#26c78d" class="m-l-15" size="20" type="icondianhua"></layout-icon>
+            </div>
+            <div @click="$openLocation(st.store_lat,st.store_lon,st.biz_shop_name)" class="store-vip-address m-b-10">
+              地址：{{st.area_address}}{{st.store_address}}
+              <layout-icon color="#26c78d" class="m-l-15" style="display: inline-block" size="20" type="icondizhi1"></layout-icon>
+            </div>
+
           </div>
 
         </div>
@@ -309,31 +314,38 @@
           留言评论
         </div>
         <div class="comment-list">
-          <div class="comment-item" :key="idx" v-for="(item,idx) in comments">
-            <layout-comment :comment="item" :isLast="comments.length-1===idx" @comment="clickComment"></layout-comment>
-            <div class="comment-send" v-if="item.child.length>0">
-              <block :key="ind" v-for="(com,ind) of item.child">
-                <block :key="indx" v-for="(co,indx) of com">
-                  <block v-if="co.touserid==item.User_ID">
-                    <div @click.stop="clickCommentSend(item,co.groupid,co.userid,co)" class="fz-12 c3 comment-send-item">
-                      <span class="color-comment p-r-5">{{co.user_nickname}}:</span> {{co.content}}
-                    </div>
-                  </block>
-                  <block v-else>
-                    <div  class="fz-12 c3 comment-send-item p-l-10">
-                      <span @click.stop="clickCommentSend(item,co.groupid,co.userid,co)" class="color-comment p-r-2">{{co.user_nickname}}</span>
-                      <span class="p-l-3 p-r-3">回复</span>
-                      <!--同一行记录里面，点击不同的人名，可以分别回复两个人-->
-                      <span @click.stop="clickCommentSend(item,co.groupid,co.touserid,co,true)" class="color-comment p-r-5">{{co.to_user_nickname}}</span>{{co.content}}
-                    </div>
+          <block v-if="comments.length>0">
+            <div class="comment-item" :key="idx" v-for="(item,idx) in comments">
+              <layout-comment :comment="item" :isLast="comments.length-1===idx" @comment="clickComment"></layout-comment>
+              <div class="comment-send" v-if="item.child.length>0">
+                <block :key="ind" v-for="(com,ind) of item.child">
+                  <block :key="indx" v-for="(co,indx) of com">
+                    <block v-if="co.touserid==item.User_ID">
+                      <div @click.stop="clickCommentSend(item,co.groupid,co.userid,co)"
+                           class="fz-12 c3 comment-send-item">
+                        <span class="color-comment p-r-5">{{co.user_nickname}}:</span> {{co.content}}
+                      </div>
+                    </block>
+                    <block v-else>
+                      <div class="fz-12 c3 comment-send-item p-l-10">
+                        <span @click.stop="clickCommentSend(item,co.groupid,co.userid,co)" class="color-comment p-r-2">{{co.user_nickname}}</span>
+                        <span class="p-l-3 p-r-3">回复</span>
+                        <!--同一行记录里面，点击不同的人名，可以分别回复两个人-->
+                        <span @click.stop="clickCommentSend(item,co.groupid,co.touserid,co,true)"
+                              class="color-comment p-r-5">{{co.to_user_nickname}}</span>{{co.content}}
+                      </div>
+                    </block>
+
                   </block>
 
                 </block>
-
-              </block>
+              </div>
             </div>
-          </div>
+          </block>
 
+          <div class="fz-12 text-center "  style="color: #D2D2D2;padding-bottom: 68rpx;padding-top: 44rpx;" v-else>
+            该商品暂无相关评论
+          </div>
         </div>
         <layout-loading v-if="commentPaginate.load"></layout-loading>
       </div>
@@ -1948,40 +1960,71 @@ export default {
     }
   }
 }
-.store-box{
-  background: #fff;
+  .store-box {
+    background: #fff;
 
-  .store-list{
-    padding: 0 20rpx 20rpx;
-    width: 710rpx;
-    .store-list-item{
-      padding: 30rpx 24rpx;
-      box-sizing: border-box;
-      border-bottom: 1px solid #e3e3e3;
-      &:first-child{
-        padding-top: 10rpx;
-      }
-      &:last-child{
-        border-bottom: none;
-      }
-      .store-item-address {
-        width: 100%;
-        box-sizing: border-box;
-        padding-left: 2rpx;
-        height: 34rpx;
-        line-height: 34rpx;
+    .store-list {
+      width: 690rpx;
+      padding: 0 30rpx;
+      margin: 0 auto;
+      .store-vip-call{
+        height: 40rpx;
+        display: flex;
         align-items: center;
-      }
-
-      .store-item-font {
+        font-size: 28rpx;
         color: #999999;
-        font-size: 12px;
-        height: 12px;
-        line-height: 12px;
+      }
+      .store-vip-address{
+        lin-height: 40rpx;
+        font-size: 28rpx;
+        color: #999999;
       }
     }
+
+    .store-list-top {
+      height: 32rpx;
+      display: flex;
+      align-items: center;
+      font-size: 13px;
+      color: #999999;
+    }
+
+    .store-list-item {
+      width: 690rpx;
+      padding: 30rpx 0rpx;
+      box-sizing: border-box;
+      border-bottom: 1rpx solid #EEEEEE;
+      &:last-child{
+        border-bottom: 0rpx;
+      }
+
+    }
+
+    .store-list-title {
+      width: 600rpx;
+      height: 30px;
+      font-size: 30rpx;
+      color:#333333;
+      font-weight: bold;
+      line-height: 30px;
+      margin-bottom: 16rpx;
+    }
+    .store-list-address {
+      width: 100%;
+      box-sizing: border-box;
+      padding-left: 2rpx;
+      height: 34rpx;
+      line-height: 34rpx;
+      align-items: center;
+    }
+
+    .store-list-font {
+      color: #999999;
+      font-size: 12px;
+      height: 12px;
+      line-height: 12px;
+    }
   }
-}
 .cate-box{
   background: #fff;
   .cate-goods-list{
