@@ -89,7 +89,7 @@
             </div>
             <div class="price-discount" style="padding: 20rpx 0 20rpx 20rpx">
               <div class="price-box" style="color: #FE2C4D">
-                <span class="sign" style="font-size: 20rpx;">￥</span><span class="num" style="font-size: 30rpx;">{{pro.price}}</span>
+                <span class="sign" style="font-size: 24rpx;">￥</span><span class="num" style="font-size: 34rpx;">{{pro.price}}</span>
               </div>
               <div class="m-l-6 price-market text-through" style="font-size: 22rpx;">
                 <span class="sign">￥</span><span class="num">{{pro.Products_PriceX}}</span>
@@ -156,7 +156,7 @@
                 </div>
                 <div class="flex flex-vertical-b">
                   <div class="price-box price-selling ">
-                    <span class="sign fz-10">￥</span><span class="num fz-14">{{pro.price}}</span>
+                    <span class="sign fz-12">￥</span><span class="num fz-17">{{pro.price}}</span>
                   </div>
                   <div class="m-l-6 fz-11 price-market text-through">
                     <span class="sign">￥</span><span class="num">{{pro.Products_PriceX}}</span>
@@ -186,7 +186,7 @@
                 </div>
                 <div class="price-discount flex flex-vertical-c" style="padding: 20rpx 0 20rpx 20rpx">
                   <div class="price-box" style="color: #FE2C4D">
-                    <span class="sign" style="font-size: 20rpx;">￥</span><span class="num" style="font-size: 30rpx;">{{pro.Products_PriceX}}</span>
+                    <span class="sign" style="font-size: 24rpx;">￥</span><span class="num" style="font-size: 34rpx;">{{pro.Products_PriceX}}</span>
                   </div>
                   <div class="m-l-6 price-market text-through" style="font-size: 22rpx;">
                     <span class="sign">￥</span><span class="num">{{pro.Products_PriceY}}</span>
@@ -209,7 +209,7 @@
                 </div>
                 <div class="price-discount flex flex-vertical-c" style="padding: 20rpx 0 20rpx 20rpx">
                   <div class="price-box" style="color: #FE2C4D">
-                    <span class="sign" style="font-size: 20rpx;">￥</span><span class="num" style="font-size: 30rpx;">{{pro.Products_PriceX}}</span>
+                    <span class="sign" style="font-size: 24rpx;">￥</span><span class="num" style="font-size: 34rpx;">{{pro.Products_PriceX}}</span>
                   </div>
                   <div class="m-l-6 price-market text-through" style="font-size: 22rpx;">
                     <span class="sign">￥</span><span class="num">{{pro.Products_PriceY}}</span>
@@ -1005,7 +1005,9 @@ export default {
         }).catch(e => {
           throw Error(e.msg || '获取相册信息失败')
         })
-
+		
+		
+		hideLoading()
         if (checkIsLogin(0, 0)) {
           const { is_favourite = 0 } = await checkFavourite({ biz_id: this.bid }, { onlyData: true }).catch(() => {
             
@@ -1021,10 +1023,8 @@ export default {
         this.refreshInfoByIsLogin()
         
       } catch (e) {
-
+		hideLoading()
         Exception.handle(e)
-      }finally{
-         hideLoading()
       }
     },
     toGoodsDetailFn (pro, activity) {

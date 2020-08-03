@@ -54,11 +54,11 @@ export default {
   name: 'GoodsItem',
   components: { WzwLiveTag },
   props: {
-    priceSignSize:{
+    priceSignSize: {
       type: String,
       default: '12px'
     },
-    priceNumSize:{
+    priceNumSize: {
       type: String,
       default: '14px'
     },

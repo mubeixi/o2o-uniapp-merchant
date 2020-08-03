@@ -1165,8 +1165,7 @@
       <div :style="{height:menuButtonInfo.height+'px',paddingRight:diyHeadRight+'px'}"
            class="flex flex-vertical-c flex-justify-between">
         <div class="flex flex-vertical-c">
-          <layout-icon :plain="false" @click="bindLeftBtnClick" class="m-l-10" color="#606060" size="22" type="iconback1"
-                       wrap-bg="none" wrap-padding="6px"></layout-icon>
+          <layout-icon @click="bindLeftBtnClick" class="m-l-15" color="#606060" size="22" type="iconback1"></layout-icon>
           <div @click="toSearch" class="head-search flex flex-vertical-c flex-justify-between"  :class="activeHeadOpacity?'bg-white':''" >
             <span class="fz-12  p-l-6 c-bc"  >搜索商品</span>
             <layout-icon color="#606060" type="iconicon-search"></layout-icon>

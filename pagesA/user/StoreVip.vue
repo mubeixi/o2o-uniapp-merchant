@@ -52,6 +52,7 @@
 
 	<div class="defaults" v-if="userVipList.length<=0">
 	  <image :src="'/static/client/empty.png'|domain"></image>
+    <div class="p-15 fz-12 text-center c7">暂无可用会员卡</div>
 	</div>
 
   </view>

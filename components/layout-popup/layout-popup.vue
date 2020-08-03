@@ -67,6 +67,7 @@ export default {
   data () {
     return {
       isShow: false,
+      compHeight: null, // 组件高度
       domInfo: {},
       animationData: {},
       maskAnimationData: {},
@@ -81,7 +82,7 @@ export default {
     if (this.showPop) {
       this.show()
     }
-
+    
     this.systemInfo = uni.getSystemInfoSync()
     // #ifdef MP-WEIXIN
     this.menuButtonInfo = uni.getMenuButtonBoundingClientRect()
@@ -91,6 +92,17 @@ export default {
     // #endif
   },
   methods: {
+    getCompHeightFn () {
+      return new Promise((resolve, reject) => {
+        const query = uni.createSelectorQuery().in(this)
+        query.select('#wrap').boundingClientRect(data => {
+          console.log('得到布局位置信息' + JSON.stringify(data))
+          // console.log("节点离页面顶部的距离为" + data.top);
+          console.log(data)
+          resolve(data.height)
+        }).exec()
+      })
+    },
     // 渐入，渐出实现
     linershow: function (opacity) {
       var animation = uni.createAnimation({
@@ -118,9 +130,16 @@ export default {
       this.maskAnimationData = this.slideupshow('0px', 1, this.duration)
       this.animationData = this.slideupshow('0px', 1, this.duration)
     },
-    close () {
-      const { windowHeight } = uni.getSystemInfoSync()
-      this.animationData = this.slideupshow(`${windowHeight}px`, 0.3, this.duration)
+    async close () {
+      var transalteY
+      
+      if (this.compHeight > 0) {
+        transalteY = this.compHeight
+      } else {
+        transalteY = await this.getCompHeightFn()
+      }
+      // const { windowHeight } = uni.getSystemInfoSync()
+      this.animationData = this.slideupshow(`${transalteY}px`, 0.3, this.duration)
       this.maskAnimationData = this.slideupshow('0px', 0, this.duration)
       setTimeout(() => {
         this.isShow = false
@@ -136,7 +155,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-
+  
   .popup-layer {
     position: fixed;
     z-index: 99;
@@ -148,7 +167,7 @@ export default {
     opacity: 0;
     //transform: translateY(100%);
   }
-
+  
   .popup-wrap {
     position: fixed;
     left: 0;
@@ -165,7 +184,7 @@ export default {
       color: #333;
     }
   }
-
+  
   .safearea-box2 {
     height: constant(safe-area-inset-bottom);
     height: env(safe-area-inset-bottom);
