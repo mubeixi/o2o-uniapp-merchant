@@ -218,7 +218,7 @@ export default {
 
       if (this.vipData[this.inds].upgrade_rights && this.vipData[this.inds].upgrade_rights.coupon && this.vipData[this.inds].upgrade_rights.coupon.value) {
         const id = this.vipData[this.inds].upgrade_rights.coupon.value
-        this.coupon = await getCouponList({ record_id: id }, {
+        this.coupon = await getCouponList({ coupon_id: id }, {
           onlyData: true,
           tip: '加载中',
           noUid: 1
