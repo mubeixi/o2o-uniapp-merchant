@@ -257,7 +257,7 @@
           </div>
 
           <div class="expired-box" style="padding-bottom: 30rpx" v-if="bizList[biz_id].expired_cart_prod_count>0">
-            <div class="expired-hr" style="border-top: 1px dashed #e7e7e7;padding: 0rpx 0 40rpx 0"></div>
+            <div class="expired-hr" style="border-top: 1rpx dashed #e7e7e7;padding: 0rpx 0 40rpx 0"></div>
             <div class="expired-total c3 fz-18">
               共失效<span class="price-selling">{{bizList[biz_id].expired_cart_prod_count}}</span>件商品
             </div>
@@ -1618,7 +1618,7 @@ export default {
     }
 
     .mxitem {
-      border-bottom: 1px solid #eaeaea;
+      border-bottom: 1rpx solid #eaeaea;
 
       .num {
         float: right;
@@ -1848,7 +1848,7 @@ export default {
       /*margin-top: 30rpx;*/
       /*padding-bottom: 30rpx;*/
       padding: 30rpx 40rpx 30rpx 30rpx;
-      border-bottom: 2rpx solid #efefef;
+      border-bottom: 1rpx solid #efefef;
 
       &:last-child {
         border-bottom: none;
@@ -1979,7 +1979,7 @@ export default {
     width: 750rpx;
 
     .row {
-      border-bottom: 1px solid $fun-border-color;
+      border-bottom: 1rpx solid $fun-border-color;
 
       &:last-child {
         border-bottom: none;
@@ -2014,7 +2014,7 @@ export default {
       display: flex;
       justify-content: space-between;
       height: 104rpx;
-      border-bottom: 1px solid rgba(230, 230, 230, 1);
+      border-bottom: 1rpx solid rgba(230, 230, 230, 1);
       align-items: center;
       font-size: 28rpx;
     }
@@ -2099,7 +2099,7 @@ export default {
     width: 32rpx;
     height: 32rpx;
     border-radius: 50%;
-    border: 1px solid #F43131;
+    border: 1rpx solid #F43131;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -2116,7 +2116,7 @@ export default {
     width: 32rpx;
     height: 32rpx;
     border-radius: 50%;
-    border: 1px solid #B5B5B5;
+    border: 1rpx solid #B5B5B5;
   }
 
   .time-popup-confirmbtn{

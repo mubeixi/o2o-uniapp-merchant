@@ -107,6 +107,7 @@ export default {
   },
   data () {
     return {
+		userInfo:{},
       current_url: '',
       isReady: false,
       mode: 'default',
@@ -136,9 +137,9 @@ export default {
     initData () {
       return this.$store.state.system.initData
     },
-    userInfo () {
-      return this.$store.getters['user/getUserInfo']()
-    }
+    // userInfo () {
+    //   return this.$store.getters['user/getUserInfo']()
+    // }
   },
   onLoad (options) {
     const { mode, spike_good_id, flashsale_id, prod_id } = options
