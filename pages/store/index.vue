@@ -116,6 +116,8 @@ export default {
     }
   },
   onLoad (options) {
+    Storage.remove('value_index')
+    Storage.remove('attr_index')
     if (!options.biz_id) {
       modal('店铺id缺失')
       return
