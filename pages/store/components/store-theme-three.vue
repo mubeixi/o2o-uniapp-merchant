@@ -38,11 +38,11 @@
                 </div>
               </div>
               <div class="store-info-row flex-vertical-c" style="margin: 20rpx 0">
-                <layout-icon color="#999" size="14" type="iconicon-address"></layout-icon>
-                <div class="c9 fz-12">地址:{{storeInfo.biz_address}}</div>
+                <layout-icon color="#999" size="14" type="icondizhi1"></layout-icon>
+                <div class="c9 fz-12 m-l-4">地址：{{storeInfo.biz_address}}</div>
               </div>
               <div class="store-info-row flex-vertical-c">
-                <div class="fz-12 c9">营业时间:{{storeInfo.business_start}}-{{storeInfo.business_end}}</div>
+                <div class="fz-12 c9">营业时间：{{storeInfo.business_start}}-{{storeInfo.business_end}}</div>
               </div>
             </div>
           </div>
@@ -135,7 +135,7 @@
                 <div @click="$toGoodsDetail(goods)" :style="{backgroundImage:'url('+$getDomain(goods.ImgPath)+')'}"
                      class="cover"></div>
                 <div class="info">
-                  <div class="title fz-13 c3">
+                  <div class="title fz-14 fz-b c3">
                     <wzw-live-tag :room_id="goods.room_id" :product-info="goods" />
                     {{goods.Products_Name}}
                   </div>
@@ -236,7 +236,7 @@
               <div class="kill-goods-item flex" v-for="(pro,idx) in killList" :key="idx" @click="$toGoodsDetail(pro)">
                 <div :style="{backgroundImage:'url('+pro.ImgPath+')'}" class="item-cover"></div>
                 <div class="item-info flex1">
-                  <div class="act-goods-item-title fz-12 c3 m-t-14 m-b-8">
+                  <div class="act-goods-item-title fz-14 c3 m-t-14 m-b-8 fz-b">
                     <wzw-live-tag :room_id="pro.room_id" :product-info="pro" />
                     {{pro.Products_Name}}
                   </div>
@@ -336,7 +336,7 @@
       </div>
     </div>
 
-    <layout-layer positions="center" ref="attr">
+    <layout-layer positions="center" ref="attrOld">
       <div class="attr-form-wrap">
         <div class="attr-head">
           <div class="title">{{product.Products_Name}}</div>
@@ -398,6 +398,15 @@
 
     <div class="safearea-box fixed" style="z-index: 5"></div>
 
+    <product-sku
+      :isCart="true"
+      :product-info="product"
+      ref="attr"
+      :isNeedNumber="true"
+      @updaCart="productSkuAdd"
+
+    ></product-sku>
+
   </div>
 </template>
 
@@ -422,7 +431,7 @@ import LayoutPageTitle from '@/components/layout-page-title/layout-page-title'
 import LayoutIcon from '@/components/layout-icon/layout-icon'
 import WzwLiveTag from '@/components/wzw-live-tag/wzw-live-tag'
 import LayoutLayer from '@/components/layout-layer/layout-layer'
-
+import ProductSku from '@/components/product-sku/product-sku'
 var countdownInstance = null
 var countdownInstanceByFlash = null
 /**
@@ -470,7 +479,8 @@ export default {
     LayoutLayer,
     WzwLiveTag,
     LayoutIcon,
-    LayoutPageTitle
+    LayoutPageTitle,
+    ProductSku
   },
   mixins: [componetMixin],
   props: {
@@ -486,7 +496,7 @@ export default {
       toViewIdx: '',
       pixelRatio: 1,
       headTabTop: 100,
-      headBlockHeight:0,
+      headBlockHeight: 0,
       pageScrollTop: 0,
       containerRightScrollTop: 0,
       containerLeftScrollTop: 0,
@@ -595,6 +605,43 @@ export default {
     }
   },
   methods: {
+    async productSkuAdd (sku) {
+      this.attrInfo.attr_id = sku.id
+      this.attrInfo.prod_id = this.product.Products_ID
+      let addQty = sku.qty
+      const attr_id = sku.id
+      const prod_id = this.product.Products_ID
+      const isCartHas = this.$store.getters['cart/getRow']({
+        attr_id,
+        prod_id
+      })
+      if (isCartHas !== false) {
+        //数量相等无任何操作
+        if (addQty == isCartHas.num) {
+          return
+        }
+        addQty = addQty - isCartHas.num
+      }
+
+      const { ImgPath, Products_Name, Products_PriceX, Products_PriceY } = this.product
+      const productInfo = {}
+      Object.assign(productInfo, {
+        biz_id: Number(this.bid),
+        checked: true,
+        pic: ImgPath,
+        name: Products_Name,
+        price_selling: Number(Products_PriceX),
+        price_market: Number(Products_PriceY)
+      })
+      const cartRT = await this.$store.dispatch('cart/addNum', {
+        product: { ...this.product, ...this.attrInfo, ...productInfo },
+        num: addQty
+      })
+      this.refreshCount()
+      if (cartRT !== false) {
+        this.attrInfo.num = Number(this.attrInfo.num) + 1
+      }
+    },
     taggleCartListExpand () {
       if (this.listExpand) {
         this.$closePop('carts')
@@ -860,7 +907,7 @@ export default {
       if (!checkIsLogin(1, 1)) return
       const goodsInfo = await getProductDetail({ prod_id }, {
         onlyData: true,
-        tip: 'loading',
+        tip: '加载中',
         mask: true
       }).catch(e => {
         throw Error(e.msg || '获取商品详情失败')
@@ -870,29 +917,30 @@ export default {
       this.check_attr = {}// 重置
       this.product = goodsInfo
 
-      if (goodsInfo.skujosn) {
-        let skujosn_new = []
-        for (const i in goodsInfo.skujosn) {
-          skujosn_new.push({
-            sku: i,
-            val: goodsInfo.skujosn[i]
-          })
-        }
+      // if (goodsInfo.skujosn) {
+      //   let skujosn_new = []
+      //   for (const i in goodsInfo.skujosn) {
+      //     skujosn_new.push({
+      //       sku: i,
+      //       val: goodsInfo.skujosn[i]
+      //     })
+      //   }
+      //
+      //   // 新增如果有手机的规格
+      //   for (const i in goodsInfo.skujosn) {
+      //     if (i === 'mobile_prod_attr_name') {
+      //       skujosn_new = [{
+      //         sku: i,
+      //         val: goodsInfo.skujosn[i]
+      //       }]
+      //     }
+      //   }
+      //   // 结束
+      //
+      //   this.product.skujosn_new = skujosn_new
+      //   this.product.skuvaljosn = goodsInfo.skuvaljosn
+      // }
 
-        // 新增如果有手机的规格
-        for (const i in goodsInfo.skujosn) {
-          if (i === 'mobile_prod_attr_name') {
-            skujosn_new = [{
-              sku: i,
-              val: goodsInfo.skujosn[i]
-            }]
-          }
-        }
-        // 结束
-
-        this.product.skujosn_new = skujosn_new
-        this.product.skuvaljosn = goodsInfo.skuvaljosn
-      }
       this.$openPop('attr')
     },
     toSearch () {
@@ -1593,18 +1641,16 @@ export default {
           throw Error(e.msg || '获取相册信息失败')
         })
 
-
         // 这个就不要等了吧
         if (!checkIsLogin(0, 0)) {
           throw Error('nocare')
         }
 
-		hideLoading()
+        hideLoading()
         this.refreshInfoByIsLogin()
-
       } catch (e) {
         console.log(e)
-		hideLoading()
+        hideLoading()
         Exception.handle(e)
       }
     },
@@ -2025,8 +2071,9 @@ export default {
         width: 500rpx;
         height: 160rpx;
         box-sizing: border-box;
-
-        border-bottom: 1px solid #EDEDED;
+        border-bottom: 1rpx solid #EDEDED;
+        box-sizing: border-box;
+        padding: 10rpx 0rpx;
 
         .title {
           font-size: 14px;
@@ -2040,11 +2087,11 @@ export default {
         .attr-text {
           font-size: 12px;
           color: #999;
-          margin-top: 10rpx;
+          margin-top: 20rpx;
         }
 
         .actions {
-          margin: 20rpx 0 0;
+          margin: 10rpx 0 0;
           height: 54rpx;
           display: flex;
           justify-content: space-between;
@@ -2153,7 +2200,7 @@ export default {
 
       .cate-item {
         width: 160rpx;
-        height: 97rpx;
+        height: 98rpx;
         position: relative;
 
         .cate-title {
@@ -2220,12 +2267,13 @@ export default {
         .cate-item {
           display: inline-block;
           margin-right: 15rpx;
-          padding: 12rpx 22rpx;
+          padding: 0rpx 22rpx;
           height: 50rpx;
+          line-height: 50rpx;
           box-sizing: border-box;
           background: #F7F8F8;
           border-radius: 6rpx;
-          color: #666666;
+          color: #444444;
           font-size: 24rpx;
 
           &.active {

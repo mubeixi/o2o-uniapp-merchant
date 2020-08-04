@@ -27,7 +27,7 @@ const updateCartFn = ({ prod_id, attr_id, qty, bizId }) => {
   }
 
   return new Promise((resolve, reject) => {
-    updateCart(data, { tip: 'loading' })
+    updateCart(data, { tip: '加载中' })
       .then((res) => {
         resolve(res.data)
       })
@@ -44,7 +44,7 @@ const deletedCartFn = ({ prod_attr }) => {
   }
 
   return new Promise((resolve, reject) => {
-    DelCart(data, { tip: 'loading' })
+    DelCart(data, { tip: '加载中' })
       .then((res) => {
         resolve(res.data)
       })
@@ -195,14 +195,14 @@ const actions = {
     }
     let cartList = state.cartList.length > 0 ? state.cartList : Storage.get('shopCartList')
     if (!cartList) cartList = []
-  
+
     const idx = findArrayIdx(cartList, { attr_id, prod_id })
     if (idx !== false){
       cartList[idx].price_selling = price_selling
       this.commit('cart/ASYNC_DATA', cartList)
       return true
     }
-  
+
     return false
   },
   async addNum ({ commit, state }, { product, num = 1 }) {
@@ -421,7 +421,7 @@ const getters = {
             count += row.num * row.price_market
           }
         }
-        
+
       }
       return count
     } catch (e) {
