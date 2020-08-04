@@ -2082,6 +2082,7 @@ export default {
           overflow: hidden;
           text-overflow: ellipsis;
           width: 480rpx;
+          font-weight: bold;
         }
 
         .attr-text {
