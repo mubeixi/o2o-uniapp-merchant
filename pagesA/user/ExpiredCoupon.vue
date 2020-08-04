@@ -7,33 +7,33 @@
     <block>
       <view :key="index" class="youhuijuan" v-for="(item,index) of pro">
         <image :src="'/static/client/mbxcoupon.png'|domain" class="allImg"></image>
-        <view class="infoImg">
+        <!-- <view class="infoImg">
           <image :src="item.Coupon_PhotoPath" class="image"></image>
-        </view>
+        </view> -->
         <view class="storeTitle">
-          {{item.Coupon_Subject}}
+          满{{item.Coupon_Condition}}减{{item.Coupon_Cash}} <span v-if="item.biz_id>0">(店铺优惠券)</span><span v-else>(通用优惠券)</span>
         </view>
         <view class="times">
           有效期：{{item.Coupon_StartTime.substring(0,10)}}至{{item.Coupon_EndTime.substring(0,10)}}
         </view>
         <view class="subject">
-          {{item.limit_txt}}
+          {{item.limit_txt||''}}
         </view>
-        <view class="prices" v-if="item.Coupon_Discount<=0">
+        <view class="prices" >
           ¥
           <text>{{item.Coupon_Cash}}</text>
         </view>
-        <view class="prices" v-else>
-          {{item.Coupon_Discount*10}}折优惠
-        </view>
-        <view class="man">
-          满{{item.Coupon_Condition}}可用
-        </view>
+<!--        <view class="prices" v-else>-->
+<!--          {{item.Coupon_Discount*10}}折优惠-->
+<!--        </view>-->
+<!--        <view class="man">-->
+<!--          满{{item.Coupon_Condition}}可用-->
+<!--        </view>-->
         <image class="yishiyong" src="/static/coupon-disabled.png"></image>
       </view>
-    
+
     </block>
-  
+
   </view>
 </template>
 
@@ -103,7 +103,7 @@ export default {
     },
     // 	change(item){
     // 		this.checked=item;
-    
+
     // 	}
   },
 }
@@ -114,7 +114,7 @@ export default {
     background-color: #FFFFFF !important;
     min-height: 100vh;
   }
-  
+
   .titless {
     position: fixed;
     top: 0rpx;
@@ -122,7 +122,7 @@ export default {
     width: 100%;
     z-index: 999;
   }
-  
+
   .nav {
     z-index: 999;
     position: fixed;
@@ -136,17 +136,17 @@ export default {
     align-items: center;
     font-size: 30rpx;
     color: #333333;
-    
+
     .views {
       width: 236rpx;
       height: 72rpx;
       line-height: 72rpx;
       text-align: center;
       position: relative;
-      
+
       &.checked {
         color: #F43131;
-        
+
         &:after {
           content: '';
           display: flex;
@@ -160,19 +160,19 @@ export default {
       }
     }
   }
-  
+
   .youhuijuan {
     width: 709rpx;
     height: 206rpx;
     margin-left: 20rpx;
     margin-bottom: 30rpx;
     position: relative;
-    
+
     .allImg {
       width: 100%;
       height: 100%;
     }
-    
+
     .infoImg {
       width: 89rpx;
       height: 89rpx;
@@ -181,38 +181,38 @@ export default {
       top: 56rpx;
       left: 44rpx;
       overflow: hidden;
-      
+
       .image {
         width: 100%;
         height: 100%;
       }
     }
-    
+
     .storeTitle {
       font-size: 28rpx;
       color: #333333;
       line-height: 28rpx;
       position: absolute;
       top: 48rpx;
-      left: 150rpx;
+      left: 60rpx;
     }
-    
+
     .times {
       font-size: 20rpx;
       color: #666666;
       position: absolute;
       top: 92rpx;
-      left: 148rpx;
+      left: 62rpx;
     }
-    
+
     .subject {
       font-size: 16rpx;
       color: #FF565F;
       position: absolute;
-      left: 148rpx;
+      left: 62rpx;
       top: 130rpx;
     }
-    
+
     .prices {
       width: 110rpx;
       height: 40rpx;
@@ -223,14 +223,14 @@ export default {
       font-size: 30rpx;
       position: absolute;
       top: 41rpx;
-      left: 534rpx;
-      
+      left: 524rpx;
+
       text {
         margin-left: 11rpx;
         font-size: 52rpx;
       }
     }
-    
+
     .man {
       height: 19rpx;
       font-size: 20rpx;
@@ -239,7 +239,7 @@ export default {
       top: 95rpx;
       left: 534rpx;
     }
-    
+
     .button {
       width: 125rpx;
       height: 44rpx;
@@ -253,7 +253,7 @@ export default {
       top: 133rpx;
       left: 527rpx;
     }
-    
+
     .yishiyong {
       position: absolute;
       width: 106rpx;
@@ -262,7 +262,7 @@ export default {
       left: 455rpx;
     }
   }
-  
+
   .lasts {
     font-size: 14px;
     padding-top: 30rpx;
@@ -270,24 +270,24 @@ export default {
     text-align: center;
     display: flex;
     justify-content: center;
-    
+
     .lefts {
       color: #666666;
     }
-    
+
     .rights {
       margin-left: 10rpx;
       color: #F43131;
     }
   }
-  
+
   .defaults {
     margin: 0 auto;
     width: 640rpx;
     height: 480rpx;
     padding-top: 100rpx;
   }
-  
+
   .yishiyong {
     position: absolute;
     width: 106rpx;

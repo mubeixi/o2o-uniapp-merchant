@@ -140,6 +140,7 @@ export default {
   },
   data () {
     return {
+      isScreen: false,
       cash_from: 1,
       active: 0,
       cate: 2,
@@ -256,6 +257,7 @@ export default {
       }
     },
     reset () {
+      this.isScreen = false
       this.minPrice = ''
       this.maxPrice = ''
       this.isShipping = 0
@@ -280,6 +282,7 @@ export default {
       this.page = 1
       // this.orderby="search";
       const item = 'search'
+      this.isScreen = true
       this.getProd(item)
       this.showShai = false
     },
@@ -330,7 +333,7 @@ export default {
       }
     },
     getProd (item) {
-      let data
+      let data = {}
       if (this.inputValue) {
         data = {
 
@@ -361,7 +364,8 @@ export default {
         } else if (this.isSheng === 2) {
           data.order_by_direction = 'desc'
         }
-      } else if (item === 'search') {
+      }
+      if (this.isScreen) {
         data.min_price = this.minPrice
         data.max_price = this.maxPrice
         data.order_by = this.orderby
@@ -373,7 +377,7 @@ export default {
         if (this.isShipping === 1) {
           data.free_shipping = 1
         } else if (this.isShipping === 2) {
-          data.free_shipping = 0
+          data.free_shipping = 2
         }
       }
       if (this.Products_ID) {
@@ -430,6 +434,7 @@ export default {
     width: 750rpx;
     overflow: hidden;
     background: white;
+    position: relative;
   }
 
   .top {
@@ -700,8 +705,8 @@ export default {
 
   .shaixuan {
     box-sizing: border-box;
-    position: absolute;
-    top: 210rpx;
+    position: fixed;
+    top: 206rpx;
     width: 750rpx;
     background-color: #FFFFFF;
     z-index: 999;
