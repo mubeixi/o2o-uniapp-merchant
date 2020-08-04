@@ -4,7 +4,7 @@
     <!-- #ifdef APP-PLUS -->
     <view class="status_bar" style="background-color: rgb(248, 248, 248);"><!-- 这里是状态栏 --></view>
     <!-- #endif -->
-    
+
     <div :key="item" class="pro" v-for="(item,index) of refundInfo.refund_prod_list">
       <div class="pro-div">
         <image :src="item.prod_img" alt="" class="pro-img" />
@@ -20,7 +20,7 @@
           <!--          </div>-->
           <!--          <div>原路退回:<span class="fz-16 danger-color"><span class="span fz-12">￥</span>{{item.refund_pay_fee}} </span>-->
           <!--          </div>-->
-        
+
         </div>
       </div>
     </div>
@@ -58,7 +58,7 @@
       <view :key="index" class="shangchuans" v-for="(item,index) of imgs">
         <image :src="item" @click="yulan(index)" class="image"></image>
         <layout-icon @click="delImg(index)" class="image del" size="20" type="iconicon-test"></layout-icon>
-      
+
       </view>
       <view @click="addImg" class="shangchuan" v-if="imgs.length<9">
         <view class="heng"></view>
@@ -67,7 +67,7 @@
     </div>
     <div style="height: 50px;"></div>
     <div @click="submit" class="bottom">提交</div>
-    
+
     <popup-layer :direction="'top'" ref="popup" style="z-index: 99;">
       <div class="bMbx">
         <div class="fMbx">退款原因</div>
@@ -83,13 +83,13 @@
             </label>
           </radio-group>
         </div>
-      
+
       </div>
       <div @click="closeReason" class="sure">
         确定
       </div>
     </popup-layer>
-  
+
   </div>
 </template>
 
@@ -137,7 +137,7 @@ export default {
   },
   onLoad (option) {
     this.Order_ID = option.Order_ID
-    
+
     if (option.prod_id) {
       this.prod_id = option.prod_id
       this.attr_id = option.attr_id
@@ -147,7 +147,7 @@ export default {
     this.getRefund()
   },
   created () {
-  
+
   },
   computed: {
     initData () {
@@ -205,7 +205,7 @@ export default {
         }
         this.refundInfo = res.data
       }).catch(e => {
-      
+
       })
     },
     // 退款说明
@@ -236,7 +236,7 @@ export default {
           if (i === 'refund_prod_list') {
             for (var j in res.data[i]) {
               this.backNumber = this.maxNumber = res.data[i][j].prod_count - res.data[i][j].is_back_num
-              
+
               for (var k in res.data[i][j]) {
                 if (k === 'attr_info') {
                   if (res.data[i][j][k]) {
@@ -249,7 +249,7 @@ export default {
         }
         this.refundInfo = res.data
       }).catch(e => {
-      
+
       })
     },
     // 提交
@@ -274,7 +274,7 @@ export default {
         postData.attr_id = this.attr_id
         postData.back_num = this.backNumber
       }
-      
+
       orderRefund(postData).then(res => {
         toast('提交成功')
         setTimeout(() => {
@@ -290,7 +290,7 @@ export default {
     },
     async addImg () {
       try {
-        showLoading('loading')
+        showLoading('加载中')
         const files = await chooseImageByPromise({ count: 9 - this.arr.length }).catch(e => {
           throw Error(e.msg)
         })
@@ -298,7 +298,7 @@ export default {
         const ossUrls = await uploadImages({ imgs }).catch(() => {
           throw Error('文件批量上传失败')
         })
-        
+
         imgs.map(item => {
           this.imgs.push(item)
         })
@@ -337,12 +337,12 @@ export default {
     position: relative;
     margin-right: 28rpx;
     margin-bottom: 28rpx;
-    
+
     .image {
       width: 100%;
       height: 100%;
     }
-    
+
     .del {
       width: 38rpx;
       height: 38rpx;
@@ -352,14 +352,14 @@ export default {
       z-index: 9;
     }
   }
-  
+
   .shangchuan {
     width: 146rpx;
     height: 146rpx;
     border: 1px solid rgba(186, 186, 186, 1);
     position: relative;
     margin-bottom: 28rpx;
-    
+
     .heng {
       width: 76rpx;
       height: 3rpx;
@@ -368,7 +368,7 @@ export default {
       top: 72rpx;
       left: 35rpx;
     }
-    
+
     .shu {
       width: 3rpx;
       height: 76rpx;
@@ -376,38 +376,38 @@ export default {
       position: absolute;
       top: 35rpx;
       left: 72rpx;
-      
+
     }
   }
-  
+
   .wrap {
     /*   height: 100vh; */
     background: #fff;
 	width: 750rpx;
 	overflow-x: hidden;
   }
-  
+
   .pro {
     display: flex;
     margin-bottom: 30rpx;
     margin-top: 30rpx;
   }
-  
+
   .pro-msg {
     margin-left: 27rpx;
     width: 476rpx;
   }
-  
+
   .pro-div {
     width: 200rpx;
     height: 200rpx;
   }
-  
+
   .pro-img {
     width: 100%;
     height: 100%;
   }
-  
+
   .pro-name {
     font-size: 26rpx;
     margin-bottom: 20rpx;
@@ -418,7 +418,7 @@ export default {
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
   }
-  
+
   .attr {
     display: inline-block;
     height: 50rpx;
@@ -429,23 +429,23 @@ export default {
     padding: 0 20rpx;
     margin-bottom: 20rpx;
   }
-  
+
   .pro-price {
     color: #F43131;
     font-size: 36rpx;
   }
-  
+
   .pro-price .span {
     font-size: 24rpx;
     font-style: normal;
   }
-  
+
   .amount {
     font-size: 30rpx;
     float: right;
     color: #333;
   }
-  
+
   .item {
     display: flex;
     height: 50px;
@@ -457,31 +457,31 @@ export default {
     font-size: 14px;
     border-bottom: 1px solid #E3E3E3;
   }
-  
+
   .spe {
     justify-content: flex-start;
   }
-  
+
   .item-left {
     margin-right: 10px;
     font-size: 28rpx;
   }
-  
+
   .item-right {
     color: #888;
     font-size: 24rpx;
   }
-  
+
   .noborder {
     border: none;
   }
-  
+
   .item-right .img {
     width: 15rpx;
     height: 23rpx;
     margin-left: 25rpx;
   }
-  
+
   /* 上传图像 */
   .imgs {
     display: flex;
@@ -489,7 +489,7 @@ export default {
     padding-right: 0rpx;
     flex-wrap: wrap;
   }
-  
+
   .bottom {
     position: fixed;
     bottom: 0;
@@ -503,7 +503,7 @@ export default {
     background: #F43131;
     z-index: 8;
   }
-  
+
   /* 退款 */
   .methods,
   .reason {
@@ -515,12 +515,12 @@ export default {
     background: #fff;
     padding-top: 20px;
   }
-  
+
   .m-title {
     text-align: center;
     margin-bottom: 10px;
   }
-  
+
   .confirm-method {
     background: #F43131;
     color: #fff;
@@ -529,10 +529,10 @@ export default {
     width: 100%;
     margin-top: 20px;
   }
-  
+
   .bMbx {
     padding: 0rpx 20rpx;
-    
+
     .fMbx {
       font-size: 32rpx;
       height: 30rpx;
@@ -540,7 +540,7 @@ export default {
       text-align: center;
       padding: 36rpx 0rpx;
     }
-    
+
     .iMbx {
       display: flex;
       justify-content: space-between;
@@ -550,7 +550,7 @@ export default {
       font-size: 28rpx;
     }
   }
-  
+
   .sure {
     height: 90rpx;
     width: 100%;
@@ -561,11 +561,11 @@ export default {
     line-height: 90rpx;
     text-align: center;
   }
-  
+
   .danger-color {
     color: #f43131;
   }
-  
+
   .amount {
     float: right;
     display: flex;
@@ -573,7 +573,7 @@ export default {
     height: 50rpx;
     width: 168rpx;
   }
-  
+
   .amount {
     .attr_num {
       width: 72rpx;
@@ -589,7 +589,7 @@ export default {
       min-height: 0;
     }
   }
-  
+
   .plus {
     width: 48rpx;
     height: 50rpx;
@@ -597,7 +597,7 @@ export default {
     text-align: center;
     line-height: 50rpx;
     box-sizing: border-box;
-    
+
     &.disabled {
       background: #efefef;
     }

@@ -540,7 +540,7 @@ export default {
       this.total_count = this.$store.getters['cart/getTotalNum'](Number(this.bid))
       this.total_price = this.$store.getters['cart/getTotalMoney'](Number(this.bid))
       this.allCheck = this.$store.getters['cart/getListCheckStatus'](Number(this.bid))
-      
+
       // this.refreshShowListNum()
     },
     taggkeCartShow () {
@@ -705,14 +705,14 @@ export default {
       if (!this.submitFlag) return
       this.attrInfo.num++
       this.product.prod_id = this.product.Products_ID
-  
+
       const pro = {
         ...this.product,
         ...this.attrInfo,
         attr_text: this.attrInfo.attr_text
       }
       const { ImgPath: pic, Products_PriceX: price_selling, Products_PriceY: price_market, Products_Name: name } = pro
-      
+
       const cart = await this.$store.dispatch('cart/addNum', {
         product:{
           ...pro,
@@ -824,7 +824,7 @@ export default {
         if (attr_id === 0) {
           this.$set(this.CartList[biz_id][prod_id][attr_id], 'Qty', num)
         }
-  
+
         this.refreshCount()
         return
       }
@@ -843,14 +843,14 @@ export default {
         price_market,
         name
       }
-      
+
 
       const cart = await this.$store.dispatch('cart/addNum', {
         product,
         num
       })
       if (cart !== false) {
-        
+
         this.refreshCount()
         // 更新数量
         await this.initCart()
@@ -886,7 +886,7 @@ export default {
       this.refreshCount()
       // 更新数量
       this.initCart()
-      
+
       this.isAjax = false
     },
     async delNum () {
@@ -995,7 +995,7 @@ export default {
     async openAttrLayer (prod_id) {
       const goodsInfo = await getProductDetail({ prod_id }, {
         onlyData: true,
-        tip: 'loading',
+        tip: '加载中',
         mask: true
       }).catch(e => {
         throw Error(e.msg || '获取商品详情失败')
@@ -1120,7 +1120,7 @@ export default {
             if (!this.bizList[biz_id].isSaleTime) {
               CartList[biz_id][prod_id][attr_id].checked = false
             }
-            
+
           }
         }
       }
@@ -1192,9 +1192,9 @@ export default {
       align-items: center;
       justify-content: center;
     }
-  
+
     .plus-tag {
-    
+
       background-color: #FF0000;
       border-radius: 8px;
       font-size: 12px;
@@ -1211,9 +1211,9 @@ export default {
           font-size: 14px;
         }
       }
-    
+
     }
-    
+
     .close-btn {
       height: 50px;
       width: 50px;

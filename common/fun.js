@@ -222,7 +222,7 @@ export const confirm = (options) => {
   })
 }
 
-export const showLoading = (title = 'loading', mask = true) => {
+export const showLoading = (title = '加载中', mask = true) => {
   uni.showLoading({
     title,
     mask
