@@ -26,6 +26,7 @@ import StoreThemeOne from '@/pages/store/components/store-theme-one'
 import StoreThemeTwo from '@/pages/store/components/store-theme-two'
 import StoreThemeThree from '@/pages/store/components/store-theme-three'
 import { getBizInfo } from '@/api/store'
+import Storage from '@/common/Storage.js'
 // #ifdef MP-WEIXIN
 // const livePlayer = requirePlugin('live-player-plugin')
 // #endif
