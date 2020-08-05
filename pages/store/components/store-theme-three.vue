@@ -616,7 +616,7 @@ export default {
         prod_id
       })
       if (isCartHas !== false) {
-        //数量相等无任何操作
+        // 数量相等无任何操作
         if (addQty == isCartHas.num) {
           return
         }
@@ -916,7 +916,7 @@ export default {
       this.attrInfo = { ...attrInfoTmpl } // 重置
       this.check_attr = {}// 重置
       this.product = goodsInfo
-
+      this.product.minPrice = this.product.Products_PriceX
       // if (goodsInfo.skujosn) {
       //   let skujosn_new = []
       //   for (const i in goodsInfo.skujosn) {
