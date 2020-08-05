@@ -26,6 +26,7 @@ import StoreThemeOne from '@/pages/store/components/store-theme-one'
 import StoreThemeTwo from '@/pages/store/components/store-theme-two'
 import StoreThemeThree from '@/pages/store/components/store-theme-three'
 import { getBizInfo } from '@/api/store'
+import Storage from '@/common/Storage.js'
 // #ifdef MP-WEIXIN
 // const livePlayer = requirePlugin('live-player-plugin')
 // #endif
@@ -116,6 +117,8 @@ export default {
     }
   },
   onLoad (options) {
+    Storage.remove('value_index')
+    Storage.remove('attr_index')
     if (!options.biz_id) {
       modal('店铺id缺失')
       return

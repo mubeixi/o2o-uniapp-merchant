@@ -23,28 +23,28 @@
         </view>
         <view :key="idx" class="youhuijuan" v-for="(item,idx) in couponList">
           <image :src="'/static/client/free/mbxcoupon.png'|domain" class="allImg"></image>
-          <view class="infoImg">
+          <!-- <view class="infoImg">
             <image :src="item.Coupon_PhotoPath" class="image"></image>
-          </view>
+          </view> -->
           <view class="storeTitle">
-            {{item.Coupon_Subject}}
+            满{{item.Coupon_Condition}}减{{item.Coupon_Cash}} <span v-if="item.biz_id>0">(店铺优惠券)</span><span v-else>(通用优惠券)</span>
           </view>
           <view class="times">
             有效期：{{item.Coupon_StartTime}}-{{item.Coupon_EndTime}}
           </view>
           <view class="limit">
-            {{item.limit_txt}}
+            {{item.limit_txt||''}}
           </view>
-          <view class="prices" v-if="item.Coupon_Discount<=0">
+          <view class="prices" >
             ¥
             <text>{{item.Coupon_Cash}}</text>
           </view>
-          <view class="prices" v-else>
-            {{item.Coupon_Discount*10}}折优惠
-          </view>
-          <view class="man" v-if="item.Coupon_Subject">
-            满{{item.Coupon_Condition}}可用
-          </view>
+<!--          <view class="prices" v-else>-->
+<!--            {{item.Coupon_Discount*10}}折优惠-->
+<!--          </view>-->
+<!--          <view class="man" v-if="item.Coupon_Subject">-->
+<!--            满{{item.Coupon_Condition}}可用-->
+<!--          </view>-->
           <view @click="goIndex(item.coupon_prod)" class="button">
             去使用
           </view>
@@ -366,6 +366,7 @@ export default {
     background-color: #FFFFFF !important;
     min-height: 100vh;
     padding-top: 18px;
+    box-sizing: border-box;
   }
 
   .titless {
@@ -447,7 +448,7 @@ export default {
       line-height: 28rpx;
       position: absolute;
       top: 62rpx;
-      left: 150rpx;
+      left: 60rpx;
     }
 
     .times {
@@ -455,14 +456,14 @@ export default {
       color: #666666;
       position: absolute;
       top: 105rpx;
-      left: 148rpx;
+      left: 62rpx;
     }
 
     .limit {
       font-size: 16rpx;
       color: #FF565F;
       position: absolute;
-      left: 148rpx;
+      left: 62rpx;
       top: 140rpx;
     }
 
@@ -484,7 +485,7 @@ export default {
       font-size: 30rpx;
       position: absolute;
       top: 41rpx;
-      left: 534rpx;
+      left: 524rpx;
 
       text {
         margin-left: 11rpx;
@@ -511,8 +512,8 @@ export default {
       color: #F43131;
       text-align: center;
       position: absolute;
-      top: 133rpx;
-      left: 527rpx;
+      top: 126rpx;
+      left: 516rpx;
     }
 
     .yishiyong {

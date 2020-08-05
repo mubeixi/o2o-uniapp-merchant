@@ -75,12 +75,16 @@
 
 import layoutPopup from '@/components/layout-popup/layout-popup.vue'
 import { error } from '@/common/fun.js'
-import { numberSort } from '@/common/helper'
+import { mergeObject, numberSort } from '@/common/helper'
 import Storage from '@/common/Storage'
 import LayoutIcon from '@/components/layout-icon/layout-icon'
 export default {
   components: { layoutPopup, LayoutIcon },
   props: {
+    isNeedNumber: {
+      type: Boolean,
+      default: false
+    },
     isCart: {
       type: Boolean,
       default: false
@@ -108,8 +112,8 @@ export default {
     productInfo: {
       deep: true,
       handler (newVal, oldVal) {
-        console.log(newVal)
         this.list = newVal
+        this.postData.qty = 1
         this.init()
       }
     }
@@ -174,16 +178,15 @@ export default {
         }
       }
 
-      console.log('pro')
+      const skuInfo = JSON.parse(JSON.stringify(this.postData))
       if (this.isCart) {
-        this.$emit('updaCart', this.postData)
+        this.$emit('updaCart', skuInfo)
       } else {
-        this.$emit('submitSure', this.postData)
+        this.$emit('submitSure', skuInfo)
       }
       this.close()
     },
     buyNow () {
-      console.log(this.productInfo.skuvaljosn, this.submitFlag)
       if (this.productInfo.skuvaljosn && JSON.stringify(this.productInfo.skuvaljosn) !== '{}') {
         if (!this.submitFlag) {
           uni.showToast({
@@ -242,7 +245,6 @@ export default {
 
       // 属性判断
       if (attr_val) {
-        console.log(attr_val, 'attr_val', this.productInfo)
         this.postData.id = attr_val.Product_Attr_ID // 选择属性的id
         this.postData.count = attr_val.Property_count // 选择属性的库存
         this.postData.Attr_Value_text = attr_val.Attr_Value_text // 选择属性的名字
@@ -254,6 +256,23 @@ export default {
 
         this.submitFlag = !(!this.check_attr)
         // this.submitFlag = (!this.check_attr || Object.getOwnPropertyNames(this.check_attr).length !== Object.getOwnPropertyNames(this.list.skujosn).length) ? false : true;
+        // 如果是外卖模板需要返回当前规格购物车的数量
+        if (this.isNeedNumber) {
+          const attr_id = this.postData.id
+          const prod_id = this.productInfo.Products_ID
+          const isCartHas = this.$store.getters['cart/getRow']({
+            attr_id,
+            prod_id
+          })
+          console.log('isCartHas', isCartHas, attr_val)
+          // 如果已经存在
+          //console.log(mergeObject(this.attrInfo, isCartHas, true),"ssss")
+          if (isCartHas !== false) {
+            this.postData.qty = isCartHas.num
+          } else {
+            this.postData.qty = 1// 新增的时候，数量为0
+          }
+        }
       }
       // 判断属性库存
       if (attr_val && attr_val.Property_count <= 0) {
@@ -271,6 +290,8 @@ export default {
 
       Storage.set('value_index', value_index)
       Storage.set('attr_index', attr_index)
+
+      console.log(this.postData, 'post')
     },
     addNum () {
       if (this.postData.qty < this.postData.count) {
@@ -310,7 +331,6 @@ export default {
     init () {
       this.postData.price = this.list.minPrice
       this.postData.count = this.list.Products_Count
-      console.log(this.list.skujosn)
       if (this.list.skujosn) {
         let skujosn_new = []
         for (const i in this.list.skujosn) {

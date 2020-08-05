@@ -7,9 +7,9 @@
     <block>
       <view :key="index" class="youhuijuan" v-for="(item,index) of pro">
         <image :src="'/static/client/mbxcoupon.png'|domain" class="allImg"></image>
-        <view class="infoImg">
+       <!-- <view class="infoImg">
           <image :src="item.Coupon_PhotoPath" class="image"></image>
-        </view>
+        </view> -->
         <view class="storeTitle">
           满{{item.Coupon_Condition}}减{{item.Coupon_Cash}} <span v-if="item.biz_id>0">(店铺优惠券)</span><span v-else>(通用优惠券)</span>
         </view>
@@ -206,7 +206,7 @@ export default {
       line-height: 28rpx;
       position: absolute;
       top: 48rpx;
-      left: 150rpx;
+      left: 60rpx;
     }
 
     .times {
@@ -214,15 +214,15 @@ export default {
       color: #666666;
       position: absolute;
       top: 92rpx;
-      left: 148rpx;
+      left: 62rpx;
     }
 
     .subject {
       font-size: 16rpx;
       color: #FF565F;
       position: absolute;
-      left: 148rpx;
-      top: 130rpx;
+      left: 54rpx;
+      top: 62rpx;
     }
 
     .prices {
@@ -235,7 +235,7 @@ export default {
       font-size: 30rpx;
       position: absolute;
       top: 41rpx;
-      left: 534rpx;
+      left: 524rpx;
 
       text {
         margin-left: 11rpx;
@@ -263,7 +263,7 @@ export default {
       text-align: center;
       position: absolute;
       top: 126rpx;
-      left: 527rpx;
+      left: 516rpx;
     }
 
     .yishiyong {

@@ -3,7 +3,7 @@
     <!-- <page-title title="发表评论" rightHidden="true" bgcolor="#ffffff"></page-title> -->
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <view style="height: 40rpx;width: 100%;">
-    
+
     </view>
     <block :key="index" v-for="(item,index) of productList">
       <div @click="$toGoodsDetail(item)" class="pro-comment flex flex-vertical-c">
@@ -18,7 +18,7 @@
           </div>
         </div>
         <layout-icon color="#777777" size="20" style="margin-left: auto" type="iconicon-arrow-right"></layout-icon>
-      
+
       </div>
       <view class="rate">
         <view class="rates">整体评价</view>
@@ -46,7 +46,7 @@
         </div>
       </view>
     </block>
-    
+
     <view class="niming">
       <view>
         匿名评价
@@ -159,7 +159,7 @@ export default {
     },
     async addImg (index) {
       try {
-        showLoading('loading')
+        showLoading('加载中')
         const files = await chooseImageByPromise({ count: 9 - this.commitList[index].image_path.length }).catch(e => {
           throw Error(e.msg)
         })
@@ -167,7 +167,7 @@ export default {
         const ossUrls = await uploadImages({ imgs }).catch(() => {
           throw Error('文件批量上传失败')
         })
-        
+
         imgs.map(item => {
           this.imgList[index].img.push(item)
         })
@@ -204,7 +204,7 @@ export default {
     background-color: #F8F8F8;
     box-sizing: border-box;
   }
-  
+
   .edit {
     box-sizing: border-box;
     width: 710rpx;
@@ -220,12 +220,12 @@ export default {
     color: #333333;
     background-color: #FFFFFF;
   }
-  
+
   .place {
     color: #CBCBCB !important;
     font-size: 24rpx !important;
   }
-  
+
   .submit {
     width: 690rpx;
     height: 80rpx;
@@ -238,7 +238,7 @@ export default {
     text-align: center;
     margin-top: 65rpx;
   }
-  
+
   .niming {
     width: 710rpx;
     height: 75rpx;
@@ -254,7 +254,7 @@ export default {
     margin-bottom: 20rpx;
     font-size: 26rpx;
   }
-  
+
   .item {
     display: flex;
     height: 50px;
@@ -264,31 +264,31 @@ export default {
     font-size: 14px;
     border-bottom: 1px solid #E3E3E3;
   }
-  
+
   .spe {
     justify-content: flex-start;
   }
-  
+
   .item-left {
     margin-right: 10px;
     font-size: 28rpx;
   }
-  
+
   .item-right {
     color: #888;
     font-size: 24rpx;
   }
-  
+
   .noborder {
     border: none;
   }
-  
+
   .item-right img {
     width: 15rpx;
     height: 23rpx;
     margin-left: 25rpx;
   }
-  
+
   /* 上传图像 */
   .imgs {
     display: flex;
@@ -296,7 +296,7 @@ export default {
     flex-wrap: wrap;
     padding-left: 20rpx;
   }
-  
+
   .bottom {
     position: fixed;
     bottom: 0;
@@ -310,7 +310,7 @@ export default {
     background: #F43131;
     z-index: 9999;
   }
-  
+
   /* 退款 */
   .methods,
   .reason {
@@ -322,12 +322,12 @@ export default {
     background: #fff;
     padding-top: 20px;
   }
-  
+
   .m-title {
     text-align: center;
     margin-bottom: 10px;
   }
-  
+
   .confirm-method {
     background: #F43131;
     color: #fff;
@@ -336,10 +336,10 @@ export default {
     width: 100%;
     margin-top: 20px;
   }
-  
+
   .bMbx {
     padding: 0rpx 20rpx;
-    
+
     .fMbx {
       font-size: 32rpx;
       height: 30rpx;
@@ -347,7 +347,7 @@ export default {
       text-align: center;
       padding: 36rpx 0rpx;
     }
-    
+
     .iMbx {
       display: flex;
       justify-content: space-between;
@@ -357,7 +357,7 @@ export default {
       font-size: 28rpx;
     }
   }
-  
+
   .sure {
     height: 90rpx;
     width: 100%;
@@ -368,7 +368,7 @@ export default {
     line-height: 90rpx;
     text-align: center;
   }
-  
+
   .shangchuans {
     width: 146rpx;
     height: 146rpx;
@@ -376,12 +376,12 @@ export default {
     position: relative;
     margin-right: 20rpx;
     margin-bottom: 28rpx;
-    
+
     .image {
       width: 100%;
       height: 100%;
     }
-    
+
     .del {
       width: 38rpx;
       height: 38rpx;
@@ -391,14 +391,14 @@ export default {
       z-index: 9999;
     }
   }
-  
+
   .shangchuan {
     width: 146rpx;
     height: 146rpx;
     border: 1px solid rgba(186, 186, 186, 1);
     position: relative;
     margin-bottom: 28rpx;
-    
+
     .heng {
       width: 76rpx;
       height: 3rpx;
@@ -407,7 +407,7 @@ export default {
       top: 72rpx;
       left: 35rpx;
     }
-    
+
     .shu {
       width: 3rpx;
       height: 76rpx;
@@ -415,16 +415,16 @@ export default {
       position: absolute;
       top: 35rpx;
       left: 72rpx;
-      
+
     }
   }
-  
+
   .shangH {
     background-color: #FFFFFF;
     width: 710rpx;
     margin: 0 auto;
   }
-  
+
   .rate {
     margin: 0 auto;
     width: 710rpx;
@@ -434,14 +434,14 @@ export default {
     align-items: center;
     border-radius: 10rpx;
     padding: 25rpx 0rpx;
-    
+
     .rates {
       font-size: 26rpx;
       color: #333333;
       margin-left: 25rpx;
       margin-right: 22rpx;
     }
-    
+
     .score {
       padding-top: 5rpx;
       font-size: 26rpx;
@@ -450,7 +450,7 @@ export default {
       margin-left: 15rpx;
     }
   }
-  
+
   .pro-comment {
     margin: 0 auto 10px;
     width: 710rpx;
@@ -459,12 +459,12 @@ export default {
     padding: 20rpx;
     box-sizing: border-box;
   }
-  
+
   .pro-img {
     width: 84rpx;
     height: 84rpx;
   }
-  
+
   .pro-title {
     height: 24rpx;
     line-height: 24rpx;
@@ -477,16 +477,16 @@ export default {
     margin-top: 10px;
     margin-bottom: 9px;
   }
-  
+
   .pro-price {
     height: 20rpx;
     line-height: 20rpx;
     color: #B1B1B1;
-    
+
     .color-r {
       color: #F53636;
     }
-    
+
     .linethrow {
       text-decoration: line-through;
     }
