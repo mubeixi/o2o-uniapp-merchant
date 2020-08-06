@@ -1781,7 +1781,12 @@ export default {
   },
   onReady () {
     this.pageScrollEnable = true
-
+  
+    uni.setNavigationBarColor({
+      frontColor: '#ffffff',
+      backgroundColor: '#eeeeee'
+    })
+    
     this.$nextTick().then(() => {
       const query = uni.createSelectorQuery().in(this)
       query.select('#store-bottom-action').boundingClientRect(data => {

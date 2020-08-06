@@ -41,13 +41,14 @@
             <layout-icon :color="isFavourite?'#F53636':'#fff'" size="22" type="iconicon-favorite"></layout-icon>
           </div>
           <div class="action-item-space"></div>
-          <div @click.stop="$cellPhone(storeInfo.biz_mobile)" class="action-item">
-            <layout-icon color="#fff" size="22" type="iconicon-phone"></layout-icon>
-          </div>
-          <div class="action-item-space"></div>
           <div @click="goTo" class="action-item">
             <layout-icon color="#fff" size="22" type="iconicon-address"></layout-icon>
           </div>
+          <div class="action-item-space"></div>
+          <div @click.stop="$cellPhone(storeInfo.biz_mobile)" class="action-item">
+            <layout-icon color="#fff" size="22" type="iconicon-phone"></layout-icon>
+          </div>
+          
         </div>
       </div>
       <!--占位-->
@@ -966,7 +967,7 @@ export default {
         // 启动倒计时，牛逼啊霸哥
         countdownInstance = setInterval(this.stampFuncByKill, 1000)
 
-        const bizCateList = await getBizProdCateList({ biz_id: this.bid,prod_count:1 }, { onlyData: true }).catch((e) => {
+        const bizCateList = await getBizProdCateList({ biz_id: this.bid, prod_count: 1 }, { onlyData: true }).catch((e) => {
           throw Error('获取商家自定义分类失败')
         })
 
@@ -990,7 +991,7 @@ export default {
           page: 1,
           pageSize: 6,
           total: 0,
-		  prod_count:99,
+		  prod_count: 99,
           finish: false,
           productList: [] // 商品列表
         })
@@ -1055,16 +1056,15 @@ export default {
           })
           this.isFavourite = is_favourite
         }
-		hideLoading()
+        hideLoading()
         // 这个就不要等了吧
         if (!checkIsLogin(0, 0)) {
           throw Error('nocare')
         }
 
         this.refreshInfoByIsLogin()
-
       } catch (e) {
-		hideLoading()
+        hideLoading()
         Exception(e)
       }
     },
@@ -1316,6 +1316,10 @@ export default {
   },
   onReady () {
     console.log('readyreadyreadyreadyreadyreadyreadyready')
+    uni.setNavigationBarColor({
+      frontColor: '#ffffff',
+      backgroundColor: '#eeeeee'
+    })
     this.headTabTop = this.menuButtonInfo.bottom + 10
     // 锚点要向上偏移的距离
     this.anchorTop = (this.menuButtonInfo.bottom + 10 + 55) * -1

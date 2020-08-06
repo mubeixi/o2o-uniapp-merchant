@@ -1,6 +1,6 @@
 <template>
   <div>
-    <layout-page-title extStyle="padding-bottom:10px;background:#fff;" title="商家详情" ></layout-page-title>
+    <layout-page-title :extStyle="'padding-bottom:10px;background:none;'" status-bg-color="none" menu-button-bg-color="none" ></layout-page-title>
     <div class="store-comp-wrap" :style="{top:menuButtonInfo.bottom+10+'px'}">
       <scroll-view class="store-comp-scroll" scroll-y>
         <div class="store-info">
@@ -13,19 +13,19 @@
           <div class="actions">
             <div @click="$openLocation(storeInfo.biz_lat_gd,storeInfo.biz_lon_gd,storeInfo.biz_shop_name,storeInfo.biz_address)"
                  class="action-item">
-              <layout-icon color="#26C78D" size="26" type="iconicon-address"></layout-icon>
+              <layout-icon :img-icon="true" color="#26C78D" size="26" type="/static/store/theme-default/address.png"></layout-icon>
             </div>
             <div @click.stop="$cellPhone(storeInfo.biz_mobile)" class="action-item">
-              <layout-icon color="#26C78D" size="26" type="iconicon-phone"></layout-icon>
+              <layout-icon :img-icon="true" color="#26C78D" size="26" type="/static/store/theme-default/phone.png"></layout-icon>
             </div>
             <div @click="taggleFavorite" class="action-item">
-              <layout-icon :color="isFavourite?'#F53636':'#26C78D'" size="26" type="iconicon-favorite"></layout-icon>
+              <layout-icon :img-icon="true" :color="isFavourite?'#F53636':'#26C78D'" size="26" :type="isFavourite?'/static/store/theme-default/favorite-a.png':'/static/store/theme-default/favorite.png'"></layout-icon>
             </div>
             <div @click="toShare" class="action-item">
-              <layout-icon color="#26C78D" size="26" type="iconicon-timeline"></layout-icon>
+              <layout-icon :img-icon="true" color="#26C78D" size="26" type="/static/store/theme-default/timeline.png"></layout-icon>
             </div>
             <button class="action-item share-btn" open-type="share">
-              <layout-icon color="#26C78D" size="26" type="iconicon-share"></layout-icon>
+              <layout-icon :img-icon="true" color="#26C78D" size="26" type="/static/store/theme-default/share.png"></layout-icon>
             </button>
             <!--        <image mode="widthFix" class="action-item" src="/static/store/address.png"></image>-->
             <!--        <image mode="widthFix" class="action-item" src="/static/store/phone.png"></image>-->
@@ -72,7 +72,7 @@
                     </div>
                     <div class="info">
                       <span class="condition">满{{coupon.Coupon_Condition}}元可使用</span>
-                      <span class="use-end-item">有效期至{{coupon.Coupon_EndTime|formatTime('YYYY-MM-DD')}}</span>
+                      <span class="use-end-item">有效期至{{coupon.Coupon_EndTime|formatTime('YYYY.MM.DD')}}</span>
                     </div>
                   </div>
                 </div>
@@ -101,7 +101,7 @@
                   <div class="block-title-text">到店券</div>
                   <div class="block-title-more flex flex-vertical-center c9 fz-12" @click="$linkTo('/pagesA/store/virtualGoods?biz_id='+bid)">
                     <span>查看全部</span>
-                    <icon class="iconright" color="#999" size="14" type="iconright"></icon>
+                    <layout-icon class="iconright" color="#999" size="14" type="iconicon-arrow-right"></layout-icon>
                   </div>
                 </div>
                 <div class="block-content">
@@ -137,9 +137,12 @@
               <!--产品专区-->
               <div class="block goods-box">
                 <ul class="nav-list">
-                  <li :class="{active:goodsNavIndex === 0}" @click="goodsNavIndex=0" class="nav-item">推荐产品</li>
-                  <li :class="{active:goodsNavIndex === 1}" @click="goodsNavIndex=1" class="nav-item">产品分类</li>
-                  <li :class="{active:goodsNavIndex === 2}" @click="goodsNavIndex=2" class="nav-item">全部产品</li>
+                  <li :class="{active:goodsNavIndex === 0}" @click="goodsNavIndex=0" class="nav-item">推荐产品<span
+              class="underline" v-if="goodsNavIndex === 0"></span></li>
+                  <li :class="{active:goodsNavIndex === 1}" @click="goodsNavIndex=1" class="nav-item">产品分类<span
+              class="underline" v-if="goodsNavIndex === 1"></span></li>
+                  <li :class="{active:goodsNavIndex === 2}" @click="goodsNavIndex=2" class="nav-item">全部产品<span
+              class="underline" v-if="goodsNavIndex === 2"></span></li>
                 </ul>
                 <!-- style="height: 540rpx;overflow-y: hidden"      :style="{height:systemInfo.windowHeight+'px'}"       :style="{height:systemInfo.windowHeight+'px'}"-->
                 <swiper
@@ -150,7 +153,7 @@
                     <div class="goods-list">
                       <div :key="idx" @click="$toGoodsDetail(item)"
                            class="goods-item" style="margin-bottom: 18rpx;" v-for="(item,idx) in recommends">
-                        <div :style="{backgroundImage:'url('+item.ImgPath+')'}" class="goods-item-cover"></div>
+                        <div :style="{backgroundImage:'url('+item.ImgPath+')'}" class="goods-item-cover recommend-goods-cover"><div class="discount-text">折扣</div></div>
                         <div class="goods-item-right">
                           <div class="title">{{item.Products_Name}}</div>
                           <div class="c8" style="line-height: 16px;max-height: 32px;overflow: hidden;">
@@ -165,7 +168,7 @@
                         </div>
                       </div>
                     </div>
-                    <div @click="$linkTo('/pages/search/result?biz_id='+bid)"
+                    <div v-if="recommends.length>0" @click="$linkTo('/pages/search/result?biz_id='+bid)"
                          class="flex flex-vertical-c flex-justify-c look-more">
                       <span class="c9 fz-12">查看更多</span>
                       <layout-icon color="#999" size="14" type="iconicon-arrow-right"></layout-icon>
@@ -190,13 +193,12 @@
                         :style="{marginRight:idx%2===0?'20rpx':'0rpx'}"
                         @click="$toGoodsDetail(item)" style="width: 345rpx;border-radius: 8rpx;overflow: hidden;height: 450rpx;margin-bottom: 20rpx;"
                         v-for="(item,idx) in goodsList">
-                        <div :style="{backgroundImage:'url('+item.ImgPath+')'}" class="img-cover"
-                             style="width: 345rpx;height: 345rpx"></div>
+                        <div :style="{backgroundImage:'url('+item.ImgPath+')'}" class="img-cover" style="width: 345rpx;height: 345rpx"></div>
                         <div class="c3 fz-13" style="line-height: 36rpx;height: 72rpx;overflow-x: hidden">{{item.Products_Name}}</div>
                         <div class="flex flex-vertical-c" style="height: 32rpx;">
                           <div class="price-selling"><span class="fz-12">￥</span><span class="fz-17">{{item.Products_PriceX}}</span>
                           </div>
-                          <div class="p-l-10 text-through price-market"><span class="fz-12">￥</span><span class="fz-17">{{item.Products_PriceY}}</span>
+                          <div class="p-l-10 text-through price-market"><span class="fz-12">￥</span><span class="fz-12">{{item.Products_PriceY}}</span>
                           </div>
                         </div>
                       </div>
@@ -218,7 +220,7 @@
                   <div class="block-title-text">留言评论</div>
                   <div @click="headTabIndex=4" class="block-title-more flex flex-vertical-center c9 fz-12">
                     <span>查看全部</span>
-                    <icon class="iconright" color="#999" size="14" type="iconright"></icon>
+                    <layout-icon class="iconright" color="#999" size="14" type="iconicon-arrow-right"></layout-icon>
                   </div>
                 </div>
                 <div class="block-content">
@@ -264,16 +266,14 @@
             </div>
           </swiper-item>
           <swiper-item class="tab-page">
-            <div class="tab-page-wrap p-t-15" id="scrollView2">
-              <div class="p-10">地址:<span @click="$openLocation(storeInfo.biz_lat,storeInfo.biz_lon)" class="p-l-10">{{storeInfo.biz_address}}</span></div>
-              <div class="hr h15"></div>
-              <div class="p-10">电话:<span class="p-l-10" @click="$cellPhone(storeInfo.biz_mobile)">{{storeInfo.biz_mobile}}</span></div>
-              <div class="hr h15"></div>
-              <div class="p-10">简介:<span class="p-l-10 fz-14 c6">{{storeInfo.intro||'暂无简介'}}</span></div>
+            <div style="box-sizing: border-box;" class="tab-page-wrap p-t-15 p-l-10 p-r-10" id="scrollView2">
+              <div class="p-t-10 p-b-10 bor-b c9">地址:<span @click="$openLocation(storeInfo.biz_lat,storeInfo.biz_lon)" class="p-l-10 c3">{{storeInfo.biz_address}}</span></div>
+              <div class="p-t-10 p-b-10 bor-b c9">电话:<span class="p-l-10 c3" @click="$cellPhone(storeInfo.biz_mobile)">{{storeInfo.biz_mobile}}</span></div>
+              <div class="p-t-10 p-b-10 bor-b c9">简介:<span class="p-l-10 fz-14 c3">{{storeInfo.intro||'暂无简介'}}</span></div>
             </div>
           </swiper-item>
           <swiper-item class="tab-page">
-            <div class="tab-page-wrap" id="scrollView3">
+            <div class="tab-page-wrap p-b-15" id="scrollView3">
 
               <!--只显示有照片的相册 v-if="imgs.photo && imgs.photo.length>0"-->
               <div :key="idx1" class="photo-section" v-for="(imgs,idx1) in photoList">
@@ -1235,7 +1235,12 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-
+  page{
+    background: #f5f5f5;
+  }
+  .default-bg-color{
+    background: #f5f5f5;
+  }
   .plus-tag {
 
     background-color: #FF0000;
@@ -1502,6 +1507,9 @@ export default {
   .comment-item {
     border-bottom: 1rpx solid #E8E8E8;
     padding-bottom: 30rpx;
+    &:last-child{
+      border-bottom: none;
+    }
   }
 
   .block-title {
@@ -1772,8 +1780,10 @@ export default {
     &-item {
       display: inline-block;
       margin-right: 6px;
-      padding: 4px;
+      height: 16px;
+      line-height: 16px;
       border-radius: 4px;
+      padding: 0 4px;
       font-size: 10px;
       color: $fun-red-color;
       border: 1px solid #FF9090;
@@ -1803,7 +1813,7 @@ export default {
     .actions {
       width: 750rpx;
       box-sizing: border-box;
-      padding: 0rpx 40rpx;
+      padding: 30rpx 40rpx;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -1811,14 +1821,19 @@ export default {
       .action-item {
         flex: 1;
         text-align: center;
+        height: 26px;
         /*width: 40rpx;*/
         /*height: auto;*/
         //padding: 0 40rpx;
         &.share-btn {
           background: none;
-
+          line-height: inherit;
+          padding-left:0;
+          padding-right: 0;
           &::after {
             border: none;
+            width: auto;
+            height: auto;
           }
         }
       }
@@ -2016,18 +2031,36 @@ export default {
       align-items: center;
 
       .nav-item {
+        position: relative;
         font-weight: bold;
         padding: 0;
         margin-right: 40rpx;
-        height: 32px;
-        line-height: 32px;
+        height: 40px;
+        line-height: 40px;
         display: inline-block;
         color: #333;
-
-        &.active {
-          color: $fun-green-color;
-          border-bottom: 2px solid $fun-green-color;
+  
+  
+        .underline {
+          visibility: hidden;
+          position: absolute;
+          left: 50%;
+          bottom: 0;
+          transform: translateX(-50%);
+          height: 2px;
+          width: 18px;
+          background: #FFC000;
         }
+  
+        &.active {
+          /*color: #FFC000;*/
+          
+          .underline {
+            visibility: visible;
+          }
+        }
+
+       
       }
     }
 
@@ -2036,6 +2069,24 @@ export default {
 
       .block-title-text {
         font-weight: bold;
+      }
+    }
+    
+    .recommend-goods-cover{
+      position: relative;
+      
+      .discount-text{
+        position: absolute;
+        left: 0rpx;
+        top: 50rpx;
+        background: #FFE300;
+        color: #333;
+        font-size: 20rpx;
+        width: 100rpx;
+        text-align: center;
+        height: 28rpx;
+        line-height: 28rpx;
+        transform: rotate(-45deg);
       }
     }
 
@@ -2107,8 +2158,8 @@ export default {
   }
 
   .comment-box {
-    border-top: 30rpx solid #f2f2f2;
-    border-bottom: 30rpx solid #f2f2f2;
+    border-top: 20rpx solid #f5f5f5;
+    /*border-bottom: 20rpx solid #f5f5f5;*/
     padding: 0 25rpx;
     background: white;
 
@@ -2200,11 +2251,11 @@ export default {
           transform: translateX(-50%);
           height: 2px;
           width: 18px;
-          background: $fun-green-color;
+          background: #FFC000;
         }
 
         &.active {
-          color: $fun-green-color;
+          /*color: #FFC000;*/
 
           .underline {
             visibility: visible;
