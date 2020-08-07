@@ -106,7 +106,7 @@
                   <div class="goods-list">
                     <div :key="idx" @click="$toGoodsDetail(item)" class="goods-item" v-for="(item,idx) in virtualGoodsLsit">
                       <div class="left">
-                        <div :style="{backgroundImage:'url('+item.ImgPath+')'}" class="cover"></div>
+                        <div :style="{backgroundImage:'url('+getPreviewThumb(item.ImgPath)+')'}" class="cover"></div>
                       </div>
                       <div class="right">
                         <h5 class="title"><span>{{item.Products_Name}}</span></h5>
@@ -151,7 +151,7 @@
                     <div class="goods-list">
                       <div :key="idx" @click="$toGoodsDetail(item)"
                            class="goods-item" style="margin-bottom: 18rpx;" v-for="(item,idx) in recommends">
-                        <div :style="{backgroundImage:'url('+item.ImgPath+')'}" class="goods-item-cover recommend-goods-cover">
+                        <div :style="{backgroundImage:'url('+getPreviewThumb(item.ImgPath)+')'}" class="goods-item-cover recommend-goods-cover">
                           <!--<div class="discount-text">折扣</div>-->
                           <image mode="widthFix" class="discount-img" src="/static/store/theme-default/discount-tag.png"></image>
                         </div>
@@ -187,7 +187,7 @@
                                   @click="toSearchByCate(column)"
                                   style="background: #FFFFFF;display: inline-block;" v-for="(column,idx2) in row.child">{{column.cate_name}}</span>
                           </block>
-                          
+
                         </div>
                       </block>
                     </div>
@@ -199,7 +199,7 @@
                         :style="{marginRight:idx%2===0?'20rpx':'0rpx'}"
                         @click="$toGoodsDetail(item)" style="width: 345rpx;border-radius: 8rpx;overflow: hidden;height: 450rpx;margin-bottom: 20rpx;"
                         v-for="(item,idx) in goodsList">
-                        <div :style="{backgroundImage:'url('+item.ImgPath+')'}" class="img-cover" style="width: 345rpx;height: 345rpx"></div>
+                        <div :style="{backgroundImage:'url('+getPreviewThumb(item.ImgPath,'-r400')+')'}" class="img-cover" style="width: 345rpx;height: 345rpx"></div>
                         <div class="c3 fz-13" style="line-height: 36rpx;height: 72rpx;overflow-x: hidden">{{item.Products_Name}}</div>
                         <div class="flex flex-vertical-c" style="height: 32rpx;">
                           <div class="price-selling"><span class="fz-12">￥</span><span class="fz-17">{{item.Products_PriceX}}</span>
@@ -471,7 +471,7 @@ import LayoutCopyright from '@/components/layout-copyright/layout-copyright'
 import LayoutComment from '@/components/layout-comment/layout-comment'
 import LayoutIcon from '@/components/layout-icon/layout-icon'
 import { componetMixin } from '@/mixins/BaseMixin'
-import { checkIsLogin, getArrColumn } from '@/common/helper'
+import { checkIsLogin, getArrColumn, getDomain, getPreviewThumb } from '@/common/helper'
 import { error, hideLoading, modal, showLoading, toast, checkIsExpire, confirm, linkToEasy } from '@/common/fun'
 import {
   addFavourite,
@@ -559,7 +559,7 @@ export default {
       storeInfo: {},
       couponList: [],
       activityList: [],
-      manjianList:[],
+      manjianList: [],
       comments: [],
       goodsNavIndex: 0,
       recommends: [],
@@ -662,6 +662,7 @@ export default {
     }
   },
   methods: {
+    getPreviewThumb,
     toSearchByCate (cateInfo) {
       console.log(cateInfo)
       const url = `/pages/search/result?biz_cate_id=${cateInfo.id}&biz_id=${this.bid}`
@@ -1172,7 +1173,7 @@ export default {
         this.activityList = await getBizSpikeList({ biz_id: this.bid, status: 1 }, { onlyData: true }).catch((e) => {
           throw Error('获取限时抢购数据失败')
         })
-  
+
         this.manjianList = await getActiveInfo({ type: 'manjian', biz_id: this.bid }).then(res => res.data.active_info).catch(err => { throw Error(err.msg) })
         console.log('manjianList is', this.manjianList)
 

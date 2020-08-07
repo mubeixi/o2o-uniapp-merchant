@@ -81,7 +81,7 @@
         </div>
         <div class="kill-list">
           <div :key="ind" @click="$toGoodsDetail(pro)" class="kill-list-item" v-for="(pro,ind) of killList">
-            <div :style="{backgroundImage:'url('+pro.ImgPath+')'}" class="item-cover"></div>
+            <div :style="{backgroundImage:'url('+getPreviewThumb(pro.ImgPath,'-r350')+')'}" class="item-cover"></div>
             <div class="pro-title c3" style="margin-top: 14rpx">
               <wzw-live-tag :room_id="pro.room_id" :product-info="pro" />
               {{pro.Products_Name}}
@@ -148,7 +148,7 @@
             <div class="act-goods-list">
               <div class="act-goods-item" v-for="(pro,idx) in activity.spike_goods" :key="idx"
                    @click="toGoodsDetailFn(pro,activity)">
-                <div :style="{backgroundImage:'url('+pro.ImgPath+')'}" class="item-cover"></div>
+                <div :style="{backgroundImage:'url('+getPreviewThumb(pro.ImgPath,'-r350')+')'}" class="item-cover"></div>
                 <div class="act-goods-item-title fz-12 c3 m-t-14 m-b-8">
                   <wzw-live-tag :room_id="pro.room_id" :product-info="pro" />
                   {{pro.Products_Name}}
@@ -179,7 +179,7 @@
           <div class="fun-goods-col" style="padding: 0 9rpx 0 0rpx">
             <block v-for="(pro,idx) in bizCateList[bizCateNavIndex].productList" :key="idx">
               <div class="fun-goods-item" v-if="idx%2===0" @click="$toGoodsDetail(pro)">
-                <div class="product-cover" :style="{backgroundImage:'url('+$getDomain(pro.ImgPath)+')'}"></div>
+                <div class="product-cover" :style="{backgroundImage:'url('+getPreviewThumb(pro.ImgPath,'-r400')+')'}"></div>
                 <div class="p-t-8 fz-13 c3" style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis">
                   {{pro.Products_Name}}
                 </div>
@@ -202,7 +202,7 @@
           <div class="fun-goods-col" style="padding: 0 0rpx 0 9rpx">
             <block v-for="(pro,idx) in bizCateList[bizCateNavIndex].productList" :key="idx">
               <div class="fun-goods-item" v-if="idx%2===1" @click="$toGoodsDetail(pro)">
-                <div class="product-cover" :style="{backgroundImage:'url('+$getDomain(pro.ImgPath)+')'}"></div>
+                <div class="product-cover" :style="{backgroundImage:'url('+getPreviewThumb(pro.ImgPath,'-r400')+')'}"></div>
                 <div class="p-t-8 fz-13 c3" style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis">
                   {{pro.Products_Name}}
                 </div>
@@ -393,7 +393,7 @@ import { checkIsExpire, confirm, error, hideLoading, showLoading, toast } from '
 import { getAlbumList, getBizInfo, getBizSpikeList } from '@/api/store'
 import { getFlashsaleList, getProductList } from '@/api/product'
 import { getActiveInfo, getCommitList, getCouponList } from '@/api/common'
-import { checkIsLogin, getCountdownFunc } from '@/common/helper'
+import { checkIsLogin, getCountdownFunc, getPreviewThumb } from '@/common/helper'
 import {
   addFavourite,
   cancelFavourite,
@@ -577,6 +577,7 @@ export default {
     }
   },
   methods: {
+    getPreviewThumb,
     async productSkuAdd (sku) {
       var attr_id = sku.id; var prod_id = this.currentProductInfo.Products_ID
 

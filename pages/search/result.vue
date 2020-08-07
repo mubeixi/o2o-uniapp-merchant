@@ -70,7 +70,7 @@
     <div v-if="cate==1">
       <div class="cate1">
         <div :key="i" @click="$toGoodsDetail(item)" class="pro" v-for="(item,i) of pro">
-          <image :src="item.ImgPath" class="pro-img"></image>
+          <image :src="item.ImgPath+'-r400'" class="pro-img"></image>
           <div class="pro_desc">
             <div class="title"><wzw-live-tag :room_id="item.room_id" :product-info="item" />{{item.Products_Name}}</div>
             <div class="price">
@@ -88,7 +88,7 @@
     <div v-else>
       <div class="cate2">
         <div :key="i" @click="$toGoodsDetail(item)" class="pro" v-for="(item,i) of pro">
-          <image :src="item.ImgPath" alt="" class="pro-img"></image>
+          <image :src="item.ImgPath+'-r400'" alt="" class="pro-img"></image>
           <div class="pro_desc">
             <div class="title"><wzw-live-tag :room_id="item.room_id" :product-info="item" />{{item.Products_Name}}</div>
             <div class="price">

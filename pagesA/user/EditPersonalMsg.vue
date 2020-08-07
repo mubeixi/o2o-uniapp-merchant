@@ -5,10 +5,10 @@
     <input class="v_input" placeholder="修改昵称" type="text" v-if="type === 1" v-model="userInfo.User_NickName" />
     <block v-if="type === 2">
       <view class="area-item">
-        <text class="area-label">请选择生日</text>
+        <text class="area-label">生日</text>
         <picker @change="bindDateChange" mode="date">
           <view class="uni-input" v-if="dateValue">{{dateValue}}</view>
-          <view class="uni-input" v-if="!dateValue">请选择出生时间</view>
+          <view class="uni-input" v-if="!dateValue">请选择</view>
         </picker>
       </view>
     </block>

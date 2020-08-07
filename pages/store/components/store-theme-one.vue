@@ -142,7 +142,7 @@
         </div>
         <div class="kill-list">
           <div :key="ind" @click="$toGoodsDetail(pro)" class="kill-list-item" v-for="(pro,ind) of killList">
-            <div :style="{backgroundImage:'url('+pro.ImgPath+')'}" class="item-cover"></div>
+            <div :style="{backgroundImage:'url('+getPreviewThumb(pro.ImgPath,'-r350')+')'}" class="item-cover"></div>
             <div class="pro-title c3 m-t-6 m-b-10">
               <wzw-live-tag :room_id="pro.room_id" :product-info="pro" />
               {{pro.Products_Name}}
@@ -194,7 +194,7 @@
             </div>
             <div class="act-goods-list">
               <div class="act-goods-item" v-for="(pro,idx) in activity.spike_goods" :key="idx" @click="toGoodsDetailFn(pro,activity)">
-                <div :style="{backgroundImage:'url('+pro.ImgPath+')'}" class="item-cover"></div>
+                <div :style="{backgroundImage:'url('+getPreviewThumb(pro.ImgPath,'-r350')+')'}" class="item-cover"></div>
                 <div class="fz-12 c3 m-t-15 m-b-8" style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">
                   <wzw-live-tag :room_id="pro.room_id" :product-info="pro" />
                   {{pro.Products_Name}}
@@ -221,7 +221,7 @@
         </div>
         <div class="virtual-list">
           <div class="virtual-item flex" v-for="(pro,idx) in virtualGoodsLsit" :key="idx" @click="$toGoodsDetail(pro)">
-            <div :style="{backgroundImage:'url('+pro.ImgPath+')'}" class="item-cover"></div>
+            <div :style="{backgroundImage:'url('+getPreviewThumb(pro.ImgPath,'-r200')+')'}" class="item-cover"></div>
             <div class="flex1 flex flex-column flex-justify-between">
               <div class="c3 product-title">
                 <wzw-live-tag :room_id="pro.room_id" :product-info="pro" />
@@ -336,9 +336,9 @@
                               class="color-comment p-r-5">{{co.to_user_nickname}}</span>{{co.content}}
                       </div>
                     </block>
-        
+
                   </block>
-      
+
                 </block>
               </div>
             </div>
@@ -449,7 +449,7 @@ import { checkIsExpire, confirm, error, hideLoading, showLoading, toast } from '
 import { getAlbumList, getBizInfo, getBizSpikeList, getStoreList } from '@/api/store'
 import { getBizProdCateList, getFlashsaleList, getProductList } from '@/api/product'
 import { getActiveInfo, getCommitList, getCouponList } from '@/api/common'
-import { checkIsLogin, getCountdownFunc } from '@/common/helper'
+import { checkIsLogin, getCountdownFunc, getPreviewThumb } from '@/common/helper'
 import {
   addFavourite,
   cancelFavourite,
@@ -542,7 +542,7 @@ export default {
       headTabTop: 100,
       pageScrollTop: 0,
       headTabIndex: 0,
-      handChangeTab:false,
+      handChangeTab: false,
       isFavourite: false,
       headTabSticky: false,
       storeInfo: {
@@ -551,7 +551,7 @@ export default {
       storeGoodsTotal: 0,
       killList: [],
       flashActivityList: [],
-      manjianList:[],
+      manjianList: [],
       virtualGoodsLsit: [],
       virtualPaginate: {
         finish: false,
@@ -607,22 +607,23 @@ export default {
     }
   },
   methods: {
+    getPreviewThumb,
     bindScroll (e) {
       const { scrollTop } = e.detail
       this.pageScrollTop = scrollTop
       this.headTabSticky = scrollTop >= this.headTabTop
 
-      if(!this.handChangeTab){
+      if (!this.handChangeTab) {
         if (scrollTop >= this.scrollHeightS[2]) {
           this.headTabIndex = 3
           return
         }
-  
+
         if (scrollTop >= this.scrollHeightS[1]) {
           this.headTabIndex = 2
           return
         }
-  
+
         if (scrollTop >= this.scrollHeightS[0]) {
           this.headTabIndex = 1
           return
@@ -631,7 +632,6 @@ export default {
           this.headTabIndex = 0
         }
       }
-      
     },
     // 更新尺寸
     upSectionBoxHeight () {
@@ -652,10 +652,10 @@ export default {
       this.headTabIndex = idx
       this.handChangeTab = true
       this.setViewIdx(viewId)
-    
-      setTimeout(()=>{
+
+      setTimeout(() => {
         this.handChangeTab = false
-      },1000)
+      }, 1000)
     },
     async submit () {
       const obj = {}
@@ -984,7 +984,7 @@ export default {
         })
         // 启动限时抢购倒计时，牛逼啊霸哥
         countdownInstanceByFlash = setInterval(this.stampFuncByFlash, 1000)
-  
+
         this.manjianList = await getActiveInfo({ type: 'manjian', biz_id: this.bid }).then(res => res.data.active_info).catch(err => { throw Error(err.msg) })
         console.log('manjianList is', this.manjianList)
 
@@ -1275,7 +1275,10 @@ export default {
         if (biz_cate.id) {
           postData.biz_cate_id = biz_cate.id
         }
-        const { data: newList, totalCount } = await getProductList(postData).catch(err => { throw Error(err.msg) })
+        const { data, totalCount } = await getProductList(postData).catch(err => { throw Error(err.msg) })
+        const newList = data.map(row => {
+          return Object.assign(row, { ImgPath: this.getPreviewThumb(row.ImgPath, '-r400') })
+        })
 
         this.bizCateList[this.bizCateNavIndex].page++
         this.bizCateList[this.bizCateNavIndex].productList = biz_cate.productList.concat(newList)
