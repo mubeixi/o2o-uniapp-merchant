@@ -9,7 +9,6 @@
         个人中心
       </div>
     </div>
-
     <div class="header">
       <div :style="{top:menuButtonInfo.top+'px',height:menuButtonInfo.height+'px'}" class="left-icon-box">
         <!--:plain="false" :wrap-bg="activeHeadOpacity===1?'#f2f2f2':'none'" wrap-padding="6px"-->

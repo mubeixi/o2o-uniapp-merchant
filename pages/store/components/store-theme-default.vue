@@ -153,14 +153,18 @@
                     <div class="goods-list">
                       <div :key="idx" @click="$toGoodsDetail(item)"
                            class="goods-item" style="margin-bottom: 18rpx;" v-for="(item,idx) in recommends">
-                        <div :style="{backgroundImage:'url('+item.ImgPath+')'}" class="goods-item-cover recommend-goods-cover"><div class="discount-text">折扣</div></div>
-                        <div class="goods-item-right">
+                        <div :style="{backgroundImage:'url('+item.ImgPath+')'}" class="goods-item-cover recommend-goods-cover">
+                          <!--<div class="discount-text">折扣</div>-->
+                          <image mode="widthFix" class="discount-img" src="/static/store/theme-default/discount-tag.png"></image>
+                        </div>
+                        <div class="goods-item-right" style="display: flex;flex-direction: column;">
                           <div class="title">{{item.Products_Name}}</div>
                           <div class="c8" style="line-height: 16px;max-height: 32px;overflow: hidden;">
                             {{item.Products_BriefDescription}}
                           </div>
-                          <div class="flex flex-justify-between flex-vertical-c m-t-10">
-                            <div class="selling-price">
+                          <div style="flex:1;"></div>
+                          <div class="flex flex-justify-between flex-vertical-t m-t-10">
+                            <div class="selling-price p-b-10">
                               <span class="sign">￥</span><span class="num">{{item.Products_PriceX}}</span>
                             </div>
                             <div class="btn">购买</div>
@@ -178,10 +182,14 @@
                     <div class="p-t-20 p-l-15 p-b-20 p-r-15"
                          style="width: 700rpx;background: #F7F7F7;box-sizing: border-box;">
                       <block :key="idx1" v-for="(row,idx1) in bizCateList">
-                        <div class="row p-b-15" v-if="row.child">
+                        <div class="row p-b-15" >
                           <div class="fz-14 c3 ">{{row.cate_name}}</div>
-                          <span :key="idx2" class="column fz-12 c6 p-9 m-r-10 m-t-10"
-                                style="background: #FFFFFF;display: inline-block;" v-for="(column,idx2) in row.child">{{column.cate_name}}</span>
+                          <block v-if="row.child">
+                            <span :key="idx2" class="column fz-12 c6 p-9 m-r-10 m-t-10"
+                                  @click="toSearchByCate(column)"
+                                  style="background: #FFFFFF;display: inline-block;" v-for="(column,idx2) in row.child">{{column.cate_name}}</span>
+                          </block>
+                          
                         </div>
                       </block>
                     </div>
@@ -281,7 +289,7 @@
                   <div class="label"></div>
                   <div class="text flex1 c3">{{imgs.cate_name}}</div>
                   <div @click="$linkTo('/pagesA/store/photo?bid='+bid+'&tab='+idx1)" class="flex flex-vertical-c">
-                    <span class="c9 fz-12">查看更多</span>
+                    <span class="c9 fz-12">查看更多（{{imgs.photo_total}}）</span>
                     <layout-icon color="#999" size="14" type="iconicon-arrow-right"></layout-icon>
                   </div>
                 </div>
@@ -466,7 +474,7 @@ import LayoutComment from '@/components/layout-comment/layout-comment'
 import LayoutIcon from '@/components/layout-icon/layout-icon'
 import { componetMixin } from '@/mixins/BaseMixin'
 import { checkIsLogin, getArrColumn } from '@/common/helper'
-import { error, hideLoading, modal, showLoading, toast, checkIsExpire, confirm } from '@/common/fun'
+import { error, hideLoading, modal, showLoading, toast, checkIsExpire, confirm, linkToEasy } from '@/common/fun'
 import {
   addFavourite,
   cancelFavourite,
@@ -655,6 +663,12 @@ export default {
     }
   },
   methods: {
+    toSearchByCate (cateInfo) {
+      console.log(cateInfo)
+      const url = `/pages/search/result?biz_cate_id=${cateInfo.id}&biz_id=${this.bid}`
+      console.log(url)
+      linkToEasy(url)
+    },
     async submit () {
       const obj = {}
       // 删除
@@ -1199,13 +1213,10 @@ export default {
         }
 
         this.refreshInfoByIsLogin()
-
-
       } catch (e) {
-
         Exception(e)
-      }finally{
-         hideLoading()
+      } finally {
+        hideLoading()
       }
     },
     upSwiperHeight () {
@@ -1964,7 +1975,7 @@ export default {
 
             .selling-price {
               color: $fun-red-color;
-  
+
               .sign{
                 font-size: 24rpx;
               }
@@ -2039,8 +2050,7 @@ export default {
         line-height: 40px;
         display: inline-block;
         color: #333;
-  
-  
+
         .underline {
           visibility: hidden;
           position: absolute;
@@ -2051,16 +2061,15 @@ export default {
           width: 18px;
           background: #FFC000;
         }
-  
+
         &.active {
           /*color: #FFC000;*/
-          
+
           .underline {
             visibility: visible;
           }
         }
 
-       
       }
     }
 
@@ -2071,10 +2080,16 @@ export default {
         font-weight: bold;
       }
     }
-    
+
     .recommend-goods-cover{
       position: relative;
-      
+
+      .discount-img{
+        position: absolute;
+        left: 0rpx;
+        top: 0rpx;
+        width: 60rpx;
+      }
       .discount-text{
         position: absolute;
         left: 0rpx;
@@ -2133,11 +2148,11 @@ export default {
 
           .selling-price {
             color: $fun-red-color;
-  
+
             .sign{
               font-size: 24rpx;
             }
-            
+
             .num {
               font-size: 34rpx;
             }

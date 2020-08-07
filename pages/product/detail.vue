@@ -183,12 +183,11 @@
 
   .product-title {
     width: 698rpx;
-    line-height: 40rpx;
-
     padding: 0rpx 30rpx 0rpx 22rpx;
     background-color: #ffffff;
     color: #333333;
-    font-size: 14px;
+    font-size: 30rpx;
+    line-height: 40rpx;
     font-weight: bold;
     overflow: hidden;
     text-overflow: ellipsis;

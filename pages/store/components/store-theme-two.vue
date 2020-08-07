@@ -184,7 +184,7 @@
                 <div class="p-t-8 fz-13 c3" style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis">
                   {{pro.Products_Name}}
                 </div>
-                <div class="price-discount flex flex-vertical-c" style="padding: 20rpx 0 20rpx 20rpx">
+                <div class="price-discount flex flex-vertical-c" style="padding: 20rpx 0 0rpx 0rpx">
                   <div class="price-box" style="color: #FE2C4D">
                     <span class="sign" style="font-size: 24rpx;">￥</span><span class="num" style="font-size: 34rpx;">{{pro.Products_PriceX}}</span>
                   </div>
@@ -207,7 +207,7 @@
                 <div class="p-t-8 fz-13 c3" style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis">
                   {{pro.Products_Name}}
                 </div>
-                <div class="price-discount flex flex-vertical-c" style="padding: 20rpx 0 20rpx 20rpx">
+                <div class="price-discount flex flex-vertical-c" style="padding: 20rpx 0rpx 0rpx 0rpx">
                   <div class="price-box" style="color: #FE2C4D">
                     <span class="sign" style="font-size: 24rpx;">￥</span><span class="num" style="font-size: 34rpx;">{{pro.Products_PriceX}}</span>
                   </div>
@@ -1145,7 +1145,7 @@ export default {
     },
     async getCommentList () {
       if (this.commentPaginate.finish) {
-        toast('没有更多啦', 'none')
+        // toast('没有更多啦', 'none')
         return
       }
       const { data: commentList, totalCount: commentTotal } = await getCommitList({
@@ -2127,10 +2127,10 @@ export default {
         justify-content: space-between;
 
         .goods-action-reduce {
-          height: 33rpx;
-          line-height: 33rpx;
+          height: 36rpx;
+          line-height: 36rpx;
           font-size: 20rpx;
-          padding: 0rpx 20rpx;
+          padding: 0rpx 8rpx;
           box-sizing: border-box;
           color: #fff;
           background: linear-gradient(180deg, rgba(252, 109, 136, 1), rgba(254, 43, 75, 1));

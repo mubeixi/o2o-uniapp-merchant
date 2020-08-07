@@ -48,7 +48,7 @@
           <div @click.stop="$cellPhone(storeInfo.biz_mobile)" class="action-item">
             <layout-icon color="#fff" size="22" type="iconicon-phone"></layout-icon>
           </div>
-          
+
         </div>
       </div>
       <!--占位-->
@@ -244,7 +244,7 @@
         </div>
       </div>
       <div class="h15" style="background: #f8f8f8"></div>
-      <div class="section-item cate-box" >
+      <div id="cate-box" class="section-item cate-box" >
         <div id="section-sale" class="section-anchor" :style="{top:anchorTop+'px'}"></div>
         <div class="title p-t-20 p-b-0" style="text-align: center;">
           <image style="width: 254rpx;height: 63rpx;" :src="$getDomain('/static/client/store/theme_one/sale-list.png')"></image>
@@ -282,7 +282,7 @@
         <div class="h10"></div>
       </div>
       <div class="h15" style="background: #f8f8f8"></div>
-      <div class="section-item store-box">
+      <div id="store-box" class="section-item store-box">
         <div id="section-store" class="section-anchor" :style="{top:anchorTop+'px'}"></div>
         <div class="title p-15" style="text-align: center;">
           <image style="width: 254rpx;height: 63rpx;" :src="$getDomain('/static/client/store/theme_one/store-list.png')"></image>
@@ -309,7 +309,7 @@
       </div>
       <div class="h15" style="background: #f8f8f8"></div>
       <!--评论列表-->
-      <div class="section-item comment-box">
+      <div id="comment-box" class="section-item comment-box">
         <div id="section-comment" class="section-anchor" :style="{top:anchorTop+'px'}"></div>
         <div class="block-title">
           留言评论
@@ -336,9 +336,9 @@
                               class="color-comment p-r-5">{{co.to_user_nickname}}</span>{{co.content}}
                       </div>
                     </block>
-
+        
                   </block>
-
+      
                 </block>
               </div>
             </div>
@@ -445,11 +445,11 @@
 
 <script>
 import { componetMixin } from '@/mixins/BaseMixin'
-import { error, hideLoading, modal, showLoading, toast, checkIsExpire, confirm } from '@/common/fun'
+import { checkIsExpire, confirm, error, hideLoading, showLoading, toast } from '@/common/fun'
 import { getAlbumList, getBizInfo, getBizSpikeList, getStoreList } from '@/api/store'
 import { getBizProdCateList, getFlashsaleList, getProductList } from '@/api/product'
 import { getCommitList, getCouponList } from '@/api/common'
-import { checkIsLogin, getCountdownFunc, objTranslate } from '@/common/helper'
+import { checkIsLogin, getCountdownFunc } from '@/common/helper'
 import {
   addFavourite,
   cancelFavourite,
@@ -466,6 +466,7 @@ import GoodsItem from '@/components/good-item/good-item'
 import LayoutComment from '@/components/layout-comment/layout-comment'
 import LayoutModal from '@/components/layout-modal/layout-modal'
 import LayoutLayer from '@/components/layout-layer/layout-layer'
+
 var countdownInstance = null
 var countdownInstanceByFlash = null
 /**
@@ -531,7 +532,6 @@ export default {
       animation: {},
       animationData: {},
       animationData2: {},
-
       commentModalPlaceholder: '请输入内容',
       anchorTop: 0,
       commentModalShow: false,
@@ -542,6 +542,7 @@ export default {
       headTabTop: 100,
       pageScrollTop: 0,
       headTabIndex: 0,
+      handChangeTab:false,
       isFavourite: false,
       headTabSticky: false,
       storeInfo: {
@@ -573,7 +574,8 @@ export default {
       storeList: [],
       photoList: [],
       storePhotoTotal: 0,
-      spikeList: []
+      spikeList: [],
+      scrollHeightS: [0, 0, 0]
     }
   },
   watch: {
@@ -604,6 +606,56 @@ export default {
     }
   },
   methods: {
+    bindScroll (e) {
+      const { scrollTop } = e.detail
+      this.pageScrollTop = scrollTop
+      this.headTabSticky = scrollTop >= this.headTabTop
+
+      if(!this.handChangeTab){
+        if (scrollTop >= this.scrollHeightS[2]) {
+          this.headTabIndex = 3
+          return
+        }
+  
+        if (scrollTop >= this.scrollHeightS[1]) {
+          this.headTabIndex = 2
+          return
+        }
+  
+        if (scrollTop >= this.scrollHeightS[0]) {
+          this.headTabIndex = 1
+          return
+        }
+        if (scrollTop < this.scrollHeightS[0]) {
+          this.headTabIndex = 0
+        }
+      }
+      
+    },
+    // 更新尺寸
+    upSectionBoxHeight () {
+      const query = uni.createSelectorQuery().in(this)
+      query.select('#cate-box').boundingClientRect(data => {
+        console.log(data)
+        this.scrollHeightS[0] = data.top
+      })
+      query.select('#store-box').boundingClientRect(data => {
+        this.scrollHeightS[1] = data.top
+      })
+      query.select('#comment-box').boundingClientRect(data => {
+        this.scrollHeightS[2] = data.top
+      })
+      query.exec()
+    },
+    bindHeadTabClick (idx, viewId) {
+      this.headTabIndex = idx
+      this.handChangeTab = true
+      this.setViewIdx(viewId)
+    
+      setTimeout(()=>{
+        this.handChangeTab = false
+      },1000)
+    },
     async submit () {
       const obj = {}
       // 删除
@@ -991,7 +1043,7 @@ export default {
           page: 1,
           pageSize: 6,
           total: 0,
-		  prod_count: 99,
+          prod_count: 99,
           finish: false,
           productList: [] // 商品列表
         })
@@ -1057,6 +1109,10 @@ export default {
           this.isFavourite = is_favourite
         }
         hideLoading()
+
+        this.$nextTick().then(() => {
+          this.upSectionBoxHeight()
+        }).catch(() => {})
         // 这个就不要等了吧
         if (!checkIsLogin(0, 0)) {
           throw Error('nocare')
@@ -1097,17 +1153,14 @@ export default {
     toApply () {
       this.$linkTo('/pages/product/apply?bid=' + this.bid)
     },
-    bindHeadTabClick (idx, viewId) {
-      this.headTabIndex = idx
-      this.setViewIdx(viewId)
-    },
+
     async getCateGoodsList () {
       // 牛逼啊
       this.changeCateIdx(this.bizCateNavIndex, true)
     },
     async getCommentList () {
       if (this.commentPaginate.finish) {
-        toast('没有更多啦', 'none')
+        // toast('没有更多啦', 'none')
         return
       }
       const { data: commentList, totalCount: commentTotal } = await getCommitList({
@@ -1270,12 +1323,6 @@ export default {
         Exception.handle(e)
       })
     },
-    bindScroll (e) {
-      const { scrollTop } = e.detail
-      this.pageScrollTop = scrollTop
-
-      this.headTabSticky = scrollTop >= this.headTabTop
-    },
     toActivity (aid) {
       this.$linkTo('/pagesA/active/FlashSaleByBiz?biz_id=' + this.bid + '&spike_id=' + aid)
     },
@@ -1315,7 +1362,6 @@ export default {
 
   },
   onReady () {
-    console.log('readyreadyreadyreadyreadyreadyreadyready')
     uni.setNavigationBarColor({
       frontColor: '#ffffff',
       backgroundColor: '#eeeeee'
@@ -1583,6 +1629,8 @@ export default {
   }
   .info-box {
     padding: 0 20rpx;
+    flex:1;
+
     .store-name {
 
     }
@@ -2056,6 +2104,9 @@ export default {
       color: #333;
       &:first-child{
         margin-left: 40rpx;
+      }
+      &.active{
+        color: $fun-green-color;
       }
       .sale-underline {
         position: absolute;

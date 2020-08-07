@@ -161,7 +161,9 @@ export default {
       oneHourSend: 0,
       lat: '',
       lng: '',
-      biz_ids: ''
+      biz_ids: '',
+      biz_cate_id: '',
+      biz_id: ''
     }
   },
   onLoad (option) {
@@ -175,6 +177,10 @@ export default {
     }
     if (option.biz_id) {
       this.biz_ids = option.biz_id
+      this.biz_id = option.biz_id
+    }
+    if (option.biz_cate_id) {
+      this.biz_cate_id = option.biz_cate_id
     }
     this.Cate_ID = option.Cate_ID
     this.searchAll = Storage.get('searchAll')
@@ -245,6 +251,10 @@ export default {
     goSearch () {
       if (this.refer === 'searchPage') {
         this.$back()
+        return
+      }
+      if (this.biz_id) {
+        this.$linkTo('/pages/search/index?biz_id=' + this.biz_id)
         return
       }
       this.$linkTo('/pages/search/index')
@@ -390,6 +400,9 @@ export default {
       }
       if (this.biz_ids) {
         data.biz_ids = this.biz_ids
+      }
+      if (this.biz_cate_id) {
+        data.biz_cate_id = this.biz_cate_id
       }
 
       // 模式为2，而且没有商户配置，就不要继续走了
