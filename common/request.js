@@ -197,6 +197,10 @@ export const ajax = ({ url, method = 'post', data = {}, options = {},isAddHost=t
 
         if (hookErrorCode.includes(errorCode)) {
           if (errorCode === 66001) {
+
+            Storage.remove('access_token')
+            Storage.remove('user_id')
+
             //阻断后面的跳转
             if(Storage.get('toLogin')){
               reject(Error('nocare'))
