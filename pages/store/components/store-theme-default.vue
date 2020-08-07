@@ -2092,6 +2092,7 @@ export default {
         left: 0rpx;
         top: 0rpx;
         width: 60rpx;
+        height: 60rpx;
       }
       .discount-text{
         position: absolute;
