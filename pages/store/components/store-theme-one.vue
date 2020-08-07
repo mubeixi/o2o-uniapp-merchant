@@ -31,8 +31,8 @@
         </div>
         <div class="info-box">
           <div class="store-name fz-15 m-b-8">{{storeInfo.biz_shop_name}}</div>
-          <div class="store-activity-list m-b-8" v-if="flashActivityList.length>0">
-            <div class="store-activity-item fz-10" v-for="(item,idx) in flashActivityList" :key="idx" @click="toActivity(item.id)">{{item.name}}</div>
+          <div class="store-activity-list m-b-8" v-if="manjianList.length>0">
+            <div class="store-activity-item fz-10" v-for="(item,idx) in manjianList" :key="idx" >满{{item.reach}}减{{item.award}}</div>
           </div>
           <div class="like fz-11">{{storeInfo.follow}}人关注</div>
         </div>
@@ -448,7 +448,7 @@ import { componetMixin } from '@/mixins/BaseMixin'
 import { checkIsExpire, confirm, error, hideLoading, showLoading, toast } from '@/common/fun'
 import { getAlbumList, getBizInfo, getBizSpikeList, getStoreList } from '@/api/store'
 import { getBizProdCateList, getFlashsaleList, getProductList } from '@/api/product'
-import { getCommitList, getCouponList } from '@/api/common'
+import { getActiveInfo, getCommitList, getCouponList } from '@/api/common'
 import { checkIsLogin, getCountdownFunc } from '@/common/helper'
 import {
   addFavourite,
@@ -551,6 +551,7 @@ export default {
       storeGoodsTotal: 0,
       killList: [],
       flashActivityList: [],
+      manjianList:[],
       virtualGoodsLsit: [],
       virtualPaginate: {
         finish: false,
@@ -983,6 +984,9 @@ export default {
         })
         // 启动限时抢购倒计时，牛逼啊霸哥
         countdownInstanceByFlash = setInterval(this.stampFuncByFlash, 1000)
+  
+        this.manjianList = await getActiveInfo({ type: 'manjian', biz_id: this.bid }).then(res => res.data.active_info).catch(err => { throw Error(err.msg) })
+        console.log('manjianList is', this.manjianList)
 
         // this.goodsList = await getProductList({ pageSize: 2, ...base }, { onlyData: true }).catch(e => {
         //   throw Error(e.msg || '获取商品列表错误')

@@ -53,8 +53,9 @@
               <span class="store-follow-text">{{storeInfo.follow}}人关注</span>
             </div>
             <div class="store-activity">
-              <div v-for="(item,idx) in flashActivityList" :key="idx" @click="toActivity(item)" class="activity-item">
-                {{item.name}}
+
+              <div v-for="(item,idx) in manjianList" :key="idx" class="activity-item">
+                满{{item.reach}}减{{item.award}}
               </div>
             </div>
           </div>
@@ -163,12 +164,12 @@
                         </div>
                         <div class="flex flex-vertical-c" v-else>
                           <block v-if="goods.num>0">
-                            <layout-icon @click.stop="goodsNumMinus(goods)" color="#B2B1B1" size="20"
+                            <layout-icon @click.stop="goodsNumMinus(goods)" color="#B2B1B1" size="24"
                                          type="iconicon-minus"></layout-icon>
                             <input v-model="goods.num" @focus="getQty(goods.num)"
                                    @blur="changeGoodsNum($event,idx,goods)" class="input-num text-center fz-12" />
                           </block>
-                          <layout-icon @click.stop="goodsNumPlus(goods)" color="#E64239" size="20"
+                          <layout-icon @click.stop="goodsNumPlus(goods)" color="#E64239" size="24"
                                        type="iconicon-plus"></layout-icon>
                         </div>
                       </block>
@@ -415,7 +416,7 @@ import { componetMixin } from '@/mixins/BaseMixin'
 import { checkIsExpire, confirm, error, hideLoading, showLoading, toast } from '@/common/fun'
 import { getAlbumList, getBizInfo, getBizSpikeList } from '@/api/store'
 import { getBizProdCateList, getFlashsaleList, getProductDetail, getProductList } from '@/api/product'
-import { getCouponList } from '@/api/common'
+import { getActiveInfo, getCouponList } from '@/api/common'
 import {
   checkIsLogin,
   findArrayIdx, getArrColumn,
@@ -542,6 +543,7 @@ export default {
       },
       storeGoodsTotal: 0,
       killList: [],
+      manjianList: [],
       flashActivityList: [],
       couponList: [],
       storeList: [],
@@ -1511,6 +1513,9 @@ export default {
           }
         })
         console.log(this.flashActivityList)
+
+        this.manjianList = await getActiveInfo({ type: 'manjian', biz_id: this.bid }).then(res => res.data.active_info).catch(err => { throw Error(err.msg) })
+        console.log('manjianList is', this.manjianList)
         // 启动限时抢购倒计时，牛逼啊霸哥
         countdownInstanceByFlash = setInterval(this.stampFuncByFlash, 1000)
 
@@ -1781,12 +1786,12 @@ export default {
   },
   onReady () {
     this.pageScrollEnable = true
-  
+
     uni.setNavigationBarColor({
       frontColor: '#ffffff',
       backgroundColor: '#eeeeee'
     })
-    
+
     this.$nextTick().then(() => {
       const query = uni.createSelectorQuery().in(this)
       query.select('#store-bottom-action').boundingClientRect(data => {
@@ -2298,7 +2303,7 @@ export default {
           .goods-item-action {
             .btn-open-attr {
               background: #E64239;
-              font-size: 10px;
+              font-size: 22rpx;
               color: #fff;
               width: 110rpx;
               height: 38rpx;

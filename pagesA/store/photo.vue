@@ -12,12 +12,11 @@
     </div>
     <!--  占位-->
 
-    <div class="photo-section" v-if="photoList.length>0">
+    <div class="photo-section" v-if="photoList.length>0 && photoList[headTabIndex].photo">
       <div class="photo-list">
         <block :key="idx2" v-for="(img,idx2) in photoList[headTabIndex].photo">
           <image :src="img.photo_img" @click="priviewFn(photoList[headTabIndex],idx2)" class="photo-item"></image>
         </block>
-
       </div>
     </div>
     <div class="defaults" v-else>
