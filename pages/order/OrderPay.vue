@@ -195,12 +195,12 @@ import { formatArrayColumn, GetQueryByString, isWeiXin, objTranslate, urlencode 
 import Storage from '@/common/Storage'
 import { error, hideLoading, modal, showLoading, toast } from '@/common/fun'
 import BaseMixin from '@/mixins/BaseMixin'
-import LayoutLayer from '@/componets/layout-layer/layout-layer'
-import WzwPay from '@/componets/wzw-pay/wzw-pay'
-import LayoutIcon from '@/componets/layout-icon/layout-icon'
+import LayoutLayer from '@/components/layout-layer/layout-layer'
+import WzwPay from '@/components/wzw-pay/wzw-pay'
+import LayoutIcon from '@/components/layout-icon/layout-icon'
 import { computeArrayColumnSum, farmatPayParam } from '@/pages/order/pay'
 import { Exception } from '@/common/Exception'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 
 export default {
   name: 'OrderPay',
@@ -1215,7 +1215,7 @@ export default {
   
   .other .bd {
     padding-bottom: 30rpx;
-    border-bottom: 2rpx solid #efefef;
+    border-bottom: 1rpx solid #efefef;
   }
   
   .o_title {
@@ -1339,7 +1339,7 @@ export default {
     
     .c_method {
       padding: 37rpx 0;
-      border-bottom: 2rpx solid #E6E6E6;
+      border-bottom: 1rpx solid #E6E6E6;
     }
     
     & .c_method:first-child {
@@ -1371,7 +1371,7 @@ export default {
       
       .input {
         margin: 40rpx 0;
-        border: 1px solid #efefef;
+        border: 1rpx solid #efefef;
         height: 80rpx;
         line-height: 80rpx;
       }

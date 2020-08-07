@@ -9,7 +9,6 @@
         个人中心
       </div>
     </div>
-
     <div class="header">
       <div :style="{top:menuButtonInfo.top+'px',height:menuButtonInfo.height+'px'}" class="left-icon-box">
         <!--:plain="false" :wrap-bg="activeHeadOpacity===1?'#f2f2f2':'none'" wrap-padding="6px"-->
@@ -68,7 +67,7 @@
 
       </block>
     </div>
-    <div class="intro">为你推荐</div>
+    <div class="intro" v-if="proList.length>0">为你推荐</div>
     <div class="product-list flex">
 
       <pro-tag
@@ -91,9 +90,9 @@
 </template>
 
 <script>
-import LayoutIcon from '@/componets/layout-icon/layout-icon'
-import LayoutFun from '@/componets/layout-fun/layout-fun'
-import ProTag from '@/componets/pro-tag/pro-tag'
+import LayoutIcon from '@/components/layout-icon/layout-icon'
+import LayoutFun from '@/components/layout-fun/layout-fun'
+import ProTag from '@/components/pro-tag/pro-tag'
 import BaseMixin, { tabbarMixin } from '@/mixins/BaseMixin'
 import { checkIsLogin, getDomain } from '@/common/helper'
 import { getProductList } from '@/api/product'
@@ -101,7 +100,7 @@ import { getOrderNum } from '@/api/order'
 import { getRightsCard, getUserInfo, getFuncModule } from '@/api/customer'
 
 import { mapActions } from 'vuex'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 import eventHub from '@/common/eventHub'
 import { error } from '@/common/fun'
 

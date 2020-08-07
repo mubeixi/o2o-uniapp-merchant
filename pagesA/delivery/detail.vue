@@ -1328,13 +1328,13 @@ import { getActiveInfo, getCommitList, getCouponList } from '@/api/common'
 import { getBizInfo } from '@/api/store'
 import { commentReply, getUserCoupon } from '@/api/customer'
 
-import ProductSku from '@/componets/product-sku/product-sku'
+import ProductSku from '@/components/product-sku/product-sku'
 import { updateCart } from '@/api/order'
 import { formatRichTextByUparseFn } from '@/common/filter'
-import LayoutIcon from '@/componets/layout-icon/layout-icon'
-import LayoutComment from '@/componets/layout-comment/layout-comment'
-import WzwGoodsAction from '@/componets/wzw-goods-action/wzw-goods-action'
-import LayoutPopup from '@/componets/layout-popup/layout-popup'
+import LayoutIcon from '@/components/layout-icon/layout-icon'
+import LayoutComment from '@/components/layout-comment/layout-comment'
+import WzwGoodsAction from '@/components/wzw-goods-action/wzw-goods-action'
+import LayoutPopup from '@/components/layout-popup/layout-popup'
 
 import { error, hideLoading, modal, showLoading, toast } from '@/common/fun'
 import {
@@ -1345,12 +1345,12 @@ import {
   mergeObject,
   numberSort
 } from '@/common/helper'
-import uParse from '@/componets/gaoyia-parse/parse'
+import uParse from '@/components/gaoyia-parse/parse'
 import Storage from '@/common/Storage'
-import LayoutModal from '@/componets/layout-modal/layout-modal'
+import LayoutModal from '@/components/layout-modal/layout-modal'
 import { Exception } from '@/common/Exception'
-import LayoutLayer from '@/componets/layout-layer/layout-layer'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import LayoutLayer from '@/components/layout-layer/layout-layer'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 
 const countdownInstance = null
 const attrInfoTmpl = {

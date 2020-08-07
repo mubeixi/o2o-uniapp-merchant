@@ -4,7 +4,7 @@
 
     <div class="wrap-item" @click.stop="goVipList(item)"    :style="{backgroundImage: 'url('+$getDomain('/static/client/storeVipListBg.png')+')'}"  v-for="(item,index) of userVipList" :key="index">
 
-      <div class="money-btn"  :class="item.arr.length<=0?'lastPos':''" @click.stop="goBanlance(item.biz_id,item.biz_user_money)">
+      <div class="money-btn"  :class="item.arr.length<=0?'lastPos':''" @click.stop="goBanlance(item.biz_id,item.biz_user_money)" v-if="initData.cash_from==2">
         查看资金流水
       </div>
 
@@ -17,7 +17,7 @@
         </div>
       </div>
 
-      <div class="wrap-item-money flex flex-vertical-c m-b-15">
+      <div class="wrap-item-money flex flex-vertical-c m-b-15"  v-if="initData.cash_from==2">
           <div class="m-r-15">
             <span class="fz-13">余额：</span>
             <span class="fz-11">¥</span>
@@ -52,6 +52,7 @@
 
 	<div class="defaults" v-if="userVipList.length<=0">
 	  <image :src="'/static/client/empty.png'|domain"></image>
+    <div class="p-15 fz-12 text-center c7">暂无可用会员卡</div>
 	</div>
 
   </view>
@@ -59,9 +60,9 @@
 
 <script>
 import { getBizUserList } from '@/api/customer'
-import LayoutIcon from '@/componets/layout-icon/layout-icon'
+import LayoutIcon from '@/components/layout-icon/layout-icon'
 import BaseMixin from '@/mixins/BaseMixin'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 import { error } from '@/common/fun'
 
 export default {
@@ -81,6 +82,11 @@ export default {
     this.page = 1
     this.userVipList = []
     this.initFn()
+  },
+  computed: {
+    initData () {
+      return this.$store.state.system.initData
+    }
   },
   methods: {
     goVipList (item) {

@@ -38,8 +38,8 @@ import { getUserInfo, updateUserInfo } from '@/api/customer'
 import BaseMixin from '@/mixins/BaseMixin'
 import { mapActions } from 'vuex'
 import { error } from '@/common/fun'
-import WzwAddress from '@/componets/wzw-address/wzw-address'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import WzwAddress from '@/components/wzw-address/wzw-address'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 
 export default {
   mixins: [BaseMixin],

@@ -80,12 +80,12 @@
 </template>
 
 <script>
-import LayoutIcon from '@/componets/layout-icon/layout-icon'
+import LayoutIcon from '@/components/layout-icon/layout-icon'
 import BaseMixin from '@/mixins/BaseMixin'
 import { linkToEasy, modal, toast } from '@/common/fun'
 import { cancelFavourite, getFavouriteProdList } from '@/api/customer'
 import Storage from '@/common/Storage'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 
 export default {
   name: 'FavoriteIndex',
@@ -341,8 +341,8 @@ export default {
       box-sizing: border-box;
       
       &.active {
-        color: $fun-primary-color;
-        border-bottom: 2px solid $fun-primary-color;
+        color: $fun-red-color;
+        border-bottom: 2px solid $fun-red-color;
       }
       
       &:first-child {

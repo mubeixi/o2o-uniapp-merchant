@@ -121,13 +121,13 @@
         </div>
       </div>
       <div class="control">
-        <div @click="cancelReason" class="action-btn" style="border-right: 1px solid #e4e4e4; box-sizing: border-box;">
+        <div @click="cancelReason" class="action-btn" style="border-right: 1rpx solid #e4e4e4; box-sizing: border-box;">
           取消
         </div>
         <div @click="sureReason" class="action-btn" style="color: #F43131;">确定</div>
       </div>
     </layout-modal>
-    <div class="h50" style="background: #f8f8f8;"></div>
+    <div class="h50"></div>
   </div>
 
 </template>
@@ -135,9 +135,9 @@
 import { cancelOrder, confirmOrder, delOrder, getOrderList, getOrderNum } from '@/api/order'
 import BaseMixin from '@/mixins/BaseMixin'
 import { error } from '@/common/fun'
-import LayoutModal from '@/componets/layout-modal/layout-modal'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
-import LayoutIcon from '@/componets/layout-icon/layout-icon'
+import LayoutModal from '@/components/layout-modal/layout-modal'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
+import LayoutIcon from '@/components/layout-icon/layout-icon'
 
 export default {
   components: {
@@ -456,17 +456,17 @@ export default {
         height: 20rpx;
         border-radius: 50%;
         background-color: #FFFFFF;
-        border: 1px solid #F43131;
+        border: 1rpx solid $fun-red-color;
         font-size: 15rpx;
         display: flex;
         align-items: center;
         justify-content: center;
-        color: #F43131;
+        color: $fun-red-color;
       }
     }
     
     .nav-item.active {
-      color: red;
+      color: $fun-red-color;
       border-bottom: 2px solid red;
     }
   }
@@ -614,7 +614,7 @@ export default {
         height: 28px;
         line-height: 28px;
         text-align: center;
-        border: 1px solid #eee;
+        border: 1rpx solid #eee;
         border-radius: 14px;
         color: #777;
         font-size: 13px;
@@ -652,7 +652,7 @@ export default {
     .reason {
       font-size: 14px;
       min-height: 200px;
-      border: 1px solid #E3E3E3;
+      border: 1rpx solid #E3E3E3;
       line-height: 1.4;
       height: auto;
       width: auto;
@@ -661,7 +661,7 @@ export default {
     
     .inputs {
       font-size: 14px;
-      border: 1px solid #E3E3E3;
+      border: 1rpx solid #E3E3E3;
       line-height: 1.4;
       padding: 10px;
       height: auto;
@@ -679,7 +679,7 @@ export default {
     width: 100%;
     margin-top: 15px;
     display: flex;
-    border-top: 1px solid #e4e4e4;
+    border-top: 1rpx solid #e4e4e4;
     
     .action-btn {
       flex: 1;

@@ -20,6 +20,7 @@
       "style": {
         "navigationBarTextStyle": "black",
         "navigationStyle": "custom",
+        "disableScroll": true,
         "navigationBarTitleText": "店铺首页"
 //        "mp-weixin": {
 //          "usingComponents": {

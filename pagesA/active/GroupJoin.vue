@@ -46,7 +46,7 @@
       <image :src="'/static/client/tuan/time.png'|domain" class="img" />
       <span class="my">拼团中，还差<span class="spans">{{product.pintuan_people-product.teamnum}}</span>人</span>
     </div>
-    
+
     <!--参团-->
     <!-- #ifdef MP-WEIXIN || MP-ALIPAY || MP-BAIDU || MP-TOUTIAO -->
     <div class="liji">
@@ -54,14 +54,14 @@
       <div @click="joinFunc" class="vanButton" v-else>立即参团</div>
     </div>
     <!-- #endif -->
-    
+
     <!-- #ifdef H5 || APP-PLUS -->
     <div class="liji">
       <view @click="inviteFunc" class="vanButton" v-if="joined">去分享</view>
       <div @click="joinFunc" class="vanButton" v-else>立即参团</div>
     </div>
     <!-- #endif -->
-    
+
     <!-- 间隙 -->
     <div class="mbxline"></div>
     <!-- 拼团规则 -->
@@ -98,7 +98,7 @@
         </div>
       </div>
     </div>
-    
+
     <layout-layer :direction="'top'" ref="popupLayer">
       <div class="shareinfo" v-if="type=='share'">
         <div class="s_top">
@@ -119,7 +119,7 @@
         <div @click="cancel" class="s_bottom">取消</div>
       </div>
     </layout-layer>
-    
+
     <!--分享引导框开始-->
     <div @click="isShowGuide=false" class="hide guide_box" v-show="isShowGuide">
       <div class="mask"></div>
@@ -136,7 +136,7 @@
       @submitSure="skuSub"
       ref="cartPopu"
     ></product-sku>
-  
+
   </div>
 </template>
 
@@ -147,29 +147,29 @@ import { updateCart } from '@/api/order'
 import { buildSharePath, checkIsLogin, getProductThumb } from '@/common/helper'
 import Storage from '@/common/Storage'
 import { error, hideLoading, modal, showLoading } from '@/common/fun'
-import LayoutLayer from '@/componets/layout-layer/layout-layer'
+import LayoutLayer from '@/components/layout-layer/layout-layer'
 import { Exception } from '@/common/Exception'
 import { mapActions } from 'vuex'
-import ProductSku from '@/componets/product-sku/product-sku'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
-import WzwLiveTag from '@/componets/wzw-live-tag/wzw-live-tag'
-
+import ProductSku from '@/components/product-sku/product-sku'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
+import WzwLiveTag from '@/components/wzw-live-tag/wzw-live-tag'
+import LayoutIcon from '@/components/layout-icon/layout-icon'
 const groupStam = null
 const getGroupCountdown = ({ end_timeStamp = 1571221631, current = (new Date()).getTime() } = {}) => {
   let { d = 0, h = 0, m = 0, s = 0 } = {}
   // 时间戳格式转换
   current = parseInt(current / 1000)
-  
+
   const countTime = end_timeStamp - current
   if (countTime < 0) {
     return false
   }
-  
+
   d = parseInt(countTime / (60 * 60 * 24))
   h = parseInt((countTime - d * 60 * 60 * 24) / (60 * 60))
   m = parseInt((countTime - d * 60 * 60 * 24 - h * 60 * 60) / 60)
   s = countTime - d * 60 * 60 * 24 - h * 60 * 60 - m * 60
-  
+
   return {
     d,
     h,
@@ -184,6 +184,7 @@ export default {
     WzwImTip,
     ProductSku,
     LayoutLayer,
+    LayoutIcon
   },
   mixins: [BaseMixin],
   data () {
@@ -243,7 +244,7 @@ export default {
       this.postData.attr_id = sku.id
       this.postData.active_id = this.Team_ID
       this.postData.prod_id = this.Prod_ID
-      
+
       updateCart(this.postData).then(res => {
         uni.navigateTo({
           url: '/pages/order/OrderBooking?cart_key=DirectBuy&checkfrom=group',
@@ -271,11 +272,11 @@ export default {
       // #ifdef H5
       this.isShowGuide = true
       // #endif
-      
+
       // #ifdef MP-WEIXIN || MP-ALIPAY || MP-BAIDU || MP-TOUTIAO
-      
+
       // #endif
-      
+
       // #ifdef APP-PLUS
       this.showTick('share')
       // #endif
@@ -297,10 +298,10 @@ export default {
           throw Error(e.msg || '获取产品详情失败')
         })
         productInfo.minPrice = productInfo.pintuan_pricex
-        
+
         this.product = productInfo
         this.join_team_list = productInfo.join_team_list
-        
+
         // 获取开团的时间
         for (var team of this.join_team_list) {
           if (team.team_head) {
@@ -308,21 +309,21 @@ export default {
             break
           }
         }
-        
+
         if (productInfo.skujosn) {
           this.product.skujosn = typeof productInfo.skujosn === 'string' ? JSON.parse(productInfo.skujosn) : productInfo.skujosn
           this.product.skuvaljosn = typeof productInfo.skuvaljosn === 'string' ? JSON.parse(productInfo.skuvaljosn) : productInfo.skuvaljosn
         }
-        
+
         // this.stampCount()
         // 开发时候一直倒计时太乱了
         // 浩华说没有倒计时，青春结束了
         // groupStam = setInterval(this.stampFunc, 1000)
-        
+
         this.prodList = await getProductList({ ...this.prod_arg }, { onlyData: 1 }).catch(e => {
           throw Error(e.msg || '获取产品推荐列表失败')
         })
-        
+
       } catch (e) {
         Exception.handle(e)
       } finally {
@@ -342,21 +343,21 @@ export default {
           clearInterval(groupStam)
         }
       }
-      
+
       this.countdown = rt
     },
     async shareFunc (channel) {
       const _self = this
       const path = 'pages/detail/groupJoin?Team_ID=' + this.Team_ID + '&Products_ID=' + this.Prod_ID
       const front_url = this.initData.front_url
-      
+
       const shareObj = {
         title: this.product.Products_Name,
         desc: this.product.Products_BriefDescription,
         imageUrl: getProductThumb(this.product.ImgPath),
         path: buildSharePath(path),
       }
-      
+
       switch (channel) {
         case 'wx':
           uni.share({
@@ -381,7 +382,7 @@ export default {
           })
           break
         case 'wxmini':
-          
+
           uni.share({
             provider: 'weixin',
             scene: 'WXSceneSession',
@@ -405,12 +406,12 @@ export default {
           }).catch((err) => {
             Exception.handle(err)
           })
-          
+
           if (!sharePic) {
             error('获取分享参数失败')
             return
           }
-          
+
           setTimeout(function () {
             uni.navigateTo({
               url: '/pagesA/product/SharePic/SharePic',
@@ -425,7 +426,7 @@ export default {
   },
   async created () {
     const initData = await this.getInitData()
-    
+
     let WX_MINI_ORIGIN_ID = Storage.get('WX_MINI_ORIGIN_ID')
     if (!WX_MINI_ORIGIN_ID) {
       const login_methods = initData.login_methods
@@ -436,7 +437,7 @@ export default {
         }
       }
     }
-    
+
     this.wxMiniOriginId = WX_MINI_ORIGIN_ID
   },
   onLoad (options) {
@@ -459,7 +460,7 @@ export default {
     }
     return shareObj
   },
-  
+
 }
 </script>
 
@@ -472,55 +473,55 @@ export default {
     right: 0;
     z-index: 9;
     text-align: right;
-    
+
     .mask {
       position: absolute;
       width: 100%;
       height: 100%;
       background: rgba(0, 0, 0, .7);
-      
+
     }
-    
+
     .guide_point {
       width: 375rpx;
       height: 475rpx;
       /*margin-right: 10px;*/
     }
-    
+
     .guide_btn {
       width: 189rpx;
       height: 63rpx;
       margin-right: 20px;
     }
   }
-  
+
   .shareinfo {
     padding: 30rpx 0 0;
     color: #333;
     font-size: 12px;
   }
-  
+
   .shareinfo > div {
     text-align: center;
   }
-  
+
   .s_top {
     display: flex;
     justify-content: center;
     align-items: center;
   }
-  
+
   .s_top img {
     width: 38px;
     height: 38px;
     display: block;
     margin: 0 auto 5px;
   }
-  
+
   .s_top > div:nth-child(1) {
     /*margin-right: 60px;*/
   }
-  
+
   .s_bottom {
     position: relative;
     bottom: 0;
@@ -532,30 +533,30 @@ export default {
     line-height: 30px;
     margin-top: 25px;
   }
-  
+
   .start {
     overflow-x: hidden;
     background-color: #fff !important;
-    
+
     .nav-title {
       background: #fafafa !important;
     }
-    
+
     .first {
       padding: 10px 0px;
       display: flex;
-      
+
       .left {
         width: 290rpx;
         height: 290rpx;
         margin-left: 10px;
-        
+
         .img {
           width: 290rpx;
           height: 290rpx;
         }
       }
-      
+
       .right {
         width: 460rpx;
         margin-left: 20px;
@@ -563,7 +564,7 @@ export default {
         padding-bottom: 10px;
         padding-right: 12px;
         position: relative;
-        
+
         .top {
           width: 100%;
           font-size: 26rpx;
@@ -572,30 +573,30 @@ export default {
           color: rgba(51, 51, 51, 1);
           line-height: 21px;
         }
-        
+
         .bottom {
           margin-top: 40rpx;
-          
+
           @media screen and (max-width: 371px) {
             margin-top: 0;
           }
-          
+
           .price {
             font-size: 24rpx;
             color: #F43131;
-            
+
             span {
               margin-left: 14px;
               color: #999999;
             }
-            
+
             .prices {
               color: #F43131;
               font-size: 40rpx;
               margin-left: 5px;
             }
           }
-          
+
           .tuan {
             margin-top: 3px;
             font-size: 24rpx;
@@ -606,7 +607,7 @@ export default {
         }
       }
     }
-    
+
     .second {
       display: flex;
       width: 100%;
@@ -619,23 +620,23 @@ export default {
       justify-content: space-around;
       padding-left: 16px;
       padding-right: 16px;
-      
+
       @media screen and (max-width: 371px) {
         padding: 14px 0px;
       }
-      
+
       .img {
         width: 16px;
         height: 16px;
         margin-right: 4px;
       }
-      
+
       .lis {
         display: flex;
         align-items: center;
       }
     }
-    
+
     .three {
       .paySuc {
         padding: 82rpx 241rpx;
@@ -647,33 +648,33 @@ export default {
         font-weight: 500;
         color: rgba(244, 49, 49, 1);
         line-height: 38px;
-        
+
         .img {
           width: 34px;
           height: 31px;
         }
       }
-      
+
       .lyl {
         display: flex;
         margin: 0 auto;
         padding-left: 220rpx;
         padding-right: 205rpx;
         list-style: none;
-        
+
         .img {
           width: 95rpx;
           height: 95rpx;
           border-radius: 50%;
         }
-        
+
         .liq {
           margin-right: 11px;
           width: 95rpx;
           height: 95rpx;
           border-radius: 50%;
           position: relative;
-          
+
           .tuanzhang {
             width: 26px;
             height: 19px;
@@ -681,7 +682,7 @@ export default {
             position: absolute;
             left: -11px;
           }
-          
+
           .tuanzhang {
             width: 26px;
             font-size: 10px;
@@ -693,7 +694,7 @@ export default {
         }
       }
     }
-    
+
     .how {
       width: 167px;
       margin-top: 28px;
@@ -701,24 +702,24 @@ export default {
       padding-left: 231rpx;
       display: flex;
       align-items: center;
-      
+
       .img {
         width: 18px;
         height: 18px;
       }
-      
+
       .my {
         font-size: 30rpx;
         color: #333;
         margin-left: 8px;
-        
+
         .spans {
           color: #F43131;
           margin: 0 5px;
         }
       }
     }
-    
+
     .times {
       display: flex;
       // width: 344px;
@@ -727,25 +728,25 @@ export default {
       margin: 0 auto;
       align-items: center;
       justify-content: center;
-      
+
       .line {
         width: 123rpx;
         height: 1px;
         background-color: #DEDDDD;
       }
-      
+
       .text {
         width: 350rpx;
         margin: 0 12rpx;
         display: flex;
         align-items: center;
         font-size: 24rpx;
-        
+
         .myTime {
           margin: 0 28rpx;
           font-size: 30rpx;
         }
-        
+
         .num {
           background-color: #484848;
           border-radius: 2px;
@@ -758,7 +759,7 @@ export default {
           color: #fff;
           text-align: center;
         }
-        
+
         .lines {
           //width: 6px;
           padding: 0 4rpx;
@@ -768,14 +769,14 @@ export default {
         }
       }
     }
-    
+
     .dingdan {
       margin-top: 18px;
       font-size: 0;
       margin-bottom: 15px;
       padding: 0rpx 110rpx;
       height: 74rpx;
-      
+
       // @media screen and (max-width: 370px) {
       //     margin-left: 15px;
       //     margin-right: 0;
@@ -800,14 +801,14 @@ export default {
         line-height: 74rpx;
         text-align: center;
       }
-      
+
       .invi {
         margin-left: 30rpx;
         font-size: 34rpx;
         background-color: #F43131;
       }
     }
-    
+
     .liji {
       margin-top: 18px;
       font-size: 0;
@@ -816,7 +817,7 @@ export default {
       margin-bottom: 15px;
       height: 74rpx;
       line-height: 74rpx;
-      
+
       .vanButton {
         font-size: 34rpx;
         width: 690rpx;
@@ -827,13 +828,13 @@ export default {
         background-color: #F43131;
       }
     }
-    
+
     .mbxline {
       width: 100%;
       height: 11px;
       background-color: #f2f2f2;
     }
-    
+
     .guize {
       .top {
         font-size: 30rpx;
@@ -842,20 +843,20 @@ export default {
         margin-left: 18px;
         margin-bottom: 17px;
       }
-      
+
       .xiang {
         margin-left: 30px;
-        
+
         .hang {
           display: flex;
           align-items: center;
           margin-bottom: 10px;
-          
+
           .img {
             width: 6px;
             height: 11px;
           }
-          
+
           .spana {
             margin-left: 8px;
             font-size: 24rpx;
@@ -864,7 +865,7 @@ export default {
         }
       }
     }
-    
+
     .dianzhang {
       font-size: 30rpx;
       color: #333333;
@@ -872,7 +873,7 @@ export default {
       padding: 17px;
     }
   }
-  
+
   // 查看更多
   .prolist {
     display: flex;
@@ -881,23 +882,23 @@ export default {
     padding: 0 11px;
     background-color: #f2f2f2;
   }
-  
+
   .pro-item {
     width: 345rpx;
     margin-bottom: 15px;
     background: #fff;
   }
-  
+
   .pro-item .img {
     width: 100%;
     height: 345rpx;
   }
-  
+
   .item-name {
     font-size: 24rpx;
     line-height: 30rpx;
     height: 60rpx;
-    
+
     padding-left: 11rpx;
     padding-right: 15rpx;
     color: #333;
@@ -907,27 +908,27 @@ export default {
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
   }
-  
+
   .red {
     color: #F43131;
     font-weight: 700;
   }
-  
+
   .price {
     margin-top: 10px;
     padding: 0 5px 10px;
   }
-  
+
   .pricem {
     font-size: 24rpx;
     font-style: normal;
   }
-  
+
   .n_price {
     color: #ff0000;
     font-size: 34rpx;
   }
-  
+
   .o_price {
     color: #afafaf;
     font-size: 12px;

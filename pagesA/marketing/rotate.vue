@@ -156,8 +156,8 @@ import { Rotate } from '@/common/luck'
 import { checkIsLogin, findArrayIdx } from '@/common/helper'
 import { backFunc, confirm, error, hideLoading, linkTo, showLoading, toast } from '@/common/fun'
 import BaseMixin from '@/mixins/BaseMixin'
-import LayoutPopup from '@/componets/layout-popup/layout-popup'
-import LayoutModal from '@/componets/layout-modal/layout-modal'
+import LayoutPopup from '@/components/layout-popup/layout-popup'
+import LayoutModal from '@/components/layout-modal/layout-modal'
 
 const rotateInstance = new Rotate()
 

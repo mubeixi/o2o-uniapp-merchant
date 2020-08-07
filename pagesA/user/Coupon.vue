@@ -7,11 +7,11 @@
     <block>
       <view :key="index" class="youhuijuan" v-for="(item,index) of pro">
         <image :src="'/static/client/mbxcoupon.png'|domain" class="allImg"></image>
-        <view class="infoImg">
+       <!-- <view class="infoImg">
           <image :src="item.Coupon_PhotoPath" class="image"></image>
-        </view>
+        </view> -->
         <view class="storeTitle">
-          {{item.Coupon_Subject}}
+          满{{item.Coupon_Condition}}减{{item.Coupon_Cash}} <span v-if="item.biz_id>0">(店铺优惠券)</span><span v-else>(通用优惠券)</span>
         </view>
         <view class="times">
           有效期：{{item.Coupon_StartTime.substring(0,10)}}至{{item.Coupon_EndTime.substring(0,10)}}
@@ -19,21 +19,21 @@
         <view class="subject">
           {{item.limit_txt||''}}
         </view>
-        <view class="prices" v-if="item.Coupon_Discount<=0">
+        <view class="prices" >
           ¥
           <text>{{item.Coupon_Cash}}</text>
         </view>
-        <view class="prices" v-else>
-          {{item.Coupon_Discount*10}}折优惠
-        </view>
-        <view class="man">
-          满{{item.Coupon_Condition}}可用
-        </view>
-        <view @click="goIndex(item.coupon_prod)" class="button">
+<!--        <view class="prices" v-else>-->
+<!--          {{item.Coupon_Discount*10}}折优惠-->
+<!--        </view>-->
+<!--        <view class="man">-->
+<!--          满{{item.Coupon_Condition}}可用-->
+<!--        </view>-->
+        <view @click="goIndex(item.biz_id)" class="button">
           去使用
         </view>
       </view>
-    
+
     </block>
     <view class="lasts">
       <view class="lefts">
@@ -51,7 +51,7 @@
 import BaseMixin from '@/mixins/BaseMixin'
 import { getCouponList } from '@/api/common'
 import { toHome } from '@/common/fun'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 
 export default {
   components: { WzwImTip },
@@ -62,7 +62,7 @@ export default {
       page: 1,
       pageSize: 6,
       pro: [],
-      totalCount: 0,
+      totalCount: 0
     }
   },
   onShow () {
@@ -83,7 +83,7 @@ export default {
   methods: {
     goExpired () {
       uni.navigateTo({
-        url: '/pagesA/user/ExpiredCoupon',
+        url: '/pagesA/user/ExpiredCoupon'
       })
     },
     // 获取用户已领取可使用的优惠券
@@ -92,7 +92,7 @@ export default {
         page: this.page,
         pageSize: this.pageSize,
         User_ID: 49,
-        status: 1,
+        status: 1
       }
       getCouponList(data).then(res => {
         this.totalCount = res.totalCount
@@ -102,20 +102,22 @@ export default {
       }).catch(e => {
       })
     },
-    goIndex (i) {
-      if (i === '0') {
-        toHome()
+    goIndex (biz_id) {
+      if (biz_id > 0) {
+        uni.navigateTo({
+          url: '/pages/store/index?biz_id='+biz_id
+        })
       } else {
-        uni.redirectTo({
-          url: '/pages/classify/result?pid=' + i,
+        uni.switchTab({
+          url: '/pages/index/index'
         })
       }
-    },
+    }
     // 	change(item){
     // 		this.checked=item;
-    
+
     // 	}
-  },
+  }
 }
 </script>
 
@@ -124,7 +126,7 @@ export default {
     background-color: #FFFFFF !important;
     min-height: 100vh;
   }
-  
+
   .titless {
     position: fixed;
     top: 0rpx;
@@ -132,7 +134,7 @@ export default {
     width: 100%;
     z-index: 999;
   }
-  
+
   .nav {
     z-index: 999;
     position: fixed;
@@ -146,17 +148,17 @@ export default {
     align-items: center;
     font-size: 30rpx;
     color: #333333;
-    
+
     .views {
       width: 236rpx;
       height: 72rpx;
       line-height: 72rpx;
       text-align: center;
       position: relative;
-      
+
       &.checked {
         color: #F43131;
-        
+
         &:after {
           content: '';
           display: flex;
@@ -170,19 +172,19 @@ export default {
       }
     }
   }
-  
+
   .youhuijuan {
     width: 709rpx;
     height: 206rpx;
     margin-left: 20rpx;
     margin-bottom: 30rpx;
     position: relative;
-    
+
     .allImg {
       width: 100%;
       height: 100%;
     }
-    
+
     .infoImg {
       width: 89rpx;
       height: 89rpx;
@@ -191,38 +193,38 @@ export default {
       top: 56rpx;
       left: 44rpx;
       overflow: hidden;
-      
+
       .image {
         width: 100%;
         height: 100%;
       }
     }
-    
+
     .storeTitle {
       font-size: 28rpx;
       color: #333333;
       line-height: 28rpx;
       position: absolute;
       top: 48rpx;
-      left: 150rpx;
+      left: 60rpx;
     }
-    
+
     .times {
       font-size: 20rpx;
       color: #666666;
       position: absolute;
       top: 92rpx;
-      left: 148rpx;
+      left: 62rpx;
     }
-    
+
     .subject {
       font-size: 16rpx;
       color: #FF565F;
       position: absolute;
-      left: 148rpx;
-      top: 130rpx;
+      left: 54rpx;
+      top: 62rpx;
     }
-    
+
     .prices {
       width: 110rpx;
       height: 40rpx;
@@ -233,14 +235,14 @@ export default {
       font-size: 30rpx;
       position: absolute;
       top: 41rpx;
-      left: 534rpx;
-      
+      left: 524rpx;
+
       text {
         margin-left: 11rpx;
         font-size: 52rpx;
       }
     }
-    
+
     .man {
       height: 19rpx;
       font-size: 20rpx;
@@ -249,7 +251,7 @@ export default {
       top: 95rpx;
       left: 534rpx;
     }
-    
+
     .button {
       width: 125rpx;
       height: 44rpx;
@@ -260,10 +262,10 @@ export default {
       color: #F43131;
       text-align: center;
       position: absolute;
-      top: 133rpx;
-      left: 527rpx;
+      top: 126rpx;
+      left: 516rpx;
     }
-    
+
     .yishiyong {
       position: absolute;
       width: 106rpx;
@@ -272,7 +274,7 @@ export default {
       left: 455rpx;
     }
   }
-  
+
   .lasts {
     font-size: 14px;
     padding-top: 30rpx;
@@ -280,17 +282,17 @@ export default {
     text-align: center;
     display: flex;
     justify-content: center;
-    
+
     .lefts {
       color: #666666;
     }
-    
+
     .rights {
       margin-left: 10rpx;
       color: #F43131;
     }
   }
-  
+
   .defaults {
     margin: 0 auto;
     width: 640rpx;

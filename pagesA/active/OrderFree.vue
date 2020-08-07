@@ -91,13 +91,13 @@
 <script>
 
 import BaseMixin from '@/mixins/BaseMixin'
-import LayoutIcon from '@/componets/layout-icon/layout-icon'
+import LayoutIcon from '@/components/layout-icon/layout-icon'
 import { getActiveInfo } from '@/api/common'
 import { getProductList } from '@/api/product'
 import { error, hideLoading, showLoading } from '@/common/fun'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
-import WzwEmptyImg from '@/componets/wzw-empyt-img/wzw-empty-img'
-import WzwLiveTag from '@/componets/wzw-live-tag/wzw-live-tag'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
+import WzwEmptyImg from '@/components/wzw-empyt-img/wzw-empty-img'
+import WzwLiveTag from '@/components/wzw-live-tag/wzw-live-tag'
 
 export default {
   name: 'OrderFree',

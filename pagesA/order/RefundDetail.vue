@@ -1,24 +1,28 @@
 <template>
   <view @click="commonClick" class="overflow">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
-    <view class="tops" v-if="show">
-      <view class="imgs box-sizing">
-        <image :src="prod_list.prod_img" class="image"></image>
-      </view>
-      <view class="textRight box-sizing">
-        <view class="topText">
-          {{prod_list.prod_name}}
+    <layout-page-loading :show="!isReady"></layout-page-loading>
+    <block v-if="show" >
+      <view class="tops" v-for="(prod,idx) in prod_list" :key="idx">
+        <view class="imgs box-sizing">
+          <image :src="prod.prod_img" class="image"></image>
         </view>
-        <view class="bottomText">
-          <view>
-            ¥{{prod_list.prod_price}}
+        <view class="textRight box-sizing">
+          <view class="topText">
+            {{prod.prod_name}}
           </view>
-          <view>
-            ×{{prod_list.prod_count}}
+          <view class="bottomText">
+            <view>
+              ¥{{prod.prod_price}}
+            </view>
+            <view>
+              ×{{prod.prod_count}}
+            </view>
           </view>
         </view>
       </view>
-    </view>
+    </block>
+    
 
     <view class="centers" v-if="pro">
       <view class="td">
@@ -44,6 +48,8 @@
         商家收货地址：{{pro.shop_address.RecieveProvince_name}}{{pro.shop_address.RecieveCity_name}}{{pro.shop_address.RecieveArea_name}}{{pro.shop_address.RecieveName}}
         手机号码:{{pro.shop_address.RecieveMobile}}{{pro.shop_address.RecieveAddress}}收
       </view>
+  
+      <div style="padding-left: 20rpx;margin-top: 50rpx;" class="c3 fz-b fz-16">退款动态</div>
       <block v-if="isFahuo">
         <view class="fahuo" v-if="pro.Back_Status==1">
           <view @click="isFahuo=false" class="fahuoSubmit">
@@ -51,7 +57,6 @@
           </view>
         </view>
         <view class="lines">
-
         </view>
         <block :key="index" v-for="(item,index) of pro.back_detail">
           <view class="reason">
@@ -81,16 +86,18 @@
 
 import { getBackOrderDetail, refundSend } from '@/api/order'
 import BaseMixin from '@/mixins/BaseMixin'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
+import LayoutPageLoading from '@/components/layout-page-loading/layout-page-loading'
 
 export default {
-  components: { WzwImTip },
+  components: { LayoutPageLoading, WzwImTip },
   mixins: [BaseMixin],
   data () {
     return {
+      isReady:false,
       Back_ID: 0,//退款单ID
       pro: [],
-      prod_list: {},
+      prod_list: [],
       isFahuo: true,
       shipping: '',
       shippingID: '',
@@ -100,11 +107,14 @@ export default {
   },
   onLoad (options) {
     this.Back_ID = options.Back_ID
-    if (!options.store_id) return
-    this.store_id = options.store_id
+    if (options.store_id){
+      this.store_id = options.store_id
+    }
+    
+    this.getBackOrderDetail()
   },
   onShow () {
-    this.getBackOrderDetail()
+  
   },
   methods: {
     refundSend () {
@@ -147,10 +157,12 @@ export default {
 
       await getBackOrderDetail(data).then(res => {
         this.pro = res.data
-        this.prod_list = res.data.prod_list[0]
+        this.prod_list = res.data.prod_list
       }).catch(e => {
       })
       this.show=true
+
+      this.isReady = true
     },
   },
 }
@@ -159,7 +171,7 @@ export default {
 <style lang="scss" scoped>
   .overflow {
     background-color: #FFFFFF;
-    height: 100vh;
+    min-height: 100vh;
 
     .tops {
       box-sizing: border-box;

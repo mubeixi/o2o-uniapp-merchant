@@ -8,33 +8,18 @@
           {{imgs.cate_name}}
           <span class="underline" v-if="headTabIndex === idx"></span>
         </div>
-
       </div>
     </div>
     <!--  占位-->
-    <!--    <div class="h50 bg-white" v-if="headTabSticky"></div>-->
 
-    <!--    <swiper-->
-    <!--      :current="headTabIndex"-->
-    <!--      @change="indexChangeEvent"-->
-    <!--      class="tab-container"-->
-    <!--    >-->
-    <!--      <swiper-item class="tab-page">-->
-    <!--        <scroll-view class="tab-page-wrap" scroll-y @scrolltolower="loadMore">-->
-    <div class="photo-section">
+    <div class="photo-section" v-if="photoList.length>0 && photoList[headTabIndex].photo">
       <div class="photo-list">
         <block :key="idx2" v-for="(img,idx2) in photoList[headTabIndex].photo">
-          <image :src="img.photo_img" @click="priviewFn(photoList[headTabIndex],idx2)"
-                 class="photo-item"></image>
+          <image :src="img.photo_img" @click="priviewFn(photoList[headTabIndex],idx2)" class="photo-item"></image>
         </block>
-
       </div>
     </div>
-    <!--        </scroll-view>-->
-    <!--      </swiper-item>-->
-    <!--    </swiper>-->
-
-    <div class="defaults" v-if="photoList.length<=0">
+    <div class="defaults" v-else>
       <image :src="'/static/client/empty.png'|domain"></image>
     </div>
 
@@ -46,7 +31,7 @@ import BaseMixin from '@/mixins/BaseMixin'
 import { hideLoading, modal, showLoading } from '@/common/fun'
 import { getAlbumList, getPhotoList } from '@/api/store'
 import { getArrColumn } from '@/common/helper'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 
 export default {
   name: 'StorePhoto',
@@ -151,7 +136,7 @@ export default {
   }
 
   .photo-section {
-    margin: 20rpx 20rpx 40rpx;
+    padding: 20rpx 20rpx 40rpx;
 
     .php-section-title {
       .label {

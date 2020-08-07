@@ -3,7 +3,7 @@ import store from '@/store'
 // require('./filter')
 import './filter'
 
-// import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+// import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 // Vue.component('wzw-im-tip', WzwImTip)
 
 require('./Promisify')

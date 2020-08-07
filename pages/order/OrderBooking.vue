@@ -257,7 +257,7 @@
           </div>
 
           <div class="expired-box" style="padding-bottom: 30rpx" v-if="bizList[biz_id].expired_cart_prod_count>0">
-            <div class="expired-hr" style="border-top: 1px dashed #e7e7e7;padding: 0rpx 0 40rpx 0"></div>
+            <div class="expired-hr" style="border-top: 1rpx dashed #e7e7e7;padding: 0rpx 0 40rpx 0"></div>
             <div class="expired-total c3 fz-18">
               共失效<span class="price-selling">{{bizList[biz_id].expired_cart_prod_count}}</span>件商品
             </div>
@@ -393,17 +393,17 @@
 import BaseMixin from '@/mixins/BaseMixin'
 import { createOrder, createOrderCheck, getBizOrderTemplateList } from '@/api/order'
 import { getAddressList } from '@/api/customer'
-import LayoutLayer from '@/componets/layout-layer/layout-layer'
+import LayoutLayer from '@/components/layout-layer/layout-layer'
 import { confirm, error, hideLoading, modal, showLoading } from '@/common/fun'
 import Storage from '@/common/Storage'
 import { findArrayIdx, getObjectAttrNum, objTranslate } from '@/common/helper'
-import LayoutIcon from '@/componets/layout-icon/layout-icon'
-import FunErrMsg from '@/componets/fun-err-msg/fun-err-msg'
+import LayoutIcon from '@/components/layout-icon/layout-icon'
+import FunErrMsg from '@/components/fun-err-msg/fun-err-msg'
 import { Exception } from '@/common/Exception'
-import DiyForm from '@/componets/diy-form/diy-form'
+import DiyForm from '@/components/diy-form/diy-form'
 import { mapGetters } from 'vuex'
 import { computeArrayColumnSum } from '@/pages/order/pay'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 
 export default {
   mixins: [BaseMixin],
@@ -1417,6 +1417,7 @@ export default {
           return
         }
 
+        hideLoading()
         const url = '/pages/order/OrderPay?Order_ID=' + createOrderResult.Order_ID + '&pagefrom=check'
         uni.redirectTo({
           url: url
@@ -1429,8 +1430,12 @@ export default {
           this.formCheckResult = []
         }, 4000)
         Exception.handle(e)
+
+        setTimeout(() => {
+          hideLoading()
+        }, 2000)
       } finally {
-        hideLoading()
+
       }
     }
     // ...mapActions(['getUserInfo','setUserInfo']),
@@ -1613,7 +1618,7 @@ export default {
     }
 
     .mxitem {
-      border-bottom: 1px solid #eaeaea;
+      border-bottom: 1rpx solid #eaeaea;
 
       .num {
         float: right;
@@ -1843,7 +1848,7 @@ export default {
       /*margin-top: 30rpx;*/
       /*padding-bottom: 30rpx;*/
       padding: 30rpx 40rpx 30rpx 30rpx;
-      border-bottom: 2rpx solid #efefef;
+      border-bottom: 1rpx solid #efefef;
 
       &:last-child {
         border-bottom: none;
@@ -1974,7 +1979,7 @@ export default {
     width: 750rpx;
 
     .row {
-      border-bottom: 1px solid $fun-border-color;
+      border-bottom: 1rpx solid $fun-border-color;
 
       &:last-child {
         border-bottom: none;
@@ -2009,7 +2014,7 @@ export default {
       display: flex;
       justify-content: space-between;
       height: 104rpx;
-      border-bottom: 1px solid rgba(230, 230, 230, 1);
+      border-bottom: 1rpx solid rgba(230, 230, 230, 1);
       align-items: center;
       font-size: 28rpx;
     }
@@ -2094,7 +2099,7 @@ export default {
     width: 32rpx;
     height: 32rpx;
     border-radius: 50%;
-    border: 1px solid #F43131;
+    border: 1rpx solid #F43131;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -2111,7 +2116,7 @@ export default {
     width: 32rpx;
     height: 32rpx;
     border-radius: 50%;
-    border: 1px solid #B5B5B5;
+    border: 1rpx solid #B5B5B5;
   }
 
   .time-popup-confirmbtn{

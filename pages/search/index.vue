@@ -25,21 +25,27 @@
 
 <script>
 import BaseMixin from '@/mixins/BaseMixin'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
+import { linkToEasy } from '@/common/fun'
 
 export default {
   mixins: [BaseMixin],
   name: 'SearchIndex',
   data () {
     return {
+      biz_id: '',
       inputValue: '',
-      searchAll: [],
+      searchAll: []
     }
   },
   components: { WzwImTip },
   onLoad (options) {
     if (options.keyword) {
       this.inputValue = options.keyword
+    }
+
+    if (options.biz_id) {
+      this.biz_id = options.biz_id
     }
   },
   onShow () {
@@ -48,24 +54,24 @@ export default {
       key: 'searchAll',
       success (res) {
         than.searchAll = res.data
-      },
+      }
     })
   },
   methods: {
     goSearch (item) {
-      uni.navigateTo({
-        url: '/pages/search/result?inputValue=' + item,
-      })
+      var url = '/pages/search/result?inputValue=' + item
+      if (this.biz_id)url += '&biz_id=' + this.biz_id
+      linkToEasy(url)
     },
     success () {
-      const url = '/pages/search/result?refer=searchPage&inputValue=' + this.inputValue
+      var url = '/pages/search/result?refer=searchPage&inputValue=' + this.inputValue
       this.inputValue = ''
       if (this.inputValue !== '') { // 输入框的值不为空时
         const than = this
         for (var item of this.searchAll) {
           if (item === this.inputValue) {
             uni.navigateTo({
-              url,
+              url
             })
             return
           }
@@ -73,25 +79,27 @@ export default {
         this.searchAll.push(this.inputValue) // 将输入框的值添加到搜索记录数组中存储
         uni.setStorage({
           key: 'searchAll',
-          data: than.searchAll,
+          data: than.searchAll
         })
       }
+
+      if (this.biz_id)url += '&biz_id=' + this.biz_id
       uni.navigateTo({
-        url,
+        url
       })
     },
     clear () {
       this.searchAll = []
       uni.setStorage({
         key: 'searchAll',
-        data: [],
+        data: []
       })
     },
     close () {
       this.inputValue = ''
       this.$back()
-    },
-  },
+    }
+  }
 }
 </script>
 
@@ -104,7 +112,7 @@ export default {
     font-size: 30rpx;
     padding: 30rpx 22rpx 46rpx 20rpx;
     box-sizing: border-box;
-    
+
     .search-input {
       float: left;
       width: 600rpx;
@@ -117,38 +125,38 @@ export default {
       padding-left: 91rpx;
       box-sizing: border-box;
     }
-    
+
     .search_icon {
       position: absolute;
       top: 46rpx;
       left: 61rpx;
     }
-    
+
     .span {
       font-size: 30rpx;
       color: #333333;
     }
   }
-  
+
   .history {
     padding: 0 20rpx;
   }
-  
+
   .title {
     display: flex;
     justify-content: space-between;
     height: 40rpx;
     align-items: center;
   }
-  
+
   .title {
     font-size: 28rpx;
     color: #333;
     font-weight: 500;
     height: 40rpx;
-    
+
     line-height: 40rpx;
-    
+
     .img {
       width: 40rpx;
       height: 40rpx;
@@ -156,11 +164,11 @@ export default {
       /*height: 100%;*/
     }
   }
-  
+
   .dels {
     width: 40rpx;
   }
-  
+
   .h_content .span {
     float: left;
     background: rgba(245, 245, 245, 1);

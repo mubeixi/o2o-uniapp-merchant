@@ -46,7 +46,7 @@
 
 import { cancelRefund, getBackOrder } from '@/api/order'
 import BaseMixin from '@/mixins/BaseMixin'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 
 export default {
   components: { WzwImTip },
@@ -62,9 +62,7 @@ export default {
     }
   },
   onShow () {
-    this.data = []
-    this.page = 1
-    this.getBackOrder()
+  
   },
   onLoad (option) {
     this.index = option.index
@@ -74,6 +72,11 @@ export default {
       this.page++
       this.getBackOrder()
     }
+  },
+  created () {
+    this.data = []
+    this.page = 1
+    this.getBackOrder()
   },
   methods: {
     //取消退款

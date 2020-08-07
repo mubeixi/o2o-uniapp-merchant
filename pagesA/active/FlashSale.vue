@@ -68,11 +68,11 @@
 </template>
 <script>
 import { getProductList } from '@/api/product'
-import layoutIcon from '@/componets/layout-icon/layout-icon'
+import layoutIcon from '@/components/layout-icon/layout-icon'
 import BaseMixin from '@/mixins/BaseMixin'
-import LayoutAd from '@/componets/layout-ad/layout-ad'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
-import WzwLiveTag from '@/componets/wzw-live-tag/wzw-live-tag'
+import LayoutAd from '@/components/layout-ad/layout-ad'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
+import WzwLiveTag from '@/components/wzw-live-tag/wzw-live-tag'
 
 export default {
   mixins: [BaseMixin],

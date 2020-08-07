@@ -109,12 +109,12 @@
 import BaseMixin, { tabbarMixin } from '@/mixins/BaseMixin'
 import { mapActions } from 'vuex'
 import { CartList as getCartList, DelCart } from '@/api/customer'
-import LayoutIcon from '@/componets/layout-icon/layout-icon'
+import LayoutIcon from '@/components/layout-icon/layout-icon'
 import Storage from '@/common/Storage'
 import { getProductList } from '@/api/product'
 import { error } from '@/common/fun'
-import ProTag from '@/componets/pro-tag/pro-tag'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import ProTag from '@/components/pro-tag/pro-tag'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 /**
  * 检查店铺的状态
  * 1.要么在营业时间内

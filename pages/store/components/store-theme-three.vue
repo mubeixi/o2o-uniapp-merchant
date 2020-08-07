@@ -13,11 +13,7 @@
       <!--      </div>-->
     </div>
 
-    <scroll-view class="store-comp-wrap"
-                 @touchstart="touchPageStart"
-                 @touchmove="touchPageMove"
-                 @touchend="touchPageEnd"
-                 @scroll="bindScroll" :scroll-y="pageScrollEnable">
+    <div class="store-comp-wrap">
       <div id="topBox" class="top-box">
         <image class="top-box-bg" :src="$getDomain('/static/client/store/theme-three/top-bg.png')"></image>
         <layout-page-title letf-icon-color="#fff" status-bg-color="none" menu-button-bg-color="none"
@@ -26,7 +22,7 @@
         <div class="store-info">
           <div class="flex">
             <div class="store-info-logo" :style="{backgroundImage:'url('+storeInfo.biz_logo+')'}" @click="toPicture">
-              <div class="thumbCount">{{storePhotoTotal}}张照片</div>
+              <div class="thumbCount" v-if="storePhotoTotal>0">{{storePhotoTotal}}张照片</div>
             </div>
             <div class="store-info-more">
               <div class="store-info-row flex-vertical-c flex-justify-between">
@@ -42,11 +38,11 @@
                 </div>
               </div>
               <div class="store-info-row flex-vertical-c" style="margin: 20rpx 0">
-                <layout-icon color="#999" size="14" type="iconicon-address"></layout-icon>
-                <div class="c9 fz-12">地址:{{storeInfo.biz_address}}</div>
+                <layout-icon color="#999" size="14" type="icondizhi1"></layout-icon>
+                <div class="c9 fz-12 m-l-4">地址：{{storeInfo.biz_address}}</div>
               </div>
               <div class="store-info-row flex-vertical-c">
-                <div class="fz-12 c9">营业时间:{{storeInfo.business_start}}-{{storeInfo.business_end}}</div>
+                <div class="fz-12 c9">营业时间：{{storeInfo.business_start}}-{{storeInfo.business_end}}</div>
               </div>
             </div>
           </div>
@@ -57,8 +53,9 @@
               <span class="store-follow-text">{{storeInfo.follow}}人关注</span>
             </div>
             <div class="store-activity">
-              <div v-for="(item,idx) in flashActivityList" :key="idx" @click="toActivity(item)" class="activity-item">
-                {{item.name}}
+
+              <div v-for="(item,idx) in manjianList" :key="idx" class="activity-item">
+                满{{item.reach}}减{{item.award}}
               </div>
             </div>
           </div>
@@ -86,7 +83,7 @@
         </div>
       </div>
 
-      <div class="container" :style="{height:systemInfo.windowHeight-diyHeadHeight+'px'}"
+      <div class="container" :style="{height:systemInfo.windowHeight-headBlockHeight+'px'}"
            :class="{sticky:headTabSticky==1}">
         <scroll-view class="container-l"
                      :upper-threshold="5"
@@ -96,11 +93,11 @@
                      @scrolltoupper="bindScrollLeftTop"
                      @scroll="bindContainerLeftScroll"
                      :scroll-y="leftScrollEnable">
-          <div :class="{active:bizCateNavIndex===-2}" @click="setCateActuveIdx(-2,0)" class="cate-item">
+          <div :class="{active:bizCateNavIndex===-2}" @click="setCateActuveIdx(-2,0)" class="cate-item"  v-if="flashActivityList.length>0">
             <div class="cate-underline"></div>
             <div class="cate-title">限时抢购</div>
           </div>
-          <div :class="{active:bizCateNavIndex===-1}" @click="setCateActuveIdx(-1,0)" class="cate-item">
+          <div :class="{active:bizCateNavIndex===-1}" @click="setCateActuveIdx(-1,0)" class="cate-item"  v-if="killList.length>0">
             <div class="cate-underline"></div>
             <div class="cate-title">秒杀</div>
           </div>
@@ -139,7 +136,7 @@
                 <div @click="$toGoodsDetail(goods)" :style="{backgroundImage:'url('+$getDomain(goods.ImgPath)+')'}"
                      class="cover"></div>
                 <div class="info">
-                  <div class="title fz-13 c3">
+                  <div class="title fz-14 fz-b c3">
                     <wzw-live-tag :room_id="goods.room_id" :product-info="goods" />
                     {{goods.Products_Name}}
                   </div>
@@ -149,7 +146,7 @@
                   </div>
                   <div class="flex flex-vertical-c flex-justify-between">
                     <div class="flex flex-vertical-c">
-                      <span class="price-selling fz-12">￥</span><span class="price-selling fz-14">{{goods.Products_PriceX}}</span>
+                      <span class="price-selling fz-12">￥</span><span class="price-selling fz-17">{{goods.Products_PriceX}}</span>
                       <!--<div class="text-through price-market fz-12 m-l-6">￥{{goods.Products_PriceY}}</div>-->
                     </div>
                     <div @click.stop="$noop" class="action goods-item-action">
@@ -167,12 +164,12 @@
                         </div>
                         <div class="flex flex-vertical-c" v-else>
                           <block v-if="goods.num>0">
-                            <layout-icon @click.stop="goodsNumMinus(goods)" color="#B2B1B1" size="20"
+                            <layout-icon @click.stop="goodsNumMinus(goods)" color="#B2B1B1" size="24"
                                          type="iconicon-minus"></layout-icon>
                             <input v-model="goods.num" @focus="getQty(goods.num)"
                                    @blur="changeGoodsNum($event,idx,goods)" class="input-num text-center fz-12" />
                           </block>
-                          <layout-icon @click.stop="goodsNumPlus(goods)" color="#E64239" size="20"
+                          <layout-icon @click.stop="goodsNumPlus(goods)" color="#E64239" size="24"
                                        type="iconicon-plus"></layout-icon>
                         </div>
                       </block>
@@ -222,7 +219,7 @@
                       </div>
                       <div class="flex flex-vertical-b">
                         <div class="price-box price-selling ">
-                          <span class="sign fz-10">￥</span><span class="num fz-14">{{pro.price}}</span>
+                          <span class="sign fz-12">￥</span><span class="num fz-17">{{pro.price}}</span>
                         </div>
                         <div class="m-l-6 fz-11 price-market text-through">
                           <span class="sign">￥</span><span class="num">{{pro.Products_PriceX}}</span>
@@ -240,7 +237,7 @@
               <div class="kill-goods-item flex" v-for="(pro,idx) in killList" :key="idx" @click="$toGoodsDetail(pro)">
                 <div :style="{backgroundImage:'url('+pro.ImgPath+')'}" class="item-cover"></div>
                 <div class="item-info flex1">
-                  <div class="act-goods-item-title fz-12 c3 m-t-14 m-b-8">
+                  <div class="act-goods-item-title fz-14 c3 m-t-14 m-b-8 fz-b">
                     <wzw-live-tag :room_id="pro.room_id" :product-info="pro" />
                     {{pro.Products_Name}}
                   </div>
@@ -276,7 +273,7 @@
 
         </scroll-view>
       </div>
-    </scroll-view>
+    </div>
 
     <layout-layer @click="bindCartsPopClose" :bottomStr="storeBottomActionHeight" positions="bottom" ref="carts">
       <div class="carts-box">
@@ -340,7 +337,7 @@
       </div>
     </div>
 
-    <layout-layer positions="center" ref="attr">
+    <layout-layer positions="center" ref="attrOld">
       <div class="attr-form-wrap">
         <div class="attr-head">
           <div class="title">{{product.Products_Name}}</div>
@@ -402,6 +399,15 @@
 
     <div class="safearea-box fixed" style="z-index: 5"></div>
 
+    <product-sku
+      :isCart="true"
+      :product-info="product"
+      ref="attr"
+      :isNeedNumber="true"
+      @updaCart="productSkuAdd"
+
+    ></product-sku>
+
   </div>
 </template>
 
@@ -410,7 +416,7 @@ import { componetMixin } from '@/mixins/BaseMixin'
 import { checkIsExpire, confirm, error, hideLoading, showLoading, toast } from '@/common/fun'
 import { getAlbumList, getBizInfo, getBizSpikeList } from '@/api/store'
 import { getBizProdCateList, getFlashsaleList, getProductDetail, getProductList } from '@/api/product'
-import { getCouponList } from '@/api/common'
+import { getActiveInfo, getCouponList } from '@/api/common'
 import {
   checkIsLogin,
   findArrayIdx, getArrColumn,
@@ -422,11 +428,11 @@ import {
 } from '@/common/helper'
 import { addFavourite, cancelFavourite, CartList as getCartList, checkFavourite, getUserCoupon } from '@/api/customer'
 import { Exception } from '@/common/Exception'
-import LayoutPageTitle from '@/componets/layout-page-title/layout-page-title'
-import LayoutIcon from '@/componets/layout-icon/layout-icon'
-import WzwLiveTag from '@/componets/wzw-live-tag/wzw-live-tag'
-import LayoutLayer from '@/componets/layout-layer/layout-layer'
-
+import LayoutPageTitle from '@/components/layout-page-title/layout-page-title'
+import LayoutIcon from '@/components/layout-icon/layout-icon'
+import WzwLiveTag from '@/components/wzw-live-tag/wzw-live-tag'
+import LayoutLayer from '@/components/layout-layer/layout-layer'
+import ProductSku from '@/components/product-sku/product-sku'
 var countdownInstance = null
 var countdownInstanceByFlash = null
 /**
@@ -474,7 +480,8 @@ export default {
     LayoutLayer,
     WzwLiveTag,
     LayoutIcon,
-    LayoutPageTitle
+    LayoutPageTitle,
+    ProductSku
   },
   mixins: [componetMixin],
   props: {
@@ -485,11 +492,12 @@ export default {
   },
   data () {
     return {
-      listExpand:false,
+      listExpand: false,
       scrollTopNum: 0,
       toViewIdx: '',
       pixelRatio: 1,
       headTabTop: 100,
+      headBlockHeight: 0,
       pageScrollTop: 0,
       containerRightScrollTop: 0,
       containerLeftScrollTop: 0,
@@ -499,8 +507,8 @@ export default {
       moveDirectionByPage: '--',
       storeBottomActionHeight: '52px',
       pageScrollEnable: false,
-      leftScrollEnable: false,
-      rightScrollEnable: false,
+      leftScrollEnable: true,
+      rightScrollEnable: true,
       product: {
         skuvaljosn: {}
       },
@@ -535,6 +543,7 @@ export default {
       },
       storeGoodsTotal: 0,
       killList: [],
+      manjianList: [],
       flashActivityList: [],
       couponList: [],
       storeList: [],
@@ -598,6 +607,43 @@ export default {
     }
   },
   methods: {
+    async productSkuAdd (sku) {
+      this.attrInfo.attr_id = sku.id
+      this.attrInfo.prod_id = this.product.Products_ID
+      let addQty = sku.qty
+      const attr_id = sku.id
+      const prod_id = this.product.Products_ID
+      const isCartHas = this.$store.getters['cart/getRow']({
+        attr_id,
+        prod_id
+      })
+      if (isCartHas !== false) {
+        // 数量相等无任何操作
+        if (addQty == isCartHas.num) {
+          return
+        }
+        addQty = addQty - isCartHas.num
+      }
+
+      const { ImgPath, Products_Name, Products_PriceX, Products_PriceY } = this.product
+      const productInfo = {}
+      Object.assign(productInfo, {
+        biz_id: Number(this.bid),
+        checked: true,
+        pic: ImgPath,
+        name: Products_Name,
+        price_selling: Number(Products_PriceX),
+        price_market: Number(Products_PriceY)
+      })
+      const cartRT = await this.$store.dispatch('cart/addNum', {
+        product: { ...this.product, ...this.attrInfo, ...productInfo },
+        num: addQty
+      })
+      this.refreshCount()
+      if (cartRT !== false) {
+        this.attrInfo.num = Number(this.attrInfo.num) + 1
+      }
+    },
     taggleCartListExpand () {
       if (this.listExpand) {
         this.$closePop('carts')
@@ -740,7 +786,7 @@ export default {
       if (!this.submitFlag) return
 
       const cart = await this.$store.dispatch('cart/addNum', {
-        product: { ...this.product, ...this.attrInfo,checked: true },
+        product: { ...this.product, ...this.attrInfo, checked: true },
         attr_text: this.attrInfo.attr_text,
         num: 1
       })
@@ -863,7 +909,7 @@ export default {
       if (!checkIsLogin(1, 1)) return
       const goodsInfo = await getProductDetail({ prod_id }, {
         onlyData: true,
-        tip: 'loading',
+        tip: '加载中',
         mask: true
       }).catch(e => {
         throw Error(e.msg || '获取商品详情失败')
@@ -872,30 +918,31 @@ export default {
       this.attrInfo = { ...attrInfoTmpl } // 重置
       this.check_attr = {}// 重置
       this.product = goodsInfo
+      this.product.minPrice = this.product.Products_PriceX
+      // if (goodsInfo.skujosn) {
+      //   let skujosn_new = []
+      //   for (const i in goodsInfo.skujosn) {
+      //     skujosn_new.push({
+      //       sku: i,
+      //       val: goodsInfo.skujosn[i]
+      //     })
+      //   }
+      //
+      //   // 新增如果有手机的规格
+      //   for (const i in goodsInfo.skujosn) {
+      //     if (i === 'mobile_prod_attr_name') {
+      //       skujosn_new = [{
+      //         sku: i,
+      //         val: goodsInfo.skujosn[i]
+      //       }]
+      //     }
+      //   }
+      //   // 结束
+      //
+      //   this.product.skujosn_new = skujosn_new
+      //   this.product.skuvaljosn = goodsInfo.skuvaljosn
+      // }
 
-      if (goodsInfo.skujosn) {
-        let skujosn_new = []
-        for (const i in goodsInfo.skujosn) {
-          skujosn_new.push({
-            sku: i,
-            val: goodsInfo.skujosn[i]
-          })
-        }
-
-        // 新增如果有手机的规格
-        for (const i in goodsInfo.skujosn) {
-          if (i === 'mobile_prod_attr_name') {
-            skujosn_new = [{
-              sku: i,
-              val: goodsInfo.skujosn[i]
-            }]
-          }
-        }
-        // 结束
-
-        this.product.skujosn_new = skujosn_new
-        this.product.skuvaljosn = goodsInfo.skuvaljosn
-      }
       this.$openPop('attr')
     },
     toSearch () {
@@ -1346,10 +1393,10 @@ export default {
       this.containerRightScrollTop = scrollTop
     },
     bindScrollLeftTop () {
-      this.leftScrollEnable = false
+      // this.leftScrollEnable = false
     },
     bindScrollRightTop () {
-      this.rightScrollEnable = false
+      // this.rightScrollEnable = false
       // this.headTabSticky = false
       // this.pageScrollEnable = true
       // this.leftScrollEnable = false
@@ -1382,7 +1429,8 @@ export default {
         checkFavourite({ biz_id: this.bid }, { onlyData: true }).then(res => {
           const { is_favourite = 0 } = res
           this.isFavourite = is_favourite
-        }).catch(() => {
+        }).catch((e) => {
+          throw e
         })
       }
 
@@ -1465,6 +1513,9 @@ export default {
           }
         })
         console.log(this.flashActivityList)
+
+        this.manjianList = await getActiveInfo({ type: 'manjian', biz_id: this.bid }).then(res => res.data.active_info).catch(err => { throw Error(err.msg) })
+        console.log('manjianList is', this.manjianList)
         // 启动限时抢购倒计时，牛逼啊霸哥
         countdownInstanceByFlash = setInterval(this.stampFuncByFlash, 1000)
 
@@ -1572,6 +1623,7 @@ export default {
             console.log(this.diyHeadHeight, this.systemInfo.windowHeight, this.systemInfo.windowHeight - this.diyHeadHeight)
 
             this.headTabTop = data.height - this.diyHeadHeight
+            this.headBlockHeight = data.height
             console.log(this.headTabTop)
           })
           query.exec()
@@ -1599,9 +1651,8 @@ export default {
           throw Error('nocare')
         }
 
-        this.refreshInfoByIsLogin()
-
         hideLoading()
+        this.refreshInfoByIsLogin()
       } catch (e) {
         console.log(e)
         hideLoading()
@@ -1609,7 +1660,7 @@ export default {
       }
     },
     toPicture () {
-      this.$linkTo('/pagesA/store/photo?bid=' + this.bid)
+      if (this.storePhotoTotal > 0) this.$linkTo('/pagesA/store/photo?bid=' + this.bid)
     },
     taggleFavorite () {
       if (!checkIsLogin(1, 1)) return
@@ -1735,6 +1786,11 @@ export default {
   },
   onReady () {
     this.pageScrollEnable = true
+
+    uni.setNavigationBarColor({
+      frontColor: '#ffffff',
+      backgroundColor: '#eeeeee'
+    })
 
     this.$nextTick().then(() => {
       const query = uni.createSelectorQuery().in(this)
@@ -2025,8 +2081,9 @@ export default {
         width: 500rpx;
         height: 160rpx;
         box-sizing: border-box;
-
-        border-bottom: 1px solid #EDEDED;
+        border-bottom: 1rpx solid #EDEDED;
+        box-sizing: border-box;
+        padding: 10rpx 0rpx;
 
         .title {
           font-size: 14px;
@@ -2035,16 +2092,17 @@ export default {
           overflow: hidden;
           text-overflow: ellipsis;
           width: 480rpx;
+          font-weight: bold;
         }
 
         .attr-text {
           font-size: 12px;
           color: #999;
-          margin-top: 10rpx;
+          margin-top: 20rpx;
         }
 
         .actions {
-          margin: 20rpx 0 0;
+          margin: 10rpx 0 0;
           height: 54rpx;
           display: flex;
           justify-content: space-between;
@@ -2103,7 +2161,7 @@ export default {
       flex: 1;
       padding-left: 58rpx;
     }
-  
+
     .user-btn {
       height: 50px;
       width: 50px;
@@ -2132,7 +2190,7 @@ export default {
     top: 0;
     right: 0;
     z-index: 1;
-    overflow-x: hidden;
+    overflow: hidden;
     background: #fff;
 
     .container-l {
@@ -2153,7 +2211,7 @@ export default {
 
       .cate-item {
         width: 160rpx;
-        height: 97rpx;
+        height: 98rpx;
         position: relative;
 
         .cate-title {
@@ -2220,12 +2278,13 @@ export default {
         .cate-item {
           display: inline-block;
           margin-right: 15rpx;
-          padding: 12rpx 22rpx;
+          padding: 0rpx 22rpx;
           height: 50rpx;
+          line-height: 50rpx;
           box-sizing: border-box;
           background: #F7F8F8;
           border-radius: 6rpx;
-          color: #666666;
+          color: #444444;
           font-size: 24rpx;
 
           &.active {
@@ -2244,7 +2303,7 @@ export default {
           .goods-item-action {
             .btn-open-attr {
               background: #E64239;
-              font-size: 10px;
+              font-size: 22rpx;
               color: #fff;
               width: 110rpx;
               height: 38rpx;

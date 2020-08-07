@@ -40,7 +40,7 @@ const confByPro = {
   IM_WSS_URL,
   IM_API_URL,
   users_id,
-  isCustom: true,
+  isCustom: false,
   isDev
 }
 //及贝

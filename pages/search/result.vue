@@ -125,9 +125,9 @@ import { getProductList } from '@/api/product'
 import BaseMixin from '@/mixins/BaseMixin'
 import Storage from '@/common/Storage'
 import { getLocation } from '@/common/tool/location'
-import { LayoutModal } from '@/componets/layout-modal/layout-modal'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
-import WzwLiveTag from '@/componets/wzw-live-tag/wzw-live-tag'
+import { LayoutModal } from '@/components/layout-modal/layout-modal'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
+import WzwLiveTag from '@/components/wzw-live-tag/wzw-live-tag'
 import { error } from '@/common/fun'
 
 export default {
@@ -140,6 +140,7 @@ export default {
   },
   data () {
     return {
+      isScreen: false,
       cash_from: 1,
       active: 0,
       cate: 2,
@@ -160,7 +161,9 @@ export default {
       oneHourSend: 0,
       lat: '',
       lng: '',
-      biz_ids: ''
+      biz_ids: '',
+      biz_cate_id: '',
+      biz_id: ''
     }
   },
   onLoad (option) {
@@ -174,6 +177,10 @@ export default {
     }
     if (option.biz_id) {
       this.biz_ids = option.biz_id
+      this.biz_id = option.biz_id
+    }
+    if (option.biz_cate_id) {
+      this.biz_cate_id = option.biz_cate_id
     }
     this.Cate_ID = option.Cate_ID
     this.searchAll = Storage.get('searchAll')
@@ -246,6 +253,10 @@ export default {
         this.$back()
         return
       }
+      if (this.biz_id) {
+        this.$linkTo('/pages/search/index?biz_id=' + this.biz_id)
+        return
+      }
       this.$linkTo('/pages/search/index')
     },
     shipping (i) {
@@ -256,6 +267,7 @@ export default {
       }
     },
     reset () {
+      this.isScreen = false
       this.minPrice = ''
       this.maxPrice = ''
       this.isShipping = 0
@@ -280,6 +292,7 @@ export default {
       this.page = 1
       // this.orderby="search";
       const item = 'search'
+      this.isScreen = true
       this.getProd(item)
       this.showShai = false
     },
@@ -330,7 +343,7 @@ export default {
       }
     },
     getProd (item) {
-      let data
+      let data = {}
       if (this.inputValue) {
         data = {
 
@@ -361,7 +374,8 @@ export default {
         } else if (this.isSheng === 2) {
           data.order_by_direction = 'desc'
         }
-      } else if (item === 'search') {
+      }
+      if (this.isScreen) {
         data.min_price = this.minPrice
         data.max_price = this.maxPrice
         data.order_by = this.orderby
@@ -373,7 +387,7 @@ export default {
         if (this.isShipping === 1) {
           data.free_shipping = 1
         } else if (this.isShipping === 2) {
-          data.free_shipping = 0
+          data.free_shipping = 2
         }
       }
       if (this.Products_ID) {
@@ -386,6 +400,9 @@ export default {
       }
       if (this.biz_ids) {
         data.biz_ids = this.biz_ids
+      }
+      if (this.biz_cate_id) {
+        data.biz_cate_id = this.biz_cate_id
       }
 
       // 模式为2，而且没有商户配置，就不要继续走了
@@ -430,6 +447,7 @@ export default {
     width: 750rpx;
     overflow: hidden;
     background: white;
+    position: relative;
   }
 
   .top {
@@ -700,8 +718,8 @@ export default {
 
   .shaixuan {
     box-sizing: border-box;
-    position: absolute;
-    top: 210rpx;
+    position: fixed;
+    top: 206rpx;
     width: 750rpx;
     background-color: #FFFFFF;
     z-index: 999;

@@ -3,20 +3,15 @@
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <div class="top">
       <image :src="'/static/client/vip/vip-bg.png'|domain" class="img-full"></image>
-      <swiper :autoplay="false" :current="inds" :duration="1000" :indicator-dots="false" @change="change"
-              class="center">
-        <swiper-item :key="index" class="vipFir"
-                     v-for="(item,index) of vipData">
-          <!-- :style="vipData.length==1?'margin-left:43rpx;':''" -->
+      <swiper :autoplay="false" :current="inds" :duration="1000" :indicator-dots="false" @change="change" class="center">
+        <swiper-item :style="{marginLeft:vipData.length===1?'43rpx':'0rpx'}" class="vipFir" v-for="(item,index) of vipData"  :key="index">
           <image :src="'/static/client/vip/vip.png'|domain" class="img-full"></image>
-          <div class="vip-title">
-            {{item.level_name||''}}
-          </div>
+          <div class="vip-title">{{item.level_name||''}}</div>
         </swiper-item>
       </swiper>
     </div>
 
-    <div class="vip-has">
+    <div class="vip-has" v-if="vipData.length>0">
       <div class="vip-has-title fz-17 c3">
         会员享特权
       </div>
@@ -38,7 +33,7 @@
           <span class="label p-r-8 fz-16 color-red">*</span>
           <span class="c6">{{vipData[inds].upgrade_rights.price_back.name}}</span>
         </div>
-        <div style="line-height: 30px;" class="flex flex-vertical-c fz-14" v-if="vipData[inds].upgrade_rights.money&&vipData[inds].upgrade_rights.money.value>0">
+        <div style="line-height: 30px;" class="flex flex-vertical-c fz-14" v-if="vipData[inds].upgrade_rights.money">
           <span class="label p-r-8 fz-16 color-red">*</span>
           <span class="c6">{{vipData[inds].upgrade_rights.money.name}}</span>：<span class="price-selling">￥{{vipData[inds].upgrade_rights.money.value}}</span>
         </div>
@@ -85,6 +80,7 @@
       </div>
     </div>
 
+    <layout-copyright></layout-copyright>
     <div style="width: 750rpx;height: 100rpx"></div>
     <div @click="submit" class="fz-12 submit" v-if="vipData[inds].user_level<vipData[inds].level">
       ¥<span class="fz-16">{{vipData[inds].price}}直接购买</span>
@@ -110,22 +106,24 @@ import { getCouponList, getShopGiftList, getUserLevel } from '@/api/common'
 import { createBuyLevelOrder, userLevelPay } from '@/api/order'
 import { error, toast } from '@/common/fun'
 import { getUserID } from '@/common/request'
-import WzwPay from '@/componets/wzw-pay/wzw-pay'
+import WzwPay from '@/components/wzw-pay/wzw-pay'
 import BaseMixin from '@/mixins/BaseMixin'
 import Pay from '@/common/Pay'
 import { checkIsLogin } from '@/common/helper.js'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
+import LayoutCopyright from '@/components/layout-copyright/layout-copyright'
 
 export default {
   name: 'VipList',
   mixins: [BaseMixin],
   components: {
+    LayoutCopyright,
     WzwImTip,
     WzwPay
   },
   data () {
     return {
-      vipData: [{ basic_rights: '' }],
+      vipData: [],
       inds: 0,
       coupon: [],
       pro: [],
@@ -220,7 +218,7 @@ export default {
 
       if (this.vipData[this.inds].upgrade_rights && this.vipData[this.inds].upgrade_rights.coupon && this.vipData[this.inds].upgrade_rights.coupon.value) {
         const id = this.vipData[this.inds].upgrade_rights.coupon.value
-        this.coupon = await getCouponList({ record_id: id }, {
+        this.coupon = await getCouponList({ coupon_id: id }, {
           onlyData: true,
           tip: '加载中',
           noUid: 1
@@ -257,7 +255,8 @@ export default {
           }, 1500)
           return
         }
-        this.vipData = arr
+        // this.vipData = arr
+        this.$set(this, 'vipData', arr)
         if (this.vipData[this.inds].upgrade_rights && this.vipData[this.inds].upgrade_rights.coupon && this.vipData[this.inds].upgrade_rights.coupon.value) {
           const id = this.vipData[this.inds].upgrade_rights.coupon.value
           this.coupon = await getCouponList({ coupon_id: id }, {
@@ -363,6 +362,7 @@ export default {
     margin: 50rpx auto 0;
     background-color: #FFFFFF;
     white-space: nowrap;
+    border-radius: 10rpx;
 
     &-title {
       width: 100%;

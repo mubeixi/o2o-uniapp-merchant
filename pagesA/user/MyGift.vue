@@ -45,7 +45,7 @@
 <script>
 import BaseMixin from '@/mixins/BaseMixin'
 import { getGiftList } from '@/api/product'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 
 export default {
   components: { WzwImTip },
@@ -149,27 +149,28 @@ export default {
     align-items: center;
     font-size: 30rpx;
     color: #333333;
-    background: #f8f8f8;
+    background: #fff;
     
     .ins {
-      width: 236rpx;
+      flex: 1;
       height: 72rpx;
       line-height: 72rpx;
       text-align: center;
       position: relative;
       
       &.checked {
-        color: #F43131;
+        color: $fun-red-color;
         
         &:after {
           content: '';
           display: flex;
           width: 135rpx;
           height: 4rpx;
-          background-color: #F43131;
+          background-color: $fun-red-color;
           position: absolute;
           bottom: 0rpx;
-          left: 50rpx;
+          left: 50%;
+		  transform: translateX(-50%)
         }
       }
     }

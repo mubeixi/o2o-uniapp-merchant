@@ -24,11 +24,17 @@
       <view class="first">
         <block :key="index" v-for="(item,index) of funcModules.child">
           <view @click="spreadQr(0,0)" class="left" v-if="item.field=='erweima_weixin'">
-            <image :src="item.img|domain" class="image"></image>
+            <image v-if="item.img_icon.use==0" :src="item.img_icon.img|domain" class="image"></image>
+			<div style="display: inline-block" v-if="item.img_icon.use==1">
+			  <layout-icon size="79rpx" :color="item.img_icon.color" :type="item.img_icon.icon"></layout-icon>
+			</div>
             <view class="haha">{{item.name}}</view>
           </view>
           <view @click="spreadQr(1,0)" class="right" v-if="item.field=='erweima_tuiguang'">
-            <image :src="item.img|domain" class="image"></image>
+            <image v-if="item.img_icon.use==0" :src="item.img_icon.img|domain" class="image"></image>
+            <div style="display: inline-block" v-if="item.img_icon.use==1">
+              <layout-icon size="79rpx" :color="item.img_icon.color" :type="item.img_icon.icon"></layout-icon>
+            </div>
             <view class="haha">{{item.name}}</view>
           </view>
         </block>
@@ -44,8 +50,8 @@
 import { mapActions } from 'vuex'
 import { getDisInit, getDistributeWxQrcode, getFuncModule } from '@/api/customer'
 import BaseMixin from '@/mixins/BaseMixin'
-import LayoutIcon from '@/componets/layout-icon/layout-icon'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import LayoutIcon from '@/components/layout-icon/layout-icon'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 
 export default {
   components: {

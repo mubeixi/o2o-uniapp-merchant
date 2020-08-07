@@ -1,55 +1,63 @@
 <template>
-  <view @click="commonClick" class="myall">
+  <view @click="commonClick" class="page-wrap p-b-safe-area">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
-    <radio-group @change="radioChange" class="radio-group">
-      <label :class="!check_flag ? 'no-redio' : ''" :key="idx" class="radio-item" v-for="(item,idx) in addresslist">
-        <radio :checked="Number(item.Address_ID) === Number(check_address_id)" :disabled="!check_flag"
-               :value="idx"
-               class="radio-ele" color="#F43131" style="transform: scale(0.8)" v-if="check_flag" />
-        <view class="flex-main fz-12"  :class="check_flag?'':'p-l-10'">
-          <view class='flex-top'>
-            <view class='name'>收货人：{{item.Address_Name}}</view>
-            <view class='pho'>{{item.Address_Mobile}}</view>
+    <div class="container">
+      <radio-group @change="radioChange" class="radio-group">
+        <label :class="!check_flag ? 'no-redio' : ''" :key="idx" class="radio-item" v-for="(item,idx) in addresslist">
+          <radio :checked="Number(item.Address_ID) === Number(check_address_id)" :disabled="!check_flag"
+                 :value="idx"
+                 class="radio-ele" color="#F43131" style="transform: scale(0.8)" v-if="check_flag" />
+          <view class="flex-main fz-14"  :class="check_flag?'':'p-l-25'">
+            <view class='flex-top'>
+              <view class='name'>{{item.Address_Name}}</view>
+              <view class='pho'>{{item.Address_Mobile}}</view>
+              <view class='default' v-if="item.Address_Is_Default === 1">默认</view>
+            </view>
+            <view class='flex-add m-t-10'>{{item.Address_Province_name}} {{item.Address_City_name}}
+              {{item.Address_Area_name}}
+              <block v-if="item.Address_Town_name">{{item.Address_Town_name}}</block>
+              {{item.Address_Detailed}}
+            </view>
+            <!--          -->
           </view>
-          <view class='flex-add'>收货地址：{{item.Address_Province_name}} {{item.Address_City_name}}
-            {{item.Address_Area_name}}
-            <block v-if="item.Address_Town_name">{{item.Address_Town_name}}</block>
-            {{item.Address_Detailed}}
+          <view class="flex-action">
+            <layout-icon @click="deladdress(item.Address_ID)" class="m-b-6" color="#888" size="18" type="iconshanchu"></layout-icon>
+            <layout-icon @click="addressAddEdit(item.Address_ID)" color="#888" size="18" type="iconbianji"></layout-icon>
           </view>
-          <view class='flex-add default' v-if="item.Address_Is_Default === 1">默认地址</view>
-        </view>
-        <view class="flex-action">
-          <layout-icon @click="deladdress(item.Address_ID)" class="m-b-6" color="#999" size="20"
-                       type="iconshanchu"></layout-icon>
-          <layout-icon @click="addressAddEdit(item.Address_ID)" color="#999" size="20" type="iconbianji"></layout-icon>
-        </view>
-      </label>
-    </radio-group>
+        </label>
 
-    <view style='height:82rpx;'></view>
-    <view @click="addressAddEdit('a')" class='tianjia flex flex-vertical-c'>
-      <view class='jia_img'>
-        <layout-icon color="#f43131" size="18" type="iconadd"></layout-icon>
-      </view>
-      <text>新增个人地址</text>
-      <view class='go_img'>
-        <layout-icon size="16" type="iconicon-arrow-right"></layout-icon>
-      </view>
-    </view>
+      </radio-group>
+    </div>
+
+    <div class="h10"></div>
+    <div class="add-btn " @click="addressAddEdit('a')">
+      <layout-icon color="#fff" size="14" type="iconPlus"></layout-icon>
+      <div class="add-btn-text m-l-6">新建地址</div>
+    </div>
+    <div class="h20"></div>
+    <!--    <view @click="addressAddEdit('a')" class='tianjia flex flex-vertical-c'>-->
+    <!--      <view class='jia_img'>-->
+    <!--        <layout-icon color="#f43131" size="18" type="iconadd"></layout-icon>-->
+    <!--      </view>-->
+    <!--      <text>新增个人地址</text>-->
+    <!--      <view class='go_img'>-->
+    <!--        <layout-icon size="16" type="iconicon-arrow-right"></layout-icon>-->
+    <!--      </view>-->
+    <!--    </view>-->
   </view>
 </template>
 
 <script>
 import { delAddress, getAddressList } from '@/api/customer'
 import BaseMixin from '@/mixins/BaseMixin'
-import LayoutIcon from '@/componets/layout-icon/layout-icon'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import LayoutIcon from '@/components/layout-icon/layout-icon'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 
 export default {
   mixins: [BaseMixin],
   components: {
     WzwImTip,
-    LayoutIcon,
+    LayoutIcon
   },
   data () {
     return {
@@ -57,7 +65,7 @@ export default {
       del_address_id: 0, // 存储删除收货地址id
       check_address_id: 0, // 选择的ID
       check_flag: false, // 选则框是否展示  来自会员中心->收货地址 则不展示  来自提交订单->选择收货地址 则显示
-      from_page: '', // 来源页面  checkout(需设置checkout页面的back_address_id)、会员中心(不需操作)
+      from_page: '' // 来源页面  checkout(需设置checkout页面的back_address_id)、会员中心(不需操作)
     }
   },
   methods: {
@@ -115,18 +123,18 @@ export default {
                 uni.showToast({
                   title: '删除成功',
                   icon: 'success',
-                  duration: 1000,
+                  duration: 1000
                 })
               })
             } else {
               uni.showModal({
                 title: '错误',
                 content: '收货地址id获取失败',
-                showCancel: false,
+                showCancel: false
               })
             }
           }
-        },
+        }
       })
     },
 
@@ -139,7 +147,7 @@ export default {
       }
 
       uni.navigateTo({
-        url: '/pagesA/user/EditAddress?from=addresslist' + (address_id ? '&addressid=' + address_id : ''),
+        url: '/pagesA/user/EditAddress?from=addresslist' + (address_id ? '&addressid=' + address_id : '')
       })
     },
 
@@ -150,7 +158,7 @@ export default {
         this.addresslist = addresslist
       }).catch(() => {
       })
-    },
+    }
   },
   /**
    * 生命周期函数--监听页面加载
@@ -171,24 +179,45 @@ export default {
   },
   onShow () {
     this.getAddressList()
-  },
+  }
 }
 </script>
 
 <style lang="scss" scoped>
-  .myall {
-    background-color: #FFFFFF !important;
-    min-height: 100vh;
+
+  .add-btn{
+    margin-left: 30rpx;
+    margin-right: 30rpx;
+    z-index: 5;
+    width: 690rpx;
+    height: 88rpx;
+    border-radius: 10rpx;
+    background-color: $fun-red-color;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .page-wrap {
+    background: #fff;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    .container{
+      flex:1;
+      overflow-y: scroll;
+    }
   }
 
   .radio-item {
     width: 750rpx;
-    padding: 20rpx 0;
+    padding: 30rpx 0;
     overflow: hidden;
     display: flex;
     flex-flow: row;
     align-items: center;
-    border-bottom: 15rpx #f4f4f4 solid;
+    border-bottom: 20rpx #f8f8f8 solid;
   }
 
   .radio-item .radio-ele {
@@ -206,28 +235,40 @@ export default {
 
   .flex-main .flex-top {
     display: flex;
-    flex-flow: row;
     margin-bottom: 10rpx;
+    align-items: center;
   }
 
   .flex-main .flex-top .name {
-    width: 65%;
+    font-size: 16px;
+    color: #333;
+    font-weight: bold;
   }
 
   .flex-main .flex-top .pho {
-    width: 35%;
-    text-align: right;
+    font-size: 12px;
+    color: #666;
+    margin-left: 18px;
   }
 
   .flex-main .flex-add {
     width: 100%;
-    line-height: 36rpx;
+    font-size: 14px;
+    color: #333;
+    line-height: 20px;
     overflow: hidden;
   }
 
-  .flex-main .flex-add.default {
-    color: #ff0000;
-    margin-top: 10rpx;
+  .default {
+    background-color: $fun-red-color;
+    color: #fff;
+    margin-left: 15px;
+    width: 32px;
+    height: 16px;
+    text-align: center;
+    font-size: 10px;
+    line-height: 16px;
+    border-radius: 3px;
   }
 
   .flex-action {

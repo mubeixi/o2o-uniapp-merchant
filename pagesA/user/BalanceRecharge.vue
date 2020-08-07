@@ -58,7 +58,7 @@ import { checkIsLogin, GetQueryByString, isWeiXin, urlencode } from '@/common/he
 import { getActiveInfo } from '@/api/common'
 import Storage from '@/common/Storage'
 import BaseMixin from '@/mixins/BaseMixin'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 
 export default {
   components: { WzwImTip },

@@ -30,7 +30,7 @@
           </block>
           <block v-else>{{item.cate_name}}</block>
         </div>
-      
+
       </div>
       <scroll-view class="list" scroll-y="true">
         <div :key="idx" class="goods-item" v-for="(goods,idx) in showList">
@@ -60,7 +60,7 @@
         </div>
       </scroll-view>
     </div>
-    
+
     <div class="goods-bottom-action">
       <div class="cart">
         <div @click="$openPop('carts')" class="icon-wrap">
@@ -78,7 +78,7 @@
         </div>
       </div>
     </div>
-    
+
     <layout-layer bottomStr="85rpx" positions="bottom" radius="20rpx" ref="carts">
       <div :style="{height:systemInfo.windowHeight*0.6+'px'}" class="carts-box">
         <div class="carts-list">
@@ -108,7 +108,7 @@
         </div>
       </div>
     </layout-layer>
-    
+
     <layout-layer positions="center" ref="attr">
       <div class="attr-form-wrap">
         <div class="attr-head">
@@ -142,7 +142,7 @@
         </div>
         <div class="actions">
           <div class="flex1">
-          
+
           </div>
           <div>
             <div :class="{disabled:!submitFlag}" @click="confirmAdd" class="confirm-btn" v-if="attrInfo.num<1">加入购物车
@@ -155,26 +155,26 @@
               <layout-icon @click.stop="addNum" color="#26C78D" size="24" type="iconicon-plus p-10"></layout-icon>
             </div>
           </div>
-        
+
         </div>
       </div>
     </layout-layer>
-  
+
   </div>
 
 </template>
 
 <script>
 import BaseMixin from '@/mixins/BaseMixin'
-import LayoutIcon from '@/componets/layout-icon/layout-icon'
+import LayoutIcon from '@/components/layout-icon/layout-icon'
 import { getBizProdCateList, getProductDetail, getProductList } from '@/api/product'
-import LayoutLayer from '@/componets/layout-layer/layout-layer'
+import LayoutLayer from '@/components/layout-layer/layout-layer'
 import { error, modal } from '@/common/fun'
 import { Exception } from '@/common/Exception'
 import { getBizInfo } from '@/api/store'
 import { checkIsLogin, mergeObject, numberSort } from '@/common/helper'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
-import WzwLiveTag from '@/componets/wzw-live-tag/wzw-live-tag'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
+import WzwLiveTag from '@/components/wzw-live-tag/wzw-live-tag'
 
 const attrInfoTmpl = {
   num: 0,
@@ -323,9 +323,9 @@ export default {
         this.attrInfo.attr_text = attr_val.Attr_Value_text
         this.attrInfo.count = attr_val.Property_count // 选择属性的库存
         this.attrInfo.price = attr_val.Attr_Price ? attr_val.Attr_Price : this.product.Products_PriceX // 选择属性的价格
-        
+
         this.submitFlag = !(!this.check_attr)
-        
+
         const atrr_id = attr_val.Product_Attr_ID
         const isCartHas = this.$store.getters['delivery/getRow'](atrr_id)
         console.log(isCartHas, attr_val)
@@ -338,7 +338,7 @@ export default {
       } else {
         this.attrInfo = { ...attrInfoTmpl }
       }
-      
+
       console.log(attr_val)
       // 判断属性库存
       if (attr_val && attr_val.Property_count <= 0) {
@@ -347,7 +347,7 @@ export default {
       }
       this.check_attr = check_attr
       this.submitFlag = !((!this.check_attr || Object.keys(this.check_attr).length !== Object.keys(this.product.skujosn_new).length))
-      
+
       // 购买数量处理  大于最高时赋值最高值
       if (this.attrInfo.num > this.attrInfo.count) {
         this.attrInfo.num = this.attrInfo.count
@@ -363,7 +363,7 @@ export default {
         })
         this.attrInfo.num = this.attrInfo.count
       }
-      
+
       this.$store.commit('delivery/ADD_GOODS', {
         num: 1,
         product: { ...this.product, ...this.attrInfo },
@@ -372,7 +372,7 @@ export default {
     delNum () {
       if (this.attrInfo.num > 0) {
         this.attrInfo.num -= 1
-        
+
         this.$store.commit('delivery/MINUS_GOODS', {
           num: 1,
           product: { attr_id: this.attrInfo.attr_id },
@@ -397,7 +397,7 @@ export default {
         amount = currentAttrInfo.count
         error('购买数量不能超过库存量')
       }
-      
+
       this.$store.commit('delivery/SET_GOODS_NUM', {
         num: amount,
         product: { attr_id: currentAttrInfo.attr_id },
@@ -418,7 +418,7 @@ export default {
         error('购买数量不能超过库存量')
         return
       }
-      
+
       // 实际也是加减的意思
       if (action === 'add') {
         this.$store.commit('delivery/ADD_GOODS', {
@@ -461,7 +461,7 @@ export default {
         amount = currentAttrInfo.count
         error('购买数量不能超过库存量')
       }
-      
+
       this.$store.commit('delivery/SET_GOODS_NUM', {
         num: amount,
         product: { attr_id: currentAttrInfo.attr_id },
@@ -479,7 +479,7 @@ export default {
     goodsNumPlus (goodsInfo) {
       const num = goodsInfo.num ? goodsInfo.num + 1 : 1
       this.$set(goodsInfo, 'num', num)
-      
+
       // const attrInfoTmpl = {
       //   num: 0,
       //   attr_id: '', // 规格id
@@ -512,13 +512,13 @@ export default {
         amount = currentGoods.count
         error('购买数量不能超过库存量')
       }
-      
+
       this.$store.commit('delivery/SET_GOODS_NUM', {
         num: amount,
         product: { attr_id: 'noattr_' + currentGoods.Products_ID },
       })
     },
-    
+
     confirmAdd () {
       if (!this.submitFlag) return
       this.attrInfo.num++
@@ -531,16 +531,16 @@ export default {
     async openAttrLayer (prod_id) {
       const goodsInfo = await getProductDetail({ prod_id }, {
         onlyData: true,
-        tip: 'loading',
+        tip: '加载中',
         mask: true,
       }).catch(e => {
         throw Error(e.msg || '获取商品详情失败')
       })
-      
+
       this.attrInfo = { ...attrInfoTmpl } // 重置
       this.check_attr = {}// 重置
       this.product = goodsInfo
-      
+
       if (goodsInfo.skujosn) {
         let skujosn_new = []
         for (const i in goodsInfo.skujosn) {
@@ -549,7 +549,7 @@ export default {
             val: goodsInfo.skujosn[i],
           })
         }
-        
+
         // 新增如果有手机的规格
         for (const i in goodsInfo.skujosn) {
           if (i === 'mobile_prod_attr_name') {
@@ -560,7 +560,7 @@ export default {
           }
         }
         // 结束
-        
+
         this.product.skujosn_new = skujosn_new
         this.product.skuvaljosn = goodsInfo.skuvaljosn
       }
@@ -579,9 +579,9 @@ export default {
           throw Error(e.msg || '获取商家自定义分类失败')
         })
         this.cateList = this.cateList.concat(cateList)
-        
+
         this.changeTab(0)
-        
+
         this.bizInfo = await getBizInfo({ biz_id: this.bid }).then(res => {
           return res.data[0]
         }).catch(e => {
@@ -643,30 +643,30 @@ export default {
     this._init_func()
   },
   created () {
-  
+
   },
 }
 </script>
 <style lang="scss" scoped>
-  
+
   .carts {
     &-box {
       width: 750rpx;
       overflow-x: hidden;
       overflow-y: scroll;
     }
-    
+
     &-list {
       padding: 30rpx 30rpx 60rpx;
       width: 750rpx;
       box-sizing: border-box;
     }
-    
+
     &-item {
       height: 186rpx;
       display: flex;
       align-items: center;
-      
+
       &-cover {
         @include cover-img();
         width: 122rpx;
@@ -674,21 +674,21 @@ export default {
         border-radius: 4rpx;
         margin-right: 22rpx;
       }
-      
+
       &-info {
         width: 546rpx;
-        
+
         .title {
           font-size: 16px;
           color: #333;
         }
-        
+
         .attr-text {
           font-size: 12px;
           color: #999;
           margin-top: 10rpx;
         }
-        
+
         .actions {
           margin: 18rpx 0;
           height: 54rpx;
@@ -699,7 +699,7 @@ export default {
       }
     }
   }
-  
+
   .goods-bottom-action {
     position: fixed;
     bottom: 0;
@@ -708,7 +708,7 @@ export default {
     color: #fff;
     font-size: 12px;
     z-index: 103;
-    
+
     .cart {
       position: absolute;
       top: -8rpx;
@@ -719,7 +719,7 @@ export default {
       //overflow: hidden;
       background: #5B5B5B;
       z-index: 4;
-      
+
       .icon-wrap {
         position: absolute;
         left: 50%;
@@ -741,40 +741,40 @@ export default {
 		  z-index: 11;
         }
       }
-      
+
     }
-    
+
     .box {
       position: absolute;
       bottom: 0;
       width: 750rpx;
-      
+
       background: rgba(0, 0, 0, .5);
       display: flex;
       align-items: center;
-      
+
       .prompt {
         flex: 1;
         padding-left: 158rpx;
       }
-      
+
       .buy {
         width: 200rpx;
         background: $fun-primary-color;
         height: 85rpx;
         line-height: 85rpx;
         text-align: center;
-        
+
       }
     }
-    
+
   }
-  
+
   .attr-form-wrap {
     width: 660rpx;
     background: #fff;
     border-radius: 10rpx;
-    
+
     .actions {
       display: flex;
       height: 90rpx;
@@ -782,7 +782,7 @@ export default {
       align-items: center;
       justify-content: space-between;
       padding: 0 30rpx;
-      
+
       .confirm-btn {
         width: 145rpx;
         height: 50rpx;
@@ -793,46 +793,46 @@ export default {
         border: none;
         font-size: 12px;
         color: #fff;
-        
+
         &.disabled {
           background: #999;
         }
       }
     }
-    
+
     .attr-head {
       padding: 14px;
       text-align: center;
       position: relative;
-      
+
       .close {
         position: absolute;
         right: 10px;
         top: 14;
       }
     }
-    
+
     .form {
-    
+
     }
-    
+
     .cart-attr-box {
       padding-bottom: 15px;
       max-height: 400px;
       overflow-y: scroll;
     }
-    
+
     .cartAttr {
       padding: 15px 15px 0;
-      
+
       .sku-title {
         margin-bottom: 12px;
       }
-      
+
       .sku-val-list {
         display: flex;
         flex-wrap: wrap;
-        
+
         .sku-val-item {
           padding: 4px 6px;
           font-size: 12px;
@@ -841,7 +841,7 @@ export default {
           margin-right: 20rpx;
           margin-bottom: 20rpx;
           box-sizing: border-box;
-          
+
           &.checked {
             border: 1px solid $fun-primary-color;
             color: $fun-primary-color;
@@ -851,44 +851,44 @@ export default {
       }
     }
   }
-  
+
   .navigation-bar {
     position: relative;
-    
+
     .left-icon {
       position: absolute;
       left: 15px;
       top: 50%;
       transform: translateY(-50%);
     }
-    
+
     .title {
       text-align: center;
       font-size: 16px;
     }
   }
-  
+
   .head {
     background-color: #fff;
     height: 280rpx;
     @include cover-img();
   }
-  
+
   .store-info {
-    
+
     .store-logo {
       width: 80rpx;
       height: 80rpx;
       border-radius: 50%;
       overflow: hidden;
     }
-    
+
     .store-title {
       color: #fff;
     }
-    
+
   }
-  
+
   .container {
     position: fixed;
     top: 340rpx;
@@ -897,14 +897,14 @@ export default {
     background: #fff;
     display: flex;
     justify-content: space-between;
-    
+
     .cate {
       width: 150rpx;
       height: 100%;
       overflow-x: hidden;
       overflow-y: scroll;
       background: #F8F8F8;
-      
+
       .cate-item {
         height: 38px;
         line-height: 38px;
@@ -915,48 +915,48 @@ export default {
         border-bottom: 1px solid #fff;
         font-size: 14px;
         color: #333;
-        
+
         &.active {
           background: #fff;
         }
       }
     }
-    
+
     .list {
       width: 585rpx;
       height: 100%;
       overflow-x: hidden;
       overflow-y: scroll;
-      
+
       .goods-item {
         display: flex;
         align-items: center;
         padding: 20rpx 0;
         border-bottom: 1px solid #E1E1E1;
-        
+
         .cover {
           width: 118rpx;
           height: 118rpx;
           background: #f2f2f2;
           @include cover-img();
         }
-        
+
         .info {
           flex: 1;
           padding-left: 20rpx;
-          
+
           .title {
             font-size: 13px;
             color: #333;
           }
         }
-        
+
         .action {
           .input-num {
             display: inline;
             width: 50rpx;
           }
-          
+
           .btn-open-attr {
             background: $fun-primary-color;
             font-size: 10px;
@@ -967,7 +967,7 @@ export default {
             border-radius: 19rpx;
             text-align: center;
             position: relative;
-            
+
             .goods-num-tag {
               position: absolute;
               right: -10px;

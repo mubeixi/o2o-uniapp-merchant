@@ -20,12 +20,13 @@
 import BaseMixin from '@/mixins/BaseMixin'
 import { modal } from '@/common/fun'
 import { buildSharePath, checkIsLogin } from '@/common/helper'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 import StoreThemeDefault from '@/pages/store/components/store-theme-default'
 import StoreThemeOne from '@/pages/store/components/store-theme-one'
 import StoreThemeTwo from '@/pages/store/components/store-theme-two'
 import StoreThemeThree from '@/pages/store/components/store-theme-three'
 import { getBizInfo } from '@/api/store'
+import Storage from '@/common/Storage.js'
 // #ifdef MP-WEIXIN
 // const livePlayer = requirePlugin('live-player-plugin')
 // #endif
@@ -57,6 +58,7 @@ export default {
     },
     bindUpStoreInfo (storeInfo) {
       this.storeInfo = storeInfo
+
       // const { room_id, live_end_time, live_start_time } = this.storeInfo
       // if (room_id) {
       //   const nowTimeStamp = uni.$moment().unix()
@@ -108,7 +110,16 @@ export default {
   mounted () {
 
   },
+  onPageScroll: function (e) {
+    if (e.scrollTop < 0) {
+      uni.pageScrollTo({
+        scrollTop: 0
+      })
+    }
+  },
   onLoad (options) {
+    Storage.remove('value_index')
+    Storage.remove('attr_index')
     if (!options.biz_id) {
       modal('店铺id缺失')
       return
@@ -164,12 +175,13 @@ export default {
 
   .page-wrap {
     background: #f2f2f2;
-    position: absolute;
+    position: fixed;
     width: 750rpx;
     left: 0;
     top: 0;
     z-index: 1;
-    height: 100vh;
+    right: 0;
+    bottom: 0;
     overflow: hidden;
   }
 

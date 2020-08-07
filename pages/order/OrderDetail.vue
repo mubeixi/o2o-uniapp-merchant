@@ -301,16 +301,16 @@
 
 <script>
 
-import wzwQrcode from '@/componets/wzw-qrcode/wzw-qrcode'
+import wzwQrcode from '@/components/wzw-qrcode/wzw-qrcode'
 import { cancelOrder, confirmOrder, getOrderDetail } from '@/api/order'
 import BaseMixin from '@/mixins/BaseMixin'
 import { GetQueryByString, isWeiXin } from '@/common/helper'
 import Storage from '@/common/Storage'
 import { modal, toast } from '@/common/fun'
-import LayoutLayer from '@/componets/layout-layer/layout-layer'
-import WzwPay from '@/componets/wzw-pay/wzw-pay'
-import LayoutIcon from '@/componets/layout-icon/layout-icon'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import LayoutLayer from '@/components/layout-layer/layout-layer'
+import WzwPay from '@/components/wzw-pay/wzw-pay'
+import LayoutIcon from '@/components/layout-icon/layout-icon'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 import { mapGetters } from 'vuex'
 import { Exception } from '@/common/Exception'
 export default {

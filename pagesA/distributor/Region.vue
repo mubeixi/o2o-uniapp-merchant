@@ -151,8 +151,8 @@
 import BaseMixin from '@/mixins/BaseMixin'
 
 import { agentInfo } from '@/api/customer'
-import CircleTitle from '@/componets/circle-title/circle-title'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import CircleTitle from '@/components/circle-title/circle-title'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 
 export default {
   mixins: [BaseMixin],

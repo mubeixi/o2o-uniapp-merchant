@@ -48,8 +48,8 @@ import BaseMixin from '@/mixins/BaseMixin.js'
 import { getBizSpikeDetail, getSpikeProd } from '@/api/product'
 import { getBizInfo } from '@/api/store'
 import { getCountdownFunc } from '@/common/helper'
-import LayoutIcon from '@/componets/layout-icon/layout-icon'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import LayoutIcon from '@/components/layout-icon/layout-icon'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 
 let countdownInstance = null
 export default {

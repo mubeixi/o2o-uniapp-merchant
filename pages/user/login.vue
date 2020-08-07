@@ -1,5 +1,5 @@
 <template>
-  <div @click="commonClick" class="wrap">
+  <div @click="commonClick" class="page-wrap">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <layout-page-title :letfFn="true" :page-title="pageTitle" @clickLeft="bindBackFn"></layout-page-title>
     <fun-err-msg :errs="formCheckResult" :topStr="menuButtonInfo.height+menuButtonInfo.top+10+'px'"
@@ -55,7 +55,7 @@
       </div>
     </block>
     <block v-if="mode==='wxLogin'">
-      <image :src="initData.ShopLogo+'-r100'" class="img imgWx m-t-50" mode="widthFix"></image>
+      <image v-if="initData.ShopLogo" :src="initData.ShopLogo+'-r100'" class="img imgWx m-t-50" mode="widthFix"></image>
 
       <div  class="otherLogin-top-item" >
         <button @getuserinfo="weixinlogin" class="btn  wxBtn" open-type="getUserInfo">
@@ -109,10 +109,10 @@
 
 <script>
 import BaseMixin from '@/mixins/BaseMixin'
-import LayoutPageTitle from '@/componets/layout-page-title/layout-page-title'
-import FunErrMsg from '@/componets/fun-err-msg/fun-err-msg'
-import LayoutPopup from '@/componets/layout-popup/layout-popup'
-import LayoutIcon from '@/componets/layout-icon/layout-icon'
+import LayoutPageTitle from '@/components/layout-page-title/layout-page-title'
+import FunErrMsg from '@/components/fun-err-msg/fun-err-msg'
+import LayoutPopup from '@/components/layout-popup/layout-popup'
+import LayoutIcon from '@/components/layout-icon/layout-icon'
 
 import { error } from '@/common/fun'
 import { getSmsCode, userLogin } from '@/api/customer'
@@ -122,7 +122,7 @@ import Promisify from '@/common/Promisify'
 import Storage from '@/common/Storage'
 import IM from '@/common/Im/Im'
 import eventHub from '@/common/eventHub'
-import WzwImTip from '@/componets/wzw-im-tip/wzw-im-tip'
+import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 
 export default {
   name: 'UserLogin',
@@ -512,6 +512,19 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+
+  .page-wrap {
+    text-align: center;
+    top: 0;
+    bottom: 0;
+    width: 750rpx;
+    color: #333;
+    box-sizing: border-box;
+    background: #fff;
+    overflow: hidden;
+    position: fixed;
+  }
+
   button {
     line-height: 2.3;
   }
