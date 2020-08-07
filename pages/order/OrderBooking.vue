@@ -114,19 +114,20 @@
             <div class="o_title">
               <span class="">配送方式</span>
               <div class="flex flex-vertical-c" style="text-align:right; color: #888;">
-                <div :key="shipid" v-for="(ship,shipid) in bizList[biz_id].shipping_company">
-                  <!--要允许显示同城配送-->
-                  <block v-if="shipid!='is_self_get' && (ship!='同城配送' || bizList[biz_id].shippingStatus.isSameCity)">
-                    <div  @click="ShipRadioChange(shipid,biz_id)" class="row flex flex-justify-between flex-vertical-b m-l-15" >
-                      <div class="checked m-r-8" v-if="shipid==postData.shipping_id[biz_id]">
-                        <div class="checked-radio"></div>
-                      </div>
-                      <div class="unchecked m-r-8" v-else></div>
-                      <span class="flex1">{{ship}}</span>
-                    </div>
+                <block v-if="bizList[biz_id]['Order_Shipping']['Price']==0">
+                  <block v-if="orderLoading">
+                    <block v-if="bizList[biz_id]['Order_Shipping']['Price']==0">
+                      免运费
+                    </block>
+                    <block v-else>
+                      ￥{{bizList[biz_id]['Order_Shipping']['Price']}}
+                    </block>
                   </block>
-
-                </div>
+                  <block v-else>
+                    ￥{{bizList[biz_id]['Order_Shipping']['Price']}}
+                    <image src="/static/loading.gif" style="width: 40rpx;height: 40rpx"></image>
+                  </block>
+              </div>
               </div>
             </div>
           </div>
@@ -1095,6 +1096,7 @@ export default {
      */
     async checkOrderParam ({ isInit = false } = {}) {
       try {
+        this.orderLoading=false
         const oldOrderInfo = { ...this.orderInfo }
 
         let params = {}
