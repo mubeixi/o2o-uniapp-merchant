@@ -78,11 +78,9 @@
                 </div>
               </scroll-view>
 
-              <!--限时抢购-->
-              <div class="activity-list  flex flex-justify-c" v-if="activityList.length>0">
-                <div :key="idx" @click="$linkTo('/pagesA/active/FlashSaleByBiz?biz_id='+bid+'&spike_id='+item.id)" class="activity-item"
-                     v-for="(item,idx) in activityList">{{item.name}}
-                </div>
+              <!--满减活动-->
+              <div class="activity-list  flex flex-justify-c" v-if="manjianList.length>0">
+                <div :key="idx"  class="activity-item" v-for="(item,idx) in manjianList">满{{item.reach}}减{{item.award}}</div>
               </div>
 
               <!--便捷操作-->
@@ -484,7 +482,7 @@ import {
   getUserCoupon
 } from '@/api/customer'
 import { Exception } from '@/common/Exception'
-import { getCommitList, getCouponList } from '@/api/common'
+import { getActiveInfo, getCommitList, getCouponList } from '@/api/common'
 import { getAlbumList, getBizInfo, getBizSpikeList, getStoreList } from '@/api/store'
 import { getBizProdCateList, getProductList } from '@/api/product'
 import LayoutPageTitle from '@/components/layout-page-title/layout-page-title'
@@ -561,6 +559,7 @@ export default {
       storeInfo: {},
       couponList: [],
       activityList: [],
+      manjianList:[],
       comments: [],
       goodsNavIndex: 0,
       recommends: [],
@@ -1173,6 +1172,9 @@ export default {
         this.activityList = await getBizSpikeList({ biz_id: this.bid, status: 1 }, { onlyData: true }).catch((e) => {
           throw Error('获取限时抢购数据失败')
         })
+  
+        this.manjianList = await getActiveInfo({ type: 'manjian', biz_id: this.bid }).then(res => res.data.active_info).catch(err => { throw Error(err.msg) })
+        console.log('manjianList is', this.manjianList)
 
         if (checkIsLogin(0, 0)) {
           const { is_favourite = 0 } = await checkFavourite({ biz_id: this.bid }, { onlyData: true }).catch((e) => {
