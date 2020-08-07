@@ -39,7 +39,7 @@
     </div>
   </block>
   <block v-else>
-    <image  :style="{ width: _size}" mode="widthFix" class="icon-img" :src="type"></image>
+    <image  :style="{ width: _size,height: _size}" class="icon-img" :src="type"></image>
   </block>
 
 </template>
@@ -69,6 +69,10 @@ export default {
       require: true,
       type: String,
       default: ''
+    },
+    imgIcon:{
+      type:Boolean,
+      default:false
     },
     weight: {
       type: String,
@@ -105,7 +109,7 @@ export default {
       }
     },
     isImg: function () {
-      return this.type.indexOf('http') !== -1
+      return this.imgIcon || this.type.indexOf('http') !== -1
     }
   },
   methods: {

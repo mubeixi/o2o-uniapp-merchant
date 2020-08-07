@@ -1476,6 +1476,7 @@ export default {
 
           .title-money {
             /*width: 124rpx;*/
+            display: inline-block;
             padding: 0 18rpx;
             height: 44rpx;
             font-size: 22rpx;

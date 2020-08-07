@@ -45,7 +45,7 @@
           <scroll-page-merchat ref="page2"></scroll-page-merchat>
         </scroll-view>
       </div>
-      
+
       <layout-modal :autoClose="false" ref="openLocalSettingModal">
         <div class="refuseApplyDialog">
           <div class="c3 fz-16 modal-title">
@@ -262,6 +262,14 @@ export default {
 
         this.topTheme = topTheme
         this.diyTitle = title
+
+        // 默认皮肤顶部可以为白
+        if (this.topTheme === 'default') {
+          uni.setNavigationBarColor({
+            frontColor: '#ffffff',
+            backgroundColor: '#eeeeee'
+          })
+        }
 
         // // 存储页面数据
         // this.templateData = [] // 页面数据的二维数组。

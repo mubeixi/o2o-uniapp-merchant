@@ -58,6 +58,7 @@ export default {
     },
     bindUpStoreInfo (storeInfo) {
       this.storeInfo = storeInfo
+
       // const { room_id, live_end_time, live_start_time } = this.storeInfo
       // if (room_id) {
       //   const nowTimeStamp = uni.$moment().unix()

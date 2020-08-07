@@ -266,7 +266,7 @@ export default {
           })
           console.log('isCartHas', isCartHas, attr_val)
           // 如果已经存在
-          //console.log(mergeObject(this.attrInfo, isCartHas, true),"ssss")
+          // console.log(mergeObject(this.attrInfo, isCartHas, true),"ssss")
           if (isCartHas !== false) {
             this.postData.qty = isCartHas.num
           } else {

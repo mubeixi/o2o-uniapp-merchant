@@ -76,7 +76,7 @@
         <div class="title p-t-20 p-l-10 p-r-10 flex flex-vertical-c flex-justify-between">
           <div class="fz-20 c3 fz-b">全民秒杀日</div>
           <div class="more flex flex-vertical-c" @click.stop="$linkTo('/pagesA/active/SeckillByBiz?biz_id='+bid)">
-            <span class="c3  fz-12">查看更多</span>
+            <span class="c3  fz-12 m-r-6">查看更多</span>
             <layout-icon type="iconicon-arrow-right" size="14" color="#333"></layout-icon>
           </div>
         </div>
@@ -127,7 +127,7 @@
               <div class="title-text">{{activity.name}}</div>
               <div class="more flex flex-vertical-c"
                    @click.stop="$linkTo('/pagesA/active/FlashSaleByBiz?biz_id='+bid+'&spike_id='+activity.id)">
-                <span class="fz-12">查看更多</span>
+                <span class="fz-12 m-r-6">查看更多</span>
                 <layout-icon display="inline" type="iconicon-arrow-right" size="14" color="#fff"></layout-icon>
               </div>
             </div>
@@ -184,7 +184,7 @@
                 <div class="p-t-8 fz-13 c3" style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis">
                   {{pro.Products_Name}}
                 </div>
-                <div class="price-discount flex flex-vertical-c" style="padding: 20rpx 0 20rpx 20rpx">
+                <div class="price-discount flex flex-vertical-c" style="padding: 20rpx 0 0rpx 0rpx">
                   <div class="price-box" style="color: #FE2C4D">
                     <span class="sign" style="font-size: 24rpx;">￥</span><span class="num" style="font-size: 34rpx;">{{pro.Products_PriceX}}</span>
                   </div>
@@ -194,7 +194,7 @@
                 </div>
                 <div slot="ext" class="goods-action">
                   <div class="goods-action-reduce">已减{{$filterPrice(pro.Products_PriceY-pro.Products_PriceX)}}元</div>
-                  <image :src="$getDomain('/static/client/store/theme_two/go-btn-icon.png')"
+                  <image @click.stop="openGoodsDialog(pro)" :src="$getDomain('/static/client/store/theme_two/go-btn-icon.png')"
                          class="goods-action-go"></image>
                 </div>
               </div>
@@ -207,7 +207,7 @@
                 <div class="p-t-8 fz-13 c3" style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis">
                   {{pro.Products_Name}}
                 </div>
-                <div class="price-discount flex flex-vertical-c" style="padding: 20rpx 0 20rpx 20rpx">
+                <div class="price-discount flex flex-vertical-c" style="padding: 20rpx 0rpx 0rpx 0rpx">
                   <div class="price-box" style="color: #FE2C4D">
                     <span class="sign" style="font-size: 24rpx;">￥</span><span class="num" style="font-size: 34rpx;">{{pro.Products_PriceX}}</span>
                   </div>
@@ -217,7 +217,7 @@
                 </div>
                 <div slot="ext" class="goods-action">
                   <div class="goods-action-reduce">已减{{$filterPrice(pro.Products_PriceY-pro.Products_PriceX)}}元</div>
-                  <image :src="$getDomain('/static/client/store/theme_two/go-btn-icon.png')"
+                  <image @click.stop="openGoodsDialog(pro)" :src="$getDomain('/static/client/store/theme_two/go-btn-icon.png')"
                          class="goods-action-go"></image>
                 </div>
               </div>
@@ -231,7 +231,7 @@
         <!--        </div>-->
         <div class="h10"></div>
       </div>
-      <div class="h15" style="background: #f8f8f8"></div>
+      <div class="h15 bg-white"></div>
       <!--      <div class="section-item store-box">-->
       <!--        <div id="section-store" class="section-anchor" :style="{top:anchorTop+'px'}"></div>-->
       <!--        <div class="title p-15" style="text-align: center;">-->
@@ -377,6 +377,15 @@
 
     </div>
 
+    <product-sku
+      :hasCart="false"
+      :mode="mode"
+      :isCart="true"
+      :product-info="currentProductInfo"
+      @updaCart="productSkuAdd"
+      ref="mySku"
+    ></product-sku>
+
   </div>
 </template>
 <script>
@@ -400,6 +409,8 @@ import WzwLiveTag from '@/components/wzw-live-tag/wzw-live-tag'
 import LayoutLoading from '@/components/layout-loading/layout-loading'
 import LayoutPageTitle from '@/components/layout-page-title/layout-page-title'
 import LayoutLayer from '@/components/layout-layer/layout-layer'
+import ProductSku from '@/components/product-sku/product-sku'
+import Storage from '@/common/Storage'
 
 var countdownInstance = null
 var countdownInstanceByFlash = null
@@ -445,6 +456,7 @@ const checkStoreStatus = (bizInfo) => {
 export default {
   name: 'store-theme-two',
   components: {
+    ProductSku,
     LayoutLayer,
     LayoutPageTitle,
     LayoutLoading,
@@ -460,6 +472,15 @@ export default {
   },
   data () {
     return {
+      attrInfo: {
+        Products_ID: 0,
+        num: 0,
+        attr_id: '', // 规格id
+        attr_text: '',
+        price: '', // 价格
+        count: 0// 库存
+      },
+      currentProductInfo: {},
       isLoading: false,
       isUserLogin: false,
       storeBottomActionHeight: '0px',
@@ -556,6 +577,66 @@ export default {
     }
   },
   methods: {
+    async productSkuAdd (sku) {
+      
+      var attr_id = sku.id,prod_id = this.currentProductInfo.Products_ID;
+      
+      this.attrInfo.attr_id = attr_id
+      this.attrInfo.prod_id = prod_id
+      let addQty = sku.qty
+
+      const isCartHas = this.$store.getters['cart/getRow']({
+        attr_id,
+        prod_id
+      })
+      if (isCartHas !== false) {
+        // 数量相等无任何操作
+        if (addQty === isCartHas.num) {
+          return
+        }
+        addQty = addQty - isCartHas.num
+      }
+    
+      const { ImgPath, Products_Name, Products_PriceX, Products_PriceY } = this.currentProductInfo
+      const productInfo = {}
+      Object.assign(productInfo, {
+        biz_id: Number(this.bid),
+        checked: true,
+        pic: ImgPath,
+        name: Products_Name,
+        price_selling: Number(Products_PriceX),
+        price_market: Number(Products_PriceY)
+      })
+      const cartRT = await this.$store.dispatch('cart/addNum', {
+        product: { ...this.product, ...this.attrInfo, ...productInfo },
+        num: addQty
+      })
+      this.refreshCount()
+      if (cartRT !== false) {
+        this.attrInfo.num = Number(this.attrInfo.num) + 1
+      }
+    },
+    openGoodsDialog(productInfo){
+      console.log(productInfo)
+      this.currentProductInfo = productInfo
+      this.currentProductInfo.minPrice = productInfo.Products_PriceX
+  
+      Storage.remove('value_index')
+      Storage.remove('attr_index')
+      this.$refs.mySku.show()
+    },
+    buyNow (e) {
+      console.log(e)
+    },
+    submitSure (e) {
+      console.log(e)
+    },
+    save (e) {
+      console.log(e)
+    },
+    updaCart (e) {
+      console.log(e)
+    },
     async submit () {
       const obj = {}
       // 删除
@@ -1005,12 +1086,11 @@ export default {
         }).catch(e => {
           throw Error(e.msg || '获取相册信息失败')
         })
-		
-		
-		hideLoading()
+
+        hideLoading()
         if (checkIsLogin(0, 0)) {
           const { is_favourite = 0 } = await checkFavourite({ biz_id: this.bid }, { onlyData: true }).catch(() => {
-            
+
           })
           this.isFavourite = is_favourite
         }
@@ -1021,9 +1101,8 @@ export default {
         }
 
         this.refreshInfoByIsLogin()
-        
       } catch (e) {
-		hideLoading()
+        hideLoading()
         Exception.handle(e)
       }
     },
@@ -1066,7 +1145,7 @@ export default {
     },
     async getCommentList () {
       if (this.commentPaginate.finish) {
-        toast('没有更多啦', 'none')
+        // toast('没有更多啦', 'none')
         return
       }
       const { data: commentList, totalCount: commentTotal } = await getCommitList({
@@ -1329,7 +1408,7 @@ export default {
 
   .mall-tabbar-wrap {
     position: fixed;
-    z-index: 102;
+    z-index: 100;
     bottom: 25px;
     right: 20px;
     height: 50px;
@@ -2048,10 +2127,10 @@ export default {
         justify-content: space-between;
 
         .goods-action-reduce {
-          height: 33rpx;
-          line-height: 33rpx;
+          height: 36rpx;
+          line-height: 36rpx;
           font-size: 20rpx;
-          padding: 0rpx 20rpx;
+          padding: 0rpx 8rpx;
           box-sizing: border-box;
           color: #fff;
           background: linear-gradient(180deg, rgba(252, 109, 136, 1), rgba(254, 43, 75, 1));
