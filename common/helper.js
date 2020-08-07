@@ -786,6 +786,15 @@ export function mixinStyle (defaultStyle, style) {
   return rt
 }
 
+export const getPreviewThumb =  (url, ext = '-r200') => {
+  var _url = getDomain(url)
+  if (!_url) {
+    return ''
+  }
+  if (ext)_url += ext
+  return _url
+}
+
 const Helper = {
   Object: {
     mapList: (list, fn) => {

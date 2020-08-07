@@ -1,6 +1,6 @@
 <template>
   <div class="product" @click="openNext" :style="{marginRight:index%2===0?'50rpx':'0rpx'}">
-    <div :style="{backgroundImage:'url('+pro_src+')'}" class="pro-img"></div>
+    <div :style="{backgroundImage:'url('+getPreviewThumb(pro_src,'-r400')+')'}" class="pro-img"></div>
     <div class="pro-name"><wzw-live-tag :room_id="productInfo.room_id" :product-info="productInfo" />{{pro_name}}</div>
     <div class="pro-price flex">
       <div class="new-price">
@@ -13,6 +13,7 @@
 </template>
 <script>
 import { linkToEasy } from '@/common/fun'
+import {getPreviewThumb} from '@/common/helper'
 import WzwLiveTag from '@/components/wzw-live-tag/wzw-live-tag'
 
 export default {
@@ -50,6 +51,7 @@ export default {
     }
   },
   methods: {
+    getPreviewThumb,
     openNext () {
       const url = '/pages/product/detail?prod_id=' + this.prod_id
       linkToEasy(url)

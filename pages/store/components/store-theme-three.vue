@@ -133,7 +133,7 @@
             </div>
             <div class="goods-list">
               <div :key="idx" class="goods-item" v-for="(goods,idx) in showList">
-                <div @click="$toGoodsDetail(goods)" :style="{backgroundImage:'url('+$getDomain(goods.ImgPath)+')'}"
+                <div @click="$toGoodsDetail(goods)" :style="{backgroundImage:'url('+getPreviewThumb(goods.ImgPath,'-r200')+')'}"
                      class="cover"></div>
                 <div class="info">
                   <div class="title fz-14 fz-b c3">
@@ -206,7 +206,7 @@
                 <div class="act-goods-list">
                   <div class="act-goods-item flex" v-for="(pro,idx) in activity.spike_goods" :key="idx"
                        @click.stop="toGoodsDetailFn(pro,activity)">
-                    <div :style="{backgroundImage:'url('+pro.ImgPath+')'}" class="item-cover"></div>
+                    <div :style="{backgroundImage:'url('+getPreviewThumb(pro.ImgPath,'-r200')+')'}" class="item-cover"></div>
                     <div class="item-info flex1">
                       <div class="act-goods-item-title fz-12 c3 m-t-14 m-b-8">
                         <wzw-live-tag :room_id="pro.room_id" :product-info="pro" />
@@ -235,7 +235,7 @@
           <div class="kill-box" v-if="showMode==='kill'">
             <div class="kill-goods-list">
               <div class="kill-goods-item flex" v-for="(pro,idx) in killList" :key="idx" @click="$toGoodsDetail(pro)">
-                <div :style="{backgroundImage:'url('+pro.ImgPath+')'}" class="item-cover"></div>
+                <div :style="{backgroundImage:'url('+getPreviewThumb(pro.ImgPath,'-r200')+')'}" class="item-cover"></div>
                 <div class="item-info flex1">
                   <div class="act-goods-item-title fz-14 c3 m-t-14 m-b-8 fz-b">
                     <wzw-live-tag :room_id="pro.room_id" :product-info="pro" />
@@ -425,7 +425,9 @@ import {
   mergeObject,
   numberSort,
   objTranslate
+  , getPreviewThumb
 } from '@/common/helper'
+
 import { addFavourite, cancelFavourite, CartList as getCartList, checkFavourite, getUserCoupon } from '@/api/customer'
 import { Exception } from '@/common/Exception'
 import LayoutPageTitle from '@/components/layout-page-title/layout-page-title'
@@ -433,6 +435,7 @@ import LayoutIcon from '@/components/layout-icon/layout-icon'
 import WzwLiveTag from '@/components/wzw-live-tag/wzw-live-tag'
 import LayoutLayer from '@/components/layout-layer/layout-layer'
 import ProductSku from '@/components/product-sku/product-sku'
+
 var countdownInstance = null
 var countdownInstanceByFlash = null
 /**
@@ -607,6 +610,7 @@ export default {
     }
   },
   methods: {
+    getPreviewThumb,
     async productSkuAdd (sku) {
       this.attrInfo.attr_id = sku.id
       this.attrInfo.prod_id = this.product.Products_ID

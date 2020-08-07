@@ -1206,7 +1206,7 @@
                 @change="changeSwiperCurrent"
                 interval="3000" style="height:750rpx;width: 750rpx;"  >
           <swiper-item :key="index" v-for="(item,index) of imgs">
-            <image :src="item+'-r640'" @click="previewImg(index)" class="full-img" v-if="item" />
+            <image :src="item+'-r800'" @click="previewImg(index)" class="full-img" v-if="item" />
           </swiper-item>
         </swiper>
 
@@ -1507,7 +1507,7 @@
             <div class="recommend-list flex ">
 
               <div class="recommend-item"  v-for="(recommend,recommendIndex) of recommendList" :key="recommendIndex"  @click="$toGoodsDetail(recommend)">
-                  <image :src="recommend.ImgPath" class="recommend-item-img  m-b-12"></image>
+                  <image :src="recommend.ImgPath+'-r350'" class="recommend-item-img  m-b-12"></image>
                   <div class="recommend-item-title">
                     {{recommend.Products_Name}}
                   </div>

@@ -12,7 +12,7 @@
         </div>
       </div>
       <div @click="update(0)" class="item">
-        <div class="item-name">用户名</div>
+        <div class="item-name">姓名</div>
         <div class="info">
           {{userInfo.User_Name}}
         </div>
@@ -100,7 +100,7 @@ export default {
     },
     async changeAvator () {
       try {
-        showLoading('加载中')
+        
         const files = await chooseImageByPromise({ count: 1 }).catch(e => {
           throw Error(e.msg)
         })
@@ -117,14 +117,13 @@ export default {
       } catch (e) {
         console.log(e.message)
       } finally {
-        hideLoading()
+        
       }
 
     },
     async init () {
       this.userInfo = await getUserInfo({}, {
-        onlyData: true,
-        tip: '加载中',
+        onlyData: true
       }).catch(e => {
         error(e.msg || '获取信息失败')
       })
@@ -145,8 +144,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
   .bgColor-white {
     height: 100vh;
+    background-color: #fff;
   }
 
   .msg {
@@ -156,7 +157,7 @@ export default {
       display: flex;
       align-items: center;
       padding: 39rpx 0;
-      border-bottom: 1px solid #E3E3E3;
+      border-bottom: 1rpx solid $fun-border-color;
 
       .item-name {
         font-size: 30rpx;
