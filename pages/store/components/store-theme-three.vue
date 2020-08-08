@@ -403,7 +403,7 @@
       :isCart="true"
       :product-info="product"
       ref="attr"
-      :isNeedNumber="true"
+      :notSaveNumber="true"
       @updaCart="productSkuAdd"
 
     ></product-sku>
@@ -614,20 +614,22 @@ export default {
     async productSkuAdd (sku) {
       this.attrInfo.attr_id = sku.id
       this.attrInfo.prod_id = this.product.Products_ID
-      let addQty = sku.qty
-      const attr_id = sku.id
-      const prod_id = this.product.Products_ID
-      const isCartHas = this.$store.getters['cart/getRow']({
-        attr_id,
-        prod_id
-      })
-      if (isCartHas !== false) {
-        // 数量相等无任何操作
-        if (addQty == isCartHas.num) {
-          return
-        }
-        addQty = addQty - isCartHas.num
-      }
+      const addQty = sku.qty
+
+      // 不需要像美团那样维持现状
+      // const attr_id = sku.id
+      // const prod_id = this.product.Products_ID
+      // const isCartHas = this.$store.getters['cart/getRow']({
+      //   attr_id,
+      //   prod_id
+      // })
+      // if (isCartHas !== false) {
+      //   // 数量相等无任何操作
+      //   if (addQty == isCartHas.num) {
+      //     return
+      //   }
+      //   addQty = addQty - isCartHas.num
+      // }
 
       const { ImgPath, Products_Name, Products_PriceX, Products_PriceY } = this.product
       const productInfo = {}
