@@ -47,7 +47,7 @@
   </div>
 </template>
 <script>
-import { getDomain, toGoodsDetail } from '@/common/helper'
+import { getDomain, getPreviewThumb, toGoodsDetail } from '@/common/helper'
 import WzwLiveTag from '@/components/wzw-live-tag/wzw-live-tag'
 
 export default {
@@ -123,7 +123,7 @@ export default {
     clickFn (goods) {
       toGoodsDetail(goods)
     },
-    getDomainUrl: (url) => getDomain(url)
+    getDomainUrl: (url) => getPreviewThumb(url)
   }
 }
 </script>

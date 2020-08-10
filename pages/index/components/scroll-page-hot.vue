@@ -86,7 +86,7 @@
           v-if="item.indexOf('kill') !== -1"></diy-kill>
       </section>
     </view>
-    <div v-if="!fullDiy" class="block kill-box">
+    <div v-if="!fullDiy && killList.length>0" class="block kill-box">
       <div class="block-title flex-vertical-c">
         <div class="block-title-text">今日秒杀</div>
         <div @click="$linkTo('/pagesA/active/SeckillByBiz')" class="block-title-more flex flex-ver-c c9 fz-12">
@@ -99,7 +99,7 @@
         <div class="goods-list" v-else>
           <div :key="idx" @click="$toGoodsDetail(item)" class="goods-item" v-for="(item,idx) in killList">
             <block v-if="idx<6">
-              <div :style="{backgroundImage:'url('+item.ImgPath+')'}" class="cover">
+              <div :style="{backgroundImage:'url('+getPreviewThumb(item.ImgPath)+')'}" class="cover">
               </div>
               <h5 class="title">{{item.Products_Name}}</h5>
               <div class="price-box">
@@ -133,9 +133,9 @@
         </ul>
       </div>
       <div class="block-content">
-        <div class="live-list">
-          <block :key="idx" v-for="(item,idx) in liveNav[liveNavIndex].goodsList">
-            <div @click="$toGoodsDetail(item)" class="live-item">
+        <div class="live-list" v-if="liveNav.length>0 && liveNav[liveNavIndex] && liveNav[liveNavIndex].goodsList">
+
+            <div @click="$toGoodsDetail(item)" class="live-item" v-for="(item,idx) in liveNav[liveNavIndex].goodsList" :key="idx" >
               <div class="left">
                 <div :style="{backgroundImage:'url('+item.ImgPath+')'}" class="cover"></div>
               </div>
@@ -159,7 +159,7 @@
                 </div>
               </div>
             </div>
-          </block>
+
           <layout-loading v-if="loadingByLiveList"></layout-loading>
         </div>
       </div>
@@ -188,7 +188,7 @@ import DiyGroup from '@/components/diy-group/diy-group'
 import DiyFlash from '@/components/diy-flash/diy-flash'
 import DiyNav from '@/components/diy-nav/diy-nav'
 import LayoutCopyright from '@/components/layout-copyright/layout-copyright'
-import { objTranslate, toGoodsDetail } from '@/common/helper'
+import { objTranslate, toGoodsDetail, getPreviewThumb } from '@/common/helper'
 
 import { getFlashsaleList, getProductCategory, getProductList } from '@/api/product'
 import { Exception } from '@/common/Exception'
@@ -267,9 +267,8 @@ export default {
     }
   },
   methods: {
-
+    getPreviewThumb,
     bindReachBottom () {
-      console.log('emit bindReachBottom event', objTranslate(this.liveNav), this.liveNavIndex)
       this.loadLiveGoodsList(this.liveNavIndex)
     },
     changeLiveNav (idx) {
@@ -338,7 +337,7 @@ export default {
 
       const cateId = this.liveNav[idx].Category_ID
 
-      const { data: liveGoodsList, totalCount } = await getProductList({
+      const { data, totalCount } = await getProductList({
         Cate_ID: cateId,
         page: this.liveNav[idx].page,
         pageSize: this.liveNav[idx].pageSize
@@ -346,11 +345,15 @@ export default {
         throw Error(e.msg || '刷新直播商品列表失败')
       })
 
+      var liveGoodsList = data.map(row => {
+        return { ...row, ImgPath: getPreviewThumb(row.ImgPath) }
+      })
+
       this.$set(this.liveNav[idx], 'goodsList', this.liveNav[idx].goodsList.concat(liveGoodsList))
       this.$set(this.liveNav[idx], 'totalCount', totalCount)
       this.$set(this.liveNav[idx], 'page', this.liveNav[idx].page + 1)
       this.$set(this.liveNav[idx], 'isAjax', false)
-
+      console.log(this.liveNav)
       this.loadingByLiveList = false
     },
     async _init_func () {
@@ -389,13 +392,13 @@ export default {
 
         this.liveNav = [
           {
-            Category_Name:'全部',
-            Category_ID:'',
-            goodsList : [],
-            totalCount : 999,
-            pageSize : 10,
-            page : 1,
-            isAjax : false,
+            Category_Name: '全部',
+            Category_ID: '',
+            goodsList: [],
+            totalCount: 999,
+            pageSize: 10,
+            page: 1,
+            isAjax: false
           },
           ...liveNavData
         ]

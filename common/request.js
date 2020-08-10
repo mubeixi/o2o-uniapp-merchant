@@ -267,6 +267,14 @@ export const fetch = function ({ act, param = {}, options = false, url = '/api/l
 
     param.Users_ID = getUsersID()
     param.User_ID = getUserID()
+    
+    // 定位有关的三个公共参数
+    if(Storage.get('location_id') && Storage.get('current_lat') && Storage.get('current_lng')){
+      param.lng =Storage.get('current_lng')
+      param.lat =Storage.get('current_lat')
+      param.location_id =Storage.get('location_id')
+    }
+    
     // 如果某接口指定不要User_ID的
     if (options && options.noUid) delete param.User_ID
     // 检查是否同一个接口请求过快

@@ -98,6 +98,7 @@ export default {
   mixins: [componetMixin],
   data () {
     return {
+      isInitDone: false,
       areaLoading: false,
       firstCateHeight: 44,
       firstCateList: [],
@@ -149,8 +150,10 @@ export default {
         })
         this.firstCateList.unshift({ Category_Name: '所有', Category_ID: '-1' })
         if (!this.firstCateList) this.firstCateList = []
-        this.loadQuickGoodsList(0)
+        await this.loadQuickGoodsList(0)
+        this.isInitDone = true
       } catch (e) {
+        this.isInitDone = true
         Exception.handle(e)
       } finally {
         // hideLoading()
@@ -161,7 +164,7 @@ export default {
      */
     async loadGoodsList (postData, obj) {
       if (!obj) obj = []
-      obj = await getProductList({ ...postData, one_hour_send: 1 }, { onlyData: true }).catch(e => {
+      obj = await getProductList({ ...postData }, { onlyData: true }).catch(e => {
         throw Error(e.msg || '获取商品列表失败')
       })
       return obj.concat([])
@@ -194,10 +197,13 @@ export default {
         this.areaLoading = false
         // hideLoading()
       }
+    },
+    manualInitFunc () {
+      if (!this.isInitDone) this._init_func()
     }
   },
   created () {
-    this._init_func()
+
   }
 }
 </script>

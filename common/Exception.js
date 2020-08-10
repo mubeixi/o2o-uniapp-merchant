@@ -24,6 +24,16 @@ export function Exception () {
  * @constructor
  */
 function handle (e) {
+  if (typeof e === 'string') {
+    e = new Error(e)
+  }
+  if (typeof e === 'object' && e.hasOwnProperty('msg')) {
+    e = new Error(e.msg)
+  }
+  if (typeof e === 'object' && e.hasOwnProperty('errMsg')) {
+    e = new Error(e.errMsg)
+  }
+
   if (e === 'nocare' || e.message === 'nocare') return
   let { message = '错误信息', type = 'toast', icon = 'none' } = e
   if (typeof e !== 'object') {

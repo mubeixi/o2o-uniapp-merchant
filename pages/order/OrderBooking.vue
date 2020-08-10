@@ -127,7 +127,7 @@
                     ￥{{bizList[biz_id]['Order_Shipping']['Price']}}
                     <image src="/static/loading.gif" style="width: 40rpx;height: 40rpx"></image>
                   </block>
-              </div>
+                </block>
               </div>
             </div>
           </div>

@@ -8,8 +8,7 @@
            @click="$linkTo('/pages/search/index')" class="search-box">
         <layout-icon display="inline" class="iconsearch" color="#fff" size="18" weight="bold" type="iconicon-search"></layout-icon>
       </div>
-      <div @touchmove.stop.prevent :style="{backgroundColor:primaryColor,paddingTop:menuButtonInfo.top+'px'}"
-           class="head-box" style="height: 50px;">
+      <div @touchmove.stop.prevent :style="{backgroundColor:primaryColor,paddingTop:menuButtonInfo.top+'px'}" class="head-box" style="height: 50px;">
         <div style="height: 36px;" :style="{marginRight:diyHeadRight+menuButtonInfo.height+'px'}" class="head">
           <ul class="tab-box">
             <li :class="[headTabIndex === 0?'active':'']" @click="setHeadTabIndex(0)" class="tab-item" id="headTabItem0">
@@ -36,12 +35,10 @@
         <scroll-view @scrolltolower="bindGetMore(0)" class="tab-page-wrap" lower-threshold="1" scroll-y v-show="headTabIndex===0">
           <scroll-page-hot ref="page0"></scroll-page-hot>
         </scroll-view>
-        <scroll-view @scrolltolower="bindGetMore(1)" class="tab-page-wrap" lower-threshold="1" scroll-y
-                     v-show="headTabIndex===1">
+        <scroll-view @scrolltolower="bindGetMore(1)" class="tab-page-wrap" lower-threshold="1" scroll-y v-show="headTabIndex===1">
           <scroll-page-local ref="page1"></scroll-page-local>
         </scroll-view>
-        <scroll-view @scrolltolower="bindGetMore(2)" class="tab-page-wrap" lower-threshold="1" scroll-y
-                     v-show="headTabIndex===2">
+        <scroll-view @scrolltolower="bindGetMore(2)" class="tab-page-wrap" lower-threshold="1" scroll-y v-show="headTabIndex===2">
           <scroll-page-merchat ref="page2"></scroll-page-merchat>
         </scroll-view>
       </div>
@@ -70,6 +67,12 @@
         <scroll-page-hot :full-diy="true"></scroll-page-hot>
       </scroll-view>
     </block>
+
+    <div @click="toMerchant" class="location-btn" v-if="initData.switch_location">
+      <layout-icon color="#fff" display="inline" size="24" type="iconicon-address"></layout-icon>
+      <!--<div class="fz-10 color-white">发布活动</div>-->
+    </div>
+
     <div @click="toMerchant" class="publish-btn">
       <layout-icon color="#fff" display="inline" size="18" type="iconfabu"></layout-icon>
       <div class="fz-10 color-white">发布活动</div>
@@ -87,7 +90,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import { error } from '@/common/fun'
+import { error, modal } from '@/common/fun'
 import BaseMixin, { tabbarMixin } from '@/mixins/BaseMixin'
 import LayoutIcon from '@/components/layout-icon/layout-icon'
 import ScrollPageHot from '@/pages/index/components/scroll-page-hot'
@@ -97,9 +100,10 @@ import Promisify from '@/common/Promisify'
 import LayoutModal from '@/components/layout-modal/layout-modal'
 import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 import Storage from '@/common/Storage'
-import { getSkinConfig } from '@/api/common'
+import { getLocationByCoordinate, getSkinConfig } from '@/api/common'
 import LayoutLoading from '@/components/layout-loading/layout-loading'
 import LayoutPageTitle from '@/components/layout-page-title/layout-page-title'
+import { Exception } from '@/common/Exception'
 
 export default {
   mixins: [BaseMixin, tabbarMixin],
@@ -114,9 +118,9 @@ export default {
     LayoutIcon
   },
   computed: {
-    initData () {
-      return this.$store.getters['system/initData']
-    },
+    // initData () {
+    //   return this.$store.getters['system/initData']
+    // },
     userAddressInfo () {
       return this.$store.getters['user/getUserAddressInfo']()
     },
@@ -126,6 +130,7 @@ export default {
   },
   data () {
     return {
+      initData: {},
       loadingByTmpl: false, // 标记是否请求完结
       templateList: [],
       templateData: [],
@@ -212,6 +217,10 @@ export default {
     setHeadTabIndex (idx) {
       this.defaultUnderlineLeft = 0 // 没有左边距了
       this.headTabIndex = idx
+      if (idx > 0) {
+        if (idx === 1) this.$refs.page1.manualInitFunc()
+        if (idx === 2) this.$refs.page2.manualInitFunc()
+      }
       if (idx > 0 && (!this.userAddressInfo || JSON.stringify(this.userAddressInfo === '{}'))) {
         Promisify('authorize', { scope: 'scope.userLocation' }).then(() => {
           this.getUserLocation()
@@ -271,38 +280,6 @@ export default {
           })
         }
 
-        // // 存储页面数据
-        // this.templateData = [] // 页面数据的二维数组。
-        // this.templateList = [] // 页面组件的二维数组。
-        // if (templateData && Array.isArray(templateData[0])) {
-        //   // 多个页面，每个页面是一个数组
-        //   templateData.map(item => {
-        //     this.templateData.push(item)
-        //     this.templateList.push([])
-        //   })
-        // } else if (
-        //   templateData && !Array.isArray(templateData[0]) && templateData.length > 0
-        // ) {
-        //   // 单纯是一个对象的时候？？
-        //   this.templateData = [templateData]
-        //   this.templateList = [[]]
-        // } else {
-        //   this.templateData = [[]]
-        //   this.templateList = [[]]
-        // }
-        // // this.templateData = templateData
-        // // 存储页面组件templateList
-        // for (let i = 0; i < this.templateData.length; i++) {
-        //   if (
-        //     this.templateData[i] &&
-        //     this.templateData[i] !== []
-        //   ) {
-        //     this.templateData[i].map(m => {
-        //       this.templateList[i].push(m.tag)
-        //     })
-        //   }
-        // }
-
         return true
       } catch (e) {
         return e
@@ -316,6 +293,28 @@ export default {
     bindGetMore (idx) {
       console.log(idx)
       this.$refs[`page${idx}`].bindReachBottom()
+    },
+    /**
+     * 打开获取定位才开始弄
+     * @returns {Promise<void>}
+     * @private
+     */
+    async _init_location () {
+      try {
+        const { latitude: lat, longitude: lng } = await Promisify('getLocation').catch(err => { throw err })
+        console.log(lat, lng)
+        const { location_id, formatted_address, area_name } = await getLocationByCoordinate({ lat, lng, provider: 1 }).then(res => res.data).catch(err => Exception.handle(err))
+        // 全部存起来
+        Storage.set('current_lat', lat)
+        Storage.set('current_lng', lng)
+        Storage.set('location_id', location_id)
+        Storage.set('formatted_address', formatted_address)
+        Storage.set('area_name', area_name)
+
+        return { location_id, lat, lng, formatted_address, area_name }
+      } catch (e) {
+        Exception.handle(e)
+      }
     },
     ...mapActions({
       setUserAddressInfo: 'user/setUserAddressInfo'
@@ -369,6 +368,16 @@ export default {
     }
   },
   created () {
+    this.$store.dispatch('system/loadInitData').then(data => {
+      this.initData = data
+      console.log('this.initData is ', this.initData)
+      if (this.initData.switch_location) {
+        this._init_location()
+      }
+    }).catch(() => {
+
+    })
+
     this.getLocationDone = false
     Storage.set('isRefresh', false)
     this._init_func()
@@ -413,18 +422,36 @@ export default {
     text-align: center;
   }
 
-  .publish-btn {
+  .location-btn {
     position: fixed;
-    bottom: 128rpx;
+    bottom: 133px;
     margin-bottom: env(safe-area-inset-bottom);
-    right: 30rpx;
+    right: 15px;
     z-index: 99;
     box-sizing: border-box;
-    padding-top: 8rpx;
-    width: 98rpx;
-    height: 98rpx;
+    padding-top: 4px;
+    width: 49px;
+    height: 49px;
     background: rgba(38, 199, 141, 1);
-    box-shadow: 0rpx 2rpx 12rpx 0rpx rgba(35, 183, 130, 0.4);
+    box-shadow: 0rpx 1px 6px 0rpx rgba(35, 183, 130, 0.4);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .publish-btn {
+    position: fixed;
+    bottom: 64px;
+    margin-bottom: env(safe-area-inset-bottom);
+    right: 15px;
+    z-index: 99;
+    box-sizing: border-box;
+    padding-top: 4px;
+    width: 49px;
+    height: 49px;
+    background: rgba(38, 199, 141, 1);
+    box-shadow: 0rpx 1px 6px 0rpx rgba(35, 183, 130, 0.4);
     border-radius: 50%;
     text-align: center;
   }
