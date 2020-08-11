@@ -2143,7 +2143,7 @@ export default {
 
       .goods-action {
         height: 58rpx;
-        padding: 0 20rpx;
+        padding: 0 20rpx  0rpx 0rpx;
         margin-bottom: 10rpx;
         display: flex;
         align-items: flex-end;
