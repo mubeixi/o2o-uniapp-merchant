@@ -221,8 +221,8 @@ export default {
       font-size: 16rpx;
       color: #FF565F;
       position: absolute;
-      left: 54rpx;
-      top: 62rpx;
+      left: 60rpx;
+      top: 132rpx;
     }
 
     .prices {

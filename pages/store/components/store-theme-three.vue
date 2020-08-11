@@ -157,8 +157,7 @@
                         </div>
                       </block>
                       <block v-else>
-                        <div @click.stop="openAttrLayer(goods.Products_ID)" class="btn-open-attr m-r-10"
-                             v-if="goods.skujosn">
+                        <div v-if="goods.skujosn" @click.stop="openAttrLayer(goods.Products_ID)" class="btn-open-attr m-r-10">
                           选规格
                           <div class="goods-num-tag" v-if="goods.num>0">{{goods.num}}</div>
                         </div>
@@ -275,7 +274,7 @@
       </div>
     </div>
 
-    <layout-layer @click="bindCartsPopClose" :bottomStr="storeBottomActionHeight" positions="bottom" ref="carts">
+    <layout-layer @maskClicked="bindCartsPopClose" :bottomStr="storeBottomActionHeight" positions="bottom" ref="carts">
       <div class="carts-box">
         <div class="carts-action flex flex-vertical-c flex-justify-between">
           <div class="check-all flex flex-vertical-c" @click="selectBiz">
@@ -287,7 +286,7 @@
             <span class="c6 fz-12 p-l-3">清空购物车</span></div>
         </div>
         <scroll-view scroll-y :style="{height:systemInfo.windowHeight*0.6+'px'}" class="carts-list">
-          <div :key="idx" class="carts-item" v-for="(row,idx) in carts">
+          <div class="carts-item" v-for="(row,idx) in showCarts" :key="idx" >
             <div class="check-item flex flex-vertical-c" @click="selectItem(row)">
               <layout-icon color="#E64239" size="20" type="iconicon-check" v-if="row.checked"></layout-icon>
               <layout-icon color="#ccc" size="20" type="iconradio" v-else></layout-icon>
@@ -295,21 +294,18 @@
             <div :style="{backgroundImage:'url('+row.pic+')'}" class="carts-item-cover"></div>
             <div class="carts-item-info">
               <div class="title">{{row.name}}</div>
-              <div class="attr-text">{{row.attr_text||''}}</div>
+              <div class="attr-text" v-if="row.attr_text">{{row.attr_text||''}}</div>
               <div class="actions">
                 <div class="price-box fz-10 flex1">
                   <span class="price-selling">￥</span><span class="price-selling fz-15">{{row.price_selling}}</span>
                   <span class="p-l-7 price-market text-through">￥{{row.price_market}}</span>
                 </div>
                 <div class="action flex flex-vertical-c">
-                  <block v-if="row.num>0">
-                    <layout-icon @click.stop="attrNumMinus(row)" color="#B2B1B1" size="24"
-                                 type="iconicon-minus"></layout-icon>
-                    <input style="width: 54rpx;" v-model="row.num" @focus="getQty(row.num)"
-                           @blur="changeAttrNum($event,idx,row)" class="input-num text-center fz-13" />
-                  </block>
-                  <layout-icon @click.stop="attrNumPlus(row)" color="#E64239" size="24"
-                               type="iconicon-plus"></layout-icon>
+                  <layout-icon v-if="row.num>0" @click.stop="attrNumMinus(row)" color="#B2B1B1" size="24"
+                               type="iconicon-minus"></layout-icon>
+                  <input style="width: 54rpx;" v-model="row.num" @focus="getQty(row.num)"
+                         @blur="changeAttrNum($event,idx,row)" class="input-num text-center fz-13" />
+                  <layout-icon @click.stop="attrNumPlus(row)" color="#E64239" size="24" type="iconicon-plus"></layout-icon>
                 </div>
               </div>
             </div>
@@ -376,11 +372,10 @@
             <div :class="{disabled:!submitFlag}" @click="confirmAdd" class="confirm-btn" v-if="attrInfo.num<1">加入购物车
             </div>
             <div class="flex flex-vertical-c" style="width: 120px" v-else>
-              <block v-if="attrInfo.num>0">
-                <layout-icon @click.stop="delNum" color="#26C78D" size="24" type="iconicon-minus p-10"></layout-icon>
-                <input @focus="getQty(attrInfo.num)" @blur="changeNum" class="input-num text-center fz-12"
-                       v-model="attrInfo.num" />
-              </block>
+              <layout-icon v-if="attrInfo.num>0" @click.stop="delNum" color="#26C78D" size="24"
+                           type="iconicon-minus p-10"></layout-icon>
+              <input @focus="getQty(attrInfo.num)" @blur="changeNum" class="input-num text-center fz-12"
+                     v-model="attrInfo.num" />
               <layout-icon @click.stop="addNum" color="#26C78D" size="24" type="iconicon-plus p-10"></layout-icon>
             </div>
           </div>
@@ -421,11 +416,11 @@ import {
   checkIsLogin,
   findArrayIdx, getArrColumn,
   getCountdownFunc,
+  getPreviewThumb,
   getTouchEventInfo,
   mergeObject,
   numberSort,
   objTranslate
-  , getPreviewThumb
 } from '@/common/helper'
 
 import { addFavourite, cancelFavourite, CartList as getCartList, checkFavourite, getUserCoupon } from '@/api/customer'
@@ -554,7 +549,8 @@ export default {
       storePhotoTotal: 0,
       spikeList: [],
       activeAttrIdx: 0,
-      activeGoodsIdx: 0
+      activeGoodsIdx: 0,
+      showCarts: []
     }
   },
   computed: {
@@ -602,6 +598,15 @@ export default {
         console.log('headTabSticky value is', val)
       }
     },
+    carts: {
+      immediate: true,
+      deep: true,
+      handler (nval) {
+        console.log('carts value change,current value is', nval)
+        var showCarts = this.$store.getters['cart/getCartList'](this.bid)
+        this.$set(this, 'showCarts', showCarts)
+      }
+    },
     bid: {
       immediate: true,
       handler (nval) {
@@ -614,8 +619,8 @@ export default {
     async productSkuAdd (sku) {
       this.attrInfo.attr_id = sku.id
       this.attrInfo.prod_id = this.product.Products_ID
+      this.attrInfo.attr_text = sku.Attr_Value_text //规格名称
       const addQty = sku.qty
-
       // 不需要像美团那样维持现状
       // const attr_id = sku.id
       // const prod_id = this.product.Products_ID
@@ -645,9 +650,13 @@ export default {
         product: { ...this.product, ...this.attrInfo, ...productInfo },
         num: addQty
       })
-      this.refreshCount()
+
       if (cartRT !== false) {
-        this.attrInfo.num = Number(this.attrInfo.num) + 1
+        this.refreshCount()
+        //强制刷新视图
+        this.$forceUpdate()
+        // 不需要修改，意义不大
+        // this.attrInfo.num = Number(this.attrInfo.num) + 1
       }
     },
     taggleCartListExpand () {
@@ -657,8 +666,13 @@ export default {
         return
       }
       if (!this.listExpand) {
-        this.$openPop('carts')
+
         this.listExpand = true
+        console.log('this.carts value is', this.carts)
+
+        setTimeout(() => {
+          this.$openPop('carts')
+        }, 100)
       }
     },
     // 不然点击无法正常
@@ -913,43 +927,47 @@ export default {
     },
     async openAttrLayer (prod_id) {
       if (!checkIsLogin(1, 1)) return
-      const goodsInfo = await getProductDetail({ prod_id }, {
-        onlyData: true,
-        tip: '加载中',
-        mask: true
-      }).catch(e => {
-        throw Error(e.msg || '获取商品详情失败')
-      })
+      try {
+        const goodsInfo = await getProductDetail({ prod_id }, {
+          onlyData: true,
+          tip: '加载中',
+          mask: true
+        }).catch(e => {
+          throw Error(e.msg || '获取商品详情失败')
+        })
+        this.attrInfo = { ...attrInfoTmpl } // 重置
+        this.check_attr = {}// 重置
+        this.product = goodsInfo
+        this.product.minPrice = this.product.Products_PriceX
 
-      this.attrInfo = { ...attrInfoTmpl } // 重置
-      this.check_attr = {}// 重置
-      this.product = goodsInfo
-      this.product.minPrice = this.product.Products_PriceX
-      // if (goodsInfo.skujosn) {
-      //   let skujosn_new = []
-      //   for (const i in goodsInfo.skujosn) {
-      //     skujosn_new.push({
-      //       sku: i,
-      //       val: goodsInfo.skujosn[i]
-      //     })
-      //   }
-      //
-      //   // 新增如果有手机的规格
-      //   for (const i in goodsInfo.skujosn) {
-      //     if (i === 'mobile_prod_attr_name') {
-      //       skujosn_new = [{
-      //         sku: i,
-      //         val: goodsInfo.skujosn[i]
-      //       }]
-      //     }
-      //   }
-      //   // 结束
-      //
-      //   this.product.skujosn_new = skujosn_new
-      //   this.product.skuvaljosn = goodsInfo.skuvaljosn
-      // }
-
-      this.$openPop('attr')
+        // if (goodsInfo.skujosn) {
+        //   let skujosn_new = []
+        //   for (const i in goodsInfo.skujosn) {
+        //     skujosn_new.push({
+        //       sku: i,
+        //       val: goodsInfo.skujosn[i]
+        //     })
+        //   }
+        //
+        //   // 新增如果有手机的规格
+        //   for (const i in goodsInfo.skujosn) {
+        //     if (i === 'mobile_prod_attr_name') {
+        //       skujosn_new = [{
+        //         sku: i,
+        //         val: goodsInfo.skujosn[i]
+        //       }]
+        //     }
+        //   }
+        //   // 结束
+        //
+        //   this.product.skujosn_new = skujosn_new
+        //   this.product.skuvaljosn = goodsInfo.skuvaljosn
+        // }
+        console.log('this. attrInfo is', this.attrInfo)
+        this.$openPop('attr')
+      } catch (e) {
+        Exception.handle(e)
+      }
     },
     toSearch () {
       // inputValue=' + this.bizSearchKeyWord + '&
@@ -1520,7 +1538,12 @@ export default {
         })
         console.log(this.flashActivityList)
 
-        this.manjianList = await getActiveInfo({ type: 'manjian', biz_id: this.bid }).then(res => res.data.active_info).catch(err => { throw Error(err.msg) })
+        this.manjianList = await getActiveInfo({
+          type: 'manjian',
+          biz_id: this.bid
+        }).then(res => res.data.active_info).catch(err => {
+          throw Error(err.msg)
+        })
         console.log('manjianList is', this.manjianList)
         // 启动限时抢购倒计时，牛逼啊霸哥
         countdownInstanceByFlash = setInterval(this.stampFuncByFlash, 1000)
@@ -2066,7 +2089,6 @@ export default {
     }
 
     &-item {
-      height: 160rpx;
       display: flex;
       align-items: center;
 
@@ -2085,11 +2107,10 @@ export default {
 
       &-info {
         width: 500rpx;
-        height: 160rpx;
         box-sizing: border-box;
         border-bottom: 1rpx solid #EDEDED;
         box-sizing: border-box;
-        padding: 10rpx 0rpx;
+        padding: 40rpx 0rpx 30rpx;
 
         .title {
           font-size: 14px;
@@ -2103,12 +2124,18 @@ export default {
 
         .attr-text {
           font-size: 12px;
-          color: #999;
+          height: 20px;
+          line-height: 20px;
+          padding: 0 8px;
+          border-radius: 4px;
+          color: #666;
+          background: $fun-tag-color;
           margin-top: 20rpx;
+          display: inline-block;
         }
 
         .actions {
-          margin: 10rpx 0 0;
+          margin: 20rpx 0 0;
           height: 54rpx;
           display: flex;
           justify-content: space-between;
@@ -2127,7 +2154,7 @@ export default {
     bottom: constant(safe-area-inset-bottom);
     bottom: env(safe-area-inset-bottom);
     left: 0;
-    z-index: 6;
+    z-index: 100;
 
     .cart-box {
       display: flex;
