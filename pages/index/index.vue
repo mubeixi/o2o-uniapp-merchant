@@ -1,5 +1,5 @@
 <template>
-  <div class="page-wrap">
+  <div class="page-wrap" @click="bindFullClick">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <layout-loading v-if="loadingByTmpl"></layout-loading>
     <block v-if="topTheme==='default'">
@@ -53,7 +53,7 @@
           </div>
           <div class="control flex flex-justify-between flex-justify-c">
             <button @click="$closePop('openLocalSettingModal')" class="action-btn btn-cancel" size="mini">取消</button>
-            <button bindopensetting="bindOpenSetting" class="btn-sub action-btn" open-type='openSetting' size="mini">确定
+            <button @opensetting="bindOpenSetting" class="btn-sub action-btn" open-type='openSetting' size="mini">确定
             </button>
           </div>
         </div>
@@ -68,11 +68,39 @@
       </scroll-view>
     </block>
 
-    <div @click="toMerchant" class="location-btn" v-if="initData.switch_location">
-      <layout-icon color="#fff" display="inline" size="24" type="iconicon-address"></layout-icon>
-      <!--<div class="fz-10 color-white">发布活动</div>-->
-    </div>
+<!--    <div class="location-btn-box">-->
+<!--      <div class="location-btn-wrap">-->
+<!--        <image src="/static/home/local-btn-preview.png" :animation="localAnimateByPreview" @click="toMerchant" class="fun-location-btn location-btn-preview" v-if="initData.switch_location"></image>-->
+<!--        <div :animation="localAnimateByPreview" @click="toMerchant" class="fun-location-btn location-btn-preview" v-if="initData.switch_location">-->
+<!--          <layout-icon color="#fff" display="inline" size="20" type="iconicon-address"></layout-icon>-->
+<!--          <div class="fz-8 color-white">查看位置</div>-->
+<!--        </div>-->
 
+<!--        <image src="/static/home/local-btn-local.png" :animation="localAnimateByLocal" @click="toMerchant" class="fun-location-btn location-btn-local" v-if="initData.switch_location"></image>-->
+<!--        <div :animation="localAnimateByLocal" @click="toMerchant" class="fun-location-btn location-btn-local" v-if="initData.switch_location">-->
+<!--          <layout-icon color="#fff" display="inline" size="20" type="iconicon-address"></layout-icon>-->
+<!--          <div class="fz-8 color-white">当前位置</div>-->
+<!--        </div>-->
+<!--        <image src="/static/home/local-btn-change.png" :animation="localAnimateByChange" @click="handleSetLocation" class="fun-location-btn location-btn-change" v-if="initData.switch_location"></image>-->
+<!--        <div :animation="localAnimateByChange" @click="handleSetLocation" class="fun-location-btn location-btn-change" v-if="initData.switch_location">-->
+<!--          <layout-icon color="#fff" display="inline" size="20" type="iconicon-address"></layout-icon>-->
+<!--          <div class="fz-8 color-white">修改位置</div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+
+<!--    <div @click="taggleOpenLocationComp" :animation="localAnimate" class="location-btn" v-if="initData.switch_location">-->
+<!--      <layout-icon color="#fff" display="inline" size="24" type="iconicon-address"></layout-icon>-->
+<!--      &lt;!&ndash;<div class="fz-10 color-white">发布活动</div>&ndash;&gt;-->
+<!--    </div>-->
+    <image src="/static/home/local-btn.png" @click="handleSetLocation" :animation="localAnimate" class="location-btn" v-if="initData.switch_location"></image>
+    <div class="location-tooltip-wrap" v-if="showFormattedAddress && initData.switch_location && formatted_address">
+      <div class="location-tooltip-conent">当前位置：{{formatted_address}} <span class="text-underline p-l-4">点此切换</span>
+        <!--<layout-icon color="rgba(0,0,0,.7)" display="inline" class="iconright" type="iconright"></layout-icon>-->
+        <image src="/static/home/local-arrow-right.png" class="iconright"></image>
+      </div>
+
+    </div>
     <div @click="toMerchant" class="publish-btn">
       <layout-icon color="#fff" display="inline" size="18" type="iconfabu"></layout-icon>
       <div class="fz-10 color-white">发布活动</div>
@@ -90,7 +118,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import { error, modal } from '@/common/fun'
+import { error, hideLoading, modal, showLoading } from '@/common/fun'
 import BaseMixin, { tabbarMixin } from '@/mixins/BaseMixin'
 import LayoutIcon from '@/components/layout-icon/layout-icon'
 import ScrollPageHot from '@/pages/index/components/scroll-page-hot'
@@ -104,6 +132,27 @@ import { getLocationByCoordinate, getSkinConfig } from '@/api/common'
 import LayoutLoading from '@/components/layout-loading/layout-loading'
 import LayoutPageTitle from '@/components/layout-page-title/layout-page-title'
 import { Exception } from '@/common/Exception'
+import { emptyObject } from '@/common/helper'
+
+// 动画时间
+const locationBtnAnimationDuration = 300
+/**
+ * 定位按钮创建动画工具函数
+ * @param x
+ * @param y
+ * @param opacity
+ * @param duration
+ * @param timingFunction
+ * @returns {*}
+ */
+function createdLocationBtnAnimation ({ x, y, rotate = 0, opacity, duration, timingFunction = 'ease-in-out' }) {
+  var animation = uni.createAnimation({
+    duration,
+    timingFunction
+  })
+  animation.translateX(x).translateY(y).rotate(rotate).opacity(opacity).step()
+  return animation.export()
+}
 
 export default {
   mixins: [BaseMixin, tabbarMixin],
@@ -130,6 +179,13 @@ export default {
   },
   data () {
     return {
+      showFormattedAddress: false,
+      formatted_address: '',
+      localAnimate: {},
+      localAnimateByPreview: {},
+      localAnimateByLocal: {},
+      localAnimateByChange: {},
+      init_location_ing: false,
       initData: {},
       loadingByTmpl: false, // 标记是否请求完结
       templateList: [],
@@ -137,6 +193,8 @@ export default {
       tagIndex: 0,
       topTheme: '',
       diyTitle: '',
+      locationCompExpandIng: false, // 在动画期间，不允许点击
+      locationCompExpand: false, // 默认不展开
 
       /** 疯狂hack **/
       getLocationDone: false,
@@ -174,6 +232,36 @@ export default {
     }
   },
   methods: {
+    bindFullClick () {
+      if (this.locationCompExpand) this.taggleOpenLocationComp()
+    },
+    taggleOpenLocationComp () {
+      const rate = 0.8
+      if (this.locationCompExpandIng) return
+      if (this.locationCompExpand) {
+        this.localAnimateByPreview = createdLocationBtnAnimation({ x: 0, y: 0, duration: locationBtnAnimationDuration, opacity: 0 })
+        this.localAnimateByChange = createdLocationBtnAnimation({ x: 0, y: 0, duration: locationBtnAnimationDuration, opacity: 0 })
+        this.localAnimateByLocal = createdLocationBtnAnimation({ x: 0, y: 0, duration: locationBtnAnimationDuration, opacity: 0 })
+        this.localAnimate = createdLocationBtnAnimation({ rotate: 0, duration: locationBtnAnimationDuration, opacity: 1 })
+        setTimeout(() => {
+          this.locationCompExpand = false
+          this.locationCompExpandIng = false
+        }, locationBtnAnimationDuration)
+      }
+
+      if (!this.locationCompExpand) {
+        this.localAnimateByPreview = createdLocationBtnAnimation({ x: -49 * 2 * rate, y: 0, duration: locationBtnAnimationDuration, opacity: 1 })
+        this.localAnimateByChange = createdLocationBtnAnimation({ x: 0, y: -49 * 2 * rate, duration: locationBtnAnimationDuration, opacity: 1 })
+        var distanceX = Math.sqrt(2) / 2 * 49 * 2
+        this.localAnimateByLocal = createdLocationBtnAnimation({ x: -distanceX * rate, y: -distanceX * rate, duration: locationBtnAnimationDuration, opacity: 1 })
+        this.localAnimate = createdLocationBtnAnimation({ rotate: 360, duration: locationBtnAnimationDuration, opacity: 1 })
+
+        setTimeout(() => {
+          this.locationCompExpand = true
+          this.locationCompExpandIng = false
+        }, locationBtnAnimationDuration)
+      }
+    },
     toLiveList () {
       this.$linkTo('/pagesA/live/liveList')
     },
@@ -206,10 +294,15 @@ export default {
       })
     },
     bindOpenSetting () {
-      uni.openSetting({
+      uni.getSetting({
         success: (res) => {
+          console.log('bindOpenSetting susscess', res)
           if (res.authSetting['scope.userLocation']) {
-            this.getUserLocation()
+            if (!Storage.get('location_id') && !this.init_location_ing) {
+              this._init_location().then(() => {
+                this.$refs.openLocalSettingModal.close()
+              }).catch(() => {})
+            }
           }
         }
       })
@@ -221,13 +314,9 @@ export default {
         if (idx === 1) this.$refs.page1.manualInitFunc()
         if (idx === 2) this.$refs.page2.manualInitFunc()
       }
-      if (idx > 0 && (!this.userAddressInfo || JSON.stringify(this.userAddressInfo === '{}'))) {
-        Promisify('authorize', { scope: 'scope.userLocation' }).then(() => {
-          this.getUserLocation()
-        }).catch(() => {
-          this.$refs.openLocalSettingModal.show()
-        })
-      }
+      // if (idx > 0 && (!this.userAddressInfo || JSON.stringify(this.userAddressInfo === '{}'))) {
+      //
+      // }
     },
     getUserLocation () {
       uni.getLocation({
@@ -295,13 +384,18 @@ export default {
       this.$refs[`page${idx}`].bindReachBottom()
     },
     /**
-     * 打开获取定位才开始弄
+     * 手动获取位置
      * @returns {Promise<void>}
      * @private
      */
-    async _init_location () {
+    async handleSetLocation () {
       try {
-        const { latitude: lat, longitude: lng } = await Promisify('getLocation').catch(err => { throw err })
+        var conf = { latitude: Storage.get('current_lat'), longitude: Storage.get('current_lng') }
+        emptyObject(conf)
+        const { latitude: lat, longitude: lng } = await Promisify('chooseLocation', conf).catch(err => {
+          if (err.errMsg === 'chooseLocation:fail cancel') throw Error('nocare')
+          throw err
+        })
         console.log(lat, lng)
         const { location_id, formatted_address, area_name } = await getLocationByCoordinate({ lat, lng, provider: 1 }).then(res => res.data).catch(err => Exception.handle(err))
         // 全部存起来
@@ -309,10 +403,61 @@ export default {
         Storage.set('current_lng', lng)
         Storage.set('location_id', location_id)
         Storage.set('formatted_address', formatted_address)
+        this.formatted_address = formatted_address
         Storage.set('area_name', area_name)
+
+        this.$refs.page1.manualFlashLocation()
+        this.$refs.page2.manualFlashLocation()
 
         return { location_id, lat, lng, formatted_address, area_name }
       } catch (e) {
+        console.log(e)
+        Exception.handle(e)
+      }
+    },
+
+    /**
+     * 打开获取定位才开始弄
+     * @returns {Promise<void>}
+     * @private
+     */
+    async _init_location () {
+      try {
+        if (this.init_location_ing) {
+          console.log('已经阻止重复启动_init_location')
+          return
+        }
+        // 标记，不要和onshow里面重复调用
+        this.init_location_ing = true
+        await Promisify('authorize', { scope: 'scope.userLocation' }).catch((err) => {
+          this.$refs.openLocalSettingModal.show()
+          console.log(err)
+          throw Error('nocare')
+        })
+
+        const { latitude: lat, longitude: lng } = await Promisify('getLocation').catch(err => {
+          console.log(err)
+          throw Error('nocare')
+        })
+        console.log(lat, lng)
+        showLoading('更新位置', true)
+        const { location_id, formatted_address, area_name } = await getLocationByCoordinate({ lat, lng, provider: 1 }).then(res => res.data).catch(err => Exception.handle(err))
+        // 全部存起来
+        Storage.set('current_lat', lat)
+        Storage.set('current_lng', lng)
+        Storage.set('location_id', location_id)
+        Storage.set('formatted_address', formatted_address)
+        this.formatted_address = formatted_address
+        Storage.set('area_name', area_name)
+
+        this.init_location_ing = false
+        hideLoading()
+        return { location_id, lat, lng, formatted_address, area_name }
+      } catch (e) {
+        hideLoading()
+        this.$set(this, 'init_location_ing', false)
+        console.log(this.init_location_ing)
+        console.log(e)
         Exception.handle(e)
       }
     },
@@ -341,14 +486,14 @@ export default {
 
     if (this.topTheme === 'default') {
       this.$refs.page0.hookOnShow()
-      this.$refs.openLocalSettingModal.close()
-      if (this.headTabIndex > 0) {
-        Promisify('authorize', { scope: 'scope.userLocation' }).then(() => {
-          this.getUserLocation()
-        }).catch(() => {
-          this.$refs.openLocalSettingModal.show()
-        })
-      }
+      // this.$refs.openLocalSettingModal.close()
+      // if (this.headTabIndex > 0) {
+      //   Promisify('authorize', { scope: 'scope.userLocation' }).then(() => {
+      //     this.getUserLocation()
+      //   }).catch(() => {
+      //     this.$refs.openLocalSettingModal.show()
+      //   })
+      // }
     }
   },
   onReady () {
@@ -368,10 +513,17 @@ export default {
     }
   },
   created () {
+    this.showFormattedAddress = true
+    setTimeout(() => {
+      this.showFormattedAddress = false
+    }, 10000)
+    if (Storage.get('formatted_address')) {
+      this.formatted_address = Storage.get('formatted_address')
+    }
     this.$store.dispatch('system/loadInitData').then(data => {
       this.initData = data
       console.log('this.initData is ', this.initData)
-      if (this.initData.switch_location) {
+      if (this.initData.switch_location && !Storage.get('location_id')) {
         this._init_location()
       }
     }).catch(() => {
@@ -422,22 +574,96 @@ export default {
     text-align: center;
   }
 
+  .location-btn-box {
+    position: fixed;
+    bottom: 133px;
+    margin-bottom: env(safe-area-inset-bottom);
+    right: 15px;
+    z-index: 98;
+    .location-btn-wrap{
+      width: 147px;
+      height: 147px;
+
+      position: relative;
+      .location-btn-preview{
+        position: absolute;
+        right: 0;
+        bottom:0;
+        opacity: 0;
+      }
+      .location-btn-local{
+        position: absolute;
+        right: 0;
+        bottom:0;
+        opacity: 0;
+      }
+      .location-btn-change{
+        position: absolute;
+        right: 0;
+        bottom:0;
+        opacity: 0;
+      }
+    }
+  }
+
+  .fun-location-btn{
+    /*box-sizing: border-box;*/
+    /*padding-top: 4px;*/
+    width: 49px;
+    height: 49px;
+    /*background: rgba(38, 199, 141, 1);*/
+    /*box-shadow: 0rpx 1px 6px 0rpx rgba(35, 183, 130, 0.4);*/
+    /*border-radius: 50%;*/
+    /*text-align: center;*/
+  }
+
+  .location-tooltip-wrap{
+    position: fixed;
+    bottom: 157px;
+    margin-bottom: env(safe-area-inset-bottom);
+    right: 74px;
+    z-index: 99;
+    display: flex;
+    align-items: flex-start;
+    .location-tooltip-conent{
+      padding: 6px;
+      width: 380rpx;
+      font-size: 12px;
+      line-height: 20px;
+      background: rgba(0,0,0,.5);
+      color: #fff;
+      position: relative;
+      border-bottom-left-radius: 4px;
+      border-top-left-radius: 4px;
+      border-top-right-radius: 4px;
+    }
+    .iconright{
+      width: 16px;
+      height: 16px;
+      position: absolute;
+      right: 0px;
+      bottom: 0;
+      transform: translateX(100%);
+      opacity: 0.5;
+    }
+
+  }
+
   .location-btn {
     position: fixed;
     bottom: 133px;
     margin-bottom: env(safe-area-inset-bottom);
     right: 15px;
     z-index: 99;
-    box-sizing: border-box;
-    padding-top: 4px;
+    /*box-sizing: border-box;*/
     width: 49px;
     height: 49px;
-    background: rgba(38, 199, 141, 1);
-    box-shadow: 0rpx 1px 6px 0rpx rgba(35, 183, 130, 0.4);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    /*background: rgba(38, 199, 141, 1);*/
+    /*box-shadow: 0rpx 1px 6px 0rpx rgba(35, 183, 130, 0.4);*/
+    /*border-radius: 50%;*/
+    /*display: flex;*/
+    /*align-items: center;*/
+    /*justify-content: center;*/
   }
 
   .publish-btn {

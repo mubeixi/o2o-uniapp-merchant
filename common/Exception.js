@@ -40,7 +40,7 @@ function handle (e) {
     message = e
   }
   // 开发模式下，全部都弹出来
-  if (ENV.isDev) { type = 'modal'; message = '开发调试信息:' + message; console.log(e) }
+  // if (ENV.isDev) { type = 'modal'; message = '开发调试信息:' + message; console.log(e) }
   if (type === 'toast') toast(message, icon)
   if (type === 'modal') modal(message)
 
