@@ -13,7 +13,7 @@
     <div class="top-bg" :style="{zIndex:headTabSticky?-2:-4,height:(menuButtonInfo.bottom+10+15+75+15)*2+'px',backgroundImage: 'url('+$getDomain('/static/client/store/theme_one/top-bg-large.jpg')+')'}"></div>
 <!--    <div class="top-bg" :style="{zIndex:headTabSticky?-2:-4,top:menuButtonInfo.bottom+10+15+75+15+'px',height:menuButtonInfo.bottom+10+15+75+15+'px',backgroundImage: 'url('+$getDomain('/static/client/store/theme_one/top-bg.png')+')'}"></div>-->
     <div :style="{height:menuButtonInfo.height+'px',top:menuButtonInfo.top+'px'}" class="navigator-bar">
-      <layout-icon @click="$back" class="m-l-10" :color="headTabSticky?'#fff':'#fff'" size="20" weight="500" type="iconicon-arrow-left"></layout-icon>
+      <layout-icon @click="$back" class="p-l-10 p-r-10" :color="headTabSticky?'#fff':'#fff'" size="20" weight="500" type="iconicon-arrow-left"></layout-icon>
     </div>
     <!--menuButtonInfo.bottom+10+34-->
     <scroll-view
@@ -376,7 +376,7 @@
             <span class="c6 fz-12 p-l-3">清空购物车</span></div>
         </div>
         <scroll-view scroll-y :style="{height:systemInfo.windowHeight*0.6+'px'}" class="carts-list">
-          <div :key="idx" class="carts-item" v-for="(row,idx) in carts">
+          <div :key="idx" class="carts-item" v-for="(row,idx) in showCarts">
             <div class="check-item flex flex-vertical-c" @click="selectItem(row)">
               <layout-icon color="#E64239" size="20" type="iconicon-check" v-if="row.checked"></layout-icon>
               <layout-icon color="#ccc" size="20" type="iconradio" v-else></layout-icon>
@@ -391,12 +391,10 @@
                   <span class="p-l-7 price-market text-through">￥{{row.price_market}}</span>
                 </div>
                 <div class="action flex flex-vertical-c">
-                  <block v-if="row.num>0">
-                    <layout-icon @click.stop="attrNumMinus(row)" color="#B2B1B1" size="24"
-                                 type="iconicon-minus"></layout-icon>
-                    <input style="width: 54rpx;" v-model="row.num" @focus="getQty(row.num)"
-                           @blur="changeAttrNum($event,idx,row)" class="input-num text-center fz-13" />
-                  </block>
+                  <layout-icon v-if="row.num>0" @click.stop="attrNumMinus(row)" color="#B2B1B1" size="24"
+                               type="iconicon-minus"></layout-icon>
+                  <input style="width: 54rpx;" v-model="row.num" @focus="getQty(row.num)"
+                         @blur="changeAttrNum($event,idx,row)" class="input-num text-center fz-13" />
                   <layout-icon @click.stop="attrNumPlus(row)" color="#E64239" size="24"
                                type="iconicon-plus"></layout-icon>
                 </div>
@@ -576,10 +574,20 @@ export default {
       photoList: [],
       storePhotoTotal: 0,
       spikeList: [],
-      scrollHeightS: [0, 0, 0]
+      scrollHeightS: [0, 0, 0],
+      showCarts:[]
     }
   },
   watch: {
+    carts: {
+      immediate: true,
+      deep: true,
+      handler (nval) {
+        console.log('carts value change,current value is', nval)
+        var showCarts = this.$store.getters['cart/getCartList'](this.bid)
+        this.$set(this, 'showCarts', showCarts)
+      }
+    },
     bid: {
       immediate: true,
       handler (nval) {
