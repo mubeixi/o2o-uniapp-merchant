@@ -113,6 +113,7 @@ export default {
   mixins: [componetMixin],
   data () {
     return {
+      isInitDone: false,
       areaLoading: false,
       firstCateHeight: 44,
       storeFirstCateIdx: 0, // 好店
@@ -164,15 +165,17 @@ export default {
         })
         if (!this.firstCateList) this.firstCateList = []
         this.firstCateList.unshift({ Category_Name: '所有', Category_ID: '-1' })
-        this.loadMerchantList(0)
+        await this.loadMerchantList(0)
+        this.isInitDone = true
       } catch (e) {
+        this.isInitDone = true
         Exception.handle(e)
       } finally {
         // hideLoading()
       }
     },
     async loadMerchantList (idx) {
-      if(this.firstCateList.length<1)return;
+      if (this.firstCateList.length < 1) return
       try {
         this.merchantList = []
         // showLoading()
@@ -205,10 +208,13 @@ export default {
         this.areaLoading = false
         // hideLoading()
       }
+    },
+    manualInitFunc () {
+      if (!this.isInitDone) this._init_func()
     }
   },
   created () {
-    this._init_func()
+
   }
 
 }
