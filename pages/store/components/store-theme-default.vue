@@ -388,7 +388,7 @@
     </layout-modal>
 
     <layout-layer @maskClicked="bindCartsPopClose" :bottomStr="storeBottomActionHeight" positions="bottom" ref="carts">
-      <div class="carts-box">
+      <div class="carts-box" v-if="listExpand">
         <div class="carts-action flex flex-vertical-c flex-justify-between">
           <div class="check-all flex flex-vertical-c" @click="selectBiz">
             <layout-icon color="#E64239" size="20" type="iconicon-check" v-if="allCheck"></layout-icon>
@@ -399,7 +399,7 @@
             <span class="c6 fz-12 p-l-3">清空购物车</span></div>
         </div>
         <scroll-view scroll-y :style="{height:systemInfo.windowHeight*0.6+'px'}" class="carts-list">
-          <div :key="idx" class="carts-item" v-for="(row,idx) in carts">
+          <div :key="idx" class="carts-item" v-for="(row,idx) in showCarts">
             <div class="check-item flex flex-vertical-c" @click="selectItem(row)">
               <layout-icon color="#E64239" size="20" type="iconicon-check" v-if="row.checked"></layout-icon>
               <layout-icon color="#ccc" size="20" type="iconradio" v-else></layout-icon>
@@ -407,19 +407,17 @@
             <div :style="{backgroundImage:'url('+row.pic+')'}" class="carts-item-cover"></div>
             <div class="carts-item-info">
               <div class="title">{{row.name}}</div>
-              <div class="attr-text">{{row.attr_text||''}}</div>
+              <div class="attr-text" v-if="row.attr_text">{{row.attr_text||''}}</div>
               <div class="actions">
                 <div class="price-box fz-10 flex1">
                   <span class="price-selling">￥</span><span class="price-selling fz-15">{{row.price_selling}}</span>
                   <span class="p-l-7 price-market text-through">￥{{row.price_market}}</span>
                 </div>
                 <div class="action flex flex-vertical-c">
-                  <block v-if="row.num>0">
-                    <layout-icon @click.stop="attrNumMinus(row)" color="#B2B1B1" size="24"
-                                 type="iconicon-minus"></layout-icon>
-                    <input style="width: 54rpx;" v-model="row.num" @focus="getQty(row.num)"
-                           @blur="changeAttrNum($event,idx,row)" class="input-num text-center fz-13" />
-                  </block>
+                  <layout-icon v-if="row.num>0" @click.stop="attrNumMinus(row)" color="#B2B1B1" size="24"
+                               type="iconicon-minus"></layout-icon>
+                  <input style="width: 54rpx;" v-model="row.num" @focus="getQty(row.num)"
+                         @blur="changeAttrNum($event,idx,row)" class="input-num text-center fz-13" />
                   <layout-icon @click.stop="attrNumPlus(row)" color="#E64239" size="24"
                                type="iconicon-plus"></layout-icon>
                 </div>
@@ -471,7 +469,7 @@ import LayoutCopyright from '@/components/layout-copyright/layout-copyright'
 import LayoutComment from '@/components/layout-comment/layout-comment'
 import LayoutIcon from '@/components/layout-icon/layout-icon'
 import { componetMixin } from '@/mixins/BaseMixin'
-import { checkIsLogin, getArrColumn, getDomain, getPreviewThumb } from '@/common/helper'
+import { checkIsLogin, getArrColumn, getDomain, getPreviewThumb, objTranslate } from '@/common/helper'
 import { error, hideLoading, modal, showLoading, toast, checkIsExpire, confirm, linkToEasy } from '@/common/fun'
 import {
   addFavourite,
@@ -631,7 +629,8 @@ export default {
           scrollTop: 0,
           name: '点评'
         }
-      ]
+      ],
+      showCarts:[]
     }
   },
   computed: {
@@ -654,6 +653,15 @@ export default {
     }
   },
   watch: {
+    carts: {
+      immediate: true,
+      deep: true,
+      handler (nval) {
+        console.log('carts value change,current value is', nval)
+        //var showCarts = this.$store.getters['cart/getCartList'](this.bid)
+        this.$set(this, 'showCarts', objTranslate(nval))
+      }
+    },
     bid: {
       immediate: true,
       handler (nval) {
@@ -703,8 +711,19 @@ export default {
         return
       }
       if (!this.listExpand) {
-        this.$openPop('carts')
+       
         this.listExpand = true
+  
+        var showCarts = this.$store.getters['cart/getCartList'](this.bid)
+  
+        console.log('showCarts value is', showCarts)
+        this.$set(this, 'showCarts', objTranslate(showCarts))
+  
+        // 强制刷新视图
+        this.$forceUpdate()
+        setTimeout(() => {
+          this.$openPop('carts')
+        }, 100)
       }
     },
     clearCart () {
@@ -1383,13 +1402,12 @@ export default {
     }
 
     &-list {
-      padding: 20rpx 20rpx 60rpx 0;
+      padding: 0rpx 20rpx 60rpx 0;
       width: 750rpx;
       box-sizing: border-box;
     }
 
     &-item {
-      height: 160rpx;
       display: flex;
       align-items: center;
 
@@ -1408,7 +1426,7 @@ export default {
 
       &-info {
         width: 500rpx;
-        height: 160rpx;
+        padding: 40rpx 0rpx 30rpx;
         box-sizing: border-box;
 
         border-bottom: 1px solid #EDEDED;
@@ -1424,8 +1442,14 @@ export default {
 
         .attr-text {
           font-size: 12px;
-          color: #999;
-          margin-top: 10rpx;
+          height: 20px;
+          line-height: 20px;
+          padding: 0 8px;
+          border-radius: 4px;
+          color: #666;
+          background: $fun-tag-color;
+          margin-top: 20rpx;
+          display: inline-block;
         }
 
         .actions {

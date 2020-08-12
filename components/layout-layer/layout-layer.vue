@@ -29,6 +29,10 @@ export default {
       type: String,
       default: 'bottom'
     },
+    extClass:{
+      type:String,
+      default:''
+    },
     bottomStr: {
       type: String,
       default: ''
@@ -102,7 +106,7 @@ export default {
 
   .popup-content {
     position: fixed;
-    z-index: 100;
+    z-index: 102;
     overflow: hidden;
   }
 

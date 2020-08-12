@@ -32,7 +32,8 @@
         <div class="info-box flex1">
           <div class="store-name fz-15 m-b-8">{{storeInfo.biz_shop_name}}</div>
           <div class="store-activity-list m-b-8" v-if="manjianList.length>0">
-            <div class="store-activity-item fz-10" v-for="(item,idx) in manjianList" :key="idx">满{{item.reach}}减{{item.award}}
+            <div class="store-activity-item fz-10" v-for="(item,idx) in manjianList" :key="idx">
+              满{{item.reach}}减{{item.award}}
             </div>
           </div>
           <!--<div class="like fz-11">{{storeInfo.follow}}人关注</div>-->
@@ -301,7 +302,7 @@
     <!--    </layout-modal>-->
 
     <layout-layer @maskClicked="bindCartsPopClose" :bottomStr="storeBottomActionHeight" positions="bottom" ref="carts">
-      <div class="carts-box">
+      <div class="carts-box" v-if="listExpand">
         <div class="carts-action flex flex-vertical-c flex-justify-between">
           <div class="check-all flex flex-vertical-c" @click="selectBiz">
             <layout-icon color="#E64239" size="20" type="iconicon-check" v-if="allCheck"></layout-icon>
@@ -312,7 +313,7 @@
             <span class="c6 fz-12 p-l-3">清空购物车</span></div>
         </div>
         <scroll-view scroll-y :style="{height:systemInfo.windowHeight*0.6+'px'}" class="carts-list">
-          <div :key="idx" class="carts-item" v-for="(row,idx) in carts">
+          <div :key="idx" class="carts-item" v-for="(row,idx) in showCarts">
             <div class="check-item flex flex-vertical-c" @click="selectItem(row)">
               <layout-icon color="#E64239" size="20" type="iconicon-check" v-if="row.checked"></layout-icon>
               <layout-icon color="#ccc" size="20" type="iconradio" v-else></layout-icon>
@@ -327,12 +328,10 @@
                   <span class="p-l-7 price-market text-through">￥{{row.price_market}}</span>
                 </div>
                 <div class="action flex flex-vertical-c">
-                  <block v-if="row.num>0">
-                    <layout-icon @click.stop="attrNumMinus(row)" color="#B2B1B1" size="24"
-                                 type="iconicon-minus"></layout-icon>
-                    <input style="width: 54rpx;" v-model="row.num" @focus="getQty(row.num)"
-                           @blur="changeAttrNum($event,idx,row)" class="input-num text-center fz-13" />
-                  </block>
+                  <layout-icon v-if="row.num>0" @click.stop="attrNumMinus(row)" color="#B2B1B1" size="24"
+                               type="iconicon-minus"></layout-icon>
+                  <input style="width: 54rpx;" v-model="row.num" @focus="getQty(row.num)"
+                         @blur="changeAttrNum($event,idx,row)" class="input-num text-center fz-13" />
                   <layout-icon @click.stop="attrNumPlus(row)" color="#E64239" size="24"
                                type="iconicon-plus"></layout-icon>
                 </div>
@@ -369,8 +368,9 @@
       </div>
 
       <div class="close-btn" @click.stop="taggkeCartShow">
-        <div v-if="!cartExpand" class="plus-tag" :class="{aircle:total_count<100,zero:total_count<10}">{{total_count}}</div>
-<!--        <layout-icon v-if="!cartExpand" size="23" type="iconicon_plus" color="#fff"></layout-icon>-->
+        <div v-if="!cartExpand" class="plus-tag" :class="{aircle:total_count<100,zero:total_count<10}">{{total_count}}
+        </div>
+        <!--        <layout-icon v-if="!cartExpand" size="23" type="iconicon_plus" color="#fff"></layout-icon>-->
         <layout-icon v-if="cartExpand" size="23" type="iconxingzhuang" color="#fff"></layout-icon>
       </div>
 
@@ -393,7 +393,7 @@ import { checkIsExpire, confirm, error, hideLoading, showLoading, toast } from '
 import { getAlbumList, getBizInfo, getBizSpikeList } from '@/api/store'
 import { getFlashsaleList, getProductList } from '@/api/product'
 import { getActiveInfo, getCommitList, getCouponList } from '@/api/common'
-import { checkIsLogin, getCountdownFunc, getPreviewThumb } from '@/common/helper'
+import { checkIsLogin, getCountdownFunc, getPreviewThumb, objTranslate } from '@/common/helper'
 import {
   addFavourite,
   cancelFavourite,
@@ -546,7 +546,8 @@ export default {
       storeList: [],
       photoList: [],
       storePhotoTotal: 0,
-      spikeList: []
+      spikeList: [],
+      showCarts: [],
     }
   },
   computed: {
@@ -569,6 +570,15 @@ export default {
     }
   },
   watch: {
+    carts: {
+      immediate: true,
+      deep: true,
+      handler (nval) {
+        console.log('carts value change,current value is', nval)
+        //var showCarts = this.$store.getters['cart/getCartList'](this.bid)
+        this.$set(this, 'showCarts', objTranslate(nval))
+      },
+    },
     bid: {
       immediate: true,
       handler (nval) {
@@ -671,8 +681,20 @@ export default {
         return
       }
       if (!this.listExpand) {
-        this.$openPop('carts')
+        
         this.listExpand = true
+  
+        var showCarts = this.$store.getters['cart/getCartList'](this.bid)
+  
+        console.log('showCarts value is', showCarts)
+        this.$set(this, 'showCarts', objTranslate(showCarts))
+  
+        // 强制刷新视图
+        this.$forceUpdate()
+        setTimeout(() => {
+          this.$openPop('carts')
+        }, 100)
+        
       }
     },
     clearCart () {
@@ -979,7 +1001,12 @@ export default {
         // 启动限时抢购倒计时，牛逼啊霸哥
         countdownInstanceByFlash = setInterval(this.stampFuncByFlash, 1000)
 
-        this.manjianList = await getActiveInfo({ type: 'manjian', biz_id: this.bid }).then(res => res.data.active_info).catch(err => { throw Error(err.msg) })
+        this.manjianList = await getActiveInfo({
+          type: 'manjian',
+          biz_id: this.bid,
+        }).then(res => res.data.active_info).catch(err => {
+          throw Error(err.msg)
+        })
         console.log('manjianList is', this.manjianList)
 
         // this.goodsList = await getProductList({ pageSize: 2, ...base }, { onlyData: true }).catch(e => {
@@ -1411,7 +1438,7 @@ export default {
 
   .mall-tabbar-wrap {
     position: fixed;
-    z-index: 100;
+    z-index: 102;
     bottom: 25px;
     right: 20px;
     height: 50px;
@@ -1516,13 +1543,13 @@ export default {
     }
 
     &-list {
-      padding: 20rpx 20rpx 60rpx 0;
+      padding: 0rpx 20rpx 60rpx 0;
       width: 750rpx;
       box-sizing: border-box;
     }
 
     &-item {
-      height: 160rpx;
+
       display: flex;
       align-items: center;
 
@@ -1541,11 +1568,9 @@ export default {
 
       &-info {
         width: 500rpx;
-        height: 160rpx;
         box-sizing: border-box;
-
         border-bottom: 1px solid #EDEDED;
-
+        padding: 40rpx 0rpx 30rpx;
         .title {
           font-size: 14px;
           color: #333;
@@ -1558,7 +1583,14 @@ export default {
         .attr-text {
           font-size: 12px;
           color: #999;
-          margin-top: 10rpx;
+          height: 20px;
+          line-height: 20px;
+          padding: 0 8px;
+          border-radius: 4px;
+          color: #666;
+          background: $fun-tag-color;
+          margin-top: 20rpx;
+          display: inline-block;
         }
 
         .actions {
@@ -2123,7 +2155,7 @@ export default {
 
       .goods-action {
         height: 58rpx;
-        padding: 0 20rpx;
+        padding: 0 20rpx  0rpx 0rpx;
         margin-bottom: 10rpx;
         display: flex;
         align-items: flex-end;

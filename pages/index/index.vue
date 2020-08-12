@@ -392,15 +392,20 @@ export default {
       try {
         var conf = { latitude: Storage.get('current_lat'), longitude: Storage.get('current_lng') }
         emptyObject(conf)
+        console.log('conf is',conf)
+  
+        // wx.openLocation({
+        //   ...conf
+        // })
         const { latitude: lat, longitude: lng } = await Promisify('chooseLocation', conf).catch(err => {
           if (err.errMsg === 'chooseLocation:fail cancel') throw Error('nocare')
           throw err
         })
         console.log(lat, lng)
-        const { location_id, formatted_address, area_name } = await getLocationByCoordinate({ lat, lng, provider: 1 }).then(res => res.data).catch(err => Exception.handle(err))
-        // 全部存起来
         Storage.set('current_lat', lat)
         Storage.set('current_lng', lng)
+        const { location_id, formatted_address, area_name } = await getLocationByCoordinate({ lat, lng, provider: 1 }).then(res => res.data).catch(err => Exception.handle(err))
+        // 全部存起来
         Storage.set('location_id', location_id)
         Storage.set('formatted_address', formatted_address)
         this.formatted_address = formatted_address
