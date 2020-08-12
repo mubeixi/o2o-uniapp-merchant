@@ -107,7 +107,7 @@
     <!--      </div>-->
     <!--    </div>-->
 
-    <layout-layer positions="center" ref="attr">
+    <layout-layer positions="center" ref="attrOld">
       <div class="attr-form-wrap">
         <div class="attr-head">
           <span class="title">{{product.Products_Name}}</span>
@@ -167,7 +167,7 @@
             <span class="c6 fz-12 p-l-3">清空购物车</span></div>
         </div>
         <scroll-view scroll-y :style="{height:systemInfo.windowHeight*0.6+'px'}" class="carts-list">
-          <div :key="idx" class="carts-item" v-for="(row,idx) in carts">
+          <div :key="idx" class="carts-item" v-for="(row,idx) in showCarts">
             <div class="check-item flex flex-vertical-c" @click="selectItem(row)">
               <layout-icon color="#E64239" size="20" type="iconicon-check" v-if="row.checked"></layout-icon>
               <layout-icon color="#ccc" size="20" type="iconradio" v-else></layout-icon>
@@ -231,6 +231,17 @@
 
     </div>
 
+
+
+    <product-sku
+      :isCart="true"
+      :product-info="product"
+      ref="attr"
+      :notSaveNumber="true"
+      @updaCart="productSkuAdd"
+
+    ></product-sku>
+
   </div>
 </template>
 <script>
@@ -242,7 +253,7 @@ import { checkIsLogin, mergeObject, numberSort } from '@/common/helper'
 import { CartList as getCartList } from '@/api/customer'
 import LayoutLayer from '@/components/layout-layer/layout-layer'
 import LayoutIcon from '@/components/layout-icon/layout-icon'
-
+import ProductSku from '@/components/product-sku/product-sku'
 const attrInfoTmpl = {
   Products_ID: 0,
   num: 0,
@@ -275,7 +286,8 @@ export default {
   mixins: [BaseMixin],
   components: {
     LayoutIcon,
-    LayoutLayer
+    LayoutLayer,
+    ProductSku
   },
   data () {
     return {
@@ -323,10 +335,65 @@ export default {
           totalCount: 0,
           page: 1
         }
-      ]
+      ],
+      showCarts:[]
+    }
+  },
+  watch: {
+    carts: {
+      immediate: true,
+      deep: true,
+      handler (nval) {
+        console.log('carts value change,current value is', nval)
+        var showCarts = this.$store.getters['cart/getCartList'](this.bid)
+        this.$set(this, 'showCarts', showCarts)
+      }
     }
   },
   methods: {
+    async productSkuAdd (sku) {
+      this.attrInfo.attr_id = sku.id
+      this.attrInfo.prod_id = this.product.Products_ID
+      this.attrInfo.attr_text = sku.Attr_Value_text //规格名称
+      const addQty = sku.qty
+      // 不需要像美团那样维持现状
+      // const attr_id = sku.id
+      // const prod_id = this.product.Products_ID
+      // const isCartHas = this.$store.getters['cart/getRow']({
+      //   attr_id,
+      //   prod_id
+      // })
+      // if (isCartHas !== false) {
+      //   // 数量相等无任何操作
+      //   if (addQty == isCartHas.num) {
+      //     return
+      //   }
+      //   addQty = addQty - isCartHas.num
+      // }
+
+      const { ImgPath, Products_Name, Products_PriceX, Products_PriceY } = this.product
+      const productInfo = {}
+      Object.assign(productInfo, {
+        biz_id: Number(this.bid),
+        checked: true,
+        pic: ImgPath,
+        name: Products_Name,
+        price_selling: Number(Products_PriceX),
+        price_market: Number(Products_PriceY)
+      })
+      const cartRT = await this.$store.dispatch('cart/addNum', {
+        product: { ...this.product, ...this.attrInfo, ...productInfo },
+        num: addQty
+      })
+
+      if (cartRT !== false) {
+        this.refreshCount()
+        //强制刷新视图
+        this.$forceUpdate()
+        // 不需要修改，意义不大
+        // this.attrInfo.num = Number(this.attrInfo.num) + 1
+      }
+    },
     async submit () {
       const obj = {}
       // 删除
@@ -993,42 +1060,51 @@ export default {
       }
     },
     async openAttrLayer (prod_id) {
-      const goodsInfo = await getProductDetail({ prod_id }, {
-        onlyData: true,
-        tip: '加载中',
-        mask: true
-      }).catch(e => {
-        throw Error(e.msg || '获取商品详情失败')
-      })
-
-      this.attrInfo = { ...attrInfoTmpl } // 重置
-      this.check_attr = {}// 重置
-      this.product = goodsInfo
-
-      if (goodsInfo.skujosn) {
-        let skujosn_new = []
-        for (const i in goodsInfo.skujosn) {
-          skujosn_new.push({
-            sku: i,
-            val: goodsInfo.skujosn[i]
-          })
-        }
-
-        // 新增如果有手机的规格
-        for (const i in goodsInfo.skujosn) {
-          if (i === 'mobile_prod_attr_name') {
-            skujosn_new = [{
-              sku: i,
-              val: goodsInfo.skujosn[i]
-            }]
-          }
-        }
-        // 结束
-
-        this.product.skujosn_new = skujosn_new
-        this.product.skuvaljosn = goodsInfo.skuvaljosn
+      if (!checkIsLogin(1, 1)) return
+      if(this.cartExpand){
+        this.taggkeCartShow()
       }
-      this.$openPop('attr')
+      try {
+        const goodsInfo = await getProductDetail({ prod_id }, {
+          onlyData: true,
+          tip: '加载中',
+          mask: true
+        }).catch(e => {
+          throw Error(e.msg || '获取商品详情失败')
+        })
+        this.attrInfo = { ...attrInfoTmpl } // 重置
+        this.check_attr = {}// 重置
+        this.product = goodsInfo
+        this.product.minPrice = this.product.Products_PriceX
+
+        // if (goodsInfo.skujosn) {
+        //   let skujosn_new = []
+        //   for (const i in goodsInfo.skujosn) {
+        //     skujosn_new.push({
+        //       sku: i,
+        //       val: goodsInfo.skujosn[i]
+        //     })
+        //   }
+        //
+        //   // 新增如果有手机的规格
+        //   for (const i in goodsInfo.skujosn) {
+        //     if (i === 'mobile_prod_attr_name') {
+        //       skujosn_new = [{
+        //         sku: i,
+        //         val: goodsInfo.skujosn[i]
+        //       }]
+        //     }
+        //   }
+        //   // 结束
+        //
+        //   this.product.skujosn_new = skujosn_new
+        //   this.product.skuvaljosn = goodsInfo.skuvaljosn
+        // }
+        console.log('this. attrInfo is', this.attrInfo)
+        this.$openPop('attr')
+      } catch (e) {
+        Exception.handle(e)
+      }
     },
     refreshShowListNum () {
       for (var idx in this.showList) {

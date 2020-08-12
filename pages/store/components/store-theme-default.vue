@@ -106,7 +106,7 @@
                   <div class="goods-list">
                     <div :key="idx" @click="$toGoodsDetail(item)" class="goods-item" v-for="(item,idx) in virtualGoodsLsit">
                       <div class="left">
-                        <div :style="{backgroundImage:'url('+item.ImgPath+')'}" class="cover"></div>
+                        <div :style="{backgroundImage:'url('+getPreviewThumb(item.ImgPath)+')'}" class="cover"></div>
                       </div>
                       <div class="right">
                         <h5 class="title"><span>{{item.Products_Name}}</span></h5>
@@ -151,7 +151,7 @@
                     <div class="goods-list">
                       <div :key="idx" @click="$toGoodsDetail(item)"
                            class="goods-item" style="margin-bottom: 18rpx;" v-for="(item,idx) in recommends">
-                        <div :style="{backgroundImage:'url('+item.ImgPath+')'}" class="goods-item-cover recommend-goods-cover">
+                        <div :style="{backgroundImage:'url('+getPreviewThumb(item.ImgPath)+')'}" class="goods-item-cover recommend-goods-cover">
                           <!--<div class="discount-text">折扣</div>-->
                           <image mode="widthFix" class="discount-img" src="/static/store/theme-default/discount-tag.png"></image>
                         </div>
@@ -187,7 +187,7 @@
                                   @click="toSearchByCate(column)"
                                   style="background: #FFFFFF;display: inline-block;" v-for="(column,idx2) in row.child">{{column.cate_name}}</span>
                           </block>
-                          
+
                         </div>
                       </block>
                     </div>
@@ -199,7 +199,7 @@
                         :style="{marginRight:idx%2===0?'20rpx':'0rpx'}"
                         @click="$toGoodsDetail(item)" style="width: 345rpx;border-radius: 8rpx;overflow: hidden;height: 450rpx;margin-bottom: 20rpx;"
                         v-for="(item,idx) in goodsList">
-                        <div :style="{backgroundImage:'url('+item.ImgPath+')'}" class="img-cover" style="width: 345rpx;height: 345rpx"></div>
+                        <div :style="{backgroundImage:'url('+getPreviewThumb(item.ImgPath,'-r400')+')'}" class="img-cover" style="width: 345rpx;height: 345rpx"></div>
                         <div class="c3 fz-13" style="line-height: 36rpx;height: 72rpx;overflow-x: hidden">{{item.Products_Name}}</div>
                         <div class="flex flex-vertical-c" style="height: 32rpx;">
                           <div class="price-selling"><span class="fz-12">￥</span><span class="fz-17">{{item.Products_PriceX}}</span>
@@ -388,7 +388,7 @@
     </layout-modal>
 
     <layout-layer @maskClicked="bindCartsPopClose" :bottomStr="storeBottomActionHeight" positions="bottom" ref="carts">
-      <div class="carts-box">
+      <div class="carts-box" v-if="listExpand">
         <div class="carts-action flex flex-vertical-c flex-justify-between">
           <div class="check-all flex flex-vertical-c" @click="selectBiz">
             <layout-icon color="#E64239" size="20" type="iconicon-check" v-if="allCheck"></layout-icon>
@@ -399,7 +399,7 @@
             <span class="c6 fz-12 p-l-3">清空购物车</span></div>
         </div>
         <scroll-view scroll-y :style="{height:systemInfo.windowHeight*0.6+'px'}" class="carts-list">
-          <div :key="idx" class="carts-item" v-for="(row,idx) in carts">
+          <div :key="idx" class="carts-item" v-for="(row,idx) in showCarts">
             <div class="check-item flex flex-vertical-c" @click="selectItem(row)">
               <layout-icon color="#E64239" size="20" type="iconicon-check" v-if="row.checked"></layout-icon>
               <layout-icon color="#ccc" size="20" type="iconradio" v-else></layout-icon>
@@ -407,19 +407,17 @@
             <div :style="{backgroundImage:'url('+row.pic+')'}" class="carts-item-cover"></div>
             <div class="carts-item-info">
               <div class="title">{{row.name}}</div>
-              <div class="attr-text">{{row.attr_text||''}}</div>
+              <div class="attr-text" v-if="row.attr_text">{{row.attr_text||''}}</div>
               <div class="actions">
                 <div class="price-box fz-10 flex1">
                   <span class="price-selling">￥</span><span class="price-selling fz-15">{{row.price_selling}}</span>
                   <span class="p-l-7 price-market text-through">￥{{row.price_market}}</span>
                 </div>
                 <div class="action flex flex-vertical-c">
-                  <block v-if="row.num>0">
-                    <layout-icon @click.stop="attrNumMinus(row)" color="#B2B1B1" size="24"
-                                 type="iconicon-minus"></layout-icon>
-                    <input style="width: 54rpx;" v-model="row.num" @focus="getQty(row.num)"
-                           @blur="changeAttrNum($event,idx,row)" class="input-num text-center fz-13" />
-                  </block>
+                  <layout-icon v-if="row.num>0" @click.stop="attrNumMinus(row)" color="#B2B1B1" size="24"
+                               type="iconicon-minus"></layout-icon>
+                  <input style="width: 54rpx;" v-model="row.num" @focus="getQty(row.num)"
+                         @blur="changeAttrNum($event,idx,row)" class="input-num text-center fz-13" />
                   <layout-icon @click.stop="attrNumPlus(row)" color="#E64239" size="24"
                                type="iconicon-plus"></layout-icon>
                 </div>
@@ -471,7 +469,7 @@ import LayoutCopyright from '@/components/layout-copyright/layout-copyright'
 import LayoutComment from '@/components/layout-comment/layout-comment'
 import LayoutIcon from '@/components/layout-icon/layout-icon'
 import { componetMixin } from '@/mixins/BaseMixin'
-import { checkIsLogin, getArrColumn } from '@/common/helper'
+import { checkIsLogin, getArrColumn, getDomain, getPreviewThumb, objTranslate } from '@/common/helper'
 import { error, hideLoading, modal, showLoading, toast, checkIsExpire, confirm, linkToEasy } from '@/common/fun'
 import {
   addFavourite,
@@ -559,7 +557,7 @@ export default {
       storeInfo: {},
       couponList: [],
       activityList: [],
-      manjianList:[],
+      manjianList: [],
       comments: [],
       goodsNavIndex: 0,
       recommends: [],
@@ -631,7 +629,8 @@ export default {
           scrollTop: 0,
           name: '点评'
         }
-      ]
+      ],
+      showCarts:[]
     }
   },
   computed: {
@@ -654,6 +653,15 @@ export default {
     }
   },
   watch: {
+    carts: {
+      immediate: true,
+      deep: true,
+      handler (nval) {
+        console.log('carts value change,current value is', nval)
+        //var showCarts = this.$store.getters['cart/getCartList'](this.bid)
+        this.$set(this, 'showCarts', objTranslate(nval))
+      }
+    },
     bid: {
       immediate: true,
       handler (nval) {
@@ -662,6 +670,7 @@ export default {
     }
   },
   methods: {
+    getPreviewThumb,
     toSearchByCate (cateInfo) {
       console.log(cateInfo)
       const url = `/pages/search/result?biz_cate_id=${cateInfo.id}&biz_id=${this.bid}`
@@ -702,8 +711,19 @@ export default {
         return
       }
       if (!this.listExpand) {
-        this.$openPop('carts')
+       
         this.listExpand = true
+  
+        var showCarts = this.$store.getters['cart/getCartList'](this.bid)
+  
+        console.log('showCarts value is', showCarts)
+        this.$set(this, 'showCarts', objTranslate(showCarts))
+  
+        // 强制刷新视图
+        this.$forceUpdate()
+        setTimeout(() => {
+          this.$openPop('carts')
+        }, 100)
       }
     },
     clearCart () {
@@ -1172,7 +1192,7 @@ export default {
         this.activityList = await getBizSpikeList({ biz_id: this.bid, status: 1 }, { onlyData: true }).catch((e) => {
           throw Error('获取限时抢购数据失败')
         })
-  
+
         this.manjianList = await getActiveInfo({ type: 'manjian', biz_id: this.bid }).then(res => res.data.active_info).catch(err => { throw Error(err.msg) })
         console.log('manjianList is', this.manjianList)
 
@@ -1382,13 +1402,12 @@ export default {
     }
 
     &-list {
-      padding: 20rpx 20rpx 60rpx 0;
+      padding: 0rpx 20rpx 60rpx 0;
       width: 750rpx;
       box-sizing: border-box;
     }
 
     &-item {
-      height: 160rpx;
       display: flex;
       align-items: center;
 
@@ -1407,7 +1426,7 @@ export default {
 
       &-info {
         width: 500rpx;
-        height: 160rpx;
+        padding: 40rpx 0rpx 30rpx;
         box-sizing: border-box;
 
         border-bottom: 1px solid #EDEDED;
@@ -1423,8 +1442,14 @@ export default {
 
         .attr-text {
           font-size: 12px;
-          color: #999;
-          margin-top: 10rpx;
+          height: 20px;
+          line-height: 20px;
+          padding: 0 8px;
+          border-radius: 4px;
+          color: #666;
+          background: $fun-tag-color;
+          margin-top: 20rpx;
+          display: inline-block;
         }
 
         .actions {
@@ -2091,6 +2116,7 @@ export default {
         left: 0rpx;
         top: 0rpx;
         width: 60rpx;
+        height: 60rpx;
       }
       .discount-text{
         position: absolute;

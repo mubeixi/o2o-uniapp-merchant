@@ -134,11 +134,16 @@
             <div class="o_title">
               <span>配送价格</span>
               <div class="flex flex-vertical-c" style="text-align:right; color: #888;">
-                <block v-if="bizList[biz_id]['Order_Shipping']['Price']==0">
+                <block v-if="orderLoading">
+                  <block v-if="bizList[biz_id]['Order_Shipping']['Price']==0">
                     免运费
+                  </block>
+                  <block v-else>
+                    ￥{{bizList[biz_id]['Order_Shipping']['Price']}}
+                  </block>
                 </block>
                 <block v-else>
-                  ￥{{bizList[biz_id]['Order_Shipping']['Price']}}
+                  <image src="/static/loading.gif" style="width: 40rpx;height: 40rpx"></image>
                 </block>
               </div>
             </div>
@@ -309,9 +314,9 @@
     </div>
 
     <div class="space-box"></div>
-    <div class="safearea-box fixed" style="background-color: #f8f8f8!important;"></div>
+    <div id="safearea-box" class="safearea-box fixed"></div>
 
-    <layout-layer @maskClicked="handClicked" bottomStr="50px" ref="popupMX" title="明细">
+    <layout-layer @maskClicked="handClicked" :bottomStr="safeAreaHeight+50+'px'"  ref="popupMX" title="明细">
       <div class="mxdetail">
         <!--有问题要搞-->
         <div class="mxitem">产品
@@ -416,6 +421,7 @@ export default {
   },
   data () {
     return {
+      safeAreaHeight:0,
       cash_from: 1, // 使用余额模式
       allowUseMoney: 0,
       toDay: '', // 当前年月日
@@ -1095,6 +1101,7 @@ export default {
      */
     async checkOrderParam ({ isInit = false } = {}) {
       try {
+        this.orderLoading=false
         const oldOrderInfo = { ...this.orderInfo }
 
         let params = {}
@@ -1453,6 +1460,14 @@ export default {
     const { cash_from = 1 } = initData
     this.cash_from = Number(cash_from)
   },
+  onReady () {
+    const query = uni.createSelectorQuery().in(this)
+    query.select('#safearea-box').boundingClientRect(data => {
+      console.log('得到布局位置信息' + JSON.stringify(data))
+      console.log('节点离页面顶部的距离为' + data.top)
+      this.safeAreaHeight = data.height
+    }).exec()
+  },
   onLoad (options) {
     this.toDay = uni.$moment(new Date()).add(0, 'year').format('YYYY-MM-DD')
     this.postData.cart_key = options.cart_key
@@ -1609,9 +1624,6 @@ export default {
     font-size: 28rpx;
     line-height: 80rpx;
     padding: 20rpx 30rpx;
-    /* #ifndef APP-PLUS */
-    padding-bottom: 100rpx;
-    /* #endif */
     .mxtitle {
       font-size: 28rpx;
       text-align: center;
@@ -1913,12 +1925,9 @@ export default {
   /* 提交订单 */
   .order_total {
     position: fixed;
-    bottom: 0;
     height: 50px;
-    /* #ifdef MP */
     bottom: constant(safe-area-inset-bottom);
     bottom: env(safe-area-inset-bottom);
-    /* #endif */
     width: 100%;
     display: flex;
     align-items: center;

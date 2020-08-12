@@ -3,8 +3,7 @@
     <layout-popup ref="productSku" @maskClicked="closePro">
       <div class="cartSku" @touchmove.prevent.stop="noop">
         <div class="cartTop">
-          <image class="image" @click="showImgDetal"
-                 :src="imgShow?imgShow+'-r200':(list.Products_JSON.ImgPath[0]?list.Products_JSON.ImgPath[0]+'-r200':'')"></image>
+          <image class="image" @click="showImgDetal" :src="imgShow?imgShow+'-r200':(list.Products_JSON.ImgPath[0]?list.Products_JSON.ImgPath[0]+'-r200':'')"></image>
           <div class="cartTitle">
             <div class="cartTitles flex flex-justify-between">
               <div class=" cart-price">
@@ -81,6 +80,10 @@ import LayoutIcon from '@/components/layout-icon/layout-icon'
 export default {
   components: { layoutPopup, LayoutIcon },
   props: {
+    notSaveNumber: {
+      type: Boolean,
+      default: false
+    },
     isNeedNumber: {
       type: Boolean,
       default: false
@@ -288,10 +291,13 @@ export default {
         this.postData.qty = this.postData.count
       }
 
-      Storage.set('value_index', value_index)
-      Storage.set('attr_index', attr_index)
-
-      console.log(this.postData, 'post')
+      if (this.notSaveNumber) {
+        Storage.remove('value_index')
+        Storage.remove('attr_index')
+      } else {
+        Storage.set('value_index', value_index)
+        Storage.set('attr_index', attr_index)
+      }
     },
     addNum () {
       if (this.postData.qty < this.postData.count) {
@@ -362,12 +368,16 @@ export default {
       this.isShow = true
       this.$refs.productSku.show()
       await this.init()
+      if (this.notSaveNumber) {
+        this.postData.qty = 1
+      }
 
       const value_index = Storage.get('value_index')
       const attr_index = Storage.get('attr_index')
       if (value_index && attr_index) {
         await this.selectAttr(value_index, attr_index)
       }
+
     },
     closePro () {
       this.submitFlag = false

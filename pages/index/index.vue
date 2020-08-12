@@ -1,5 +1,5 @@
 <template>
-  <div class="page-wrap">
+  <div class="page-wrap" @click="bindFullClick">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <layout-loading v-if="loadingByTmpl"></layout-loading>
     <block v-if="topTheme==='default'">
@@ -8,8 +8,7 @@
            @click="$linkTo('/pages/search/index')" class="search-box">
         <layout-icon display="inline" class="iconsearch" color="#fff" size="18" weight="bold" type="iconicon-search"></layout-icon>
       </div>
-      <div @touchmove.stop.prevent :style="{backgroundColor:primaryColor,paddingTop:menuButtonInfo.top+'px'}"
-           class="head-box" style="height: 50px;">
+      <div @touchmove.stop.prevent :style="{backgroundColor:primaryColor,paddingTop:menuButtonInfo.top+'px'}" class="head-box" style="height: 50px;">
         <div style="height: 36px;" :style="{marginRight:diyHeadRight+menuButtonInfo.height+'px'}" class="head">
           <ul class="tab-box">
             <li :class="[headTabIndex === 0?'active':'']" @click="setHeadTabIndex(0)" class="tab-item" id="headTabItem0">
@@ -36,12 +35,10 @@
         <scroll-view @scrolltolower="bindGetMore(0)" class="tab-page-wrap" lower-threshold="1" scroll-y v-show="headTabIndex===0">
           <scroll-page-hot ref="page0"></scroll-page-hot>
         </scroll-view>
-        <scroll-view @scrolltolower="bindGetMore(1)" class="tab-page-wrap" lower-threshold="1" scroll-y
-                     v-show="headTabIndex===1">
+        <scroll-view @scrolltolower="bindGetMore(1)" class="tab-page-wrap" lower-threshold="1" scroll-y v-show="headTabIndex===1">
           <scroll-page-local ref="page1"></scroll-page-local>
         </scroll-view>
-        <scroll-view @scrolltolower="bindGetMore(2)" class="tab-page-wrap" lower-threshold="1" scroll-y
-                     v-show="headTabIndex===2">
+        <scroll-view @scrolltolower="bindGetMore(2)" class="tab-page-wrap" lower-threshold="1" scroll-y v-show="headTabIndex===2">
           <scroll-page-merchat ref="page2"></scroll-page-merchat>
         </scroll-view>
       </div>
@@ -56,7 +53,7 @@
           </div>
           <div class="control flex flex-justify-between flex-justify-c">
             <button @click="$closePop('openLocalSettingModal')" class="action-btn btn-cancel" size="mini">取消</button>
-            <button bindopensetting="bindOpenSetting" class="btn-sub action-btn" open-type='openSetting' size="mini">确定
+            <button @opensetting="bindOpenSetting" class="btn-sub action-btn" open-type='openSetting' size="mini">确定
             </button>
           </div>
         </div>
@@ -70,6 +67,40 @@
         <scroll-page-hot :full-diy="true"></scroll-page-hot>
       </scroll-view>
     </block>
+
+<!--    <div class="location-btn-box">-->
+<!--      <div class="location-btn-wrap">-->
+<!--        <image src="/static/home/local-btn-preview.png" :animation="localAnimateByPreview" @click="toMerchant" class="fun-location-btn location-btn-preview" v-if="initData.switch_location"></image>-->
+<!--        <div :animation="localAnimateByPreview" @click="toMerchant" class="fun-location-btn location-btn-preview" v-if="initData.switch_location">-->
+<!--          <layout-icon color="#fff" display="inline" size="20" type="iconicon-address"></layout-icon>-->
+<!--          <div class="fz-8 color-white">查看位置</div>-->
+<!--        </div>-->
+
+<!--        <image src="/static/home/local-btn-local.png" :animation="localAnimateByLocal" @click="toMerchant" class="fun-location-btn location-btn-local" v-if="initData.switch_location"></image>-->
+<!--        <div :animation="localAnimateByLocal" @click="toMerchant" class="fun-location-btn location-btn-local" v-if="initData.switch_location">-->
+<!--          <layout-icon color="#fff" display="inline" size="20" type="iconicon-address"></layout-icon>-->
+<!--          <div class="fz-8 color-white">当前位置</div>-->
+<!--        </div>-->
+<!--        <image src="/static/home/local-btn-change.png" :animation="localAnimateByChange" @click="handleSetLocation" class="fun-location-btn location-btn-change" v-if="initData.switch_location"></image>-->
+<!--        <div :animation="localAnimateByChange" @click="handleSetLocation" class="fun-location-btn location-btn-change" v-if="initData.switch_location">-->
+<!--          <layout-icon color="#fff" display="inline" size="20" type="iconicon-address"></layout-icon>-->
+<!--          <div class="fz-8 color-white">修改位置</div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+
+<!--    <div @click="taggleOpenLocationComp" :animation="localAnimate" class="location-btn" v-if="initData.switch_location">-->
+<!--      <layout-icon color="#fff" display="inline" size="24" type="iconicon-address"></layout-icon>-->
+<!--      &lt;!&ndash;<div class="fz-10 color-white">发布活动</div>&ndash;&gt;-->
+<!--    </div>-->
+    <image src="/static/home/local-btn.png" @click="handleSetLocation" :animation="localAnimate" class="location-btn" v-if="initData.switch_location"></image>
+    <div class="location-tooltip-wrap" v-if="showFormattedAddress && initData.switch_location && formatted_address">
+      <div class="location-tooltip-conent">当前位置：{{formatted_address}} <span class="text-underline p-l-4">点此切换</span>
+        <!--<layout-icon color="rgba(0,0,0,.7)" display="inline" class="iconright" type="iconright"></layout-icon>-->
+        <image src="/static/home/local-arrow-right.png" class="iconright"></image>
+      </div>
+
+    </div>
     <div @click="toMerchant" class="publish-btn">
       <layout-icon color="#fff" display="inline" size="18" type="iconfabu"></layout-icon>
       <div class="fz-10 color-white">发布活动</div>
@@ -87,7 +118,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import { error } from '@/common/fun'
+import { error, hideLoading, modal, showLoading } from '@/common/fun'
 import BaseMixin, { tabbarMixin } from '@/mixins/BaseMixin'
 import LayoutIcon from '@/components/layout-icon/layout-icon'
 import ScrollPageHot from '@/pages/index/components/scroll-page-hot'
@@ -97,9 +128,31 @@ import Promisify from '@/common/Promisify'
 import LayoutModal from '@/components/layout-modal/layout-modal'
 import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 import Storage from '@/common/Storage'
-import { getSkinConfig } from '@/api/common'
+import { getLocationByCoordinate, getSkinConfig } from '@/api/common'
 import LayoutLoading from '@/components/layout-loading/layout-loading'
 import LayoutPageTitle from '@/components/layout-page-title/layout-page-title'
+import { Exception } from '@/common/Exception'
+import { emptyObject } from '@/common/helper'
+
+// 动画时间
+const locationBtnAnimationDuration = 300
+/**
+ * 定位按钮创建动画工具函数
+ * @param x
+ * @param y
+ * @param opacity
+ * @param duration
+ * @param timingFunction
+ * @returns {*}
+ */
+function createdLocationBtnAnimation ({ x, y, rotate = 0, opacity, duration, timingFunction = 'ease-in-out' }) {
+  var animation = uni.createAnimation({
+    duration,
+    timingFunction
+  })
+  animation.translateX(x).translateY(y).rotate(rotate).opacity(opacity).step()
+  return animation.export()
+}
 
 export default {
   mixins: [BaseMixin, tabbarMixin],
@@ -114,9 +167,9 @@ export default {
     LayoutIcon
   },
   computed: {
-    initData () {
-      return this.$store.getters['system/initData']
-    },
+    // initData () {
+    //   return this.$store.getters['system/initData']
+    // },
     userAddressInfo () {
       return this.$store.getters['user/getUserAddressInfo']()
     },
@@ -126,12 +179,22 @@ export default {
   },
   data () {
     return {
+      showFormattedAddress: false,
+      formatted_address: '',
+      localAnimate: {},
+      localAnimateByPreview: {},
+      localAnimateByLocal: {},
+      localAnimateByChange: {},
+      init_location_ing: false,
+      initData: {},
       loadingByTmpl: false, // 标记是否请求完结
       templateList: [],
       templateData: [],
       tagIndex: 0,
       topTheme: '',
       diyTitle: '',
+      locationCompExpandIng: false, // 在动画期间，不允许点击
+      locationCompExpand: false, // 默认不展开
 
       /** 疯狂hack **/
       getLocationDone: false,
@@ -169,6 +232,36 @@ export default {
     }
   },
   methods: {
+    bindFullClick () {
+      if (this.locationCompExpand) this.taggleOpenLocationComp()
+    },
+    taggleOpenLocationComp () {
+      const rate = 0.8
+      if (this.locationCompExpandIng) return
+      if (this.locationCompExpand) {
+        this.localAnimateByPreview = createdLocationBtnAnimation({ x: 0, y: 0, duration: locationBtnAnimationDuration, opacity: 0 })
+        this.localAnimateByChange = createdLocationBtnAnimation({ x: 0, y: 0, duration: locationBtnAnimationDuration, opacity: 0 })
+        this.localAnimateByLocal = createdLocationBtnAnimation({ x: 0, y: 0, duration: locationBtnAnimationDuration, opacity: 0 })
+        this.localAnimate = createdLocationBtnAnimation({ rotate: 0, duration: locationBtnAnimationDuration, opacity: 1 })
+        setTimeout(() => {
+          this.locationCompExpand = false
+          this.locationCompExpandIng = false
+        }, locationBtnAnimationDuration)
+      }
+
+      if (!this.locationCompExpand) {
+        this.localAnimateByPreview = createdLocationBtnAnimation({ x: -49 * 2 * rate, y: 0, duration: locationBtnAnimationDuration, opacity: 1 })
+        this.localAnimateByChange = createdLocationBtnAnimation({ x: 0, y: -49 * 2 * rate, duration: locationBtnAnimationDuration, opacity: 1 })
+        var distanceX = Math.sqrt(2) / 2 * 49 * 2
+        this.localAnimateByLocal = createdLocationBtnAnimation({ x: -distanceX * rate, y: -distanceX * rate, duration: locationBtnAnimationDuration, opacity: 1 })
+        this.localAnimate = createdLocationBtnAnimation({ rotate: 360, duration: locationBtnAnimationDuration, opacity: 1 })
+
+        setTimeout(() => {
+          this.locationCompExpand = true
+          this.locationCompExpandIng = false
+        }, locationBtnAnimationDuration)
+      }
+    },
     toLiveList () {
       this.$linkTo('/pagesA/live/liveList')
     },
@@ -201,10 +294,15 @@ export default {
       })
     },
     bindOpenSetting () {
-      uni.openSetting({
+      uni.getSetting({
         success: (res) => {
+          console.log('bindOpenSetting susscess', res)
           if (res.authSetting['scope.userLocation']) {
-            this.getUserLocation()
+            if (!Storage.get('location_id') && !this.init_location_ing) {
+              this._init_location().then(() => {
+                this.$refs.openLocalSettingModal.close()
+              }).catch(() => {})
+            }
           }
         }
       })
@@ -212,13 +310,13 @@ export default {
     setHeadTabIndex (idx) {
       this.defaultUnderlineLeft = 0 // 没有左边距了
       this.headTabIndex = idx
-      if (idx > 0 && (!this.userAddressInfo || JSON.stringify(this.userAddressInfo === '{}'))) {
-        Promisify('authorize', { scope: 'scope.userLocation' }).then(() => {
-          this.getUserLocation()
-        }).catch(() => {
-          this.$refs.openLocalSettingModal.show()
-        })
+      if (idx > 0) {
+        if (idx === 1) this.$refs.page1.manualInitFunc()
+        if (idx === 2) this.$refs.page2.manualInitFunc()
       }
+      // if (idx > 0 && (!this.userAddressInfo || JSON.stringify(this.userAddressInfo === '{}'))) {
+      //
+      // }
     },
     getUserLocation () {
       uni.getLocation({
@@ -271,38 +369,6 @@ export default {
           })
         }
 
-        // // 存储页面数据
-        // this.templateData = [] // 页面数据的二维数组。
-        // this.templateList = [] // 页面组件的二维数组。
-        // if (templateData && Array.isArray(templateData[0])) {
-        //   // 多个页面，每个页面是一个数组
-        //   templateData.map(item => {
-        //     this.templateData.push(item)
-        //     this.templateList.push([])
-        //   })
-        // } else if (
-        //   templateData && !Array.isArray(templateData[0]) && templateData.length > 0
-        // ) {
-        //   // 单纯是一个对象的时候？？
-        //   this.templateData = [templateData]
-        //   this.templateList = [[]]
-        // } else {
-        //   this.templateData = [[]]
-        //   this.templateList = [[]]
-        // }
-        // // this.templateData = templateData
-        // // 存储页面组件templateList
-        // for (let i = 0; i < this.templateData.length; i++) {
-        //   if (
-        //     this.templateData[i] &&
-        //     this.templateData[i] !== []
-        //   ) {
-        //     this.templateData[i].map(m => {
-        //       this.templateList[i].push(m.tag)
-        //     })
-        //   }
-        // }
-
         return true
       } catch (e) {
         return e
@@ -316,6 +382,89 @@ export default {
     bindGetMore (idx) {
       console.log(idx)
       this.$refs[`page${idx}`].bindReachBottom()
+    },
+    /**
+     * 手动获取位置
+     * @returns {Promise<void>}
+     * @private
+     */
+    async handleSetLocation () {
+      try {
+        var conf = { latitude: Storage.get('current_lat'), longitude: Storage.get('current_lng') }
+        emptyObject(conf)
+        console.log('conf is',conf)
+  
+        // wx.openLocation({
+        //   ...conf
+        // })
+        const { latitude: lat, longitude: lng } = await Promisify('chooseLocation', conf).catch(err => {
+          if (err.errMsg === 'chooseLocation:fail cancel') throw Error('nocare')
+          throw err
+        })
+        console.log(lat, lng)
+        Storage.set('current_lat', lat)
+        Storage.set('current_lng', lng)
+        const { location_id, formatted_address, area_name } = await getLocationByCoordinate({ lat, lng, provider: 1 }).then(res => res.data).catch(err => Exception.handle(err))
+        // 全部存起来
+        Storage.set('location_id', location_id)
+        Storage.set('formatted_address', formatted_address)
+        this.formatted_address = formatted_address
+        Storage.set('area_name', area_name)
+
+        this.$refs.page1.manualFlashLocation()
+        this.$refs.page2.manualFlashLocation()
+
+        return { location_id, lat, lng, formatted_address, area_name }
+      } catch (e) {
+        console.log(e)
+        Exception.handle(e)
+      }
+    },
+
+    /**
+     * 打开获取定位才开始弄
+     * @returns {Promise<void>}
+     * @private
+     */
+    async _init_location () {
+      try {
+        if (this.init_location_ing) {
+          console.log('已经阻止重复启动_init_location')
+          return
+        }
+        // 标记，不要和onshow里面重复调用
+        this.init_location_ing = true
+        await Promisify('authorize', { scope: 'scope.userLocation' }).catch((err) => {
+          this.$refs.openLocalSettingModal.show()
+          console.log(err)
+          throw Error('nocare')
+        })
+
+        const { latitude: lat, longitude: lng } = await Promisify('getLocation').catch(err => {
+          console.log(err)
+          throw Error('nocare')
+        })
+        console.log(lat, lng)
+        showLoading('更新位置', true)
+        const { location_id, formatted_address, area_name } = await getLocationByCoordinate({ lat, lng, provider: 1 }).then(res => res.data).catch(err => Exception.handle(err))
+        // 全部存起来
+        Storage.set('current_lat', lat)
+        Storage.set('current_lng', lng)
+        Storage.set('location_id', location_id)
+        Storage.set('formatted_address', formatted_address)
+        this.formatted_address = formatted_address
+        Storage.set('area_name', area_name)
+
+        this.init_location_ing = false
+        hideLoading()
+        return { location_id, lat, lng, formatted_address, area_name }
+      } catch (e) {
+        hideLoading()
+        this.$set(this, 'init_location_ing', false)
+        console.log(this.init_location_ing)
+        console.log(e)
+        Exception.handle(e)
+      }
     },
     ...mapActions({
       setUserAddressInfo: 'user/setUserAddressInfo'
@@ -342,14 +491,14 @@ export default {
 
     if (this.topTheme === 'default') {
       this.$refs.page0.hookOnShow()
-      this.$refs.openLocalSettingModal.close()
-      if (this.headTabIndex > 0) {
-        Promisify('authorize', { scope: 'scope.userLocation' }).then(() => {
-          this.getUserLocation()
-        }).catch(() => {
-          this.$refs.openLocalSettingModal.show()
-        })
-      }
+      // this.$refs.openLocalSettingModal.close()
+      // if (this.headTabIndex > 0) {
+      //   Promisify('authorize', { scope: 'scope.userLocation' }).then(() => {
+      //     this.getUserLocation()
+      //   }).catch(() => {
+      //     this.$refs.openLocalSettingModal.show()
+      //   })
+      // }
     }
   },
   onReady () {
@@ -369,6 +518,23 @@ export default {
     }
   },
   created () {
+    this.showFormattedAddress = true
+    setTimeout(() => {
+      this.showFormattedAddress = false
+    }, 10000)
+    if (Storage.get('formatted_address')) {
+      this.formatted_address = Storage.get('formatted_address')
+    }
+    this.$store.dispatch('system/loadInitData').then(data => {
+      this.initData = data
+      console.log('this.initData is ', this.initData)
+      if (this.initData.switch_location && !Storage.get('location_id')) {
+        this._init_location()
+      }
+    }).catch(() => {
+
+    })
+
     this.getLocationDone = false
     Storage.set('isRefresh', false)
     this._init_func()
@@ -413,18 +579,110 @@ export default {
     text-align: center;
   }
 
+  .location-btn-box {
+    position: fixed;
+    bottom: 133px;
+    margin-bottom: env(safe-area-inset-bottom);
+    right: 15px;
+    z-index: 98;
+    .location-btn-wrap{
+      width: 147px;
+      height: 147px;
+
+      position: relative;
+      .location-btn-preview{
+        position: absolute;
+        right: 0;
+        bottom:0;
+        opacity: 0;
+      }
+      .location-btn-local{
+        position: absolute;
+        right: 0;
+        bottom:0;
+        opacity: 0;
+      }
+      .location-btn-change{
+        position: absolute;
+        right: 0;
+        bottom:0;
+        opacity: 0;
+      }
+    }
+  }
+
+  .fun-location-btn{
+    /*box-sizing: border-box;*/
+    /*padding-top: 4px;*/
+    width: 49px;
+    height: 49px;
+    /*background: rgba(38, 199, 141, 1);*/
+    /*box-shadow: 0rpx 1px 6px 0rpx rgba(35, 183, 130, 0.4);*/
+    /*border-radius: 50%;*/
+    /*text-align: center;*/
+  }
+
+  .location-tooltip-wrap{
+    position: fixed;
+    bottom: 157px;
+    margin-bottom: env(safe-area-inset-bottom);
+    right: 74px;
+    z-index: 99;
+    display: flex;
+    align-items: flex-start;
+    .location-tooltip-conent{
+      padding: 6px;
+      width: 380rpx;
+      font-size: 12px;
+      line-height: 20px;
+      background: rgba(0,0,0,.5);
+      color: #fff;
+      position: relative;
+      border-bottom-left-radius: 4px;
+      border-top-left-radius: 4px;
+      border-top-right-radius: 4px;
+    }
+    .iconright{
+      width: 16px;
+      height: 16px;
+      position: absolute;
+      right: 0px;
+      bottom: 0;
+      transform: translateX(100%);
+      opacity: 0.5;
+    }
+
+  }
+
+  .location-btn {
+    position: fixed;
+    bottom: 133px;
+    margin-bottom: env(safe-area-inset-bottom);
+    right: 15px;
+    z-index: 99;
+    /*box-sizing: border-box;*/
+    width: 49px;
+    height: 49px;
+    /*background: rgba(38, 199, 141, 1);*/
+    /*box-shadow: 0rpx 1px 6px 0rpx rgba(35, 183, 130, 0.4);*/
+    /*border-radius: 50%;*/
+    /*display: flex;*/
+    /*align-items: center;*/
+    /*justify-content: center;*/
+  }
+
   .publish-btn {
     position: fixed;
-    bottom: 128rpx;
+    bottom: 64px;
     margin-bottom: env(safe-area-inset-bottom);
-    right: 30rpx;
+    right: 15px;
     z-index: 99;
     box-sizing: border-box;
-    padding-top: 8rpx;
-    width: 98rpx;
-    height: 98rpx;
+    padding-top: 4px;
+    width: 49px;
+    height: 49px;
     background: rgba(38, 199, 141, 1);
-    box-shadow: 0rpx 2rpx 12rpx 0rpx rgba(35, 183, 130, 0.4);
+    box-shadow: 0rpx 1px 6px 0rpx rgba(35, 183, 130, 0.4);
     border-radius: 50%;
     text-align: center;
   }

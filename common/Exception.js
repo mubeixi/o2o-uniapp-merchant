@@ -24,13 +24,23 @@ export function Exception () {
  * @constructor
  */
 function handle (e) {
+  if (typeof e === 'string') {
+    e = new Error(e)
+  }
+  if (typeof e === 'object' && e.hasOwnProperty('msg')) {
+    e = new Error(e.msg)
+  }
+  if (typeof e === 'object' && e.hasOwnProperty('errMsg')) {
+    e = new Error(e.errMsg)
+  }
+
   if (e === 'nocare' || e.message === 'nocare') return
   let { message = '错误信息', type = 'toast', icon = 'none' } = e
   if (typeof e !== 'object') {
     message = e
   }
   // 开发模式下，全部都弹出来
-  if (ENV.isDev) { type = 'modal'; message = '开发调试信息:' + message; console.log(e) }
+  // if (ENV.isDev) { type = 'modal'; message = '开发调试信息:' + message; console.log(e) }
   if (type === 'toast') toast(message, icon)
   if (type === 'modal') modal(message)
 

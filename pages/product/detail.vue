@@ -1161,10 +1161,11 @@
 
     <div :style="{height:diyHeadHeight+'px'}" class="head-box-active"  :class="activeHeadOpacity?'bg-ebebeb':''">
       <div :style="{height:menuButtonInfo.top+'px'}"></div>
-      <div :style="{height:menuButtonInfo.height+'px',paddingRight:diyHeadRight+'px'}"
-           class="flex flex-vertical-c flex-justify-between">
+      <div :style="{height:menuButtonInfo.height+'px',paddingRight:diyHeadRight+'px'}" class="flex flex-vertical-c flex-justify-between">
         <div class="flex flex-vertical-c">
-          <layout-icon @click="bindLeftBtnClick" class="m-l-15" color="#606060" size="22" type="iconback1"></layout-icon>
+          <div class="flex flex-vertical-c p-l-10" :style="{height:menuButtonInfo.height+'px',width:menuButtonInfo.width/2+'px'}">
+            <layout-icon @click="bindLeftBtnClick" color="rgba(0,0,0,0.9)"  size="17" type="iconnavigator-left"></layout-icon>
+          </div>
           <div @click="toSearch" class="head-search flex flex-vertical-c flex-justify-between"  :class="activeHeadOpacity?'bg-white':''" >
             <span class="fz-12  p-l-6 c-bc"  >搜索商品</span>
             <layout-icon color="#606060" type="iconicon-search"></layout-icon>
@@ -1206,7 +1207,7 @@
                 @change="changeSwiperCurrent"
                 interval="3000" style="height:750rpx;width: 750rpx;"  >
           <swiper-item :key="index" v-for="(item,index) of imgs">
-            <image :src="item+'-r640'" @click="previewImg(index)" class="full-img" v-if="item" />
+            <image :src="item+'-r800'" @click="previewImg(index)" class="full-img" v-if="item" />
           </swiper-item>
         </swiper>
 
@@ -1507,7 +1508,7 @@
             <div class="recommend-list flex ">
 
               <div class="recommend-item"  v-for="(recommend,recommendIndex) of recommendList" :key="recommendIndex"  @click="$toGoodsDetail(recommend)">
-                  <image :src="recommend.ImgPath" class="recommend-item-img  m-b-12"></image>
+                  <image :src="recommend.ImgPath+'-r350'" class="recommend-item-img  m-b-12"></image>
                   <div class="recommend-item-title">
                     {{recommend.Products_Name}}
                   </div>

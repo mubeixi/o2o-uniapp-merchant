@@ -100,3 +100,6 @@ export const getRotateRecord = (param, options) => fetch({ act: 'getPrizeRecord'
 
 // 大转盘初始化
 export const rotateInit = (param, options) => fetch({ act: 'initTurn', param, options })
+
+// 根据经纬度和精确定位设置获取对应的地区id
+export const getLocationByCoordinate = (param, options) => fetch({ act: 'getLocationByCoordinate', param, options })

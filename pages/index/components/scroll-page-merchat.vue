@@ -113,6 +113,7 @@ export default {
   mixins: [componetMixin],
   data () {
     return {
+      isInitDone: false,
       areaLoading: false,
       firstCateHeight: 44,
       storeFirstCateIdx: 0, // 好店
@@ -164,15 +165,17 @@ export default {
         })
         if (!this.firstCateList) this.firstCateList = []
         this.firstCateList.unshift({ Category_Name: '所有', Category_ID: '-1' })
-        this.loadMerchantList(0)
+        await this.loadMerchantList(0)
+        this.isInitDone = true
       } catch (e) {
+        this.isInitDone = true
         Exception.handle(e)
       } finally {
         // hideLoading()
       }
     },
     async loadMerchantList (idx) {
-      if(this.firstCateList.length<1)return;
+      if (this.firstCateList.length < 1) return
       try {
         this.merchantList = []
         // showLoading()
@@ -188,13 +191,13 @@ export default {
           postData.cate_id = cateId
         }
         this.areaLoading = true
-        this.userAddressInfo = this.$store.getters['user/getUserAddressInfo']()
-        if (this.userAddressInfo && this.userAddressInfo.hasOwnProperty('latitude') && this.userAddressInfo.hasOwnProperty('longitude')) {
-          Object.assign(postData, {
-            lat: this.userAddressInfo.latitude,
-            lng: this.userAddressInfo.longitude
-          })
-        }
+        // this.userAddressInfo = this.$store.getters['user/getUserAddressInfo']()
+        // if (this.userAddressInfo && this.userAddressInfo.hasOwnProperty('latitude') && this.userAddressInfo.hasOwnProperty('longitude')) {
+        //   Object.assign(postData, {
+        //     lat: this.userAddressInfo.latitude,
+        //     lng: this.userAddressInfo.longitude
+        //   })
+        // }
         // 商家无法利用一级分类获取到
         this.merchantList = await getBizInfo(postData, { onlyData: true }).catch((e) => {
           throw Error('获取人气商家列表失败')
@@ -205,10 +208,16 @@ export default {
         this.areaLoading = false
         // hideLoading()
       }
+    },
+    manualFlashLocation () {
+      if (this.isInitDone)this.loadMerchantList(this.storeFirstCateIdx)
+    },
+    manualInitFunc () {
+      if (!this.isInitDone) this._init_func()
     }
   },
   created () {
-    this._init_func()
+
   }
 
 }

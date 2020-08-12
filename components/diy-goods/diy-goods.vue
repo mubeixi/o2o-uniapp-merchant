@@ -47,6 +47,7 @@
 import { getProductList } from '@/api/product'
 import { lazyImgUrl } from '@/common'
 import { getDomain, toGoodsDetail } from '@/common/helper'
+import {getPreviewThumb} from '@/common/helper'
 
 export default {
   name: 'DiyGoods',
@@ -260,7 +261,7 @@ export default {
         return lazyImgUrl// 展位图替换掉吧。。
       }
 
-      return getDomain(url)
+      return getPreviewThumb(url)
     }
 
   },
