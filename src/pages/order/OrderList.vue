@@ -709,7 +709,7 @@ export default {
     color: #a1a1a1;
   }
   
-  .page-wrap >>> .popup-content {
+  .page-wrap .popup-content {
     padding: 0px;
   }
 </style>
