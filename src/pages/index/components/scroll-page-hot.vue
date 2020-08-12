@@ -2,7 +2,7 @@
   <div>
 <!--    <layout-ad code="index_top" paddingStr="20px 0 20px 0"></layout-ad>-->
 <!--    <layout-loading v-if="loadingByTmpl"></layout-loading>-->
-    <view class="home-diy-wrap" :style="{backgroundColor:bgcolor}" v-if="loadReady">
+    <view class="home-diy-wrap" :style="{backgroundColor:bgcolor}" v-if="isInitDone">
       <section
         :class="[item]"
         :data-name="item"
@@ -238,8 +238,9 @@ export default {
   },
   data () {
     return {
+      isInitDone: false,
       bgcolor: '',
-      loadReady: false,
+
       loadingByTmpl: false, // 标记是否请求完结
       templateList: [],
       templateData: [],
@@ -360,10 +361,10 @@ export default {
       this.loadingByKillList = true
       // showLoading('初始化数据')
       try {
-        this.loadingByTmpl = true
+        // this.loadingByTmpl = true
         const handleRT = await this.get_tmpl_data()
-        this.loadingByTmpl = false
-        this.loadReady = true
+        // this.loadingByTmpl = false
+        
         if (handleRT !== true) throw handleRT // hanldeRT不是true就是一个Error实例，直接抛出
 
         this.killList = await getFlashsaleList({}, { onlyData: true }).catch(err => {
@@ -403,8 +404,10 @@ export default {
           ...liveNavData
         ]
 
-        this.loadLiveGoodsList(0) // 加载第一个分类的商品
+        await this.loadLiveGoodsList(0) // 加载第一个分类的商品
+        this.isInitDone = true
       } catch (e) {
+        this.isInitDone = true
         Exception.handle(e)
       } finally {
         // hideLoading()
@@ -439,11 +442,21 @@ export default {
         })
       }
     },
+    manualFlashLocation () {
+      console.log('scroll-page-hot manualFlashLocation',this.isInitDone)
+      if (this.isInitDone) {
+        this.isInitDone = false
+        this._init_func()
+      }
+    },
+    manualInitFunc () {
+      if (!this.isInitDone) this._init_func()
+    },
     $toGoodsDetail: toGoodsDetail
   },
 
   created () {
-    this._init_func()
+
   }
 }
 </script>

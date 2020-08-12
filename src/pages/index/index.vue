@@ -1,7 +1,6 @@
 <template>
   <div class="page-wrap" @click="bindFullClick">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
-    <layout-loading v-if="loadingByTmpl"></layout-loading>
     <block v-if="topTheme==='default'">
       <div @touchmove.stop.prevent
            :style="{height:menuButtonInfo.height+'px',width:menuButtonInfo.height+'px',paddingLeft:menuButtonInfo.height/2+'px',paddingRight:menuButtonInfo.height/3+'px',top:menuButtonInfo.top+'px',right:diyHeadRight+10+'px'}"
@@ -33,6 +32,7 @@
       <!--<div @touchmove.stop.prevent :style="{height:menuButtonInfo.top+50+'px'}" style="background-color: #26C78D"></div>-->
       <div :style="{top:menuButtonInfo.top+50+'px'}" class="main tab-container">
         <scroll-view @scrolltolower="bindGetMore(0)" class="tab-page-wrap" lower-threshold="1" scroll-y v-show="headTabIndex===0">
+          <layout-loading v-if="!getLocationDone"></layout-loading>
           <scroll-page-hot ref="page0"></scroll-page-hot>
         </scroll-view>
         <scroll-view @scrolltolower="bindGetMore(1)" class="tab-page-wrap" lower-threshold="1" scroll-y v-show="headTabIndex===1">
@@ -64,7 +64,7 @@
       <layout-page-title :show-left-icon="false" :extStyle="'padding-bottom:10px;background:#fff;'" :page-title="diyTitle"></layout-page-title>
       <!--@scrolltolower="bindGetMore(0)"-->
       <scroll-view class="full-diy-wrap" lower-threshold="1" scroll-y :style="{top:menuButtonInfo.bottom+10+'px'}">
-        <scroll-page-hot :full-diy="true"></scroll-page-hot>
+        <scroll-page-hot ref="pagenone" :full-diy="true"></scroll-page-hot>
       </scroll-view>
     </block>
 
@@ -298,22 +298,61 @@ export default {
         success: (res) => {
           console.log('bindOpenSetting susscess', res)
           if (res.authSetting['scope.userLocation']) {
-            if (!Storage.get('location_id') && !this.init_location_ing) {
-              this._init_location().then(() => {
-                this.$refs.openLocalSettingModal.close()
-              }).catch(() => {})
-            }
+            this._init_location().then(() => {
+              this.$refs.openLocalSettingModal.close()
+
+              // 这个地方，只有后两个tab才会出现这个问题，所以可以直接用这样写
+              
+              this.$refs.page1.manualInitFunc()
+              this.$refs.page2.manualInitFunc()
+              if (this.topTheme === 'default') this.$refs.page0.manualInitFunc()
+              if (this.topTheme === 'none') this.$refs.pagenone.manualInitFunc()
+            }).catch(() => {})
+
+            // if (!Storage.get('location_id') && !this.init_location_ing) {
+            //
+            // }
           }
         }
       })
     },
-    setHeadTabIndex (idx) {
+    async setHeadTabIndex (idx) {
       this.defaultUnderlineLeft = 0 // 没有左边距了
       this.headTabIndex = idx
-      if (idx > 0) {
+
+      // 有位置的前提下
+      if (Storage.get('location_id') && Storage.get('lat') && Storage.get('lng')) {
         if (idx === 1) this.$refs.page1.manualInitFunc()
         if (idx === 2) this.$refs.page2.manualInitFunc()
+        if (idx === 0) {
+          if (this.topTheme === 'default') this.$refs.page0.manualInitFunc()
+          if (this.topTheme === 'none') this.$refs.pagenone.manualInitFunc()
+        }
+      } else {
+        //首屏不给面子没问题
+        if (idx === 0){
+          if (this.topTheme === 'default') this.$refs.page0.manualInitFunc()
+          if (this.topTheme === 'none') this.$refs.pagenone.manualInitFunc()
+          return
+        }
+        // 拿一次设备
+        await this._init_location().then(res => {
+          if (res !== false) {
+            if (idx === 1) this.$refs.page1.manualInitFunc()
+            if (idx === 2) this.$refs.page2.manualInitFunc()
+            // if (idx === 0) {
+            //
+            // }
+          }
+          // 错了就弹出这个，不管三七二十一
+          if (res === false) {
+            this.$refs.openLocalSettingModal.show()
+          }
+        }).catch(err => {
+          // 获取位置错了
+        })
       }
+
       // if (idx > 0 && (!this.userAddressInfo || JSON.stringify(this.userAddressInfo === '{}'))) {
       //
       // }
@@ -375,9 +414,9 @@ export default {
       }
     },
     async _init_func () {
-      this.loadingByTmpl = true
+      // this.loadingByTmpl = true
       await this.get_tmpl_data()
-      this.loadingByTmpl = false
+      // this.loadingByTmpl = false
     },
     bindGetMore (idx) {
       console.log(idx)
@@ -392,8 +431,8 @@ export default {
       try {
         var conf = { latitude: Storage.get('current_lat'), longitude: Storage.get('current_lng') }
         emptyObject(conf)
-        console.log('conf is',conf)
-  
+        console.log('conf is', conf)
+
         // wx.openLocation({
         //   ...conf
         // })
@@ -409,10 +448,21 @@ export default {
         Storage.set('location_id', location_id)
         Storage.set('formatted_address', formatted_address)
         this.formatted_address = formatted_address
+        this.showFormattedAddress = true
+        setTimeout(() => {
+          this.showFormattedAddress = false
+        }, 10000)
         Storage.set('area_name', area_name)
 
         this.$refs.page1.manualFlashLocation()
         this.$refs.page2.manualFlashLocation()
+
+        if (this.topTheme === 'default') {
+          this.$refs.page0.manualFlashLocation()
+        }
+        if (this.topTheme === 'none') {
+          this.$refs.pagenone.manualFlashLocation()
+        }
 
         return { location_id, lat, lng, formatted_address, area_name }
       } catch (e) {
@@ -426,7 +476,7 @@ export default {
      * @returns {Promise<void>}
      * @private
      */
-    async _init_location () {
+    async _init_location ({ openDialog = false } = {}) {
       try {
         if (this.init_location_ing) {
           console.log('已经阻止重复启动_init_location')
@@ -434,18 +484,19 @@ export default {
         }
         // 标记，不要和onshow里面重复调用
         this.init_location_ing = true
+
         await Promisify('authorize', { scope: 'scope.userLocation' }).catch((err) => {
-          this.$refs.openLocalSettingModal.show()
+          if (openDialog) this.$refs.openLocalSettingModal.show()
           console.log(err)
           throw Error('nocare')
         })
 
-        const { latitude: lat, longitude: lng } = await Promisify('getLocation',{isHighAccuracy:true}).catch(err => {
+        const { latitude: lat, longitude: lng } = await Promisify('getLocation', { type: 'gcj02' }).catch(err => {
           console.log(err)
           throw Error('nocare')
         })
         console.log(lat, lng)
-        showLoading('更新位置', true)
+        // showLoading('更新位置', true)
         const { location_id, formatted_address, area_name } = await getLocationByCoordinate({ lat, lng, provider: 1 }).then(res => res.data).catch(err => Exception.handle(err))
         // 全部存起来
         Storage.set('current_lat', lat)
@@ -456,14 +507,16 @@ export default {
         Storage.set('area_name', area_name)
 
         this.init_location_ing = false
-        hideLoading()
+
+        // hideLoading()
         return { location_id, lat, lng, formatted_address, area_name }
       } catch (e) {
-        hideLoading()
+        // hideLoading()
         this.$set(this, 'init_location_ing', false)
         console.log(this.init_location_ing)
         console.log(e)
         Exception.handle(e)
+        return false
       }
     },
     ...mapActions({
@@ -482,6 +535,9 @@ export default {
     if (this.topTheme === 'default') {
       this.$refs.page0.hookOnHide()
     }
+    if (this.topTheme === 'none') {
+      this.$refs.pagenone.hookOnHide()
+    }
   },
   onShow () {
     this.setTabBarIndex(0)
@@ -491,6 +547,18 @@ export default {
 
     if (this.topTheme === 'default') {
       this.$refs.page0.hookOnShow()
+      // this.$refs.openLocalSettingModal.close()
+      // if (this.headTabIndex > 0) {
+      //   Promisify('authorize', { scope: 'scope.userLocation' }).then(() => {
+      //     this.getUserLocation()
+      //   }).catch(() => {
+      //     this.$refs.openLocalSettingModal.show()
+      //   })
+      // }
+    }
+
+    if (this.topTheme === 'none') {
+      this.$refs.pagenone.hookOnShow()
       // this.$refs.openLocalSettingModal.close()
       // if (this.headTabIndex > 0) {
       //   Promisify('authorize', { scope: 'scope.userLocation' }).then(() => {
@@ -517,27 +585,35 @@ export default {
       }).exec()
     }
   },
-  created () {
-    this.showFormattedAddress = true
-    setTimeout(() => {
-      this.showFormattedAddress = false
-    }, 10000)
-    if (Storage.get('formatted_address')) {
-      this.formatted_address = Storage.get('formatted_address')
-    }
-    this.$store.dispatch('system/loadInitData').then(data => {
-      this.initData = data
+  async created () {
+    try {
+      this.getLocationDone = false
+      Storage.set('isRefresh', false)
+
+      if (Storage.get('formatted_address')) {
+        this.formatted_address = Storage.get('formatted_address')
+        this.showFormattedAddress = true
+        setTimeout(() => {
+          this.showFormattedAddress = false
+        }, 10000)
+      }
+      // 强制重新读取
+      const initData = await this.$store.dispatch('system/loadInitData').catch(() => {})
+
+      this.initData = initData
       console.log('this.initData is ', this.initData)
       if (this.initData.switch_location && !Storage.get('location_id')) {
-        this._init_location()
+        await this._init_location().catch(() => {})
       }
-    }).catch(() => {
-
-    })
-
-    this.getLocationDone = false
-    Storage.set('isRefresh', false)
-    this._init_func()
+      await this._init_func()
+      this.getLocationDone = true
+      this.setHeadTabIndex(0)
+    } catch (e) {
+      console.log(e)
+      await this._init_func()
+      this.getLocationDone = true
+      this.setHeadTabIndex(0)
+    }
   }
 }
 </script>

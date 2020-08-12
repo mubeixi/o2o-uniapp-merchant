@@ -44,7 +44,8 @@ export default {
     Storage.set('users_id', ENV.users_id)
     // #endif
 
-    this.$store.dispatch('system/loadInitData')
+    // 强制读取服务器
+    this.$store.dispatch('system/loadInitData', { isOnline: true })
     this.$store.dispatch('theme/refreshTheme')
   },
   onShow: function (options) {
