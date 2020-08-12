@@ -1,8 +1,10 @@
 <template>
   <div>
     <div :style="{top:menuButtonInfo.top+50+'px'}"
+         v-if="firstCateList.length>0"
          class="section scroll-box first-cate-list  bg-white">
       <li :key="idx" @click="changeStoreCateNav(idx)" class="scroll-item fz-15 c3"
+          
           v-for="(cate,idx) in firstCateList">
         {{cate.Category_Name}}
         <span class="underline" v-show="storeFirstCateIdx === idx"></span>

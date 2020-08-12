@@ -1,7 +1,7 @@
 <template>
   <div>
     <div :style="{top:menuButtonInfo.top+50+'px'}" @touchmove.stop.prevent="$noop"
-         class="section scroll-box first-cate-list  bg-white">
+         class="section scroll-box first-cate-list  bg-white" v-if="firstCateList.length>0">
       <li :key="idx" @click="changeQuickCateNav(idx)" class="scroll-item fz-15 c3" v-for="(cate,idx) in firstCateList">
         {{cate.Category_Name}}
         <span class="underline" v-show="quickFirstCateIdx === idx"></span>

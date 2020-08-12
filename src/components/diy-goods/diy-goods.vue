@@ -179,6 +179,7 @@ export default {
       immediate: true,
       deep: true,
       handler (val) {
+        
         if (!val) return
         const { list = [], cate_id = [], limit } = val
 
@@ -199,6 +200,7 @@ export default {
         //   param.pageSize = 6
         // }
 
+        console.log('getProductList',param)
         getProductList(param).then(res => {
           this.goodsList = res.data
         })

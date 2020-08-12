@@ -1,4 +1,19 @@
-单次分享，也用onwer_id，提交订单成功后删除该onwer_id
+# my-project
 
+## Project setup
+```
+yarn install
+```
 
+### Compiles and hot-reloads for development
+```
+yarn serve
+```
 
+### Compiles and minifies for production
+```
+yarn build
+```
+
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).
