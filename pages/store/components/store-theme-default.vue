@@ -388,7 +388,7 @@
     </layout-modal>
 
     <layout-layer @maskClicked="bindCartsPopClose" :bottomStr="storeBottomActionHeight" positions="bottom" ref="carts">
-      <div class="carts-box">
+      <div class="carts-box" v-if="listExpand">
         <div class="carts-action flex flex-vertical-c flex-justify-between">
           <div class="check-all flex flex-vertical-c" @click="selectBiz">
             <layout-icon color="#E64239" size="20" type="iconicon-check" v-if="allCheck"></layout-icon>
@@ -469,7 +469,7 @@ import LayoutCopyright from '@/components/layout-copyright/layout-copyright'
 import LayoutComment from '@/components/layout-comment/layout-comment'
 import LayoutIcon from '@/components/layout-icon/layout-icon'
 import { componetMixin } from '@/mixins/BaseMixin'
-import { checkIsLogin, getArrColumn, getDomain, getPreviewThumb } from '@/common/helper'
+import { checkIsLogin, getArrColumn, getDomain, getPreviewThumb, objTranslate } from '@/common/helper'
 import { error, hideLoading, modal, showLoading, toast, checkIsExpire, confirm, linkToEasy } from '@/common/fun'
 import {
   addFavourite,
@@ -658,8 +658,8 @@ export default {
       deep: true,
       handler (nval) {
         console.log('carts value change,current value is', nval)
-        var showCarts = this.$store.getters['cart/getCartList'](this.bid)
-        this.$set(this, 'showCarts', showCarts)
+        //var showCarts = this.$store.getters['cart/getCartList'](this.bid)
+        this.$set(this, 'showCarts', objTranslate(nval))
       }
     },
     bid: {
@@ -711,8 +711,19 @@ export default {
         return
       }
       if (!this.listExpand) {
-        this.$openPop('carts')
+       
         this.listExpand = true
+  
+        var showCarts = this.$store.getters['cart/getCartList'](this.bid)
+  
+        console.log('showCarts value is', showCarts)
+        this.$set(this, 'showCarts', objTranslate(showCarts))
+  
+        // 强制刷新视图
+        this.$forceUpdate()
+        setTimeout(() => {
+          this.$openPop('carts')
+        }, 100)
       }
     },
     clearCart () {

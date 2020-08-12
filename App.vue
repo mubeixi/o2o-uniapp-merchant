@@ -16,6 +16,11 @@ export default {
   },
   onLaunch: function () {
     console.log('App Launch')
+  
+    Storage.remove('current_lat')
+    Storage.remove('current_lng')
+    Storage.remove('location_id')
+    Storage.remove('formatted_address')
 
     // eventHub.livePlayer = livePlayer
     console.log('ENV is', ENV)

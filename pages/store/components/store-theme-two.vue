@@ -302,7 +302,7 @@
     <!--    </layout-modal>-->
 
     <layout-layer @maskClicked="bindCartsPopClose" :bottomStr="storeBottomActionHeight" positions="bottom" ref="carts">
-      <div class="carts-box">
+      <div class="carts-box" v-if="listExpand">
         <div class="carts-action flex flex-vertical-c flex-justify-between">
           <div class="check-all flex flex-vertical-c" @click="selectBiz">
             <layout-icon color="#E64239" size="20" type="iconicon-check" v-if="allCheck"></layout-icon>
@@ -393,7 +393,7 @@ import { checkIsExpire, confirm, error, hideLoading, showLoading, toast } from '
 import { getAlbumList, getBizInfo, getBizSpikeList } from '@/api/store'
 import { getFlashsaleList, getProductList } from '@/api/product'
 import { getActiveInfo, getCommitList, getCouponList } from '@/api/common'
-import { checkIsLogin, getCountdownFunc, getPreviewThumb } from '@/common/helper'
+import { checkIsLogin, getCountdownFunc, getPreviewThumb, objTranslate } from '@/common/helper'
 import {
   addFavourite,
   cancelFavourite,
@@ -575,8 +575,8 @@ export default {
       deep: true,
       handler (nval) {
         console.log('carts value change,current value is', nval)
-        var showCarts = this.$store.getters['cart/getCartList'](this.bid)
-        this.$set(this, 'showCarts', showCarts)
+        //var showCarts = this.$store.getters['cart/getCartList'](this.bid)
+        this.$set(this, 'showCarts', objTranslate(nval))
       },
     },
     bid: {
@@ -681,8 +681,20 @@ export default {
         return
       }
       if (!this.listExpand) {
-        this.$openPop('carts')
+        
         this.listExpand = true
+  
+        var showCarts = this.$store.getters['cart/getCartList'](this.bid)
+  
+        console.log('showCarts value is', showCarts)
+        this.$set(this, 'showCarts', objTranslate(showCarts))
+  
+        // 强制刷新视图
+        this.$forceUpdate()
+        setTimeout(() => {
+          this.$openPop('carts')
+        }, 100)
+        
       }
     },
     clearCart () {

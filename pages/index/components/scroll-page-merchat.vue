@@ -191,13 +191,13 @@ export default {
           postData.cate_id = cateId
         }
         this.areaLoading = true
-        this.userAddressInfo = this.$store.getters['user/getUserAddressInfo']()
-        if (this.userAddressInfo && this.userAddressInfo.hasOwnProperty('latitude') && this.userAddressInfo.hasOwnProperty('longitude')) {
-          Object.assign(postData, {
-            lat: this.userAddressInfo.latitude,
-            lng: this.userAddressInfo.longitude
-          })
-        }
+        // this.userAddressInfo = this.$store.getters['user/getUserAddressInfo']()
+        // if (this.userAddressInfo && this.userAddressInfo.hasOwnProperty('latitude') && this.userAddressInfo.hasOwnProperty('longitude')) {
+        //   Object.assign(postData, {
+        //     lat: this.userAddressInfo.latitude,
+        //     lng: this.userAddressInfo.longitude
+        //   })
+        // }
         // 商家无法利用一级分类获取到
         this.merchantList = await getBizInfo(postData, { onlyData: true }).catch((e) => {
           throw Error('获取人气商家列表失败')
@@ -208,6 +208,9 @@ export default {
         this.areaLoading = false
         // hideLoading()
       }
+    },
+    manualFlashLocation () {
+      if (this.isInitDone)this.loadMerchantList(this.storeFirstCateIdx)
     },
     manualInitFunc () {
       if (!this.isInitDone) this._init_func()

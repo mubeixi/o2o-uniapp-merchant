@@ -275,7 +275,7 @@
     </div>
 
     <layout-layer @maskClicked="bindCartsPopClose" :bottomStr="storeBottomActionHeight" positions="bottom" ref="carts">
-      <div class="carts-box">
+      <div class="carts-box" v-if="listExpand">
         <div class="carts-action flex flex-vertical-c flex-justify-between">
           <div class="check-all flex flex-vertical-c" @click="selectBiz">
             <layout-icon color="#E64239" size="20" type="iconicon-check" v-if="allCheck"></layout-icon>
@@ -303,8 +303,7 @@
                 <div class="action flex flex-vertical-c">
                   <layout-icon v-if="row.num>0" @click.stop="attrNumMinus(row)" color="#B2B1B1" size="24"
                                type="iconicon-minus"></layout-icon>
-                  <input style="width: 54rpx;" v-model="row.num" @focus="getQty(row.num)"
-                         @blur="changeAttrNum($event,idx,row)" class="input-num text-center fz-13" />
+                  <input style="width: 54rpx;" v-model="row.num" @focus="getQty(row.num)" @blur="changeAttrNum($event,idx,row)" class="input-num text-center fz-13" />
                   <layout-icon @click.stop="attrNumPlus(row)" color="#E64239" size="24" type="iconicon-plus"></layout-icon>
                 </div>
               </div>
@@ -603,8 +602,8 @@ export default {
       deep: true,
       handler (nval) {
         console.log('carts value change,current value is', nval)
-        var showCarts = this.$store.getters['cart/getCartList'](this.bid)
-        this.$set(this, 'showCarts', showCarts)
+        //var showCarts = this.$store.getters['cart/getCartList'](this.bid)
+        this.$set(this, 'showCarts', objTranslate(nval))
       }
     },
     bid: {
@@ -619,7 +618,7 @@ export default {
     async productSkuAdd (sku) {
       this.attrInfo.attr_id = sku.id
       this.attrInfo.prod_id = this.product.Products_ID
-      this.attrInfo.attr_text = sku.Attr_Value_text //规格名称
+      this.attrInfo.attr_text = sku.Attr_Value_text // 规格名称
       const addQty = sku.qty
       // 不需要像美团那样维持现状
       // const attr_id = sku.id
@@ -653,7 +652,7 @@ export default {
 
       if (cartRT !== false) {
         this.refreshCount()
-        //强制刷新视图
+        // 强制刷新视图
         this.$forceUpdate()
         // 不需要修改，意义不大
         // this.attrInfo.num = Number(this.attrInfo.num) + 1
@@ -666,10 +665,17 @@ export default {
         return
       }
       if (!this.listExpand) {
-
         this.listExpand = true
         console.log('this.carts value is', this.carts)
-
+  
+  
+        var showCarts = this.$store.getters['cart/getCartList'](this.bid)
+  
+        console.log('showCarts value is', showCarts)
+        this.$set(this, 'showCarts', objTranslate(showCarts))
+        
+        // 强制刷新视图
+        this.$forceUpdate()
         setTimeout(() => {
           this.$openPop('carts')
         }, 100)
