@@ -8,6 +8,9 @@ const wxMpAppidPlaceholar = '%mpWeixinAppid%' // 占位
 const manifestTmplFilePath = './src/manifest.json.tmpl'
 const manifestFilePath = './src/manifest.json'
 
+const extTmplFilePath = './src/ext.json.tmpl'
+const extFilePath = './src/ext.json'
+
 // 修改业务配置文件
 async function changeEnvFile () {
   const confContent = await readFileByPromise(confTmplFilePath)
@@ -21,6 +24,13 @@ async function changeManifestConf () {
   return await writeFileByPromise(manifestFilePath, confContent)
 }
 
+// 修改ext.json配置文件
+async function changeExtConf () {
+  var confContent = await readFileByPromise(extTmplFilePath)
+  confContent = confContent.replace(wxMpAppidPlaceholar, wxMpAppid)
+  return await writeFileByPromise(extFilePath, confContent)
+}
+
 /**
  * 火箭发射
  * @returns {Promise<void>}
@@ -28,6 +38,7 @@ async function changeManifestConf () {
 async function fly () {
   await changeEnvFile()
   await changeManifestConf()
+  await changeExtConf()
 }
 
 fly()
