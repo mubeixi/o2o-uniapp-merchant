@@ -440,7 +440,7 @@ export default {
           throw Error('nocare')
         })
 
-        const { latitude: lat, longitude: lng } = await Promisify('getLocation').catch(err => {
+        const { latitude: lat, longitude: lng } = await Promisify('getLocation',{isHighAccuracy:true}).catch(err => {
           console.log(err)
           throw Error('nocare')
         })
