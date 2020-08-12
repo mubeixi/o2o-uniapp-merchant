@@ -306,14 +306,14 @@ export default {
 
               // 这个地方，只有后两个tab才会出现这个问题，所以可以直接用这样写
 
-              this.$refs.page1.manualInitFunc()
-              this.$refs.page2.manualInitFunc()
+              this.$refs.page1.manualFlashLocation()
+              this.$refs.page2.manualFlashLocation()
 
               if (this.headTabIndex === 0) {
                 this.isShowFullLoading = true
               }
-              if (this.topTheme === 'default') this.$refs.page0.manualInitFunc()
-              if (this.topTheme === 'none') this.$refs.pagenone.manualInitFunc()
+              if (this.topTheme === 'default') this.$refs.page0.manualFlashLocation()
+              if (this.topTheme === 'none') this.$refs.pagenone.manualFlashLocation()
             }).catch(() => {})
 
             // if (!Storage.get('location_id') && !this.init_location_ing) {
