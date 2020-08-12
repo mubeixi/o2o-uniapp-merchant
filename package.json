@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "trans:dev": "node ./ci/change-env-dev.js",
+    "trans:build": "node ./ci/change-env-build.js",
     "serve": "npm run dev:h5",
     "build": "npm run build:h5",
     "build:app-plus": "cross-env NODE_ENV=production UNI_PLATFORM=app-plus vue-cli-service uni-build",
