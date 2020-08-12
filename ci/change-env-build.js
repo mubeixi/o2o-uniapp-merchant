@@ -1,6 +1,6 @@
 const { readFileByPromise, writeFileByPromise } = require('./utils')
 
-const confTmplFilePath = './src/common/env.pro'
+const confTmplFilePath = './src/common/env.dev'
 const confFilePath = './src/common/env.js'
 
 const wxMpAppid = 'wx28e6e80223bd5f0f'
