@@ -406,9 +406,11 @@ export default {
 
         await this.loadLiveGoodsList(0) // 加载第一个分类的商品
         this.isInitDone = true
+        this.$emit('hotLoadDone')
       } catch (e) {
         this.isInitDone = true
         Exception.handle(e)
+        this.$emit('hotLoadDone')
       } finally {
         // hideLoading()
       }

@@ -1,6 +1,7 @@
 <template>
   <div class="page-wrap" @click="bindFullClick">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
+    <layout-page-loading :show="isShowFullLoading"></layout-page-loading>
     <block v-if="topTheme==='default'">
       <div @touchmove.stop.prevent
            :style="{height:menuButtonInfo.height+'px',width:menuButtonInfo.height+'px',paddingLeft:menuButtonInfo.height/2+'px',paddingRight:menuButtonInfo.height/3+'px',top:menuButtonInfo.top+'px',right:diyHeadRight+10+'px'}"
@@ -32,8 +33,7 @@
       <!--<div @touchmove.stop.prevent :style="{height:menuButtonInfo.top+50+'px'}" style="background-color: #26C78D"></div>-->
       <div :style="{top:menuButtonInfo.top+50+'px'}" class="main tab-container">
         <scroll-view @scrolltolower="bindGetMore(0)" class="tab-page-wrap" lower-threshold="1" scroll-y v-show="headTabIndex===0">
-          <layout-loading v-if="!getLocationDone"></layout-loading>
-          <scroll-page-hot ref="page0"></scroll-page-hot>
+          <scroll-page-hot ref="page0" @hotLoadDone="hotLoadDoneFn" ></scroll-page-hot>
         </scroll-view>
         <scroll-view @scrolltolower="bindGetMore(1)" class="tab-page-wrap" lower-threshold="1" scroll-y v-show="headTabIndex===1">
           <scroll-page-local ref="page1"></scroll-page-local>
@@ -64,7 +64,7 @@
       <layout-page-title :show-left-icon="false" :extStyle="'padding-bottom:10px;background:#fff;'" :page-title="diyTitle"></layout-page-title>
       <!--@scrolltolower="bindGetMore(0)"-->
       <scroll-view class="full-diy-wrap" lower-threshold="1" scroll-y :style="{top:menuButtonInfo.bottom+10+'px'}">
-        <scroll-page-hot ref="pagenone" :full-diy="true"></scroll-page-hot>
+        <scroll-page-hot @hotLoadDone="hotLoadDoneFn" ref="pagenone" :full-diy="true"></scroll-page-hot>
       </scroll-view>
     </block>
 
@@ -133,6 +133,7 @@ import LayoutLoading from '@/components/layout-loading/layout-loading'
 import LayoutPageTitle from '@/components/layout-page-title/layout-page-title'
 import { Exception } from '@/common/Exception'
 import { emptyObject } from '@/common/helper'
+import LayoutPageLoading from '@/components/layout-page-loading/layout-page-loading'
 
 // 动画时间
 const locationBtnAnimationDuration = 300
@@ -157,6 +158,7 @@ function createdLocationBtnAnimation ({ x, y, rotate = 0, opacity, duration, tim
 export default {
   mixins: [BaseMixin, tabbarMixin],
   components: {
+    LayoutPageLoading,
     LayoutPageTitle,
     LayoutLoading,
     WzwImTip,
@@ -179,6 +181,7 @@ export default {
   },
   data () {
     return {
+      isShowFullLoading: false,
       showFormattedAddress: false,
       formatted_address: '',
       localAnimate: {},
@@ -302,9 +305,13 @@ export default {
               this.$refs.openLocalSettingModal.close()
 
               // 这个地方，只有后两个tab才会出现这个问题，所以可以直接用这样写
-              
+
               this.$refs.page1.manualInitFunc()
               this.$refs.page2.manualInitFunc()
+
+              if (this.headTabIndex === 0) {
+                this.isShowFullLoading = true
+              }
               if (this.topTheme === 'default') this.$refs.page0.manualInitFunc()
               if (this.topTheme === 'none') this.$refs.pagenone.manualInitFunc()
             }).catch(() => {})
@@ -329,8 +336,8 @@ export default {
           if (this.topTheme === 'none') this.$refs.pagenone.manualInitFunc()
         }
       } else {
-        //首屏不给面子没问题
-        if (idx === 0){
+        // 首屏不给面子没问题
+        if (idx === 0) {
           if (this.topTheme === 'default') this.$refs.page0.manualInitFunc()
           if (this.topTheme === 'none') this.$refs.pagenone.manualInitFunc()
           return
@@ -433,6 +440,12 @@ export default {
         emptyObject(conf)
         console.log('conf is', conf)
 
+        await Promisify('authorize', { scope: 'scope.userLocation' }).catch((err) => {
+          this.$refs.openLocalSettingModal.show()
+          console.log(err)
+          throw Error('nocare')
+        })
+
         // wx.openLocation({
         //   ...conf
         // })
@@ -443,6 +456,9 @@ export default {
         console.log(lat, lng)
         Storage.set('current_lat', lat)
         Storage.set('current_lng', lng)
+        if (this.headTabIndex === 0) {
+          this.isShowFullLoading = true
+        }
         const { location_id, formatted_address, area_name } = await getLocationByCoordinate({ lat, lng, provider: 1 }).then(res => res.data).catch(err => Exception.handle(err))
         // 全部存起来
         Storage.set('location_id', location_id)
@@ -519,6 +535,12 @@ export default {
         return false
       }
     },
+    hotLoadDoneFn () {
+      this.isShowFullLoading = false
+      // setTimeout(()=>{
+      //
+      // },5000)
+    },
     ...mapActions({
       setUserAddressInfo: 'user/setUserAddressInfo'
     })
@@ -587,6 +609,7 @@ export default {
   },
   async created () {
     try {
+      this.isShowFullLoading = true
       this.getLocationDone = false
       Storage.set('isRefresh', false)
 
@@ -607,12 +630,12 @@ export default {
       }
       await this._init_func()
       this.getLocationDone = true
-      this.setHeadTabIndex(0)
+      await this.setHeadTabIndex(0)
     } catch (e) {
       console.log(e)
       await this._init_func()
       this.getLocationDone = true
-      this.setHeadTabIndex(0)
+      await this.setHeadTabIndex(0)
     }
   }
 }

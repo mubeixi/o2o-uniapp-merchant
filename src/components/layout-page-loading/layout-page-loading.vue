@@ -11,10 +11,14 @@
   justify-content: center;
   align-items: center;
 }
+.image{
+  width: 80px;
+  height: 80px;
+}
 </style>
 <template>
 <div class="page-full-loading" v-if="isShow">
-  <image src="/static/page-loading.gif"></image>
+  <image class="image" src="/static/spinner.gif"></image>
 </div>
 </template>
 <script>
