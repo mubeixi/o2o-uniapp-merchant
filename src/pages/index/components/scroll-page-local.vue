@@ -41,7 +41,7 @@
           </div>
 
           <div v-if="areaLoading">
-            <layout-page-loading :show="areaLoading"></layout-page-loading>
+            <layout-page-loading :show="isShowFullLoading" v-if="isShowFullLoading"></layout-page-loading>
           </div>
 
           <div class="page-section-title" v-if="quickGoodsList.length>0">
@@ -99,6 +99,7 @@ export default {
   mixins: [componetMixin],
   data () {
     return {
+      isShowFullLoading:false,
       isInitDone: false,
       areaLoading: false,
       firstCateHeight: 44,
@@ -189,8 +190,11 @@ export default {
 
         this.areaLoading = true
         if(isConcat!='isConcat'){
+          this.isShowFullLoading=true
           this.page=1
           this.quickGoodsList = []
+        }else{
+          this.isShowFullLoading=false
         }
         const postData = { page: this.page, pageSize: this.pageSize }
         if (cateId != -1) {
@@ -216,6 +220,7 @@ export default {
 
       } finally {
         this.areaLoading = false
+        this.isShowFullLoading=false
         // hideLoading()
       }
     },
