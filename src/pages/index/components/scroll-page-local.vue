@@ -67,6 +67,11 @@
             </div>
           </div>
 
+          <div class="none" v-else>
+            <image :src="'/static/client/box.png'|domain" class="img" />
+            <div class="m-t-15"><span>暂无数据</span></div>
+          </div>
+
           <div class="h20"></div>
 
           <div class="safearea-box"></div>
@@ -276,5 +281,16 @@ export default {
         height: 100%;
       }
     }
+  }
+
+  .none {
+    text-align: center;
+    padding: 60rpx 0;
+    color: #B0B0B0;
+    font-size: 26rpx;
+  }
+  .none .img {
+    height: 220rpx;
+    width: 200rpx;
   }
 </style>
