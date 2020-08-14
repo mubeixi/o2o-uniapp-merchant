@@ -1,69 +1,73 @@
 <template>
-  <div @click="commonClick" class="page-wrap" v-if="isReady">
+  <div @click="commonClick" class="page-wrap" >
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <layout-page-loading :show="isShowFullLoading"></layout-page-loading>
     <canvas canvas-id="myCanvas" class="myCanvas" id="myCanvas" />
-    <div class="text-box">
-      <div class="flex flex-vertical-c flex-justify-between">
-        <span class="c3 fz-16">推广文案</span>
-        <span @click="copy" class="text-share-btn">复制文案</span>
+    <block v-if="isReady">
+      <div class="text-box">
+        <div class="flex flex-vertical-c flex-justify-between">
+          <span class="c3 fz-16">推广文案</span>
+          <span @click="copy" class="text-share-btn">复制文案</span>
+        </div>
+        <div class="container p-15 fz-12 c3">
+          <textarea :value="shareText" @input="bindShareTextChange" style="line-height: 1.6"></textarea>
+          <!--        <div class="m-t-10">{{detailData.Products_Name}}</div>-->
+          <!--        <div class="m-t-10">已售{{detailData.Products_Sales}}件</div>-->
+          <!--        <div class="m-t-10">拼购价:{{detailData.Products_PriceX}}</div>-->
+          <!--        <div class="m-t-10">原价:{{detailData.Products_PriceY}}</div>-->
+        </div>
       </div>
-      <div class="container p-15 fz-12 c3">
-        <textarea :value="shareText" @input="bindShareTextChange" style="line-height: 1.6"></textarea>
-        <!--        <div class="m-t-10">{{detailData.Products_Name}}</div>-->
-        <!--        <div class="m-t-10">已售{{detailData.Products_Sales}}件</div>-->
-        <!--        <div class="m-t-10">拼购价:{{detailData.Products_PriceX}}</div>-->
-        <!--        <div class="m-t-10">原价:{{detailData.Products_PriceY}}</div>-->
-      </div>
-    </div>
 
-    <div class="preivew" style="background-image: url('/static/share/cover-wrap.png')">
-      <div :style="{backgroundImage:'url('+detailData.ImgPath+')'}" class="preivew-cover"></div>
-      <div class="preivew-title c3 fz-14">{{detailData.Products_Name}}</div>
-      <div class="preivew-pricebox flex flex-justify-between flex-vertical-c">
-        <div class="price fz-12 flex flex-vertical-b">
-          <span class="c6">拼购价：</span>
-          <span class="fz-12 price-selling">￥</span>
-          <span class="fz-14 price-selling">
+
+      <div :style="{backgroundImage:'url('+$getDomain('/static/client/share/cover-wrap.png')+')'}"  class="preivew">
+        <div :style="{backgroundImage:'url('+detailData.ImgPath+')'}" class="preivew-cover"></div>
+        <div class="preivew-title c3 fz-14">{{detailData.Products_Name}}</div>
+        <div class="preivew-pricebox flex flex-justify-between flex-vertical-c">
+          <div class="price fz-12 flex flex-vertical-b">
+            <span class="c6">拼购价：</span>
+            <span class="fz-12 price-selling">￥</span>
+            <span class="fz-14 price-selling">
             <block v-if="mode==='spike' || mode==='seckill'">{{detailData.price}}</block>
             <block v-else-if="detailData.is_pintuan">{{detailData.pintuan_pricex}}</block>
             <block v-else>{{detailData.Products_PriceX}}</block>
           </span>
-          <span class="price-market text-through p-l-10">¥
+            <span class="price-market text-through p-l-10">¥
           <block
             v-if="mode==='spike' || mode==='seckill' || detailData.is_pintuan">{{detailData.Products_PriceX}}</block>
           <block v-else>{{detailData.Products_PriceY}}</block>
           </span>
+          </div>
+          <div class="count fz-12 color-white">
+            <div class="text">{{detailData.click_count}}人正在抢购</div>
+          </div>
         </div>
-        <div class="count fz-12 color-white">
-          <div class="text">{{detailData.click_count}}人正在抢购</div>
+        <div class="active-info fz-12" v-if="mode==='spike' || mode==='seckill'">
+          <div class="active-btn color-white">
+            <block v-if="mode==='spike'">拼团</block>
+            <block v-if="mode==='seckill'">秒杀</block>
+          </div>
+          <div class="active-endtime c6">截止时间:{{detailData.end_time_text}}</div>
+        </div>
+        <div class="preivew-hr"></div>
+        <div class="preivew-spread">
+          <image :src="userInfo.User_HeadImg" class="headimg"></image>
+          <div class="nickname c3 p-l-10 fz-14"><span class="text">{{userInfo.User_NickName}}</span><span class="p-l-6">为您推荐</span>
+          </div>
+          <image :src="shareInfo.img_url" class="qrcode"></image>
         </div>
       </div>
-      <div class="active-info fz-12" v-if="mode==='spike' || mode==='seckill'">
-        <div class="active-btn color-white">
-          <block v-if="mode==='spike'">拼团</block>
-          <block v-if="mode==='seckill'">秒杀</block>
+      <div class="bottom flex flex-justify-between flex-vertical-c">
+        <button class="bottom-share-btn flex flex-vertical-c flex-justify-c" open-type="share">
+          <layout-icon color="#FF0000" type="iconicon-share"></layout-icon>
+          <span class="p-l-6">转发</span>
+        </button>
+        <div @click="saveImg" class="bottom-save-btn flex flex-vertical-c flex-justify-c">
+          <layout-icon color="#fff" type="iconxiazai"></layout-icon>
+          <span class="p-l-10">保存推广图和文案</span>
         </div>
-        <div class="active-endtime c6">截止时间:{{detailData.end_time_text}}</div>
       </div>
-      <div class="preivew-hr"></div>
-      <div class="preivew-spread">
-        <image :src="userInfo.User_HeadImg" class="headimg"></image>
-        <div class="nickname c3 p-l-10 fz-14"><span class="text">{{userInfo.User_NickName}}</span><span class="p-l-6">为您推荐</span>
-        </div>
-        <image :src="shareInfo.img_url" class="qrcode"></image>
-      </div>
-    </div>
-    <div class="bottom flex flex-justify-between flex-vertical-c">
-      <button class="bottom-share-btn flex flex-vertical-c flex-justify-c" open-type="share">
-        <layout-icon color="#FF0000" type="iconicon-share"></layout-icon>
-        <span class="p-l-6">转发</span>
-      </button>
-      <div @click="saveImg" class="bottom-save-btn flex flex-vertical-c flex-justify-c">
-        <layout-icon color="#fff" type="iconxiazai"></layout-icon>
-        <span class="p-l-10">保存推广图和文案</span>
-      </div>
-    </div>
+    </block>
+
 
 	<div class="h20"></div>
     <div class="safearea-box" style="background-color: #f8f8f8 !important;"></div>
@@ -145,6 +149,7 @@ export default {
     // }
   },
   onLoad (options) {
+    this.isShowFullLoading=true
     const { mode, spike_good_id, flashsale_id, prod_id } = options
     if (!prod_id) {
       modal('产品id必传')
@@ -217,7 +222,6 @@ export default {
     async createCanvas () {
       if (!checkIsLogin(1, 1)) return
       try {
-        this.isShowFullLoading=true
         const wrapHeight = 1038
         const ctx = canvasInstance
 
@@ -440,8 +444,9 @@ export default {
         // })
 
         this.isReady = true
+
+        await this.createCanvas()
         this.isShowFullLoading=false
-        this.createCanvas()
       } catch (e) {
         console.log(e)
         modal(e.message)

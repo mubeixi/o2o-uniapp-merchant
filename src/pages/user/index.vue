@@ -232,6 +232,16 @@ export default {
         error(e.msg || '获取权益卡错误')
       })
       this.cardList = arr
+
+
+      this.page=1
+      const { data, totalCount } = await getProductList({}).catch(e => {
+        throw Error(e.msg || '获取推荐商品信息失败')
+      })
+
+      this.proList = data
+      this.productTotal = totalCount
+      this.page++
     },
     goDailyCheck () {
       if (!checkIsLogin(1, 1)) return
@@ -258,13 +268,6 @@ export default {
         return { ...row, color: row.img_icon.color, className: row.img_icon.use === 1 ? row.img_icon.icon : getDomain(row.img_icon.img) }
       })
 
-      const { data, totalCount } = await getProductList({}).catch(e => {
-        throw Error(e.msg || '获取推荐商品信息失败')
-      })
-
-      this.proList = data
-      this.productTotal = totalCount
-      this.page++
     },
     // 获取订单角标数
     getOrderNum () {

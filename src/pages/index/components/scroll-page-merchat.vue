@@ -89,6 +89,10 @@
             </div>
 
           </div>
+          <div class="none" v-else>
+            <image :src="'/static/client/box.png'|domain" class="img" />
+            <div class="m-t-15"><span>暂无数据</span></div>
+          </div>
 
           <div class="h20" v-if="merchantList.length>0" style="background: #f8f8f8;"></div>
           <div class="safearea-box" v-if="merchantList.length>0" style="background: #f8f8f8;"></div>
@@ -323,5 +327,15 @@ export default {
       }
     }
 
+  }
+  .none {
+    text-align: center;
+    padding: 60rpx 0;
+    color: #B0B0B0;
+    font-size: 26rpx;
+  }
+  .none .img {
+    height: 220rpx;
+    width: 200rpx;
   }
 </style>

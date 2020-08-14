@@ -133,7 +133,7 @@
         </ul>
       </div>
       <div class="block-content">
-        <div class="live-list" v-if="liveNav.length>0 && liveNav[liveNavIndex] && liveNav[liveNavIndex].goodsList">
+        <div class="live-list" v-if="liveNav.length>0 && liveNav[liveNavIndex] && liveNav[liveNavIndex].goodsList.length>0">
 
             <div @click="$toGoodsDetail(item)" class="live-item" v-for="(item,idx) in liveNav[liveNavIndex].goodsList" :key="idx" >
               <div class="left">
@@ -161,6 +161,10 @@
             </div>
 
           <layout-loading v-if="loadingByLiveList"></layout-loading>
+        </div>
+        <div class="none" v-else>
+          <image :src="'/static/client/box.png'|domain" class="img" />
+          <div class="m-t-15"><span>暂无数据</span></div>
         </div>
       </div>
     </div>
@@ -364,7 +368,7 @@ export default {
         // this.loadingByTmpl = true
         const handleRT = await this.get_tmpl_data()
         // this.loadingByTmpl = false
-        
+
         if (handleRT !== true) throw handleRT // hanldeRT不是true就是一个Error实例，直接抛出
 
         this.killList = await getFlashsaleList({}, { onlyData: true }).catch(err => {
@@ -724,5 +728,15 @@ export default {
         }
       }
     }
+  }
+  .none {
+    text-align: center;
+    padding: 60rpx 0;
+    color: #B0B0B0;
+    font-size: 26rpx;
+  }
+  .none .img {
+    height: 220rpx;
+    width: 200rpx;
   }
 </style>
