@@ -1141,6 +1141,7 @@
 </style>
 <template>
   <div @click="commonClick" class="page-wrap"  >
+    <layout-page-loading :show="isShowFullLoading"></layout-page-loading>
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
 <!--    <div :style="{height:diyHeadHeight+'px',opacity:1-activeHeadOpacity}" class="head-box-default"-->
 <!--         v-show="1-activeHeadOpacity">-->
@@ -1163,8 +1164,8 @@
       <div :style="{height:menuButtonInfo.top+'px'}"></div>
       <div :style="{height:menuButtonInfo.height+'px',paddingRight:diyHeadRight+'px'}" class="flex flex-vertical-c flex-justify-between">
         <div class="flex flex-vertical-c">
-          <div class="flex flex-vertical-c p-l-10" :style="{height:menuButtonInfo.height+'px',width:menuButtonInfo.width/2+'px'}">
-            <layout-icon @click="bindLeftBtnClick" color="rgba(0,0,0,0.9)"  size="17" type="iconnavigator-left"></layout-icon>
+          <div class="flex flex-vertical-c p-l-10" @click="bindLeftBtnClick" :style="{height:menuButtonInfo.height+'px',width:menuButtonInfo.width/2+'px'}">
+            <layout-icon  color="rgba(0,0,0,0.9)"  size="17" type="iconnavigator-left"></layout-icon>
           </div>
           <div @click="toSearch" class="head-search flex flex-vertical-c flex-justify-between"  :class="activeHeadOpacity?'bg-white':''" >
             <span class="fz-12  p-l-6 c-bc"  >搜索商品</span>
@@ -1775,7 +1776,7 @@ import { Exception } from '@/common/Exception'
 import ProductComment from '@/pages/product/components/product-comment'
 import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 import store from '@/store'
-
+import LayoutPageLoading from '@/components/layout-page-loading/layout-page-loading'
 let countdownInstance = null
 
 // #ifdef MP-WEIXIN
@@ -1794,10 +1795,12 @@ export default {
     ProductSku,
     WzwGoodsAction,
     uParse,
-    LayoutPopup
+    LayoutPopup,
+    LayoutPageLoading
   },
   data () {
     return {
+      isShowFullLoading:false,//是否显示动态图
       isCart: false, // 是否确定是加入购物车
       groupListTotalCount: 0, // 多少人在拼团
       groupList: [], // 拼团列表
@@ -2529,8 +2532,7 @@ export default {
     },
     async _init_func (options) {
       try {
-        showLoading()
-
+        this.isShowFullLoading=true
         if (options.gift) {
           this.gift = options.gift
           this.postData.active_id = options.gift
@@ -2667,6 +2669,8 @@ export default {
           countdownInstance = setInterval(this.stampFunc, 1000)
         }
 
+        //因页面加载太久  故在获取完产品就展示
+        this.isShowFullLoading=false
         // this.productInfo.Products_Promise = [{ name: '随时退款' }, { name: '随时退款' }, { name: '随时退款' }, { name: '随时退款' }]
         // this.productInfo.Products_Description = formatRichTextByUparseFn(this.productInfo.Products_Description)
 
@@ -2758,7 +2762,7 @@ export default {
       } catch (e) {
         Exception.handle(e)
       } finally {
-        hideLoading()
+        this.isShowFullLoading=false
       }
     }
   },

@@ -1,5 +1,6 @@
 <template>
   <div>
+    <layout-page-loading :show="isShowFullLoading"></layout-page-loading>
     <layout-page-title :extStyle="'padding-bottom:10px;background:none;'" status-bg-color="none" menu-button-bg-color="none" ></layout-page-title>
     <div class="store-comp-wrap" :style="{top:menuButtonInfo.bottom+10+'px'}">
       <scroll-view class="store-comp-scroll" scroll-y>
@@ -485,7 +486,7 @@ import { getAlbumList, getBizInfo, getBizSpikeList, getStoreList } from '@/api/s
 import { getBizProdCateList, getProductList } from '@/api/product'
 import LayoutPageTitle from '@/components/layout-page-title/layout-page-title'
 import LayoutLayer from '@/components/layout-layer/layout-layer'
-
+import LayoutPageLoading from '@/components/layout-page-loading/layout-page-loading'
 const attrInfoTmpl = {
   num: 0,
   attr_id: '', // 规格id
@@ -521,7 +522,8 @@ export default {
     LayoutModal,
     LayoutCopyright,
     LayoutComment,
-    LayoutIcon
+    LayoutIcon,
+    LayoutPageLoading
   },
   props: {
     bid: {
@@ -531,6 +533,7 @@ export default {
   },
   data () {
     return {
+      isShowFullLoading:false,
       isUserLogin: false,
       storeBottomActionHeight: '0px',
       listExpand: false,
@@ -711,14 +714,14 @@ export default {
         return
       }
       if (!this.listExpand) {
-       
+
         this.listExpand = true
-  
+
         var showCarts = this.$store.getters['cart/getCartList'](this.bid)
-  
+
         console.log('showCarts value is', showCarts)
         this.$set(this, 'showCarts', objTranslate(showCarts))
-  
+
         // 强制刷新视图
         this.$forceUpdate()
         setTimeout(() => {
@@ -1123,7 +1126,7 @@ export default {
     },
     async _init_func () {
       try {
-        showLoading('加载中')
+        this.isShowFullLoading=true
         const storeInfoData = await getBizInfo({ biz_id: this.bid }, { onlyData: true }).catch((e) => {
           throw Error(e.msg || '商品信息失败')
         })
@@ -1228,7 +1231,7 @@ export default {
           })
           query.exec()
         })
-
+        this.isShowFullLoading=false
         // 这个就不要等了吧
         if (!checkIsLogin(0, 0)) {
           throw Error('nocare')
@@ -1238,7 +1241,7 @@ export default {
       } catch (e) {
         Exception(e)
       } finally {
-        hideLoading()
+        this.isShowFullLoading=false
       }
     },
     upSwiperHeight () {

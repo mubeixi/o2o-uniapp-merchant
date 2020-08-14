@@ -197,6 +197,7 @@ export default {
       Shipping_ID: this.shipping_id,
     }).then(res => {
       this.shipping_company = res.data.shipping_company_dropdown
+      this.shipping_price=res.data.shipping_price
     })
   },
   async created () {
