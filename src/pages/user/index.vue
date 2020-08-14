@@ -227,8 +227,7 @@ export default {
   methods: {
     async init () {
       const arr = await getRightsCard({ status: 1 }, {
-        onlyData: true,
-        tip: '加载中'
+        onlyData: true
       }).catch(e => {
         error(e.msg || '获取权益卡错误')
       })

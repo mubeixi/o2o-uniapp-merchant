@@ -7,7 +7,7 @@
 
     <block v-if="mode!=='wxLogin'">
       <block v-if="initData.ShopLogo">
-        <image :src="initData.ShopLogo+'-r100'" class="img m-t-25" mode="widthFix"></image>
+        <image :src="initData.ShopLogo+'-r350'" class="img m-t-25" mode="widthFix"></image>
       </block>
 
       <div class="form">
@@ -55,7 +55,7 @@
       </div>
     </block>
     <block v-if="mode==='wxLogin'">
-      <image v-if="initData.ShopLogo" :src="initData.ShopLogo+'-r100'" class="img imgWx m-t-50" mode="widthFix"></image>
+      <image v-if="initData.ShopLogo" :src="initData.ShopLogo+'-r350'" class="img imgWx m-t-50" mode="widthFix"></image>
 
       <div  class="otherLogin-top-item" >
         <button @getuserinfo="weixinlogin" class="btn  wxBtn" open-type="getUserInfo">

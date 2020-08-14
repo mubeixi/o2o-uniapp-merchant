@@ -1,6 +1,7 @@
 <template>
   <div @click="commonClick" class="praise page-wrap">
     <wzw-im-tip></wzw-im-tip>
+    <layout-page-loading :show="isShowFullLoading"></layout-page-loading>
     <div :key="index" class="praise-item" v-for="(item,index) of praise">
       <div class="praise-item-title flex flex-vertical-c">
         <image :src="item.User_HeadImg" class="user-img m-r-8"></image>
@@ -53,23 +54,25 @@ import { getCommitList } from '@/api/common'
 import { error } from '@/common/fun'
 import LayoutIcon from '@/components/layout-icon/layout-icon'
 import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
-
+import LayoutPageLoading from '@/components/layout-page-loading/layout-page-loading'
 import eventHub from '@/common/eventHub'
 
 export default {
   mixins: [BaseMixin, tabbarMixin],
   components: {
     WzwImTip,
-    LayoutIcon
+    LayoutIcon,
+    LayoutPageLoading
   },
   data () {
     return {
+      isShowFullLoading:false,
       praise: [],
       postData: {
         page: 1,
         pageSize: 6,
         has_img: 1,
-		score: 5
+		    score: 5
       },
       totalCount: 0
     }
@@ -79,15 +82,22 @@ export default {
       this.$linkTo('/pages/product/detail?prod_id=' + item.Product_ID)
     },
     async init (item) {
-      const list = await getCommitList(this.postData, { tip: '加载中' }).catch(e => {
+      if (item === 'isInit') {
+        this.isShowFullLoading=true
+      }else{
+        showLoading()
+      }
+      const list = await getCommitList(this.postData).catch(e => {
         error(e.msg || '获取评论列表失败')
       })
       if (item === 'isInit') {
         this.praise = list.data
+        this.isShowFullLoading=false
       } else {
         list.data.map(item => {
           this.praise.push(item)
         })
+        hideLoading()
       }
       this.totalCount = list.totalCount
     }
