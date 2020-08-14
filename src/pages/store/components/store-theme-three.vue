@@ -1,5 +1,6 @@
 <template>
   <div class="page-wrap">
+    <layout-page-loading :show="isShowFullLoading"></layout-page-loading>
     <!--,opacity:headTabOpacity-->
     <div class="fixed-top-box" :style="{zIndex:headTabOpacity>0?5:-5,opacity:headTabOpacity}">
       <layout-page-title :letf-icon-size="18" :letfFn="true" :pageTitle="'店铺详情'" @clickLeft="$back"></layout-page-title>
@@ -429,7 +430,7 @@ import LayoutIcon from '@/components/layout-icon/layout-icon'
 import WzwLiveTag from '@/components/wzw-live-tag/wzw-live-tag'
 import LayoutLayer from '@/components/layout-layer/layout-layer'
 import ProductSku from '@/components/product-sku/product-sku'
-
+import LayoutPageLoading from '@/components/layout-page-loading/layout-page-loading'
 var countdownInstance = null
 var countdownInstanceByFlash = null
 /**
@@ -478,7 +479,8 @@ export default {
     WzwLiveTag,
     LayoutIcon,
     LayoutPageTitle,
-    ProductSku
+    ProductSku,
+    LayoutPageLoading
   },
   mixins: [componetMixin],
   props: {
@@ -489,6 +491,7 @@ export default {
   },
   data () {
     return {
+      isShowFullLoading:false,
       listExpand: false,
       scrollTopNum: 0,
       toViewIdx: '',
@@ -667,13 +670,13 @@ export default {
       if (!this.listExpand) {
         this.listExpand = true
         console.log('this.carts value is', this.carts)
-  
-  
+
+
         var showCarts = this.$store.getters['cart/getCartList'](this.bid)
-  
+
         console.log('showCarts value is', showCarts)
         this.$set(this, 'showCarts', objTranslate(showCarts))
-        
+
         // 强制刷新视图
         this.$forceUpdate()
         setTimeout(() => {
@@ -1514,7 +1517,7 @@ export default {
     },
     async _init_func () {
       try {
-        showLoading('加载中')
+        this.isShowFullLoading=true
         const storeInfoData = await getBizInfo({ biz_id: this.bid }, { onlyData: true }).catch((e) => {
           throw Error(e.msg || '商品信息失败')
         })
@@ -1686,11 +1689,11 @@ export default {
           throw Error('nocare')
         }
 
-        hideLoading()
+        this.isShowFullLoading=false
         this.refreshInfoByIsLogin()
       } catch (e) {
         console.log(e)
-        hideLoading()
+        this.isShowFullLoading=false
         Exception.handle(e)
       }
     },

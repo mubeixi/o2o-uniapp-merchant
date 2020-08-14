@@ -1,10 +1,11 @@
 <template>
   <div>
+
     <div :style="{top:menuButtonInfo.top+50+'px'}"
          v-if="firstCateList.length>0"
          class="section scroll-box first-cate-list  bg-white">
       <li :key="idx" @click="changeStoreCateNav(idx)" class="scroll-item fz-15 c3"
-          
+
           v-for="(cate,idx) in firstCateList">
         {{cate.Category_Name}}
         <span class="underline" v-show="storeFirstCateIdx === idx"></span>
@@ -42,7 +43,7 @@
           </div>
 
           <div v-if="areaLoading">
-            <layout-loading></layout-loading>
+            <layout-page-loading :show="true"></layout-page-loading>
           </div>
 
           <div class="p-b-15 p-t-15" style="background: #f8f8f8" v-if="merchantList.length>0">
@@ -108,10 +109,10 @@ import { getBizInfo } from '@/api/store'
 import { mapGetters } from 'vuex'
 import LayoutLoading from '@/components/layout-loading/layout-loading'
 import LayoutAd from '@/components/layout-ad/layout-ad'
-
+import LayoutPageLoading from '@/components/layout-page-loading/layout-page-loading'
 export default {
   name: 'scroll-page-merchat',
-  components: { LayoutAd, LayoutLoading },
+  components: { LayoutAd, LayoutLoading,LayoutPageLoading },
   mixins: [componetMixin],
   data () {
     return {

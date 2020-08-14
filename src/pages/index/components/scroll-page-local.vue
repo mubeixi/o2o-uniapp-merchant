@@ -16,7 +16,7 @@
       duration="300"
     >
       <swiper-item :key="idx1" class="quick-cate-swiper-item" v-for="(first,idx1) in firstCateList">
-        <scroll-view class="bg-white scroll-view-wrap" scroll-y  >
+        <scroll-view class="bg-white scroll-view-wrap" scroll-y  @scrolltolower="moreList">
 
           <div class="grid-box">
             <div
@@ -41,7 +41,7 @@
           </div>
 
           <div v-if="areaLoading">
-            <layout-loading></layout-loading>
+            <layout-page-loading :show="areaLoading"></layout-page-loading>
           </div>
 
           <div class="page-section-title" v-if="quickGoodsList.length>0">
@@ -87,13 +87,14 @@ import GoodsItem from '@/components/good-item/good-item'
 import { mapGetters } from 'vuex'
 import LayoutLoading from '@/components/layout-loading/layout-loading'
 import LayoutAd from '@/components/layout-ad/layout-ad'
-
+import LayoutPageLoading from '@/components/layout-page-loading/layout-page-loading'
 export default {
   name: 'scroll-page-local',
   components: {
     LayoutAd,
     LayoutLoading,
-    GoodsItem
+    GoodsItem,
+    LayoutPageLoading
   },
   mixins: [componetMixin],
   data () {
@@ -103,7 +104,10 @@ export default {
       firstCateHeight: 44,
       firstCateList: [],
       quickFirstCateIdx: 0, // 同城闪送
-      quickGoodsList: [] // 钜惠推荐商品
+      quickGoodsList: [], // 钜惠推荐商品
+      pageSize:10,
+      page:1,
+      totalCount:0
     }
   },
   computed: {
@@ -128,6 +132,12 @@ export default {
     }
   },
   methods: {
+    moreList(){
+      if(this.quickGoodsList.length<this.totalCount){
+        this.page++
+        this.loadQuickGoodsList(this.quickFirstCateIdx,'isConcat')
+      }
+    },
     refreshByLocal () {
       this.loadQuickGoodsList(this.quickFirstCateIdx)
     },
@@ -164,20 +174,25 @@ export default {
      */
     async loadGoodsList (postData, obj) {
       if (!obj) obj = []
-      obj = await getProductList({ ...postData }, { onlyData: true }).catch(e => {
+      obj = await getProductList({ ...postData }).catch(e => {
         throw Error(e.msg || '获取商品列表失败')
       })
-      return obj.concat([])
+      this.totalCount=obj.totalCount
+      return obj.data.concat([])
     },
-    async loadQuickGoodsList (idx) {
+    async loadQuickGoodsList (idx,isConcat) {
       try {
-        this.quickGoodsList = []
+
         // showLoading()
         const cateId = this.firstCateList[idx].Category_ID
         if (!cateId) return
 
         this.areaLoading = true
-        const postData = { page: 1, pageSize: 999 }
+        if(isConcat!='isConcat'){
+          this.page=1
+          this.quickGoodsList = []
+        }
+        const postData = { page: this.page, pageSize: this.pageSize }
         if (cateId != -1) {
           postData.Cate_ID = cateId
         }
@@ -191,7 +206,12 @@ export default {
         // }
         // 需要刷新页面
         const list = await this.loadGoodsList(postData)
-        this.quickGoodsList = list
+        if(isConcat!='isConcat'){
+          this.quickGoodsList = list
+        }else{
+          this.quickGoodsList = this.quickGoodsList.concat(list)
+        }
+
       } catch (e) {
 
       } finally {

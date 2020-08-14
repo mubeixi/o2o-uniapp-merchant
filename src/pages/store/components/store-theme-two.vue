@@ -1,5 +1,6 @@
 <template>
   <div class="page-wrap">
+    <layout-page-loading :show="isShowFullLoading"></layout-page-loading>
     <layout-page-title extStyle="position:fixed;top:0;width:750rpx;left:0;z-index:5;background:#fff;color:#333;"
                        :letfFn="true" :pageTitle="'店铺详情'" @clickLeft="bindBackFn"></layout-page-title>
     <div class="store-info-space bg-white" :style="{height: menuButtonInfo.bottom+'px'}"></div>
@@ -410,6 +411,7 @@ import LayoutPageTitle from '@/components/layout-page-title/layout-page-title'
 import LayoutLayer from '@/components/layout-layer/layout-layer'
 import ProductSku from '@/components/product-sku/product-sku'
 import Storage from '@/common/Storage'
+import LayoutPageLoading from '@/components/layout-page-loading/layout-page-loading'
 
 var countdownInstance = null
 var countdownInstanceByFlash = null
@@ -460,7 +462,8 @@ export default {
     LayoutPageTitle,
     LayoutLoading,
     WzwLiveTag,
-    LayoutIcon
+    LayoutIcon,
+    LayoutPageLoading
   },
   mixins: [componetMixin],
   props: {
@@ -471,6 +474,7 @@ export default {
   },
   data () {
     return {
+      isShowFullLoading:false,
       attrInfo: {
         Products_ID: 0,
         num: 0,
@@ -681,20 +685,20 @@ export default {
         return
       }
       if (!this.listExpand) {
-        
+
         this.listExpand = true
-  
+
         var showCarts = this.$store.getters['cart/getCartList'](this.bid)
-  
+
         console.log('showCarts value is', showCarts)
         this.$set(this, 'showCarts', objTranslate(showCarts))
-  
+
         // 强制刷新视图
         this.$forceUpdate()
         setTimeout(() => {
           this.$openPop('carts')
         }, 100)
-        
+
       }
     },
     clearCart () {
@@ -965,7 +969,7 @@ export default {
     },
     async _init_func () {
       try {
-        showLoading('加载中')
+        this.isShowFullLoading=true
         const storeInfoData = await getBizInfo({ biz_id: this.bid }, { onlyData: true }).catch((e) => {
           throw Error(e.msg || '商品信息失败')
         })
@@ -1117,7 +1121,7 @@ export default {
           throw Error(e.msg || '获取相册信息失败')
         })
 
-        hideLoading()
+        this.isShowFullLoading=false
         if (checkIsLogin(0, 0)) {
           const { is_favourite = 0 } = await checkFavourite({ biz_id: this.bid }, { onlyData: true }).catch(() => {
 
@@ -1132,7 +1136,7 @@ export default {
 
         this.refreshInfoByIsLogin()
       } catch (e) {
-        hideLoading()
+        this.isShowFullLoading=false
         Exception.handle(e)
       }
     },

@@ -1,6 +1,7 @@
 <template>
   <div :class="selectStore?'over':''" @click="commonClick" class="page-wrap">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
+    <layout-page-loading :show="isShowFullLoading"></layout-page-loading>
     <fun-err-msg :errs.sync="formCheckResult" ref="refMsg"></fun-err-msg>
     <block v-if="orderInfo.is_virtual===0">
       <div @click="goAddressList" class="address bg-white">
@@ -410,6 +411,7 @@ import { mapGetters } from 'vuex'
 import { computeArrayColumnSum } from '@/pages/order/pay'
 import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 
+import LayoutPageLoading from '@/components/layout-page-loading/layout-page-loading'
 export default {
   mixins: [BaseMixin],
   components: {
@@ -417,10 +419,12 @@ export default {
     DiyForm,
     FunErrMsg,
     LayoutIcon,
-    LayoutLayer
+    LayoutLayer,
+    LayoutPageLoading
   },
   data () {
     return {
+      isShowFullLoading:false,
       safeAreaHeight:0,
       cash_from: 1, // 使用余额模式
       allowUseMoney: 0,
@@ -663,7 +667,7 @@ export default {
     },
     async _init_func () {
       if (!this.$checkIsLogin(1, 1)) return
-
+      this.isShowFullLoading=true
       const addressList = await getAddressList({}, { onlyData: true }).catch(() => {
       })
       if (Array.isArray(addressList) && addressList.length > 0) {
@@ -692,6 +696,7 @@ export default {
           this.tmplFromList = temp_info.formData
         }
       }
+      this.isShowFullLoading=false
     },
     changgeTabIdx (index) {
       this.tabIdx = index

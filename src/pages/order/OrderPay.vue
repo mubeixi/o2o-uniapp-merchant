@@ -1,6 +1,7 @@
 <template>
   <div @click="commonClick">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
+    <layout-page-loading :show="isShowFullLoading"></layout-page-loading>
     <div class="zhezhao" v-if="password_input">
       <div class="input-wrap">
         <div>请输入余额支付密码</div>
@@ -202,6 +203,7 @@ import { computeArrayColumnSum, farmatPayParam } from '@/pages/order/pay'
 import { Exception } from '@/common/Exception'
 import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 
+import LayoutPageLoading from '@/components/layout-page-loading/layout-page-loading'
 export default {
   name: 'OrderPay',
   mixins: [BaseMixin],
@@ -209,7 +211,8 @@ export default {
     WzwImTip,
     LayoutIcon,
     WzwPay,
-    LayoutLayer
+    LayoutLayer,
+    LayoutPageLoading
   },
   computed: {
     allProdAmount () {
@@ -298,6 +301,7 @@ export default {
   },
   data () {
     return {
+      isShowFullLoading:false,
       safeAreaHeight:0,
       cash_from: 1, // 使用余额模式
       allowUseMoney: 0,
@@ -461,7 +465,7 @@ export default {
     // 订单详情
     async _init_func () {
       try {
-        showLoading()
+        this.isShowFullLoading=true
 
         let order_list = null
         console.log(this.mode)
@@ -515,7 +519,7 @@ export default {
       } catch (e) {
         modal(e.message)
       } finally {
-        hideLoading()
+        this.isShowFullLoading=false
       }
     },
     moneyInputHandleByBiz (e, Order_ID, order_idx) {
