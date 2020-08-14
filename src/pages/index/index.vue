@@ -97,7 +97,8 @@
     <div class="location-tooltip-wrap" v-if="showFormattedAddress && initData.switch_location && formatted_address">
       <div class="location-tooltip-conent">当前位置：{{formatted_address}} <span class="text-underline p-l-4">点此切换</span>
         <!--<layout-icon color="rgba(0,0,0,.7)" display="inline" class="iconright" type="iconright"></layout-icon>-->
-        <image src="/static/home/local-arrow-right.png" class="iconright"></image>
+<!--        <image src="/static/home/local-arrow-right.png" class="iconright"></image>-->
+        <image src="/static/home/local-arrow-down.png" class="iconbottom"></image>
       </div>
 
     </div>
@@ -327,8 +328,9 @@ export default {
       this.defaultUnderlineLeft = 0 // 没有左边距了
       this.headTabIndex = idx
 
+      console.log(Storage.get('location_id'), Storage.get('current_lat'), Storage.get('current_lng'))
       // 有位置的前提下
-      if (Storage.get('location_id') && Storage.get('lat') && Storage.get('lng')) {
+      if (Storage.get('location_id') && Storage.get('current_lat') && Storage.get('current_lng')) {
         if (idx === 1) this.$refs.page1.manualInitFunc()
         if (idx === 2) this.$refs.page2.manualInitFunc()
         if (idx === 0) {
@@ -520,6 +522,10 @@ export default {
         Storage.set('location_id', location_id)
         Storage.set('formatted_address', formatted_address)
         this.formatted_address = formatted_address
+		    this.showFormattedAddress = true
+        setTimeout(() => {
+          this.showFormattedAddress = false
+        }, 10000)
         Storage.set('area_name', area_name)
 
         this.init_location_ing = false
@@ -626,7 +632,8 @@ export default {
       this.initData = initData
       console.log('this.initData is ', this.initData)
       if (this.initData.switch_location && !Storage.get('location_id')) {
-        await this._init_location().catch(() => {})
+        const rt = await this._init_location().catch(() => {})
+        console.log(rt)
       }
       await this._init_func()
       this.getLocationDone = true
@@ -723,9 +730,9 @@ export default {
 
   .location-tooltip-wrap{
     position: fixed;
-    bottom: 157px;
+    bottom: 192px;
     margin-bottom: env(safe-area-inset-bottom);
-    right: 74px;
+    right: 39px;
     z-index: 99;
     display: flex;
     align-items: flex-start;
@@ -740,6 +747,15 @@ export default {
       border-bottom-left-radius: 4px;
       border-top-left-radius: 4px;
       border-top-right-radius: 4px;
+    }
+    .iconbottom{
+      width: 10px;
+      height: 10px;
+      position: absolute;
+      right: 0px;
+      bottom: 0px;
+      transform: translate(0,100%);
+      opacity: 0.5;
     }
     .iconright{
       width: 16px;
