@@ -59,7 +59,7 @@ const confByJb = {
   isDev
 }
 
-export default confByDev
+export default confByPro
 
  //export default confByPro
 
