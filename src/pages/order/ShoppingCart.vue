@@ -2,7 +2,7 @@
   <div @click="commonClick" class="shopping-cart">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <div :style="{height:diyHeadHeight+'px'}" class="bg-white"></div>
-
+    <layout-page-loading :show="isShowFullLoading"></layout-page-loading>
     <div :style="{height:diyHeadHeight+'px'}" class="top-box bg-white">
       <div :style="{height:menuButtonInfo.top+'px'}" class="bg-white" style="position: fixed;top: 0;width: 750rpx;z-index: 99;"></div>
       <div :style="{height:menuButtonInfo.height+'px',top:systemInfo.statusBarHeight+'px'}" class="cart-title fz-16 c3">
@@ -17,87 +17,89 @@
       </div>
     </div>
 
-    <div class="content">
-      <div class="cartbox" v-if="pageInitDone && total_count>0">
-        <div :key="biz_id" class="order_msg" v-for="(biz,biz_id) in CartList">
-          <div @click="selectBiz(bizList[biz_id].id,bizList[biz_id].isSaleTime)" class="biz_msg flex">
-            <div class="flex1 flex flex-vertical-c">
-              <div class="item-cart">
-                <layout-icon color="#F43131" size="20" type="iconicon-check" v-if="bizCheck[biz_id]"></layout-icon>
-                <layout-icon color="#ccc" size="20" type="iconradio" v-else></layout-icon>
+    <block v-if="!isShowFullLoading">
+      <div class="content">
+        <div class="cartbox" v-if="total_count>0">
+          <div :key="biz_id" class="order_msg" v-for="(biz,biz_id) in CartList">
+            <div @click="selectBiz(bizList[biz_id].id,bizList[biz_id].isSaleTime)" class="biz_msg flex">
+              <div class="flex1 flex flex-vertical-c">
+                <div class="item-cart">
+                  <layout-icon color="#F43131" size="20" type="iconicon-check" v-if="bizCheck[biz_id]"></layout-icon>
+                  <layout-icon color="#ccc" size="20" type="iconradio" v-else></layout-icon>
+                </div>
+                <img :src="bizList[biz_id].biz_logo" class="biz_logo" />
+                <span class="biz_name">{{bizList[biz_id].biz_name}}{{biz_id}}</span>
               </div>
-              <img :src="bizList[biz_id].biz_logo" class="biz_logo" />
-              <span class="biz_name">{{bizList[biz_id].biz_name}}{{biz_id}}</span>
-            </div>
-            <span class="is-sale-time" v-if="!bizList[biz_id].isSaleTime">
+              <span class="is-sale-time" v-if="!bizList[biz_id].isSaleTime">
               该商家已打烊
             </span>
-          </div>
-          <block :key="prod_id" v-for="(proList,prod_id) in biz">
-            <div :key="attr_id" class="pro" v-for="(item,attr_id) in proList">
-              <div @click="selectItem(biz_id,prod_id,attr_id,bizList[biz_id].isSaleTime)" class="item-cart">
-                <layout-icon color="#F43131" size="20" type="iconicon-check" v-if="item.checked"></layout-icon>
-                <layout-icon color="#ccc" size="20" type="iconradio" v-else></layout-icon>
-              </div>
-              <img :src="item.ImgPath" class="pro-img" />
-              <div class="pro-msg">
-                <div class="pro-name">{{item.ProductsName}}</div>
-                <div class="attr" v-if="item.Productsattrstrval">
-                  <span>{{item.Productsattrstrval}}</span>
+            </div>
+            <block :key="prod_id" v-for="(proList,prod_id) in biz">
+              <div :key="attr_id" class="pro" v-for="(item,attr_id) in proList">
+                <div @click="selectItem(biz_id,prod_id,attr_id,bizList[biz_id].isSaleTime)" class="item-cart">
+                  <layout-icon color="#F43131" size="20" type="iconicon-check" v-if="item.checked"></layout-icon>
+                  <layout-icon color="#ccc" size="20" type="iconradio" v-else></layout-icon>
                 </div>
-                <div class="pro-price">
-                  <span class="span">￥</span>{{item.ProductsPriceX}}
-                  <span class="amount">
+                <img :src="item.ImgPath" class="pro-img" />
+                <div class="pro-msg">
+                  <div class="pro-name">{{item.ProductsName}}</div>
+                  <div class="attr" v-if="item.Productsattrstrval">
+                    <span>{{item.Productsattrstrval}}</span>
+                  </div>
+                  <div class="pro-price">
+                    <span class="span">￥</span>{{item.ProductsPriceX}}
+                    <span class="amount">
                       <span :class="item.Qty===1?'disabled':''" @click="updateCartFn(biz_id,prod_id,attr_id,-1,bizList[biz_id].isSaleTime)"
                             class="plus">-</span>
                       <input @blur="inputQty($event,biz_id,prod_id,attr_id,bizList[biz_id].isSaleTime)" @focus="getQty(item.Qty)" class="attr_num"
                              min="1" type="number" v-model="item.Qty" />
                       <span @click="updateCartFn(biz_id,prod_id,attr_id,1,bizList[biz_id].isSaleTime)" class="plus">+</span>
                     </span>
+                  </div>
                 </div>
               </div>
-            </div>
-          </block>
+            </block>
+          </div>
         </div>
+        <div class="none" v-else>
+          <image :src="'/static/client/box.png'|domain" class="img" />
+          <div><span>购物车空空如也</span><span @click="gotoBuy" class="tobuy">去逛逛</span></div>
+        </div>
+
       </div>
-      <div class="none" v-else>
-        <image :src="'/static/client/box.png'|domain" class="img" />
-        <div><span>购物车空空如也</span><span @click="gotoBuy" class="tobuy">去逛逛</span></div>
+
+      <div class="checkout" v-if="!manage">
+        <div @click="selectAll" class="item-cart ">
+          <layout-icon class="m-r-5" color="#F43131" size="20" type="iconicon-check" v-if="allCheck"></layout-icon>
+          <layout-icon class="m-r-5" color="#ccc" size="20" type="iconradio" v-else></layout-icon>
+          <span>全选</span>
+        </div>
+        <block v-if="!isDel">
+          <div class="total">合计：<span>￥<span>{{totalPrice}}</span></span></div>
+          <div @click="submit" class="checkbtn">结算</div>
+        </block>
+        <block v-else>
+          <div @click="DelCart" class="checkbtn">删除</div>
+        </block>
       </div>
 
-    </div>
+      <div class="intro">为你推荐</div>
+      <div class="product-list flex">
 
-    <div class="checkout" v-if="!manage">
-      <div @click="selectAll" class="item-cart ">
-        <layout-icon class="m-r-5" color="#F43131" size="20" type="iconicon-check" v-if="allCheck"></layout-icon>
-        <layout-icon class="m-r-5" color="#ccc" size="20" type="iconradio" v-else></layout-icon>
-        <span>全选</span>
+        <pro-tag
+          :index="idx"
+          :key="idx"
+          :product-info="item"
+          :pro_name="item.Products_Name"
+          :pro_price="item.Products_PriceX"
+          :pro_price_old="item.Products_PriceY"
+          :pro_src="item.ImgPath"
+          :prod_id="item.Products_ID"
+          v-for="(item,idx) in proList"
+        />
+
       </div>
-      <block v-if="!isDel">
-        <div class="total">合计：<span>￥<span>{{totalPrice}}</span></span></div>
-        <div @click="submit" class="checkbtn">结算</div>
-      </block>
-      <block v-else>
-        <div @click="DelCart" class="checkbtn">删除</div>
-      </block>
-    </div>
-
-    <div class="intro">为你推荐</div>
-    <div class="product-list flex">
-
-      <pro-tag
-        :index="idx"
-        :key="idx"
-        :product-info="item"
-        :pro_name="item.Products_Name"
-        :pro_price="item.Products_PriceX"
-        :pro_price_old="item.Products_PriceY"
-        :pro_src="item.ImgPath"
-        :prod_id="item.Products_ID"
-        v-for="(item,idx) in proList"
-      />
-
-    </div>
+    </block>
 
     <div class="h50"></div>
     <div class="safearea-box" style="background-color: #f8f8f8!important;"></div>
@@ -115,6 +117,8 @@ import { getProductList } from '@/api/product'
 import { error } from '@/common/fun'
 import ProTag from '@/components/pro-tag/pro-tag'
 import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
+import LayoutPageLoading from '@/components/layout-page-loading/layout-page-loading'
+import { hideLoading, showLoading } from '../../common/fun'
 /**
  * 检查店铺的状态
  * 1.要么在营业时间内
@@ -136,16 +140,19 @@ const checkStoreStatus = (bizInfo) => {
   if (business_status && !business_time_status && !out_business_time_order) return true
 
 }
+let timeShow=null
 export default {
   mixins: [BaseMixin, tabbarMixin],
   components: {
 
     WzwImTip,
     LayoutIcon,
-    ProTag
+    ProTag,
+    LayoutPageLoading
   },
   data () {
     return {
+      isShowFullLoading:true,
       isAjax: false,
       CartList: [],
       bizList: [],
@@ -425,12 +432,22 @@ export default {
       }
       this.totalPrice = Number(total).toFixed(2)
     },
-    async _int_func () {
+    async _int_func (init) {
       this.pageInitDone = false
-      if (!this.$checkIsLogin(0)) return
+
+      if (!this.$checkIsLogin(0)){
+        timeShow=null
+        this.isShowFullLoading=false
+        return
+      }
+      if(init=='init'){
+        this.isShowFullLoading=true
+      }else{
+        showLoading('加载中')
+      }
+
       const cart = await getCartList({ cart_key: 'CartList' }, {
-        onlyData: true,
-        tip: '加载中'
+        onlyData: true
       }).catch(e => {
         throw Error(e.msg || '获取购物车产品失败')
       })
@@ -444,6 +461,16 @@ export default {
 
       this.$store.commit('cart/SET_BIZLIST', bizList)
       this.$set(this, 'bizList', bizList)
+
+      if(init=='init'){
+        setTimeout(()=>{
+          this.isShowFullLoading=false
+        },500)
+      }else{
+        hideLoading()
+      }
+
+
 
       const attrList = []
       for (const biz_id in CartList) {
@@ -480,9 +507,11 @@ export default {
     })
   },
   async created () {
+
     const { data, totalCount } = await getProductList({ page: this.page }).catch(e => {
       throw Error(e.msg || '获取推荐商品信息失败')
     })
+
     this.proList = data
     this.productTotal = totalCount
     this.page++
@@ -499,12 +528,20 @@ export default {
     this.page++
     this.proList = this.proList.concat(proList)
   },
+  onHide(){
+    timeShow= setTimeout(()=>{
+      this.isShowFullLoading=true
+    },100)
+
+  },
   onShow () {
+
     this.setTabBarIndex(3)
     this.$store.dispatch('system/setTabActiveIdx', 3)
     this.refreshTabTag()
 
-    this._int_func()
+    this._int_func('init')
+
   }
 
 }

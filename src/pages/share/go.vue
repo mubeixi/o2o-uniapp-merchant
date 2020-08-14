@@ -1,6 +1,7 @@
 <template>
   <div @click="commonClick" class="page-wrap" v-if="isReady">
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
+    <layout-page-loading :show="isShowFullLoading"></layout-page-loading>
     <canvas canvas-id="myCanvas" class="myCanvas" id="myCanvas" />
     <div class="text-box">
       <div class="flex flex-vertical-c flex-justify-between">
@@ -95,7 +96,7 @@ import Promisify from '@/common/Promisify'
 import { buildSharePath, checkIsLogin, cutstrFun, saveImageToDisk } from '@/common/helper'
 import { Exception } from '@/common/Exception'
 import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
-
+import LayoutPageLoading from '@/components/layout-page-loading/layout-page-loading'
 let canvasInstance = null
 export default {
   name: 'ShareIndex',
@@ -103,11 +104,13 @@ export default {
   components: {
     WzwImTip,
     LayoutIcon,
-    LayoutModal
+    LayoutModal,
+    LayoutPageLoading
   },
   data () {
     return {
 		userInfo:{},
+      isShowFullLoading:false,
       current_url: '',
       isReady: false,
       mode: 'default',
@@ -214,7 +217,7 @@ export default {
     async createCanvas () {
       if (!checkIsLogin(1, 1)) return
       try {
-        showLoading('生成中')
+        this.isShowFullLoading=true
         const wrapHeight = 1038
         const ctx = canvasInstance
 
@@ -354,7 +357,7 @@ export default {
         e.type = 'modal'
         Exception.handle(e)
       } finally {
-        hideLoading()
+        this.isShowFullLoading=false
       }
     },
     async copy () {
@@ -370,7 +373,7 @@ export default {
     },
     async _init_func (options) {
       try {
-        showLoading()
+        this.isShowFullLoading=true
 
         this.userInfo = await this.$store.dispatch('user/getUerInfo', { stroage: 'online' })
 
@@ -437,7 +440,7 @@ export default {
         // })
 
         this.isReady = true
-        hideLoading()
+        this.isShowFullLoading=false
         this.createCanvas()
       } catch (e) {
         console.log(e)
