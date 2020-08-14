@@ -1,5 +1,6 @@
 <template>
   <div class="fixed-wrap">
+    <layout-page-loading :show="isShowFullLoading"></layout-page-loading>
     <!--超级占位，把上面这些全干掉了-->
     <div class="sticky-space" :style="{backgroundImage: 'url('+$getDomain('/static/client/store/theme_one/top-bg-large.jpg')+')',height:menuButtonInfo.bottom+10+'px',zIndex:headTabSticky?3:-4}"></div>
     <div :class="{isStickly:headTabSticky}" :style="{top:menuButtonInfo.bottom+10+'px',zIndex:headTabSticky?3:-5}" class="head-tab fixed" id="stickyTab">
@@ -464,7 +465,7 @@ import GoodsItem from '@/components/good-item/good-item'
 import LayoutComment from '@/components/layout-comment/layout-comment'
 import LayoutModal from '@/components/layout-modal/layout-modal'
 import LayoutLayer from '@/components/layout-layer/layout-layer'
-
+import LayoutPageLoading from '@/components/layout-page-loading/layout-page-loading'
 var countdownInstance = null
 var countdownInstanceByFlash = null
 /**
@@ -508,7 +509,7 @@ const checkStoreStatus = (bizInfo) => {
 
 export default {
   name: 'store-theme-one',
-  components: { LayoutLayer, LayoutModal, LayoutComment, GoodsItem, LayoutLoading, WzwLiveTag, LayoutIcon },
+  components: { LayoutLayer, LayoutModal, LayoutComment, GoodsItem, LayoutLoading, WzwLiveTag, LayoutIcon,LayoutPageLoading },
   mixins: [componetMixin],
   props: {
     bid: {
@@ -518,6 +519,7 @@ export default {
   },
   data () {
     return {
+      isShowFullLoading:false,
       isUserLogin: false,
       storeBottomActionHeight: '0px',
       listExpand: false,
@@ -701,18 +703,18 @@ export default {
       if (!this.listExpand) {
 
         this.listExpand = true
-  
+
         var showCarts = this.$store.getters['cart/getCartList'](this.bid)
-  
+
         console.log('showCarts value is', showCarts)
         this.$set(this, 'showCarts', objTranslate(showCarts))
-  
+
         // 强制刷新视图
         this.$forceUpdate()
         setTimeout(() => {
           this.$openPop('carts')
         }, 100)
-        
+
       }
     },
     clearCart () {
@@ -980,7 +982,7 @@ export default {
     },
     async _init_func () {
       try {
-        showLoading('加载中')
+        this.isShowFullLoading=true
         const storeInfoData = await getBizInfo({ biz_id: this.bid }, { onlyData: true }).catch((e) => {
           throw Error(e.msg || '商品信息失败')
         })
@@ -1132,7 +1134,7 @@ export default {
           })
           this.isFavourite = is_favourite
         }
-        hideLoading()
+        this.isShowFullLoading=false
 
         this.$nextTick().then(() => {
           this.upSectionBoxHeight()
@@ -1144,7 +1146,7 @@ export default {
 
         this.refreshInfoByIsLogin()
       } catch (e) {
-        hideLoading()
+        this.isShowFullLoading=false
         Exception(e)
       }
     },
