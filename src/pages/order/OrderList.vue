@@ -614,7 +614,7 @@ export default {
         height: 28px;
         line-height: 28px;
         text-align: center;
-        border: 1rpx solid #eee;
+        border: 1px solid #eee;
         border-radius: 14px;
         color: #777;
         font-size: 13px;
@@ -624,9 +624,10 @@ export default {
         }
         
         &.active {
-          /*color: #fff;*/
-          /*background: #F43131;*/
-          /*border: none;*/
+
+          color: #fff;
+          background: #F43131;
+          border: none;
         }
       }
     }

@@ -627,7 +627,7 @@ export default {
         }, 10000)
       }
       // 强制重新读取
-      const initData = await this.$store.dispatch('system/loadInitData').catch(() => {})
+      const initData = await this.$store.dispatch('system/loadInitData',{ isOnline: true }).catch(() => {})
 
       this.initData = initData
       console.log('this.initData is ', this.initData)
