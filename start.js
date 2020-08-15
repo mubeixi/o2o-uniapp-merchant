@@ -5,7 +5,7 @@ const rootDirPath = resolve('./')
 const projectRuntimePath = `${rootDirPath}/dist/dev/mp-weixin`
 
 // 打开微信开发者工具
-shell.exec(`cli open --project ${projectRuntimePath}`)
+// shell.exec(`cli open --project ${projectRuntimePath}`)
 
 
 

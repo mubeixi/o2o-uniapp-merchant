@@ -543,7 +543,7 @@ export default {
           font-size: 12px;
 
           .title {
-            font-size: 13px;
+            font-size: 14px;
             max-height: 36px;
             line-height: 18px;
             margin-top: 10px;
@@ -696,6 +696,7 @@ export default {
           height: 32px;
           overflow: hidden;
           text-overflow: ellipsis;
+          font-size: 14px;
         }
 
         .price-box {
