@@ -45,7 +45,9 @@ export default {
     // #endif
 
     // 强制读取服务器
-    this.$store.dispatch('system/loadInitData', { isOnline: true })
+    this.$store.dispatch('system/loadInitData', { isOnline: true }).then(res=>{
+      console.log('App Launch flash initData is',res)
+    })
     this.$store.dispatch('theme/refreshTheme')
   },
   onShow: function (options) {
