@@ -25,13 +25,13 @@
           {{activeInfo.descr||'暂无填写'}}
         </div>
       </div>
-      
+
       <div class="free-title m-b-18" v-if="recommendProdList.length>0">
         <div class="free-line"></div>
         <span class="fz-16 c3 m-l-10 m-r-10">推荐商品</span>
         <div class="free-line"></div>
       </div>
-      
+
       <scroll-view class="scroll-view_H" scroll-left="120" scroll-x="true" v-if="recommendProdList.length>0">
         <div :key="ind" @click="$toGoodsDetail(pro)" class=" uni-bg-red m-r-10" v-for="(pro,ind) of recommendProdList">
           <div class="img-div">
@@ -50,15 +50,15 @@
             </div>
           </div>
         </div>
-      
+
       </scroll-view>
-      
+
       <div class="free-title m-b-18" v-if="prodList.length>0">
         <div class="free-line"></div>
         <span class="fz-16 c3 m-l-10 m-r-10">全部商品</span>
         <div class="free-line"></div>
       </div>
-      
+
       <div class="free-list flex " v-if="prodList.length>0">
         <div :key="index" @click="$toGoodsDetail(item)" class="free-list-item " v-for="(item,index) of prodList">
           <div class="free-list-item-img m-b-9">
@@ -77,13 +77,13 @@
             </div>
           </div>
         </div>
-      
+
       </div>
-      
+
       <block v-if="prodList.length<1 && recommendProdList.length<1">
         <wzw-empty-img></wzw-empty-img>
       </block>
-    
+
     </scroll-view>
   </div>
 </template>
@@ -155,24 +155,42 @@ export default {
         //   throw Error(e.msg || '获取商家信息错误')
         // })
         const that = this
-        
+
         this.activeInfo = await getActiveInfo({ type: 'freeorder', ...this.postData }, {
           onlyData: true,
         }).catch(e => {
+          error('获取活动失败')
+          setTimeout(function () {
+            that.$back()
+          }, 2000)
+          return
           throw Error(e.msg || '获取活动失败')
         })
-        if (Array.isArray(this.activeInfo)) {
+        if (Array.isArray(this.activeInfo)||this.activeInfo.status==0) {
           error('暂无免单活动')
           setTimeout(function () {
             that.$back()
           }, 1500)
           return
         }
-        
+        if(this.activeInfo.status_time==1){
+          error('免单活动还未开始')
+          setTimeout(function () {
+            that.$back()
+          }, 2000)
+          return
+        }if(this.activeInfo.status_time==2){
+          error('免单活动已经结束')
+          setTimeout(function () {
+            that.$back()
+          }, 2000)
+          return
+        }
+
         // php时间戳
         this.start_time = uni.$moment(this.activeInfo.start_time * 1000).format('YYYY.MM.DD')
         this.end_time = uni.$moment(this.activeInfo.end_time * 1000).format('YYYY.MM.DD')
-        
+
         if (this.activeInfo.active_info.recommend_prod_id) {
           this.recommendProdList = await getProductList({
             Products_ID: this.activeInfo.active_info.recommend_prod_id,
@@ -182,7 +200,7 @@ export default {
             throw Error(e.msg || '获取推荐商品失败')
           })
         }
-        
+
         if (this.activeInfo.active_info.prod_id) {
           this.prodList = await getProductList({
             Products_ID: this.activeInfo.active_info.prod_id,
@@ -236,7 +254,7 @@ export default {
     width: 750rpx;
     overflow-x: hidden;
   }
-  
+
   .top-box {
     z-index: 1;
     width: 750rpx;
@@ -247,7 +265,7 @@ export default {
     background-repeat: no-repeat;
     background-size: 100% auto;
     padding-bottom: 10px;
-    
+
     .title {
       font-size: 40rpx;
       width: 750rpx;
@@ -257,16 +275,16 @@ export default {
       transform: translateY(-50%);
     }
   }
-  
+
   .free-top {
-    
+
     &-bg {
       position: absolute;
       top: 0;
       left: 0;
       width: 750rpx;
     }
-    
+
     &-title {
       font-size: 21px;
       color: #FFFFFF;
@@ -275,7 +293,7 @@ export default {
       top: 40rpx;
       left: 292rpx;
     }
-    
+
     &-time {
       width: 458rpx;
       height: 60rpx;
@@ -286,7 +304,7 @@ export default {
       margin: 0 auto;
       color: #FFFFFF;
     }
-    
+
     &-active {
       width: 710rpx;
       position: relative;
@@ -297,34 +315,34 @@ export default {
       padding: 30rpx;
       box-sizing: border-box;
       margin: 40rpx 20rpx;
-      
+
       &-content {
         line-height: 40rpx;
         word-break: break-all;
       }
     }
   }
-  
+
   .container-wrap {
     position: fixed;
     width: 750rpx;
     bottom: 0;
   }
-  
+
   .free-title {
     height: 30rpx;
     line-height: 30rpx;
     display: flex;
     justify-content: center;
     align-items: center;
-    
+
     .free-line {
       width: 46rpx;
       height: 4rpx;
       background: rgba(255, 0, 0, 1);
     }
   }
-  
+
   .scroll-view_H {
     width: 750rpx;
     height: 330rpx;
@@ -332,17 +350,17 @@ export default {
     box-sizing: border-box;
     margin-bottom: 70rpx;
     white-space: nowrap;
-    
+
     .uni-bg-red {
       width: 240rpx;
       height: 330rpx;
       display: inline-block;
-      
+
       .img-div {
         width: 240rpx;
         height: 240rpx;
       }
-      
+
       .pro-title {
         width: 240rpx;
         height: 24rpx;
@@ -352,33 +370,33 @@ export default {
         text-overflow: ellipsis;
         white-space: nowrap;
       }
-      
+
       .price {
         color: #f00;
-        
+
         .fz-11 {
           text-decoration: line-through;
         }
       }
-      
+
     }
   }
-  
+
   .free-list {
     width: 750rpx;
     padding-left: 20rpx;
     flex-wrap: wrap;
-    
+
     &-item {
       width: 344rpx;
       margin-right: 20rpx;
       margin-bottom: 40rpx;
-      
+
       &-img {
         width: 344rpx;
         height: 344rpx;
       }
-      
+
       &-title {
         width: 344rpx;
         overflow: hidden;
@@ -389,16 +407,16 @@ export default {
         height: 56rpx;
         line-height: 28rpx;
       }
-      
+
       &-price {
         color: #f00;
-        
+
         .c9 {
           text-decoration: line-through;
         }
       }
     }
-    
+
   }
 
 </style>
