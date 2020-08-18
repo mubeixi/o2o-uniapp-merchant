@@ -507,6 +507,11 @@ export default {
     overflow-x: hidden;
     text-overflow: ellipsis;
   }
+  .price{
+    white-space: nowrap;
+    overflow-x: hidden;
+    text-overflow:ellipsis;
+  }
 
   @import "../../assets/goods.scss";
 
