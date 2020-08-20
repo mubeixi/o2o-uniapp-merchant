@@ -1,7 +1,7 @@
 const { readFileByPromise, writeFileByPromise } = require('./utils')
 const { wxMpAppid, wxMpAppidPlaceholar } = require('./conf')
 
-const confTmplFilePath = './src/common/env.pro'
+const confTmplFilePath = './src/common/env.dev'
 const confFilePath = './src/common/env.js'
 
 const manifestTmplFilePath = './src/manifest.json.tmpl'
