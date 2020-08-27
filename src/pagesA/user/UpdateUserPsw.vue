@@ -106,7 +106,7 @@ export default {
         phone_data: loginData.encryptedData,
         iv: loginData.iv
       }
-      updateUserMobile(postData, { reqHeader: true, tip: '绑定中' }).then(res => {
+      await updateUserMobile(postData, { reqHeader: true, tip: '绑定中' }).then(res => {
         this.toast('修改成功', 'success')
         this.goBack()
       }).catch((e) => {

@@ -1479,8 +1479,8 @@
               </div>
             </div>
 
-            <div @click="$cellPhone(store[0].biz_account)" class="store-vip-call m-b-10">
-              电话：{{store[0].biz_account}}
+            <div @click="$cellPhone(store[0].biz_mobile)" class="store-vip-call m-b-10">
+              电话：{{store[0].biz_mobile}}
               <layout-icon color="#26c78d" class="m-l-15" size="20" type="icondianhua"></layout-icon>
             </div>
 
