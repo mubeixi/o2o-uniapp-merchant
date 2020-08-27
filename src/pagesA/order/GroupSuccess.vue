@@ -10,7 +10,7 @@
         <div class="top">{{product.Products_Name}}</div>
         <div class="bottom">
           <div class="price">
-            ¥<span class="prices">{{product.pintuan_pricex}}</span><span>拼团省￥{{product.Products_PriceX-product.pintuan_pricex}}</span>
+            ¥<span class="prices">{{product.pintuan_pricex}}</span><span>拼团省￥{{ (product.Products_PriceX*100-product.pintuan_pricex*100)/100}}</span>
           </div>
           <div class="tuan">
             {{product.pintuan_people}}人团 • 已团{{product.teamnum}}件
