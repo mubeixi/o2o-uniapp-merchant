@@ -274,7 +274,7 @@ export default {
     },
     goDetail (item) {
       toGoodsDetail(item)
-      
+
     },
     itemMarginObj (idx) {
       const conf = this.goods.style.margin
@@ -537,6 +537,11 @@ export default {
     line-height: 12px;
     overflow-x: hidden;
     text-overflow: ellipsis;
+  }
+  .price{
+    white-space: nowrap;
+    overflow-x: hidden;
+    text-overflow:ellipsis;
   }
 
   @import "../../assets/goods.scss";

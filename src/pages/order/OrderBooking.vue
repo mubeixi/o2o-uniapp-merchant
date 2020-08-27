@@ -259,7 +259,7 @@
           </div>
 
           <div class="text-right fz-14" style="padding: 20rpx 20rpx 50rpx">
-            共{{bizList[biz_id].prod_count}}件商品，小计<span class="price-selling">￥{{bizList[biz_id].Order_TotalPrice}}</span>
+            共{{bizList[biz_id].prod_count||0}}件商品，小计<span class="price-selling">￥{{bizList[biz_id].Order_TotalPrice||0}}</span>
           </div>
 
           <div class="expired-box" style="padding-bottom: 30rpx" v-if="bizList[biz_id].expired_cart_prod_count>0">
@@ -412,6 +412,7 @@ import { computeArrayColumnSum } from '@/pages/order/pay'
 import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 
 import LayoutPageLoading from '@/components/layout-page-loading/layout-page-loading'
+import { backFunc } from '../../common/fun'
 export default {
   mixins: [BaseMixin],
   components: {
@@ -424,8 +425,8 @@ export default {
   },
   data () {
     return {
-      isShowFullLoading:false,
-      safeAreaHeight:0,
+      isShowFullLoading: false,
+      safeAreaHeight: 0,
       cash_from: 1, // 使用余额模式
       allowUseMoney: 0,
       toDay: '', // 当前年月日
@@ -667,7 +668,7 @@ export default {
     },
     async _init_func () {
       if (!this.$checkIsLogin(1, 1)) return
-      this.isShowFullLoading=true
+      this.isShowFullLoading = true
       const addressList = await getAddressList({}, { onlyData: true }).catch(() => {
       })
       if (Array.isArray(addressList) && addressList.length > 0) {
@@ -696,7 +697,7 @@ export default {
           this.tmplFromList = temp_info.formData
         }
       }
-      this.isShowFullLoading=false
+      this.isShowFullLoading = false
     },
     changgeTabIdx (index) {
       this.tabIdx = index
@@ -1106,7 +1107,7 @@ export default {
      */
     async checkOrderParam ({ isInit = false } = {}) {
       try {
-        this.orderLoading=false
+        this.orderLoading = false
         const oldOrderInfo = { ...this.orderInfo }
 
         let params = {}
@@ -1171,7 +1172,7 @@ export default {
               if (bid === biz_id) {
                 // console.log(bid, biz_id, bizList[bid].Order_Shipping, bizList[bid].shipping_company)
                 // 如果该商户有选择，那么就设置上
-                if (bizList[bid].Order_Shipping.shipping_id) {
+                if (bizList[bid].Order_Shipping && bizList[bid].Order_Shipping.shipping_id) {
                   this.$set(this, 'ship_current', bizList[bid].Order_Shipping.shipping_id)
                   this.$set(this.postData.shipping_id, biz_id, bizList[bid].Order_Shipping.shipping_id)
                   this.$set(this.postData.shipping_name, biz_id, bizList[bid].shipping_company[bizList[bid].Order_Shipping.shipping_id])
@@ -1201,12 +1202,28 @@ export default {
         }
 
         var bizListUpShiping = {}
-        const allTotalPrice = computeArrayColumnSum(bizList, 'Order_TotalPrice') // computeArrayColumnSum()
+        var allTotalPrice = 0
+        for (var key in bizList) {
+          if (bizList[key].hasOwnProperty('Order_TotalPrice')) {
+            allTotalPrice += Number(bizList[key].Order_TotalPrice)
+          }
+        }
+
         console.log(allTotalPrice)
         this.allowUseMoney = Math.min(parseFloat(this.userInfo.User_Money), parseFloat(allTotalPrice))
 
         for (var bizId in bizList) {
           var bizInfo = bizList[bizId]
+          if (!bizInfo.hasOwnProperty('prod_count') || !bizInfo.prod_count) {
+            uni.showModal({
+              title: '信息提示',
+              content: `${bizInfo.biz_shop_name}没有有效商品，请联系商家后重新提交订单`,
+              showCancel: false,
+              success (res) {
+                backFunc()
+              }
+            })
+          }
           var expired_prod_count = 0
           for (var i in bizInfo.expired_cart_prod) {
             expired_prod_count += bizInfo.expired_cart_prod[i].length
@@ -1307,6 +1324,7 @@ export default {
         //   }
         // }
       } catch (e) {
+        console.log(e)
         Exception.handle(e)
       } finally {
         this.orderLoading = true

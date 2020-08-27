@@ -591,7 +591,7 @@ export default {
     // 跳转商品详情
     goDetail (item) {
       uni.navigateTo({
-        url: '/pages/detail/detail?Products_ID=' + item
+        url: '/pages/product/detail?pro_id=' + item
       })
     },
     // 跳转去列表页

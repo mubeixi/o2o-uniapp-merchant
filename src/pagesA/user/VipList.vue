@@ -139,6 +139,9 @@ export default {
         order_id: this.order_id,
         pay_method: item.pay_type
       }
+	  if(item.pay_type=='remainder_pay'){
+		  data.pay_passwd=item.user_pay_password
+	  }
       const payCan = await userLevelPay(data, { tip: '加载中' }).catch(e => {
         error(e.msg || '创建订单失败')
       })
