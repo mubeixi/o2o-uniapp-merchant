@@ -90,12 +90,11 @@ export default {
 
     // 是否需要发票
     need_invoice: {
-      type: Object,
-      default: {  }
+      type: String
     },
     // 发票信息
     invoice_info: {
-      type: Object
+      type: String
     },
     // 订单备注
     order_remark: {

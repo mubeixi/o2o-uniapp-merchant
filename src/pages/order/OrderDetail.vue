@@ -126,11 +126,19 @@
         </view>
       </view>
     </view>
-    <div class="other  bg-white" v-if="orderInfo.Order_Type=='pintuan'||orderInfo.Order_Type=='shop'">
+    <div class="other  bg-white" v-if="(orderInfo.Order_Type=='pintuan'||orderInfo.Order_Type=='shop')&&orderInfo.Coupon_Money>0">
       <div class="bd">
         <div class="o_title">
           <span>优惠券选择</span>
           <span class="c8">{{orderInfo.Coupon_Money}}元优惠券</span>
+        </div>
+      </div>
+    </div>
+    <div class="other  bg-white" v-if="(orderInfo.Order_Type=='pintuan'||orderInfo.Order_Type=='shop')&&orderInfo.users_coupon_money>0">
+      <div class="bd">
+        <div class="o_title">
+          <span>平台通用优惠券</span>
+          <span class="c8">{{orderInfo.users_coupon_money}}元优惠券</span>
         </div>
       </div>
     </div>
@@ -227,6 +235,9 @@
         </view>
         <view class="mxitem" v-if="orderInfo.Coupon_Money > 0">优惠券
           <text class="num">-{{orderInfo.Coupon_Money}}</text>
+        </view>
+        <view class="mxitem" v-if="orderInfo.users_coupon_money > 0">平台优惠券
+          <text class="num">-{{orderInfo.users_coupon_money}}</text>
         </view>
         <view class="mxitem" v-if="orderInfo.Integral_Money > 0">积分抵用
           <text class="num">-{{orderInfo.Integral_Money}}</text>
