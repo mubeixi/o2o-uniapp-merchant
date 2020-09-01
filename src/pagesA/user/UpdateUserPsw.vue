@@ -72,6 +72,7 @@ export default {
   mixins: [BaseMixin],
   data () {
     return {
+      wxCode:'',
       type: 0,
       is_back: false,
       curr_psw: '',
@@ -99,10 +100,10 @@ export default {
     async getPhoneNumberAll (e) {
       const loginData = e.detail
       if (!loginData.iv) return
-      const wxLoginRt = await Promisify('login').catch(() => { throw Error('微信login错误') })
-      const { code: lp_code } = wxLoginRt
+      // const wxLoginRt = await Promisify('login').catch(() => { throw Error('微信login错误') })
+      // const { code: lp_code } = wxLoginRt
       const postData = {
-        lp_code,
+        lp_code:this.wxCode,
         phone_data: loginData.encryptedData,
         iv: loginData.iv
       }
@@ -272,7 +273,7 @@ export default {
       }
     }
   },
-  onLoad (options) {
+  async onLoad (options) {
     if (!checkIsLogin(1, 0)) return
 
     if (options.type == 0) {
@@ -288,6 +289,10 @@ export default {
       this.title = '修改手机号码'
       this.type = 3
       this.bgcolor = '#fff'
+      const wxLoginRt = await Promisify('login').catch(() => { throw Error('微信login错误') })
+      const code= wxLoginRt.code
+      this.wxCode=code
+      console.log(wxLoginRt,"wxLoginRt")
     }
     uni.setNavigationBarTitle({
       title: this.title

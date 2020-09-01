@@ -138,10 +138,16 @@ export default {
         order_id: this.order_id,
         pay_method: item.pay_type
       }
+      if(item.pay_type=='remainder_pay'){
+        data.pay_passwd=item.user_pay_password
+      }
+      console.log(item,"ssitemssitemssitemssitemssitemssitem")
+
       const payCan = await rightsCardPay(data, { tip: '加载中' }).catch(e => {
         error(e.msg || '创建订单失败')
+        return
       })
-      if (payCan.data) {
+      if (payCan.data&&!Array.isArray(payCan.data)) {
         Pay(this, item.pay_type, payCan)
       } else {
         toast('支付成功')
@@ -160,6 +166,7 @@ export default {
       })
     },
     paySuccessCall (res) {
+      console.log(res,"resresresres")
       var _that = this
       if (res && res.code && res.code === 2) {
         _that.payFailCall()

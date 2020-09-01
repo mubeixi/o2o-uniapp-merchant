@@ -3,7 +3,7 @@
     <wzw-im-tip ref="wzwImTip"></wzw-im-tip>
     <form action="/">
       <div class="search-wrap">
-        <icon class="search_icon" size="34rpx" type="search" />
+        <icon class="search_icon" size="34rpx" type="search"  @click="success" />
         <input @confirm="success" autofocus="autofocus" class="search-input" confirm-type='search' focus="focus"
                name="search" type="text" v-model="inputValue">
         <span @click="close" class="span">取消</span>

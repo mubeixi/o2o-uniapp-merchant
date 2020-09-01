@@ -367,6 +367,11 @@ export default {
     async copy () {
       try {
         const str = this.shareText
+        if(!this.shareText){
+          error('没有可复制的文案')
+          return
+        }
+
         console.log(str)
         await Promisify('setClipboardData', { data: str }).catch(e => {
           throw Error(e.errMsg)

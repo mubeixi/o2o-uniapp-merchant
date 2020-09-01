@@ -103,6 +103,7 @@ import { mapActions } from 'vuex'
 import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
 import eventHub from '@/common/eventHub'
 import { error } from '@/common/fun'
+import Storage from '@/common/Storage';
 
 export default {
   mixins: [BaseMixin, tabbarMixin],
@@ -297,6 +298,9 @@ export default {
       getUserInfo().then(res => {
         this.setUserInfo(res.data)
       }).catch(err => {
+        Storage.remove('access_token')
+        Storage.remove('user_id')
+        this.setUserInfo({})
       })
       this.getOrderNum()
     }
