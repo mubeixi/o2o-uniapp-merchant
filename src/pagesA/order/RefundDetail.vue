@@ -16,13 +16,13 @@
               ¥{{prod.prod_price}}
             </view>
             <view>
-              ×{{prod.prod_count}}
+              ×{{prod.is_back_num}}
             </view>
           </view>
         </view>
       </view>
     </block>
-    
+
 
     <view class="centers" v-if="pro">
       <view class="td">
@@ -48,7 +48,7 @@
         商家收货地址：{{pro.shop_address.RecieveProvince_name}}{{pro.shop_address.RecieveCity_name}}{{pro.shop_address.RecieveArea_name}}{{pro.shop_address.RecieveName}}
         手机号码:{{pro.shop_address.RecieveMobile}}{{pro.shop_address.RecieveAddress}}收
       </view>
-  
+
       <div style="padding-left: 20rpx;margin-top: 50rpx;" class="c3 fz-b fz-16">退款动态</div>
       <block v-if="isFahuo">
         <view class="fahuo" v-if="pro.Back_Status==1">
@@ -110,11 +110,11 @@ export default {
     if (options.store_id){
       this.store_id = options.store_id
     }
-    
+
     this.getBackOrderDetail()
   },
   onShow () {
-  
+
   },
   methods: {
     refundSend () {
