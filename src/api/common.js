@@ -103,3 +103,7 @@ export const rotateInit = (param, options) => fetch({ act: 'initTurn', param, op
 
 // 根据经纬度和精确定位设置获取对应的地区id
 export const getLocationByCoordinate = (param, options) => fetch({ act: 'getLocationByCoordinate', param, options })
+
+
+// 写入用户日志
+export const upUserLog = (param, options) => fetch({ act: 'write_user_log', param, options })

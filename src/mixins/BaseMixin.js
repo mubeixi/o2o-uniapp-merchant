@@ -16,7 +16,7 @@ import { WX_JSSDK_INIT } from '@/common/uni'
 // #endif
 import { sendAnalysisData } from '@/api/common'
 import store from '@/store'
-
+import {upUserLog} from '@/api/common'
 const Analysis = {
   data () {
     return {
@@ -185,11 +185,11 @@ export default {
     },
     // 语言
     $t (line, data) {
-      return uni.T._(line, data)
+      return T._(line, data)
     },
     // 切换语种
     $setLocale (code) {
-      uni.T.setLocale(code)
+      T.setLocale(code)
     },
     mixintap () {
       this.mixin = 'MixinText' + (Math.random() + '').substring(3, 7)
@@ -223,6 +223,14 @@ export default {
         const old_users_id = Storage.get('users_id')
 
         // #ifdef H5
+        if (checkIsLogin() && !sessionStorage.getItem('is_send_usrlog')) {
+          upUserLog({}).then(res => {
+            sessionStorage.setItem('is_send_usrlog', 1)
+          }).catch(() => {
+          })
+        }
+
+
         // 要保持url里面一直有users_id,没有就重新跳转一次
         if (!GetQueryByString(location.href, 'users_id')) {
           let { href, protocol, host, search, hash, pathname } = window.location
