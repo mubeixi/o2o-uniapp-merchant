@@ -123,6 +123,7 @@ import Storage from '@/common/Storage'
 import IM from '@/common/Im/Im'
 import eventHub from '@/common/eventHub'
 import WzwImTip from '@/components/wzw-im-tip/wzw-im-tip'
+import {upUserLog} from '@/api/common'
 
 export default {
   name: 'UserLogin',
@@ -399,6 +400,14 @@ export default {
       Storage.set('user_id', user_id)
 
       this.$store.commit('user/SET_USER_INFO', userData)
+
+
+      await upUserLog({}).then(res => {
+        // #ifdef H5
+        sessionStorage.setItem('is_send_usrlog', 1)
+        // #endif
+      }).catch(e => {
+      })
 
       // 新增全局监听
       if (!Storage.get('listenStatus')) {

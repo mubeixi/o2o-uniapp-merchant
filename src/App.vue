@@ -8,6 +8,7 @@ import Storage from '@/common/Storage'
 import eventHub from '@/common/eventHub'
 import IM from '@/common/Im/Im'
 import { modal } from '@/common/fun'
+import {upUserLog} from '@/api/common'
 // const livePlayer = requirePlugin('live-player-plugin')
 
 export default {
@@ -16,11 +17,20 @@ export default {
   },
   onLaunch: function () {
     console.log('App Launch')
-  
+
     Storage.remove('current_lat')
     Storage.remove('current_lng')
     Storage.remove('location_id')
     Storage.remove('formatted_address')
+
+    // #ifndef H5
+    console.log('H5 onLaunch H5 onLaunch H5 onLaunch')
+    if (Storage.get('user_id')) {
+      upUserLog({}).then(res => {
+      }).catch(() => {
+      })
+    }
+    // #endif
 
     // eventHub.livePlayer = livePlayer
     console.log('ENV is', ENV)
