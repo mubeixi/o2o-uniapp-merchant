@@ -185,11 +185,11 @@ export default {
     },
     // 语言
     $t (line, data) {
-      return uni.T._(line, data)
+      return T._(line, data)
     },
     // 切换语种
     $setLocale (code) {
-      uni.T.setLocale(code)
+      T.setLocale(code)
     },
     mixintap () {
       this.mixin = 'MixinText' + (Math.random() + '').substring(3, 7)
