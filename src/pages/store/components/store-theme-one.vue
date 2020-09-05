@@ -222,7 +222,7 @@
         </div>
         <div class="virtual-list">
           <div class="virtual-item flex" v-for="(pro,idx) in virtualGoodsLsit" :key="idx" @click="$toGoodsDetail(pro)">
-            <div :style="{backgroundImage:'url('+getPreviewThumb(pro.ImgPath,'-r200')+')'}" class="item-cover"></div>
+            <div :style="{backgroundImage:'url('+getPreviewThumb(pro.ImgPath,'-r640')+')'}" class="item-cover"></div>
             <div class="flex1 flex flex-column flex-justify-between">
               <div class="c3 product-title">
                 <wzw-live-tag :room_id="pro.room_id" :product-info="pro" />

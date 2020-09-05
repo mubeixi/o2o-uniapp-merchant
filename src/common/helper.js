@@ -786,7 +786,7 @@ export function mixinStyle (defaultStyle, style) {
   return rt
 }
 
-export const getPreviewThumb = (url, ext = '-r200') => {
+export const getPreviewThumb = (url, ext = '-r640') => {
   var _url = getDomain(url)
   if (!_url) {
     return ''
