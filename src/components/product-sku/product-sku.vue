@@ -3,7 +3,7 @@
     <layout-popup ref="productSku" @maskClicked="closePro">
       <div class="cartSku" @touchmove.prevent.stop="noop">
         <div class="cartTop">
-          <image class="image" @click="showImgDetal" :src="imgShow?imgShow+'-r200':(list.Products_JSON.ImgPath[0]?list.Products_JSON.ImgPath[0]+'-r200':'')"></image>
+          <image class="image" @click="showImgDetal" :src="imgShow?imgShow+'-r640':(list.Products_JSON.ImgPath[0]?list.Products_JSON.ImgPath[0]+'-r640':'')"></image>
           <div class="cartTitle">
             <div class="cartTitles flex flex-justify-between">
               <div class=" cart-price">
