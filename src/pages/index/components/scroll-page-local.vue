@@ -172,6 +172,9 @@ export default {
         this.isInitDone = true
         Exception.handle(e)
       } finally {
+        setTimeout(()=>{
+          this.$emit('hotLoadDone')
+        },600)
         // hideLoading()
       }
     },

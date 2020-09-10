@@ -213,6 +213,9 @@ export default {
         Exception.handle(e)
       } finally {
         this.areaLoading = false
+        setTimeout(()=>{
+          this.$emit('hotLoadDone')
+        },600)
         // hideLoading()
       }
     },

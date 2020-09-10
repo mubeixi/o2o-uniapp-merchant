@@ -36,10 +36,10 @@
           <scroll-page-hot ref="page0" @hotLoadDone="hotLoadDoneFn" ></scroll-page-hot>
         </scroll-view>
         <scroll-view @scrolltolower="bindGetMore(1)" class="tab-page-wrap" lower-threshold="1" scroll-y v-show="headTabIndex===1">
-          <scroll-page-local ref="page1"></scroll-page-local>
+          <scroll-page-local ref="page1"  @hotLoadDone="hotLoadDoneFn"></scroll-page-local>
         </scroll-view>
         <scroll-view @scrolltolower="bindGetMore(2)" class="tab-page-wrap" lower-threshold="1" scroll-y v-show="headTabIndex===2">
-          <scroll-page-merchat ref="page2"></scroll-page-merchat>
+          <scroll-page-merchat ref="page2"  @hotLoadDone="hotLoadDoneFn"></scroll-page-merchat>
         </scroll-view>
       </div>
 
@@ -402,6 +402,7 @@ export default {
 
         const mixinData = typeof resultData === 'string' ? JSON.parse(resultData) : resultData
 
+        console.log(mixinData,"mixinData")
         const { plugin: templateData, system } = mixinData
 
         const { topTheme = 'default', title = '' } = system
