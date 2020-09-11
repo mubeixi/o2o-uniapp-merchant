@@ -2,6 +2,9 @@
   <div>
 <!--    <layout-ad code="index_top" paddingStr="20px 0 20px 0"></layout-ad>-->
 <!--    <layout-loading v-if="loadingByTmpl"></layout-loading>-->
+
+      <layout-page-loading :show="loadingByTmpl"></layout-page-loading>
+
     <view class="home-diy-wrap" :style="{backgroundColor:bgcolor}" v-if="isInitDone">
       <section
         :class="[item]"
@@ -86,6 +89,7 @@
           v-if="item.indexOf('kill') !== -1"></diy-kill>
       </section>
     </view>
+
     <div v-if="!fullDiy && killList.length>0" class="block kill-box">
       <div class="block-title flex-vertical-c">
         <div class="block-title-text">今日秒杀</div>
@@ -206,7 +210,7 @@ import DiyTitle from '@/components/diy-title/diy-title'
 import DiyText from '@/components/diy-text/diy-text'
 import DiyGoods from '@/components/diy-goods/diy-goods'
 import DiyKill from '@/components/diy-kill/diy-kill'
-
+import LayoutPageLoading from '@/components/layout-page-loading/layout-page-loading'
 export default {
   name: 'scroll-page-hot',
   mixins: [componetMixin],
@@ -238,7 +242,8 @@ export default {
     DiyVideo,
     DiySwiper,
     DiyBase,
-    LayoutCopyright
+    LayoutCopyright,
+    LayoutPageLoading
   },
   data () {
     return {
@@ -365,9 +370,9 @@ export default {
       this.loadingByKillList = true
       // showLoading('初始化数据')
       try {
-        // this.loadingByTmpl = true
+         this.loadingByTmpl = true
         const handleRT = await this.get_tmpl_data()
-        // this.loadingByTmpl = false
+
 
         if (handleRT !== true) throw handleRT // hanldeRT不是true就是一个Error实例，直接抛出
 
@@ -413,10 +418,12 @@ export default {
         // this.$emit('hotLoadDone')
       } catch (e) {
         this.isInitDone = true
+        //this.loadingByTmpl = false
         Exception.handle(e)
         // this.$emit('hotLoadDone')
       } finally {
         setTimeout(()=>{
+          this.loadingByTmpl = false
           this.$emit('hotLoadDone')
         },600)
         // hideLoading()
