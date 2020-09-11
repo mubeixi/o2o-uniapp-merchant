@@ -642,6 +642,9 @@ export default {
       }
       await this._init_func()
       this.getLocationDone = true
+      if(this.topTheme=='none'){
+        this.navIndex=0
+      }
       await this.setHeadTabIndex(this.navIndex)
     } catch (e) {
       console.log(e)
