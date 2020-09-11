@@ -182,6 +182,7 @@ export default {
   },
   data () {
     return {
+      navIndex:0,//开始加载 同城 闪送  好店
       isShowFullLoading: false,
       showFormattedAddress: false,
       formatted_address: '',
@@ -557,8 +558,11 @@ export default {
   //   if (this.headTabIndex === 1) this.$refs.page1.bindReachBottom()
   //   if (this.headTabIndex === 2) this.$refs.page2.bindReachBottom()
   // },
-  onLoad () {
-
+  onLoad (options) {
+      console.log(options,"optionsoptionsoptionsoptionsoptionsoptionsoptionsoptionsoptions")
+    if(options.navIndex){
+      this.navIndex=Number(options.navIndex)
+    }
   },
   onHide () {
     if (this.topTheme === 'default') {
@@ -638,12 +642,12 @@ export default {
       }
       await this._init_func()
       this.getLocationDone = true
-      await this.setHeadTabIndex(0)
+      await this.setHeadTabIndex(this.navIndex)
     } catch (e) {
       console.log(e)
       await this._init_func()
       this.getLocationDone = true
-      await this.setHeadTabIndex(0)
+      await this.setHeadTabIndex(this.navIndex)
     }
   }
 }
