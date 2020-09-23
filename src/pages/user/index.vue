@@ -17,7 +17,7 @@
       </div>
       <div @click="$linkTo('/pagesA/user/PersonalMsg')" class="user-msg" v-if="userInfo.Users_ID">
         <image :src="userInfo.User_HeadImg" class="avatar"></image>
-        <div class="name">{{userInfo.User_NickName}}</div>
+        <div class="name">{{userInfo.User_NickName}}(会员号:{{userInfo.User_No}})</div>
       </div>
       <div @click="$linkTo('/pages/user/login')" class="user-msg" v-else>
         <image :src="'/static/client/home/xianshi.png'|domain" class="avatar"></image>
