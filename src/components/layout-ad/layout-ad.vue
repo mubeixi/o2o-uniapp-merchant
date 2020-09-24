@@ -212,7 +212,7 @@ export default {
     bindClick (idx) {
       if (!this.code) return
       if (this.urls[idx]) {
-        const { link } = this.urls[idx]
+        const  link  = this.urls[idx]
         if (link) linkToEasy(link)
       }
     },
