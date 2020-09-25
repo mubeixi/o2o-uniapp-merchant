@@ -147,7 +147,7 @@ export const ajax = ({ url, method = 'post', data = {}, options = {},isAddHost=t
     loginRedirect=true,//66001状态码是否跳去登录
     // timelen = 2000,
     timeout = 100, // 如果tip参数生效，请求结束后会延迟取消loading,有的请求太快了一闪而过
-    errtip = false, // 是否提示错误,尽量让接口自己决定如何展示
+    errtip = true, // 是否提示错误,尽量让接口自己决定如何展示
     // reqHeader = false, // 是否需要把响应头返回放在resolve里面，一般是有时候登录的时候需要从请求头里拿到token的
     onlyData = false,// 是否直接返回data，方便结构赋值
   } = options
