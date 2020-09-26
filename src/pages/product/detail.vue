@@ -663,6 +663,7 @@
     overflow-x: hidden;
 
     .btn-item{
+      overflow-y: hidden;
       padding: 0rpx 14rpx;
       height: 40rpx;
       background-color: #EBFFF8;
