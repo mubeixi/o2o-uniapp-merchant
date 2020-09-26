@@ -203,6 +203,7 @@ export default {
   .all {
     background-color: #F8F8F8;
     box-sizing: border-box;
+    padding-bottom: 20px;
   }
 
   .edit {
