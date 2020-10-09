@@ -267,6 +267,8 @@ export const fetch = function ({ act, param = {}, options = false, url = '/api/l
 
     param.Users_ID = getUsersID()
     param.User_ID = getUserID()
+	
+	param.build_id = ENV.buildVersion
     
     // 定位有关的三个公共参数
     if(Storage.get('location_id') && Storage.get('current_lat') && Storage.get('current_lng')){

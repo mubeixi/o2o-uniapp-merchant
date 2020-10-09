@@ -10,6 +10,8 @@ const users_id = 'wkbq6nc2kc'
 const IM_WSS_URL = 'wss://newjdtravel.bafangka.com/cus/'
 const IM_API_URL = 'https://chat.bafangka.com'
 
+const buildVersion = 115
+
 // 测试appid   wxfe5d2621576cf895  域名 https://newo2o.bafangka.com
 // 正式appid   wx28e6e80223bd5f0f  域名 https://newo2o.netcnnet.net
 
@@ -26,7 +28,8 @@ const confByDev = {
   IM_API_URL,
   users_id,
   isCustom: false,
-  isDev
+  isDev,
+  buildVersion
 }
 //正式
 const confByPro = {
@@ -41,7 +44,8 @@ const confByPro = {
   IM_API_URL,
   users_id,
   isCustom: false,
-  isDev
+  isDev,
+  buildVersion
 }
 //及贝
 const confByJb = {
@@ -56,7 +60,8 @@ const confByJb = {
   IM_API_URL,
   users_id,
   isCustom: false,
-  isDev
+  isDev,
+  buildVersion
 }
 
 export default confByDev
