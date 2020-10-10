@@ -204,6 +204,7 @@ export default {
       this.$closePop('payChannelList')
       if (name === 'remainder_pay') {
         if (this.userInfo.hasOwnProperty('User_PayPassword') && !this.userInfo.User_PayPassword) {
+			this.payLoding = false
           confirm({
             title: '提示',
             content: '该操作需要设置支付密码,是否前往设置?',
@@ -232,6 +233,7 @@ export default {
     },
     // 确定输入支付密码
     confirmInput (e) {
+		this.payLoding = false
       this.password_input = false
       this.payFn()
     },
@@ -274,6 +276,7 @@ export default {
         Exception.handle(e)
         this.payLoding = false
       } finally {
+		this.payLoding = false
         hideLoading()
       }
     },
