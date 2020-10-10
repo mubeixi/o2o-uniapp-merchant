@@ -1139,6 +1139,40 @@
     }
 
   }
+
+
+  .w-h-750{
+    width: 750rpx;
+    height: 750rpx;
+    position: relative;
+  }
+  .change-btn {
+    position: absolute;
+    bottom: 50rpx;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    width: 230rpx;
+    justify-content: space-between;
+    z-index: 10;
+
+    .shipin,
+    .tupian {
+      text-align: center;
+      border-radius: 10px;
+      color: #333333;
+      box-sizing: border-box;
+      font-size: 12px;
+      line-height: 1.4 !important;
+      padding: 5px 10px;
+      background: #ffffff;
+    }
+
+    .active {
+      color: #ffffff;
+      background: #26C78D;
+    }
+  }
 </style>
 <template>
   <div @click="commonClick" class="page-wrap"  >
@@ -1202,16 +1236,34 @@
 
       <div id="section0">
 
-        <div class="indicator-num" v-if="imgs">
-          <span class="m-r-2">{{indicatorCurrent}}</span>/{{imgs.length}}
+        <div class="w-h-750" v-if="!showVideo">
+          <div class="indicator-num" v-if="imgs&&!showVideo">
+            <span class="m-r-2">{{indicatorCurrent}}</span>/{{imgs.length}}
+          </div>
+          <swiper autoplay="true" circular="true" duration="500"
+                  @change="changeSwiperCurrent"
+                  interval="3000" class="w-h-750"   >
+            <swiper-item :key="index" v-for="(item,index) of imgs">
+              <image :src="item+'-r800'" @click="previewImg(index)" class="full-img" v-if="item" />
+            </swiper-item>
+          </swiper>
+          <view class="change-btn" v-if="productInfo.video_url">
+            <view :class="[showVideo?'active':'','shipin']" @click="change_view(1)">视频</view>
+            <view :class="[showVideo?'':'active','tupian']" @click="change_view(2)">图片</view>
+          </view>
         </div>
-        <swiper autoplay="true" circular="true" duration="500"
-                @change="changeSwiperCurrent"
-                interval="3000" style="height:750rpx;width: 750rpx;"  >
-          <swiper-item :key="index" v-for="(item,index) of imgs">
-            <image :src="item+'-r800'" @click="previewImg(index)" class="full-img" v-if="item" />
-          </swiper-item>
-        </swiper>
+
+
+
+        <view class="w-h-750" v-if="productInfo.video_url&&showVideo">
+          <video   :src="productInfo.video_url" class="w-h-750" style="z-index: 9">
+          </video>
+          <view class="change-btn" v-if="productInfo.video_url" style="z-index: 11">
+            <view :class="[showVideo?'active':'','shipin']" @click="change_view(1)">视频</view>
+            <view :class="[showVideo?'':'active','tupian']" @click="change_view(2)">图片</view>
+          </view>
+
+        </view>
 
         <block v-show="isReady">
 
@@ -1590,6 +1642,7 @@
 
     <div class="safearea-box fixed"></div>
     <product-sku
+
       :hasCart="hasCart"
       :mode="mode"
       :isCart="isCart"
@@ -1673,7 +1726,7 @@
       <product-comment></product-comment>
     </div>
 
-    <layout-modal ref="commentModal">
+    <layout-modal ref="commentModal" >
       <div class="refuseApplyDialog">
         <textarea :disabled="!commentModalShow" :value="commentValue" @input="bingReasonInput" auto-height
                   class="reason"
@@ -1685,7 +1738,7 @@
       </div>
     </layout-modal>
 
-    <layout-modal ref="groupModal">
+    <layout-modal ref="groupModal" >
 
       <scroll-view class="groupModal" scroll-y=true>
         <block v-for="(group,groupIndex) of groupList" :key="groupIndex">
@@ -1710,7 +1763,7 @@
       </scroll-view>
     </layout-modal>
 
-    <layout-popup ref="couponModal">
+    <layout-popup ref="couponModal"  >
       <view>
         <div class="t_title ">
           领券
@@ -1769,7 +1822,7 @@ import WzwGoodsAction from '@/components/wzw-goods-action/wzw-goods-action'
 import LayoutPopup from '@/components/layout-popup/layout-popup'
 
 import { error, hideLoading, modal, showLoading, toast, checkIsExpire, confirm, linkTo } from '@/common/fun'
-import { buildSharePath, checkIsLogin, getCountdownFunc, getProductThumb } from '@/common/helper'
+import {buildSharePath, checkIsLogin, getCountdownFunc, getDomain, getProductThumb} from '@/common/helper'
 import uParse from '@/components/gaoyia-parse/parse'
 import Storage from '@/common/Storage'
 import LayoutModal from '@/components/layout-modal/layout-modal'
@@ -1801,6 +1854,7 @@ export default {
   },
   data () {
     return {
+      showVideo:false,//显示视频还是图片
       isShowFullLoading:false,//是否显示动态图
       isCart: false, // 是否确定是加入购物车
       groupListTotalCount: 0, // 多少人在拼团
@@ -1891,6 +1945,14 @@ export default {
     }
   },
   methods: {
+    // type 1为视频，2为图片
+    change_view (type) {
+      if (type == 1) {
+        this.showVideo = true
+      } else {
+        this.showVideo = false
+      }
+    },
     toJoinGroup (groupId, group) {
       if (!checkIsLogin(1, 1)) return
 
@@ -1924,26 +1986,26 @@ export default {
       // }
     },
     toRoom () {
-      // let path = '/pages/product/detail?prod_id=' + this.prod_id
-      //
-      // // 限时抢购
-      // if (this.mode === 'spike' && this.spike_good_id) {
-      //   path += `&mode=spike&spike_good_id=${this.spike_good_id}`
-      // }
-      // // 秒杀
-      // if (this.mode === 'seckill' && this.flashsale_id) {
-      //   path += `&mode=seckill&flashsale_id=${this.flashsale_id}`
-      // }
-      // const roomId = this.productInfo.room_id // 填写具体的房间号，可通过下面【获取直播房间列表】 API 获取
-      // const customParams = encodeURIComponent(JSON.stringify({
-      //   path: path,
-      //   owner_id: this.$store.getters['user/getUserId']()// 公共参数
-      // }))
-      // // 开发者在直播间页面路径上携带自定义参数（如示例中的path和pid参数），后续可以在分享卡片链接和跳转至商详页时获取，
-      // // 详见【获取自定义参数】、【直播间到商详页面携带参数】章节（上限600个字符，超过部分会被截断）
-      // wx.navigateTo({
-      //   url: `plugin-private://wx2b03c6e691cd7370/pages/live-player-plugin?room_id=${roomId}&custom_params=${customParams}`
-      // })
+      let path = '/pages/product/detail?prod_id=' + this.prod_id
+
+      // 限时抢购
+      if (this.mode === 'spike' && this.spike_good_id) {
+        path += `&mode=spike&spike_good_id=${this.spike_good_id}`
+      }
+      // 秒杀
+      if (this.mode === 'seckill' && this.flashsale_id) {
+        path += `&mode=seckill&flashsale_id=${this.flashsale_id}`
+      }
+      const roomId = this.productInfo.room_id // 填写具体的房间号，可通过下面【获取直播房间列表】 API 获取
+      const customParams = encodeURIComponent(JSON.stringify({
+        path: path,
+        owner_id: this.$store.getters['user/getUserId']()// 公共参数
+      }))
+      // 开发者在直播间页面路径上携带自定义参数（如示例中的path和pid参数），后续可以在分享卡片链接和跳转至商详页时获取，
+      // 详见【获取自定义参数】、【直播间到商详页面携带参数】章节（上限600个字符，超过部分会被截断）
+      wx.navigateTo({
+        url: `plugin-private://wx2b03c6e691cd7370/pages/live-player-plugin?room_id=${roomId}&custom_params=${customParams}`
+      })
     },
     // 收藏
     tofavorite () {
@@ -2007,6 +2069,8 @@ export default {
     },
     bindScrollEvent (e) {
       const { scrollTop } = e.detail
+
+
 
       if (scrollTop < 40) {
         this.bindScrollToupperEvent()
@@ -2197,6 +2261,7 @@ export default {
         })
         return
       }
+
       // 判断规格弹窗确定按钮是否是加入购物车
       if (isCart === 'isCart') {
         this.isCart = true
@@ -2275,6 +2340,7 @@ export default {
         })
         return
       }
+
       this.isCart = false
       this.hasCart = false
       this.postData.active = 'pintuan' // 标记为是拼团
@@ -2330,6 +2396,7 @@ export default {
       } catch (e) {
         this.$modal(e.message)
       } finally {
+
         hideLoading()
       }
     },
@@ -2356,6 +2423,8 @@ export default {
         toast('加入购物车成功')
       }).catch(e => {
         error(e.msg || '加入购物车失败')
+      }).finally(()=>{
+
       })
     },
     async buyNow (sku) {
@@ -2397,6 +2466,7 @@ export default {
         this.$modal(e.message)
       } finally {
         hideLoading()
+
       }
     },
     changeTabIndex (event) {
@@ -2559,6 +2629,10 @@ export default {
         const productInfo = await getProductDetail(data, { onlyData: true }).catch(e => {
           throw Error(e.msg || '获取商品详情失败')
         })
+        if(productInfo.video_url){
+          productInfo.video_url=getDomain(productInfo.video_url)
+        }
+
         Object.assign(this.productInfo, productInfo)
 
         // 获取拼团列表
@@ -2599,6 +2673,7 @@ export default {
         //   }
         //   // 首次获取立马返回直播状态
         //   const roomId = room_id // 房间 id
+        //   // #ifdef MP-WEIXIN
         //   livePlayer.getLiveStatus({ room_id: roomId })
         //     .then(res => {
         //       // 101: 直播中, 102: 未开始, 103: 已结束, 104: 禁播, 105: 暂停中, 106: 异常，107：已过期
@@ -2609,6 +2684,7 @@ export default {
         //     .catch(err => {
         //       console.log('get live status', err)
         //     })
+        //   // #endif
         // }
 
         if (checkIsLogin(0, 0)) {
@@ -2848,4 +2924,5 @@ export default {
     return shareObj
   }
 }
+
 </script>
