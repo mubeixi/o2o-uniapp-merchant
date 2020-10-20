@@ -1419,8 +1419,8 @@ export default {
           //   return
           // }
 
-          this.postData.user_name = this.user_name
-          this.postData.user_mobile = this.user_mobile
+          this.params.user_name = this.user_name
+          this.params.user_mobile = this.user_mobile
         }
 
         showLoading()
