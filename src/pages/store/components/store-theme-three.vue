@@ -38,7 +38,7 @@
                                type="iconicon-phone"></layout-icon>
                 </div>
               </div>
-              <div class="store-info-row flex-vertical-c" style="margin: 20rpx 0">
+              <div class="store-info-row flex-vertical-c" style="margin: 20rpx 0" click="$openLocation(storeInfo.biz_lat_gd,storeInfo.biz_lon_gd,storeInfo.biz_shop_name,storeInfo.biz_address)">
                 <layout-icon color="#999" size="14" type="icondizhi1"></layout-icon>
                 <div class="c9 fz-12 m-l-4">地址：{{storeInfo.biz_address}}</div>
               </div>

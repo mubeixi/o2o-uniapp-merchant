@@ -20,7 +20,7 @@
     >
       <swiper-item :key="idx1" class="quick-cate-swiper-item" v-for="(first,idx1) in firstCateList">
 
-        <scroll-view class="bg-white scroll-view-wrap" scroll-y>
+        <scroll-view class="bg-white scroll-view-wrap" scroll-y @scrolltolower="scrolltolowerNext">
 
           <div class="grid-box">
             <div
@@ -120,12 +120,16 @@ export default {
   mixins: [componetMixin],
   data () {
     return {
+      selectIndex:0,
       isInitDone: false,
       areaLoading: false,
       firstCateHeight: 44,
       storeFirstCateIdx: 0, // 好店
       firstCateList: [],
-      merchantList: [] // 人气商家
+      merchantList: [], // 人气商家
+      page:1,
+      pageSize:4,
+      totalCount:0
     }
   },
   computed: {
@@ -143,8 +147,10 @@ export default {
   watch: {
     storeFirstCateIdx: {
       handler (idx, oldIdx) {
+        this.selectIndex=idx
         if (idx !== oldIdx) {
-          this.loadMerchantList(idx)
+          this.page=1
+          this.loadMerchantList(idx,'init')
         }
       }
     }
@@ -172,7 +178,7 @@ export default {
         })
         if (!this.firstCateList) this.firstCateList = []
         this.firstCateList.unshift({ Category_Name: '所有', Category_ID: '-1' })
-        await this.loadMerchantList(0)
+        await this.loadMerchantList(0,'init')
         this.isInitDone = true
       } catch (e) {
         this.isInitDone = true
@@ -181,10 +187,15 @@ export default {
         // hideLoading()
       }
     },
-    async loadMerchantList (idx) {
+    scrolltolowerNext(){
+      if(this.merchantList.length<this.totalCount){
+        this.page++
+        this.loadMerchantList(this.selectIndex)
+      }
+    },
+    async loadMerchantList (idx,init) {
       if (this.firstCateList.length < 1) return
       try {
-        this.merchantList = []
         // showLoading()
         const cateId = this.firstCateList[idx].Category_ID
         if (!cateId) return
@@ -192,12 +203,15 @@ export default {
           get_prod: 3,
           with_prod: 1,
           get_active: 1,
-          pageSize: 999
+          pageSize: this.pageSize,
+          page: this.page,
         }
         if (cateId != -1) {
           postData.cate_id = cateId
         }
-        this.areaLoading = true
+        if(init=='init') {
+          this.areaLoading = true
+        }
         // this.userAddressInfo = this.$store.getters['user/getUserAddressInfo']()
         // if (this.userAddressInfo && this.userAddressInfo.hasOwnProperty('latitude') && this.userAddressInfo.hasOwnProperty('longitude')) {
         //   Object.assign(postData, {
@@ -206,17 +220,28 @@ export default {
         //   })
         // }
         // 商家无法利用一级分类获取到
-        this.merchantList = await getBizInfo(postData, { onlyData: true }).catch((e) => {
+
+        const list=await getBizInfo(postData).catch((e) => {
           throw Error('获取人气商家列表失败')
         })
+        this.totalCount=list.totalCount
+
+        if(init=='init'){
+          this.merchantList=list.data
+        }else{
+            for(let item of  list.data){
+              this.merchantList.push(item)
+            }
+        }
+        console.log(this.merchantList,"merchantListmerchantList",init)
+
       } catch (e) {
         Exception.handle(e)
       } finally {
         this.areaLoading = false
-        setTimeout(()=>{
-          this.$emit('hotLoadDone')
-        },600)
-        // hideLoading()
+		setTimeout(()=>{
+		  this.$emit('hotLoadDone')
+		},600)        // hideLoading()
       }
     },
     manualFlashLocation () {
