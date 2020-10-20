@@ -308,13 +308,17 @@ export default {
 
               // 这个地方，只有后两个tab才会出现这个问题，所以可以直接用这样写
 
-              this.$refs.page1.manualFlashLocation()
-              this.$refs.page2.manualFlashLocation()
+              // this.$refs.page1.manualFlashLocation()
+              // this.$refs.page2.manualFlashLocation()
 
               if (this.headTabIndex === 0) {
                 this.isShowFullLoading = true
               }
-              if (this.topTheme === 'default') this.$refs.page0.manualFlashLocation()
+              if (this.topTheme === 'default'){
+				  this.$refs.page1.manualFlashLocation()
+				  this.$refs.page2.manualFlashLocation()
+				  this.$refs.page0.manualFlashLocation()
+			  } 
               if (this.topTheme === 'none') this.$refs.pagenone.manualFlashLocation()
             }).catch(() => {})
 
@@ -474,11 +478,12 @@ export default {
         }, 10000)
         Storage.set('area_name', area_name)
 
-        this.$refs.page1.manualFlashLocation()
-        this.$refs.page2.manualFlashLocation()
+        
 
         if (this.topTheme === 'default') {
           this.$refs.page0.manualFlashLocation()
+		  this.$refs.page1.manualFlashLocation()
+		  this.$refs.page2.manualFlashLocation()
         }
         if (this.topTheme === 'none') {
           this.$refs.pagenone.manualFlashLocation()
