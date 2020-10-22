@@ -13,6 +13,11 @@ export const getCouponList = (param, options) => fetch({
   options
 })
 
+export const getArticle = (param, options) => fetch({
+  act: 'getArticle',
+  param,
+  options
+})
 // 获取评论
 export const getCommitList = (param, options) => fetch({
   act: 'get_commit',
