@@ -65,15 +65,15 @@ export default {
   },
   created () {
     // #ifndef H5
-    uni.downloadFile({
-		    url: this.node.attr.src, // 仅为示例，并非真实的资源
-		    success: (res) => {
-		        if (res.statusCode === 200 && res.tempFilePath) {
-          this.loading = false
-		            this.bolburl = res.tempFilePath
-		        }
-		    }
-    })
+    // uni.downloadFile({
+		  //   url: this.node.attr.src, // 仅为示例，并非真实的资源
+		  //   success: (res) => {
+		  //       if (res.statusCode === 200 && res.tempFilePath) {
+    //       this.loading = false
+		  //           this.bolburl = res.tempFilePath
+		  //       }
+		  //   }
+    // })
     // #endif
   },
   methods: {
